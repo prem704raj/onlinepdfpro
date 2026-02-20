@@ -261,13 +261,14 @@
             margin-top: 4px;
         }
     </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>
 </head>
 
 <body class="fade-in">
     <header class="header">
         <div class="header-content">
             <a href="../index.html" class="logo">
-                <span class="logo-icon">📄</span>
+                <span class="logo-icon">ðŸ“„</span>
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
@@ -277,8 +278,8 @@
             </nav>
             <div class="header-actions">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
+                    <span class="theme-icon-light">ðŸŒ™</span>
+                    <span class="theme-icon-dark">â˜€ï¸</span>
                 </button>
                 <a href="../tools.html" class="btn btn-primary">Try Now</a>
             </div>
@@ -297,7 +298,7 @@
             </div>
 
             <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">🖼️</span>
+                <span class="upload-icon">ðŸ–¼ï¸</span>
                 <p class="upload-text">Select images to scale</p>
                 <p class="upload-hint">Up to 20 files. Processing stays in your browser.</p>
                 <button class="btn btn-primary upload-btn">Choose Visuals</button>
@@ -332,7 +333,7 @@
                                 <label>Width (px)</label>
                                 <input type="number" class="resize-input" id="widthInput" value="800" min="1">
                             </div>
-                            <button class="lock-btn locked" id="lockBtn" title="Maintain Aspect Ratio">🔗</button>
+                            <button class="lock-btn locked" id="lockBtn" title="Maintain Aspect Ratio">ðŸ”—</button>
                             <div class="resize-field">
                                 <label>Height (px)</label>
                                 <input type="number" class="resize-input" id="heightInput" value="600" min="1">
@@ -343,16 +344,16 @@
                     <div id="presetsMode" style="display: none;">
                         <div class="preset-grid">
                             <button class="preset-btn" data-w="1080" data-h="1080">Insta
-                                Post<small>1080×1080</small></button>
+                                Post<small>1080Ã—1080</small></button>
                             <button class="preset-btn" data-w="1200" data-h="630">FB
-                                Shared<small>1200×630</small></button>
+                                Shared<small>1200Ã—630</small></button>
                             <button class="preset-btn" data-w="1500" data-h="500">Twitter
-                                X<small>1500×500</small></button>
+                                X<small>1500Ã—500</small></button>
                             <button class="preset-btn" data-w="1280" data-h="720">HD
-                                720p<small>1280×720</small></button>
+                                720p<small>1280Ã—720</small></button>
                             <button class="preset-btn" data-w="1920" data-h="1080">Full
-                                HD<small>1920×1080</small></button>
-                            <button class="preset-btn" data-w="800" data-h="600">Web Std<small>800×600</small></button>
+                                HD<small>1920Ã—1080</small></button>
+                            <button class="preset-btn" data-w="800" data-h="600">Web Std<small>800Ã—600</small></button>
                         </div>
                     </div>
                 </div>
@@ -407,7 +408,7 @@
             </div>
 
             <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
-                <span class="privacy-reminder-icon">🛡️</span>
+                <span class="privacy-reminder-icon">ðŸ›¡ï¸</span>
                 <span>Pro-grade engine. 100% on-device isolation.</span>
             </div>
         </div>
@@ -418,7 +419,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <a href="../index.html" class="logo" style="margin-bottom: 24px;">
-                        <span class="logo-icon">📄</span>
+                        <span class="logo-icon">ðŸ“„</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
                     <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
@@ -444,7 +445,7 @@
                 <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
                 </p>
                 <div style="display: flex; gap: 24px;">
-                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with ðŸ’œ</span>
                 </div>
             </div>
         </div>
@@ -512,7 +513,7 @@
             lockBtn.onclick = () => {
                 lockAspect = !lockAspect;
                 lockBtn.classList.toggle('locked', lockAspect);
-                lockBtn.textContent = lockAspect ? '🔗' : '🔓';
+                lockBtn.textContent = lockAspect ? 'ðŸ”—' : 'ðŸ”“';
                 if (lockAspect) aspectRatio = (parseInt(widthInput.value) || 1) / (parseInt(heightInput.value) || 1);
             };
 
@@ -570,7 +571,7 @@
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
-                            <button class="btn-remove-file" onclick="window.removeFile(${index})">✕</button>
+                            <button class="btn-remove-file" onclick="window.removeFile(${index})">âœ•</button>
                         </div>
                     </div>
                 `).join('');
@@ -633,7 +634,7 @@
                         progressFill.style.width = '100%';
                         item.classList.add('success');
                         statusText.textContent = 'Scaled Successfully';
-                        statusResult.textContent = `${originalWidth}×${originalHeight} → ${newWidth}×${newHeight}`;
+                        statusResult.textContent = `${originalWidth}Ã—${originalHeight} â†’ ${newWidth}Ã—${newHeight}`;
                         results.push({ name: file.name.replace(/\.[^.]+$/, '-resized.jpg'), blob, newWidth, newHeight, success: true });
                     } catch (error) {
                         item.classList.add('error');
@@ -677,7 +678,7 @@
                 resultsList.innerHTML = successResults.map((result, index) => `
                     <div class="batch-file-item" style="margin-bottom: 12px;">
                         <div class="batch-file-header" style="margin-bottom: 0;">
-                            <span style="font-size: 1.5rem;">🖼️</span>
+                            <span style="font-size: 1.5rem;">ðŸ–¼ï¸</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${result.name}</div>
                                 <div class="batch-file-size">${result.newWidth}px wide</div>

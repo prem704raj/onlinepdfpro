@@ -128,13 +128,14 @@
             color: white;
         }
     </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>
 </head>
 
 <body class="fade-in">
     <header class="header">
         <div class="header-content">
             <a href="../index.html" class="logo">
-                <span class="logo-icon">📄</span>
+                <span class="logo-icon">ðŸ“„</span>
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
@@ -144,8 +145,8 @@
             </nav>
             <div class="header-actions">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
+                    <span class="theme-icon-light">ðŸŒ™</span>
+                    <span class="theme-icon-dark">â˜€ï¸</span>
                 </button>
                 <a href="../tools.html" class="btn btn-primary">Dashboard</a>
             </div>
@@ -164,7 +165,7 @@
             </div>
 
             <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">📦</span>
+                <span class="upload-icon">ðŸ“¦</span>
                 <p class="upload-text">Drop your documents here</p>
                 <p class="upload-hint">Everything stays 100% private on your device</p>
                 <button class="btn btn-primary upload-btn">Choose Files</button>
@@ -243,7 +244,7 @@
             </div>
 
             <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
-                <span class="privacy-reminder-icon">🛡️</span>
+                <span class="privacy-reminder-icon">ðŸ›¡ï¸</span>
                 <span>Military-grade privacy. Your files never touch a server.</span>
             </div>
         </div>
@@ -254,7 +255,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <a href="../index.html" class="logo" style="margin-bottom: 24px;">
-                        <span class="logo-icon">📄</span>
+                        <span class="logo-icon">ðŸ“„</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
                     <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
@@ -280,7 +281,7 @@
                 <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
                 </p>
                 <div style="display: flex; gap: 24px;">
-                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
+                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with ðŸ’œ</span>
                 </div>
             </div>
         </div>
@@ -332,7 +333,7 @@
                 fileList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" data-index="${index}">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -384,7 +385,7 @@
                 processingList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" id="process-${index}">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -442,7 +443,7 @@
 
                         item.classList.add('success');
                         statusText.textContent = 'Done!';
-                        statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(compressedSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
+                        statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} â†’ ${OnlinePDFPro.Utils.formatFileSize(compressedSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
 
                         results.push({
                             name: file.name.replace('.pdf', '-compressed.pdf'),
@@ -485,10 +486,10 @@
                 resultsList.innerHTML = successResults.map((result, index) => `
                     <div class="batch-file-item">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">📄</span>
+                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${result.name}</div>
-                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
+                                <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} â†’ ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
                             </div>
                             <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" data-index="${index}">Download</button>
                         </div>
