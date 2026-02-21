@@ -132,6 +132,7 @@ a {
     display: flex;
     align-items: center;
     padding: 0 24px;
+    overflow: visible;
 }
 
 [data-theme="light"] .header {
@@ -565,16 +566,14 @@ a {
 
 .lang-dropdown {
     display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
+    position: fixed;
     width: 260px;
     max-height: 380px;
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
-    z-index: 2000;
+    z-index: 10001;
     overflow: hidden;
     flex-direction: column;
 }

@@ -559,9 +559,17 @@ const LanguageSelector = {
         // Toggle dropdown
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            dropdown.classList.toggle('open');
-            if (dropdown.classList.contains('open') && searchInput) {
-                setTimeout(() => searchInput.focus(), 50);
+            const isOpen = dropdown.classList.toggle('open');
+            if (isOpen) {
+                // Position dropdown below the button
+                const rect = btn.getBoundingClientRect();
+                dropdown.style.top = (rect.bottom + 8) + 'px';
+                dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+                if (searchInput) {
+                    searchInput.value = '';
+                    this.renderList(list, this.languages);
+                    setTimeout(() => searchInput.focus(), 50);
+                }
             }
         });
 
