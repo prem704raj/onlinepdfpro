@@ -209,12 +209,12 @@ a {
 
 [data-theme="light"] .theme-icon-dark,
 :not([data-theme="light"]) .theme-icon-light {
-    display: inline;
+    display: inline !important;
 }
 
 [data-theme="light"] .theme-icon-light,
 :not([data-theme="light"]) .theme-icon-dark {
-    display: none;
+    display: none !important;
 }
 
 /* ---- Buttons ---- */

@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Provides offline support and caching
 
-const CACHE_NAME = 'onlinepdfpro-v4';
+const CACHE_NAME = 'onlinepdfpro-v5';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
