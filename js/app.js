@@ -53,17 +53,26 @@ const MobileMenu = {
         const nav = document.getElementById('nav');
 
         if (menuToggle && nav) {
-            menuToggle.addEventListener('click', () => {
-                nav.classList.toggle('active');
-                menuToggle.classList.toggle('active');
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = nav.classList.toggle('active');
+                menuToggle.textContent = isOpen ? '✕' : '☰';
             });
 
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
                     nav.classList.remove('active');
-                    menuToggle.classList.remove('active');
+                    menuToggle.textContent = '☰';
                 }
+            });
+
+            // Close on nav link click
+            nav.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                    menuToggle.textContent = '☰';
+                });
             });
         }
     }
@@ -427,12 +436,271 @@ window.addEventListener('appinstalled', () => {
 });
 
 // =========================================
+// Language Selector (Google Translate powered)
+// =========================================
+
+const LanguageSelector = {
+    // Comprehensive list of world languages supported by Google Translate
+    languages: [
+        { code: 'en', name: 'English', native: 'English' },
+        { code: 'es', name: 'Spanish', native: 'Español' },
+        { code: 'fr', name: 'French', native: 'Français' },
+        { code: 'de', name: 'German', native: 'Deutsch' },
+        { code: 'it', name: 'Italian', native: 'Italiano' },
+        { code: 'pt', name: 'Portuguese', native: 'Português' },
+        { code: 'ru', name: 'Russian', native: 'Русский' },
+        { code: 'zh-CN', name: 'Chinese (Simplified)', native: '简体中文' },
+        { code: 'zh-TW', name: 'Chinese (Traditional)', native: '繁體中文' },
+        { code: 'ja', name: 'Japanese', native: '日本語' },
+        { code: 'ko', name: 'Korean', native: '한국어' },
+        { code: 'ar', name: 'Arabic', native: 'العربية' },
+        { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
+        { code: 'bn', name: 'Bengali', native: 'বাংলা' },
+        { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ' },
+        { code: 'ur', name: 'Urdu', native: 'اردو' },
+        { code: 'ta', name: 'Tamil', native: 'தமிழ்' },
+        { code: 'te', name: 'Telugu', native: 'తెలుగు' },
+        { code: 'mr', name: 'Marathi', native: 'मराठी' },
+        { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી' },
+        { code: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ' },
+        { code: 'ml', name: 'Malayalam', native: 'മലയാളം' },
+        { code: 'or', name: 'Odia', native: 'ଓଡ଼ିଆ' },
+        { code: 'ne', name: 'Nepali', native: 'नेपाली' },
+        { code: 'si', name: 'Sinhala', native: 'සිංහල' },
+        { code: 'th', name: 'Thai', native: 'ไทย' },
+        { code: 'vi', name: 'Vietnamese', native: 'Tiếng Việt' },
+        { code: 'id', name: 'Indonesian', native: 'Bahasa Indonesia' },
+        { code: 'ms', name: 'Malay', native: 'Bahasa Melayu' },
+        { code: 'fil', name: 'Filipino', native: 'Filipino' },
+        { code: 'tr', name: 'Turkish', native: 'Türkçe' },
+        { code: 'pl', name: 'Polish', native: 'Polski' },
+        { code: 'uk', name: 'Ukrainian', native: 'Українська' },
+        { code: 'nl', name: 'Dutch', native: 'Nederlands' },
+        { code: 'sv', name: 'Swedish', native: 'Svenska' },
+        { code: 'da', name: 'Danish', native: 'Dansk' },
+        { code: 'no', name: 'Norwegian', native: 'Norsk' },
+        { code: 'fi', name: 'Finnish', native: 'Suomi' },
+        { code: 'cs', name: 'Czech', native: 'Čeština' },
+        { code: 'sk', name: 'Slovak', native: 'Slovenčina' },
+        { code: 'ro', name: 'Romanian', native: 'Română' },
+        { code: 'hu', name: 'Hungarian', native: 'Magyar' },
+        { code: 'el', name: 'Greek', native: 'Ελληνικά' },
+        { code: 'bg', name: 'Bulgarian', native: 'Български' },
+        { code: 'hr', name: 'Croatian', native: 'Hrvatski' },
+        { code: 'sr', name: 'Serbian', native: 'Српски' },
+        { code: 'sl', name: 'Slovenian', native: 'Slovenščina' },
+        { code: 'he', name: 'Hebrew', native: 'עברית' },
+        { code: 'fa', name: 'Persian', native: 'فارسی' },
+        { code: 'sw', name: 'Swahili', native: 'Kiswahili' },
+        { code: 'af', name: 'Afrikaans', native: 'Afrikaans' },
+        { code: 'am', name: 'Amharic', native: 'አማርኛ' },
+        { code: 'my', name: 'Myanmar (Burmese)', native: 'မြန်မာ' },
+        { code: 'km', name: 'Khmer', native: 'ខ្មែរ' },
+        { code: 'lo', name: 'Lao', native: 'ລາວ' },
+        { code: 'ka', name: 'Georgian', native: 'ქართული' },
+        { code: 'hy', name: 'Armenian', native: 'Հայերեն' },
+        { code: 'az', name: 'Azerbaijani', native: 'Azərbaycan' },
+        { code: 'uz', name: 'Uzbek', native: 'Oʻzbek' },
+        { code: 'kk', name: 'Kazakh', native: 'Қазақ' },
+        { code: 'mn', name: 'Mongolian', native: 'Монгол' },
+        { code: 'et', name: 'Estonian', native: 'Eesti' },
+        { code: 'lv', name: 'Latvian', native: 'Latviešu' },
+        { code: 'lt', name: 'Lithuanian', native: 'Lietuvių' },
+        { code: 'sq', name: 'Albanian', native: 'Shqip' },
+        { code: 'mk', name: 'Macedonian', native: 'Македонски' },
+        { code: 'bs', name: 'Bosnian', native: 'Bosanski' },
+        { code: 'is', name: 'Icelandic', native: 'Íslenska' },
+        { code: 'mt', name: 'Maltese', native: 'Malti' },
+        { code: 'ga', name: 'Irish', native: 'Gaeilge' },
+        { code: 'cy', name: 'Welsh', native: 'Cymraeg' },
+        { code: 'eu', name: 'Basque', native: 'Euskara' },
+        { code: 'ca', name: 'Catalan', native: 'Català' },
+        { code: 'gl', name: 'Galician', native: 'Galego' },
+        { code: 'la', name: 'Latin', native: 'Latina' },
+        { code: 'eo', name: 'Esperanto', native: 'Esperanto' },
+        { code: 'ha', name: 'Hausa', native: 'Hausa' },
+        { code: 'ig', name: 'Igbo', native: 'Igbo' },
+        { code: 'yo', name: 'Yoruba', native: 'Yorùbá' },
+        { code: 'zu', name: 'Zulu', native: 'Zulu' },
+        { code: 'xh', name: 'Xhosa', native: 'Xhosa' },
+        { code: 'so', name: 'Somali', native: 'Soomaali' },
+        { code: 'mg', name: 'Malagasy', native: 'Malagasy' },
+        { code: 'ny', name: 'Chichewa', native: 'Chichewa' },
+        { code: 'sn', name: 'Shona', native: 'Shona' },
+        { code: 'rw', name: 'Kinyarwanda', native: 'Kinyarwanda' },
+        { code: 'sd', name: 'Sindhi', native: 'سنڌي' },
+        { code: 'ps', name: 'Pashto', native: 'پښتو' },
+        { code: 'ku', name: 'Kurdish', native: 'Kurdî' },
+        { code: 'ky', name: 'Kyrgyz', native: 'Кыргызча' },
+        { code: 'tg', name: 'Tajik', native: 'Тоҷикӣ' },
+        { code: 'tk', name: 'Turkmen', native: 'Türkmen' },
+        { code: 'mi', name: 'Maori', native: 'Māori' },
+        { code: 'sm', name: 'Samoan', native: 'Gagana Samoa' },
+        { code: 'haw', name: 'Hawaiian', native: 'ʻŌlelo Hawaiʻi' },
+        { code: 'ceb', name: 'Cebuano', native: 'Cebuano' },
+        { code: 'jw', name: 'Javanese', native: 'Jawa' },
+        { code: 'su', name: 'Sundanese', native: 'Sunda' },
+    ],
+
+    init() {
+        const container = document.querySelector('.lang-selector');
+        if (!container) return;
+
+        const btn = container.querySelector('.lang-btn');
+        const dropdown = container.querySelector('.lang-dropdown');
+        const searchInput = container.querySelector('.lang-search');
+        const list = container.querySelector('.lang-list');
+
+        if (!btn || !dropdown || !list) return;
+
+        // Render language list
+        this.renderList(list, this.languages);
+
+        // Toggle dropdown
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
+            if (dropdown.classList.contains('open') && searchInput) {
+                setTimeout(() => searchInput.focus(), 50);
+            }
+        });
+
+        // Search filter
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase();
+                const filtered = this.languages.filter(lang =>
+                    lang.name.toLowerCase().includes(q) ||
+                    lang.native.toLowerCase().includes(q) ||
+                    lang.code.toLowerCase().includes(q)
+                );
+                this.renderList(list, filtered);
+            });
+        }
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        // Load Google Translate script
+        this.loadGoogleTranslate();
+    },
+
+    renderList(listEl, langs) {
+        const currentLang = this.getCurrentLanguage();
+        listEl.innerHTML = langs.map(lang => `
+            <li class="lang-item${lang.code === currentLang ? ' active' : ''}" data-lang="${lang.code}">
+                <span>${lang.name}</span>
+                <span class="lang-native">${lang.native}</span>
+            </li>
+        `).join('');
+
+        listEl.querySelectorAll('.lang-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const langCode = item.dataset.lang;
+                this.setLanguage(langCode);
+                // Close dropdown
+                item.closest('.lang-dropdown').classList.remove('open');
+                // Update active states
+                listEl.querySelectorAll('.lang-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    },
+
+    getCurrentLanguage() {
+        return localStorage.getItem('doctools-lang') || 'en';
+    },
+
+    setLanguage(langCode) {
+        localStorage.setItem('doctools-lang', langCode);
+
+        if (langCode === 'en') {
+            // Reset to original
+            this.resetTranslation();
+            return;
+        }
+
+        // Use Google Translate
+        this.triggerGoogleTranslate(langCode);
+    },
+
+    loadGoogleTranslate() {
+        // Add hidden Google Translate element
+        const div = document.createElement('div');
+        div.id = 'google_translate_element';
+        div.style.display = 'none';
+        document.body.appendChild(div);
+
+        // Define the callback
+        window.googleTranslateElementInit = () => {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: false
+            }, 'google_translate_element');
+
+            // Auto-apply saved language
+            const savedLang = this.getCurrentLanguage();
+            if (savedLang && savedLang !== 'en') {
+                setTimeout(() => this.triggerGoogleTranslate(savedLang), 1000);
+            }
+        };
+
+        // Load the script
+        const script = document.createElement('script');
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.head.appendChild(script);
+    },
+
+    triggerGoogleTranslate(langCode) {
+        const select = document.querySelector('.goog-te-combo');
+        if (select) {
+            select.value = langCode;
+            select.dispatchEvent(new Event('change'));
+        } else {
+            // Retry after a short delay if Google Translate hasn't loaded yet
+            setTimeout(() => {
+                const retrySelect = document.querySelector('.goog-te-combo');
+                if (retrySelect) {
+                    retrySelect.value = langCode;
+                    retrySelect.dispatchEvent(new Event('change'));
+                }
+            }, 2000);
+        }
+    },
+
+    resetTranslation() {
+        // Reset Google Translate
+        const iframe = document.querySelector('.goog-te-banner-frame');
+        if (iframe) {
+            const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const restoreBtn = innerDoc.querySelector('.goog-close-link');
+            if (restoreBtn) restoreBtn.click();
+        }
+
+        // Fallback: remove googtrans cookie and reload
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
+
+        // If still translated, force reload
+        if (document.querySelector('.translated-ltr, .translated-rtl')) {
+            window.location.reload();
+        }
+    }
+};
+
+// =========================================
 // Initialize on DOM Ready
 // =========================================
 
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     MobileMenu.init();
+    LanguageSelector.init();
 
     console.log('OnlinePDFPro initialized - All processing happens locally in your browser');
 });
@@ -441,6 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const _exports = {
     ThemeManager,
     MobileMenu,
+    LanguageSelector,
     FileUploader,
     ProgressHandler,
     RecentlyUsed,
@@ -451,3 +720,4 @@ const _exports = {
 
 window.OnlinePDFPro = _exports;
 window.DocTools = _exports; // backward compatibility
+

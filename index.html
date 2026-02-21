@@ -4,16 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnlinePDFPro - Premium Private PDF Tools | No Uploads Required</title>
+    <title>OnlinePDFPro — Free Private PDF Tools | No Uploads Required</title>
     <meta name="description"
-        content="Professional grade online PDF tools that work entirely in your browser. Compress, merge, split, and convert with 100% privacy.">
+        content="Free online PDF tools that work entirely in your browser. Compress, merge, split, convert — 100% private, no uploads.">
     <meta name="keywords"
-        content="premium PDF tools, online PDF tools, compress PDF, merge PDF, split PDF, image compress, online PDF, free PDF tools, browser PDF editor">
+        content="PDF tools, compress PDF, merge PDF, split PDF, image compress, free PDF tools, browser PDF editor, private PDF">
 
     <link rel="canonical" href="https://onlinepdfpro.com/">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="OnlinePDFPro - Premium Private PDF Tools">
+    <meta property="og:title" content="OnlinePDFPro — Free Private PDF Tools">
     <meta property="og:description"
         content="Free, private document tools that work entirely in your browser. No uploads, no sign up.">
     <meta property="og:type" content="website">
@@ -22,91 +21,19 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#020617">
+    <meta name="theme-color" content="#0a0a0b">
 
-    <style>
-        /* Homepage Specific Adjustments */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: minmax(180px, auto);
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        .bento-item {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 32px;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .bento-large {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        .bento-medium {
-            grid-column: span 2;
-        }
-
-        @media (max-width: 1024px) {
-            .bento-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .bento-large,
-            .bento-medium {
-                grid-column: span 1;
-                grid-row: span 1;
-            }
-        }
-
-        /* Mouse tracking for glow effect */
-        .tool-card {
-            position: relative;
-        }
-
-        .tool-card::before {
-            content: "";
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
-                    rgba(255, 255, 255, 0.06),
-                    transparent 40%);
-            border-radius: inherit;
-            height: 100%;
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            transition: opacity 500ms;
-            width: 100%;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .tool-card:hover::before {
-            opacity: 1;
-        }
-    </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-         crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 </head>
 
 <body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo">
@@ -119,107 +46,124 @@
                 <a href="help.html" class="nav-link">Help</a>
             </nav>
             <div class="header-actions">
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language">🌐</button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
                     <span class="theme-icon-light">🌙</span>
                     <span class="theme-icon-dark">☀️</span>
                 </button>
-                <a href="tools.html" class="btn btn-primary">Try Now</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <a href="tools.html" class="btn btn-primary">Get Started</a>
             </div>
         </div>
     </header>
 
     <main id="main">
+        <!-- Hero: Action-first, conversion-focused -->
         <section class="hero">
             <div class="container">
-                <span class="section-tag fade-in">Privacy-First Document Suite</span>
-                <h1 class="hero-title fade-in" style="animation-delay: 0.1s;">
-                    The <span class="highlight">Bespoke Way</span> to <br>Handle Your Documents.
+                <h1 class="hero-title fade-in">
+                    Free PDF tools,<br><span class="highlight">100% private.</span>
                 </h1>
-                <p class="hero-subtitle fade-in" style="animation-delay: 0.2s;">
-                    Experience professional-grade tools with total privacy.
-                    No uploads. No tracking. Just speed and security, right in your browser.
+                <p class="hero-subtitle fade-in" style="animation-delay: 0.1s;">
+                    Compress, merge, split, and convert documents right in your browser.
+                    Nothing gets uploaded. Ever.
                 </p>
-                <div class="hero-actions fade-in" style="animation-delay: 0.3s;">
-                    <a href="tools.html" class="btn btn-primary">Explore All Tools</a>
-                    <a href="about.html" class="btn btn-secondary">How it Works</a>
+                <div class="hero-actions fade-in" style="animation-delay: 0.2s;">
+                    <a href="tools/compress-pdf.html" class="btn btn-primary btn-lg">Compress a PDF</a>
+                    <a href="tools.html" class="btn btn-secondary btn-lg">Browse All Tools</a>
                 </div>
             </div>
         </section>
 
+        <!-- Popular Tools: Clean grid -->
         <section class="popular-tools">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-tag">Essential Utilities</span>
+                    <span class="section-tag">Most Used</span>
                     <h2 class="section-title">Popular Tools</h2>
                 </div>
 
-                <div class="bento-grid">
-                    <a href="tools/compress-pdf.html" class="glass-card bento-item bento-large tool-card">
+                <div class="tools-grid" style="max-width: 960px; margin: 0 auto;">
+                    <a href="tools/compress-pdf.html" class="glass-card tool-card">
                         <span class="tool-icon">📦</span>
                         <h3 class="tool-name">Compress PDF</h3>
-                        <p class="tool-desc">Radically reduce file sizes without sacrificing quality. Smart batch
-                            compression.</p>
+                        <p class="tool-desc">Reduce file sizes without quality loss.</p>
                     </a>
 
-                    <a href="tools/merge-pdf.html" class="glass-card bento-item tool-card">
+                    <a href="tools/merge-pdf.html" class="glass-card tool-card">
                         <span class="tool-icon">📎</span>
                         <h3 class="tool-name">Merge PDF</h3>
-                        <p class="tool-desc">Combine documents with a drag.</p>
+                        <p class="tool-desc">Combine multiple PDFs into one.</p>
                     </a>
 
-                    <a href="tools/image-compress.html" class="glass-card bento-item tool-card">
+                    <a href="tools/split-pdf.html" class="glass-card tool-card">
+                        <span class="tool-icon">✂️</span>
+                        <h3 class="tool-name">Split PDF</h3>
+                        <p class="tool-desc">Extract pages or split into files.</p>
+                    </a>
+
+                    <a href="tools/image-compress.html" class="glass-card tool-card">
                         <span class="tool-icon">🗜️</span>
-                        <h3 class="tool-name">Image Shrink</h3>
+                        <h3 class="tool-name">Image Compress</h3>
                         <p class="tool-desc">Optimize JPG & PNG in bulk.</p>
                     </a>
 
-                    <a href="tools/pdf-to-images.html" class="glass-card bento-item bento-medium tool-card">
+                    <a href="tools/pdf-to-images.html" class="glass-card tool-card">
                         <span class="tool-icon">🖼️</span>
                         <h3 class="tool-name">PDF to Images</h3>
-                        <p class="tool-desc">Convert document pages into high-fidelity image files instantly.</p>
+                        <p class="tool-desc">Convert pages to JPG or PNG.</p>
+                    </a>
+
+                    <a href="tools/images-to-pdf.html" class="glass-card tool-card">
+                        <span class="tool-icon">📑</span>
+                        <h3 class="tool-name">Images to PDF</h3>
+                        <p class="tool-desc">Create a PDF from your images.</p>
                     </a>
                 </div>
 
-                <div style="text-align: center; margin-top: 60px;">
-                    <a href="tools.html" class="nav-link" style="font-size: 1.1rem; color: var(--aurora-violet);">
-                        View All 13+ Tools &rarr;
-                    </a>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="tools.html" class="btn btn-secondary">View All 13+ Tools →</a>
                 </div>
             </div>
         </section>
 
+        <!-- Trust Signals -->
         <section class="section">
             <div class="container">
-                <div class="glass-card"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; padding: 60px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
-                        <h3 style="margin-bottom: 8px;">100% Client-Side</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Files never leave your device. We
-                            use browser compute, not servers.</p>
+                <div class="glass-card trust-strip">
+                    <div class="trust-item">
+                        <span class="trust-icon">🔒</span>
+                        <h3>100% Client-Side</h3>
+                        <p>Files never leave your device. Everything runs in your browser.</p>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2.5rem; margin-bottom: 12px;">⚡</div>
-                        <h3 style="margin-bottom: 8px;">Peak Performance</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Zero upload time means instant
-                            processing even on large files.</p>
+                    <div class="trust-item">
+                        <span class="trust-icon">⚡</span>
+                        <h3>Instant Processing</h3>
+                        <p>No upload wait. Large files process in seconds.</p>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2.5rem; margin-bottom: 12px;">🆓</div>
-                        <h3 style="margin-bottom: 8px;">Always Free</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">No limits, no credits, no
-                            registrations. Just pure utility.</p>
+                    <div class="trust-item">
+                        <span class="trust-icon">🆓</span>
+                        <h3>Always Free</h3>
+                        <p>No limits, no sign-ups, no hidden costs.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section" style="background: var(--surface-1);">
-            <div class="container" style="text-align: center;">
-                <h2 class="hero-title" style="font-size: 3rem;">Ready to experience <br><span class="highlight">better
-                        privacy?</span></h2>
-                <div style="margin-top: 40px;">
-                    <a href="tools.html" class="btn btn-primary">Get Started Now</a>
+        <!-- Bottom CTA -->
+        <section class="bottom-cta">
+            <div class="container">
+                <h2>Start using free tools now.</h2>
+                <div style="margin-top: 24px;">
+                    <a href="tools.html" class="btn btn-primary btn-lg">Browse All Tools</a>
                 </div>
             </div>
         </section>
@@ -229,60 +173,36 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="/index.html" class="logo" style="margin-bottom: 24px;">
+                    <a href="index.html" class="logo">
                         <span class="logo-icon">📄</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
-                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
                 </div>
                 <div class="footer-links-group">
                     <h4>Platform</h4>
                     <ul>
-                        <li><a href="/tools.html">All Tools</a></li>
-                        <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/help.html">Help & Contact</a></li>
+                        <li><a href="tools.html">All Tools</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="help.html">Help</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
                     <h4>Legal</h4>
                     <ul>
-                        <li><a href="/privacy.html">Privacy Policy</a></li>
-                        <li><a href="/terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
-            <div
-                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
                 </p>
-                <nav style="display: flex; gap: 24px; flex-wrap: wrap;">
-                    <a href="/about.html"
-                        style="color: var(--text-muted); font-size: 0.875rem; text-decoration: none;">About</a>
-                    <a href="/privacy.html"
-                        style="color: var(--text-muted); font-size: 0.875rem; text-decoration: none;">Privacy Policy</a>
-                    <a href="/terms.html"
-                        style="color: var(--text-muted); font-size: 0.875rem; text-decoration: none;">Terms &amp;
-                        Conditions</a>
-                    <a href="/help.html"
-                        style="color: var(--text-muted); font-size: 0.875rem; text-decoration: none;">Contact</a>
-                </nav>
             </div>
         </div>
     </footer>
 
     <script src="js/app.js"></script>
-    <script>
-        // Mouse glow effect for bento cards
-        document.querySelectorAll('.tool-card').forEach(card => {
-            card.onmousemove = e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-            };
-        });
-    </script>
 </body>
 
 </html>

@@ -20,13 +20,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/tools.css">
     <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#020617">
+    <meta name="theme-color" content="#0a0a0b">
 
     <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -143,6 +143,8 @@
 </head>
 
 <body class="fade-in">
+        <a href="#main" class="skip-link">Skip to main content</a>
+
     <header class="header">
         <div class="header-content">
             <a href="../index.html" class="logo">
@@ -155,11 +157,21 @@
                 <a href="../help.html" class="nav-link">Help</a>
             </nav>
             <div class="header-actions">
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language">🌐</button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
                     <span class="theme-icon-light">🌙</span>
                     <span class="theme-icon-dark">☀️</span>
                 </button>
-                <a href="../tools.html" class="btn btn-primary">Try Now</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <a href="../tools.html" class="btn btn-primary">All Tools</a>
             </div>
         </div>
     </header>
@@ -268,24 +280,34 @@
         </div>
     </main>
 
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="../index.html" class="logo" style="margin-bottom: 24px;">
+                    <a href="../index.html" class="logo">
                         <span class="logo-icon">📄</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
-                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../help.html">Help</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
-            <div
-                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
-                </p>
-                <div style="display: flex; gap: 24px;">
-                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with 💜</span>
-                </div>
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.</p>
             </div>
         </div>
     </footer>

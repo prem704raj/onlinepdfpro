@@ -4,24 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Free PDF & Document Tools - OnlinePDFPro</title>
+    <title>All Free PDF & Document Tools — OnlinePDFPro</title>
     <meta name="description"
-        content="Browse all free online PDF and document tools. Compress PDF, merge PDF, convert images, resize, crop and more - all processed privately in your browser.">
+        content="Browse all free online PDF and document tools. Compress, merge, split, convert — 100% private, browser-based.">
     <meta name="keywords"
         content="free PDF tools, online PDF tools, compress PDF, merge PDF, split PDF, image compress, image resize, PDF converter">
 
     <link rel="canonical" href="https://onlinepdfpro.com/tools.html">
 
-    <meta property="og:title" content="All Free PDF & Document Tools - OnlinePDFPro">
+    <meta property="og:title" content="All Free PDF & Document Tools — OnlinePDFPro">
     <meta property="og:description"
-        content="13+ free document tools. Compress, merge, split PDFs, convert images and more - all in your browser.">
+        content="13+ free document tools. Compress, merge, split PDFs, convert images — all in your browser.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://onlinepdfpro.com/tools.html">
     <meta property="og:site_name" content="OnlinePDFPro">
-
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="All Free PDF & Document Tools - OnlinePDFPro">
-    <meta name="twitter:description" content="13+ free document tools processed privately in your browser.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,8 +26,10 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/tools.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1E3A5F">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>
+    <meta name="theme-color" content="#0a0a0b">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -40,39 +38,44 @@
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo">
-                <span class="logo-icon">ðŸ“„</span>
+                <span class="logo-icon">📄</span>
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
-
             <nav class="nav" id="nav">
                 <a href="tools.html" class="nav-link active">All Tools</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="help.html" class="nav-link">Help</a>
             </nav>
-
             <div class="header-actions">
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language">🌐</button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon-light">ðŸŒ™</span>
-                    <span class="theme-icon-dark">â˜€ï¸</span>
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
                 </button>
-                <a href="tools.html" class="btn btn-primary">Try Now</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main id="main" class="tool-page">
         <div class="container">
             <div class="tool-header">
                 <h1 class="tool-title">All Tools</h1>
-                <p class="tool-description">Free document tools that work in your browser. No uploads, no signup
-                    required.</p>
+                <p class="tool-description">Free document tools that run in your browser. No uploads, no signup.</p>
             </div>
 
             <!-- Search -->
             <div class="search-box">
                 <div class="search-wrapper">
-                    <span class="search-icon">ðŸ”</span>
+                    <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" id="toolSearch" placeholder="Search tools...">
                 </div>
             </div>
@@ -87,129 +90,119 @@
 
             <!-- Recently Used -->
             <section id="recentlyUsed" class="recently-used" style="display: none;">
-                <h2 style="font-size: 1.125rem; margin-bottom: var(--space-md);">Recently Used</h2>
+                <h2 style="font-size: 1rem; margin-bottom: 16px; color: var(--text-secondary);">Recently Used</h2>
                 <div class="tools-grid" id="recentGrid"></div>
-                <hr style="margin: var(--space-xl) 0; border: none; border-top: 1px solid var(--border-color);">
+                <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border);">
             </section>
 
             <!-- Tools Grid -->
             <div class="tools-grid" id="toolsGrid">
                 <!-- PDF Tools -->
-                <a href="tools/compress-pdf.html" class="glass-card tool-card" data-category="pdf"
-                    data-name="Compress PDF">
-                    <div class="tool-card-icon">ðŸ“¦</div>
+                <a href="tools/compress-pdf.html" class="tool-card" data-category="pdf" data-name="Compress PDF">
+                    <div class="tool-card-icon">📦</div>
                     <h3 class="tool-card-title">Compress PDF</h3>
                     <p class="tool-card-description">Reduce PDF file size while maintaining quality</p>
                 </a>
 
-                <a href="tools/merge-pdf.html" class="glass-card tool-card" data-category="pdf" data-name="Merge PDF">
-                    <div class="tool-card-icon">ðŸ“Ž</div>
+                <a href="tools/merge-pdf.html" class="tool-card" data-category="pdf" data-name="Merge PDF">
+                    <div class="tool-card-icon">📎</div>
                     <h3 class="tool-card-title">Merge PDF</h3>
                     <p class="tool-card-description">Combine multiple PDFs into one document</p>
                 </a>
 
-                <a href="tools/split-pdf.html" class="glass-card tool-card" data-category="pdf" data-name="Split PDF">
-                    <div class="tool-card-icon">âœ‚ï¸</div>
+                <a href="tools/split-pdf.html" class="tool-card" data-category="pdf" data-name="Split PDF">
+                    <div class="tool-card-icon">✂️</div>
                     <h3 class="tool-card-title">Split PDF</h3>
-                    <p class="tool-card-description">Extract pages or split PDF into multiple files</p>
+                    <p class="tool-card-description">Extract pages or split into multiple files</p>
                 </a>
 
-                <a href="tools/rotate-pdf.html" class="glass-card tool-card" data-category="pdf" data-name="Rotate PDF">
-                    <div class="tool-card-icon">ðŸ”„</div>
+                <a href="tools/rotate-pdf.html" class="tool-card" data-category="pdf" data-name="Rotate PDF">
+                    <div class="tool-card-icon">🔄</div>
                     <h3 class="tool-card-title">Rotate PDF</h3>
                     <p class="tool-card-description">Rotate PDF pages to any orientation</p>
                 </a>
 
-                <a href="tools/pdf-to-images.html" class="glass-card tool-card" data-category="pdf"
-                    data-name="PDF to Images">
-                    <div class="tool-card-icon">ðŸ–¼ï¸</div>
+                <a href="tools/pdf-to-images.html" class="tool-card" data-category="pdf" data-name="PDF to Images">
+                    <div class="tool-card-icon">🖼️</div>
                     <h3 class="tool-card-title">PDF to Images</h3>
                     <p class="tool-card-description">Convert PDF pages to JPG or PNG images</p>
                 </a>
 
-                <a href="tools/images-to-pdf.html" class="glass-card tool-card" data-category="pdf"
-                    data-name="Images to PDF">
-                    <div class="tool-card-icon">ðŸ“‘</div>
+                <a href="tools/images-to-pdf.html" class="tool-card" data-category="pdf" data-name="Images to PDF">
+                    <div class="tool-card-icon">📑</div>
                     <h3 class="tool-card-title">Images to PDF</h3>
                     <p class="tool-card-description">Create PDF from multiple images</p>
                 </a>
 
-                <a href="tools/pdf-watermark.html" class="glass-card tool-card" data-category="pdf"
-                    data-name="PDF Watermark">
-                    <div class="tool-card-icon">ðŸ’§</div>
+                <a href="tools/pdf-watermark.html" class="tool-card" data-category="pdf" data-name="PDF Watermark">
+                    <div class="tool-card-icon">💧</div>
                     <h3 class="tool-card-title">PDF Watermark</h3>
                     <p class="tool-card-description">Add text or image watermark to PDF</p>
                 </a>
 
-                <a href="tools/pdf-lock.html" class="glass-card tool-card" data-category="pdf" data-name="PDF Lock">
-                    <div class="tool-card-icon">ðŸ”’</div>
+                <a href="tools/pdf-lock.html" class="tool-card" data-category="pdf" data-name="PDF Lock">
+                    <div class="tool-card-icon">🔐</div>
                     <h3 class="tool-card-title">PDF Lock</h3>
                     <p class="tool-card-description">Password protect your PDF files</p>
                 </a>
 
                 <!-- Image Tools -->
-                <a href="tools/image-compress.html" class="glass-card tool-card" data-category="image"
-                    data-name="Image Compress">
-                    <div class="tool-card-icon">ðŸ—œï¸</div>
+                <a href="tools/image-compress.html" class="tool-card" data-category="image" data-name="Image Compress">
+                    <div class="tool-card-icon">🗜️</div>
                     <h3 class="tool-card-title">Image Compress</h3>
                     <p class="tool-card-description">Reduce image file size without losing quality</p>
                 </a>
 
-                <a href="tools/image-resize.html" class="glass-card tool-card" data-category="image"
-                    data-name="Image Resize">
-                    <div class="tool-card-icon">ðŸ“</div>
+                <a href="tools/image-resize.html" class="tool-card" data-category="image" data-name="Image Resize">
+                    <div class="tool-card-icon">📐</div>
                     <h3 class="tool-card-title">Image Resize</h3>
                     <p class="tool-card-description">Resize images to any dimension</p>
                 </a>
 
-                <a href="tools/image-crop.html" class="glass-card tool-card" data-category="image"
-                    data-name="Image Crop">
-                    <div class="tool-card-icon">âœ‚ï¸</div>
+                <a href="tools/image-crop.html" class="tool-card" data-category="image" data-name="Image Crop">
+                    <div class="tool-card-icon">✂️</div>
                     <h3 class="tool-card-title">Image Crop</h3>
                     <p class="tool-card-description">Crop and rotate images easily</p>
                 </a>
 
                 <!-- Conversion Tools -->
-                <a href="tools/xlsx-to-csv.html" class="glass-card tool-card" data-category="convert"
-                    data-name="XLSX to CSV">
-                    <div class="tool-card-icon">ðŸ“Š</div>
+                <a href="tools/xlsx-to-csv.html" class="tool-card" data-category="convert" data-name="XLSX to CSV">
+                    <div class="tool-card-icon">📊</div>
                     <h3 class="tool-card-title">XLSX to CSV</h3>
                     <p class="tool-card-description">Convert Excel spreadsheets to CSV</p>
                 </a>
 
-                <a href="tools/csv-to-xlsx.html" class="glass-card tool-card" data-category="convert"
-                    data-name="CSV to XLSX">
-                    <div class="tool-card-icon">ðŸ“ˆ</div>
+                <a href="tools/csv-to-xlsx.html" class="tool-card" data-category="convert" data-name="CSV to XLSX">
+                    <div class="tool-card-icon">📈</div>
                     <h3 class="tool-card-title">CSV to XLSX</h3>
                     <p class="tool-card-description">Convert CSV files to Excel format</p>
                 </a>
             </div>
 
             <!-- Privacy Reminder -->
-            <div class="privacy-reminder mt-lg">
-                <span class="privacy-reminder-icon">ðŸ›¡ï¸</span>
+            <div class="privacy-reminder mt-xl">
+                <span class="privacy-reminder-icon">🛡️</span>
                 <span>All processing happens in your browser. Files never leave your device.</span>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo" style="margin-bottom: 24px;">
-                        <span class="logo-icon">ðŸ“„</span>
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon">📄</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
-                    <p class="footer-tagline">Building a safer, faster web <br>for your documents.</p>
+                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
                 </div>
                 <div class="footer-links-group">
                     <h4>Platform</h4>
                     <ul>
                         <li><a href="tools.html">All Tools</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="help.html">Help</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
@@ -220,38 +213,19 @@
                     </ul>
                 </div>
             </div>
-            <div
-                style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <p style="color: var(--text-muted); font-size: 0.875rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
                 </p>
-                <div style="display: flex; gap: 24px;">
-                    <span style="color: var(--text-muted); font-size: 0.875rem;">Crafted with ðŸ’œ</span>
-                </div>
             </div>
         </div>
     </footer>
 
     <script src="js/app.js"></script>
     <script>
-        // Search and Filter functionality
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('toolSearch');
             const filterBtns = document.querySelectorAll('.filter-btn');
-            const toolCards = document.querySelectorAll('.tool-card');
-
-            // Mouse glow effect for cards
-            const initGlow = (cards) => {
-                cards.forEach(card => {
-                    card.onmousemove = e => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        card.style.setProperty('--mouse-x', `${x}px`);
-                        card.style.setProperty('--mouse-y', `${y}px`);
-                    };
-                });
-            };
-            initGlow(toolCards);
+            const toolCards = document.querySelectorAll('#toolsGrid .tool-card');
 
             // Search
             searchInput.addEventListener('input', DocTools.Utils.debounce((e) => {
@@ -276,32 +250,24 @@
                 toolCards.forEach(card => {
                     const name = card.dataset.name.toLowerCase();
                     const cardCategory = card.dataset.category;
-
                     const matchesQuery = name.includes(query);
                     const matchesCategory = category === 'all' || cardCategory === category;
-
                     card.style.display = matchesQuery && matchesCategory ? 'flex' : 'none';
                 });
             }
 
-            // Load recently used
+            // Recently used
             const recent = DocTools.RecentlyUsed.get();
             if (recent.length > 0) {
                 const recentSection = document.getElementById('recentlyUsed');
                 const recentGrid = document.getElementById('recentGrid');
-
                 recentSection.style.display = 'block';
-
                 recent.forEach(item => {
                     const originalCard = document.querySelector(`[data-name="${item.name}"]`);
                     if (originalCard) {
-                        const cloned = originalCard.cloneNode(true);
-                        recentGrid.appendChild(cloned);
+                        recentGrid.appendChild(originalCard.cloneNode(true));
                     }
                 });
-
-                // Re-init glow for clones
-                initGlow(recentGrid.querySelectorAll('.tool-card'));
             }
         });
     </script>
