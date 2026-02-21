@@ -1,43 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign PDF - Online PDF Pro</title>
-    <link rel="stylesheet" href="../css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign PDF Online Free - Draw or Type Signature | OnlinePDFPro</title>
+    <meta name="description"
+        content="Sign PDF documents online for free. Draw your signature or type it with professional fonts. 100% private, browser-based processing.">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/sign-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#0a0a0b">
 </head>
 
-<body>
-
-    <header>
-        <div class="container">
-            <h1><a href="../index.html">← Online PDF Pro</a> / Sign PDF</h1>
+<body class="fade-in">
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="container">
+    <main class="tool-page" style="padding-top: 100px; min-height: 80vh;">
+        <div class="container" style="max-width: 900px; margin: 0 auto; padding: 20px;">
+            <div class="tool-header" style="text-align: center; margin-bottom: 40px;">
+                <span class="section-tag fade-in">E-Signature Tool</span>
+                <h1 class="tool-title fade-in">Sign PDF</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s; color: var(--text-secondary);">
+                    Securely sign your PDF documents. Everything stays 100% private in your browser.
+                </p>
+            </div>
 
-        <div class="upload-area" id="dropArea"
-            style="border: 2px dashed #ccc; padding: 40px; text-align: center; cursor: pointer; border-radius: 12px; margin-top: 30px;">
-            <p>Drop your PDF here or click to upload</p>
-            <input type="file" id="fileInput" accept=".pdf" hidden />
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
+                <span class="upload-icon">✨</span>
+                <p class="upload-text">Drop your PDF here or click to upload</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden />
+            </div>
+
+            <div id="controls" style="display:none; margin-top: 30px; text-align: center;">
+                <div style="margin-bottom: 24px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="clearSig()" class="btn btn-secondary">Clear Signature</button>
+                    <button onclick="typeSig()" class="btn btn-secondary">Type Name</button>
+                    <button onclick="savePdf()" class="btn btn-primary">Download Signed PDF</button>
+                </div>
+
+                <div
+                    style="background: var(--surface-1); padding: 30px; border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <p style="margin-bottom: 16px; font-weight: 500; color: var(--text-primary);">Draw your signature
+                        below:</p>
+                    <canvas id="canvas" width="600" height="250"
+                        style="border: 2px solid var(--border); border-radius: 12px; background: white; display: none; max-width: 100%; cursor: crosshair; touch-action: none; margin: 0 auto; box-shadow: var(--shadow-md);"></canvas>
+
+                    <input type="text" id="nameInput" placeholder="Type your name & press Enter"
+                        style="display:none; width:100%; max-width: 600px; margin: 20px auto 0; padding:15px; font-size:1.2rem; border-radius:8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); font-family: 'Inter', sans-serif;">
+                </div>
+            </div>
         </div>
-
-        <div id="controls" style="display:none; margin:30px 0; text-align:center;">
-            <button onclick="clearSig()" class="btn">Clear</button>
-            <button onclick="typeSig()" class="btn">Type Name</button>
-            <button onclick="savePdf()" class="btn primary">Download Signed PDF</button>
-        </div>
-
-        <canvas id="canvas" width="600" height="250"
-            style="border:2px solid #000; border-radius:12px; background:white; display:none; max-width: 100%;"></canvas>
-
-        <input type="text" id="nameInput" placeholder="Type your name & press Enter"
-            style="display:none; width:100%; padding:15px; margin-top:20px; font-size:20px; border-radius:8px;">
-
     </main>
 
+    <footer class="footer">
+        <div class="container"
+            style="text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 40px;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 OnlinePDFPro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
 
@@ -68,6 +146,7 @@
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => {
             const file = e.target.files[0];
+            if (!file) return;
             file.arrayBuffer().then(buf => {
                 pdfBytes = buf;
                 document.getElementById('controls').style.display = 'block';
@@ -104,23 +183,27 @@
             if (!pdfBytes) return alert("Upload PDF first");
             if (!signatureImage) return alert("Add signature first");
 
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-            const pages = pdfDoc.getPages();
-            const firstPage = pages[0];
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const pages = pdfDoc.getPages();
+                const firstPage = pages[0];
 
-            const pngBytes = Uint8Array.from(atob(signatureImage.split(',')[1]), c => c.charCodeAt(0));
-            const pngImage = await pdfDoc.embedPng(pngBytes);
+                const pngBytes = Uint8Array.from(atob(signatureImage.split(',')[1]), c => c.charCodeAt(0));
+                const pngImage = await pdfDoc.embedPng(pngBytes);
 
-            const { width, height } = firstPage.getSize();
-            firstPage.drawImage(pngImage, {
-                x: width * 0.25,
-                y: height * 0.25,
-                width: width * 0.5,
-                height: height * 0.3,
-            });
+                const { width, height } = firstPage.getSize();
+                firstPage.drawImage(pngImage, {
+                    x: width * 0.25,
+                    y: height * 0.25,
+                    width: width * 0.5,
+                    height: height * 0.3,
+                });
 
-            const finalPdfBytes = await pdfDoc.save();
-            download(finalPdfBytes, "Signed-PDF-OnlinePDFPro.pdf", "application/pdf");
+                const finalPdfBytes = await pdfDoc.save();
+                download(finalPdfBytes, "Signed-PDF-OnlinePDFPro.pdf", "application/pdf");
+            } catch (err) {
+                alert('Error modifying PDF: ' + err.message);
+            }
         }
     </script>
 
