@@ -1,25 +1,66 @@
-// OnlinePDFPro Service Worker Kill Switch
-// We are disabling offline caching temporarily to ensure all visual updates (SVGs/styles)
-// are immediately fetched bypassing any aggressive local cache.
+// OnlinePDFPro Service Worker
+// Modern PWA support with reliable caching strategy
 
-self.addEventListener('install', (e) => {
+const CACHE_NAME = 'onlinepdfpro-v6'; // Bumped for new features
+const STATIC_ASSETS = [
+    '/index.html',
+    '/css/style.css',
+    '/js/app.js',
+    '/manifest.json',
+    '/icon-192.png',
+    '/icon-512.png'
+];
+
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(STATIC_ASSETS);
+        })
+    );
     self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-    e.waitUntil(
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
-                cacheNames.map((name) => caches.delete(name))
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
             );
-        }).then(() => {
-            return self.registration.unregister();
         })
     );
     self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-    // Completely bypass service worker, go straight to network
-    return;
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
+
+    // Network-first for HTML to avoid stale pages
+    if (request.headers.get('accept')?.includes('text/html')) {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    return response;
+                })
+                .catch(() => caches.match(request))
+        );
+        return;
+    }
+
+    // Cache-first for static assets
+    event.respondWith(
+        caches.match(request).then((cached) => {
+            return cached || fetch(request).then((response) => {
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                return response;
+            });
+        })
+    );
 });

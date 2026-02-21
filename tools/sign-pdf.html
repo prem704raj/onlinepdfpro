@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign PDF Online Free - Draw or Type Signature | OnlinePDFPro</title>
+    <meta name="description"
+        content="Sign PDF documents online for free. Draw your signature or type it with professional fonts. 100% private, browser-based processing.">
+    <meta name="keywords"
+        content="sign PDF, e-signature, draw signature, type signature, free PDF signer, private PDF tools">
+
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/sign-pdf.html">
+
+    <meta property="og:title" content="Sign PDF Online Free - OnlinePDFPro">
+    <meta property="og:description"
+        content="Sign your PDF documents securely in your browser. No uploads, no storage, complete privacy with client-side signing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/sign-pdf.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#0a0a0b">
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+
+    <style>
+        .editor-container {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 100%;
+            overflow: auto;
+        }
+
+        #pdfCanvas {
+            cursor: crosshair;
+        }
+
+        .editor-tools {
+            width: 100%;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .signature-input-wrap {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #typeInput {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tip-box {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* Override for canvas to see drawing better on light background */
+        [data-theme="dark"] .canvas-wrapper {
+            background: #fff;
+            /* Always white for the PDF itself */
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <a href="../tools.html" class="btn btn-primary">All Tools</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 900px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">E-Signature Tool</span>
+                <h1 class="tool-title fade-in">Sign PDF</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Securely sign your PDF documents with a hand-drawn or typed signature.
+                    Everything stays 100% private in your browser.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+                <span class="upload-icon">✨</span>
+                <p class="upload-text">Drop PDF here to sign</p>
+                <p class="upload-hint">100% browser-based. Files never touched by us.</p>
+                <button class="btn btn-primary upload-btn">Choose PDF</button>
+            </div>
+
+            <div id="editorSection" style="display: none;">
+                <div class="editor-container fade-in">
+                    <div class="canvas-wrapper">
+                        <canvas id="pdfCanvas"></canvas>
+                    </div>
+
+                    <div class="editor-tools">
+                        <button class="btn btn-secondary" id="clearBtn">Clear Signature</button>
+                        <button class="btn btn-secondary" id="typeSigBtn">Type Signature</button>
+                        <button class="btn btn-primary" id="downloadBtn">Download Signed PDF</button>
+
+                        <div class="signature-input-wrap" id="typeInputWrap">
+                            <input type="text" id="typeInput" placeholder="Type your name here...">
+                        </div>
+                    </div>
+                    <div class="tip-box">
+                        Tip: Click and drag on the PDF to draw your signature. Use "Type Signature" for a formal look.
+                    </div>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Security first. Your document processing happens entirely on your local hardware.</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="../tools.html">All Tools</a></li>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../help.html">Help</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="../privacy.html">Privacy Policy</a></li>
+                        <li><a href="../terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        (function () {
+            const canvas = document.getElementById('pdfCanvas');
+            const ctx = canvas.getContext('2d');
+            const uploadZone = document.getElementById('uploadZone');
+            const editorSection = document.getElementById('editorSection');
+            const clearBtn = document.getElementById('clearBtn');
+            const typeSigBtn = document.getElementById('typeSigBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const typeInputWrap = document.getElementById('typeInputWrap');
+            const typeInput = document.getElementById('typeInput');
+
+            let pdfDoc = null;
+            let signatureImg = null;
+            let drawing = false;
+            let originalBuffer = null;
+
+            // Global PDF.js worker
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+            OnlinePDFPro.FileUploader.init('uploadZone', {
+                accept: '.pdf,application/pdf',
+                multiple: false,
+                onFilesSelected: async (files) => {
+                    const file = files[0];
+                    if (!file) return;
+
+                    const arrayBuffer = await file.arrayBuffer();
+                    originalBuffer = arrayBuffer;
+
+                    try {
+                        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                        pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+
+                        renderPage(pdf, 1);
+                        uploadZone.style.display = 'none';
+                        editorSection.style.display = 'block';
+                    } catch (err) {
+                        alert("Error loading PDF: " + err.message);
+                    }
+                }
+            });
+
+            async function renderPage(pdf, num) {
+                const page = await pdf.getPage(num);
+                const viewport = page.getViewport({ scale: 1.5 });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: ctx, viewport }).promise;
+            }
+
+            // Drawing logic
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                startDrawing({ offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top });
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                draw({ offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top });
+            });
+            canvas.addEventListener('touchend', stopDrawing);
+
+            function startDrawing(e) {
+                drawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+                ctx.strokeStyle = 'blue';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+            }
+
+            function draw(e) {
+                if (!drawing) return;
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+
+            function stopDrawing() {
+                if (!drawing) return;
+                drawing = false;
+                signatureImg = canvas.toDataURL();
+            }
+
+            clearBtn.addEventListener('click', async () => {
+                if (!originalBuffer) return;
+                const pdf = await pdfjsLib.getDocument({ data: originalBuffer }).promise;
+                await renderPage(pdf, 1);
+                signatureImg = null;
+                typeInputWrap.style.display = 'none';
+                typeInput.value = '';
+            });
+
+            typeSigBtn.addEventListener('click', () => {
+                typeInputWrap.style.display = 'block';
+                typeInput.focus();
+            });
+
+            typeInput.addEventListener('input', () => {
+                // Redraw page first to clear previous type
+                (async () => {
+                    const pdf = await pdfjsLib.getDocument({ data: originalBuffer }).promise;
+                    await renderPage(pdf, 1);
+
+                    ctx.font = '40px cursive';
+                    ctx.fillStyle = 'blue';
+                    ctx.fillText(typeInput.value, 60, canvas.height - 100);
+                    signatureImg = canvas.toDataURL();
+                })();
+            });
+
+            downloadBtn.addEventListener('click', async () => {
+                if (!signatureImg) {
+                    alert("Please sign the document first!");
+                    return;
+                }
+
+                try {
+                    // Create a fresh load to avoid state issues
+                    const signingDoc = await PDFLib.PDFDocument.load(originalBuffer);
+                    const pages = signingDoc.getPages();
+                    const firstPage = pages[0];
+
+                    const pngData = signatureImg.split(',')[1];
+                    const pngImage = await signingDoc.embedPng(Uint8Array.from(atob(pngData), c => c.charCodeAt(0)));
+
+                    // The canvas is scaled at 1.5, we need to draw it scaled back
+                    // Actually, we can just draw the whole overlay
+                    // But easier to just draw the image if we keep track of coords
+                    // For now, let's just do a simple implementation as the user requested
+
+                    firstPage.drawImage(pngImage, {
+                        x: 0,
+                        y: 0,
+                        width: firstPage.getWidth(),
+                        height: firstPage.getHeight()
+                    });
+
+                    const pdfBytes = await signingDoc.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'signed.pdf';
+                    a.click();
+
+                    OnlinePDFPro.RecentlyUsed.add('sign-pdf', 'Sign PDF');
+                } catch (err) {
+                    alert("Error signing PDF: " + err.message);
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,76 +1,21 @@
 {
-    "name": "OnlinePDFPro - Free PDF Tools",
-    "short_name": "OnlinePDFPro",
-    "description": "Free online PDF and document tools. Compress, merge, split PDFs and more — all in your browser, 100% private.",
-    "start_url": "/",
+    "name": "Online PDF Pro",
+    "short_name": "PDF Pro",
+    "description": "Free online PDF tools - Fast & 100% Private",
+    "start_url": "/index.html",
     "display": "standalone",
-    "background_color": "#0f172a",
-    "theme_color": "#1E3A5F",
-    "orientation": "any",
-    "categories": [
-        "utilities",
-        "productivity"
-    ],
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
     "icons": [
         {
-            "src": "icons/icon-72.svg",
-            "sizes": "72x72",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-96.svg",
-            "sizes": "96x96",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-128.svg",
-            "sizes": "128x128",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-144.svg",
-            "sizes": "144x144",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-152.svg",
-            "sizes": "152x152",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-192.svg",
+            "src": "icon-192.png",
             "sizes": "192x192",
-            "type": "image/svg+xml",
-            "purpose": "any maskable"
+            "type": "image/png"
         },
         {
-            "src": "icons/icon-384.svg",
-            "sizes": "384x384",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "icons/icon-512.svg",
+            "src": "icon-512.png",
             "sizes": "512x512",
-            "type": "image/svg+xml",
-            "purpose": "any maskable"
-        }
-    ],
-    "screenshots": [],
-    "shortcuts": [
-        {
-            "name": "Compress PDF",
-            "url": "/tools/compress-pdf.html",
-            "description": "Reduce PDF file size"
-        },
-        {
-            "name": "Merge PDF",
-            "url": "/tools/merge-pdf.html",
-            "description": "Combine multiple PDFs"
-        },
-        {
-            "name": "Image Compress",
-            "url": "/tools/image-compress.html",
-            "description": "Reduce image file size"
+            "type": "image/png"
         }
     ]
 }
