@@ -109,30 +109,39 @@
             flex-direction: column;
             align-items: center;
             background: var(--surface-2);
-            padding: 120px 20px 20px 20px;
+            padding: 40px 20px 20px 20px;
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
             overflow-x: auto;
+            margin-top: 50px;
         }
 
-        .fixed-controls {
+        .fixed-top-bar {
             position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--surface-1);
-            padding: 20px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            z-index: 999;
-            border: 3px solid #2563eb;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #2563eb;
+            padding: 18px 0;
+            text-align: center;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             display: flex;
-            gap: 12px;
             align-items: center;
-            flex-wrap: wrap;
-            width: max-content;
-            max-width: 95vw;
             justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .fixed-top-bar button,
+        .fixed-top-bar select {
+            padding: 14px 28px;
+            margin: 0 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
         }
 
         .select-styled {
@@ -166,8 +175,8 @@
             background: var(--surface-1);
             padding: 30px;
             border-radius: 20px;
-            border: 4px solid #2563eb;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 5px solid #2563eb;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
             width: 90%;
             max-width: 600px;
             text-align: center;
@@ -179,14 +188,14 @@
         }
 
         #modalCanvas {
-            border: 3px solid var(--border);
+            border: 4px solid var(--border);
             border-radius: 16px;
             background: white;
             cursor: crosshair;
             touch-action: none;
             width: 100%;
-            max-width: 500px;
-            height: 250px;
+            max-width: 550px;
+            height: 280px;
             margin: 0 auto;
             display: block;
         }
@@ -269,26 +278,18 @@
             </div>
 
             <div id="editor" style="display:none; margin-top: 32px;">
-                <div class="fixed-controls">
-                    <button onclick="openSignatureModal()" class="btn"
-                        style="background: #2563eb; color: white; border: none; font-weight: bold; padding: 14px 28px; border-radius: 12px; font-size: 16px;">✍️
-                        Draw New Signature</button>
+                <div class="fixed-top-bar">
+                    <button onclick="openSignatureModal()" style="background:white; color:#2563eb;">✍️ Draw
+                        Signature</button>
 
-                    <div
-                        style="display: flex; align-items: center; gap: 12px; border-left: 2px solid var(--border); padding-left: 16px; margin-left: 4px;">
-                        <label style="font-weight: 600; color: var(--text-primary); font-size: 16px;">Add to
-                            &rarr;</label>
-                        <select id="pageSelector" class="select-styled"
-                            style="padding: 14px 24px; border-radius: 12px; font-size: 16px; min-width: 120px;"></select>
-                    </div>
+                    <select id="pageSelector" class="select-styled"
+                        style="display: inline-block; padding: 12px 24px; color: #333;"></select>
 
-                    <button id="applyAllBtn" onclick="applyToAll()" class="btn"
-                        style="display: none; background: #10b981; color: white; border: none; font-weight: bold; padding: 14px 28px; border-radius: 12px; font-size: 16px;">Apply
-                        to All Pages</button>
+                    <button id="applyAllBtn" onclick="applyToAll()"
+                        style="display: none; background:#10b981; color:white;">Apply to All Pages</button>
 
-                    <button onclick="downloadPDF()" class="btn"
-                        style="background: #2563eb; color: white; border: none; font-weight: bold; padding: 14px 28px; border-radius: 12px; font-size: 16px; margin-left: auto;">💾
-                        Download Signed PDF</button>
+                    <button onclick="downloadPDF()" style="background:#f59e0b; color:white;">Download Signed
+                        PDF</button>
                 </div>
 
                 <div id="pages-container" class="fade-in">
@@ -309,14 +310,14 @@
     <div id="signatureModal" class="modal-overlay">
         <div class="modal-content">
             <h2 style="margin-bottom:20px; color: var(--text-primary);">Draw Your Signature</h2>
-            <canvas id="modalCanvas" width="500" height="250"></canvas>
+            <canvas id="modalCanvas" width="550" height="280"></canvas>
             <div class="modal-actions" style="justify-content: center; margin-top: 20px;">
                 <button onclick="closeSignatureModal()" class="btn"
                     style="padding:12px 24px; background:var(--surface-2); color:var(--text-primary); border:none; border-radius:12px;">Cancel</button>
                 <button onclick="clearModalCanvas()" class="btn"
-                    style="padding:12px 24px; background:#ef4444; color:white; border:none; border-radius:12px;">Clear</button>
+                    style="padding:12px 30px; background:#ef4444; color:white; border:none; border-radius:12px; margin:0 10px;">Clear</button>
                 <button onclick="saveModalSignature()" class="btn"
-                    style="padding:12px 32px; background:#10b981; color:white; border:none; border-radius:12px; font-weight:bold;">✅
+                    style="padding:14px 40px; background:#10b981; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold;">✅
                     Use This Signature</button>
             </div>
         </div>
@@ -484,11 +485,11 @@
             sig.className = 'signature';
             sig.dataset.url = dataURL;
             sig.style.backgroundImage = `url(${dataURL})`;
-            sig.style.left = '50px';
-            sig.style.top = '100px';
-            sig.style.width = '280px';
-            sig.style.height = '140px';
-            // Ratio of modal pad (500x250 = 2:1 ratio)
+            sig.style.left = '200px';
+            sig.style.top = '250px';
+            sig.style.width = '300px';
+            sig.style.height = '152px';
+            // Ratio of modal pad (550x280 = 1.96:1 ratio)
 
             const resize = document.createElement('div');
             resize.className = 'resize-handle';
