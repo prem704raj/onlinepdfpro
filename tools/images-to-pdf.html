@@ -421,48 +421,51 @@
                 const pdfDoc = await PDFLib.PDFDocument.create();
 
                 for (const imgData of images) {
-                    const imgBytes = Uint8Array.from(atob(imgData.split(',')[1]), c => c.charCodeAt(0));
-
-                    let image;
-                    try {
-                        image = await pdfDoc.embedJpg(imgBytes);
-                    } catch {
-                        try {
-                            image = await pdfDoc.embedPng(imgBytes);
-                        } catch {
-                            try {
-                                // PDF-Lib failed to parse the native bytes (e.g. WebP, Progressive JPEG, Exif errors).
-                                // Fallback: Rasterize the image cleanly via HTML5 Canvas and export as a pure baseline JPEG.
-                                const cleanJpegData = await new Promise((resolve, reject) => {
-                                    const img = new Image();
-                                    img.onload = () => {
-                                        const canvas = document.createElement('canvas');
-                                        canvas.width = img.width;
-                                        canvas.height = img.height;
-                                        const ctx = canvas.getContext('2d');
-                                        // Ensure canvas background is white (for transparent PNG/WebPs being forced to JPG)
-                                        ctx.fillStyle = '#FFFFFF';
-                                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                                        ctx.drawImage(img, 0, 0);
-                                        resolve(canvas.toDataURL('image/jpeg', 1.0));
-                                    };
-                                    img.onerror = reject;
-                                    img.src = imgData;
-                                });
-
-                                // Securely convert Base64 Data URL to pristine ArrayBuffer
-                                const res = await fetch(cleanJpegData);
-                                const cleanBytes = await res.arrayBuffer();
-                                image = await pdfDoc.embedJpg(cleanBytes);
-                            } catch (fallbackErr) {
-                                console.error("Ultimate fallback failed:", fallbackErr);
-                                alert("One image format could not be processed natively. Please remove the corrupted image and try again.");
-                                document.getElementById('progress').style.display = 'none';
-                                document.getElementById('convertSection').style.display = 'block';
-                                return;
+                    // UNIVERSAL SANITIZER: Always draw to Canvas to strip metadata, unsupported formats, and memory-crashing ultra-high resolutions before giving it to pdf-lib.
+                    const cleanBytes = await new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let w = img.width;
+                            let h = img.height;
+                            
+                            // Safe scaling to prevent RAM crashes on mobile devices
+                            const MAX_DIM = 2500;
+                            if (w > h && w > MAX_DIM) {
+                                h = Math.round(h * MAX_DIM / w);
+                                w = MAX_DIM;
+                            } else if (h > w && h > MAX_DIM) {
+                                w = Math.round(w * MAX_DIM / h);
+                                h = MAX_DIM;
                             }
-                        }
-                    }
+                            
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            
+                            // Fill white background (protects transparent PNGs/WebPs turning black)
+                            ctx.fillStyle = '#FFFFFF';
+                            ctx.fillRect(0, 0, w, h);
+                            ctx.drawImage(img, 0, 0, w, h);
+                            
+                            // Export as high-quality standard JPEG
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                            const b64 = dataUrl.split(',')[1];
+                            const binaryString = window.atob(b64);
+                            const len = binaryString.length;
+                            const bytes = new Uint8Array(len);
+                            // Avoid 'Uint8Array.from' for huge arrays on mobile Webkit - iteration is mathematically safer
+                            for (let i = 0; i < len; i++) {
+                                bytes[i] = binaryString.charCodeAt(i);
+                            }
+                            resolve(bytes);
+                        };
+                        img.onerror = () => reject(new Error("Failed to load image into canvas"));
+                        img.src = imgData;
+                    });
+
+                    // It will guarantee to be a valid baseline JPEG byte stream now
+                    const image = await pdfDoc.embedJpg(cleanBytes);
 
                     // A4 size page with image fitted inside
                     const A4_WIDTH = 595.28;
@@ -489,8 +492,8 @@
                 const pdfBytes = await pdfDoc.save();
                 download(pdfBytes, "My-Beautiful-PDF-OnlinePDFPro.pdf", "application/pdf");
             } catch (err) {
-                console.error(err);
-                alert("Error converting images to PDF. Ensure they are valid JPG/PNG files.");
+                console.error("PDF Generation Error (Universal Sanitizer):", err);
+                alert("An unexpected error occurred building the PDF. Please try again.");
             }
 
             document.getElementById('progress').style.display = 'none';
