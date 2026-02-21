@@ -59,6 +59,10 @@ def replace_head(filepath):
     # Regex to find everything between <head> and </head> inclusive
     pattern = re.compile(r'<head>.*?</head>', re.DOTALL | re.IGNORECASE)
     
+    # Extract existing <style> block if any to preserve page-specific CSS
+    style_match = re.search(r'(<style\b[^>]*>.*?</style>)', content, re.DOTALL | re.IGNORECASE)
+    existing_style = style_match.group(1) if style_match else ""
+
     # We must append custom head injections if the file needs them
     # like pdf.js linking on OCR / Sign pages, or AdSense code.
     head_addition = ""
@@ -71,7 +75,7 @@ def replace_head(filepath):
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>"""
     
     # Close the head tag properly after additions
-    final_new_head = NEW_HEAD.replace('</head>', head_addition + '\n</head>')
+    final_new_head = NEW_HEAD.replace('</head>', head_addition + '\n    ' + existing_style + '\n</head>')
 
     if pattern.search(content):
         new_content = pattern.sub(final_new_head, content)

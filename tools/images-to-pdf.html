@@ -49,6 +49,166 @@
         gtag('config', 'G-XXXXXXX');
     </script>
 
+    <style>
+        /* LUXURY GRID V3 */
+        .preview-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 20px !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            margin: 40px 0 !important;
+            padding: 20px !important;
+        }
+
+        .image-block {
+            position: relative !important;
+            width: 160px !important;
+            min-width: 160px !important;
+            max-width: 160px !important;
+            background: white !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+            transition: all 0.3s !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: block !important;
+        }
+
+        .image-block:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .image-block img {
+            width: 160px !important;
+            min-width: 160px !important;
+            max-width: 160px !important;
+            height: 200px !important;
+            object-fit: cover !important;
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+
+        .page-label {
+            position: absolute !important;
+            top: 8px !important;
+            left: 8px !important;
+            background: rgba(0, 0, 0, 0.75) !important;
+            color: white !important;
+            padding: 5px 10px !important;
+            border-radius: 8px !important;
+            font-weight: bold !important;
+            font-size: 12px !important;
+            z-index: 10 !important;
+        }
+
+        .remove-btn {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            background: #ef4444 !important;
+            color: white !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 50% !important;
+            font-size: 16px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: none !important;
+            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4) !important;
+            z-index: 10 !important;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626 !important;
+            transform: scale(1.1) !important;
+        }
+
+        .add-button {
+            width: 160px !important;
+            min-width: 160px !important;
+            max-width: 160px !important;
+            height: 200px !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-radius: 16px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: white !important;
+            cursor: pointer !important;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.35) !important;
+            transition: all 0.3s !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .add-button:hover {
+            transform: translateY(-5px) scale(1.03) !important;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.5) !important;
+        }
+
+        .add-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border: 4px solid white !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 36px !important;
+            font-weight: bold !important;
+        }
+
+        .add-text {
+            font-size: 14px !important;
+            margin-top: 10px !important;
+            font-weight: 600 !important;
+        }
+
+        .drag-over {
+            border: 3px dashed #2563eb !important;
+            opacity: 0.7 !important;
+        }
+
+        .convert-section {
+            text-align: center !important;
+            margin: 40px 0 !important;
+        }
+
+        .convert-btn {
+            padding: 18px 60px !important;
+            font-size: 20px !important;
+            border-radius: 16px !important;
+            background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+            color: white !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-weight: bold !important;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3) !important;
+            transition: all 0.3s !important;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.5) !important;
+        }
+
+        .image-count {
+            text-align: center !important;
+            font-size: 18px !important;
+            color: #666 !important;
+            margin: 10px 0 !important;
+        }
+    </style>
 </head>
 
 <body>
