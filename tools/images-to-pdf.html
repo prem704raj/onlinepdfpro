@@ -74,22 +74,24 @@
 
         <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
             <span class="upload-icon">🖼️</span>
-            <p class="upload-text" style="font-size:20px; color:#2563eb;">Click below or Drop Images anywhere<br><span
-                    style="font-size: 0.8em; color: var(--text-muted);">(JPG, PNG, WebP - Multiple allowed)</span></p>
+            <p class="upload-text" style="font-size:20px; color:#2563eb;">Drop Images Here or Click to Upload<br><span
+                    style="font-size: 0.8em; color: var(--text-muted);">JPG, PNG, WebP — Multiple images allowed</span>
+            </p>
             <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
         </div>
 
+        <p class="image-count fade-in" id="imageCount"></p>
+
         <div id="preview" class="preview-grid fade-in" style="display:none;"></div>
 
-        <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;">
-            <h3 style="color: var(--text-primary); margin-bottom: 20px;">✨ Crafting your beautiful PDF...</h3>
-        </div>
-
-        <div style="text-align:center; margin:50px 0;" id="convertSection" class="fade-in" style="display:none;">
-            <button onclick="convertToPDF()" class="btn btn-primary btn-lg"
-                style="padding:20px 80px; font-size:22px; border-radius:16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);">
+        <div class="convert-section fade-in" id="convertSection" style="display:none;">
+            <button onclick="convertToPDF()" class="convert-btn">
                 ✨ Convert to PDF & Download
             </button>
+        </div>
+
+        <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;">
+            <h3 style="color: var(--text-primary); margin-bottom: 20px;">✨ Crafting your A4 PDF pages...</h3>
         </div>
 
     </main>
@@ -124,12 +126,23 @@
 
     <script>
         let images = [];
+        let dragIndex = null;
 
-        // All click & drop events
+        // Click to upload
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => addImages(e.target.files);
 
-        // Drag drop on whole page
+        // Drag & Drop on upload area
+        const dropArea = document.getElementById('dropArea');
+        dropArea.ondragover = e => { e.preventDefault(); dropArea.style.borderColor = '#2563eb'; };
+        dropArea.ondragleave = () => { dropArea.style.borderColor = '#e2e8f0'; };
+        dropArea.ondrop = e => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#e2e8f0';
+            addImages(e.dataTransfer.files);
+        };
+
+        // Also drag drop on whole page
         document.body.ondragover = e => e.preventDefault();
         document.body.ondrop = e => {
             e.preventDefault();
@@ -163,58 +176,79 @@
         function renderPreviews() {
             const container = document.getElementById('preview');
             container.innerHTML = '';
+            container.style.display = 'flex';
 
             images.forEach((src, index) => {
                 const block = document.createElement('div');
                 block.className = 'image-block';
                 block.draggable = true;
+
                 block.innerHTML = `
       <div class="page-label">Page ${index + 1}</div>
-      <div class="remove-btn" onclick="removeImage(${index})">×</div>
-      <img src="${src}" alt="Page ${index + 1}">
+      <button class="remove-btn" onclick="removeImage(event, ${index})">×</button>
+      <img src="${src}" draggable="false">
     `;
 
                 // Drag to rearrange
-                block.ondragstart = e => e.dataTransfer.setData('index', index);
-                block.ondragover = e => e.preventDefault();
+                block.ondragstart = e => {
+                    dragIndex = index;
+                    setTimeout(() => block.style.opacity = '0.4', 0);
+                };
+                block.ondragend = () => { block.style.opacity = '1'; };
+                block.ondragover = e => { e.preventDefault(); block.classList.add('drag-over'); };
+                block.ondragleave = () => { block.classList.remove('drag-over'); };
                 block.ondrop = e => {
                     e.preventDefault();
-                    const from = e.dataTransfer.getData('index');
-                    if (from != index) {
-                        [images[from], images[index]] = [images[index], images[from]];
+                    block.classList.remove('drag-over');
+                    if (dragIndex !== null && dragIndex !== index) {
+                        const temp = images[dragIndex];
+                        images.splice(dragIndex, 1);
+                        images.splice(index, 0, temp);
                         renderPreviews();
                     }
+                    dragIndex = null;
                 };
 
                 container.appendChild(block);
             });
 
-            // Always show beautiful + button at the end
+            // Beautiful + button at the end
             const addBtn = document.createElement('div');
             addBtn.className = 'add-button';
-            addBtn.id = 'addBtn';
-            addBtn.innerHTML = '+<span>Add More Images</span>';
+            addBtn.innerHTML = `
+    <div class="add-icon">+</div>
+    <div class="add-text">Add More</div>
+  `;
             addBtn.onclick = () => document.getElementById('fileInput').click();
             container.appendChild(addBtn);
 
+            // Update count
+            document.getElementById('imageCount').textContent = images.length > 0 ? `${images.length} image${images.length > 1 ? 's' : ''} selected` : '';
+
+            // Show/hide convert button
             if (images.length > 0) {
-                document.getElementById('preview').style.display = 'flex';
                 document.getElementById('convertSection').style.display = 'block';
                 document.getElementById('dropArea').style.display = 'none';
             } else {
-                document.getElementById('preview').style.display = 'none';
                 document.getElementById('convertSection').style.display = 'none';
                 document.getElementById('dropArea').style.display = 'block';
             }
         }
 
-        function removeImage(index) {
+        function removeImage(event, index) {
+            event.stopPropagation();
             images.splice(index, 1);
             renderPreviews();
+            if (images.length === 0) {
+                document.getElementById('preview').style.display = 'none';
+                document.getElementById('imageCount').textContent = '';
+                document.getElementById('dropArea').style.display = 'block';
+                document.getElementById('convertSection').style.display = 'none';
+            }
         }
 
         async function convertToPDF() {
-            if (images.length === 0) return;
+            if (images.length === 0) return alert("Add images first!");
 
             document.getElementById('convertSection').style.display = 'none';
             document.getElementById('progress').style.display = 'block';
@@ -224,32 +258,41 @@
 
                 for (const imgData of images) {
                     const imgBytes = Uint8Array.from(atob(imgData.split(',')[1]), c => c.charCodeAt(0));
+
                     let image;
                     try {
-                        image = await pdfDoc.embedPng(imgBytes);
-                    } catch {
                         image = await pdfDoc.embedJpg(imgBytes);
-                    }
-
-                    // Safety cap for extremely large images
-                    const MAX_DIMENSION = 2000;
-                    let width = image.width;
-                    let height = image.height;
-
-                    if (width > height) {
-                        if (width > MAX_DIMENSION) {
-                            height *= MAX_DIMENSION / width;
-                            width = MAX_DIMENSION;
-                        }
-                    } else {
-                        if (height > MAX_DIMENSION) {
-                            width *= MAX_DIMENSION / height;
-                            height = MAX_DIMENSION;
+                    } catch {
+                        try {
+                            image = await pdfDoc.embedPng(imgBytes);
+                        } catch {
+                            alert("One image format not supported. Try JPG or PNG.");
+                            document.getElementById('progress').style.display = 'none';
+                            document.getElementById('convertSection').style.display = 'block';
+                            return;
                         }
                     }
 
-                    const page = pdfDoc.addPage([width, height]);
-                    page.drawImage(image, { x: 0, y: 0, width: width, height: height });
+                    // A4 size page with image fitted inside
+                    const A4_WIDTH = 595.28;
+                    const A4_HEIGHT = 841.89;
+                    const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT]);
+
+                    // Calculate fit natively
+                    const imgWidth = image.width;
+                    const imgHeight = image.height;
+                    const ratio = Math.min(A4_WIDTH / imgWidth, A4_HEIGHT / imgHeight);
+                    const finalWidth = imgWidth * ratio;
+                    const finalHeight = imgHeight * ratio;
+                    const x = (A4_WIDTH - finalWidth) / 2;
+                    const y = (A4_HEIGHT - finalHeight) / 2;
+
+                    page.drawImage(image, {
+                        x: x,
+                        y: y,
+                        width: finalWidth,
+                        height: finalHeight
+                    });
                 }
 
                 const pdfBytes = await pdfDoc.save();
