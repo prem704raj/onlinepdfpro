@@ -440,15 +440,22 @@
                                         canvas.width = img.width;
                                         canvas.height = img.height;
                                         const ctx = canvas.getContext('2d');
+                                        // Ensure canvas background is white (for transparent PNG/WebPs being forced to JPG)
+                                        ctx.fillStyle = '#FFFFFF';
+                                        ctx.fillRect(0, 0, canvas.width, canvas.height);
                                         ctx.drawImage(img, 0, 0);
-                                        resolve(canvas.toDataURL('image/jpeg', 0.95));
+                                        resolve(canvas.toDataURL('image/jpeg', 1.0));
                                     };
                                     img.onerror = reject;
                                     img.src = imgData;
                                 });
-                                const cleanBytes = Uint8Array.from(atob(cleanJpegData.split(',')[1]), c => c.charCodeAt(0));
+
+                                // Securely convert Base64 Data URL to pristine ArrayBuffer
+                                const res = await fetch(cleanJpegData);
+                                const cleanBytes = await res.arrayBuffer();
                                 image = await pdfDoc.embedJpg(cleanBytes);
                             } catch (fallbackErr) {
+                                console.error("Ultimate fallback failed:", fallbackErr);
                                 alert("One image format could not be processed natively. Please remove the corrupted image and try again.");
                                 document.getElementById('progress').style.display = 'none';
                                 document.getElementById('convertSection').style.display = 'block';
