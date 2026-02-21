@@ -65,7 +65,7 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 800px; margin: 0 auto;">
+    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 900px; margin: 0 auto;">
         <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Images to PDF</h1>
         <p class="tool-description" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px;">
             Convert multiple JPG, PNG, or WebP images into a single PDF instantly.
@@ -79,13 +79,16 @@
             <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
         </div>
 
-        <div id="preview" style="margin-top:30px; text-align:center;"></div>
+        <div id="preview" class="preview-container fade-in" style="display:none;"></div>
 
-        <div id="convertBtn" style="display:none; text-align:center; margin:40px 0;">
-            <button onclick="convertToPDF()" class="btn btn-primary btn-lg"
-                style="padding:18px 50px; font-size:20px;">Convert to PDF & Download</button>
+        <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;">
+            <h3 style="color: var(--text-primary); margin-bottom: 20px;">🖼️ Combining Images to PDF...</h3>
         </div>
 
+        <div id="convertSection" class="fade-in" style="display:none; text-align:center; margin:40px 0;">
+            <button onclick="convertToPDF()" class="btn btn-primary btn-lg"
+                style="padding:18px 60px; font-size:20px;">Convert to PDF & Download</button>
+        </div>
     </main>
 
     
@@ -112,110 +115,135 @@
         </div>
     </footer>
 
-    <script src="../js/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script src="../js/app.js"></script>
 
     <script>
-        // YE TEENO TARAH SE KAAM KAREGA — click, drop, ya drag
+        let images = [];
+
+        // Initial upload area
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => addImages(e.target.files);
+
+        // Drag & Drop on main area
         const dropArea = document.getElementById('dropArea');
-        const fileInput = document.getElementById('fileInput');
 
-        dropArea.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-        dropArea.addEventListener('dragover', e => {
+        dropArea.ondragover = e => {
             e.preventDefault();
-            dropArea.style.background = '#f0f9ff';
-            dropArea.style.border = '3px dashed #2563eb';
-        });
-
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.style.background = '';
-            dropArea.style.border = '';
-        });
-
-        dropArea.addEventListener('drop', e => {
+            dropArea.style.borderColor = 'var(--accent)';
+        };
+        dropArea.ondragleave = e => {
+            dropArea.style.borderColor = 'var(--border)';
+        };
+        dropArea.ondrop = e => {
             e.preventDefault();
-            dropArea.style.background = '';
-            dropArea.style.border = '';
-            handleFiles(e.dataTransfer.files);
-        });
+            dropArea.style.borderColor = 'var(--border)';
+            addImages(e.dataTransfer.files);
+        };
 
-        let selectedImages = [];
-
-        function handleFiles(files) {
-            selectedImages = [];
-            document.getElementById('preview').innerHTML = '';
-
-            [...files].forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    selectedImages.push(file);
-
-                    const reader = new FileReader();
-                    reader.onload = e => {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.width = '150px';
-                        img.style.height = '200px';
-                        img.style.objectFit = 'cover';
-                        img.style.margin = '10px';
-                        img.style.borderRadius = '12px';
-                        img.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
-                        document.getElementById('preview').appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                }
+        function addImages(fileList) {
+            // Use Promise.all to ensure sequential order matches selection
+            const filePromises = [...fileList].map(file => {
+                return new Promise(resolve => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            resolve(e.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        resolve(null);
+                    }
+                });
             });
 
-            if (selectedImages.length > 0) {
-                document.getElementById('convertBtn').style.display = 'block';
-            }
+            Promise.all(filePromises).then(results => {
+                results.forEach(res => {
+                    if (res) images.push(res);
+                });
+                renderPreviews();
+            });
+        }
+
+        function renderPreviews() {
+            const container = document.getElementById('preview');
+            container.innerHTML = ''; // clear
+
+            images.forEach((src, index) => {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                div.draggable = true;
+                div.innerHTML = `
+      <div class="page-number">Page ${index + 1}</div>
+      <div class="remove-btn" onclick="removeImage(${index})">×</div>
+      <img src="${src}" alt="Page ${index + 1}">
+    `;
+
+                // Drag events
+                div.ondragstart = e => e.dataTransfer.setData('text/plain', index);
+                div.ondragover = e => e.preventDefault();
+                div.ondrop = e => {
+                    e.preventDefault();
+                    const fromIndex = e.dataTransfer.getData('text');
+                    const toIndex = index;
+                    if (fromIndex !== toIndex) {
+                        [images[fromIndex], images[toIndex]] = [images[toIndex], images[fromIndex]];
+                        renderPreviews();
+                    }
+                };
+
+                container.appendChild(div);
+            });
+
+            // Always show + button at the end
+            const addBtn = document.createElement('div');
+            addBtn.className = 'add-more';
+            addBtn.id = 'addMore';
+            addBtn.textContent = '+';
+            addBtn.onclick = () => document.getElementById('fileInput').click();
+            container.appendChild(addBtn);
+
+            document.getElementById('preview').style.display = images.length > 0 ? 'flex' : 'none';
+            document.getElementById('convertSection').style.display = images.length > 0 ? 'block' : 'none';
+        }
+
+        function removeImage(index) {
+            images.splice(index, 1);
+            renderPreviews();
         }
 
         async function convertToPDF() {
-            const pdfDoc = await PDFLib.PDFDocument.create();
+            if (images.length === 0) return;
 
-            for (const imageFile of selectedImages) {
-                const arrayBuffer = await imageFile.arrayBuffer();
+            document.getElementById('convertSection').style.display = 'none';
+            document.getElementById('progress').style.display = 'block';
 
-                // Auto detects jpg/png/webp for generic embedding
-                let image;
-                if (imageFile.type === 'image/png') {
-                    image = await pdfDoc.embedPng(arrayBuffer);
-                } else {
-                    image = await pdfDoc.embedJpg(arrayBuffer);
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+
+                for (const imgData of images) {
+                    const imgBytes = Uint8Array.from(atob(imgData.split(',')[1]), c => c.charCodeAt(0));
+                    let image;
+                    try {
+                        image = await pdfDoc.embedPng(imgBytes);
+                    } catch {
+                        image = await pdfDoc.embedJpg(imgBytes);
+                    }
+
+                    const page = pdfDoc.addPage([image.width, image.height]);
+                    page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
                 }
 
-                // Scale down image dimensions if they are insanely huge to prevent blank pages
-                const MAX_DIMENSION = 2000;
-                let width = image.width;
-                let height = image.height;
-
-                if (width > height) {
-                    if (width > MAX_DIMENSION) {
-                        height *= MAX_DIMENSION / width;
-                        width = MAX_DIMENSION;
-                    }
-                } else {
-                    if (height > MAX_DIMENSION) {
-                        width *= MAX_DIMENSION / height;
-                        height = MAX_DIMENSION;
-                    }
-                }
-
-                const page = pdfDoc.addPage([width, height]);
-                page.drawImage(image, {
-                    x: 0,
-                    y: 0,
-                    width: width,
-                    height: height,
-                });
+                const pdfBytes = await pdfDoc.save();
+                download(pdfBytes, "Images-to-PDF-OnlinePDFPro.pdf", "application/pdf");
+            } catch (err) {
+                console.error(err);
+                alert("Error converting images to PDF. Ensure they are valid JPG/PNG files.");
             }
 
-            const pdfBytes = await pdfDoc.save();
-            download(pdfBytes, "Images-to-PDF-OnlinePDFPro.pdf", "application/pdf");
+            document.getElementById('progress').style.display = 'none';
+            document.getElementById('convertSection').style.display = 'block';
         }
     </script>
 
