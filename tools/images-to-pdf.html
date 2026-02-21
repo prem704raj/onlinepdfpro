@@ -49,168 +49,46 @@
         gtag('config', 'G-XXXXXXX');
     </script>
 
-    <!-- Google AdSense Head -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 
-<body class="fade-in">
-        <a href="#main" class="skip-link">Skip to main content</a>
+<body>
 
     <header class="header">
-        <div class="header-content">
-            <a href="../index.html" class="logo">
-                <span class="logo-icon">📄</span>
-                <span class="logo-text">OnlinePDFPro</span>
-            </a>
-            <nav class="nav" id="nav">
-                <a href="../tools.html" class="nav-link">All Tools</a>
-                <a href="../about.html" class="nav-link">About</a>
-                <a href="../help.html" class="nav-link">Help</a>
-            </nav>
-            <div class="header-actions">
-                <div class="lang-selector">
-                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg></button>
-                    <div class="lang-dropdown">
-                        <div class="lang-search-wrap">
-                            <input type="text" class="lang-search" placeholder="Search language...">
-                        </div>
-                        <ul class="lang-list"></ul>
-                    </div>
-                </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-                <a href="../tools.html" class="btn btn-primary">All Tools</a>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">📄</span>
+                    <span class="logo-text">OnlinePDFPro</span>
+                </a>
+                <button class="menu-toggle" aria-label="Menu">☰</button>
             </div>
         </div>
     </header>
 
-    <main id="main" class="tool-page">
-        <div class="container" style="max-width: 900px;">
-            <div class="tool-header">
-                <span class="section-tag fade-in">Layout Engine</span>
-                <h1 class="tool-title fade-in">Images to PDF</h1>
-                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Transform your visuals into a professional document.
-                    Reorder with ease and customize every page property.
-                </p>
-            </div>
+    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 800px; margin: 0 auto;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Images to PDF</h1>
+        <p class="tool-description" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px;">
+            Convert multiple JPG, PNG, or WebP images into a single PDF instantly.
+        </p>
 
-            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">🖼️</span>
-                <p class="upload-text">Select images to convert</p>
-                <p class="upload-hint">JPG, PNG, WebP. Your privacy is baked in.</p>
-                <button class="btn btn-primary upload-btn">Choose Visuals</button>
-            </div>
-
-            <div id="imageSection" style="display: none;">
-                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
-                    <h3 class="options-title"
-                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 20px;">Document
-                        Setup</h3>
-                    <div class="options-grid">
-                        <div class="option-group">
-                            <label>Page Size</label>
-                            <div class="option-buttons" id="pageSizeOptions">
-                                <button class="option-btn active" data-size="a4">A4</button>
-                                <button class="option-btn" data-size="letter">Letter</button>
-                                <button class="option-btn" data-size="fit">Fit Image</button>
-                            </div>
-                        </div>
-                        <div class="option-group">
-                            <label>Orientation</label>
-                            <div class="option-buttons" id="orientationOptions">
-                                <button class="option-btn active" data-orient="portrait">Portrait</button>
-                                <button class="option-btn" data-orient="landscape">Landscape</button>
-                                <button class="option-btn" data-orient="auto">Auto</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;">
-                    💡 Drag cards to rearrange page order
-                </p>
-
-                <div class="thumbnails-grid" id="imageGrid"></div>
-
-                <div style="text-align: center; margin-bottom: 40px;">
-                    <button class="btn btn-secondary" id="addMoreBtn">+ Add More Media</button>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn btn-primary btn-lg" id="createBtn"
-                        style="width: 100%; padding: 18px; font-size: 1.1rem;">Generate PDF</button>
-                </div>
-            </div>
-
-            <div id="progressSection" style="display: none;">
-                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
-                    <div class="progress-container" id="progressContainer"></div>
-                </div>
-            </div>
-
-            <div id="resultsSection" style="display: none;">
-                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
-                    <div class="success-message"
-                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 32px;">
-                        PDF Created Successfully
-                    </div>
-
-                    <div class="results-stats"
-                        style="display: flex; justify-content: center; gap: 40px; margin-bottom: 40px;">
-                        <div class="stat-item">
-                            <div class="stat-value" id="pageCount"
-                                style="font-size: 2rem; font-weight: 700; color: var(--primary); font-family: 'Outfit', sans-serif;">
-                                0</div>
-                            <div class="stat-label"
-                                style="font-size: 0.8125rem; color: var(--text-muted); text-transform: uppercase;">Pages
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="fileSize"
-                                style="font-size: 2rem; font-weight: 700; color: var(--primary); font-family: 'Outfit', sans-serif;">
-                                0 KB</div>
-                            <div class="stat-label"
-                                style="font-size: 0.8125rem; color: var(--text-muted); text-transform: uppercase;">Size
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="download-section">
-                        <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
-                            Document</button>
-                    </div>
-                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
-                </div>
-                <div class="action-buttons mt-lg" style="text-align: center;">
-                    <button class="btn btn-secondary" id="createAnother">New Session</button>
-                </div>
-            </div>
-
-            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
-                <span class="privacy-reminder-icon">🛡️</span>
-                <span>Pro-grade engine. 100% on-device isolation.</span>
-            </div>
+        <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
+            <span class="upload-icon">🖼️</span>
+            <p class="upload-text">Click here or Drop Images (JPG, PNG, WebP)<br><span
+                    style="font-size: 0.9em; color: var(--text-muted);">Multiple images allowed → will become
+                    pages</span></p>
+            <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
         </div>
-    
-            <!-- Google AdSense Tool Page (After Result) -->
-            <div style="text-align:center; margin:50px 0;">
-              <ins class="adsbygoogle"
-                   style="display:block"
-                   data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                   data-ad-slot="9876543210"
-                   data-ad-format="auto"
-                   data-full-width-responsive="true"></ins>
-              <script>
-                   (adsbygoogle = window.adsbygoogle || []).push({});
-              </script>
-            </div>
-</main>
 
-        
+        <div id="preview" style="margin-top:30px; text-align:center;"></div>
+
+        <div id="convertBtn" style="display:none; text-align:center; margin:40px 0;">
+            <button onclick="convertToPDF()" class="btn btn-primary btn-lg"
+                style="padding:18px 50px; font-size:20px;">Convert to PDF & Download</button>
+        </div>
+
+    </main>
+
+    
 <!-- Viral Badge (Made with Love) -->
 <div style="text-align:center; margin:40px 0; padding:20px; background:#f0f9ff; border-radius:16px;">
   <h2 style="margin:0; color:#2563eb; font-size:24px;">Made with ❤️ by a 2nd year CSE student</h2>
@@ -228,242 +106,119 @@
 </div>
 
 <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="../index.html" class="logo">
-                        <span class="logo-icon">📄</span>
-                        <span class="logo-text">OnlinePDFPro</span>
-                    </a>
-                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
-                </div>
-                <div class="footer-links-group">
-                    <h4>Platform</h4>
-                    <ul>
-                        <li><a href="../tools.html">All Tools</a></li>
-                        <li><a href="../about.html">About</a></li>
-                        <li><a href="../help.html">Help</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links-group">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="../privacy.html">Privacy Policy</a></li>
-                        <li><a href="../terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
-                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.</p>
-            </div>
+        <div class="container"
+            style="text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 40px;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 OnlinePDFPro. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
     <script>
-        (function () {
-            const { PDFDocument } = PDFLib;
+        // YE TEENO TARAH SE KAAM KAREGA — click, drop, ya drag
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
 
-            let images = [];
-            let pageSize = 'a4';
-            let orientation = 'portrait';
-            let pdfBytes = null;
-            let draggedItem = null;
+        dropArea.addEventListener('click', () => fileInput.click());
 
-            const uploadZone = document.getElementById('uploadZone');
-            const imageSection = document.getElementById('imageSection');
-            const imageGrid = document.getElementById('imageGrid');
-            const progressSection = document.getElementById('progressSection');
-            const resultsSection = document.getElementById('resultsSection');
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
-            const addMoreInput = document.createElement('input');
-            addMoreInput.type = 'file';
-            addMoreInput.accept = 'image/*';
-            addMoreInput.multiple = true;
-            addMoreInput.style.display = 'none';
-            document.body.appendChild(addMoreInput);
+        dropArea.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropArea.style.background = '#f0f9ff';
+            dropArea.style.border = '3px dashed #2563eb';
+        });
 
-            OnlinePDFPro.FileUploader.init('uploadZone', {
-                accept: 'image/jpeg,image/png,image/webp',
-                multiple: true,
-                onFilesSelected: handleFilesSelected
-            });
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.background = '';
+            dropArea.style.border = '';
+        });
 
-            async function handleFilesSelected(files) {
-                for (const file of files) {
-                    const dataUrl = await readFileAsDataURL(file);
-                    images.push({ file, dataUrl });
-                }
-                renderImageGrid();
-                uploadZone.style.display = 'none';
-                imageSection.style.display = 'block';
-            }
+        dropArea.addEventListener('drop', e => {
+            e.preventDefault();
+            dropArea.style.background = '';
+            dropArea.style.border = '';
+            handleFiles(e.dataTransfer.files);
+        });
 
-            function renderImageGrid() {
-                imageGrid.innerHTML = '';
-                images.forEach((img, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'thumbnail-item';
-                    item.draggable = true;
-                    item.dataset.index = index;
-                    item.innerHTML = `
-                        <img src="${img.dataUrl}" class="thumbnail-image" alt="Image ${index + 1}">
-                        <span class="thumbnail-number">${index + 1}</span>
-                        <button class="file-remove" data-index="${index}">✕</button>
-                    `;
+        let selectedImages = [];
 
-                    item.addEventListener('dragstart', (e) => {
-                        draggedItem = item;
-                        item.style.opacity = '0.5';
-                    });
-                    item.addEventListener('dragover', (e) => e.preventDefault());
-                    item.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        if (draggedItem && draggedItem !== item) {
-                            const fromIdx = parseInt(draggedItem.dataset.index);
-                            const toIdx = parseInt(item.dataset.index);
-                            const [moved] = images.splice(fromIdx, 1);
-                            images.splice(toIdx, 0, moved);
-                            renderImageGrid();
-                        }
-                    });
-                    item.addEventListener('dragend', () => {
-                        document.querySelectorAll('.thumbnail-item').forEach(i => i.style.opacity = '1');
-                    });
+        function handleFiles(files) {
+            selectedImages = [];
+            document.getElementById('preview').innerHTML = '';
 
-                    imageGrid.appendChild(item);
-                });
+            [...files].forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    selectedImages.push(file);
 
-                imageGrid.querySelectorAll('.file-remove').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        images.splice(parseInt(e.target.dataset.index), 1);
-                        if (images.length === 0) resetTool();
-                        else renderImageGrid();
-                    });
-                });
-            }
-
-            document.querySelectorAll('#pageSizeOptions .option-btn').forEach(btn => {
-                btn.onclick = () => {
-                    document.querySelectorAll('#pageSizeOptions .option-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    pageSize = btn.dataset.size;
-                };
-            });
-
-            document.querySelectorAll('#orientationOptions .option-btn').forEach(btn => {
-                btn.onclick = () => {
-                    document.querySelectorAll('#orientationOptions .option-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    orientation = btn.dataset.orient;
-                };
-            });
-
-            document.getElementById('addMoreBtn').onclick = () => addMoreInput.click();
-            addMoreInput.onchange = (e) => {
-                handleFilesSelected(Array.from(e.target.files));
-                addMoreInput.value = '';
-            };
-
-            document.getElementById('createBtn').onclick = createPDF;
-
-            async function createPDF() {
-                if (images.length === 0) return;
-                imageSection.style.display = 'none';
-                progressSection.style.display = 'block';
-                const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
-
-                try {
-                    const pdf = await PDFLib.PDFDocument.create();
-                    for (let i = 0; i < images.length; i++) {
-                        progress.update((i / images.length) * 90, `Rendering page ${i + 1}...`);
-                        const img = images[i];
-                        const imageBytes = await fetch(img.dataUrl).then(r => r.arrayBuffer());
-                        let embeddedImage;
-                        if (img.file.type === 'image/png') embeddedImage = await pdf.embedPng(imageBytes);
-                        else embeddedImage = await pdf.embedJpg(imageBytes);
-
-                        const imgWidth = embeddedImage.width;
-                        const imgHeight = embeddedImage.height;
-                        let pageWidth, pageHeight;
-
-                        if (pageSize === 'fit') {
-                            pageWidth = imgWidth;
-                            pageHeight = imgHeight;
-                        } else {
-                            const sizes = { a4: { w: 595.28, h: 841.89 }, letter: { w: 612, h: 792 } };
-                            const size = sizes[pageSize];
-                            let orient = orientation;
-                            if (orient === 'auto') orient = imgWidth > imgHeight ? 'landscape' : 'portrait';
-                            if (orient === 'landscape') { pageWidth = size.h; pageHeight = size.w; }
-                            else { pageWidth = size.w; pageHeight = size.h; }
-                        }
-
-                        const page = pdf.addPage([pageWidth, pageHeight]);
-                        const scale = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
-                        const scaledWidth = imgWidth * scale;
-                        const scaledHeight = imgHeight * scale;
-                        const x = (pageWidth - scaledWidth) / 2;
-                        const y = (pageHeight - scaledHeight) / 2;
-                        page.drawImage(embeddedImage, { x, y, width: scaledWidth, height: scaledHeight });
-                    }
-
-                    progress.update(95, 'Optimizing bytes...');
-                    pdfBytes = await pdf.save();
-                    document.getElementById('pageCount').textContent = images.length;
-                    document.getElementById('fileSize').textContent = OnlinePDFPro.Utils.formatFileSize(pdfBytes.length);
-                    progress.complete('Success!');
-
-                    setTimeout(() => {
-                        progressSection.style.display = 'none';
-                        resultsSection.style.display = 'block';
-                        OnlinePDFPro.AutoClear.start(300, resetTool, document.getElementById('autoClear'));
-                        OnlinePDFPro.RecentlyUsed.add('images-to-pdf', 'Images to PDF');
-                    }, 500);
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    resetTool();
-                }
-            }
-
-            document.getElementById('downloadBtn').onclick = () => {
-                if (!pdfBytes) return;
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, 'images-to-pdf.pdf');
-            };
-
-            document.getElementById('createAnother').onclick = resetTool;
-
-            function resetTool() {
-                images = []; pdfBytes = null; imageGrid.innerHTML = '';
-                uploadZone.style.display = 'block'; imageSection.style.display = 'none';
-                progressSection.style.display = 'none'; resultsSection.style.display = 'none';
-                OnlinePDFPro.AutoClear.clearAll();
-            }
-
-            function readFileAsDataURL(file) {
-                return new Promise((resolve, reject) => {
                     const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = reject;
+                    reader.onload = e => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '150px';
+                        img.style.height = '200px';
+                        img.style.objectFit = 'cover';
+                        img.style.margin = '10px';
+                        img.style.borderRadius = '12px';
+                        img.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                        document.getElementById('preview').appendChild(img);
+                    };
                     reader.readAsDataURL(file);
+                }
+            });
+
+            if (selectedImages.length > 0) {
+                document.getElementById('convertBtn').style.display = 'block';
+            }
+        }
+
+        async function convertToPDF() {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+
+            for (const imageFile of selectedImages) {
+                const arrayBuffer = await imageFile.arrayBuffer();
+
+                // Auto detects jpg/png/webp for generic embedding
+                let image;
+                if (imageFile.type === 'image/png') {
+                    image = await pdfDoc.embedPng(arrayBuffer);
+                } else {
+                    image = await pdfDoc.embedJpg(arrayBuffer);
+                }
+
+                // Scale down image dimensions if they are insanely huge to prevent blank pages
+                const MAX_DIMENSION = 2000;
+                let width = image.width;
+                let height = image.height;
+
+                if (width > height) {
+                    if (width > MAX_DIMENSION) {
+                        height *= MAX_DIMENSION / width;
+                        width = MAX_DIMENSION;
+                    }
+                } else {
+                    if (height > MAX_DIMENSION) {
+                        width *= MAX_DIMENSION / height;
+                        height = MAX_DIMENSION;
+                    }
+                }
+
+                const page = pdfDoc.addPage([width, height]);
+                page.drawImage(image, {
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: height,
                 });
             }
-        })();
+
+            const pdfBytes = await pdfDoc.save();
+            download(pdfBytes, "Images-to-PDF-OnlinePDFPro.pdf", "application/pdf");
+        }
     </script>
 
-    <!-- Google AdSense Sticky Bottom -->
-    <div style="position:fixed; bottom:0; left:0; width:100%; background:white; padding:8px; box-shadow:0 -4px 20px rgba(0,0,0,0.1); text-align:center; z-index:9999;">
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:320px;height:100px"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="5555555555"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
 
 <!-- Floating WhatsApp Button -->
 <a href="https://wa.me/?text=Best%20Free%20PDF%20tool%20I%20found%20%F0%9F%94%A5%0A%F0%9F%94%97%20https://onlinepdfpro.com" 
