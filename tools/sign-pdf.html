@@ -249,20 +249,38 @@
             </div>
 
             <div id="editor" style="display:none; margin-top: 32px;">
-                <div
-                    style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
-                    <button onclick="openSignatureModal()" class="btn btn-secondary">✍️ Add Signature</button>
-                    <select id="pageSelector" class="select-styled"></select>
-                    <button id="applyAllBtn" onclick="applyToAll()" class="btn btn-secondary"
-                        style="display: none;">Apply to All Pages</button>
-                    <button onclick="clearAll()" class="btn btn-secondary text-only">Clear All</button>
-                    <button onclick="downloadPDF()" class="btn btn-primary">💾 Download Signed PDF</button>
+                <div class="sticky-controls"
+                    style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; align-items: center; position: sticky; top: 80px; z-index: 100; padding: 20px; background: var(--surface-1); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--border);">
+
+                    <button onclick="openSignatureModal()" class="btn"
+                        style="background: #2563eb; color: white; border: none; font-weight: bold; padding: 12px 20px; border-radius: 12px; font-size: 16px;">✍️
+                        Add New Signature</button>
+
+                    <div
+                        style="display: flex; align-items: center; gap: 12px; border-left: 2px solid var(--border); padding-left: 16px; margin-left: 4px;">
+                        <label style="font-weight: 600; color: var(--text-primary); font-size: 16px;">Add to
+                            &rarr;</label>
+                        <select id="pageSelector" class="select-styled"
+                            style="padding: 12px 20px; border-radius: 12px; font-size: 16px; min-width: 120px;"></select>
+                    </div>
+
+                    <button id="applyAllBtn" onclick="applyToAll()" class="btn"
+                        style="display: none; background: #10b981; color: white; border: none; font-weight: bold; padding: 12px 20px; border-radius: 12px; font-size: 16px;">Apply
+                        to All Pages</button>
+
+                    <button onclick="downloadPDF()" class="btn"
+                        style="background: #2563eb; color: white; border: none; font-weight: bold; padding: 12px 20px; border-radius: 12px; font-size: 16px; margin-left: auto;">💾
+                        Download Signed PDF</button>
                 </div>
 
                 <div id="pages-container" class="fade-in">
-                    <p style="color: var(--text-muted); text-align: center; margin-bottom: 16px; font-size: 0.9rem;">
-                        Scroll to view pages. Use buttons above to add signatures, then drag them anywhere.
-                    </p>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 16px; padding: 0 16px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Scroll to view pages. Use
+                            buttons above to add signatures, then drag them anywhere.</p>
+                        <button onclick="clearAll()" class="btn btn-secondary text-only"
+                            style="font-size: 0.9rem; padding: 6px 12px;">Clear All Signatures</button>
+                    </div>
                     <div id="pages" style="text-align: center;"></div>
                 </div>
             </div>
