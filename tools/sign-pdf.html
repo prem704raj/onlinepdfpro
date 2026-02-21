@@ -27,6 +27,21 @@
             box-shadow: var(--shadow-xl);
             border: 1px solid var(--border);
             max-width: 100%;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .page-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            z-index: 10;
+            font-weight: 500;
         }
 
         .page canvas {
@@ -42,6 +57,8 @@
             border: 2px dashed transparent;
             transition: border-color 0.2s;
             box-sizing: border-box;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         }
 
         .signature:active {
@@ -54,7 +71,7 @@
 
         .signature.active {
             border-color: var(--primary);
-            transform: scale(1.02);
+            z-index: 100;
         }
 
         .resize-handle {
@@ -98,7 +115,19 @@
             overflow-x: auto;
         }
 
-        /* Modal styling for drawing pad */
+        .select-styled {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Modal styling */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -209,7 +238,7 @@
                 <span class="section-tag fade-in">Interactive E-Signature</span>
                 <h1 class="tool-title fade-in">Sign PDF</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Drag, drop, and resize your signature perfectly on the page. 100% private.
+                    Drag, drop, and resize your signature perfectly on any page. 100% private.
                 </p>
             </div>
 
@@ -220,10 +249,14 @@
             </div>
 
             <div id="editor" style="display:none; margin-top: 32px;">
-                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;">
-                    <button onclick="openSignatureModal()" class="btn btn-secondary">+ Add Signature</button>
+                <div
+                    style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; align-items: center;">
+                    <button onclick="openSignatureModal()" class="btn btn-secondary">✍️ Add Signature</button>
+                    <select id="pageSelector" class="select-styled"></select>
+                    <button id="applyAllBtn" onclick="applyToAll()" class="btn btn-secondary"
+                        style="display: none;">Apply to All Pages</button>
                     <button onclick="clearAll()" class="btn btn-secondary text-only">Clear All</button>
-                    <button onclick="downloadPDF()" class="btn btn-primary">Download Signed PDF</button>
+                    <button onclick="downloadPDF()" class="btn btn-primary">💾 Download Signed PDF</button>
                 </div>
 
                 <div id="pages-container" class="fade-in">
@@ -262,7 +295,6 @@
 
     <script>
         let pdfDoc = null;
-        let originalPdfBytes = null;
 
         // Worker setup for PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
@@ -287,12 +319,13 @@
             if (!file || file.type !== 'application/pdf') return alert('Please upload a valid PDF.');
 
             const arrayBuffer = await file.arrayBuffer();
-            originalPdfBytes = arrayBuffer;
             pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
 
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             const pagesDiv = document.getElementById('pages');
+            const selector = document.getElementById('pageSelector');
             pagesDiv.innerHTML = '';
+            selector.innerHTML = '';
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -304,12 +337,21 @@
 
                 const pageDiv = document.createElement('div');
                 pageDiv.className = 'page';
+                pageDiv.innerHTML = `<div class="page-label">Page ${i}</div>`;
                 pageDiv.appendChild(canvas);
                 pagesDiv.appendChild(pageDiv);
+
+                const option = document.createElement('option');
+                option.value = i - 1;
+                option.textContent = `Page ${i}`;
+                selector.appendChild(option);
             }
 
             dropArea.style.display = 'none';
             document.getElementById('editor').style.display = 'block';
+            selector.style.display = 'inline-block';
+            document.getElementById('applyAllBtn').style.display = 'inline-block';
+            selector.selectedIndex = 0;
         }
 
         // Modal logic
@@ -339,7 +381,6 @@
         }
 
         function startPadDraw(e) {
-            const tgt = e.target;
             if (e.type.includes('touch')) e.preventDefault();
             drawing = true;
             const pos = getMousePos(pad, e);
@@ -378,7 +419,6 @@
         }
 
         function saveModalSignature() {
-            // Prevent empty save
             const blank = document.createElement('canvas');
             blank.width = pad.width;
             blank.height = pad.height;
@@ -393,35 +433,93 @@
 
         // signature placement & manipulation
         function placeSignature(dataURL) {
+            const pageIndex = document.getElementById('pageSelector').value;
             const pages = document.querySelectorAll('.page');
-            if (pages.length === 0) return;
+            if (pages.length === 0 || !pages[pageIndex]) return;
 
-            const sig = document.createElement('img');
-            sig.src = dataURL;
+            const pageDiv = pages[pageIndex];
+
+            // Using div with background image to avoid img nesting issues
+            const sig = document.createElement('div');
             sig.className = 'signature';
+            sig.dataset.url = dataURL;
+            sig.style.backgroundImage = `url(${dataURL})`;
             sig.style.left = '50px';
             sig.style.top = '50px';
             sig.style.width = '200px';
+            sig.style.height = '100px';
+            // Ratio of modal pad (400x200 = 2:1 ratio)
 
             const resize = document.createElement('div');
             resize.className = 'resize-handle';
 
             const del = document.createElement('div');
             del.className = 'delete-btn';
-            del.innerHTML = '&#215;'; // multiply char
+            del.innerHTML = '&#215;';
             del.onclick = (e) => { e.stopPropagation(); sig.remove(); };
 
             sig.appendChild(resize);
             sig.appendChild(del);
 
-            // Defaults to page 1
-            pages[0].appendChild(sig);
+            pageDiv.appendChild(sig);
 
             makeDraggable(sig);
             makeResizable(sig, resize);
 
-            // Scroll to page it was added to
-            pages[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            pageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function applyToAll() {
+            const pages = document.querySelectorAll('.page');
+            if (pages.length <= 1) return alert("This document only has 1 page.");
+
+            const allSigs = [];
+            pages.forEach((page, pageIndex) => {
+                const sigs = page.querySelectorAll('.signature');
+                sigs.forEach(sig => {
+                    allSigs.push({
+                        sourcePageIndex: pageIndex,
+                        dataURL: sig.dataset.url,
+                        x: sig.style.left,
+                        y: sig.style.top,
+                        width: sig.style.width,
+                        height: sig.style.height
+                    });
+                });
+            });
+
+            if (allSigs.length === 0) return alert("Please add at least one signature first!");
+
+            pages.forEach((page, targetIdx) => {
+                allSigs.forEach(sigData => {
+                    if (targetIdx !== sigData.sourcePageIndex) {
+                        const newSig = document.createElement('div');
+                        newSig.className = 'signature';
+                        newSig.dataset.url = sigData.dataURL;
+                        newSig.style.backgroundImage = `url(${sigData.dataURL})`;
+                        newSig.style.left = sigData.x;
+                        newSig.style.top = sigData.y;
+                        newSig.style.width = sigData.width;
+                        newSig.style.height = sigData.height;
+
+                        const resize = document.createElement('div');
+                        resize.className = 'resize-handle';
+
+                        const del = document.createElement('div');
+                        del.className = 'delete-btn';
+                        del.innerHTML = '&#215;';
+                        del.onclick = (e) => { e.stopPropagation(); newSig.remove(); };
+
+                        newSig.appendChild(resize);
+                        newSig.appendChild(del);
+
+                        page.appendChild(newSig);
+                        makeDraggable(newSig);
+                        makeResizable(newSig, resize);
+                    }
+                });
+            });
+            alert("All signatures applied to every page! 🔥");
         }
 
         function makeDraggable(el) {
@@ -442,6 +540,10 @@
                     document.ontouchend = endDrag;
                     document.ontouchmove = drag;
                 }
+
+                // Bring to front
+                document.querySelectorAll('.signature').forEach(s => s.classList.remove('active'));
+                el.classList.add('active');
             }
 
             function drag(e) {
@@ -472,11 +574,16 @@
                 if (e.type.includes('mouse')) e.preventDefault();
                 const startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
                 const startWidth = el.offsetWidth;
+                const startHeight = el.offsetHeight;
+                const ratio = startHeight / startWidth;
 
                 function resize(ev) {
                     const currentX = ev.type.includes('mouse') ? ev.clientX : ev.touches[0].clientX;
                     const newWidth = startWidth + (currentX - startX);
-                    if (newWidth > 50) el.style.width = newWidth + 'px';
+                    if (newWidth > 50) {
+                        el.style.width = newWidth + 'px';
+                        el.style.height = (newWidth * ratio) + 'px'; // Maintain aspect ratio
+                    }
                 }
                 function endResize() {
                     document.onmousemove = null; document.ontouchmove = null;
@@ -509,14 +616,13 @@
                     if (pageSigs.length > 0) hasSignatures = true;
 
                     for (const sig of pageSigs) {
-                        const pngUrl = sig.querySelector('img') ? sig.querySelector('img').src : sig.src;
+                        const pngUrl = sig.dataset.url;
                         const pngBytes = Uint8Array.from(atob(pngUrl.split(',')[1]), c => c.charCodeAt(0));
                         const pngImage = await pdfDoc.embedPng(pngBytes);
 
                         const page = pdfDoc.getPage(i);
                         const { width, height } = page.getSize();
 
-                        // Map DOM render scale to PDF true scale
                         const canvasEl = pages[i].querySelector('canvas');
                         const scale = width / canvasEl.offsetWidth;
 
@@ -536,7 +642,6 @@
 
                 const finalBytes = await pdfDoc.save();
 
-                // Native browser download to avoid 'download is not defined'
                 const blob = new Blob([finalBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
