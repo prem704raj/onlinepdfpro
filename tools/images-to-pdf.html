@@ -428,7 +428,7 @@
                             const canvas = document.createElement('canvas');
                             let w = img.width;
                             let h = img.height;
-                            
+
                             // Safe scaling to prevent RAM crashes on mobile devices
                             const MAX_DIM = 2500;
                             if (w > h && w > MAX_DIM) {
@@ -438,27 +438,24 @@
                                 w = Math.round(w * MAX_DIM / h);
                                 h = MAX_DIM;
                             }
-                            
+
                             canvas.width = w;
                             canvas.height = h;
                             const ctx = canvas.getContext('2d');
-                            
+
                             // Fill white background (protects transparent PNGs/WebPs turning black)
                             ctx.fillStyle = '#FFFFFF';
                             ctx.fillRect(0, 0, w, h);
                             ctx.drawImage(img, 0, 0, w, h);
-                            
+
                             // Export as high-quality standard JPEG
                             const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
-                            const b64 = dataUrl.split(',')[1];
-                            const binaryString = window.atob(b64);
-                            const len = binaryString.length;
-                            const bytes = new Uint8Array(len);
-                            // Avoid 'Uint8Array.from' for huge arrays on mobile Webkit - iteration is mathematically safer
-                            for (let i = 0; i < len; i++) {
-                                bytes[i] = binaryString.charCodeAt(i);
-                            }
-                            resolve(bytes);
+
+                            // Securely convert Base64 Data URL to pristine ArrayBuffer (bypasses window.atob size limits)
+                            fetch(dataUrl)
+                                .then(res => res.arrayBuffer())
+                                .then(buffer => resolve(new Uint8Array(buffer)))
+                                .catch(err => reject(new Error("Failed to convert canvas to binary")));
                         };
                         img.onerror = () => reject(new Error("Failed to load image into canvas"));
                         img.src = imgData;
