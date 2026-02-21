@@ -75,7 +75,8 @@
             <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
                 <span class="upload-icon">🔍</span>
                 <p class="upload-text">Drop Scanned PDF or Image here<br><span
-                        style="font-size: 0.9em; color: var(--text-muted);">(JPG, PNG, PDF supported)</span></p>
+                        style="font-size: 0.9em; color: var(--text-muted);">(JPG, PNG, PDF - First time may take 10-20
+                        seconds)</span></p>
                 <input type="file" id="fileInput" accept="image/*,.pdf" hidden />
             </div>
 
@@ -84,11 +85,13 @@
                 <h3 style="color: var(--text-primary); margin-bottom: 20px;">Processing... <span id="status"
                         style="color: var(--accent);">0%</span></h3>
                 <div
-                    style="width:100%; background:var(--surface-3); border-radius:50px; height:20px; border: 1px solid var(--border);">
+                    style="width:100%; background:var(--surface-3); border-radius:50px; height:20px; border: 1px solid var(--border); margin-bottom: 12px;">
                     <div id="bar"
-                        style="width:0%; background:var(--accent); height:100%; border-radius:50px; transition:all 0.3s;">
+                        style="width:0%; background:var(--accent); height:100%; border-radius:50px; transition:all 0.4s;">
                     </div>
                 </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">First time takes longer (downloading language
+                    data)</p>
             </div>
 
             <!-- Result Area -->
@@ -143,6 +146,27 @@
         // Set worker info for pdf.js to avoid "Worker not initialized" error
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
+        // Pre-load Tesseract worker for speed
+        let worker = null;
+        async function initWorker() {
+            if (!worker) {
+                worker = await Tesseract.createWorker({
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const progress = Math.round(m.progress * 100);
+                            document.getElementById('status').textContent = progress + '%';
+                            document.getElementById('bar').style.width = progress + '%';
+                        }
+                    }
+                });
+                await worker.loadLanguage('eng');  // Sirf English = super fast
+                await worker.initialize('eng');
+            }
+        }
+
+        // Initialize worker in background immediately
+        initWorker().catch(console.error);
+
         // OCR logic matching user request
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => {
@@ -179,6 +203,8 @@
             document.getElementById('dropArea').style.display = 'none';
             document.querySelector('.tool-description').textContent = "Analyzing document... Please wait.";
 
+            await initWorker(); // Ensure worker is actually ready before proceeding
+
             let images = [];
 
             try {
@@ -186,9 +212,10 @@
                     // PDF to images using pdf.js
                     const arrayBuffer = await file.arrayBuffer();
                     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                    for (let i = 1; i <= pdf.numPages; i++) {
+                    // Max 20 pages limit constraint added
+                    for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
                         const page = await pdf.getPage(i);
-                        const viewport = page.getViewport({ scale: 2 }); // 2x scale crispness
+                        const viewport = page.getViewport({ scale: 2.0 }); // 2x scale crispness
                         const canvas = document.createElement('canvas');
                         canvas.width = viewport.width;
                         canvas.height = viewport.height;
@@ -206,27 +233,11 @@
 
                 let fullText = "";
 
-                // Initialize Tesseract Worker
-                const worker = await Tesseract.createWorker({
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const prog = Math.round(m.progress * 100);
-                            document.getElementById('status').textContent = prog + '%';
-                            document.getElementById('bar').style.width = prog + '%';
-                        }
-                    }
-                });
-
-                await worker.loadLanguage('eng+hin');
-                await worker.initialize('eng+hin');
-
                 for (let i = 0; i < images.length; i++) {
                     const result = await worker.recognize(images[i]);
-                    fullText += `--- Page ${i + 1} ---\n`;
+                    if (images.length > 1) fullText += `--- Page ${i + 1} ---\n`;
                     fullText += result.data.text + "\n\n";
                 }
-
-                await worker.terminate();
 
                 document.getElementById('textOutput').value = fullText.trim();
                 document.getElementById('result').style.display = 'block';
