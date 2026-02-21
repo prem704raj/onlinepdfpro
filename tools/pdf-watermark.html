@@ -2,155 +2,55 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Watermark - Pro-Grade Branding | OnlinePDFPro</title>
-    <meta name="description"
-        content="Protect your intellectual property with customizable PDF watermarks. Total control over style, position, and opacity. Private browser-based processing.">
-    <meta name="keywords" content="PDF watermark, add watermark, stamp PDF, PDF protection, private document tools">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <meta name="description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-watermark.html">
+    <!-- Super SEO Tags -->
+    <meta name="keywords" content="free pdf tools, merge pdf online free, compress pdf online, sign pdf online free, ocr pdf hindi, pdf to word free, unlock pdf online, online pdf editor">
+    <meta name="author" content="Online PDF Pro">
+    <meta name="robots" content="index, follow">
 
-    <meta property="og:title" content="PDF Watermark - Pro-Grade Branding | OnlinePDFPro">
-    <meta property="og:description"
-        content="Add text watermarks to PDF documents for free. Customize font, color, position. Browser-based.">
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="Online PDF Pro - All PDF Tools 100% Free Forever">
+    <meta property="og:description" content="Merge, Compress, Sign, OCR, Convert - Sab free hai bhai! No login, No limit">
+    <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
+    <meta property="og:url" content="https://onlinepdfpro.com">
     <meta property="og:type" content="website">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online PDF Pro - Free PDF Tools India">
+    <meta name="twitter:description" content="Best free PDF tools used by 100K+ students">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
+
+    <!-- Favicon + PWA -->
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/tools.css">
-    <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#0a0a0b">
+    <!-- Core CSS (Using absolute path for nested tools compatibility) -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tools.css">
 
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXX');
+    </script>
 
-    <style>
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 24px;
-        }
-
-        .option-group label {
-            display: block;
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .form-input {
-            width: 100%;
-            background: var(--surface-1);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            font-family: inherit;
-            transition: var(--transition-base);
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: var(--bg-tertiary);
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .slider {
-            flex: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: var(--bg-tertiary);
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-            transition: var(--transition-base);
-        }
-
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .slider-value {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            width: 40px;
-        }
-
-        .color-picker-wrapper {
-            position: relative;
-            height: 42px;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-        }
-
-        #watermarkColor {
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            width: calc(100% + 10px);
-            height: calc(100% + 10px);
-            border: none;
-            cursor: pointer;
-            background: none;
-        }
-
-        .option-buttons {
-            display: flex;
-            gap: 8px;
-            background: var(--surface-1);
-            padding: 4px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-        }
-
-        .option-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.875rem;
-            font-family: 'Outfit', sans-serif;
-            transition: var(--transition-base);
-        }
-
-        .option-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-    </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-         crossorigin="anonymous"></script>
+    <!-- Google AdSense Head -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 
 <body class="fade-in">

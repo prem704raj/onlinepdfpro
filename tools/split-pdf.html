@@ -2,100 +2,57 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Split PDF Online Free - Premium Selection | OnlinePDFPro</title>
-    <meta name="description"
-        content="Extract pages or split your PDF into multiple sections. 100% private, browser-based, and secure.">
-    <meta name="keywords" content="split PDF, extract PDF pages, divide PDF, PDF splitter, private PDF tools">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <meta name="description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/split-pdf.html">
+    <!-- Super SEO Tags -->
+    <meta name="keywords" content="free pdf tools, merge pdf online free, compress pdf online, sign pdf online free, ocr pdf hindi, pdf to word free, unlock pdf online, online pdf editor">
+    <meta name="author" content="Online PDF Pro">
+    <meta name="robots" content="index, follow">
 
-    <meta property="og:title" content="Split PDF Online Free - OnlinePDFPro">
-    <meta property="og:description"
-        content="Split PDF into multiple files or extract specific pages for free. Visual page selector. 100% browser-based.">
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="Online PDF Pro - All PDF Tools 100% Free Forever">
+    <meta property="og:description" content="Merge, Compress, Sign, OCR, Convert - Sab free hai bhai! No login, No limit">
+    <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
+    <meta property="og:url" content="https://onlinepdfpro.com">
     <meta property="og:type" content="website">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online PDF Pro - Free PDF Tools India">
+    <meta name="twitter:description" content="Best free PDF tools used by 100K+ students">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
+
+    <!-- Favicon + PWA -->
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/tools.css">
-    <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#0a0a0b">
+    <!-- Core CSS (Using absolute path for nested tools compatibility) -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tools.css">
 
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
-    <style>
-        .thumbnails-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-            margin-top: 32px;
-        }
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXX');
+    </script>
 
-        .thumbnail-item {
-            background: var(--surface-1);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: var(--transition-base);
-            text-align: center;
-        }
-
-        .thumbnail-item:hover {
-            border-color: var(--aurora-azure);
-            transform: translateY(-4px);
-            background: var(--surface-2);
-        }
-
-        .thumbnail-item.selected {
-            border-color: var(--aurora-violet);
-            background: rgba(139, 92, 246, 0.1);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-        }
-
-        .thumbnail-image {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .thumbnail-number {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .thumbnail-check {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--aurora-violet);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--midnight);
-        }
-
-        .thumbnail-item.selected .thumbnail-check {
-            display: flex;
-        }
-    </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-         crossorigin="anonymous"></script>
+    <!-- Google AdSense Head -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <!-- PDF.js for client-side rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 </head>
 
 <body class="fade-in">

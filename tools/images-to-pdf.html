@@ -2,156 +2,55 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Images to PDF - Premium Document Creation | OnlinePDFPro</title>
-    <meta name="description"
-        content="Convert your images into a high-quality PDF instantly. Drag to reorder, customize page size, and maintain total privacy.">
-    <meta name="keywords"
-        content="images to PDF, JPG to PDF, PNG to PDF, create PDF from images, private document tools">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <meta name="description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/images-to-pdf.html">
+    <!-- Super SEO Tags -->
+    <meta name="keywords" content="free pdf tools, merge pdf online free, compress pdf online, sign pdf online free, ocr pdf hindi, pdf to word free, unlock pdf online, online pdf editor">
+    <meta name="author" content="Online PDF Pro">
+    <meta name="robots" content="index, follow">
 
-    <meta property="og:title" content="Images to PDF - Premium Document Creation | OnlinePDFPro">
-    <meta property="og:description"
-        content="Create PDF from multiple images for free. Set page size and order. 100% browser-based processing.">
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="Online PDF Pro - All PDF Tools 100% Free Forever">
+    <meta property="og:description" content="Merge, Compress, Sign, OCR, Convert - Sab free hai bhai! No login, No limit">
+    <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
+    <meta property="og:url" content="https://onlinepdfpro.com">
     <meta property="og:type" content="website">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online PDF Pro - Free PDF Tools India">
+    <meta name="twitter:description" content="Best free PDF tools used by 100K+ students">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
+
+    <!-- Favicon + PWA -->
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/tools.css">
-    <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#0a0a0b">
+    <!-- Core CSS (Using absolute path for nested tools compatibility) -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tools.css">
 
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXX');
+    </script>
 
-    <style>
-        .thumbnails-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .thumbnail-item {
-            position: relative;
-            background: var(--surface-1);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 8px;
-            cursor: move;
-            transition: var(--transition-base);
-            backdrop-filter: blur(8px);
-        }
-
-        .thumbnail-item:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .thumbnail-image {
-            width: 100%;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-            border-radius: var(--radius-md);
-            background: var(--bg-tertiary);
-        }
-
-        .thumbnail-number {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            background: var(--primary);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            font-family: 'Outfit', sans-serif;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .file-remove {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 24px;
-            height: 24px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 12px;
-            transition: var(--transition-base);
-            box-shadow: var(--shadow-sm);
-            z-index: 10;
-        }
-
-        .file-remove:hover {
-            transform: scale(1.1);
-            background: #dc2626;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-        }
-
-        .option-group label {
-            display: block;
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .option-buttons {
-            display: flex;
-            gap: 8px;
-            background: var(--surface-1);
-            padding: 4px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-        }
-
-        .option-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.875rem;
-            font-family: 'Outfit', sans-serif;
-            transition: var(--transition-base);
-        }
-
-        .option-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-    </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-         crossorigin="anonymous"></script>
+    <!-- Google AdSense Head -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 
 <body class="fade-in">
