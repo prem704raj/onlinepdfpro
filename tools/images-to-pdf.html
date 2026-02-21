@@ -65,30 +65,33 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 900px; margin: 0 auto;">
+    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 1200px; margin: 0 auto;">
+
         <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Images to PDF</h1>
         <p class="tool-description" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px;">
-            Convert multiple JPG, PNG, or WebP images into a single PDF instantly.
+            Convert multiple JPG, PNG, or WebP images into a single premium PDF.
         </p>
 
         <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
             <span class="upload-icon">🖼️</span>
-            <p class="upload-text">Click here or Drop Images (JPG, PNG, WebP)<br><span
-                    style="font-size: 0.9em; color: var(--text-muted);">Multiple images allowed → will become
-                    pages</span></p>
+            <p class="upload-text" style="font-size:20px; color:#2563eb;">Click below or Drop Images anywhere<br><span
+                    style="font-size: 0.8em; color: var(--text-muted);">(JPG, PNG, WebP - Multiple allowed)</span></p>
             <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
         </div>
 
-        <div id="preview" class="preview-container fade-in" style="display:none;"></div>
+        <div id="preview" class="preview-grid fade-in" style="display:none;"></div>
 
         <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;">
-            <h3 style="color: var(--text-primary); margin-bottom: 20px;">🖼️ Combining Images to PDF...</h3>
+            <h3 style="color: var(--text-primary); margin-bottom: 20px;">✨ Crafting your beautiful PDF...</h3>
         </div>
 
-        <div id="convertSection" class="fade-in" style="display:none; text-align:center; margin:40px 0;">
+        <div style="text-align:center; margin:50px 0;" id="convertSection" class="fade-in" style="display:none;">
             <button onclick="convertToPDF()" class="btn btn-primary btn-lg"
-                style="padding:18px 60px; font-size:20px;">Convert to PDF & Download</button>
+                style="padding:20px 80px; font-size:22px; border-radius:16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);">
+                ✨ Convert to PDF & Download
+            </button>
         </div>
+
     </main>
 
     
@@ -122,23 +125,14 @@
     <script>
         let images = [];
 
-        // Initial upload area
+        // All click & drop events
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => addImages(e.target.files);
 
-        // Drag & Drop on main area
-        const dropArea = document.getElementById('dropArea');
-
-        dropArea.ondragover = e => {
+        // Drag drop on whole page
+        document.body.ondragover = e => e.preventDefault();
+        document.body.ondrop = e => {
             e.preventDefault();
-            dropArea.style.borderColor = 'var(--accent)';
-        };
-        dropArea.ondragleave = e => {
-            dropArea.style.borderColor = 'var(--border)';
-        };
-        dropArea.ondrop = e => {
-            e.preventDefault();
-            dropArea.style.borderColor = 'var(--border)';
             addImages(e.dataTransfer.files);
         };
 
@@ -168,44 +162,50 @@
 
         function renderPreviews() {
             const container = document.getElementById('preview');
-            container.innerHTML = ''; // clear
+            container.innerHTML = '';
 
             images.forEach((src, index) => {
-                const div = document.createElement('div');
-                div.className = 'image-item';
-                div.draggable = true;
-                div.innerHTML = `
-      <div class="page-number">Page ${index + 1}</div>
+                const block = document.createElement('div');
+                block.className = 'image-block';
+                block.draggable = true;
+                block.innerHTML = `
+      <div class="page-label">Page ${index + 1}</div>
       <div class="remove-btn" onclick="removeImage(${index})">×</div>
       <img src="${src}" alt="Page ${index + 1}">
     `;
 
-                // Drag events
-                div.ondragstart = e => e.dataTransfer.setData('text/plain', index);
-                div.ondragover = e => e.preventDefault();
-                div.ondrop = e => {
+                // Drag to rearrange
+                block.ondragstart = e => e.dataTransfer.setData('index', index);
+                block.ondragover = e => e.preventDefault();
+                block.ondrop = e => {
                     e.preventDefault();
-                    const fromIndex = e.dataTransfer.getData('text');
-                    const toIndex = index;
-                    if (fromIndex !== toIndex) {
-                        [images[fromIndex], images[toIndex]] = [images[toIndex], images[fromIndex]];
+                    const from = e.dataTransfer.getData('index');
+                    if (from != index) {
+                        [images[from], images[index]] = [images[index], images[from]];
                         renderPreviews();
                     }
                 };
 
-                container.appendChild(div);
+                container.appendChild(block);
             });
 
-            // Always show + button at the end
+            // Always show beautiful + button at the end
             const addBtn = document.createElement('div');
-            addBtn.className = 'add-more';
-            addBtn.id = 'addMore';
-            addBtn.textContent = '+';
+            addBtn.className = 'add-button';
+            addBtn.id = 'addBtn';
+            addBtn.innerHTML = '+<span>Add More Images</span>';
             addBtn.onclick = () => document.getElementById('fileInput').click();
             container.appendChild(addBtn);
 
-            document.getElementById('preview').style.display = images.length > 0 ? 'flex' : 'none';
-            document.getElementById('convertSection').style.display = images.length > 0 ? 'block' : 'none';
+            if (images.length > 0) {
+                document.getElementById('preview').style.display = 'flex';
+                document.getElementById('convertSection').style.display = 'block';
+                document.getElementById('dropArea').style.display = 'none';
+            } else {
+                document.getElementById('preview').style.display = 'none';
+                document.getElementById('convertSection').style.display = 'none';
+                document.getElementById('dropArea').style.display = 'block';
+            }
         }
 
         function removeImage(index) {
@@ -231,12 +231,29 @@
                         image = await pdfDoc.embedJpg(imgBytes);
                     }
 
-                    const page = pdfDoc.addPage([image.width, image.height]);
-                    page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+                    // Safety cap for extremely large images
+                    const MAX_DIMENSION = 2000;
+                    let width = image.width;
+                    let height = image.height;
+
+                    if (width > height) {
+                        if (width > MAX_DIMENSION) {
+                            height *= MAX_DIMENSION / width;
+                            width = MAX_DIMENSION;
+                        }
+                    } else {
+                        if (height > MAX_DIMENSION) {
+                            width *= MAX_DIMENSION / height;
+                            height = MAX_DIMENSION;
+                        }
+                    }
+
+                    const page = pdfDoc.addPage([width, height]);
+                    page.drawImage(image, { x: 0, y: 0, width: width, height: height });
                 }
 
                 const pdfBytes = await pdfDoc.save();
-                download(pdfBytes, "Images-to-PDF-OnlinePDFPro.pdf", "application/pdf");
+                download(pdfBytes, "My-Beautiful-PDF-OnlinePDFPro.pdf", "application/pdf");
             } catch (err) {
                 console.error(err);
                 alert("Error converting images to PDF. Ensure they are valid JPG/PNG files.");
