@@ -1,66 +1,60 @@
-// OnlinePDFPro Service Worker
-// Modern PWA support with reliable caching strategy
+const CACHE_NAME = 'onlinepdfpro-v1';
 
-const CACHE_NAME = 'onlinepdfpro-v6'; // Bumped for new features
-const STATIC_ASSETS = [
+const ASSETS = [
+    '/',
     '/index.html',
     '/css/style.css',
     '/js/app.js',
-    '/manifest.json',
+    '/favicon.ico',
     '/icon-192.png',
     '/icon-512.png'
 ];
 
-self.addEventListener('install', (event) => {
+// Install - cache assets
+self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(STATIC_ASSETS);
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.addAll(ASSETS);
         })
     );
     self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+// Activate - clean old caches
+self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
+        caches.keys().then(keys => {
             return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
+                keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
             );
         })
     );
     self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-    const { request } = event;
-    const url = new URL(request.url);
+// Fetch - serve from cache, fallback to network
+self.addEventListener('fetch', event => {
+    // Skip non-GET requests
+    if (event.request.method !== 'GET') return;
 
-    // Network-first for HTML to avoid stale pages
-    if (request.headers.get('accept')?.includes('text/html')) {
-        event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                    return response;
-                })
-                .catch(() => caches.match(request))
-        );
-        return;
-    }
+    // Skip CDN requests (always fetch fresh)
+    if (event.request.url.includes('cdn.jsdelivr.net')) return;
 
-    // Cache-first for static assets
     event.respondWith(
-        caches.match(request).then((cached) => {
-            return cached || fetch(request).then((response) => {
-                const clone = response.clone();
-                caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+        caches.match(event.request).then(cached => {
+            // Return cached version or fetch new
+            const fetchPromise = fetch(event.request).then(response => {
+                // Cache successful responses
+                if (response.ok) {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, clone);
+                    });
+                }
                 return response;
-            });
+            }).catch(() => cached);
+
+            return cached || fetchPromise;
         })
     );
 });
