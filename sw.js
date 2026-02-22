@@ -1,60 +1,66 @@
-const CACHE_NAME = 'onlinepdfpro-v1';
+// OnlinePDFPro Service Worker
+// Modern PWA support with reliable caching strategy
 
-const ASSETS = [
-    '/',
+const CACHE_NAME = 'onlinepdfpro-v6'; // Bumped for new features
+const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
     '/js/app.js',
-    '/favicon.ico',
+    '/manifest.json',
     '/icon-192.png',
     '/icon-512.png'
 ];
 
-// Install - cache assets
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(ASSETS);
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(STATIC_ASSETS);
         })
     );
     self.skipWaiting();
 });
 
-// Activate - clean old caches
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then(keys => {
+        caches.keys().then((cacheNames) => {
             return Promise.all(
-                keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
             );
         })
     );
     self.clients.claim();
 });
 
-// Fetch - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
-    // Skip non-GET requests
-    if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
 
-    // Skip CDN requests (always fetch fresh)
-    if (event.request.url.includes('cdn.jsdelivr.net')) return;
-
-    event.respondWith(
-        caches.match(event.request).then(cached => {
-            // Return cached version or fetch new
-            const fetchPromise = fetch(event.request).then(response => {
-                // Cache successful responses
-                if (response.ok) {
+    // Network-first for HTML to avoid stale pages
+    if (request.headers.get('accept')?.includes('text/html')) {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
                     const clone = response.clone();
-                    caches.open(CACHE_NAME).then(cache => {
-                        cache.put(event.request, clone);
-                    });
-                }
-                return response;
-            }).catch(() => cached);
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    return response;
+                })
+                .catch(() => caches.match(request))
+        );
+        return;
+    }
 
-            return cached || fetchPromise;
+    // Cache-first for static assets
+    event.respondWith(
+        caches.match(request).then((cached) => {
+            return cached || fetch(request).then((response) => {
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                return response;
+            });
         })
     );
 });
