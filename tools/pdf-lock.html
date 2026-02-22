@@ -164,27 +164,162 @@
     </style>
 
     <style>
-    .password-box { max-width: 500px; margin: 40px auto; padding: 40px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); text-align: center; }
-    .password-box h2 { margin: 0 0 10px; color: var(--text-primary); font-size: 24px; }
-    .password-box p { color: var(--text-secondary); margin-bottom: 30px; }
-    .input-group { margin: 20px 0; text-align: left; }
-    .input-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--text-primary); font-size: 16px; }
-    .input-group input { width: 100%; padding: 16px; border: 2px solid var(--border); background: var(--surface-2); color: var(--text-primary); border-radius: 14px; font-size: 18px; outline: none; transition: all 0.3s; box-sizing: border-box; }
-    .input-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-subtle); }
-    .toggle-password { position: relative; }
-    .toggle-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 20px; cursor: pointer; }
-    .strength-bar { height: 6px; border-radius: 3px; margin-top: 10px; transition: all 0.3s; }
-    .strength-text { font-size: 13px; margin-top: 5px; }
-    .lock-btn { width: 100%; padding: 18px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(239,68,68,0.3); transition: all 0.3s; margin-top: 20px; }
-    .lock-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(239,68,68,0.5); }
-    .lock-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .success-box { display: none; margin: 40px auto; max-width: 500px; padding: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 24px; border: 2px solid #10b981; text-align: center; }
-    .success-box h2 { color: #10b981; font-size: 28px; }
-    .download-btn { padding: 18px 50px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(16,185,129,0.3); transition: all 0.3s; margin-top: 20px; }
-    .download-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(16,185,129,0.5); }
-    .file-info { display: none; margin: 20px auto; max-width: 500px; padding: 15px 20px; background: var(--surface-2); border-radius: 14px; border: 1px solid var(--border); text-align: center; color: var(--text-primary); font-weight: bold; }
+        .password-box {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .password-box h2 {
+            margin: 0 0 10px;
+            color: var(--text-primary);
+            font-size: 24px;
+        }
+
+        .password-box p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-primary);
+            border-radius: 14px;
+            font-size: 18px;
+            outline: none;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-subtle);
+        }
+
+        .toggle-password {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .strength-bar {
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .strength-text {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .lock-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .lock-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.5);
+        }
+
+        .lock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-box {
+            display: none;
+            margin: 40px auto;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 24px;
+            border: 2px solid #10b981;
+            text-align: center;
+        }
+
+        .success-box h2 {
+            color: #10b981;
+            font-size: 28px;
+        }
+
+        .download-btn {
+            padding: 18px 50px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .file-info {
+            display: none;
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 15px 20px;
+            background: var(--surface-2);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
     </style>
-</head></head>
+</head>
+</head>
 
 
 <body class="fade-in">
@@ -258,7 +393,8 @@
                 <p class="upload-text">Select PDF to protect</p>
                 <p class="upload-hint">Drop your PDF here or Click to Upload.</p>
                 <input type="file" id="fileInput" accept=".pdf" hidden />
-                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose Document</button>
+                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose
+                    Document</button>
             </div>
 
             <div class="file-info" id="fileInfo"></div>
@@ -268,22 +404,22 @@
                 <p>This password will be required to open the PDF</p>
 
                 <div class="input-group">
-                <label>Enter Password</label>
-                <div class="toggle-password">
-                    <input type="password" id="password1" placeholder="Enter password" oninput="checkStrength()">
-                    <button class="toggle-btn" onclick="togglePass('password1', this)">👁️</button>
-                </div>
-                <div class="strength-bar" id="strengthBar"></div>
-                <div class="strength-text" id="strengthText"></div>
+                    <label>Enter Password</label>
+                    <div class="toggle-password">
+                        <input type="password" id="password1" placeholder="Enter password" oninput="checkStrength()">
+                        <button class="toggle-btn" onclick="togglePass('password1', this)">👁️</button>
+                    </div>
+                    <div class="strength-bar" id="strengthBar"></div>
+                    <div class="strength-text" id="strengthText"></div>
                 </div>
 
                 <div class="input-group">
-                <label>Confirm Password</label>
-                <div class="toggle-password">
-                    <input type="password" id="password2" placeholder="Confirm password" oninput="checkMatch()">
-                    <button class="toggle-btn" onclick="togglePass('password2', this)">👁️</button>
-                </div>
-                <p id="matchText" style="font-size:13px; margin-top:5px;"></p>
+                    <label>Confirm Password</label>
+                    <div class="toggle-password">
+                        <input type="password" id="password2" placeholder="Confirm password" oninput="checkMatch()">
+                        <button class="toggle-btn" onclick="togglePass('password2', this)">👁️</button>
+                    </div>
+                    <p id="matchText" style="font-size:13px; margin-top:5px;"></p>
                 </div>
 
                 <button onclick="lockPDF()" class="lock-btn" id="lockBtn" disabled>🔒 Lock PDF with Password</button>
@@ -300,150 +436,133 @@
                 <span>Pro-grade security. Absolute browser isolation.</span>
             </div>
         </div>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
-<script>
-let pdfBytes = null;
-let lockedPdfBytes = null;
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script>
+        let pdfBytes = null;
+        let lockedPdfBytes = null;
 
-document.getElementById('dropArea').onclick = (e) => {
-    if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
-        document.getElementById('fileInput').click();
-    }
-};
-document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
+        document.getElementById('dropArea').onclick = (e) => {
+            if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
+                document.getElementById('fileInput').click();
+            }
+        };
+        document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
 
-document.getElementById('dropArea').ondragover = e => e.preventDefault();
-document.getElementById('dropArea').ondrop = e => {
-  e.preventDefault();
-  loadFile(e.dataTransfer.files[0]);
-};
+        document.getElementById('dropArea').ondragover = e => e.preventDefault();
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            loadFile(e.dataTransfer.files[0]);
+        };
 
-async function loadFile(file) {
-  if (!file) return;
-  pdfBytes = await file.arrayBuffer();
-  document.getElementById('dropArea').style.display = 'none';
-  document.getElementById('fileInfo').style.display = 'block';
-  document.getElementById('fileInfo').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-  document.getElementById('passwordBox').style.display = 'block';
-  document.getElementById('password1').focus();
-}
+        async function loadFile(file) {
+            if (!file) return;
+            pdfBytes = await file.arrayBuffer();
+            document.getElementById('dropArea').style.display = 'none';
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileInfo').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            document.getElementById('passwordBox').style.display = 'block';
+            document.getElementById('password1').focus();
+        }
 
-function togglePass(inputId, btn) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = '🔒';
-    } else {
-        input.type = 'password';
-        btn.textContent = '👁️';
-    }
-}
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🔒';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
 
-function checkStrength() {
-  const pass = document.getElementById('password1').value;
-  const bar = document.getElementById('strengthBar');
-  const text = document.getElementById('strengthText');
+        function checkStrength() {
+            const pass = document.getElementById('password1').value;
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
 
-  let strength = 0;
-  if (pass.length >= 4) strength++;
-  if (pass.length >= 8) strength++;
-  if (/[A-Z]/.test(pass)) strength++;
-  if (/[0-9]/.test(pass)) strength++;
-  if (/[^A-Za-z0-9]/.test(pass)) strength++;
+            let strength = 0;
+            if (pass.length >= 4) strength++;
+            if (pass.length >= 8) strength++;
+            if (/[A-Z]/.test(pass)) strength++;
+            if (/[0-9]/.test(pass)) strength++;
+            if (/[^A-Za-z0-9]/.test(pass)) strength++;
 
-  const levels = [
-    { color: '#ef4444', width: '20%', text: 'Very Weak' },
-    { color: '#f59e0b', width: '40%', text: 'Weak' },
-    { color: '#eab308', width: '60%', text: 'Medium' },
-    { color: '#22c55e', width: '80%', text: 'Strong' },
-    { color: '#10b981', width: '100%', text: 'Very Strong 🔥' }
-  ];
+            const levels = [
+                { color: '#ef4444', width: '20%', text: 'Very Weak' },
+                { color: '#f59e0b', width: '40%', text: 'Weak' },
+                { color: '#eab308', width: '60%', text: 'Medium' },
+                { color: '#22c55e', width: '80%', text: 'Strong' },
+                { color: '#10b981', width: '100%', text: 'Very Strong 🔥' }
+            ];
 
-  const level = levels[Math.min(strength, 4)];
-  bar.style.width = level.width;
-  bar.style.background = level.color;
-  text.textContent = level.text;
-  text.style.color = level.color;
+            const level = levels[Math.min(strength, 4)];
+            bar.style.width = level.width;
+            bar.style.background = level.color;
+            text.textContent = level.text;
+            text.style.color = level.color;
 
-  checkMatch();
-}
+            checkMatch();
+        }
 
-function checkMatch() {
-  const p1 = document.getElementById('password1').value;
-  const p2 = document.getElementById('password2').value;
-  const matchText = document.getElementById('matchText');
-  const lockBtn = document.getElementById('lockBtn');
+        function checkMatch() {
+            const p1 = document.getElementById('password1').value;
+            const p2 = document.getElementById('password2').value;
+            const matchText = document.getElementById('matchText');
+            const lockBtn = document.getElementById('lockBtn');
 
-  if (p2.length === 0) {
-    matchText.textContent = '';
-    lockBtn.disabled = true;
-    return;
-  }
+            if (p2.length === 0) {
+                matchText.textContent = '';
+                lockBtn.disabled = true;
+                return;
+            }
 
-  if (p1 === p2) {
-    matchText.textContent = '✅ Passwords match';
-    matchText.style.color = '#10b981';
-    lockBtn.disabled = false;
-  } else {
-    matchText.textContent = '❌ Passwords do not match';
-    matchText.style.color = '#ef4444';
-    lockBtn.disabled = true;
-  }
-}
+            if (p1 === p2) {
+                matchText.textContent = '✅ Passwords match';
+                matchText.style.color = '#10b981';
+                lockBtn.disabled = false;
+            } else {
+                matchText.textContent = '❌ Passwords do not match';
+                matchText.style.color = '#ef4444';
+                lockBtn.disabled = true;
+            }
+        }
 
-async function lockPDF() {
-  if (!pdfBytes) return alert('Upload a PDF first!');
+        async function lockPDF() {
+            if (!pdfBytes) return alert('Upload a PDF first!');
 
-  const password = document.getElementById('password1').value;
-  if (password.length < 1) return alert('Enter a password!');
+            const password = document.getElementById('password1').value;
+            if (password.length < 1) return alert('Enter a password!');
 
-  try {
-    const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    
-    const encryptedBytes = await pdfDoc.save({
-      userPassword: password,
-      ownerPassword: password,
-      permissions: {
-        printing: 'lowResolution',
-        modifying: false,
-        copying: false,
-        annotating: false,
-        fillingForms: false,
-        contentAccessibility: false,
-        documentAssembly: false,
-      }
-    });
+            try {
+                // 1. Load and process document with pdf-lib first
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                pdfDoc.setTitle('Password Protected - OnlinePDFPro');
+                pdfDoc.setProducer('OnlinePDFPro Security');
+                const processedBytes = await pdfDoc.save();
 
-    lockedPdfBytes = encryptedBytes;
+                // 2. Encrypt the PDF using pdf-encrypt-lite (dynamically imported)
+                const { encryptPDF } = await import('https://unpkg.com/@pdfsmaller/pdf-encrypt-lite@0.1.0/dist/index.js');
 
-    document.getElementById('passwordBox').style.display = 'none';
-    document.getElementById('fileInfo').style.display = 'none';
-    document.getElementById('successBox').style.display = 'block';
-  } catch (err) {
-    try {
-      const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-      pdfDoc.setTitle('Password Protected - OnlinePDFPro');
-      pdfDoc.setSubject('This PDF is password protected');
-      
-      lockedPdfBytes = await pdfDoc.save();
-      
-      document.getElementById('passwordBox').style.display = 'none';
-      document.getElementById('fileInfo').style.display = 'none';
-      document.getElementById('successBox').style.display = 'block';
-    } catch (err2) {
-      alert('Error: Could not process this PDF. Try another file.');
-    }
-  }
-}
+                // Encrypt with both user password (required to open) and owner password
+                lockedPdfBytes = await encryptPDF(processedBytes, password, password);
 
-function downloadLocked() {
-  if (!lockedPdfBytes) return;
-  OnlinePDFPro.Downloader.saveBlob(new Blob([lockedPdfBytes], {type: 'application/pdf'}), 'Password-Protected-OnlinePDFPro.pdf');
-}
-</script>
-</main>
+                document.getElementById('passwordBox').style.display = 'none';
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                alert('Error: Could not secure this PDF. ' + err.message);
+            }
+        }
+
+        function downloadLocked() {
+            if (!lockedPdfBytes) return;
+            OnlinePDFPro.Downloader.saveBlob(new Blob([lockedPdfBytes], { type: 'application/pdf' }), 'Password-Protected-OnlinePDFPro.pdf');
+        }
+    </script>
+    </main>
 
 
     <!-- Viral Badge (Made with Love) -->
@@ -499,10 +618,10 @@ function downloadLocked() {
     </footer>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="../js/app.js"></script>
-    
+
 
 
     <!-- Google AdSense Sticky Bottom -->
