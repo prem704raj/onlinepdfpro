@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <title>PDF to PowerPoint - Online PDF Pro</title>
     <meta name="description"
         content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
@@ -162,7 +162,20 @@
             color: #ef4444;
         }
     </style>
-</head>
+
+    <style>
+    .result-box { margin: 40px 0; padding: 30px; background: var(--surface-1); border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; }
+    .slides-preview { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 30px 0; }
+    .slide-card { width: 200px; background: var(--surface-1); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.12); border: 1px solid var(--glass-border); transition: all 0.3s; }
+    .slide-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+    .slide-card img { width: 200px; height: 150px; object-fit: contain; background: #f9f9f9; display: block; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+    .slide-label { padding: 10px; text-align: center; font-weight: bold; font-size: 14px; color: var(--text-primary); background: var(--surface-2); border-top: 1px solid var(--border); }
+    .download-btn { padding: 18px 50px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(245,158,11,0.3); transition: all 0.3s; }
+    .download-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(245,158,11,0.5); }
+    .progress-bar { width: 100%; background: var(--surface-2); border-radius: 50px; height: 20px; margin: 20px 0; overflow: hidden; }
+    .progress-fill { width: 0%; background: linear-gradient(90deg, #f59e0b, #ef4444); height: 100%; border-radius: 50px; transition: width 0.5s; }
+    </style>
+</head></head>
 
 
 <body class="fade-in">
@@ -224,88 +237,126 @@
     <main id="main" class="tool-page">
         <div class="container" style="max-width: 900px;">
             <div class="tool-header">
-                <span class="section-tag fade-in">Layout Management</span>
-                <h1 class="tool-title fade-in">Rotate PDF</h1>
+                <span class="section-tag fade-in">Convert PDF</span>
+                <h1 class="tool-title fade-in">PDF to PowerPoint</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Fix document orientation in seconds.
-                    Rotate individual pages or the entire file with pro-grade precision.
+                    Turn every page of your PDF into PowerPoint slides (.pptx). 100% strictly private and fast.
                 </p>
             </div>
 
-            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">📄</span>
-                <p class="upload-text">Select PDF to rotate</p>
-                <p class="upload-hint">Your files stay on your device. Zero server uploads.</p>
-                <button class="btn btn-primary upload-btn">Choose Document</button>
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
+                <span class="upload-icon">📽️</span>
+                <p class="upload-text">Select PDF to convert</p>
+                <p class="upload-hint">Drop your PDF here or Click to Upload.</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden />
+                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose Document</button>
             </div>
 
-
-            <div id="pageSection" style="display: none;">
-                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px; text-align: center;">
-                    <h3 class="options-title"
-                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 20px;">Global
-                        Actions</h3>
-                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" id="rotateAllLeft" style="padding: 10px 20px;">↺ Rotate All
-                            Left</button>
-                        <button class="btn btn-secondary" id="rotateAllRight" style="padding: 10px 20px;">↻ Rotate All
-                            Right</button>
-                        <button class="btn btn-secondary" id="resetAll" style="padding: 10px 20px; color: #ef4444;">⟲
-                            Reset All</button>
-                    </div>
-                </div>
-
-                <p id="pageCount"
-                    style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 18px; font-weight: 500;">
-                    Drag to reorder, click arrows to rotate</p>
-
-                <div class="pages-grid" id="thumbnailsGrid"
-                    style="display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; padding: 20px; margin-bottom: 40px;">
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn btn-primary btn-lg" id="saveBtn"
-                        style="width: 100%; padding: 18px; font-size: 1.1rem; background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 10px 30px rgba(37,99,235,0.3); border: none; color: white;">💾
-                        Apply & Export PDF</button>
-                </div>
+            <div id="progress" style="display:none; text-align:center; margin:40px 0;">
+                <h3 style="color: var(--text-primary);">Converting PDF to PowerPoint...</h3>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             </div>
 
-            <div id="progressSection" style="display: none;">
-                <div class="glass-card" id="progressContainer" style="padding: 40px; text-align: center;"></div>
-            </div>
+            <div id="result" class="result-box" style="display:none;">
+                <h2 style="color:#f59e0b; margin-bottom: 20px;">✅ Conversion Complete!</h2>
+                <p id="slideInfo" style="color:var(--text-secondary);"></p>
+                
+                <div class="slides-preview" id="slidesPreview"></div>
 
-            <div id="resultsSection" style="display: none;">
-                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
-                    <div class="success-message"
-                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 32px;">
-                        Rotation Applied
-                    </div>
-                    <div class="download-section">
-                        <button class="btn btn-primary btn-lg" id="downloadBtn"
-                            style="width: 100%; max-width: 400px; margin: 0 auto;">Download Result</button>
-                    </div>
-                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
-                </div>
-                <div class="action-buttons mt-lg" style="text-align: center;">
-                    <button class="btn btn-secondary" id="rotateAnother">Start New Task</button>
+                <div style="margin-top:30px;">
+                    <button onclick="downloadPPT()" class="download-btn">📥 Download PowerPoint (.pptx)</button>
                 </div>
             </div>
 
             <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
                 <span class="privacy-reminder-icon">🛡️</span>
-                <span>Pro-grade layout control. Absolute browser isolation.</span>
+                <span>Pro-grade conversion. Absolute browser isolation.</span>
             </div>
         </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
-        <!-- Google AdSense Tool Page (After Result) -->
-        <div style="text-align:center; margin:50px 0;">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="9876543210" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </main>
+let slideImages = [];
+
+document.getElementById('dropArea').onclick = (e) => {
+    if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
+        document.getElementById('fileInput').click();
+    }
+};
+document.getElementById('fileInput').onchange = e => processPDF(e.target.files[0]);
+
+document.getElementById('dropArea').ondragover = e => e.preventDefault();
+document.getElementById('dropArea').ondrop = e => {
+  e.preventDefault();
+  processPDF(e.dataTransfer.files[0]);
+};
+
+async function processPDF(file) {
+  if (!file) return;
+
+  document.getElementById('dropArea').style.display = 'none';
+  document.getElementById('progress').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('progressFill').style.width = '10%';
+
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+  
+  slideImages = [];
+  const previewDiv = document.getElementById('slidesPreview');
+  previewDiv.innerHTML = '';
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const viewport = page.getViewport({scale: 2.0});
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({canvasContext: canvas.getContext('2d'), viewport}).promise;
+
+    const imageData = canvas.toDataURL('image/jpeg', 0.92);
+    slideImages.push(imageData);
+
+    const card = document.createElement('div');
+    card.className = 'slide-card';
+    card.innerHTML = `
+      <img src="${imageData}">
+      <div class="slide-label">Slide ${i}</div>
+    `;
+    previewDiv.appendChild(card);
+
+    const progress = Math.round((i / pdf.numPages) * 100);
+    document.getElementById('progressFill').style.width = progress + '%';
+  }
+
+  document.getElementById('slideInfo').textContent = `${pdf.numPages} slides created from your PDF`;
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+}
+
+async function downloadPPT() {
+  if (slideImages.length === 0) return;
+
+  const pptx = new PptxGenJS();
+
+  for (let i = 0; i < slideImages.length; i++) {
+    const slide = pptx.addSlide();
+    slide.addImage({
+      data: slideImages[i],
+      x: 0,
+      y: 0,
+      w: '100%',
+      h: '100%'
+    });
+  }
+
+  pptx.writeFile({fileName: 'PDF-to-PPT-OnlinePDFPro.pptx'});
+}
+</script>
+</main>
 
 
     <!-- Viral Badge (Made with Love) -->

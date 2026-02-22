@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotate & Reorder PDF - Online PDF Pro</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tools.css">
+    <style>
+        .top-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 999;
+            margin-bottom: 30px;
+        }
+
+        .top-bar button {
+            padding: 14px 28px;
+            margin: 5px 10px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-blue {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-green:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-red {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 16px 40px !important;
+            font-size: 18px !important;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.5);
+        }
+
+        .pages-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .page-card {
+            position: relative;
+            width: 180px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s;
+            cursor: move;
+            flex-shrink: 0;
+        }
+
+        .page-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-card.dragging {
+            opacity: 0.4;
+            transform: scale(0.95);
+        }
+
+        .page-card.drag-over {
+            border: 3px dashed #2563eb;
+            transform: scale(1.05);
+        }
+
+        .page-card canvas {
+            width: 180px;
+            height: 240px;
+            object-fit: contain;
+            display: block;
+            background: #f9f9f9;
+        }
+
+        .page-info {
+            padding: 12px;
+            text-align: center;
+            background: #f8fafc;
+            border-top: 1px solid #eee;
+        }
+
+        .page-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            z-index: 10;
+        }
+
+        .rotation-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .page-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .rotate-left {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .rotate-right {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .delete-page {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .page-count {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1><a href="/">← Online PDF Pro</a> / Rotate & Reorder PDF</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="upload-area" id="dropArea">
+            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Rotate any page + Drag to
+                    reorder</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+        </div>
+
+        <div id="editor" style="display:none;">
+            <div class="top-bar">
+                <button onclick="rotateAll('left')" class="btn-blue">↺ Rotate All Left</button>
+                <button onclick="rotateAll('right')" class="btn-blue">↻ Rotate All Right</button>
+                <button onclick="resetAll()" class="btn-red">Reset All</button>
+                <button onclick="downloadPDF()" class="btn-purple">💾 Download Modified PDF</button>
+            </div>
+
+            <p class="page-count" id="pageCount"></p>
+
+            <div class="pages-grid" id="pagesGrid"></div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        let originalPdfBytes = null;
+        let pages = []; // [{index, rotation, canvas}]
+        let dragIndex = null;
+
+        document.getElementById('dropArea').onclick = (e) => {
+            if (e.target.id !== 'fileInput') {
+                document.getElementById('fileInput').click();
+            }
+        };
+        document.getElementById('fileInput').onchange = e => {
+            if (e.target.files && e.target.files.length > 0) {
+                loadPDF(e.target.files[0]);
+            }
+        };
+
+        async function loadPDF(file) {
+            originalPdfBytes = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: originalPdfBytes }).promise;
+
+            pages = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 1.0 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+                pages.push({
+                    originalIndex: i - 1,
+                    rotation: 0,
+                    imageData: canvas.toDataURL()
+                });
+            }
+
+            document.getElementById('editor').style.display = 'block';
+            document.getElementById('dropArea').style.display = 'none';
+            renderPages();
+        }
+
+        function renderPages() {
+            const grid = document.getElementById('pagesGrid');
+            grid.innerHTML = '';
+
+            pages.forEach((pageData, index) => {
+                const card = document.createElement('div');
+                card.className = 'page-card';
+                card.draggable = true;
+
+                card.innerHTML = `
+      <div class="page-number">Page ${index + 1}</div>
+      <img src="${pageData.imageData}" style="width:180px; height:240px; object-fit:contain; display:block; background:#f9f9f9; transform:rotate(${pageData.rotation}deg);">
+      <div class="page-info">
+        <div class="rotation-label">${pageData.rotation === 0 ? 'Original' : pageData.rotation + '° rotated'}</div>
+        <div class="page-buttons">
+          <button class="page-btn rotate-left" onclick="rotatePage(${index}, -90)" title="Rotate Left">↺</button>
+          <button class="page-btn rotate-right" onclick="rotatePage(${index}, 90)" title="Rotate Right">↻</button>
+          <button class="page-btn delete-page" onclick="deletePage(${index})" title="Remove Page">×</button>
+        </div>
+      </div>
+    `;
+
+                // Drag to reorder
+                card.ondragstart = e => {
+                    dragIndex = index;
+                    setTimeout(() => card.classList.add('dragging'), 0);
+                };
+                card.ondragend = () => {
+                    card.classList.remove('dragging');
+                };
+                card.ondragover = e => {
+                    e.preventDefault();
+                    card.classList.add('drag-over');
+                };
+                card.ondragleave = () => {
+                    card.classList.remove('drag-over');
+                };
+                card.ondrop = e => {
+                    e.preventDefault();
+                    card.classList.remove('drag-over');
+                    if (dragIndex !== null && dragIndex !== index) {
+                        const temp = pages[dragIndex];
+                        pages.splice(dragIndex, 1);
+                        pages.splice(index, 0, temp);
+                        renderPages();
+                    }
+                    dragIndex = null;
+                };
+
+                grid.appendChild(card);
+            });
+
+            document.getElementById('pageCount').textContent = `${pages.length} page${pages.length > 1 ? 's' : ''} — Drag to reorder, click arrows to rotate`;
+        }
+
+        function rotatePage(index, degrees) {
+            pages[index].rotation = (pages[index].rotation + degrees + 360) % 360;
+            renderPages();
+        }
+
+        function deletePage(index) {
+            if (pages.length <= 1) return alert("Cannot delete the only page!");
+            pages.splice(index, 1);
+            renderPages();
+        }
+
+        function rotateAll(direction) {
+            const deg = direction === 'left' ? -90 : 90;
+            pages.forEach(p => p.rotation = (p.rotation + deg + 360) % 360);
+            renderPages();
+        }
+
+        function resetAll() {
+            pages.forEach(p => p.rotation = 0);
+            renderPages();
+        }
+
+        async function downloadPDF() {
+            if (!originalPdfBytes) return;
+
+            const srcDoc = await PDFLib.PDFDocument.load(originalPdfBytes);
+            const newDoc = await PDFLib.PDFDocument.create();
+
+            for (const pageData of pages) {
+                const [copiedPage] = await newDoc.copyPages(srcDoc, [pageData.originalIndex]);
+
+                // Apply rotation
+                const currentRotation = copiedPage.getRotation().angle;
+                copiedPage.setRotation(PDFLib.degrees(currentRotation + pageData.rotation));
+
+                newDoc.addPage(copiedPage);
+            }
+
+            const pdfBytes = await newDoc.save();
+            download(pdfBytes, "Rotated-Reordered-OnlinePDFPro.pdf", "application/pdf");
+        }
+    </script>
+
+</body>
+
+</html>

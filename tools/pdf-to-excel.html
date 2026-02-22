@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <title>PDF to Excel - Online PDF Pro</title>
     <meta name="description"
         content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
@@ -162,7 +162,20 @@
             color: #ef4444;
         }
     </style>
-</head>
+
+    <style>
+    .result-box { margin: 40px 0; padding: 30px; background: var(--surface-1); border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; }
+    .result-box h2 { color: #10b981; margin-bottom: 20px; }
+    .preview-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--surface-1); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+    .preview-table th { background: var(--surface-2); color: var(--text-primary); padding: 14px; font-size: 14px; border-bottom: 1px solid var(--border); }
+    .preview-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .preview-table tr:hover { background: var(--surface-2); }
+    .download-btn { padding: 18px 50px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(16,185,129,0.3); transition: all 0.3s; margin: 10px; }
+    .download-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(16,185,129,0.5); }
+    .progress-bar { width: 100%; background: var(--surface-2); border-radius: 50px; height: 20px; margin: 20px 0; overflow: hidden; }
+    .progress-fill { width: 0%; background: linear-gradient(90deg, #2563eb, #7c3aed); height: 100%; border-radius: 50px; transition: width 0.5s; }
+    </style>
+</head></head>
 
 
 <body class="fade-in">
@@ -224,88 +237,181 @@
     <main id="main" class="tool-page">
         <div class="container" style="max-width: 900px;">
             <div class="tool-header">
-                <span class="section-tag fade-in">Layout Management</span>
-                <h1 class="tool-title fade-in">Rotate PDF</h1>
+                <span class="section-tag fade-in">Convert PDF</span>
+                <h1 class="tool-title fade-in">PDF to Excel</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Fix document orientation in seconds.
-                    Rotate individual pages or the entire file with pro-grade precision.
+                    Extract tables and data from your PDF into Excel (.xlsx) instantly. 100% private, no uploads.
                 </p>
             </div>
 
-            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">📄</span>
-                <p class="upload-text">Select PDF to rotate</p>
-                <p class="upload-hint">Your files stay on your device. Zero server uploads.</p>
-                <button class="btn btn-primary upload-btn">Choose Document</button>
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
+                <span class="upload-icon">📊</span>
+                <p class="upload-text">Select PDF to convert</p>
+                <p class="upload-hint">Drop your PDF here or Click to Upload. Converts tables to .xlsx</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden />
+                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose Document</button>
             </div>
 
-
-            <div id="pageSection" style="display: none;">
-                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px; text-align: center;">
-                    <h3 class="options-title"
-                        style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 20px;">Global
-                        Actions</h3>
-                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" id="rotateAllLeft" style="padding: 10px 20px;">↺ Rotate All
-                            Left</button>
-                        <button class="btn btn-secondary" id="rotateAllRight" style="padding: 10px 20px;">↻ Rotate All
-                            Right</button>
-                        <button class="btn btn-secondary" id="resetAll" style="padding: 10px 20px; color: #ef4444;">⟲
-                            Reset All</button>
-                    </div>
-                </div>
-
-                <p id="pageCount"
-                    style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 18px; font-weight: 500;">
-                    Drag to reorder, click arrows to rotate</p>
-
-                <div class="pages-grid" id="thumbnailsGrid"
-                    style="display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; padding: 20px; margin-bottom: 40px;">
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn btn-primary btn-lg" id="saveBtn"
-                        style="width: 100%; padding: 18px; font-size: 1.1rem; background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 10px 30px rgba(37,99,235,0.3); border: none; color: white;">💾
-                        Apply & Export PDF</button>
-                </div>
+            <div id="progress" style="display:none; text-align:center; margin:40px 0;">
+                <h3 style="color: var(--text-primary);">Extracting data from PDF...</h3>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             </div>
 
-            <div id="progressSection" style="display: none;">
-                <div class="glass-card" id="progressContainer" style="padding: 40px; text-align: center;"></div>
-            </div>
-
-            <div id="resultsSection" style="display: none;">
-                <div class="results-section glass-card" style="padding: 48px; text-align: center;">
-                    <div class="success-message"
-                        style="background: none; border: none; font-size: 1.75rem; font-weight: 700; color: var(--success); padding: 0; margin-bottom: 32px;">
-                        Rotation Applied
-                    </div>
-                    <div class="download-section">
-                        <button class="btn btn-primary btn-lg" id="downloadBtn"
-                            style="width: 100%; max-width: 400px; margin: 0 auto;">Download Result</button>
-                    </div>
-                    <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+            <div id="result" class="result-box" style="display:none;">
+                <h2>✅ Data Extracted Successfully!</h2>
+                <p id="pageInfo" style="color: var(--text-secondary); margin-bottom:20px;"></p>
+                
+                <div style="overflow-x:auto;">
+                    <table class="preview-table" id="previewTable"></table>
                 </div>
-                <div class="action-buttons mt-lg" style="text-align: center;">
-                    <button class="btn btn-secondary" id="rotateAnother">Start New Task</button>
+
+                <div style="margin-top:30px;">
+                    <button onclick="downloadExcel()" class="download-btn">📥 Download Excel (.xlsx)</button>
+                    <button onclick="downloadCSV()" class="download-btn" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">📥 Download CSV</button>
                 </div>
             </div>
 
             <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
                 <span class="privacy-reminder-icon">🛡️</span>
-                <span>Pro-grade layout control. Absolute browser isolation.</span>
+                <span>Pro-grade conversion. Absolute browser isolation.</span>
             </div>
         </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
-        <!-- Google AdSense Tool Page (After Result) -->
-        <div style="text-align:center; margin:50px 0;">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="9876543210" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </main>
+let extractedData = [];
+let allText = [];
+
+document.getElementById('dropArea').onclick = (e) => {
+    if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
+        document.getElementById('fileInput').click();
+    }
+};
+document.getElementById('fileInput').onchange = e => processPDF(e.target.files[0]);
+
+document.getElementById('dropArea').ondragover = e => e.preventDefault();
+document.getElementById('dropArea').ondrop = e => {
+  e.preventDefault();
+  processPDF(e.dataTransfer.files[0]);
+};
+
+async function processPDF(file) {
+  if (!file) return;
+
+  document.getElementById('dropArea').style.display = 'none';
+  document.getElementById('progress').style.display = 'block';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('progressFill').style.width = '20%';
+
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+  
+  extractedData = [];
+  allText = [];
+
+  document.getElementById('progressFill').style.width = '50%';
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    
+    const items = textContent.items;
+    
+    const lines = {};
+    items.forEach(item => {
+      const y = Math.round(item.transform[5]);
+      if (!lines[y]) lines[y] = [];
+      lines[y].push({
+        text: item.str.trim(),
+        x: Math.round(item.transform[4])
+      });
+    });
+
+    const sortedYs = Object.keys(lines).sort((a, b) => b - a);
+    
+    sortedYs.forEach(y => {
+      const lineItems = lines[y].sort((a, b) => a.x - b.x);
+      const rowTexts = lineItems.map(item => item.text).filter(t => t.length > 0);
+      if (rowTexts.length > 0) {
+        extractedData.push(rowTexts);
+        allText.push(rowTexts.join('\t'));
+      }
+    });
+  }
+
+  document.getElementById('progressFill').style.width = '100%';
+
+  const maxCols = Math.max(...extractedData.map(row => row.length), 0);
+  if (maxCols === 0) {
+      alert("No tabular data found!");
+      document.getElementById('dropArea').style.display = 'block';
+      document.getElementById('progress').style.display = 'none';
+      return;
+  }
+
+  extractedData = extractedData.map(row => {
+    while (row.length < maxCols) row.push('');
+    return row;
+  });
+
+  showPreview(maxCols);
+  
+  document.getElementById('pageInfo').textContent = `${pdf.numPages} page(s) processed • ${extractedData.length} rows found`;
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+}
+
+function showPreview(maxCols) {
+  const table = document.getElementById('previewTable');
+  table.innerHTML = '';
+
+  let headerHtml = '<thead><tr>';
+  for (let i = 0; i < maxCols; i++) {
+    headerHtml += `<th>Column ${String.fromCharCode(65 + i)}</th>`;
+  }
+  headerHtml += '</tr></thead>';
+
+  let bodyHtml = '<tbody>';
+  const previewRows = extractedData.slice(0, 20);
+  previewRows.forEach(row => {
+    bodyHtml += '<tr>';
+    row.forEach(cell => {
+      bodyHtml += `<td>${cell}</td>`;
+    });
+    bodyHtml += '</tr>';
+  });
+
+  if (extractedData.length > 20) {
+    bodyHtml += `<tr><td colspan="${maxCols}" style="text-align:center; color:var(--text-muted); padding:15px;">... and ${extractedData.length - 20} more rows (all included in download)</td></tr>`;
+  }
+
+  bodyHtml += '</tbody>';
+  table.innerHTML = headerHtml + bodyHtml;
+}
+
+function downloadExcel() {
+  if (extractedData.length === 0) return;
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(extractedData);
+  XLSX.utils.book_append_sheet(wb, ws, "PDF Data");
+  XLSX.writeFile(wb, "PDF-to-Excel-OnlinePDFPro.xlsx");
+}
+
+function downloadCSV() {
+  if (extractedData.length === 0) return;
+  const csv = extractedData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'PDF-to-CSV-OnlinePDFPro.csv';
+  a.click();
+}
+</script>
+</main>
 
 
     <!-- Viral Badge (Made with Love) -->
