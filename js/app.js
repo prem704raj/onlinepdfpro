@@ -702,35 +702,96 @@ const LanguageSelector = {
 };
 
 // =========================================
-// Feedback Widget Handler
+// Feedback Widget Handler (In-Page Modal)
 // =========================================
 
 const FeedbackHandler = {
     init() {
-        const btns = document.querySelectorAll('.feedback-widget');
-        if (!btns.length) return;
+        // Create the modal overlay (once per page)
+        this.createModal();
 
+        // Attach click handlers to all feedback buttons
+        const btns = document.querySelectorAll('.feedback-widget');
         btns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Construct email dynamically to hide from basic scraping and hover states
-                const user = 'prem0734raj';
-                const domain = 'gmail.com';
-                const email = `${user}@${domain}`;
-                const subject = encodeURIComponent('Feedback for OnlinePDFPro');
-
-                // Determine if mobile device based on user agent
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    // Mobile: use native mailto handler
-                    window.location.href = `mailto:${email}?subject=${subject}`;
-                } else {
-                    // Desktop: open Gmail web compose explicitly to avoid Windows mail client prompt issues 
-                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`, '_blank');
-                }
+                this.open();
             });
         });
+    },
+
+    createModal() {
+        // Build email target dynamically to avoid scraping
+        const u = 'prem0734raj';
+        const d = 'gmail.com';
+        const target = `${u}@${d}`;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'feedback-overlay';
+        overlay.id = 'feedbackOverlay';
+        overlay.innerHTML = `
+            <div class="feedback-modal">
+                <button class="feedback-close" id="feedbackClose" aria-label="Close feedback">&times;</button>
+                <h3>Send Feedback</h3>
+                <p class="feedback-subtitle">We'd love to hear from you! Your message will be sent directly to our team.</p>
+                <form id="feedbackForm" action="https://formsubmit.co/${target}" method="POST">
+                    <input type="hidden" name="_subject" value="Feedback for OnlinePDFPro">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="${window.location.href}">
+                    <input type="text" name="name" placeholder="Your Name (optional)" autocomplete="name">
+                    <input type="email" name="email" placeholder="Your Email (optional)" autocomplete="email">
+                    <textarea name="message" placeholder="Your feedback or suggestion..." required></textarea>
+                    <button type="submit" class="feedback-submit" id="feedbackSubmitBtn">Send Feedback</button>
+                </form>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // Close on X button
+        document.getElementById('feedbackClose').addEventListener('click', () => this.close());
+
+        // Close on overlay click (outside modal)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) this.close();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.close();
+        });
+
+        // Handle form submission
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            const btn = document.getElementById('feedbackSubmitBtn');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+        });
+    },
+
+    open() {
+        const overlay = document.getElementById('feedbackOverlay');
+        if (overlay) {
+            overlay.classList.add('active');
+            // Focus the first input
+            const firstInput = overlay.querySelector('input[name="name"]');
+            if (firstInput) setTimeout(() => firstInput.focus(), 100);
+        }
+    },
+
+    close() {
+        const overlay = document.getElementById('feedbackOverlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            // Reset form
+            const form = document.getElementById('feedbackForm');
+            if (form) form.reset();
+            const btn = document.getElementById('feedbackSubmitBtn');
+            if (btn) {
+                btn.textContent = 'Send Feedback';
+                btn.disabled = false;
+            }
+        }
     }
 };
 

@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v9'; // Bumped for feedback widget fix
+const CACHE_NAME = 'onlinepdfpro-v10'; // Bumped for feedback modal
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
