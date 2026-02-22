@@ -37,7 +37,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="/css/style.css">
@@ -55,6 +56,22 @@
     <!-- Google AdSense Head -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
+
+    <!-- Schema.org Organization Profile -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Online PDF Pro",
+      "url": "https://onlinepdfpro.com",
+      "logo": "https://onlinepdfpro.com/icon-192.png",
+      "description": "Free, private, client-side PDF tools directly in your browser.",
+      "sameAs": [
+        "https://twitter.com/OnlinePDFPro",
+        "https://www.facebook.com/OnlinePDFPro"
+      ]
+    }
+    </script>
 
 </head>
 
@@ -102,71 +119,100 @@
     </header>
 
     <main id="main">
-        <section class="hero" style="padding: var(--space-2xl) 0 var(--space-xl);">
+        <section class="hero">
             <div class="container">
-                <h1 style="font-size: 2.5rem; margin-bottom: var(--space-md);">About OnlinePDFPro</h1>
-                <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                <h1 class="hero-title">About OnlinePDFPro</h1>
+                <p class="hero-subtitle">
                     Free document tools that respect your privacy.
                 </p>
             </div>
         </section>
 
-        <section class="container" style="padding: var(--space-xl) 0;">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div style="display: grid; gap: var(--space-xl);">
-                    <div class="card"
-                        style="background: var(--bg-secondary); padding: var(--space-xl); border-radius: var(--radius-lg);">
-                        <h2
-                            style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
-                            <span>&#x1F3AF;</span> Our Mission
+        <section class="container section">
+            <div style="max-width: 720px; margin: 0 auto;">
+                <div style="display: grid; gap: 32px;">
+                    <div class="glass-card" style="padding: 32px;">
+                        <h2 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                role="img">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <circle cx="12" cy="12" r="6"></circle>
+                                <circle cx="12" cy="12" r="2"></circle>
+                            </svg>
+                            Our Mission
                         </h2>
                         <p style="color: var(--text-secondary); line-height: 1.7;">
                             OnlinePDFPro provides free, fast, and private document processing tools. We believe everyone
                             should have access to essential document tools without compromising their privacy or paying
                             subscription fees.
                         </p>
+                        <div style="margin-top: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
+                            <a href="tools.html" class="btn btn-primary btn-lg"
+                                style="min-width: 44px; min-height: 44px;">Try Tools Free</a>
+                            <a href="help.html" class="btn btn-secondary btn-lg"
+                                style="min-width: 44px; min-height: 44px;">View Support</a>
+                        </div>
                     </div>
 
-                    <div class="card"
-                        style="background: var(--bg-secondary); padding: var(--space-xl); border-radius: var(--radius-lg);">
-                        <h2
-                            style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
-                            <span>&#x1F6E1;&#xFE0F;</span> Privacy First
+                    <div class="glass-card" style="padding: 32px;">
+                        <h2 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                role="img">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            Privacy First
                         </h2>
-                        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">
+                        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
                             Unlike other document tools, your files <strong>never leave your device</strong>. All
                             processing happens right in your browser using JavaScript. We don't upload your files to any
                             server, we don't store them, and we can't see them.
                         </p>
-                        <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: var(--space-lg);">
-                            <li>No file uploads to servers</li>
-                            <li>No user accounts required</li>
-                            <li>No tracking or analytics cookies</li>
-                            <li>No data collection whatsoever</li>
+                        <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: 24px;">
+                            <li style="margin-bottom: 8px;">No file uploads to servers</li>
+                            <li style="margin-bottom: 8px;">No user accounts required</li>
+                            <li style="margin-bottom: 8px;">No tracking or analytics cookies containing personal data
+                            </li>
+                            <li style="margin-bottom: 8px;">No file data collection whatsoever</li>
                         </ul>
+                        <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 16px; font-size: 0.9em;">
+                            <em>Note: We use basic analytics and advertising (Google AdSense/Analytics) to keep this
+                                service free, but these services <strong>do not have access to your files</strong>. File
+                                processing is strictly local.</em>
+                        </p>
                     </div>
 
-                    <div class="card"
-                        style="background: var(--bg-secondary); padding: var(--space-xl); border-radius: var(--radius-lg);">
-                        <h2
-                            style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
-                            <span>&#x26A1;</span> How It Works
+                    <div class="glass-card" style="padding: 32px;">
+                        <h2 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                role="img">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            How It Works
                         </h2>
-                        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">
+                        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
                             Our tools use modern web technologies to process documents directly in your browser:
                         </p>
-                        <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: var(--space-lg);">
-                            <li><strong>PDF Tools:</strong> Powered by PDF-lib and PDF.js</li>
-                            <li><strong>Image Tools:</strong> Using the native Canvas API</li>
-                            <li><strong>Spreadsheet Tools:</strong> Built with SheetJS</li>
+                        <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: 24px;">
+                            <li style="margin-bottom: 8px;"><strong>PDF Tools:</strong> Powered by PDF-lib and PDF.js
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Image Tools:</strong> Using the native Canvas API
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Spreadsheet Tools:</strong> Built with SheetJS</li>
                         </ul>
                     </div>
 
-                    <div class="card"
-                        style="background: var(--bg-secondary); padding: var(--space-xl); border-radius: var(--radius-lg);">
-                        <h2
-                            style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
-                            <span>&#x1F4B0;</span> Free Forever
+                    <div class="glass-card" style="padding: 32px;">
+                        <h2 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                role="img">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Free Forever
                         </h2>
                         <p style="color: var(--text-secondary); line-height: 1.7;">
                             OnlinePDFPro is completely free with no hidden costs, no premium plans, and no limitations.
@@ -175,11 +221,18 @@
                         </p>
                     </div>
 
-                    <div class="card"
-                        style="background: var(--bg-secondary); padding: var(--space-xl); border-radius: var(--radius-lg);">
-                        <h2
-                            style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
-                            <span>&#x1F30D;</span> Open Source
+                    <div class="glass-card" style="padding: 32px;">
+                        <h2 style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                                role="img">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                </path>
+                            </svg>
+                            Open Source
                         </h2>
                         <p style="color: var(--text-secondary); line-height: 1.7;">
                             The entire OnlinePDFPro codebase is available for review. You can verify that we don't
@@ -193,8 +246,8 @@
 
 
     <!-- Viral Badge (Made with Love) -->
-    <div style="text-align:center; margin:40px 0; padding:20px; background:#f0f9ff; border-radius:16px;">
-        <h2 style="margin:0; color:#2563eb; font-size:24px;">Made with &#x2764;&#xFE0F; by a 2nd year CSE student</h2>
+    <div style="text-align:center; margin:40px 0; padding:20px; border-radius:16px;">
+        <h2 style="margin:0; font-size:24px;">Made with &#x2764;&#xFE0F; by a 1st year CSE student</h2>
         <p style="margin:10px 0 0; font-size:18px;">Help me grow &#x2192; Share with your friends &#x1F64F;</p>
         <div style="margin-top:15px;">
             <a href="https://wa.me/?text=Best%20Free%20PDF%20tool%20I%20found%20%F0%9F%94%A5%0A%0A%E2%9E%A1%EF%B8%8F%20Sign%20PDF%2C%20OCR%2C%20Merge%2C%20Compress%20-%20sab%20free%0A%F0%9F%94%97%20https%3A//onlinepdfpro.com"
@@ -234,20 +287,11 @@
 
     <script src="js/app.js"></script>
 
-    <!-- Google AdSense Sticky Bottom -->
-    <div
-        style="position:fixed; bottom:0; left:0; width:100%; background:white; padding:8px; box-shadow:0 -4px 20px rgba(0,0,0,0.1); text-align:center; z-index:9999;">
-        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:100px"
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="5555555555"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
 
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/?text=Best%20Free%20PDF%20tool%20I%20found%20%F0%9F%94%A5%0A%F0%9F%94%97%20https://onlinepdfpro.com"
-        style="position:fixed; bottom:120px; right:20px; background:#25d366; color:white; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 4px 20px rgba(0,0,0,0.3); z-index:9999; text-decoration:none;"
-        target="_blank">&#x1F4AC;</a>
+        class="chat-widget" aria-label="Chat with us on WhatsApp" target="_blank"
+        rel="noopener noreferrer">&#x1F4AC;</a>
 
 </body>
 

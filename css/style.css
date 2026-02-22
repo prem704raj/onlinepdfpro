@@ -35,6 +35,7 @@
     --radius-full: 9999px;
     --container-max: 1120px;
     --nav-height: 56px;
+    --header-h: calc(var(--nav-height) + 24px);
 
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -79,9 +80,15 @@
     padding: 0;
 }
 
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    scroll-padding-top: var(--header-h);
 }
 
 body {
@@ -101,6 +108,26 @@ h4,
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.15;
+    color: var(--text-primary);
+}
+
+h1 {
+    font-size: 2.25rem;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+}
+
+p {
+    margin-bottom: 16px;
 }
 
 a {
@@ -271,6 +298,7 @@ a {
     line-height: 1.1;
     margin-bottom: 20px;
     color: var(--text-primary);
+    font-weight: 700;
 }
 
 .hero-title .highlight {
@@ -537,6 +565,54 @@ a {
 
 .skip-link:focus {
     top: 0;
+}
+
+/* ---- Floating Chat Widget ---- */
+.chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #25d366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 900;
+    text-decoration: none;
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.chat-widget:hover,
+.chat-widget:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+}
+
+@media (max-width: 600px) {
+    .chat-widget {
+        bottom: 110px;
+        /* Above AdSense if active */
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chat-widget {
+        transition: none;
+    }
+
+    .chat-widget:hover,
+    .chat-widget:focus-visible {
+        transform: none;
+    }
 }
 
 /* ---- Language Selector ---- */
