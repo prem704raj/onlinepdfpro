@@ -68,11 +68,19 @@
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
-                <a href="tools.html" class="nav-link active">All Tools</a>
+                <a href="tools.html" class="nav-link">All Tools</a>
                 <a href="about.html" class="nav-link">About</a>
-                <a href="help.html" class="nav-link">Help</a>
+                <a href="help.html" class="nav-link">Help</a>\n                    <a href="mailto:contact@onlinepdfpro.com?subject=OnlinePDFPro Feedback" class="nav-link">Feedback</a>
             </nav>
             <div class="header-actions">
+                <!-- Compact Header Search -->
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
+                </div>
+
                 <div class="lang-selector">
                     <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -109,6 +117,7 @@
                     </svg>
                 </button>
                 <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+
             </div>
         </div>
     </header>
@@ -120,13 +129,7 @@
                 <p class="tool-description">Free document tools that run in your browser. No uploads, no signup.</p>
             </div>
 
-            <!-- Search -->
-            <div class="search-box">
-                <div class="search-wrapper">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="toolSearch" placeholder="Search tools...">
-                </div>
-            </div>
+
 
             <!-- Category Filter -->
             <div class="category-filter">
@@ -288,35 +291,65 @@
     </main>
 
 
-    <footer class="footer">
+    <footer class="footer"
+        style="padding: 60px 0 20px; background: var(--surface-2); border-top: 1px solid var(--border);">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-content"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">
+                    <a href="index.html" class="logo" style="margin-bottom: 16px; display: inline-flex;">
                         <span class="logo-icon">📄</span>
                         <span class="logo-text">OnlinePDFPro</span>
                     </a>
-                    <p class="footer-tagline">Fast, private document tools<br>for everyone.</p>
+                    <p class="footer-tagline" style="color: var(--text-muted); line-height: 1.5;">Fast, private document
+                        tools for everyone. Processing happens on your device.</p>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);"><strong>Built by Prem
+                                Raj</strong><br />1st Year CSE Student at VIT</p>
+                    </div>
                 </div>
                 <div class="footer-links-group">
-                    <h4>Platform</h4>
-                    <ul>
-                        <li><a href="tools.html">All Tools</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="help.html">Help</a></li>
+                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Platform</h4>
+                    <ul
+                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="tools.html" style="color: var(--text-secondary); text-decoration: none;">View All
+                                Tools</a></li>
+                        <li><a href="about.html" style="color: var(--text-secondary); text-decoration: none;">Our
+                                Story</a></li>
+                        <li><a href="help.html" style="color: var(--text-secondary); text-decoration: none;">Help &
+                                FAQ</a></li>
+                        <li><a href="#" class="feedback-trigger-footer"
+                                style="color: var(--text-secondary); text-decoration: none;">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
+                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Legal & SEO</h4>
+                    <ul
+                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy
+                                Policy</a></li>
+                        <li><a href="terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of
+                                Service</a></li>
+                        <li><a href="sitemap.xml"
+                                style="color: var(--text-secondary); text-decoration: none;">Sitemap.xml</a></li>
                     </ul>
                 </div>
             </div>
-            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
-                <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 OnlinePDFPro. All rights reserved.
-                </p>
+            <div
+                style="padding-top: 24px; border-top: 1px solid var(--border); text-align: center; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">&copy; 2026 OnlinePDFPro. 100% Free
+                    Forever.</p>
+                <div style="display: flex; gap: 16px;">
+                    <a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank" rel="noopener"
+                        aria-label="GitHub Repository" style="color: var(--text-muted);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
@@ -324,22 +357,32 @@
     <script src="js/app.js?v=4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('toolSearch');
+            const searchInput = document.getElementById('globalToolSearch');
             const filterBtns = document.querySelectorAll('.filter-btn');
             const toolCards = document.querySelectorAll('#toolsGrid .tool-card');
 
+            // Pre-fill search from URL params if arrived from another page
+            const urlParams = new URLSearchParams(window.location.search);
+            const q = urlParams.get('q');
+            if (q && searchInput) {
+                searchInput.value = q;
+                setTimeout(() => filterTools(q.toLowerCase(), 'all'), 100);
+            }
+
             // Search
-            searchInput.addEventListener('input', DocTools.Utils.debounce((e) => {
-                const query = e.target.value.toLowerCase();
-                filterTools(query, getActiveCategory());
-            }, 200));
+            if (searchInput) {
+                searchInput.addEventListener('input', DocTools.Utils.debounce((e) => {
+                    const query = e.target.value.toLowerCase();
+                    filterTools(query, getActiveCategory());
+                }, 200));
+            }
 
             // Category filter
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    filterTools(searchInput.value.toLowerCase(), btn.dataset.category);
+                    filterTools(searchInput ? searchInput.value.toLowerCase() : '', btn.dataset.category);
                 });
             });
 
@@ -374,14 +417,6 @@
     </script>
 
 
-    <!-- Floating Feedback Button -->
-    <button class="feedback-widget" aria-label="Send Feedback" title="Send Feedback">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-    </button>
-
-</body>
+    </body>
 
 </html>

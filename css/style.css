@@ -98,6 +98,12 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 h1,
@@ -118,12 +124,14 @@ h1 {
 
 h2 {
     font-size: 1.75rem;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    line-height: 1.2;
 }
 
 h3 {
     font-size: 1.25rem;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    line-height: 1.2;
 }
 
 p {
@@ -358,27 +366,62 @@ a {
 
 /* ---- Tool Cards (shared) ---- */
 .tool-card {
-    padding: 28px 24px;
+    padding: 32px 24px;
+    /* Fix: Increased hit area */
     text-decoration: none;
     color: inherit;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    /* Fix: Micro-interactions */
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-color: var(--border-hover) !important;
+}
+
+.tool-card[style*="border-color"] {
+    border-color: var(--border) !important;
+    /* Fix: Enforce standard border globally until hover/focus */
 }
 
 .tool-icon {
-    font-size: 2rem;
+    font-size: 2.25rem;
+    /* Fix: Normalized sizes */
     margin-bottom: 16px;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition);
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.05);
 }
 
 .tool-name {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin-bottom: 8px;
     font-weight: 600;
 }
 
 .tool-desc {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    /* Fix: Contrast ratio AA */
+    font-size: 0.95rem;
     line-height: 1.5;
+    margin: 0;
 }
 
 /* ---- Popular Tools Grid ---- */

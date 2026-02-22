@@ -75,6 +75,23 @@ const MobileMenu = {
                 });
             });
         }
+
+        // Global Search Setup
+        const globalSearch = document.getElementById('globalToolSearch');
+        if (globalSearch) {
+            globalSearch.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const q = e.target.value.trim();
+                    if (q) {
+                        // Redirect to tools.html with query parameter
+                        // Determine base path depending on if we are in /tools or root
+                        const isToolsDir = window.location.pathname.includes('/tools/');
+                        const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+                        window.location.href = targetUrl;
+                    }
+                }
+            });
+        }
     }
 };
 
