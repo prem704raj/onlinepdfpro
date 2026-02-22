@@ -438,7 +438,7 @@
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script src="../js/pdf-encrypt-lite.js"></script>
     <script>
         let pdfBytes = null;
         let lockedPdfBytes = null;
@@ -536,17 +536,8 @@
             if (password.length < 1) return alert('Enter a password!');
 
             try {
-                // 1. Load and process document with pdf-lib first
-                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-                pdfDoc.setTitle('Password Protected - OnlinePDFPro');
-                pdfDoc.setProducer('OnlinePDFPro Security');
-                const processedBytes = await pdfDoc.save();
-
-                // 2. Encrypt the PDF using pdf-encrypt-lite (dynamically imported)
-                const { encryptPDF } = await import('https://unpkg.com/@pdfsmaller/pdf-encrypt-lite@0.1.0/dist/index.js');
-
-                // Encrypt with both user password (required to open) and owner password
-                lockedPdfBytes = await encryptPDF(processedBytes, password, password);
+                // Encrypt the PDF bytes directly using the local pdf-encrypt-lite bundle
+                lockedPdfBytes = await window.encryptPDF(new Uint8Array(pdfBytes), password, password);
 
                 document.getElementById('passwordBox').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
