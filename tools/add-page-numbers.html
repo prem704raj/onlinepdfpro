@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Add Password to PDF - Online PDF Pro</title>
+    <title>Add Page Numbers to PDF - Online PDF Pro</title>
     <meta name="description"
         content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 
@@ -164,25 +164,22 @@
     </style>
 
     <style>
-    .password-box { max-width: 500px; margin: 40px auto; padding: 40px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); text-align: center; }
-    .password-box h2 { margin: 0 0 10px; color: var(--text-primary); font-size: 24px; }
-    .password-box p { color: var(--text-secondary); margin-bottom: 30px; }
-    .input-group { margin: 20px 0; text-align: left; }
-    .input-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--text-primary); font-size: 16px; }
-    .input-group input { width: 100%; padding: 16px; border: 2px solid var(--border); background: var(--surface-2); color: var(--text-primary); border-radius: 14px; font-size: 18px; outline: none; transition: all 0.3s; box-sizing: border-box; }
-    .input-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-subtle); }
-    .toggle-password { position: relative; }
-    .toggle-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 20px; cursor: pointer; }
-    .strength-bar { height: 6px; border-radius: 3px; margin-top: 10px; transition: all 0.3s; }
-    .strength-text { font-size: 13px; margin-top: 5px; }
-    .lock-btn { width: 100%; padding: 18px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(239,68,68,0.3); transition: all 0.3s; margin-top: 20px; }
-    .lock-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(239,68,68,0.5); }
-    .lock-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .success-box { display: none; margin: 40px auto; max-width: 500px; padding: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 24px; border: 2px solid #10b981; text-align: center; }
-    .success-box h2 { color: #10b981; font-size: 28px; }
+    .options-box { max-width: 600px; margin: 40px auto; padding: 40px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+    .options-box h2 { text-align: center; margin: 0 0 30px; color: var(--text-primary); }
+    .option-group { margin: 25px 0; }
+    .option-group label { display: block; font-weight: bold; margin-bottom: 10px; color: var(--text-primary); font-size: 16px; }
+    .option-group select, .option-group input { width: 100%; padding: 14px; border: 2px solid var(--border); background: var(--surface-2); color: var(--text-primary); border-radius: 14px; font-size: 16px; outline: none; box-sizing: border-box; }
+    .option-group select:focus, .option-group input:focus { border-color: var(--accent); }
+    .position-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .position-btn { padding: 14px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface-2); color: var(--text-primary); cursor: pointer; font-size: 14px; font-weight: bold; text-align: center; transition: all 0.3s; }
+    .position-btn:hover { border-color: var(--accent); background: var(--surface-3); }
+    .position-btn.active { border-color: var(--accent); background: var(--accent); color: white; }
+    .apply-btn { width: 100%; padding: 18px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(37,99,235,0.3); transition: all 0.3s; margin-top: 30px; }
+    .apply-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(37,99,235,0.5); }
+    .success-box { display: none; max-width: 500px; margin: 40px auto; padding: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 24px; border: 2px solid #10b981; text-align: center; }
     .download-btn { padding: 18px 50px; font-size: 20px; border-radius: 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 10px 30px rgba(16,185,129,0.3); transition: all 0.3s; margin-top: 20px; }
     .download-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(16,185,129,0.5); }
-    .file-info { display: none; margin: 20px auto; max-width: 500px; padding: 15px 20px; background: var(--surface-2); border-radius: 14px; border: 1px solid var(--border); text-align: center; color: var(--text-primary); font-weight: bold; }
+    .file-info { display: none; max-width: 600px; margin: 20px auto; padding: 15px; background: var(--surface-2); border-radius: 14px; border: 1px solid var(--border); text-align: center; color: var(--text-primary); font-weight: bold; }
     </style>
 </head></head>
 
@@ -246,16 +243,16 @@
     <main id="main" class="tool-page">
         <div class="container" style="max-width: 900px;">
             <div class="tool-header">
-                <span class="section-tag fade-in">PDF Security</span>
-                <h1 class="tool-title fade-in">Add Password to PDF</h1>
+                <span class="section-tag fade-in">Edit PDF</span>
+                <h1 class="tool-title fade-in">Add Page Numbers</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Protect your PDF files with a secure password. 100% private, no uploads.
+                    Add professional page numbers to your PDF file instantly. No uploads.
                 </p>
             </div>
 
             <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
-                <span class="upload-icon">🔒</span>
-                <p class="upload-text">Select PDF to protect</p>
+                <span class="upload-icon">📄</span>
+                <p class="upload-text">Select PDF to number</p>
                 <p class="upload-hint">Drop your PDF here or Click to Upload.</p>
                 <input type="file" id="fileInput" accept=".pdf" hidden />
                 <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose Document</button>
@@ -263,49 +260,69 @@
 
             <div class="file-info" id="fileInfo"></div>
 
-            <div class="password-box" id="passwordBox" style="display:none;">
-                <h2>🔒 Set Your Password</h2>
-                <p>This password will be required to open the PDF</p>
+            <div class="options-box" id="optionsBox" style="display:none;">
+                <h2>📄 Page Number Settings</h2>
 
-                <div class="input-group">
-                <label>Enter Password</label>
-                <div class="toggle-password">
-                    <input type="password" id="password1" placeholder="Enter password" oninput="checkStrength()">
-                    <button class="toggle-btn" onclick="togglePass('password1', this)">👁️</button>
+                <div class="option-group">
+                <label>Position</label>
+                <div class="position-grid">
+                    <div class="position-btn" data-pos="top-left" onclick="setPosition(this)">Top Left</div>
+                    <div class="position-btn" data-pos="top-center" onclick="setPosition(this)">Top Center</div>
+                    <div class="position-btn" data-pos="top-right" onclick="setPosition(this)">Top Right</div>
+                    <div class="position-btn active" data-pos="bottom-left" onclick="setPosition(this)">Bottom Left</div>
+                    <div class="position-btn" data-pos="bottom-center" onclick="setPosition(this)">Bottom Center</div>
+                    <div class="position-btn" data-pos="bottom-right" onclick="setPosition(this)">Bottom Right</div>
                 </div>
-                <div class="strength-bar" id="strengthBar"></div>
-                <div class="strength-text" id="strengthText"></div>
-                </div>
-
-                <div class="input-group">
-                <label>Confirm Password</label>
-                <div class="toggle-password">
-                    <input type="password" id="password2" placeholder="Confirm password" oninput="checkMatch()">
-                    <button class="toggle-btn" onclick="togglePass('password2', this)">👁️</button>
-                </div>
-                <p id="matchText" style="font-size:13px; margin-top:5px;"></p>
                 </div>
 
-                <button onclick="lockPDF()" class="lock-btn" id="lockBtn" disabled>🔒 Lock PDF with Password</button>
+                <div class="option-group">
+                <label>Format</label>
+                <select id="format">
+                    <option value="number">1, 2, 3...</option>
+                    <option value="pageOf">Page 1 of 10</option>
+                    <option value="dash">- 1 -</option>
+                    <option value="bracket">[1]</option>
+                </select>
+                </div>
+
+                <div class="option-group">
+                <label>Font Size</label>
+                <select id="fontSize">
+                    <option value="10">Small (10)</option>
+                    <option value="12" selected>Medium (12)</option>
+                    <option value="14">Large (14)</option>
+                    <option value="18">Extra Large (18)</option>
+                </select>
+                </div>
+
+                <div class="option-group">
+                <label>Start From Page Number</label>
+                <input type="number" id="startNum" value="1" min="1">
+                </div>
+
+                <button onclick="addPageNumbers()" class="apply-btn">✨ Add Page Numbers & Download</button>
             </div>
 
             <div class="success-box" id="successBox">
-                <h2>✅ PDF Locked Successfully!</h2>
-                <p style="color:var(--text-secondary);">Your PDF is now password protected</p>
-                <button onclick="downloadLocked()" class="download-btn">📥 Download Protected PDF</button>
+                <h2 style="color:#10b981;">✅ Page Numbers Added!</h2>
+                <p style="color:var(--text-secondary);" id="resultInfo"></p>
+                <button onclick="downloadResult()" class="download-btn">📥 Download PDF</button>
             </div>
 
             <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 60px;">
                 <span class="privacy-reminder-icon">🛡️</span>
-                <span>Pro-grade security. Absolute browser isolation.</span>
+                <span>Pro-grade layout control. Absolute browser isolation.</span>
             </div>
         </div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
 <script>
 let pdfBytes = null;
-let lockedPdfBytes = null;
+let resultBytes = null;
+let selectedPosition = 'bottom-left';
+let totalPages = 0;
 
 document.getElementById('dropArea').onclick = (e) => {
     if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -323,124 +340,81 @@ document.getElementById('dropArea').ondrop = e => {
 async function loadFile(file) {
   if (!file) return;
   pdfBytes = await file.arrayBuffer();
+
+  const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+  totalPages = pdfDoc.getPageCount();
+
   document.getElementById('dropArea').style.display = 'none';
   document.getElementById('fileInfo').style.display = 'block';
-  document.getElementById('fileInfo').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-  document.getElementById('passwordBox').style.display = 'block';
-  document.getElementById('password1').focus();
+  document.getElementById('fileInfo').textContent = `📄 ${file.name} — ${totalPages} pages`;
+  document.getElementById('optionsBox').style.display = 'block';
 }
 
-function togglePass(inputId, btn) {
-    const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = '🔒';
-    } else {
-        input.type = 'password';
-        btn.textContent = '👁️';
+function setPosition(btn) {
+  document.querySelectorAll('.position-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPosition = btn.dataset.pos;
+}
+
+async function addPageNumbers() {
+  if (!pdfBytes) return;
+
+  const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+  const pages = pdfDoc.getPages();
+  const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+  
+  const fontSize = parseInt(document.getElementById('fontSize').value);
+  const format = document.getElementById('format').value;
+  const startNum = parseInt(document.getElementById('startNum').value) || 1;
+
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+    const { width, height } = page.getSize();
+    const pageNum = i + startNum;
+
+    let text = '';
+    switch (format) {
+      case 'number': text = `${pageNum}`; break;
+      case 'pageOf': text = `Page ${pageNum} of ${pages.length}`; break;
+      case 'dash': text = `- ${pageNum} -`; break;
+      case 'bracket': text = `[${pageNum}]`; break;
     }
-}
 
-function checkStrength() {
-  const pass = document.getElementById('password1').value;
-  const bar = document.getElementById('strengthBar');
-  const text = document.getElementById('strengthText');
+    const textWidth = font.widthOfTextAtSize(text, fontSize);
 
-  let strength = 0;
-  if (pass.length >= 4) strength++;
-  if (pass.length >= 8) strength++;
-  if (/[A-Z]/.test(pass)) strength++;
-  if (/[0-9]/.test(pass)) strength++;
-  if (/[^A-Za-z0-9]/.test(pass)) strength++;
+    let x, y;
+    const margin = 40;
 
-  const levels = [
-    { color: '#ef4444', width: '20%', text: 'Very Weak' },
-    { color: '#f59e0b', width: '40%', text: 'Weak' },
-    { color: '#eab308', width: '60%', text: 'Medium' },
-    { color: '#22c55e', width: '80%', text: 'Strong' },
-    { color: '#10b981', width: '100%', text: 'Very Strong 🔥' }
-  ];
+    switch (selectedPosition) {
+      case 'top-left': x = margin; y = height - margin - fontSize; break;
+      case 'top-center': x = (width - textWidth) / 2; y = height - margin - fontSize; break;
+      case 'top-right': x = width - textWidth - margin; y = height - margin - fontSize; break;
+      case 'bottom-left': x = margin; y = margin; break;
+      case 'bottom-center': x = (width - textWidth) / 2; y = margin; break;
+      case 'bottom-right': x = width - textWidth - margin; y = margin; break;
+      default: x = (width - textWidth) / 2; y = margin;
+    }
 
-  const level = levels[Math.min(strength, 4)];
-  bar.style.width = level.width;
-  bar.style.background = level.color;
-  text.textContent = level.text;
-  text.style.color = level.color;
-
-  checkMatch();
-}
-
-function checkMatch() {
-  const p1 = document.getElementById('password1').value;
-  const p2 = document.getElementById('password2').value;
-  const matchText = document.getElementById('matchText');
-  const lockBtn = document.getElementById('lockBtn');
-
-  if (p2.length === 0) {
-    matchText.textContent = '';
-    lockBtn.disabled = true;
-    return;
-  }
-
-  if (p1 === p2) {
-    matchText.textContent = '✅ Passwords match';
-    matchText.style.color = '#10b981';
-    lockBtn.disabled = false;
-  } else {
-    matchText.textContent = '❌ Passwords do not match';
-    matchText.style.color = '#ef4444';
-    lockBtn.disabled = true;
-  }
-}
-
-async function lockPDF() {
-  if (!pdfBytes) return alert('Upload a PDF first!');
-
-  const password = document.getElementById('password1').value;
-  if (password.length < 1) return alert('Enter a password!');
-
-  try {
-    const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    
-    const encryptedBytes = await pdfDoc.save({
-      userPassword: password,
-      ownerPassword: password,
-      permissions: {
-        printing: 'lowResolution',
-        modifying: false,
-        copying: false,
-        annotating: false,
-        fillingForms: false,
-        contentAccessibility: false,
-        documentAssembly: false,
-      }
+    page.drawText(text, {
+      x: x,
+      y: y,
+      size: fontSize,
+      font: font,
+      color: PDFLib.rgb(0.3, 0.3, 0.3)
     });
-
-    lockedPdfBytes = encryptedBytes;
-
-    document.getElementById('passwordBox').style.display = 'none';
-    document.getElementById('fileInfo').style.display = 'none';
-    document.getElementById('successBox').style.display = 'block';
-  } catch (err) {
-    try {
-      const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-      pdfDoc.setTitle('Password Protected - OnlinePDFPro');
-      pdfDoc.setSubject('This PDF is password protected');
-      
-      lockedPdfBytes = await pdfDoc.save();
-      
-      document.getElementById('passwordBox').style.display = 'none';
-      document.getElementById('fileInfo').style.display = 'none';
-      document.getElementById('successBox').style.display = 'block';
-    } catch (err2) {
-      alert('Error: Could not process this PDF. Try another file.');
-    }
   }
+
+  resultBytes = await pdfDoc.save();
+
+  document.getElementById('optionsBox').style.display = 'none';
+  document.getElementById('fileInfo').style.display = 'none';
+  document.getElementById('resultInfo').textContent = `${pages.length} pages numbered successfully`;
+  document.getElementById('successBox').style.display = 'block';
 }
 
-function downloadLocked() {
-  if (!lockedPdfBytes) return;
-  download(lockedPdfBytes, 'Password-Protected-OnlinePDFPro.pdf', 'application/pdf');
+function downloadResult() {
+  if (!resultBytes) return;
+  download(resultBytes, 'Numbered-PDF-OnlinePDFPro.pdf', 'application/pdf');
 }
 </script>
 </main>
