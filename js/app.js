@@ -702,6 +702,39 @@ const LanguageSelector = {
 };
 
 // =========================================
+// Feedback Widget Handler
+// =========================================
+
+const FeedbackHandler = {
+    init() {
+        const btns = document.querySelectorAll('.feedback-widget');
+        if (!btns.length) return;
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Construct email dynamically to hide from basic scraping and hover states
+                const user = 'prem0734raj';
+                const domain = 'gmail.com';
+                const email = `${user}@${domain}`;
+                const subject = encodeURIComponent('Feedback for OnlinePDFPro');
+
+                // Determine if mobile device based on user agent
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                if (isMobile) {
+                    // Mobile: use native mailto handler
+                    window.location.href = `mailto:${email}?subject=${subject}`;
+                } else {
+                    // Desktop: open Gmail web compose explicitly to avoid Windows mail client prompt issues 
+                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}`, '_blank');
+                }
+            });
+        });
+    }
+};
+
+// =========================================
 // Initialize on DOM Ready
 // =========================================
 
@@ -709,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     MobileMenu.init();
     LanguageSelector.init();
+    FeedbackHandler.init();
 
     console.log('OnlinePDFPro initialized - All processing happens locally in your browser');
 });
