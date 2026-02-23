@@ -385,12 +385,32 @@
 
     <script src="js/app.js?v=4"></script>
     <script>
+        // Live search filtering for Popular Tools grid
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('globalToolSearch');
+            const toolCards = document.querySelectorAll('.popular-tools .tool-card');
+
+            if (searchInput && toolCards.length > 0 && window.OnlinePDFPro && window.OnlinePDFPro.Utils) {
+                searchInput.addEventListener('input', OnlinePDFPro.Utils.debounce((e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    toolCards.forEach(card => {
+                        const nameEl = card.querySelector('.tool-name');
+                        const descEl = card.querySelector('.tool-desc');
+                        if (nameEl) {
+                            const name = nameEl.textContent.toLowerCase();
+                            const desc = descEl ? descEl.textContent.toLowerCase() : '';
+                            const matchesQuery = name.includes(query) || desc.includes(query);
+                            card.style.display = matchesQuery ? 'flex' : 'none';
+                        }
+                    });
+                }, 200));
+            }
+        });
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
     </script>
-
-
 </body>
 
 </html>

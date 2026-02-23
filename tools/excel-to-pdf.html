@@ -60,137 +60,7 @@
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
-    <style>
-        .result-box {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-            text-align: center;
-        }
-
-        .excel-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .excel-table th {
-            background: #10b981;
-            color: white;
-            padding: 12px;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .excel-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-
-        .excel-table tr:nth-child(even) {
-            background: #f8fafc;
-        }
-
-        .excel-table tr:hover {
-            background: #f0fdf4;
-        }
-
-        .sheet-tabs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .sheet-tab {
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 2px solid #e2e8f0;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .sheet-tab.active {
-            background: #10b981;
-            color: white;
-            border-color: #10b981;
-        }
-
-        .sheet-tab:hover {
-            border-color: #10b981;
-        }
-
-        .dl-btn {
-            padding: 18px 50px;
-            font-size: 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .dl-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
-        }
-
-        .progress-section {
-            display: none;
-            text-align: center;
-            margin: 50px 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            max-width: 500px;
-            height: 20px;
-            background: #e2e8f0;
-            border-radius: 50px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #2563eb);
-            border-radius: 50px;
-            transition: width 0.5s;
-        }
-
-        .file-info {
-            display: none;
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 15px 20px;
-            background: #f0fdf4;
-            border-radius: 14px;
-            border: 2px solid #10b981;
-            text-align: center;
-            color: #059669;
-            font-weight: bold;
-        }
-
-        header {
-            padding-top: 100px;
-        }
-    </style>
+    
 </head>
 
 <body class="fade-in">
@@ -266,23 +136,39 @@
             </div>
             
 
-        <div class="upload-area" id="dropArea"
-            style="text-align: center; padding: 60px; border: 2px dashed #10b981; border-radius: 16px; margin: 40px auto; max-width: 600px; cursor: pointer; transition: transform 0.2s;">
-            <p style="font-size:20px;">Drop your Excel file here or Click to Upload<br><small>Supports .xlsx, .xls, .csv
-                    files</small></p>
+        
+        <div class="upload-zone glass-card fade-in" id="dropArea" style="margin-top: 40px; cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 60px 20px;">
+            <span class="upload-icon" style="font-size: 3rem; margin-bottom: 20px;">📄</span>
+            <p class="upload-text" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 15px;">Drop your file here or Click to Upload</p>
+            <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center; color: var(--text-secondary); margin-bottom: 20px;">
+                <span style="display: flex; align-items: center; gap: 4px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local
+                </span> 
+                <span>•</span> 
+                <span>Max: 100MB</span> 
+                <span>•</span> 
+                <span style="display: flex; align-items: center; gap: 4px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant
+                </span>
+            </p>
             <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden />
+            <button class="btn btn-primary" style="pointer-events: none; padding: 12px 32px; font-size: 1rem;">Choose File</button>
         </div>
+    
 
-        <div class="file-info" id="fileInfo"></div>
+        <div class="file-info glass-card" id="fileInfo" style="display: none; margin: 20px auto; text-align: center; font-weight: 600; color: var(--text-primary); border: 2px solid var(--primary); max-width: 500px; padding: 15px 20px;"></div>
 
-        <div class="progress-section" id="progressSection">
-            <h3>Processing Excel file...</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        
+        <div class="progress-section glass-card" id="progressSection" style="display:none; margin: 40px auto; max-width: 600px; text-align:center; padding: 30px;">
+            <h3 style="margin-bottom: 20px;">Processing Document...</h3>
+            <div class="progress-bar" style="width: 100%; height: 12px; background: var(--border); border-radius: 10px; margin: 0 auto; overflow: hidden;">
+                <div class="progress-fill" id="progressFill" style="width: 0%; height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s;"></div>
             </div>
+            <p id="progressText" style="color: var(--text-secondary); margin-top: 15px;"></p>
         </div>
+    
 
-        <div class="result-box" id="resultBox" style="display:none;">
+        <div class="result-box glass-card" id="resultBox" style="display:none; margin: 40px auto; padding: 40px; text-align: center; max-width: 800px; width: 100%;">
             <h2 style="color:#10b981;">✅ Excel Loaded Successfully!</h2>
             <p id="resultInfo" style="color:#666;"></p>
 
@@ -292,7 +178,7 @@
                 <table class="excel-table" id="excelTable"></table>
             </div>
 
-            <button onclick="downloadPDF()" class="dl-btn">📥 Download as PDF</button>
+            <button onclick="downloadPDF()" class="btn btn-primary btn-lg" style="margin-top: 20px;">📥 Download as PDF</button>
         </div>
 
     
