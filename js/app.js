@@ -76,6 +76,28 @@ const MobileMenu = {
             });
         }
 
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        if (faqItems.length > 0) {
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                if (question) {
+                    question.addEventListener('click', () => {
+                        const isActive = item.classList.contains('active');
+                        
+                        // Close all others
+                        faqItems.forEach(i => i.classList.remove('active'));
+                        
+                        // Toggle current
+                        if (!isActive) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
         // Global Search Setup
         const globalSearch = document.getElementById('globalToolSearch');
         if (globalSearch) {
