@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - PDF Tips, Tricks & Guides | Online PDF Pro</title>
+    <meta name="description"
+        content="Learn PDF tips, tricks and guides. How to compress, merge, sign PDFs. Best free PDF tools. Student guides for document management.">
+    <meta name="keywords" content="pdf tips, how to compress pdf, how to merge pdf, pdf guide, free pdf tools blog">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/blog.html">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .blog-hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            border-radius: 24px;
+            margin: 30px 0;
+        }
+
+        .blog-hero h1 {
+            font-size: 42px;
+            margin: 0 0 15px;
+        }
+
+        .blog-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .blog-card-body {
+            padding: 25px;
+        }
+
+        .blog-card-body .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #f0f9ff;
+            color: #2563eb;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .blog-card-body h2 {
+            font-size: 20px;
+            margin: 0 0 10px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .blog-card-body p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0 0 15px;
+        }
+
+        .blog-card-body .read-more {
+            color: #2563eb;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .blog-card-body .date {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .article-content {
+            display: none;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            line-height: 2;
+            font-size: 17px;
+        }
+
+        .article-content h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .article-content .meta {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .article-content h2 {
+            color: #2563eb;
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .article-content li {
+            margin: 8px 0;
+        }
+
+        .article-content a {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .article-content .cta-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #2563eb;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .article-content .cta-box a {
+            display: inline-block;
+            padding: 14px 30px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f0f9ff;
+            color: #2563eb;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: 2px solid #2563eb;
+        }
+
+        .back-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+
+<body style="background:#f8fafc;">
+
+    <header style="background:var(--surface-1); padding:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+        <div class="container">
+            <h1 style="margin:0; font-size:24px;"><a href="index.html"
+                    style="text-decoration:none; color:var(--text-primary);">← Online PDF Pro</a> / Blog</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div id="blogList">
+            <div class="blog-hero">
+                <h1>📝 PDF Tips & Guides</h1>
+                <p>Learn how to work smarter with PDFs. Free guides for students and professionals.</p>
+            </div>
+
+            <div class="blog-grid">
+
+                <div class="blog-card" onclick="showArticle('compress')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#fef3c7,#fde68a);">📦</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Guide</span>
+                        <h2>How to Compress PDF Without Losing Quality</h2>
+                        <p>Learn 5 proven methods to reduce your PDF file size by up to 90% while keeping the quality
+                            perfect.</p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+                <div class="blog-card" onclick="showArticle('sign')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);">✍️</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Tutorial</span>
+                        <h2>How to Sign PDF Online — Complete Guide</h2>
+                        <p>Step by step guide to add electronic signatures to your PDF documents. Free, fast, and
+                            legally valid.</p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+                <div class="blog-card" onclick="showArticle('ocr')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);">🔍</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Tips</span>
+                        <h2>What is OCR? How to Extract Text from Scanned PDFs</h2>
+                        <p>Understanding OCR technology and how to convert scanned documents into editable text for
+                            free.</p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+                <div class="blog-card" onclick="showArticle('students')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);">🎓</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Students</span>
+                        <h2>10 PDF Tools Every College Student Must Know</h2>
+                        <p>Essential PDF tools that will save you hours of work. From assignments to project reports.
+                        </p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+                <div class="blog-card" onclick="showArticle('merge')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">📑</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Guide</span>
+                        <h2>How to Merge Multiple PDFs Into One</h2>
+                        <p>Combine multiple PDF files into a single document in 3 easy steps. No software installation
+                            needed.</p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+                <div class="blog-card" onclick="showArticle('security')">
+                    <div class="blog-card-image" style="background:linear-gradient(135deg,#fee2e2,#fecaca);">🔒</div>
+                    <div class="blog-card-body">
+                        <span class="tag">Security</span>
+                        <h2>How to Password Protect Your PDF Files</h2>
+                        <p>Keep your sensitive documents safe. Learn how to add password protection to any PDF for free.
+                        </p>
+                        <span class="date">Dec 2024</span>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Articles -->
+        <div class="article-content" id="article-compress">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>How to Compress PDF Without Losing Quality</h1>
+            <p class="meta">📅 December 2024 • 5 min read</p>
+
+            <p>Large PDF files are a common problem for students and professionals. Whether you need to email an
+                assignment or upload documents to a portal, file size limits can be frustrating.</p>
+
+            <h2>Why Are PDFs So Large?</h2>
+            <ul>
+                <li>High resolution images embedded in the document</li>
+                <li>Multiple fonts and formatting</li>
+                <li>Scanned pages (image-based PDFs)</li>
+                <li>Unnecessary metadata and hidden elements</li>
+            </ul>
+
+            <h2>5 Ways to Reduce PDF Size</h2>
+            <ol>
+                <li><strong>Use Online PDF Compressor</strong> — The easiest method. Upload your PDF and get a smaller
+                    version instantly.</li>
+                <li><strong>Reduce Image Quality</strong> — Most PDFs are large because of images. Compressing images
+                    can reduce size by 60-80%.</li>
+                <li><strong>Remove Unnecessary Pages</strong> — Delete blank or unwanted pages before sharing.</li>
+                <li><strong>Use PDF/A Format</strong> — This format is optimized for archiving and is usually smaller.
+                </li>
+                <li><strong>Split Large PDFs</strong> — Break a large document into smaller parts.</li>
+            </ol>
+
+            <div class="cta-box">
+                <h3>Compress Your PDF Right Now — Free!</h3>
+                <p>Reduce file size by up to 90% without losing quality</p>
+                <a href="tools/compress-pdf.html">→ Try PDF Compressor</a>
+            </div>
+
+            <h2>How Much Can You Compress?</h2>
+            <p>On average, our tool reduces PDF size by 60-80%. A 10MB file can become 2-3MB. A 50MB file can become
+                8-10MB.</p>
+
+            <h2>Is It Safe?</h2>
+            <p>Yes! Our compressor runs entirely in your browser. Your files are never uploaded to any server.
+                Everything happens on your device.</p>
+        </div>
+
+        <div class="article-content" id="article-sign">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>How to Sign PDF Online — Complete Guide</h1>
+            <p class="meta">📅 December 2024 • 4 min read</p>
+
+            <p>Electronic signatures are legally valid in India and most countries. You no longer need to print, sign,
+                and scan documents.</p>
+
+            <h2>How to Sign a PDF in 3 Steps</h2>
+            <ol>
+                <li><strong>Upload your PDF</strong> to our Sign PDF tool</li>
+                <li><strong>Draw or type</strong> your signature</li>
+                <li><strong>Place it anywhere</strong> on any page — drag, resize, done!</li>
+            </ol>
+
+            <h2>Features of Our Sign PDF Tool</h2>
+            <ul>
+                <li>Draw signature with mouse or finger (mobile)</li>
+                <li>Type your name as signature</li>
+                <li>Drag to any position on any page</li>
+                <li>Resize as needed</li>
+                <li>Add multiple signatures</li>
+                <li>Apply to all pages at once</li>
+            </ul>
+
+            <div class="cta-box">
+                <h3>Sign Your PDF Right Now — Free!</h3>
+                <p>No registration, no watermark, works on mobile</p>
+                <a href="tools/sign.html">→ Try Sign PDF Tool</a>
+            </div>
+
+            <p>Our electronic signatures are legally recognized under the IT Act 2000 in India and similar laws
+                worldwide.</p>
+        </div>
+
+        <div class="article-content" id="article-ocr">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>What is OCR? How to Extract Text from Scanned PDFs</h1>
+            <p class="meta">📅 December 2024 • 4 min read</p>
+
+            <p>OCR stands for <strong>Optical Character Recognition</strong>. It's a technology that reads text from
+                images and scanned documents.</p>
+
+            <h2>When Do You Need OCR?</h2>
+            <ul>
+                <li>Extracting text from scanned exam papers</li>
+                <li>Copying text from Aadhaar/PAN card photos</li>
+                <li>Converting scanned books to editable text</li>
+                <li>Extracting data from bills and receipts</li>
+            </ul>
+
+            <h2>How Our OCR Tool Works</h2>
+            <ol>
+                <li>Upload a scanned PDF or image (JPG, PNG)</li>
+                <li>Our system analyzes every character in the image</li>
+                <li>Extracted text appears in 3-5 seconds</li>
+                <li>Copy the text or download as .txt file</li>
+            </ol>
+
+            <div class="cta-box">
+                <h3>Extract Text from Any Image — Free!</h3>
+                <p>Supports English + Hindi. Works on mobile too.</p>
+                <a href="tools/ocr.html">→ Try OCR Tool</a>
+            </div>
+        </div>
+
+        <div class="article-content" id="article-students">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>10 PDF Tools Every College Student Must Know</h1>
+            <p class="meta">📅 December 2024 • 6 min read</p>
+
+            <p>As a college student, you deal with PDFs every day — assignments, notes, forms, certificates. Here are 10
+                free tools that will make your life 10x easier.</p>
+
+            <ol>
+                <li><strong><a href="tools/merge.html">Merge PDF</a></strong> — Combine assignment pages into one
+                    document</li>
+                <li><strong><a href="tools/compress-pdf.html">Compress PDF</a></strong> — Reduce size for email/portal
+                    uploads</li>
+                <li><strong><a href="tools/sign.html">Sign PDF</a></strong> — Add e-signature to consent forms</li>
+                <li><strong><a href="tools/ocr.html">OCR</a></strong> — Extract text from scanned notes</li>
+                <li><strong><a href="tools/images-to-pdf.html">Images to PDF</a></strong> — Convert photos to PDF
+                    assignments</li>
+                <li><strong><a href="tools/pdf-to-word.html">PDF to Word</a></strong> — Edit PDF content in Word</li>
+                <li><strong><a href="tools/pdf-lock.html">Password Protect</a></strong> — Secure your project reports
+                </li>
+                <li><strong><a href="tools/add-page-numbers.html">Add Page Numbers</a></strong> — Professional looking
+                    reports</li>
+                <li><strong><a href="tools/rotate-pdf.html">Rotate Pages</a></strong> — Fix wrongly scanned pages</li>
+                <li><strong><a href="tools/split.html">Split PDF</a></strong> — Extract specific pages from large
+                    documents</li>
+            </ol>
+
+            <div class="cta-box">
+                <h3>All These Tools Are 100% Free!</h3>
+                <p>No registration, no watermark, no limits</p>
+                <a href="index.html">→ Try All Tools Now</a>
+            </div>
+        </div>
+
+        <div class="article-content" id="article-merge">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>How to Merge Multiple PDFs Into One</h1>
+            <p class="meta">📅 December 2024 • 3 min read</p>
+
+            <p>Need to combine multiple PDF files into a single document? It takes just 3 clicks.</p>
+
+            <h2>Steps to Merge PDFs</h2>
+            <ol>
+                <li>Go to our <a href="tools/merge.html">Merge PDF tool</a></li>
+                <li>Upload all PDF files you want to combine</li>
+                <li>Drag to reorder if needed</li>
+                <li>Click "Merge" and download your combined PDF</li>
+            </ol>
+
+            <div class="cta-box">
+                <h3>Merge PDFs Right Now — Free!</h3>
+                <a href="tools/merge.html">→ Try Merge PDF</a>
+            </div>
+        </div>
+
+        <div class="article-content" id="article-security">
+            <span class="back-btn" onclick="hideArticle()">← Back to Blog</span>
+            <h1>How to Password Protect Your PDF Files</h1>
+            <p class="meta">📅 December 2024 • 3 min read</p>
+
+            <p>Protect sensitive documents like project reports, financial data, or personal information with a strong
+                password.</p>
+
+            <h2>How to Add Password</h2>
+            <ol>
+                <li>Go to our <a href="tools/pdf-lock.html">Add Password tool</a></li>
+                <li>Upload your PDF</li>
+                <li>Enter a strong password</li>
+                <li>Download your protected PDF</li>
+            </ol>
+
+            <h2>Tips for Strong Passwords</h2>
+            <ul>
+                <li>Use at least 8 characters</li>
+                <li>Mix uppercase, lowercase, numbers, and symbols</li>
+                <li>Don't use common words or birthdays</li>
+                <li>Use different passwords for different documents</li>
+            </ul>
+
+            <div class="cta-box">
+                <h3>Protect Your PDF Right Now — Free!</h3>
+                <a href="tools/pdf-lock.html">→ Try Password Protection</a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function showArticle(id) {
+            document.getElementById('blogList').style.display = 'none';
+            document.querySelectorAll('.article-content').forEach(a => a.style.display = 'none');
+            document.getElementById('article-' + id).style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function hideArticle() {
+            document.querySelectorAll('.article-content').forEach(a => a.style.display = 'none');
+            document.getElementById('blogList').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+
+</html>

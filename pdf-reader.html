@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Reader Online Free - Read PDF in Browser | Online PDF Pro</title>
+    <meta name="description"
+        content="Read PDF files online for free. No download needed. Zoom, navigate pages, search text. Fast and mobile friendly PDF viewer.">
+    <meta name="keywords"
+        content="pdf reader online, read pdf online, pdf viewer, open pdf online free, view pdf in browser">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-reader.html">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PDF Reader Online",
+    "url": "https://onlinepdfpro.com/pdf-reader.html",
+    "description": "Free online PDF reader and viewer.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+    <style>
+        .reader-toolbar {
+            position: sticky;
+            top: 60px;
+            background: #1e293b;
+            padding: 15px 20px;
+            border-radius: 16px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            z-index: 999;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .reader-toolbar button {
+            padding: 10px 18px;
+            background: #334155;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .reader-toolbar button:hover {
+            background: #2563eb;
+        }
+
+        .reader-toolbar span {
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .reader-toolbar select {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            background: #334155;
+            color: white;
+        }
+
+        .pdf-viewer {
+            text-align: center;
+            padding: 20px;
+            min-height: 500px;
+        }
+
+        .pdf-viewer canvas {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            max-width: 100%;
+        }
+
+        .page-thumbs {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 120px;
+            width: 150px;
+            height: calc(100vh - 140px);
+            overflow-y: auto;
+            background: #1e293b;
+            padding: 10px;
+            z-index: 998;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .thumb-item {
+            width: 130px;
+            margin: 10px auto;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .thumb-item:hover {
+            border-color: #2563eb;
+        }
+
+        .thumb-item.active {
+            border-color: #2563eb;
+        }
+
+        .thumb-item canvas {
+            width: 130px;
+            display: block;
+        }
+
+        .thumb-label {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 5px;
+        }
+
+        .search-box {
+            display: none;
+            position: fixed;
+            top: 130px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        .search-box input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 250px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #2563eb;
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .search-result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: #f0f9ff;
+        }
+
+        .search-highlight {
+            background: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body style="background:#f8fafc;">
+
+    <header style="background:var(--surface-1); padding:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+        <div class="container">
+            <h1 style="margin:0; font-size:24px;"><a href="index.html"
+                    style="text-decoration:none; color:var(--text-primary);">← Online PDF Pro</a> / PDF Reader</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="upload-area" id="dropArea" style="margin-top: 50px;">
+            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Read PDF directly in your browser
+                    — No download needed</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+        </div>
+
+        <div class="reader-toolbar" id="toolbar">
+            <button onclick="toggleThumbs()" title="Thumbnails">📑</button>
+            <button onclick="prevPage()">← Prev</button>
+            <span id="pageInfo">1 / 1</span>
+            <button onclick="nextPage()">Next →</button>
+            <button onclick="zoomOut()">➖</button>
+            <span id="zoomLevel">100%</span>
+            <button onclick="zoomIn()">➕</button>
+            <button onclick="toggleSearch()">🔍 Search</button>
+            <select id="fitSelect" onchange="changeFit()">
+                <option value="page">Fit Page</option>
+                <option value="width">Fit Width</option>
+                <option value="actual">Actual Size</option>
+            </select>
+            <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        </div>
+
+        <div class="page-thumbs" id="thumbsPanel"></div>
+
+        <div class="search-box" id="searchBox">
+            <input type="text" id="searchInput" placeholder="Search in PDF..." oninput="searchPDF()">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="pdf-viewer" id="pdfViewer"></div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let currentScale = 1.5;
+        let allPagesText = [];
+
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
+
+        document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            loadPDF(e.dataTransfer.files[0]);
+        };
+
+        async function loadPDF(file) {
+            if (!file) return;
+
+            const arrayBuffer = await file.arrayBuffer();
+            pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            totalPages = pdfDoc.numPages;
+            currentPage = 1;
+            allPagesText = [];
+
+            document.getElementById('dropArea').style.display = 'none';
+            document.getElementById('toolbar').style.display = 'flex';
+
+            // Extract text for search
+            for (let i = 1; i <= totalPages; i++) {
+                const page = await pdfDoc.getPage(i);
+                const textContent = await page.getTextContent();
+                const text = textContent.items.map(item => item.str).join(' ');
+                allPagesText.push(text);
+            }
+
+            await renderPage(currentPage);
+            await renderThumbnails();
+        }
+
+        async function renderPage(num) {
+            currentPage = num;
+            const page = await pdfDoc.getPage(num);
+            const viewport = page.getViewport({ scale: currentScale });
+
+            const viewer = document.getElementById('pdfViewer');
+            viewer.innerHTML = '';
+
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+
+            viewer.appendChild(canvas);
+            document.getElementById('pageInfo').textContent = num + ' / ' + totalPages;
+            document.getElementById('zoomLevel').textContent = Math.round(currentScale * 100) + '%';
+
+            // Update thumbnail active
+            document.querySelectorAll('.thumb-item').forEach((t, i) => {
+                t.classList.toggle('active', i === num - 1);
+            });
+        }
+
+        async function renderThumbnails() {
+            const panel = document.getElementById('thumbsPanel');
+            panel.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const page = await pdfDoc.getPage(i);
+                const viewport = page.getViewport({ scale: 0.3 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+
+                const thumb = document.createElement('div');
+                thumb.className = 'thumb-item' + (i === 1 ? ' active' : '');
+                thumb.appendChild(canvas);
+                thumb.innerHTML += '<div class="thumb-label">Page ' + i + '</div>';
+                thumb.onclick = () => renderPage(i);
+                panel.appendChild(thumb);
+            }
+        }
+
+        function prevPage() { if (currentPage > 1) renderPage(currentPage - 1); }
+        function nextPage() { if (currentPage < totalPages) renderPage(currentPage + 1); }
+        function zoomIn() { currentScale += 0.25; renderPage(currentPage); }
+        function zoomOut() { if (currentScale > 0.5) { currentScale -= 0.25; renderPage(currentPage); } }
+
+        function changeFit() {
+            const fit = document.getElementById('fitSelect').value;
+            if (fit === 'page') currentScale = 1.5;
+            else if (fit === 'width') currentScale = 2.0;
+            else currentScale = 1.0;
+            renderPage(currentPage);
+        }
+
+        function toggleThumbs() {
+            const panel = document.getElementById('thumbsPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleSearch() {
+            const box = document.getElementById('searchBox');
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+            if (box.style.display === 'block') document.getElementById('searchInput').focus();
+        }
+
+        function searchPDF() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '';
+
+            if (query.length < 2) return;
+
+            allPagesText.forEach((text, index) => {
+                if (text.toLowerCase().includes(query)) {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item';
+
+                    const pos = text.toLowerCase().indexOf(query);
+                    const start = Math.max(0, pos - 30);
+                    const end = Math.min(text.length, pos + query.length + 30);
+                    let snippet = '...' + text.substring(start, end) + '...';
+                    snippet = snippet.replace(new RegExp(query, 'gi'), '<span class="search-highlight">$&</span>');
+
+                    item.innerHTML = '<strong>Page ' + (index + 1) + ':</strong> ' + snippet;
+                    item.onclick = () => renderPage(index + 1);
+                    resultsDiv.appendChild(item);
+                }
+            });
+
+            if (resultsDiv.children.length === 0) {
+                resultsDiv.innerHTML = '<p style="padding:10px; color:#666;">No results found</p>';
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.onkeydown = e => {
+            if (!pdfDoc) return;
+            if (e.key === 'ArrowLeft') prevPage();
+            if (e.key === 'ArrowRight') nextPage();
+            if (e.key === '+' || e.key === '=') zoomIn();
+            if (e.key === '-') zoomOut();
+            if (e.ctrlKey && e.key === 'f') { e.preventDefault(); toggleSearch(); }
+        };
+    </script>
+
+</body>
+
+</html>

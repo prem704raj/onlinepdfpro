@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add QR Code to PDF Online Free | Online PDF Pro</title>
+    <meta name="description"
+        content="Add QR code to any PDF page online for free. Generate QR from URL, text, phone number. Choose position and size.">
+    <meta name="keywords" content="add qr code to pdf, qr code in pdf, qr code pdf free, insert qr code pdf online">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/qr-pdf.html">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Add QR Code to PDF",
+    "url": "https://onlinepdfpro.com/qr-pdf.html",
+    "description": "Free online tool to add QR codes to PDF files.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+    <style>
+        .settings-box {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            display: none;
+        }
+
+        .settings-box h2 {
+            text-align: center;
+            margin: 0 0 30px;
+            color: #333;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .qr-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .qr-preview canvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+        }
+
+        .position-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .pos-btn {
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pos-btn:hover {
+            border-color: #2563eb;
+            background: #f0f9ff;
+        }
+
+        .pos-btn.active {
+            border-color: #2563eb;
+            background: #2563eb;
+            color: white;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+            margin-top: 25px;
+        }
+
+        .apply-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.5);
+        }
+
+        .checkbox-row {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        .checkbox-row input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .file-info {
+            display: none;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 15px 20px;
+            background: #f0f9ff;
+            border-radius: 14px;
+            border: 2px solid #2563eb;
+            text-align: center;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .success-box {
+            display: none;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #f0fdf4;
+            border-radius: 24px;
+            border: 3px solid #10b981;
+            text-align: center;
+        }
+
+        .dl-btn {
+            padding: 18px 50px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .dl-btn:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body style="background:#f8fafc;">
+
+    <header style="background:var(--surface-1); padding:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+        <div class="container">
+            <h1 style="margin:0; font-size:24px;"><a href="index.html"
+                    style="text-decoration:none; color:var(--text-primary);">← Online PDF Pro</a> / Add QR Code to PDF
+            </h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="upload-area" id="dropArea" style="margin-top: 50px;">
+            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Add QR code to any page of your
+                    PDF</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+        </div>
+
+        <div class="file-info" id="fileInfo"></div>
+
+        <div class="settings-box" id="settingsBox">
+            <h2>📱 QR Code Settings</h2>
+
+            <div class="input-group">
+                <label>QR Content (URL, text, phone, email)</label>
+                <textarea id="qrContent" rows="3" placeholder="https://onlinepdfpro.com"
+                    oninput="generateQRPreview()"></textarea>
+            </div>
+
+            <div class="qr-preview" id="qrPreview"></div>
+
+            <div class="input-group">
+                <label>QR Code Size</label>
+                <select id="qrSize">
+                    <option value="80">Small (80px)</option>
+                    <option value="120" selected>Medium (120px)</option>
+                    <option value="160">Large (160px)</option>
+                    <option value="200">Extra Large (200px)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Position on Page</label>
+                <div class="position-grid">
+                    <div class="pos-btn" data-pos="top-left" onclick="setPos(this)">Top Left</div>
+                    <div class="pos-btn" data-pos="top-center" onclick="setPos(this)">Top Center</div>
+                    <div class="pos-btn" data-pos="top-right" onclick="setPos(this)">Top Right</div>
+                    <div class="pos-btn" data-pos="center-left" onclick="setPos(this)">Center Left</div>
+                    <div class="pos-btn" data-pos="center" onclick="setPos(this)">Center</div>
+                    <div class="pos-btn" data-pos="center-right" onclick="setPos(this)">Center Right</div>
+                    <div class="pos-btn active" data-pos="bottom-right" onclick="setPos(this)">Bottom Right</div>
+                    <div class="pos-btn" data-pos="bottom-center" onclick="setPos(this)">Bottom Center</div>
+                    <div class="pos-btn" data-pos="bottom-left" onclick="setPos(this)">Bottom Left</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Add to Page</label>
+                <select id="pageSelect"></select>
+            </div>
+
+            <div class="checkbox-row">
+                <label><input type="checkbox" id="allPages"> Add QR to ALL pages</label>
+            </div>
+
+            <button onclick="addQRtoPDF()" class="apply-btn">📱 Add QR Code & Download</button>
+        </div>
+
+        <div class="success-box" id="successBox">
+            <h2 style="color:#10b981;">✅ QR Code Added!</h2>
+            <p style="color:#666;">Your PDF now has a scannable QR code</p>
+            <button onclick="downloadResult()" class="dl-btn">📥 Download PDF</button>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+    <script>
+        let pdfBytes = null;
+        let resultBytes = null;
+        let selectedPos = 'bottom-right';
+        let totalPages = 0;
+
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
+
+        document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            loadFile(e.dataTransfer.files[0]);
+        };
+
+        async function loadFile(file) {
+            if (!file) return;
+            pdfBytes = await file.arrayBuffer();
+
+            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+            totalPages = pdfDoc.getPageCount();
+
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+
+            const select = document.getElementById('pageSelect');
+            select.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = 'Page ' + i;
+                select.appendChild(opt);
+            }
+
+            document.getElementById('settingsBox').style.display = 'block';
+            generateQRPreview();
+        }
+
+        function setPos(btn) {
+            document.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedPos = btn.dataset.pos;
+        }
+
+        async function generateQRPreview() {
+            const content = document.getElementById('qrContent').value || 'https://onlinepdfpro.com';
+            const previewDiv = document.getElementById('qrPreview');
+            previewDiv.innerHTML = '';
+
+            try {
+                const canvas = document.createElement('canvas');
+                await QRCode.toCanvas(canvas, content, {
+                    width: 150,
+                    margin: 2,
+                    color: { dark: '#000000', light: '#ffffff' }
+                });
+                previewDiv.appendChild(canvas);
+            } catch (err) {
+                previewDiv.innerHTML = '<p style="color:red;">Invalid content</p>';
+            }
+        }
+
+        async function addQRtoPDF() {
+            if (!pdfBytes) return;
+
+            const content = document.getElementById('qrContent').value;
+            if (!content.trim()) return alert('Enter QR content first!');
+
+            const qrSize = parseInt(document.getElementById('qrSize').value);
+            const addToAll = document.getElementById('allPages').checked;
+            const selectedPage = parseInt(document.getElementById('pageSelect').value);
+
+            // Generate QR as PNG
+            const qrDataURL = await QRCode.toDataURL(content, {
+                width: qrSize * 3,
+                margin: 1,
+                color: { dark: '#000000', light: '#ffffff' }
+            });
+
+            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+            const qrImageBytes = Uint8Array.from(atob(qrDataURL.split(',')[1]), c => c.charCodeAt(0));
+            const qrImage = await pdfDoc.embedPng(qrImageBytes);
+
+            const pages = pdfDoc.getPages();
+            const pagesToAdd = addToAll ? pages : [pages[selectedPage - 1]];
+
+            pagesToAdd.forEach(page => {
+                const { width, height } = page.getSize();
+                const margin = 30;
+                let x, y;
+
+                switch (selectedPos) {
+                    case 'top-left': x = margin; y = height - qrSize - margin; break;
+                    case 'top-center': x = (width - qrSize) / 2; y = height - qrSize - margin; break;
+                    case 'top-right': x = width - qrSize - margin; y = height - qrSize - margin; break;
+                    case 'center-left': x = margin; y = (height - qrSize) / 2; break;
+                    case 'center': x = (width - qrSize) / 2; y = (height - qrSize) / 2; break;
+                    case 'center-right': x = width - qrSize - margin; y = (height - qrSize) / 2; break;
+                    case 'bottom-left': x = margin; y = margin; break;
+                    case 'bottom-center': x = (width - qrSize) / 2; y = margin; break;
+                    case 'bottom-right': x = width - qrSize - margin; y = margin; break;
+                    default: x = width - qrSize - margin; y = margin;
+                }
+
+                page.drawImage(qrImage, { x, y, width: qrSize, height: qrSize });
+            });
+
+            resultBytes = await pdfDoc.save();
+
+            document.getElementById('settingsBox').style.display = 'none';
+            document.getElementById('successBox').style.display = 'block';
+        }
+
+        function downloadResult() {
+            if (!resultBytes) return;
+            download(resultBytes, 'QR-PDF-OnlinePDFPro.pdf', 'application/pdf');
+        }
+    </script>
+
+</body>
+
+</html>
