@@ -66,7 +66,7 @@
             <nav class="nav" id="nav">
                 <a href="../tools.html" class="nav-link">All Tools</a>
                 <a href="../about.html" class="nav-link">About</a>
-                <a href="../help.html" class="nav-link">Help</a>\n                    <a href="mailto:contact@onlinepdfpro.com?subject=OnlinePDFPro Feedback" class="nav-link">Feedback</a>
+                <a href="../help.html" class="nav-link">Help</a>                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prem736raj@gmail.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener">Feedback</a>
             </nav>
             <div class="header-actions">
                 <!-- Compact Header Search -->
@@ -337,7 +337,7 @@
             }
 
             function autoDetectDelimiter() {
-                const firstLine = csvContent.split('\n')[0];
+                const firstLine = csvContent.split('')[0];
                 const counts = { ',': (firstLine.match(/,/g) || []).length, ';': (firstLine.match(/;/g) || []).length, '\t': (firstLine.match(/\t/g) || []).length };
                 if (counts['\t'] > counts[','] && counts['\t'] > counts[';']) delimiter = '\t';
                 else if (counts[';'] > counts[',']) delimiter = ';';
@@ -359,7 +359,7 @@
             });
 
             function updatePreview() {
-                const lines = csvContent.split('\n').filter(l => l.trim()).slice(0, 6);
+                const lines = csvContent.split('').filter(l => l.trim()).slice(0, 6);
                 parsedData = lines.map(line => parseCSVLine(line, delimiter));
                 previewTable.innerHTML = '';
                 parsedData.forEach((row, i) => {
@@ -392,7 +392,7 @@
                 const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
                 progress.update(30, 'Parsing data stream...');
                 try {
-                    const lines = csvContent.split('\n').filter(line => line.trim());
+                    const lines = csvContent.split('').filter(line => line.trim());
                     const data = lines.map(line => parseCSVLine(line, delimiter));
                     progress.update(60, 'Engineering workbook...');
                     const worksheet = XLSX.utils.aoa_to_sheet(data);
