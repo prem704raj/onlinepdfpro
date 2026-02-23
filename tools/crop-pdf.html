@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Crop PDF Online Free - Trim PDF Pages | Online PDF Pro</title>
     <meta name="description" content="">
 
@@ -44,14 +44,15 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXX');
     </script>
 
     <!-- Google AdSense Head -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+        crossorigin="anonymous"></script>
+
 
     <script type="application/ld+json">
   {
@@ -196,11 +197,11 @@
             font-weight: bold;
         }
     </style>
-    
+
 </head>
 
 <body class="fade-in">
-        <a href="#main" class="skip-link">Skip to main content</a>
+    <a href="#main" class="skip-link">Skip to main content</a>
 
     <header class="header">
         <div class="header-content">
@@ -211,7 +212,9 @@
             <nav class="nav" id="nav">
                 <a href="../tools.html" class="nav-link">All Tools</a>
                 <a href="../about.html" class="nav-link">About</a>
-                <a href="../help.html" class="nav-link">Help</a>                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prem0734raj@gmail.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener">Feedback</a>
+                <a href="../help.html" class="nav-link">Help</a> <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=prem0734raj@gmail.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener">Feedback</a>
             </nav>
             <div class="header-actions">
                 <!-- Compact Header Search -->
@@ -268,81 +271,91 @@
             <div class="tool-header">
                 <span class="section-tag fade-in">Visual Tool</span>
                 <h1 class="tool-title fade-in">Crop PDF</h1>
-                <p class="tool-description fade-in" style="animation-delay: 0.1s;">Visually crop and trim unwanted margins from your PDF pages</p>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">Visually crop and trim unwanted
+                    margins from your PDF pages</p>
             </div>
 
             <div style="margin-top:20px; width:100%;">
 
-        <div class="upload-area" id="dropArea">
-            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Visually crop and trim PDF
-                    pages</small></p>
-            <input type="file" id="fileInput" accept=".pdf" hidden />
+                <div class="upload-zone glass-card fade-in" id="dropArea"
+                    style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
+                    <span class="upload-icon"
+                        style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;">✂️</span>
+                    <p class="upload-text"
+                        style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                        Drop your PDF here</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem;">Visually crop and
+                        trim PDF pages</p>
+                    <span class="btn btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 8px; pointer-events: none;">
+                        <span>📄</span> Click to Upload
+                    </span>
+                    <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        Max file size: 100MB. Processing happens instantly on your device.
+                    </div>
+                    <input type="file" id="fileInput" accept=".pdf" hidden />
+                </div>
+
+                <div class="file-info" id="fileInfo"></div>
+
+                <div class="crop-container" id="cropContainer">
+                    <h2 style="margin-bottom:5px;">Crop PDF Pages</h2>
+                    <p style="color:#666; margin-bottom:20px;">Set margins to crop (in points). 72 points = 1 inch</p>
+
+                    <div class="page-nav">
+                        <button onclick="changePage(-1)">← Prev</button>
+                        <span id="pageInfo">Page 1 of 1</span>
+                        <button onclick="changePage(1)">Next →</button>
+                    </div>
+
+                    <canvas class="preview-canvas" id="previewCanvas"></canvas>
+
+                    <div class="crop-inputs">
+                        <div class="crop-input-group">
+                            <label>Crop from Top (pts)</label>
+                            <input type="number" id="cropTop" value="0" min="0" oninput="updatePreview()">
+                        </div>
+                        <div class="crop-input-group">
+                            <label>Crop from Bottom (pts)</label>
+                            <input type="number" id="cropBottom" value="0" min="0" oninput="updatePreview()">
+                        </div>
+                        <div class="crop-input-group">
+                            <label>Crop from Left (pts)</label>
+                            <input type="number" id="cropLeft" value="0" min="0" oninput="updatePreview()">
+                        </div>
+                        <div class="crop-input-group">
+                            <label>Crop from Right (pts)</label>
+                            <input type="number" id="cropRight" value="0" min="0" oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-row">
+                        <label>
+                            <input type="checkbox" id="applyAll" checked>
+                            Apply same crop to all pages
+                        </label>
+                    </div>
+
+                    <div class="apply-section">
+                        <button onclick="cropAndDownload()" class="apply-btn">✂️ Crop & Download PDF</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-        <div class="file-info" id="fileInfo"></div>
-
-        <div class="crop-container" id="cropContainer">
-            <h2 style="margin-bottom:5px;">Crop PDF Pages</h2>
-            <p style="color:#666; margin-bottom:20px;">Set margins to crop (in points). 72 points = 1 inch</p>
-
-            <div class="page-nav">
-                <button onclick="changePage(-1)">← Prev</button>
-                <span id="pageInfo">Page 1 of 1</span>
-                <button onclick="changePage(1)">Next →</button>
-            </div>
-
-            <canvas class="preview-canvas" id="previewCanvas"></canvas>
-
-            <div class="crop-inputs">
-                <div class="crop-input-group">
-                    <label>Crop from Top (pts)</label>
-                    <input type="number" id="cropTop" value="0" min="0" oninput="updatePreview()">
-                </div>
-                <div class="crop-input-group">
-                    <label>Crop from Bottom (pts)</label>
-                    <input type="number" id="cropBottom" value="0" min="0" oninput="updatePreview()">
-                </div>
-                <div class="crop-input-group">
-                    <label>Crop from Left (pts)</label>
-                    <input type="number" id="cropLeft" value="0" min="0" oninput="updatePreview()">
-                </div>
-                <div class="crop-input-group">
-                    <label>Crop from Right (pts)</label>
-                    <input type="number" id="cropRight" value="0" min="0" oninput="updatePreview()">
-                </div>
-            </div>
-
-            <div class="checkbox-row">
-                <label>
-                    <input type="checkbox" id="applyAll" checked>
-                    Apply same crop to all pages
-                </label>
-            </div>
-
-            <div class="apply-section">
-                <button onclick="cropAndDownload()" class="apply-btn">✂️ Crop & Download PDF</button>
-            </div>
+        <!-- Google AdSense Tool Page (After Result) -->
+        <div style="text-align:center; margin:50px 0;">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="9876543210" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
+    </main>
 
-    </div>
-        </div>
-    
-            <!-- Google AdSense Tool Page (After Result) -->
-            <div style="text-align:center; margin:50px 0;">
-              <ins class="adsbygoogle"
-                   style="display:block"
-                   data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                   data-ad-slot="9876543210"
-                   data-ad-format="auto"
-                   data-full-width-responsive="true"></ins>
-              <script>
-                   (adsbygoogle = window.adsbygoogle || []).push({});
-              </script>
-            </div>
-</main>
 
-        
-<footer class="footer"
+    <footer class="footer"
         style="padding: 60px 0 20px; background: var(--surface-2); border-top: 1px solid var(--border);">
         <div class="container">
             <div class="footer-content"
@@ -363,7 +376,8 @@
                     <h4 style="margin-bottom: 16px; font-size: 1rem;">Platform</h4>
                     <ul
                         style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View All
+                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View
+                                All
                                 Tools</a></li>
                         <li><a href="../about.html" style="color: var(--text-secondary); text-decoration: none;">Our
                                 Story</a></li>
@@ -377,9 +391,11 @@
                     <h4 style="margin-bottom: 16px; font-size: 1rem;">Legal & SEO</h4>
                     <ul
                         style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy
+                        <li><a href="../privacy.html"
+                                style="color: var(--text-secondary); text-decoration: none;">Privacy
                                 Policy</a></li>
-                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of
+                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms
+                                of
                                 Service</a></li>
                         <li><a href="../sitemap.xml"
                                 style="color: var(--text-secondary); text-decoration: none;">Sitemap.xml</a></li>
@@ -668,10 +684,10 @@
         })();
     </script>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let pdfBytes = null;
@@ -766,7 +782,7 @@
             download(croppedBytes, 'Cropped-PDF-OnlinePDFPro.pdf', 'application/pdf');
         }
     </script>
-    
+
 </body>
 
 </html>

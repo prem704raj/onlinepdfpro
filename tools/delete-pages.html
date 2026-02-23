@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Delete PDF Pages Online Free - Remove Pages from PDF | Online PDF Pro</title>
     <meta name="description" content="">
 
@@ -44,14 +44,15 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXX');
     </script>
 
     <!-- Google AdSense Head -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+        crossorigin="anonymous"></script>
+
 
     <script type="application/ld+json">
   {
@@ -211,11 +212,11 @@
             transition: width 0.4s;
         }
     </style>
-    
+
 </head>
 
 <body class="fade-in">
-        <a href="#main" class="skip-link">Skip to main content</a>
+    <a href="#main" class="skip-link">Skip to main content</a>
 
     <header class="header">
         <div class="header-content">
@@ -226,7 +227,9 @@
             <nav class="nav" id="nav">
                 <a href="../tools.html" class="nav-link">All Tools</a>
                 <a href="../about.html" class="nav-link">About</a>
-                <a href="../help.html" class="nav-link">Help</a>                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prem0734raj@gmail.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener">Feedback</a>
+                <a href="../help.html" class="nav-link">Help</a> <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=prem0734raj@gmail.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener">Feedback</a>
             </nav>
             <div class="header-actions">
                 <!-- Compact Header Search -->
@@ -283,56 +286,66 @@
             <div class="tool-header">
                 <span class="section-tag fade-in">Organizer Tool</span>
                 <h1 class="tool-title fade-in">Delete Pages</h1>
-                <p class="tool-description fade-in" style="animation-delay: 0.1s;">Remove specific pages from your PDF file visually</p>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">Remove specific pages from your PDF
+                    file visually</p>
             </div>
 
             <div style="margin-top:20px; width:100%;">
 
-        <div class="upload-area" id="dropArea">
-            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Click on pages you want to
-                    REMOVE</small></p>
-            <input type="file" id="fileInput" accept=".pdf" hidden />
-        </div>
+                <div class="upload-zone glass-card fade-in" id="dropArea"
+                    style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
+                    <span class="upload-icon"
+                        style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;">🗑️</span>
+                    <p class="upload-text"
+                        style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                        Drop your PDF here</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem;">Select pages you
+                        want to visually DELETE</p>
+                    <span class="btn btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 8px; pointer-events: none;">
+                        <span>📄</span> Click to Upload
+                    </span>
+                    <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        Max file size: 100MB. Processing happens instantly on your device.
+                    </div>
+                    <input type="file" id="fileInput" accept=".pdf" hidden />
+                </div>
 
-        <div class="file-info" id="fileInfo"></div>
+                <div class="file-info" id="fileInfo"></div>
 
-        <div class="top-controls" id="topControls">
-            <p class="selected-count" id="selectedCount">Click on pages to select for deletion</p>
-            <button onclick="selectAll()" style="background:#fee2e2; color:#ef4444;">Select All</button>
-            <button onclick="deselectAll()" style="background:#f0f9ff; color:#2563eb;">Deselect All</button>
-            <button onclick="deleteAndDownload()"
-                style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white; padding:16px 40px !important; font-size:18px !important; box-shadow:0 10px 30px rgba(239,68,68,0.3);">🗑️
-                Delete Selected & Download</button>
-        </div>
+                <div class="top-controls" id="topControls">
+                    <p class="selected-count" id="selectedCount">Click on pages to select for deletion</p>
+                    <button onclick="selectAll()" style="background:#fee2e2; color:#ef4444;">Select All</button>
+                    <button onclick="deselectAll()" style="background:#f0f9ff; color:#2563eb;">Deselect All</button>
+                    <button onclick="deleteAndDownload()"
+                        style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white; padding:16px 40px !important; font-size:18px !important; box-shadow:0 10px 30px rgba(239,68,68,0.3);">🗑️
+                        Delete Selected & Download</button>
+                </div>
 
-        <div class="progress-section" id="progressSection">
-            <h3>Loading PDF pages...</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-section" id="progressSection">
+                    <h3>Loading PDF pages...</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="pages-grid" id="pagesGrid"></div>
+
             </div>
         </div>
 
-        <div class="pages-grid" id="pagesGrid"></div>
-
-    </div>
+        <!-- Google AdSense Tool Page (After Result) -->
+        <div style="text-align:center; margin:50px 0;">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="9876543210" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
-    
-            <!-- Google AdSense Tool Page (After Result) -->
-            <div style="text-align:center; margin:50px 0;">
-              <ins class="adsbygoogle"
-                   style="display:block"
-                   data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                   data-ad-slot="9876543210"
-                   data-ad-format="auto"
-                   data-full-width-responsive="true"></ins>
-              <script>
-                   (adsbygoogle = window.adsbygoogle || []).push({});
-              </script>
-            </div>
-</main>
+    </main>
 
-        
-<footer class="footer"
+
+    <footer class="footer"
         style="padding: 60px 0 20px; background: var(--surface-2); border-top: 1px solid var(--border);">
         <div class="container">
             <div class="footer-content"
@@ -353,7 +366,8 @@
                     <h4 style="margin-bottom: 16px; font-size: 1rem;">Platform</h4>
                     <ul
                         style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View All
+                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View
+                                All
                                 Tools</a></li>
                         <li><a href="../about.html" style="color: var(--text-secondary); text-decoration: none;">Our
                                 Story</a></li>
@@ -367,9 +381,11 @@
                     <h4 style="margin-bottom: 16px; font-size: 1rem;">Legal & SEO</h4>
                     <ul
                         style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy
+                        <li><a href="../privacy.html"
+                                style="color: var(--text-secondary); text-decoration: none;">Privacy
                                 Policy</a></li>
-                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of
+                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms
+                                of
                                 Service</a></li>
                         <li><a href="../sitemap.xml"
                                 style="color: var(--text-secondary); text-decoration: none;">Sitemap.xml</a></li>
@@ -658,10 +674,10 @@
         })();
     </script>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let pdfBytes = null;
@@ -778,7 +794,7 @@
             download(newPdfBytes, 'Edited-PDF-OnlinePDFPro.pdf', 'application/pdf');
         }
     </script>
-    
+
 </body>
 
 </html>
