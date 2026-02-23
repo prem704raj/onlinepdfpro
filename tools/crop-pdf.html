@@ -83,12 +83,13 @@
             display: inline-block;
             user-select: none;
             line-height: 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             background: #e2e8f0;
             overflow: hidden;
             margin-top: 20px;
             border-radius: 8px;
         }
+
         .preview-canvas {
             display: block;
             margin: 0;
@@ -96,14 +97,16 @@
             max-width: 100%;
             height: auto;
         }
+
         .selection-box {
             position: absolute;
             border: 2px dashed #2563eb;
-            box-shadow: 0 0 0 9999px rgba(0,0,0,0.6);
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
             cursor: move;
             box-sizing: border-box;
             z-index: 10;
         }
+
         .handle {
             position: absolute;
             width: 16px;
@@ -113,14 +116,54 @@
             z-index: 11;
             border: 2px solid white;
         }
-        .handle.nw { top: -8px; left: -8px; cursor: nwse-resize; }
-        .handle.n { top: -8px; left: calc(50% - 8px); cursor: ns-resize; }
-        .handle.ne { top: -8px; right: -8px; cursor: nesw-resize; }
-        .handle.w { top: calc(50% - 8px); left: -8px; cursor: ew-resize; }
-        .handle.e { top: calc(50% - 8px); right: -8px; cursor: ew-resize; }
-        .handle.sw { bottom: -8px; left: -8px; cursor: nesw-resize; }
-        .handle.s { bottom: -8px; left: calc(50% - 8px); cursor: ns-resize; }
-        .handle.se { bottom: -8px; right: -8px; cursor: nwse-resize; }
+
+        .handle.nw {
+            top: -8px;
+            left: -8px;
+            cursor: nwse-resize;
+        }
+
+        .handle.n {
+            top: -8px;
+            left: calc(50% - 8px);
+            cursor: ns-resize;
+        }
+
+        .handle.ne {
+            top: -8px;
+            right: -8px;
+            cursor: nesw-resize;
+        }
+
+        .handle.w {
+            top: calc(50% - 8px);
+            left: -8px;
+            cursor: ew-resize;
+        }
+
+        .handle.e {
+            top: calc(50% - 8px);
+            right: -8px;
+            cursor: ew-resize;
+        }
+
+        .handle.sw {
+            bottom: -8px;
+            left: -8px;
+            cursor: nesw-resize;
+        }
+
+        .handle.s {
+            bottom: -8px;
+            left: calc(50% - 8px);
+            cursor: ns-resize;
+        }
+
+        .handle.se {
+            bottom: -8px;
+            right: -8px;
+            cursor: nwse-resize;
+        }
 
         .pdf-toolbar {
             display: inline-flex;
@@ -129,9 +172,10 @@
             padding: 10px 20px;
             border-radius: 12px;
             gap: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin: 20px 0;
         }
+
         .toolbar-btn {
             background: transparent;
             color: #fff;
@@ -142,7 +186,11 @@
             transition: 0.2s;
             font-size: 16px;
         }
-        .toolbar-btn:hover { background: #475569; }
+
+        .toolbar-btn:hover {
+            background: #475569;
+        }
+
         .page-indicator input {
             width: 50px;
             text-align: center;
@@ -323,8 +371,9 @@
                         <button onclick="changePage(-1)" class="toolbar-btn" title="Previous Page">▲</button>
                         <button onclick="changePage(1)" class="toolbar-btn" title="Next Page">▼</button>
                         <div class="page-indicator">
-                            <input type="number" id="pageInput" value="1" min="1" onchange="goToPage(this.value)"> 
-                            <span style="color:#fff; font-weight: bold; margin:0 5px;">/ <span id="totalPagesSpan">1</span></span>
+                            <input type="number" id="pageInput" value="1" min="1" onchange="goToPage(this.value)">
+                            <span style="color:#fff; font-weight: bold; margin:0 5px;">/ <span
+                                    id="totalPagesSpan">1</span></span>
                         </div>
                     </div>
 
@@ -421,7 +470,7 @@
     </footer>
 
     <script src="../js/app.js"></script>
-    
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
@@ -443,7 +492,7 @@
             loadPDF(e.dataTransfer.files[0]);
         };
 
-        
+
         let isDragging = false, isResizing = false, resizeDir = '', startX, startY;
         let startCropBox = {};
         let cropBox = { top: 0, left: 0, width: 0, height: 0 };
@@ -501,11 +550,11 @@
         function initCropBox() {
             const canvas = document.getElementById('previewCanvas');
             const rect = canvas.getBoundingClientRect();
-            cropBox = { 
-                top: rect.height * 0.1, 
-                left: rect.width * 0.1, 
-                width: rect.width * 0.8, 
-                height: rect.height * 0.8 
+            cropBox = {
+                top: rect.height * 0.1,
+                left: rect.width * 0.1,
+                width: rect.width * 0.8,
+                height: rect.height * 0.8
             };
             boxElem.style.display = 'block';
             updateBoxUI();
@@ -520,7 +569,7 @@
 
         boxElem.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            if(e.target.classList.contains('handle')) {
+            if (e.target.classList.contains('handle')) {
                 isResizing = true;
                 resizeDir = e.target.dataset.dir;
             } else {
@@ -534,7 +583,7 @@
         });
 
         boxElem.addEventListener('touchstart', (e) => {
-            if(e.target.classList.contains('handle')) {
+            if (e.target.classList.contains('handle')) {
                 isResizing = true;
                 resizeDir = e.target.dataset.dir;
             } else {
@@ -543,7 +592,7 @@
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
             startCropBox = { ...cropBox };
-            window.addEventListener('touchmove', onTouchMove, {passive: false});
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
             window.addEventListener('touchend', onMouseUp);
         });
 
@@ -567,10 +616,10 @@
             if (isDragging) {
                 let newL = startCropBox.left + dx;
                 let newT = startCropBox.top + dy;
-                if(newL < 0) newL = 0;
-                if(newT < 0) newT = 0;
-                if(newL + cropBox.width > maxW) newL = maxW - cropBox.width;
-                if(newT + cropBox.height > maxH) newT = maxH - cropBox.height;
+                if (newL < 0) newL = 0;
+                if (newT < 0) newT = 0;
+                if (newL + cropBox.width > maxW) newL = maxW - cropBox.width;
+                if (newT + cropBox.height > maxH) newT = maxH - cropBox.height;
                 cropBox.left = newL;
                 cropBox.top = newT;
             } else if (isResizing) {
@@ -582,23 +631,23 @@
                 if (resizeDir.includes('w')) {
                     newL = startCropBox.left + dx;
                     newW = startCropBox.width - dx;
-                    if(newL < 0) { newW += newL; newL = 0; }
+                    if (newL < 0) { newW += newL; newL = 0; }
                 }
                 if (resizeDir.includes('e')) {
                     newW = startCropBox.width + dx;
-                    if(newL + newW > maxW) newW = maxW - newL;
+                    if (newL + newW > maxW) newW = maxW - newL;
                 }
                 if (resizeDir.includes('n')) {
                     newT = startCropBox.top + dy;
                     newH = startCropBox.height - dy;
-                    if(newT < 0) { newH += newT; newT = 0; }
+                    if (newT < 0) { newH += newT; newT = 0; }
                 }
                 if (resizeDir.includes('s')) {
                     newH = startCropBox.height + dy;
-                    if(newT + newH > maxH) newH = maxH - newT;
+                    if (newT + newH > maxH) newH = maxH - newT;
                 }
 
-                if(newW > 20 && newH > 20) {
+                if (newW > 20 && newH > 20) {
                     cropBox.left = newL;
                     cropBox.top = newT;
                     cropBox.width = newW;
@@ -636,7 +685,7 @@
 
             pagesToCrop.forEach(page => {
                 const { width, height } = page.getSize();
-                
+
                 const newLeft = width * ratioLeft;
                 const newWidth = width * ratioWidth;
                 const newHeight = height * ratioHeight;
@@ -650,7 +699,7 @@
             const croppedBytes = await pdfDoc.save();
             download(croppedBytes, 'Cropped-PDF-OnlinePDFPro.pdf', 'application/pdf');
         }
-\n    </script>
+    </script>
 
 </body>
 
