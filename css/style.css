@@ -104,6 +104,7 @@ body {
 
 main {
     flex: 1 0 auto;
+    padding-top: calc(var(--header-h) + 24px);
 }
 
 h1,
