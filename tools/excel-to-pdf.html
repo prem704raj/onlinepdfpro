@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Excel to PDF Online Free - Convert XLSX to PDF | Online PDF Pro</title>
+    <meta name="description" content="Convert Excel spreadsheets to PDF online for free. XLSX to PDF converter with table formatting. No registration.">
+    <meta name="keywords" content="excel to pdf, xlsx to pdf, convert excel to pdf free, spreadsheet to pdf">
+    <meta name="author" content="Online PDF Pro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/excel-to-pdf.html">
+    
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="Excel to PDF Online Free - Convert XLSX to PDF | Online PDF Pro">
+    <meta property="og:description" content="Convert Excel spreadsheets to PDF online for free. XLSX to PDF converter with table formatting. No registration.">
+    <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/excel-to-pdf.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Excel to PDF Online Free - Convert XLSX to PDF | Online PDF Pro">
+    <meta name="twitter:description" content="Convert Excel spreadsheets to PDF online for free. XLSX to PDF converter with table formatting. No registration.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
+
+    <!-- Favicon + PWA -->
+    <link rel="icon" href="../favicon.ico">
+    <link rel="apple-touch-icon" href="../icon-192.png">
+    <link rel="manifest" href="../manifest.json">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Core CSS (Using absolute path for nested tools compatibility) -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/tools.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXX');
+    </script>
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Excel to PDF Converter",
+    "url": "https://onlinepdfpro.com/excel-to-pdf.html",
+    "description": "Free online Excel to PDF converter.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+    <style>
+        .result-box {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .excel-table th {
+            background: #10b981;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .excel-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .excel-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .excel-table tr:hover {
+            background: #f0fdf4;
+        }
+
+        .sheet-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .sheet-tab {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .sheet-tab.active {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .sheet-tab:hover {
+            border-color: #10b981;
+        }
+
+        .dl-btn {
+            padding: 18px 50px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .dl-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .progress-section {
+            display: none;
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 500px;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 50px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #2563eb);
+            border-radius: 50px;
+            transition: width 0.5s;
+        }
+
+        .file-info {
+            display: none;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 15px 20px;
+            background: #f0fdf4;
+            border-radius: 14px;
+            border: 2px solid #10b981;
+            text-align: center;
+            color: #059669;
+            font-weight: bold;
+        }
+
+        header {
+            padding-top: 100px;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+        <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">📄</span>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prem0734raj@gmail.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener">Feedback</a>
+            </nav>
+            <div class="header-actions">
+                <!-- Compact Header Search -->
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
+                </div>
+
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+
+            </div>
+        </div>
+    </header>
+
+    
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 900px;">
+            <div class="tool-header" style="text-align:center; margin-bottom: 20px;">
+                <span class="section-tag fade-in">Convert to PDF</span>
+                <h1 class="tool-title fade-in">Excel to PDF</h1>
+            </div>
+            
+
+        <div class="upload-area" id="dropArea"
+            style="text-align: center; padding: 60px; border: 2px dashed #10b981; border-radius: 16px; margin: 40px auto; max-width: 600px; cursor: pointer; transition: transform 0.2s;">
+            <p style="font-size:20px;">Drop your Excel file here or Click to Upload<br><small>Supports .xlsx, .xls, .csv
+                    files</small></p>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden />
+        </div>
+
+        <div class="file-info" id="fileInfo"></div>
+
+        <div class="progress-section" id="progressSection">
+            <h3>Processing Excel file...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox" style="display:none;">
+            <h2 style="color:#10b981;">✅ Excel Loaded Successfully!</h2>
+            <p id="resultInfo" style="color:#666;"></p>
+
+            <div class="sheet-tabs" id="sheetTabs"></div>
+
+            <div style="overflow-x:auto;">
+                <table class="excel-table" id="excelTable"></table>
+            </div>
+
+            <button onclick="downloadPDF()" class="dl-btn">📥 Download as PDF</button>
+        </div>
+
+    
+        </div>
+    </main>
+
+
+        
+<footer class="footer"
+        style="padding: 60px 0 20px; background: var(--surface-2); border-top: 1px solid var(--border);">
+        <div class="container">
+            <div class="footer-content"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo" style="margin-bottom: 16px; display: inline-flex;">
+                        <span class="logo-icon">📄</span>
+                        <span class="logo-text">OnlinePDFPro</span>
+                    </a>
+                    <p class="footer-tagline" style="color: var(--text-muted); line-height: 1.5;">Fast, private document
+                        tools for everyone. Processing happens on your device.</p>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);"><strong>Built by Prem
+                                Raj</strong><br />1st Year CSE Student at VIT</p>
+                    </div>
+                </div>
+                <div class="footer-links-group">
+                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Platform</h4>
+                    <ul
+                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View All
+                                Tools</a></li>
+                        <li><a href="../about.html" style="color: var(--text-secondary); text-decoration: none;">Our
+                                Story</a></li>
+                        <li><a href="../help.html" style="color: var(--text-secondary); text-decoration: none;">Help &
+                                FAQ</a></li>
+                        <li><a href="#" class="feedback-trigger-footer"
+                                style="color: var(--text-secondary); text-decoration: none;">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Legal & SEO</h4>
+                    <ul
+                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <li><a href="../privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy
+                                Policy</a></li>
+                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of
+                                Service</a></li>
+                        <li><a href="../sitemap.xml"
+                                style="color: var(--text-secondary); text-decoration: none;">Sitemap.xml</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                style="padding-top: 24px; border-top: 1px solid var(--border); text-align: center; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">&copy; 2026 OnlinePDFPro. 100% Free
+                    Forever.</p>
+                <div style="display: flex; gap: 16px;">
+                    <a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank" rel="noopener"
+                        aria-label="GitHub Repository" style="color: var(--text-muted);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+<script>
+        let workbook = null;
+        let currentSheet = '';
+
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => processExcel(e.target.files[0]);
+
+        document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            processExcel(e.dataTransfer.files[0]);
+        };
+
+        async function processExcel(file) {
+            if (!file) return;
+
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileInfo').textContent = '📊 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('resultBox').style.display = 'none';
+            document.getElementById('progressFill').style.width = '50%';
+
+            const arrayBuffer = await file.arrayBuffer();
+            workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+            document.getElementById('progressFill').style.width = '100%';
+
+            // Create sheet tabs
+            const tabsDiv = document.getElementById('sheetTabs');
+            tabsDiv.innerHTML = '';
+
+            workbook.SheetNames.forEach((name, index) => {
+                const tab = document.createElement('div');
+                tab.className = 'sheet-tab' + (index === 0 ? ' active' : '');
+                tab.textContent = name;
+                tab.onclick = () => showSheet(name, tab);
+                tabsDiv.appendChild(tab);
+            });
+
+            // Show first sheet
+            currentSheet = workbook.SheetNames[0];
+            showSheet(currentSheet, tabsDiv.firstChild);
+
+            document.getElementById('resultInfo').textContent = workbook.SheetNames.length + ' sheet(s) found';
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('resultBox').style.display = 'block';
+        }
+
+        function showSheet(sheetName, tabElement) {
+            currentSheet = sheetName;
+
+            // Update active tab
+            document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+            tabElement.classList.add('active');
+
+            // Convert sheet to HTML table
+            const sheet = workbook.Sheets[sheetName];
+            const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+            const table = document.getElementById('excelTable');
+            table.innerHTML = '';
+
+            if (data.length === 0) {
+                table.innerHTML = '<tr><td>Empty sheet</td></tr>';
+                return;
+            }
+
+            // Header row
+            let headerHtml = '<thead><tr>';
+            const maxCols = Math.max(...data.map(row => row ? row.length : 0));
+            for (let i = 0; i < maxCols; i++) {
+                const headerText = data[0] && data[0][i] !== undefined ? data[0][i] : String.fromCharCode(65 + i);
+                headerHtml += '<th>' + headerText + '</th>';
+            }
+            headerHtml += '</tr></thead>';
+
+            // Data rows
+            let bodyHtml = '<tbody>';
+            for (let i = 1; i < data.length; i++) {
+                bodyHtml += '<tr>';
+                for (let j = 0; j < maxCols; j++) {
+                    const cellValue = data[i] && data[i][j] !== undefined ? data[i][j] : '';
+                    bodyHtml += '<td>' + cellValue + '</td>';
+                }
+                bodyHtml += '</tr>';
+            }
+            bodyHtml += '</tbody>';
+
+            table.innerHTML = headerHtml + bodyHtml;
+        }
+
+        function downloadPDF() {
+            const table = document.getElementById('excelTable');
+
+            const container = document.createElement('div');
+            container.style.padding = '20px';
+            container.style.fontFamily = 'Calibri, Arial, sans-serif';
+
+            const title = document.createElement('h2');
+            title.textContent = 'Sheet: ' + currentSheet;
+            title.style.color = '#333';
+            title.style.marginBottom = '20px';
+
+            container.appendChild(title);
+            container.appendChild(table.cloneNode(true));
+
+            const options = {
+                margin: [10, 10, 10, 10],
+                filename: 'Excel-to-PDF-OnlinePDFPro.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(options).from(container).save();
+        }
+    </script>
+</body>
+
+</html>
