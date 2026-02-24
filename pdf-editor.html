@@ -804,7 +804,32 @@
 
             const textContent = await page.getTextContent();
             const textItems = textContent.items;
+            const textStyles = textContent.styles || {};
             if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
+
+            // Helper: detect font properties from PDF font name
+            function parseFontInfo(fontName) {
+                const styleDef = textStyles[fontName] || {};
+                const rawFamily = styleDef.fontFamily || 'sans-serif';
+                const name = (fontName || '').toLowerCase();
+
+                // Detect bold
+                const isBold = name.includes('bold') || name.includes('black') || name.includes('heavy');
+                // Detect italic
+                const isItalic = name.includes('italic') || name.includes('oblique');
+
+                // Map common PDF fonts to web-safe equivalents
+                let family = rawFamily;
+                if (name.includes('times') || rawFamily === 'serif') family = 'Times New Roman, serif';
+                else if (name.includes('courier') || rawFamily === 'monospace') family = 'Courier New, monospace';
+                else if (name.includes('arial') || name.includes('helvetica') || rawFamily === 'sans-serif') family = 'Arial, sans-serif';
+                else if (name.includes('georgia')) family = 'Georgia, serif';
+                else if (name.includes('verdana')) family = 'Verdana, sans-serif';
+                else if (name.includes('comic')) family = 'Comic Sans MS, cursive';
+                else family = rawFamily + ', sans-serif';
+
+                return { family, isBold, isItalic };
+            }
 
             // Group text items into lines (items with same Y position)
             const lines = [];
@@ -851,6 +876,12 @@
                 div.style.minWidth = Math.max(line.width, 30) + 'px';
                 div.style.height = line.height + 'px';
 
+                // Match original font style
+                const fontInfo = parseFontInfo(line.fontName);
+                div.style.fontFamily = fontInfo.family;
+                if (fontInfo.isBold) div.style.fontWeight = 'bold';
+                if (fontInfo.isItalic) div.style.fontStyle = 'italic';
+
                 // Restore modified text if it was previously edited
                 const savedMod = savedMods.find(m => m.lineIndex === idx);
                 if (savedMod && savedMod.newText !== line.text) {
@@ -872,6 +903,14 @@
                 div.addEventListener('focus', () => {
                     div.style.color = 'var(--text-primary, #000)';
                     div.style.background = 'rgba(255, 255, 255, 0.95)';
+                });
+
+                // Enter key saves the edit
+                div.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        div.blur(); // triggers the blur handler below
+                    }
                 });
 
                 // On blur, check if text was modified
