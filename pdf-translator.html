@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Translate PDF Online Free - 134 Languages | Online PDF Pro</title>
     <meta name="description"
-        content="Translate PDF to any language online free. Hindi, Gujarati, Tamil, Telugu, Bengali, Marathi + 130 more languages. AI-powered unlimited PDF translator.">
+        content="Translate PDF to any language online free. Hindi, Gujarati, Tamil, Telugu, Bengali, Urdu, Arabic + 130 languages. Instant unlimited PDF translator.">
     <meta name="keywords"
-        content="translate pdf, pdf translator, translate pdf to hindi, translate pdf to gujarati, pdf translator online free, translate pdf to tamil">
+        content="translate pdf, pdf translator, translate pdf to hindi, translate pdf to gujarati, translate pdf to bengali, pdf translator online free">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://onlinepdfpro.com/pdf-translator.html">
     <link rel="stylesheet" href="css/style.css">
@@ -106,34 +106,6 @@
             transform: rotate(180deg)
         }
 
-        .method-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            background: #f1f5f9;
-            padding: 8px;
-            border-radius: 16px
-        }
-
-        .method-btn {
-            padding: 12px 25px;
-            background: transparent;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 700;
-            color: #64748b;
-            transition: .3s
-        }
-
-        .method-btn.active {
-            background: #fff;
-            color: #2563eb;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, .1)
-        }
-
         .translate-btn {
             width: 100%;
             padding: 18px;
@@ -151,6 +123,12 @@
 
         .translate-btn:hover {
             transform: translateY(-3px)
+        }
+
+        .translate-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none
         }
 
         .text-panels {
@@ -194,7 +172,8 @@
         }
 
         .progress-section h3 {
-            color: #333
+            color: #333;
+            font-size: 16px
         }
 
         .dl-row {
@@ -245,16 +224,15 @@
             font-weight: 700
         }
 
-        .model-note {
-            background: #fffbeb;
-            border: 2px solid #f59e0b;
-            border-radius: 14px;
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 14px;
-            color: #92400e;
-            text-align: center;
-            display: none
+        .speed-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #f0fdf4;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 700;
+            margin: 5px
         }
 
         @media(max-width:768px) {
@@ -278,23 +256,17 @@
     </header>
     <main class="container">
         <div class="upload-area" id="dropArea">
-            <p style="font-size:20px">Drop your PDF here or Click to Upload<br><small>Translate to 134 languages —
-                    Hindi, Gujarati, Tamil, Telugu & more</small></p>
+            <p style="font-size:20px">Drop your PDF here or Click to Upload<br><small>Instant translation • 134
+                    languages • All Indian languages • No limits</small></p>
             <input type="file" id="fileInput" accept=".pdf" hidden>
         </div>
         <div class="file-info" id="fileInfo"></div>
         <div class="translator-box" id="translatorBox">
-            <h2 style="text-align:center;margin:0 0 10px;color:#333">🌐 PDF Translator</h2>
-            <p style="text-align:center;color:#666;margin:0 0 20px;font-size:14px">134 Languages • All Indian Languages
-                • Unlimited & Free</p>
-
-            <div class="method-toggle">
-                <button class="method-btn active" onclick="setMethod('fast')" id="fastBtn">⚡ Fast (API)</button>
-                <button class="method-btn" onclick="setMethod('ai')" id="aiBtn">🧠 AI (NLLB-200)</button>
-            </div>
-            <div class="model-note" id="modelNote">🧠 AI mode uses Facebook's NLLB-200 model (~300MB download, first
-                time only). Best quality for Indian languages. Works offline after first load.</div>
-
+            <h2 style="text-align:center;margin:0 0 5px;color:#333">🌐 PDF Translator</h2>
+            <p style="text-align:center;color:#666;margin:0 0 5px;font-size:14px">Instant • Unlimited • All Indian
+                Languages</p>
+            <div style="text-align:center;margin-bottom:20px"><span class="speed-badge">⚡ 2-second start</span><span
+                    class="speed-badge">📱 Works on 2G</span><span class="speed-badge">♾️ No limits</span></div>
             <div class="lang-row">
                 <select id="fromLang">
                     <option value="en">English</option>
@@ -331,8 +303,6 @@
                         <option value="sv">Swedish</option>
                         <option value="th">Thai</option>
                         <option value="vi">Vietnamese</option>
-                        <option value="he">Hebrew</option>
-                        <option value="fa">Persian</option>
                         <option value="id">Indonesian</option>
                         <option value="ms">Malay</option>
                     </optgroup>
@@ -373,14 +343,12 @@
                         <option value="sv">Swedish</option>
                         <option value="th">Thai</option>
                         <option value="vi">Vietnamese</option>
-                        <option value="he">Hebrew</option>
-                        <option value="fa">Persian</option>
                         <option value="id">Indonesian</option>
                         <option value="ms">Malay</option>
                     </optgroup>
                 </select>
             </div>
-            <button onclick="translateText()" class="translate-btn" id="translateBtn">🌐 Translate Now</button>
+            <button onclick="translateText()" class="translate-btn" id="translateBtn">🚀 Translate Instantly</button>
             <div class="progress-section" id="progressSection">
                 <h3 id="progressText">Translating...</h3>
                 <div style="width:100%;height:20px;background:#e2e8f0;border-radius:50px;margin:15px 0;overflow:hidden">
@@ -399,9 +367,9 @@
                 </div>
             </div>
             <div class="dl-row" id="downloadRow" style="display:none">
-                <button onclick="downloadTranslatedPDF()" class="dl-btn dl-pdf">📥 Download PDF</button>
+                <button onclick="downloadPDF()" class="dl-btn dl-pdf">📥 Download PDF</button>
                 <button onclick="downloadTxt()" class="dl-btn dl-txt">📝 Download TXT</button>
-                <button onclick="copyTranslation()" class="dl-btn dl-copy">📋 Copy</button>
+                <button onclick="copyIt()" class="dl-btn dl-copy">📋 Copy</button>
             </div>
         </div>
     </main>
@@ -410,26 +378,7 @@
     <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-        let originalFullText = '', translationMethod = 'fast', aiTranslator = null;
-
-        // NLLB language code map
-        const nllbMap = {
-            gu: 'guj_Gujr', hi: 'hin_Deva', pa: 'pan_Guru', ta: 'tam_Taml', te: 'tel_Telu',
-            kn: 'kan_Knda', ml: 'mal_Mlym', bn: 'ben_Beng', mr: 'mar_Deva', ur: 'urd_Arab',
-            as: 'asm_Beng', or: 'ory_Orya', sd: 'snd_Arab', ne: 'npi_Deva',
-            en: 'eng_Latn', es: 'spa_Latn', fr: 'fra_Latn', de: 'deu_Latn', it: 'ita_Latn',
-            pt: 'por_Latn', ru: 'rus_Cyrl', ar: 'arb_Arab', zh: 'zho_Hans', 'zh-CN': 'zho_Hans',
-            ja: 'jpn_Jpan', ko: 'kor_Hang', tr: 'tur_Latn', nl: 'nld_Latn', pl: 'pol_Latn',
-            sv: 'swe_Latn', th: 'tha_Thai', vi: 'vie_Latn', he: 'heb_Hebr', fa: 'pes_Arab',
-            id: 'ind_Latn', ms: 'zsm_Latn'
-        };
-
-        function setMethod(m) {
-            translationMethod = m;
-            document.getElementById('fastBtn').classList.toggle('active', m === 'fast');
-            document.getElementById('aiBtn').classList.toggle('active', m === 'ai');
-            document.getElementById('modelNote').style.display = m === 'ai' ? 'block' : 'none';
-        }
+        let originalFullText = '';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
@@ -444,8 +393,8 @@
             const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
             originalFullText = '';
             for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const tc = await page.getTextContent();
+                const pg = await pdf.getPage(i);
+                const tc = await pg.getTextContent();
                 const lines = {};
                 tc.items.forEach(item => { const y = Math.round(item.transform[5]); if (!lines[y]) lines[y] = []; lines[y].push({ text: item.str, x: Math.round(item.transform[4]) }); });
                 Object.keys(lines).sort((a, b) => b - a).forEach(y => { const lt = lines[y].sort((a, b) => a.x - b.x).map(i => i.text).join(' ').trim(); if (lt) originalFullText += lt + '\n'; });
@@ -461,91 +410,80 @@
         async function translateText() {
             const text = document.getElementById('originalText').value;
             if (!text.trim()) return alert('No text to translate!');
-            if (translationMethod === 'ai') return translateWithAI(text);
-            return translateWithAPI(text);
-        }
+            const btn = document.getElementById('translateBtn');
+            btn.disabled = true; btn.textContent = '⏳ Translating...';
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressFill').style.width = '20%';
+            document.getElementById('progressText').textContent = '⚡ Connecting to translation server...';
 
-        // ---- FAST MODE (MyMemory API) ----
-        async function translateWithAPI(text) {
             const fromLang = document.getElementById('fromLang').value;
             const toLang = document.getElementById('toLang').value;
-            document.getElementById('progressSection').style.display = 'block';
-            document.getElementById('progressText').textContent = 'Translating...';
-            document.getElementById('progressFill').style.width = '30%';
-            const chunks = splitText(text, 450);
+
+            // Try Worker proxy first (instant), fallback to MyMemory
             let translated = '';
-            for (let i = 0; i < chunks.length; i++) {
-                document.getElementById('progressFill').style.width = Math.round(30 + (i / chunks.length) * 65) + '%';
-                const src = fromLang === 'auto' ? 'en' : fromLang;
-                const lp = src + '|' + toLang;
-                const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) + '&langpair=' + lp;
-                try {
-                    const r = await fetch(url); const d = await r.json();
-                    if (d.responseData && d.responseData.translatedText && !d.responseData.translatedText.toUpperCase().includes('INVALID')) translated += d.responseData.translatedText + ' ';
-                    else translated += chunks[i] + ' ';
-                } catch (e) { translated += chunks[i] + ' '; }
-                await new Promise(r => setTimeout(r, 500));
-            }
-            finishTranslation(translated);
-        }
-
-        // ---- AI MODE (NLLB-200 via Xenova) ----
-        async function translateWithAI(text) {
-            document.getElementById('progressSection').style.display = 'block';
-            const fromLang = document.getElementById('fromLang').value;
-            const toLang = document.getElementById('toLang').value;
-            const srcCode = nllbMap[fromLang] || 'eng_Latn';
-            const tgtCode = nllbMap[toLang] || toLang + '_Latn';
-
-            if (!aiTranslator) {
-                document.getElementById('progressText').textContent = '🧠 Loading AI model (~300MB, first time only)...';
-                document.getElementById('progressFill').style.width = '10%';
-                try {
-                    const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
-                    aiTranslator = await pipeline('translation', null, {
-                        model: 'Xenova/nllb-200-distilled-600M', quantized: true,
-                        progress_callback: p => { if (p.progress) document.getElementById('progressFill').style.width = Math.round(10 + p.progress * 0.5) + '%'; }
-                    });
-                } catch (e) {
-                    alert('AI model failed to load. Falling back to Fast mode.');
-                    document.getElementById('progressSection').style.display = 'none';
-                    setMethod('fast'); return translateWithAPI(text);
-                }
+            try {
+                translated = await translateViaWorker(text, fromLang, toLang);
+            } catch (e) {
+                console.log('Worker failed, falling back to MyMemory API');
+                document.getElementById('progressText').textContent = 'Using backup translator...';
+                translated = await translateViaMyMemory(text, fromLang, toLang);
             }
 
-            document.getElementById('progressText').textContent = '🧠 Translating with AI...';
-            document.getElementById('progressFill').style.width = '70%';
-            const chunks = splitText(text, 400);
-            let translated = '';
-            for (let i = 0; i < chunks.length; i++) {
-                document.getElementById('progressFill').style.width = Math.round(70 + (i / chunks.length) * 25) + '%';
-                try {
-                    const result = await aiTranslator(chunks[i], { src_lang: srcCode, tgt_lang: tgtCode });
-                    translated += (result[0]?.translation_text || chunks[i]) + ' ';
-                } catch (e) { translated += chunks[i] + ' '; }
-            }
-            finishTranslation(translated);
-        }
-
-        function finishTranslation(translated) {
             document.getElementById('progressFill').style.width = '100%';
             document.getElementById('translatedText').value = translated.trim();
             document.getElementById('progressSection').style.display = 'none';
             document.getElementById('downloadRow').style.display = 'flex';
+            btn.disabled = false; btn.textContent = '🚀 Translate Instantly';
             if (typeof incrementCounter === 'function') { incrementCounter('pdfTranslator'); incrementTodayCount(); }
         }
 
+        // PRIMARY: Cloudflare Worker proxy
+        async function translateViaWorker(text, fromLang, toLang) {
+            document.getElementById('progressText').textContent = '⚡ Translating instantly...';
+            document.getElementById('progressFill').style.width = '50%';
+            const r = await fetch('https://pdf-translator-onlinepdfpro.workers.dev/', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text, source: fromLang, target: toLang })
+            });
+            if (!r.ok) throw new Error('Worker error ' + r.status);
+            const d = await r.json();
+            if (d.translated) return d.translated;
+            if (d.error) throw new Error(d.error);
+            throw new Error('No translation returned');
+        }
+
+        // FALLBACK: MyMemory API (chunk-based)
+        async function translateViaMyMemory(text, fromLang, toLang) {
+            const chunks = splitText(text, 450);
+            let translated = '';
+            for (let i = 0; i < chunks.length; i++) {
+                document.getElementById('progressFill').style.width = Math.round(30 + (i / chunks.length) * 65) + '%';
+                document.getElementById('progressText').textContent = 'Translating chunk ' + (i + 1) + '/' + chunks.length + '...';
+                const src = fromLang === 'auto' ? 'en' : fromLang;
+                const lp = src + '|' + toLang;
+                try {
+                    const r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) + '&langpair=' + lp);
+                    const d = await r.json();
+                    if (d.responseData && d.responseData.translatedText && !d.responseData.translatedText.toUpperCase().includes('INVALID'))
+                        translated += d.responseData.translatedText + ' ';
+                    else translated += chunks[i] + ' ';
+                } catch (e) { translated += chunks[i] + ' '; }
+                await new Promise(r => setTimeout(r, 400));
+            }
+            return translated;
+        }
+
         function splitText(text, max) {
-            const chunks = [], sentences = text.split(/(?<=[.!?\n])/); let cur = '';
-            sentences.forEach(s => { if ((cur + s).length > max) { if (cur) chunks.push(cur.trim()); cur = s; } else cur += s; });
+            const chunks = [], sents = text.split(/(?<=[.!?\n])/); let cur = '';
+            sents.forEach(s => { if ((cur + s).length > max) { if (cur) chunks.push(cur.trim()); cur = s; } else cur += s; });
             if (cur) chunks.push(cur.trim()); return chunks;
         }
 
-        async function downloadTranslatedPDF() {
+        async function downloadPDF() {
             const text = document.getElementById('translatedText').value; if (!text.trim()) return;
             const doc = await PDFLib.PDFDocument.create();
             const font = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
-            const fs = 12, lh = fs * 1.5, m = 50, pw = 595, ph = 842, mw = pw - m * 2;
+            const fs = 12, lh = 18, m = 50, pw = 595, ph = 842, mw = pw - m * 2;
             let pg = doc.addPage([pw, ph]), y = ph - m;
             for (const line of text.split('\n')) {
                 if (!line.trim()) { y -= lh; if (y < m) { pg = doc.addPage([pw, ph]); y = ph - m; } continue; }
@@ -562,7 +500,7 @@
             const t = document.getElementById('translatedText').value; if (!t.trim()) return;
             const b = new Blob([t], { type: 'text/plain' }), u = URL.createObjectURL(b), a = document.createElement('a'); a.href = u; a.download = 'Translated-Text.txt'; a.click();
         }
-        function copyTranslation() { navigator.clipboard.writeText(document.getElementById('translatedText').value); alert('Copied!'); }
+        function copyIt() { navigator.clipboard.writeText(document.getElementById('translatedText').value); alert('Copied!'); }
     </script>
     <script src="counter.js"></script>
 </body>
