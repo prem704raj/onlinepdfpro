@@ -149,13 +149,13 @@ async function downloadAudio() {
         for (let i = 0; i < chunks.length; i++) {
             btn.innerHTML = `⏳ Part ${i + 1}/${chunks.length}...`;
             const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(chunks[i])}`;
-            // Use allorigins to bypass CORS
-            const proxyUrl = `https://api.allorigins.ml/raw?url=${encodeURIComponent(url)}`;
+            // Use CodeTabs to bypass CORS for binary audio data
+            const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
             const res = await fetch(proxyUrl);
             if (!res.ok) throw new Error('API failed');
             const arrayBuffer = await res.arrayBuffer();
             audioBuffers.push(arrayBuffer);
-            await new Promise(r => setTimeout(r, 300)); // anti-rate-limit
+            await new Promise(r => setTimeout(r, 400)); // anti-rate-limit
         }
 
         // Concatenate all ArrayBuffers
