@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flatten PDF Online Free - Remove Editable Fields | Online PDF Pro</title>
+    <meta name="description"
+        content="Flatten PDF online for free. Remove editable form fields, annotations, comments. Convert interactive PDF to flat non-editable PDF.">
+    <meta name="keywords"
+        content="flatten pdf, remove form fields pdf, remove annotations pdf, make pdf non editable, flatten pdf online free">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/flatten-pdf.html">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Flatten PDF Online",
+    "url": "https://onlinepdfpro.com/flatten-pdf.html",
+    "description": "Free online tool to flatten PDF files and remove editable fields.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+    <style>
+        .info-section {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-section h2 {
+            text-align: center;
+            margin: 0 0 25px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .info-card {
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .info-card .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .info-card h3 {
+            font-size: 15px;
+            margin: 0 0 5px;
+            color: #333;
+        }
+
+        .info-card p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .card-form {
+            background: #fef2f2;
+        }
+
+        .card-anno {
+            background: #fffbeb;
+        }
+
+        .card-comment {
+            background: #f0f9ff;
+        }
+
+        .card-layer {
+            background: #f0fdf4;
+        }
+
+        .options-box {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            display: none;
+        }
+
+        .options-box h2 {
+            text-align: center;
+            margin: 0 0 25px;
+            color: #333;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 14px;
+            margin: 12px 0;
+            gap: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .option-item:hover {
+            background: #f0f9ff;
+            transform: translateX(5px);
+        }
+
+        .option-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #2563eb;
+            flex-shrink: 0;
+        }
+
+        .option-item .option-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .option-item .option-text h3 {
+            font-size: 16px;
+            margin: 0 0 3px;
+            color: #333;
+        }
+
+        .option-item .option-text p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .flatten-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+            margin-top: 25px;
+        }
+
+        .flatten-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.5);
+        }
+
+        .progress-section {
+            display: none;
+            text-align: center;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 50px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 50px;
+            transition: width 0.5s;
+        }
+
+        .result-box {
+            display: none;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .result-box h2 {
+            color: #10b981;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            min-width: 130px;
+        }
+
+        .stat-item .number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2563eb;
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .before-after {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .before-after .file-size {
+            padding: 15px 25px;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .size-before {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .size-after {
+            background: #f0fdf4;
+            color: #10b981;
+        }
+
+        .size-arrow {
+            font-size: 28px;
+            color: #666;
+        }
+
+        .download-btn {
+            padding: 18px 60px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .file-info {
+            display: none;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 18px 25px;
+            background: #f0f9ff;
+            border-radius: 14px;
+            border: 2px solid #2563eb;
+            text-align: center;
+            color: #2563eb;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .info-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .before-after {
+                flex-direction: column;
+            }
+
+            .result-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1><a href="/">← Online PDF Pro</a> / Flatten PDF</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="upload-area" id="dropArea">
+            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Remove all editable fields and
+                    make PDF flat</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+        </div>
+
+        <div class="file-info" id="fileInfo"></div>
+
+        <div class="info-section" id="infoSection">
+            <h2>What Does "Flatten PDF" Mean?</h2>
+            <p style="text-align:center; color:#666; margin-bottom:25px;">Flattening converts all interactive elements
+                into static content. The PDF becomes non-editable and looks the same on every device.</p>
+            <div class="info-cards">
+                <div class="info-card card-form">
+                    <div class="icon">📝</div>
+                    <h3>Form Fields</h3>
+                    <p>Text inputs, checkboxes, dropdowns become static text</p>
+                </div>
+                <div class="info-card card-anno">
+                    <div class="icon">📌</div>
+                    <h3>Annotations</h3>
+                    <p>Highlights, stamps, markups merge into the page</p>
+                </div>
+                <div class="info-card card-comment">
+                    <div class="icon">💬</div>
+                    <h3>Comments</h3>
+                    <p>Sticky notes and comments get removed or embedded</p>
+                </div>
+                <div class="info-card card-layer">
+                    <div class="icon">📄</div>
+                    <h3>Layers</h3>
+                    <p>All layers merge into single flat layer</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="options-box" id="optionsBox">
+            <h2>⚙️ Flatten Options</h2>
+
+            <label class="option-item" for="opt1">
+                <input type="checkbox" id="opt1" checked>
+                <div class="option-icon">📝</div>
+                <div class="option-text">
+                    <h3>Flatten Form Fields</h3>
+                    <p>Convert text inputs, checkboxes, radio buttons to static content</p>
+                </div>
+            </label>
+
+            <label class="option-item" for="opt2">
+                <input type="checkbox" id="opt2" checked>
+                <div class="option-icon">📌</div>
+                <div class="option-text">
+                    <h3>Flatten Annotations</h3>
+                    <p>Merge highlights, stamps, underlines into page content</p>
+                </div>
+            </label>
+
+            <label class="option-item" for="opt3">
+                <input type="checkbox" id="opt3" checked>
+                <div class="option-icon">💬</div>
+                <div class="option-text">
+                    <h3>Remove Comments</h3>
+                    <p>Remove all sticky notes and comment threads</p>
+                </div>
+            </label>
+
+            <label class="option-item" for="opt4">
+                <input type="checkbox" id="opt4" checked>
+                <div class="option-icon">🔗</div>
+                <div class="option-text">
+                    <h3>Remove Hyperlinks</h3>
+                    <p>Remove all clickable links from the document</p>
+                </div>
+            </label>
+
+            <label class="option-item" for="opt5">
+                <input type="checkbox" id="opt5">
+                <div class="option-icon">📊</div>
+                <div class="option-text">
+                    <h3>Remove Metadata</h3>
+                    <p>Strip author, title, creation date and other hidden info</p>
+                </div>
+            </label>
+
+            <button onclick="flattenPDF()" class="flatten-btn">⚡ Flatten PDF Now</button>
+        </div>
+
+        <div class="progress-section" id="progressSection">
+            <h3>Flattening your PDF...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText" style="color:#666;">Processing...</p>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <h2>✅ PDF Flattened Successfully!</h2>
+            <p style="color:#666;">All interactive elements have been removed</p>
+
+            <div class="result-stats" id="resultStats"></div>
+
+            <div class="before-after" id="beforeAfter"></div>
+
+            <button onclick="downloadFlattened()" class="download-btn">📥 Download Flattened PDF</button>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        let originalBytes = null;
+        let flattenedBytes = null;
+        let originalSize = 0;
+
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
+
+        document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            loadFile(e.dataTransfer.files[0]);
+        };
+
+        async function loadFile(file) {
+            if (!file) return;
+
+            originalBytes = await file.arrayBuffer();
+            originalSize = file.size;
+
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' (' + formatSize(file.size) + ')';
+            document.getElementById('optionsBox').style.display = 'block';
+            document.getElementById('infoSection').style.display = 'none';
+            document.getElementById('resultBox').style.display = 'none';
+        }
+
+        async function flattenPDF() {
+            if (!originalBytes) return;
+
+            document.getElementById('optionsBox').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressFill').style.width = '20%';
+            document.getElementById('progressText').textContent = 'Reading PDF...';
+
+            const flattenForms = document.getElementById('opt1').checked;
+            const flattenAnnotations = document.getElementById('opt2').checked;
+            const removeComments = document.getElementById('opt3').checked;
+            const removeLinks = document.getElementById('opt4').checked;
+            const removeMetadata = document.getElementById('opt5').checked;
+
+            let fieldsRemoved = 0;
+            let annotationsRemoved = 0;
+            let linksRemoved = 0;
+
+            try {
+                // Method 1: Render each page as image (guaranteed flatten)
+                document.getElementById('progressText').textContent = 'Rendering pages...';
+                document.getElementById('progressFill').style.width = '40%';
+
+                const pdfJsDoc = await pdfjsLib.getDocument({ data: originalBytes }).promise;
+                const newPdfDoc = await PDFLib.PDFDocument.create();
+
+                for (let i = 1; i <= pdfJsDoc.numPages; i++) {
+                    document.getElementById('progressText').textContent = 'Flattening page ' + i + ' of ' + pdfJsDoc.numPages + '...';
+                    document.getElementById('progressFill').style.width = Math.round(40 + (i / pdfJsDoc.numPages) * 50) + '%';
+
+                    const page = await pdfJsDoc.getPage(i);
+                    const viewport = page.getViewport({ scale: 2.0 });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    const ctx = canvas.getContext('2d');
+
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                    // Count annotations
+                    const annotations = await page.getAnnotations();
+                    annotations.forEach(ann => {
+                        if (ann.fieldType) fieldsRemoved++;
+                        if (ann.subtype === 'Link') linksRemoved++;
+                        if (ann.subtype === 'Text' || ann.subtype === 'Popup') annotationsRemoved++;
+                        if (ann.subtype === 'Highlight' || ann.subtype === 'Underline' || ann.subtype === 'StrikeOut') annotationsRemoved++;
+                    });
+
+                    // Convert canvas to image and add to new PDF
+                    const imgDataURL = canvas.toDataURL('image/jpeg', 0.95);
+                    const imgBytes = Uint8Array.from(atob(imgDataURL.split(',')[1]), c => c.charCodeAt(0));
+                    const img = await newPdfDoc.embedJpg(imgBytes);
+
+                    // Use original page dimensions
+                    const origViewport = page.getViewport({ scale: 1.0 });
+                    const newPage = newPdfDoc.addPage([origViewport.width, origViewport.height]);
+                    newPage.drawImage(img, {
+                        x: 0,
+                        y: 0,
+                        width: origViewport.width,
+                        height: origViewport.height
+                    });
+                }
+
+                // Remove metadata if selected
+                if (removeMetadata) {
+                    newPdfDoc.setTitle('');
+                    newPdfDoc.setAuthor('');
+                    newPdfDoc.setSubject('');
+                    newPdfDoc.setKeywords([]);
+                    newPdfDoc.setCreator('Online PDF Pro');
+                }
+
+                document.getElementById('progressText').textContent = 'Saving flattened PDF...';
+                document.getElementById('progressFill').style.width = '95%';
+
+                flattenedBytes = await newPdfDoc.save();
+
+                document.getElementById('progressFill').style.width = '100%';
+
+                // Show results
+                const newSize = flattenedBytes.length;
+                const reduction = Math.round((1 - newSize / originalSize) * 100);
+
+                document.getElementById('resultStats').innerHTML =
+                    '<div class="stat-item"><span class="number">' + fieldsRemoved + '</span><span class="label">Form Fields Removed</span></div>' +
+                    '<div class="stat-item"><span class="number">' + annotationsRemoved + '</span><span class="label">Annotations Flattened</span></div>' +
+                    '<div class="stat-item"><span class="number">' + linksRemoved + '</span><span class="label">Links Removed</span></div>' +
+                    '<div class="stat-item"><span class="number">' + pdfJsDoc.numPages + '</span><span class="label">Pages Processed</span></div>';
+
+                document.getElementById('beforeAfter').innerHTML =
+                    '<div class="file-size size-before">Before: ' + formatSize(originalSize) + '</div>' +
+                    '<div class="size-arrow">→</div>' +
+                    '<div class="file-size size-after">After: ' + formatSize(newSize) + '</div>';
+
+                document.getElementById('progressSection').style.display = 'none';
+                document.getElementById('resultBox').style.display = 'block';
+
+            } catch (err) {
+                alert('Error flattening PDF: ' + err.message);
+                document.getElementById('progressSection').style.display = 'none';
+                document.getElementById('optionsBox').style.display = 'block';
+            }
+        }
+
+        function downloadFlattened() {
+            if (!flattenedBytes) return;
+            download(flattenedBytes, 'Flattened-PDF-OnlinePDFPro.pdf', 'application/pdf');
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+    </script>
+
+</body>
+
+</html>
