@@ -465,7 +465,8 @@
             for (let i = 0; i < chunks.length; i++) {
                 document.getElementById('progressFill').style.width = Math.round(30 + (i / chunks.length) * 65) + '%';
 
-                const langPair = fromLang === 'auto' ? toLang : fromLang + '|' + toLang;
+                const sourceLang = fromLang === 'auto' ? 'en' : fromLang;
+                const langPair = sourceLang + '|' + toLang;
                 const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) + '&langpair=' + langPair;
 
                 try {
