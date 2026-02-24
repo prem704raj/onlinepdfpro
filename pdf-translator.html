@@ -419,14 +419,16 @@
             const fromLang = document.getElementById('fromLang').value;
             const toLang = document.getElementById('toLang').value;
 
-            // Try Worker proxy first (instant), fallback to MyMemory
+            // Use Google Translate bypass via AllOrigins proxy
             let translated = '';
             try {
-                translated = await translateViaWorker(text, fromLang, toLang);
+                translated = await translateViaGoogleProxy(text, fromLang, toLang);
             } catch (e) {
-                console.log('Worker failed, falling back to MyMemory API');
-                document.getElementById('progressText').textContent = 'Using backup translator...';
-                translated = await translateViaMyMemory(text, fromLang, toLang);
+                console.error(e);
+                alert('Translation failed. Please try again.');
+                btn.disabled = false; btn.textContent = '🚀 Translate Instantly';
+                document.getElementById('progressSection').style.display = 'none';
+                return;
             }
 
             document.getElementById('progressFill').style.width = '100%';
@@ -437,38 +439,34 @@
             if (typeof incrementCounter === 'function') { incrementCounter('pdfTranslator'); incrementTodayCount(); }
         }
 
-        // PRIMARY: Cloudflare Worker proxy
-        async function translateViaWorker(text, fromLang, toLang) {
-            document.getElementById('progressText').textContent = '⚡ Translating instantly...';
-            document.getElementById('progressFill').style.width = '50%';
-            const r = await fetch('https://pdf-translator-onlinepdfpro.workers.dev/', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: text, source: fromLang, target: toLang })
-            });
-            if (!r.ok) throw new Error('Worker error ' + r.status);
-            const d = await r.json();
-            if (d.translated) return d.translated;
-            if (d.error) throw new Error(d.error);
-            throw new Error('No translation returned');
-        }
-
-        // FALLBACK: MyMemory API (chunk-based)
-        async function translateViaMyMemory(text, fromLang, toLang) {
-            const chunks = splitText(text, 450);
+        async function translateViaGoogleProxy(text, fromLang, toLang) {
+            // Safe chunk size for GET requests (Google Translate limits 'q' and URLs have length limits)
+            const chunks = splitText(text, 1500);
             let translated = '';
+
             for (let i = 0; i < chunks.length; i++) {
-                document.getElementById('progressFill').style.width = Math.round(30 + (i / chunks.length) * 65) + '%';
+                document.getElementById('progressFill').style.width = Math.round((i / chunks.length) * 100) + '%';
                 document.getElementById('progressText').textContent = 'Translating chunk ' + (i + 1) + '/' + chunks.length + '...';
-                const src = fromLang === 'auto' ? 'en' : fromLang;
-                const lp = src + '|' + toLang;
+
+                const src = fromLang === 'auto' ? 'auto' : fromLang;
+                const googleUrl = `https://translate.google.com/translate_a/single?client=gtx&sl=${src}&tl=${toLang}&dt=t&q=${encodeURIComponent(chunks[i])}`;
+                const encodedUrl = encodeURIComponent(googleUrl);
+                const proxyUrl = `https://api.allorigins.ml/get?url=${encodedUrl}`;
+
                 try {
-                    const r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) + '&langpair=' + lp);
-                    const d = await r.json();
-                    if (d.responseData && d.responseData.translatedText && !d.responseData.translatedText.toUpperCase().includes('INVALID'))
-                        translated += d.responseData.translatedText + ' ';
-                    else translated += chunks[i] + ' ';
-                } catch (e) { translated += chunks[i] + ' '; }
-                await new Promise(r => setTimeout(r, 400));
+                    const res = await fetch(proxyUrl);
+                    if (!res.ok) throw new Error('Proxy error');
+                    const data = await res.json();
+                    const json = JSON.parse(data.contents);
+                    const chunkTranslated = json[0].map(x => x[0]).join("");
+                    translated += chunkTranslated + ' ';
+                } catch (e) {
+                    console.error('Chunk failed', e);
+                    translated += chunks[i] + ' '; // Fallback to original text on error
+                }
+
+                // Small delay to prevent rate-limiting by proxy/Google
+                await new Promise(r => setTimeout(r, 600));
             }
             return translated;
         }
