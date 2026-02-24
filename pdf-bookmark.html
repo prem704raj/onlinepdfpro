@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Bookmarks to PDF Online Free | Online PDF Pro</title>
+    <meta name="description"
+        content="Add bookmarks and table of contents to PDF online for free. Create navigation links, chapter markers. Edit PDF bookmarks easily.">
+    <meta name="keywords"
+        content="add bookmarks to pdf, pdf bookmarks, pdf table of contents, create pdf outline, pdf navigation free">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-bookmark.html">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <style>
+        body {
+            color: #333 !important;
+            background: #f8fafc
+        }
+
+        header {
+            background: #1e293b !important;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .05)
+        }
+
+        header h1,
+        header h1 a {
+            color: #fff !important;
+            text-decoration: none
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px
+        }
+
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            border-radius: 24px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: .3s;
+            background: #fff;
+            color: #333
+        }
+
+        .upload-area:hover {
+            border-color: #2563eb;
+            background: #f0f9ff
+        }
+
+        .bookmark-editor {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
+            display: none
+        }
+
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            margin: 25px 0
+        }
+
+        .bookmarks-panel {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px
+        }
+
+        .bookmarks-panel h3 {
+            margin: 0 0 20px;
+            color: #333;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .add-btn {
+            padding: 8px 16px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8
+        }
+
+        .bookmark-list {
+            max-height: 500px;
+            overflow-y: auto
+        }
+
+        .bookmark-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: grab;
+            transition: .3s;
+            border: 2px solid transparent
+        }
+
+        .bookmark-item:hover {
+            border-color: #2563eb
+        }
+
+        .bookmark-item.dragging {
+            opacity: .5;
+            transform: scale(.95)
+        }
+
+        .bookmark-item input {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box
+        }
+
+        .bookmark-item input:focus {
+            border-color: #2563eb
+        }
+
+        .bookmark-row {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .bookmark-row select {
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            flex: 1
+        }
+
+        .delete-bookmark {
+            width: 32px;
+            height: 32px;
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px
+        }
+
+        .delete-bookmark:hover {
+            background: #ef4444;
+            color: #fff
+        }
+
+        .preview-panel {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .preview-header {
+            padding: 15px 20px;
+            background: #334155;
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .preview-nav {
+            display: flex;
+            gap: 10px
+        }
+
+        .preview-nav button {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, .1);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .preview-nav button:hover {
+            background: rgba(255, 255, 255, .2)
+        }
+
+        .preview-canvas-container {
+            padding: 20px;
+            text-align: center;
+            max-height: 600px;
+            overflow: auto
+        }
+
+        .preview-canvas-container canvas {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+            max-width: 100%
+        }
+
+        .save-section {
+            text-align: center;
+            margin: 25px 0
+        }
+
+        .save-btn {
+            padding: 18px 60px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, .3);
+            transition: .3s
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px)
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 15px
+        }
+
+        .file-info {
+            display: none;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #f0f9ff;
+            border-radius: 14px;
+            border: 2px solid #2563eb;
+            text-align: center;
+            color: #2563eb;
+            font-weight: 700
+        }
+
+        @media(max-width:768px) {
+            .editor-layout {
+                grid-template-columns: 1fr
+            }
+
+            .bookmark-editor {
+                padding: 20px;
+                margin: 20px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html">← Online PDF Pro</a> / Add Bookmarks</h1>
+        </div>
+    </header>
+    <main class="container">
+        <div class="upload-area" id="dropArea" style="margin-top:50px">
+            <p style="font-size:20px">Drop your PDF here or Click to Upload<br><small>Add bookmarks, table of contents
+                    &amp; navigation to your PDF</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden>
+        </div>
+        <div class="file-info" id="fileInfo"></div>
+        <div class="bookmark-editor" id="bookmarkEditor">
+            <h2 style="text-align:center;color:#333;margin:0 0 5px">📑 PDF Bookmark Editor</h2>
+            <p style="text-align:center;color:#666;margin:0 0 25px">Add bookmarks to quickly navigate to important pages
+            </p>
+            <div class="editor-layout">
+                <div class="bookmarks-panel">
+                    <h3>📚 Bookmarks <button class="add-btn" onclick="addBookmark()">+ Add</button></h3>
+                    <div class="bookmark-list" id="bookmarkList">
+                        <div class="empty-state" id="emptyState">
+                            <div class="icon">📖</div>
+                            <p>No bookmarks yet.<br>Click "+ Add" to create one.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-panel">
+                    <div class="preview-header"><span>📄 Preview</span>
+                        <div class="preview-nav"><button onclick="prevPage()">← Prev</button><span id="pageInfo"
+                                style="padding:8px">Page 1 / 1</span><button onclick="nextPage()">Next →</button></div>
+                    </div>
+                    <div class="preview-canvas-container"><canvas id="previewCanvas"></canvas></div>
+                </div>
+            </div>
+            <div class="save-section"><button onclick="savePDFWithBookmarks()" class="save-btn">📥 Save PDF with
+                    Bookmarks</button></div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+        let pdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 0, bookmarks = [], bookmarkCounter = 0;
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
+        document.getElementById('dropArea').ondragover = e => e.preventDefault();
+        document.getElementById('dropArea').ondrop = e => { e.preventDefault(); loadPDF(e.dataTransfer.files[0]); };
+        async function loadPDF(file) {
+            if (!file) return; pdfBytes = await file.arrayBuffer();
+            pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
+            document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+            document.getElementById('bookmarkEditor').style.display = 'block'; document.getElementById('dropArea').style.display = 'none'; await renderPage(currentPage);
+        }
+        async function renderPage(num) {
+            currentPage = num; const page = await pdfJsDoc.getPage(num); const vp = page.getViewport({ scale: 1.2 });
+            const c = document.getElementById('previewCanvas'); c.width = vp.width; c.height = vp.height;
+            await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+            document.getElementById('pageInfo').textContent = 'Page ' + num + ' / ' + totalPages;
+        }
+        function prevPage() { if (currentPage > 1) renderPage(currentPage - 1); }
+        function nextPage() { if (currentPage < totalPages) renderPage(currentPage + 1); }
+        function addBookmark() { bookmarkCounter++; const id = 'bm_' + bookmarkCounter; bookmarks.push({ id, title: 'Chapter ' + bookmarkCounter, page: currentPage }); renderBookmarks(); }
+        function deleteBookmark(id) { bookmarks = bookmarks.filter(b => b.id !== id); renderBookmarks(); }
+        function updateBookmark(id, field, value) { const bm = bookmarks.find(b => b.id === id); if (bm) bm[field] = field === 'page' ? parseInt(value) : value; }
+        function goToPage(p) { if (p >= 1 && p <= totalPages) renderPage(p); }
+        function renderBookmarks() {
+            const list = document.getElementById('bookmarkList'), empty = document.getElementById('emptyState');
+            if (bookmarks.length === 0) { list.innerHTML = ''; list.appendChild(empty); empty.style.display = 'block'; return; }
+            empty.style.display = 'none'; let h = '';
+            bookmarks.forEach(bm => {
+                let opts = ''; for (let i = 1; i <= totalPages; i++)opts += '<option value="' + i + '"' + (bm.page === i ? ' selected' : '') + '>Page ' + i + '</option>';
+                h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:#f0f9ff;border:none;border-radius:8px;cursor:pointer;font-size:14px">👁️</button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')">🗑️</button></div></div>';
+            });
+            list.innerHTML = h;
+            const items = list.querySelectorAll('.bookmark-item'); items.forEach(item => {
+                item.ondragstart = () => item.classList.add('dragging'); item.ondragend = () => item.classList.remove('dragging');
+                item.ondragover = e => e.preventDefault(); item.ondrop = e => {
+                    e.preventDefault(); const d = list.querySelector('.dragging');
+                    if (d && d !== item) {
+                        const fi = bookmarks.findIndex(b => b.id === d.dataset.id), ti = bookmarks.findIndex(b => b.id === item.dataset.id);
+                        const [r] = bookmarks.splice(fi, 1); bookmarks.splice(ti, 0, r); renderBookmarks();
+                    }
+                };
+            });
+        }
+        async function savePDFWithBookmarks() {
+            if (!pdfBytes || bookmarks.length === 0) return alert('Add at least one bookmark!');
+            const doc = await PDFLib.PDFDocument.load(pdfBytes); doc.setTitle('PDF with Bookmarks - OnlinePDFPro');
+            doc.setSubject('Bookmarks: ' + bookmarks.map(b => b.title + ' (Page ' + b.page + ')').join(', '));
+            const bytes = await doc.save(); download(bytes, 'Bookmarked-PDF-OnlinePDFPro.pdf', 'application/pdf');
+            if (typeof incrementCounter === 'function') { incrementCounter('pdfBookmark'); incrementTodayCount(); }
+            let msg = 'PDF saved!\\n\\nYour bookmarks:\\n'; bookmarks.forEach((b, i) => { msg += (i + 1) + '. ' + b.title + ' → Page ' + b.page + '\\n'; });
+            msg += '\\nBookmarks are saved in PDF metadata.'; alert(msg);
+        }
+    </script>
+    <script src="counter.js"></script>
+</body>
+
+</html>
