@@ -336,6 +336,47 @@
             border-color: #2563eb;
         }
 
+        /* EXTRACTED TEXT (from original PDF) */
+        .extracted-text {
+            position: absolute;
+            cursor: text;
+            padding: 1px 2px;
+            outline: none;
+            z-index: 45;
+            border: 1px solid transparent;
+            background: transparent;
+            color: transparent;
+            line-height: 1.15;
+            white-space: pre;
+            transition: background 0.15s, border-color 0.15s;
+            border-radius: 2px;
+        }
+
+        .extracted-text:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .extracted-text:focus {
+            color: var(--text-primary, #000);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent, #6366f1);
+            z-index: 55;
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.25);
+            padding: 3px 6px;
+        }
+
+        .extracted-text.modified {
+            color: var(--text-primary, #000);
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px dashed #22c55e;
+        }
+
+        .extracted-text.modified:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent, #6366f1);
+        }
+
         /* IMAGE ELEMENTS */
         .image-element {
             position: absolute;
@@ -524,7 +565,10 @@
             <button class="tool-btn" onclick="setTool('cursor', event)" title="Select & Move">
                 🖱️<span>Select</span>
             </button>
-            <button class="tool-btn active" onclick="setTool('text', event)" title="Add Text">
+            <button class="tool-btn active" onclick="setTool('edit', event)" title="Edit Existing Text">
+                ✍️<span>Edit</span>
+            </button>
+            <button class="tool-btn" onclick="setTool('text', event)" title="Add New Text">
                 🔤<span>Text</span>
             </button>
             <button class="tool-btn" onclick="setTool('draw', event)" title="Free Draw">
@@ -687,11 +731,12 @@
         let currentPage = 1;
         let totalPages = 0;
         let currentScale = 1.5;
-        let currentTool = 'text';
+        let currentTool = 'edit';
         let isDrawing = false;
         let layers = {};
         let undoStack = [];
         let redoStack = [];
+        let extractedTexts = {};  // page -> [{originalText, element, ...}]
 
         // Elements
         const pdfCanvas = document.getElementById('pdfCanvas');
@@ -742,9 +787,130 @@
             // Restore drawings for this page
             restoreDrawings();
 
+            // Extract existing text from PDF for editing
+            await extractPageContent(page, viewport);
+
             document.getElementById('pageInfo').textContent = currentPage + ' / ' + totalPages;
             document.getElementById('zoomLevel').textContent = Math.round(currentScale * 100) + '%';
             updateLayers();
+        }
+
+        // =============================================
+        // EXTRACT EXISTING TEXT FROM PDF
+        // =============================================
+        async function extractPageContent(page, viewport) {
+            // Remove any previously extracted text for this page
+            pageWrapper.querySelectorAll('.extracted-text').forEach(el => el.remove());
+
+            const textContent = await page.getTextContent();
+            const textItems = textContent.items;
+            if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
+
+            // Group text items into lines (items with same Y position)
+            const lines = [];
+            let currentLine = null;
+
+            textItems.forEach(item => {
+                if (!item.str || !item.str.trim()) return;
+
+                const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+                const fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]);
+                const x = tx[4];
+                const y = tx[5];
+
+                // Group items with similar Y position into one line
+                if (currentLine && Math.abs(y - currentLine.y) < fontSize * 0.5) {
+                    currentLine.text += item.str;
+                    currentLine.width = (x + item.width * fontSize / (item.transform ? Math.abs(item.transform[0]) : 1)) - currentLine.x;
+                    currentLine.items.push(item);
+                } else {
+                    currentLine = {
+                        text: item.str,
+                        x: x,
+                        y: y,
+                        fontSize: fontSize,
+                        width: item.width * fontSize / (item.transform ? Math.abs(item.transform[0]) : 1),
+                        height: fontSize * 1.2,
+                        fontName: item.fontName || '',
+                        items: [item]
+                    };
+                    lines.push(currentLine);
+                }
+            });
+
+            // Check for previously modified texts
+            const savedMods = extractedTexts[currentPage] || [];
+
+            lines.forEach((line, idx) => {
+                const div = document.createElement('div');
+                div.className = 'extracted-text';
+                div.contentEditable = true;
+                div.style.left = line.x + 'px';
+                div.style.top = (line.y - line.fontSize) + 'px';
+                div.style.fontSize = line.fontSize + 'px';
+                div.style.minWidth = Math.max(line.width, 30) + 'px';
+                div.style.height = line.height + 'px';
+
+                // Restore modified text if it was previously edited
+                const savedMod = savedMods.find(m => m.lineIndex === idx);
+                if (savedMod && savedMod.newText !== line.text) {
+                    div.textContent = savedMod.newText;
+                    div.classList.add('modified');
+                } else {
+                    div.textContent = line.text;
+                }
+
+                div.dataset.lineIndex = idx;
+                div.dataset.originalText = line.text;
+                div.dataset.origX = line.x;
+                div.dataset.origY = line.y;
+                div.dataset.origFontSize = line.fontSize;
+                div.dataset.origWidth = line.width;
+                div.dataset.origHeight = line.height;
+
+                // On focus, make text visible for editing
+                div.addEventListener('focus', () => {
+                    div.style.color = 'var(--text-primary, #000)';
+                    div.style.background = 'rgba(255, 255, 255, 0.95)';
+                });
+
+                // On blur, check if text was modified
+                div.addEventListener('blur', () => {
+                    const newText = div.textContent;
+                    const origText = div.dataset.originalText;
+
+                    if (newText !== origText) {
+                        div.classList.add('modified');
+                        // Save modification
+                        const existingIdx = extractedTexts[currentPage].findIndex(m => m.lineIndex === idx);
+                        const mod = {
+                            lineIndex: idx,
+                            originalText: origText,
+                            newText: newText,
+                            x: parseFloat(div.dataset.origX),
+                            y: parseFloat(div.dataset.origY),
+                            fontSize: parseFloat(div.dataset.origFontSize),
+                            width: parseFloat(div.dataset.origWidth),
+                            height: parseFloat(div.dataset.origHeight)
+                        };
+                        if (existingIdx >= 0) {
+                            extractedTexts[currentPage][existingIdx] = mod;
+                        } else {
+                            extractedTexts[currentPage].push(mod);
+                        }
+                    } else {
+                        div.classList.remove('modified');
+                        div.style.color = 'transparent';
+                        div.style.background = 'transparent';
+                        // Remove from saved modifications
+                        extractedTexts[currentPage] = extractedTexts[currentPage].filter(m => m.lineIndex !== idx);
+                    }
+
+                    updateLayers();
+                });
+
+                pageWrapper.appendChild(div);
+            });
         }
 
         function restoreDrawings() {
@@ -827,9 +993,25 @@
                 overlayCanvas.style.pointerEvents = 'auto';
                 overlayCanvas.style.cursor = 'text';
             } else {
-                // cursor, sticky, image — let clicks pass through to DOM elements
+                // cursor, sticky, image, edit — let clicks pass through to DOM elements
                 overlayCanvas.style.pointerEvents = 'none';
                 overlayCanvas.style.cursor = 'default';
+            }
+
+            // Toggle extracted text visibility when edit tool is active
+            const extractedEls = pageWrapper.querySelectorAll('.extracted-text');
+            if (tool === 'edit') {
+                extractedEls.forEach(el => {
+                    el.style.pointerEvents = 'auto';
+                    el.style.borderColor = 'rgba(99, 102, 241, 0.15)';
+                });
+            } else {
+                extractedEls.forEach(el => {
+                    if (!el.classList.contains('modified')) {
+                        el.style.pointerEvents = 'none';
+                        el.style.borderColor = 'transparent';
+                    }
+                });
             }
 
             if (tool === 'image') {
@@ -1123,9 +1305,13 @@
             const textEls = pageWrapper.querySelectorAll('.text-element');
             const imgEls = pageWrapper.querySelectorAll('.image-element');
             const noteEls = pageWrapper.querySelectorAll('.sticky-note');
+            const modifiedCount = pageWrapper.querySelectorAll('.extracted-text.modified').length;
             const drawCount = layers[currentPage] ? layers[currentPage].drawings.length : 0;
 
             let html = '';
+            if (modifiedCount > 0) {
+                html += '<div class="layer-item"><span>✍️ ' + modifiedCount + ' Text Edit(s)</span></div>';
+            }
             textEls.forEach((el, i) => {
                 html += '<div class="layer-item"><span>🔤 Text ' + (i + 1) + '</span><button class="layer-delete" onclick="this.closest(\'.layer-item\').remove(); document.querySelectorAll(\'.text-element\')[' + i + '].remove();">×</button></div>';
             });
@@ -1275,7 +1461,41 @@
                 const page = pages[i];
                 const { width, height } = page.getSize();
 
-                // Switch to that page to get current state
+                // ============================================
+                // Handle MODIFIED EXTRACTED TEXT for every page
+                // ============================================
+                const pageMods = extractedTexts[pageNum] || [];
+                if (pageMods.length > 0) {
+                    const scaleX = width / pdfCanvas.width;
+                    const scaleY = height / pdfCanvas.height;
+
+                    for (const mod of pageMods) {
+                        // White-out the original text area
+                        const rectX = mod.x * scaleX;
+                        const rectY = height - (mod.y * scaleY);
+                        const rectW = Math.max(mod.width * scaleX, 50);
+                        const rectH = mod.fontSize * scaleY * 1.3;
+
+                        page.drawRectangle({
+                            x: rectX - 2,
+                            y: rectY - 2,
+                            width: rectW + 4,
+                            height: rectH + 4,
+                            color: PDFLib.rgb(1, 1, 1),
+                        });
+
+                        // Draw the new text
+                        const textSize = mod.fontSize * scaleX * 0.72;
+                        page.drawText(mod.newText, {
+                            x: rectX,
+                            y: rectY + 2,
+                            size: textSize > 0 ? textSize : 10,
+                            color: PDFLib.rgb(0, 0, 0),
+                        });
+                    }
+                }
+
+                // Handle current page's additional elements (added text, drawings, images)
                 if (pageNum === currentPage) {
                     // Merge overlay canvas onto PDF canvas
                     const mergedCanvas = document.createElement('canvas');
@@ -1284,7 +1504,7 @@
                     const mergedCtx = mergedCanvas.getContext('2d');
                     mergedCtx.drawImage(overlayCanvas, 0, 0);
 
-                    // Get text elements
+                    // Get NEW text elements (added by user, not extracted)
                     const textEls = pageWrapper.querySelectorAll('.text-element');
                     textEls.forEach(el => {
                         const font = el.style.fontFamily || 'Arial';
