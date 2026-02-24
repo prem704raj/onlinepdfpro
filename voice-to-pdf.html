@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice to PDF Online Free - Speak & Create PDF | Online PDF Pro</title>
+    <meta name="description"
+        content="Convert speech to PDF online for free. Speak into your microphone and get a professional PDF document. Supports 40+ languages including Hindi and English.">
+    <meta name="keywords" content="voice to pdf, speech to pdf, speak to pdf, voice to text pdf, dictation to pdf free">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/voice-to-pdf.html">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Voice to PDF Converter",
+    "url": "https://onlinepdfpro.com/voice-to-pdf.html",
+    "description": "Free online voice to PDF converter. Speak and create PDF documents.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+    <style>
+        .voice-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* LANGUAGE SELECTOR */
+        .lang-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .lang-section label {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .lang-section select {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            min-width: 250px;
+        }
+
+        .lang-section select:focus {
+            border-color: #2563eb;
+        }
+
+        /* MIC BUTTON */
+        .mic-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .mic-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            cursor: pointer;
+            font-size: 48px;
+            color: white;
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(239, 68, 68, 0.5);
+        }
+
+        .mic-btn.recording {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 25px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .mic-status {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .mic-status.active {
+            color: #10b981;
+        }
+
+        /* WAVE ANIMATION */
+        .wave-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin: 20px 0;
+            height: 50px;
+        }
+
+        .wave-container.active {
+            display: flex;
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: #10b981;
+            border-radius: 3px;
+            animation: wave 0.8s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) {
+            animation-delay: 0s;
+            height: 20px;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+            height: 35px;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+            height: 25px;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+            height: 45px;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+            height: 30px;
+        }
+
+        .wave-bar:nth-child(6) {
+            animation-delay: 0.5s;
+            height: 40px;
+        }
+
+        .wave-bar:nth-child(7) {
+            animation-delay: 0.6s;
+            height: 20px;
+        }
+
+        .wave-bar:nth-child(8) {
+            animation-delay: 0.7s;
+            height: 35px;
+        }
+
+        .wave-bar:nth-child(9) {
+            animation-delay: 0.8s;
+            height: 25px;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: scaleY(0.5);
+            }
+
+            50% {
+                transform: scaleY(1.5);
+            }
+        }
+
+        /* LIVE TEXT */
+        .live-text {
+            margin: 20px 0;
+            padding: 5px 15px;
+            background: #fef3c7;
+            border-radius: 12px;
+            border: 2px solid #fde68a;
+            font-size: 16px;
+            color: #92400e;
+            display: none;
+            min-height: 40px;
+            line-height: 1.6;
+        }
+
+        .live-text.active {
+            display: block;
+        }
+
+        /* TEXT AREA */
+        .text-section {
+            margin: 30px 0;
+        }
+
+        .text-section label {
+            display: block;
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .text-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.8;
+            resize: vertical;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .text-area:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        /* STATS */
+        .stats-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            padding: 10px 20px;
+            background: #f0f9ff;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        /* FORMATTING OPTIONS */
+        .format-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+        .format-section h3 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .format-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .format-group label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .format-group select,
+        .format-group input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .format-group select:focus,
+        .format-group input:focus {
+            border-color: #2563eb;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .action-btn {
+            padding: 16px 35px;
+            font-size: 17px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-word {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+        }
+
+        .btn-txt {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+        }
+
+        /* TIPS */
+        .tips-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f0fdf4;
+            border-radius: 16px;
+            border: 2px solid #10b981;
+        }
+
+        .tips-section h3 {
+            margin: 0 0 15px;
+            color: #059669;
+            font-size: 18px;
+        }
+
+        .tips-section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .tips-section li {
+            margin: 8px 0;
+            color: #333;
+            font-size: 15px;
+        }
+
+        /* NOT SUPPORTED */
+        .not-supported {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: #fef2f2;
+            border-radius: 16px;
+            border: 2px solid #ef4444;
+            margin: 30px 0;
+        }
+
+        .not-supported h2 {
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .voice-container {
+                padding: 20px;
+                margin: 15px;
+            }
+
+            .format-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .mic-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1><a href="/">← Online PDF Pro</a> / Voice to PDF</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="voice-container">
+
+            <div style="text-align:center; margin-bottom:30px;">
+                <h2 style="font-size:28px; color:#333; margin:0 0 10px;">🎤 Speak & Create PDF</h2>
+                <p style="color:#666; font-size:16px;">Press the mic button, speak, and download as PDF instantly</p>
+            </div>
+
+            <!-- Language Selection -->
+            <div class="lang-section">
+                <label>🌐 Language:</label>
+                <select id="langSelect">
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="en-IN">English (India)</option>
+                    <option value="hi-IN">Hindi (हिन्दी)</option>
+                    <option value="bn-IN">Bengali (বাংলা)</option>
+                    <option value="ta-IN">Tamil (தமிழ்)</option>
+                    <option value="te-IN">Telugu (తెలుగు)</option>
+                    <option value="mr-IN">Marathi (मराठी)</option>
+                    <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+                    <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                    <option value="ml-IN">Malayalam (മലയാളം)</option>
+                    <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ)</option>
+                    <option value="ur-PK">Urdu (اردو)</option>
+                    <option value="es-ES">Spanish (Español)</option>
+                    <option value="fr-FR">French (Français)</option>
+                    <option value="de-DE">German (Deutsch)</option>
+                    <option value="it-IT">Italian (Italiano)</option>
+                    <option value="pt-BR">Portuguese (Português)</option>
+                    <option value="ru-RU">Russian (Русский)</option>
+                    <option value="ja-JP">Japanese (日本語)</option>
+                    <option value="ko-KR">Korean (한국어)</option>
+                    <option value="zh-CN">Chinese (中文)</option>
+                    <option value="ar-SA">Arabic (العربية)</option>
+                </select>
+            </div>
+
+            <!-- Mic Button -->
+            <div class="mic-section">
+                <button class="mic-btn" id="micBtn" onclick="toggleRecording()">🎤</button>
+                <div class="mic-status" id="micStatus">Click the mic to start speaking</div>
+                <div class="wave-container" id="waveContainer">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+            </div>
+
+            <!-- Live Text (interim results) -->
+            <div class="live-text" id="liveText"></div>
+
+            <!-- Text Area -->
+            <div class="text-section">
+                <label>📝 Your Text (edit anytime):</label>
+                <textarea class="text-area" id="textArea"
+                    placeholder="Your spoken words will appear here...&#10;&#10;You can also type or paste text manually.&#10;&#10;Press the mic button and start speaking!"></textarea>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-badge" id="wordCount">Words: 0</div>
+                <div class="stat-badge" id="charCount">Characters: 0</div>
+                <div class="stat-badge" id="lineCount">Lines: 0</div>
+                <div class="stat-badge" id="timeCount">⏱️ 0:00</div>
+            </div>
+
+            <!-- Formatting -->
+            <div class="format-section">
+                <h3>📐 PDF Formatting</h3>
+                <div class="format-grid">
+                    <div class="format-group">
+                        <label>Document Title</label>
+                        <input type="text" id="docTitle" value="My Document" placeholder="Enter title">
+                    </div>
+                    <div class="format-group">
+                        <label>Font</label>
+                        <select id="pdfFont">
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Times-Roman">Times Roman</option>
+                            <option value="Courier">Courier</option>
+                        </select>
+                    </div>
+                    <div class="format-group">
+                        <label>Font Size</label>
+                        <select id="pdfFontSize">
+                            <option value="10">Small (10pt)</option>
+                            <option value="12" selected>Medium (12pt)</option>
+                            <option value="14">Large (14pt)</option>
+                            <option value="16">Extra Large (16pt)</option>
+                        </select>
+                    </div>
+                    <div class="format-group">
+                        <label>Page Size</label>
+                        <select id="pdfPageSize">
+                            <option value="a4" selected>A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="legal">Legal</option>
+                        </select>
+                    </div>
+                    <div class="format-group">
+                        <label>Line Spacing</label>
+                        <select id="lineSpacing">
+                            <option value="1.2">Single</option>
+                            <option value="1.5" selected>1.5 Lines</option>
+                            <option value="2.0">Double</option>
+                        </select>
+                    </div>
+                    <div class="format-group">
+                        <label>Include</label>
+                        <select id="includeOptions">
+                            <option value="title-date">Title + Date</option>
+                            <option value="title">Title Only</option>
+                            <option value="date">Date Only</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button onclick="downloadPDF()" class="action-btn btn-pdf">📥 Download PDF</button>
+                <button onclick="downloadWord()" class="action-btn btn-word">📄 Download Word</button>
+                <button onclick="downloadTxt()" class="action-btn btn-txt">📝 Download TXT</button>
+                <button onclick="copyText()" class="action-btn btn-copy">📋 Copy Text</button>
+                <button onclick="clearText()" class="action-btn btn-clear">🗑️ Clear All</button>
+            </div>
+
+            <!-- Tips -->
+            <div class="tips-section">
+                <h3>💡 Tips for Best Results</h3>
+                <ul>
+                    <li>Speak clearly and at a normal pace</li>
+                    <li>Use a quiet environment for better accuracy</li>
+                    <li>Say "period" or "full stop" to add punctuation</li>
+                    <li>Say "new line" or "next line" to start a new paragraph</li>
+                    <li>You can edit the text manually after speaking</li>
+                    <li>Select your language before starting for best accuracy</li>
+                    <li>The mic keeps listening — speak as long as you want</li>
+                    <li>Works best in Chrome and Edge browsers</li>
+                </ul>
+            </div>
+
+            <!-- Not Supported Message -->
+            <div class="not-supported" id="notSupported">
+                <h2>❌ Speech Recognition Not Supported</h2>
+                <p>Your browser doesn't support speech recognition. Please use Google Chrome or Microsoft Edge.</p>
+                <p style="margin-top:15px;">You can still type or paste text below and download as PDF.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+    <script>
+        let recognition = null;
+        let isRecording = false;
+        let fullTranscript = '';
+        let startTime = null;
+        let timerInterval = null;
+
+        // Check browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            document.getElementById('notSupported').style.display = 'block';
+            document.getElementById('micBtn').style.opacity = '0.5';
+            document.getElementById('micBtn').style.cursor = 'not-allowed';
+        } else {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = function (event) {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                if (finalTranscript) {
+                    // Process commands
+                    let processed = finalTranscript;
+                    processed = processed.replace(/new line|next line|enter/gi, '\n');
+                    processed = processed.replace(/period|full stop/gi, '.');
+                    processed = processed.replace(/comma/gi, ',');
+                    processed = processed.replace(/question mark/gi, '?');
+                    processed = processed.replace(/exclamation mark|exclamation point/gi, '!');
+
+                    fullTranscript += processed;
+                    document.getElementById('textArea').value = fullTranscript;
+                }
+
+                // Show live text
+                if (interimTranscript) {
+                    document.getElementById('liveText').textContent = '🔴 ' + interimTranscript;
+                    document.getElementById('liveText').classList.add('active');
+                } else {
+                    document.getElementById('liveText').classList.remove('active');
+                }
+
+                updateStats();
+            };
+
+            recognition.onerror = function (event) {
+                if (event.error === 'no-speech') {
+                    // Restart silently
+                    if (isRecording) {
+                        try { recognition.start(); } catch (e) { }
+                    }
+                } else if (event.error === 'not-allowed') {
+                    alert('Microphone access denied. Please allow microphone access in your browser settings.');
+                    stopRecording();
+                }
+            };
+
+            recognition.onend = function () {
+                // Auto restart if still recording
+                if (isRecording) {
+                    try { recognition.start(); } catch (e) { }
+                }
+            };
+        }
+
+        function toggleRecording() {
+            if (!SpeechRecognition) {
+                alert('Speech recognition is not supported in your browser. Please use Chrome or Edge.');
+                return;
+            }
+
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function startRecording() {
+            isRecording = true;
+            recognition.lang = document.getElementById('langSelect').value;
+
+            try {
+                recognition.start();
+            } catch (e) { }
+
+            document.getElementById('micBtn').classList.add('recording');
+            document.getElementById('micBtn').textContent = '⏹️';
+            document.getElementById('micStatus').textContent = 'Listening... Speak now!';
+            document.getElementById('micStatus').classList.add('active');
+            document.getElementById('waveContainer').classList.add('active');
+
+            // Start timer
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopRecording() {
+            isRecording = false;
+
+            try {
+                recognition.stop();
+            } catch (e) { }
+
+            document.getElementById('micBtn').classList.remove('recording');
+            document.getElementById('micBtn').textContent = '🎤';
+            document.getElementById('micStatus').textContent = 'Recording stopped. Click mic to continue.';
+            document.getElementById('micStatus').classList.remove('active');
+            document.getElementById('waveContainer').classList.remove('active');
+            document.getElementById('liveText').classList.remove('active');
+
+            clearInterval(timerInterval);
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            document.getElementById('timeCount').textContent = '⏱️ ' + mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }
+
+        function updateStats() {
+            const text = document.getElementById('textArea').value;
+            const words = text.split(/\s+/).filter(w => w.length > 0).length;
+            const chars = text.length;
+            const lines = text.split('\n').length;
+
+            document.getElementById('wordCount').textContent = 'Words: ' + words;
+            document.getElementById('charCount').textContent = 'Characters: ' + chars;
+            document.getElementById('lineCount').textContent = 'Lines: ' + lines;
+        }
+
+        // Update stats on manual typing
+        document.getElementById('textArea').addEventListener('input', function () {
+            fullTranscript = this.value;
+            updateStats();
+        });
+
+        // Download as PDF
+        async function downloadPDF() {
+            const text = document.getElementById('textArea').value;
+            if (!text.trim()) return alert('No text to convert! Speak or type something first.');
+
+            const title = document.getElementById('docTitle').value || 'My Document';
+            const fontName = document.getElementById('pdfFont').value;
+            const fontSize = parseInt(document.getElementById('pdfFontSize').value);
+            const pageSize = document.getElementById('pdfPageSize').value;
+            const lineSpacing = parseFloat(document.getElementById('lineSpacing').value);
+            const includeOption = document.getElementById('includeOptions').value;
+
+            const pdfDoc = await PDFLib.PDFDocument.create();
+
+            let fontObj;
+            switch (fontName) {
+                case 'Times-Roman': fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.TimesRoman); break;
+                case 'Courier': fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.Courier); break;
+                default: fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            }
+
+            const pageSizes = {
+                a4: [595.28, 841.89],
+                letter: [612, 792],
+                legal: [612, 1008]
+            };
+
+            const [pageWidth, pageHeight] = pageSizes[pageSize];
+            const margin = 50;
+            const maxWidth = pageWidth - margin * 2;
+            const lineHeight = fontSize * lineSpacing;
+
+            let page = pdfDoc.addPage([pageWidth, pageHeight]);
+            let y = pageHeight - margin;
+
+            // Add title and date
+            if (includeOption === 'title-date' || includeOption === 'title') {
+                page.drawText(title, {
+                    x: margin,
+                    y: y,
+                    size: fontSize + 8,
+                    font: fontObj,
+                    color: PDFLib.rgb(0.15, 0.39, 0.92)
+                });
+                y -= (fontSize + 8) * 1.5;
+            }
+
+            if (includeOption === 'title-date' || includeOption === 'date') {
+                const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                page.drawText(dateStr, {
+                    x: margin,
+                    y: y,
+                    size: fontSize - 2,
+                    font: fontObj,
+                    color: PDFLib.rgb(0.5, 0.5, 0.5)
+                });
+                y -= (fontSize - 2) * 2;
+            }
+
+            // Draw horizontal line after header
+            if (includeOption !== 'none') {
+                page.drawLine({
+                    start: { x: margin, y: y },
+                    end: { x: pageWidth - margin, y: y },
+                    thickness: 1,
+                    color: PDFLib.rgb(0.8, 0.8, 0.8)
+                });
+                y -= 20;
+            }
+
+            // Write text content
+            const paragraphs = text.split('\n');
+
+            for (const paragraph of paragraphs) {
+                if (paragraph.trim().length === 0) {
+                    y -= lineHeight;
+                    if (y < margin + lineHeight) {
+                        page = pdfDoc.addPage([pageWidth, pageHeight]);
+                        y = pageHeight - margin;
+                    }
+                    continue;
+                }
+
+                const words = paragraph.split(' ');
+                let currentLine = '';
+
+                for (const word of words) {
+                    const testLine = currentLine ? currentLine + ' ' + word : word;
+                    const testWidth = fontObj.widthOfTextAtSize(testLine, fontSize);
+
+                    if (testWidth > maxWidth && currentLine) {
+                        // Draw current line
+                        if (y < margin + lineHeight) {
+                            page = pdfDoc.addPage([pageWidth, pageHeight]);
+                            y = pageHeight - margin;
+                        }
+                        page.drawText(currentLine, {
+                            x: margin,
+                            y: y,
+                            size: fontSize,
+                            font: fontObj,
+                            color: PDFLib.rgb(0.2, 0.2, 0.2)
+                        });
+                        y -= lineHeight;
+                        currentLine = word;
+                    } else {
+                        currentLine = testLine;
+                    }
+                }
+
+                // Draw remaining text
+                if (currentLine) {
+                    if (y < margin + lineHeight) {
+                        page = pdfDoc.addPage([pageWidth, pageHeight]);
+                        y = pageHeight - margin;
+                    }
+                    page.drawText(currentLine, {
+                        x: margin,
+                        y: y,
+                        size: fontSize,
+                        font: fontObj,
+                        color: PDFLib.rgb(0.2, 0.2, 0.2)
+                    });
+                    y -= lineHeight;
+                }
+            }
+
+            // Add page numbers
+            const totalPageCount = pdfDoc.getPageCount();
+            for (let i = 0; i < totalPageCount; i++) {
+                const p = pdfDoc.getPage(i);
+                const { width, height } = p.getSize();
+                const pageNumText = 'Page ' + (i + 1) + ' of ' + totalPageCount;
+                const pageNumWidth = fontObj.widthOfTextAtSize(pageNumText, 10);
+                p.drawText(pageNumText, {
+                    x: (width - pageNumWidth) / 2,
+                    y: 25,
+                    size: 10,
+                    font: fontObj,
+                    color: PDFLib.rgb(0.6, 0.6, 0.6)
+                });
+            }
+
+            // Add footer
+            for (let i = 0; i < totalPageCount; i++) {
+                const p = pdfDoc.getPage(i);
+                const { width } = p.getSize();
+                const footer = 'Created with OnlinePDFPro.com';
+                const footerWidth = fontObj.widthOfTextAtSize(footer, 8);
+                p.drawText(footer, {
+                    x: (width - footerWidth) / 2,
+                    y: 12,
+                    size: 8,
+                    font: fontObj,
+                    color: PDFLib.rgb(0.75, 0.75, 0.75)
+                });
+            }
+
+            const pdfBytesOut = await pdfDoc.save();
+            download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'application/pdf');
+        }
+
+        // Download as Word
+        async function downloadWord() {
+            const text = document.getElementById('textArea').value;
+            if (!text.trim()) return alert('No text to convert!');
+
+            // Simple HTML to Word method
+            const title = document.getElementById('docTitle').value || 'My Document';
+            const html = '<html><head><meta charset="UTF-8"></head><body>' +
+                '<h1>' + title + '</h1>' +
+                '<p style="color:gray;">' + new Date().toLocaleDateString() + '</p><hr>' +
+                text.split('\n').map(p => '<p>' + p + '</p>').join('') +
+                '</body></html>';
+
+            const blob = new Blob([html], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title.replace(/\s+/g, '-') + '-OnlinePDFPro.doc';
+            a.click();
+        }
+
+        // Download as TXT
+        function downloadTxt() {
+            const text = document.getElementById('textArea').value;
+            if (!text.trim()) return alert('No text to convert!');
+
+            const title = document.getElementById('docTitle').value || 'My Document';
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title.replace(/\s+/g, '-') + '-OnlinePDFPro.txt';
+            a.click();
+        }
+
+        // Copy text
+        function copyText() {
+            const text = document.getElementById('textArea').value;
+            if (!text.trim()) return alert('No text to copy!');
+            navigator.clipboard.writeText(text);
+            alert('Text copied to clipboard!');
+        }
+
+        // Clear all
+        function clearText() {
+            if (confirm('Are you sure you want to clear everything?')) {
+                document.getElementById('textArea').value = '';
+                fullTranscript = '';
+                updateStats();
+                if (isRecording) stopRecording();
+                startTime = null;
+                document.getElementById('timeCount').textContent = '⏱️ 0:00';
+            }
+        }
+    </script>
+
+</body>
+
+</html>
