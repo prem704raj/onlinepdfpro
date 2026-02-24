@@ -181,6 +181,7 @@
             top: 0;
             left: 0;
             cursor: crosshair;
+            z-index: 40;
         }
 
         /* RIGHT PANEL */
@@ -465,40 +466,40 @@
 
         <!-- LEFT TOOLBAR -->
         <div class="left-toolbar">
-            <button class="tool-btn" onclick="setTool('cursor')" title="Select & Move">
+            <button class="tool-btn" onclick="setTool('cursor', event)" title="Select & Move">
                 🖱️<span>Select</span>
             </button>
-            <button class="tool-btn active" onclick="setTool('text')" title="Add Text">
+            <button class="tool-btn active" onclick="setTool('text', event)" title="Add Text">
                 🔤<span>Text</span>
             </button>
-            <button class="tool-btn" onclick="setTool('draw')" title="Free Draw">
+            <button class="tool-btn" onclick="setTool('draw', event)" title="Free Draw">
                 ✏️<span>Draw</span>
             </button>
-            <button class="tool-btn" onclick="setTool('highlight')" title="Highlight">
+            <button class="tool-btn" onclick="setTool('highlight', event)" title="Highlight">
                 🟡<span>Highlight</span>
             </button>
-            <button class="tool-btn" onclick="setTool('eraser')" title="Eraser">
+            <button class="tool-btn" onclick="setTool('eraser', event)" title="Eraser">
                 🧹<span>Eraser</span>
             </button>
-            <button class="tool-btn" onclick="setTool('image')" title="Add Image">
+            <button class="tool-btn" onclick="setTool('image', event)" title="Add Image">
                 🖼️<span>Image</span>
             </button>
-            <button class="tool-btn" onclick="setTool('shape')" title="Add Shape">
+            <button class="tool-btn" onclick="setTool('shape', event)" title="Add Shape">
                 ⬜<span>Shape</span>
             </button>
-            <button class="tool-btn" onclick="setTool('sticky')" title="Sticky Note">
+            <button class="tool-btn" onclick="setTool('sticky', event)" title="Sticky Note">
                 📝<span>Note</span>
             </button>
-            <button class="tool-btn" onclick="setTool('line')" title="Draw Line">
+            <button class="tool-btn" onclick="setTool('line', event)" title="Draw Line">
                 📏<span>Line</span>
             </button>
-            <button class="tool-btn" onclick="setTool('arrow')" title="Draw Arrow">
+            <button class="tool-btn" onclick="setTool('arrow', event)" title="Draw Arrow">
                 ➡️<span>Arrow</span>
             </button>
-            <button class="tool-btn" onclick="setTool('strikethrough')" title="Strikethrough">
+            <button class="tool-btn" onclick="setTool('strikethrough', event)" title="Strikethrough">
                 📕<span>Strike</span>
             </button>
-            <button class="tool-btn" onclick="setTool('underline')" title="Underline">
+            <button class="tool-btn" onclick="setTool('underline', event)" title="Underline">
                 📘<span>Under</span>
             </button>
             <button class="tool-btn" onclick="undoAction()" title="Undo">
@@ -736,14 +737,30 @@
         }
 
         // Tool selection
-        function setTool(tool) {
+        function setTool(tool, e) {
             currentTool = tool;
             document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.tool-btn').classList.add('active');
+            if (e && e.target) {
+                const btn = e.target.closest('.tool-btn');
+                if (btn) btn.classList.add('active');
+            }
 
-            overlayCanvas.style.cursor = tool === 'cursor' ? 'default' :
-                tool === 'text' ? 'text' :
-                    tool === 'eraser' ? 'cell' : 'crosshair';
+            // Key fix: disable overlay canvas pointer-events for cursor/text tools
+            // so users can click on existing text elements to edit them
+            const needsCanvasEvents = ['draw', 'highlight', 'eraser', 'line', 'arrow', 'shape', 'strikethrough', 'underline'];
+            if (needsCanvasEvents.includes(tool)) {
+                overlayCanvas.style.pointerEvents = 'auto';
+                overlayCanvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+            } else if (tool === 'text') {
+                // Text tool: overlay canvas captures clicks to create NEW text,
+                // but existing text elements (z-index:50) sit above it (z-index:40)
+                overlayCanvas.style.pointerEvents = 'auto';
+                overlayCanvas.style.cursor = 'text';
+            } else {
+                // cursor, sticky, image — let clicks pass through to DOM elements
+                overlayCanvas.style.pointerEvents = 'none';
+                overlayCanvas.style.cursor = 'default';
+            }
 
             if (tool === 'image') {
                 document.getElementById('imageInput').click();
@@ -919,11 +936,20 @@
             div.style.fontFamily = document.getElementById('fontFamily').value;
             div.style.fontSize = document.getElementById('fontSize').value + 'px';
             div.style.color = document.getElementById('fontColor').value;
+            div.style.zIndex = '50';
             div.textContent = 'Type here...';
             pageWrapper.appendChild(div);
             div.focus();
             document.execCommand('selectAll');
             makeDraggable(div);
+
+            // Double-click to edit text, single click in cursor mode to drag
+            div.ondblclick = (e) => {
+                e.stopPropagation();
+                div.focus();
+                document.execCommand('selectAll');
+            };
+
             updateLayers();
             saveState();
         }
@@ -965,10 +991,16 @@
         function makeDraggable(el) {
             let px = 0, py = 0;
             el.onmousedown = e => {
+                // Don't drag if clicking on interactive child elements
                 if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.classList.contains('img-resize') || e.target.classList.contains('img-delete')) return;
-                if (el.contentEditable === 'true' && currentTool === 'cursor') {
-                    e.preventDefault();
+
+                // If this is a text element and we're NOT in cursor mode, allow normal text editing
+                if (el.contentEditable === 'true' && currentTool !== 'cursor') {
+                    return; // Let the browser handle text selection/editing naturally
                 }
+
+                // In cursor mode, drag the element
+                e.preventDefault();
                 px = e.clientX;
                 py = e.clientY;
                 document.onmousemove = ev => {
@@ -1041,27 +1073,122 @@
             list.innerHTML = html;
         }
 
-        // Undo/Redo
+        // Undo/Redo — now saves both canvas drawings AND DOM elements
+        function serializeDomElements() {
+            const elements = [];
+            pageWrapper.querySelectorAll('.text-element').forEach(el => {
+                elements.push({
+                    type: 'text',
+                    left: el.style.left,
+                    top: el.style.top,
+                    fontFamily: el.style.fontFamily,
+                    fontSize: el.style.fontSize,
+                    color: el.style.color,
+                    html: el.innerHTML,
+                    fontWeight: el.style.fontWeight,
+                    fontStyle: el.style.fontStyle,
+                    textDecoration: el.style.textDecoration
+                });
+            });
+            pageWrapper.querySelectorAll('.image-element').forEach(el => {
+                const img = el.querySelector('img');
+                elements.push({
+                    type: 'image',
+                    left: el.style.left,
+                    top: el.style.top,
+                    width: el.style.width,
+                    src: img ? img.src : ''
+                });
+            });
+            pageWrapper.querySelectorAll('.sticky-note').forEach(el => {
+                const textarea = el.querySelector('textarea');
+                elements.push({
+                    type: 'sticky',
+                    left: el.style.left,
+                    top: el.style.top,
+                    text: textarea ? textarea.value : ''
+                });
+            });
+            return elements;
+        }
+
+        function restoreDomElements(elements) {
+            clearDomElements();
+            if (!elements) return;
+            elements.forEach(el => {
+                if (el.type === 'text') {
+                    const div = document.createElement('div');
+                    div.className = 'text-element';
+                    div.contentEditable = true;
+                    div.style.left = el.left;
+                    div.style.top = el.top;
+                    div.style.fontFamily = el.fontFamily;
+                    div.style.fontSize = el.fontSize;
+                    div.style.color = el.color;
+                    div.style.zIndex = '50';
+                    if (el.fontWeight) div.style.fontWeight = el.fontWeight;
+                    if (el.fontStyle) div.style.fontStyle = el.fontStyle;
+                    if (el.textDecoration) div.style.textDecoration = el.textDecoration;
+                    div.innerHTML = el.html;
+                    pageWrapper.appendChild(div);
+                    makeDraggable(div);
+                    div.ondblclick = (e) => { e.stopPropagation(); div.focus(); document.execCommand('selectAll'); };
+                } else if (el.type === 'image') {
+                    addImageElement(el.src, parseInt(el.left), parseInt(el.top), parseInt(el.width));
+                } else if (el.type === 'sticky') {
+                    const note = document.createElement('div');
+                    note.className = 'sticky-note';
+                    note.style.left = el.left;
+                    note.style.top = el.top;
+                    note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note...">' + (el.text || '') + '</textarea>';
+                    pageWrapper.appendChild(note);
+                    makeDraggable(note);
+                }
+            });
+        }
+
         function saveState() {
-            undoStack.push(JSON.stringify(layers));
+            const state = {
+                layers: JSON.parse(JSON.stringify(layers)),
+                domElements: serializeDomElements(),
+                page: currentPage
+            };
+            undoStack.push(JSON.stringify(state));
             if (undoStack.length > 30) undoStack.shift();
             redoStack = [];
         }
 
         function undoAction() {
             if (undoStack.length > 0) {
-                redoStack.push(JSON.stringify(layers));
-                layers = JSON.parse(undoStack.pop());
+                // Save current state to redo stack
+                const currentState = {
+                    layers: JSON.parse(JSON.stringify(layers)),
+                    domElements: serializeDomElements(),
+                    page: currentPage
+                };
+                redoStack.push(JSON.stringify(currentState));
+
+                const prevState = JSON.parse(undoStack.pop());
+                layers = prevState.layers;
                 restoreDrawings();
+                restoreDomElements(prevState.domElements);
                 updateLayers();
             }
         }
 
         function redoAction() {
             if (redoStack.length > 0) {
-                undoStack.push(JSON.stringify(layers));
-                layers = JSON.parse(redoStack.pop());
+                const currentState = {
+                    layers: JSON.parse(JSON.stringify(layers)),
+                    domElements: serializeDomElements(),
+                    page: currentPage
+                };
+                undoStack.push(JSON.stringify(currentState));
+
+                const nextState = JSON.parse(redoStack.pop());
+                layers = nextState.layers;
                 restoreDrawings();
+                restoreDomElements(nextState.domElements);
                 updateLayers();
             }
         }
