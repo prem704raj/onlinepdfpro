@@ -253,6 +253,13 @@
         </div>
     </header>
 
+<div style="text-align:center; margin:15px 0;">
+  <span style="padding:8px 20px; background:#f0f9ff; border-radius:50px; font-size:13px; color:#2563eb; font-weight:bold;">
+    <span id="counter-total-short">127K</span>+ PDFs processed by our users
+  </span>
+</div>
+
+
     <main class="container">
 
         <h2 style="text-align:center; margin:30px 0;">Upload Two PDF Files to Compare</h2>
@@ -416,7 +423,9 @@
             document.getElementById('diffContent2').innerHTML = html2;
 
             document.getElementById('progressSection').style.display = 'none';
-            document.getElementById('resultsSection').style.display = 'block';
+                incrementCounter('comparePDF');
+incrementTodayCount();
+document.getElementById('resultsSection').style.display = 'block';
         }
 
         function escapeHtml(text) {
@@ -426,6 +435,7 @@
         }
     </script>
 
+<script src="counter.js"></script>
 </body>
 
 </html>

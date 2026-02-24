@@ -194,6 +194,13 @@
         </div>
     </header>
 
+<div style="text-align:center; margin:15px 0;">
+  <span style="padding:8px 20px; background:#f0f9ff; border-radius:50px; font-size:13px; color:#2563eb; font-weight:bold;">
+    <span id="counter-total-short">127K</span>+ PDFs processed by our users
+  </span>
+</div>
+
+
     <main class="container">
 
         <div class="upload-area" id="dropArea" style="margin-top: 50px;">
@@ -379,10 +386,13 @@
 
         function downloadResult() {
             if (!resultBytes) return;
-            download(resultBytes, 'QR-PDF-OnlinePDFPro.pdf', 'application/pdf');
+               incrementCounter('qrPDF');
+incrementTodayCount();
+ download(resultBytes, 'QR-PDF-OnlinePDFPro.pdf', 'application/pdf');
         }
     </script>
 
+<script src="counter.js"></script>
 </body>
 
 </html>

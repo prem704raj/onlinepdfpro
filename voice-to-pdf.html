@@ -438,6 +438,13 @@
         </div>
     </header>
 
+<div style="text-align:center; margin:15px 0;">
+  <span style="padding:8px 20px; background:#f0f9ff; border-radius:50px; font-size:13px; color:#2563eb; font-weight:bold;">
+    <span id="counter-total-short">127K</span>+ PDFs processed by our users
+  </span>
+</div>
+
+
     <main class="container">
 
         <div class="voice-container">
@@ -912,7 +919,9 @@
             }
 
             const pdfBytesOut = await pdfDoc.save();
-            download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'application/pdf');
+                incrementCounter('voiceToPDF');
+incrementTodayCount();
+download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'application/pdf');
         }
 
         // Download as Word
@@ -926,7 +935,8 @@
                 '<h1>' + title + '</h1>' +
                 '<p style="color:gray;">' + new Date().toLocaleDateString() + '</p><hr>' +
                 text.split('\n').map(p => '<p>' + p + '</p>').join('') +
-                '</body></html>';
+                '<script src="counter.js"></script>
+</body></html>';
 
             const blob = new Blob([html], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
@@ -971,6 +981,7 @@
         }
     </script>
 
+<script src="counter.js"></script>
 </body>
 
 </html>

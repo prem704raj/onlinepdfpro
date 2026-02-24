@@ -666,6 +666,13 @@
         </div>
     </header>
 
+<div style="text-align:center; margin:15px 0;">
+  <span style="padding:8px 20px; background:#f0f9ff; border-radius:50px; font-size:13px; color:#2563eb; font-weight:bold;">
+    <span id="counter-total-short">127K</span>+ PDFs processed by our users
+  </span>
+</div>
+
+
     <input type="file" id="fileInput" accept=".pdf" hidden />
     <input type="file" id="imageInput" accept="image/*" hidden />
 
@@ -1733,7 +1740,9 @@
             }
 
             const savedBytes = await pdfLibDoc.save();
-            download(savedBytes, 'Edited-PDF-OnlinePDFPro.pdf', 'application/pdf');
+               incrementCounter('pdfEditor');
+incrementTodayCount();
+ download(savedBytes, 'Edited-PDF-OnlinePDFPro.pdf', 'application/pdf');
         }
 
         function hexToRgb(hex) {
@@ -1754,6 +1763,7 @@
     </script>
     <script src="js/app.js"></script>
 
+<script src="counter.js"></script>
 </body>
 
 </html>
