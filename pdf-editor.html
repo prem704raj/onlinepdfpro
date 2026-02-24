@@ -339,7 +339,7 @@
         /* EXTRACTED TEXT (from original PDF) */
         .extracted-text {
             position: absolute;
-            cursor: text;
+            cursor: pointer;
             padding: 1px 2px;
             outline: none;
             z-index: 45;
@@ -350,31 +350,125 @@
             white-space: pre;
             transition: background 0.15s, border-color 0.15s;
             border-radius: 2px;
+            user-select: none;
         }
 
         .extracted-text:hover {
             background: rgba(99, 102, 241, 0.08);
             border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        .extracted-text:focus {
-            color: var(--text-primary, #000);
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid var(--accent, #6366f1);
-            z-index: 55;
-            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.25);
-            padding: 3px 6px;
+            cursor: pointer;
         }
 
         .extracted-text.modified {
-            color: var(--text-primary, #000);
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px dashed #22c55e;
+            background: rgba(34, 197, 94, 0.12);
+            border: 2px solid #22c55e;
         }
 
-        .extracted-text.modified:focus {
-            background: rgba(255, 255, 255, 0.95);
+        .extracted-text.modified::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 16px;
+            height: 16px;
+            background: #22c55e;
+            color: white;
+            font-size: 10px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+        }
+
+        /* FLOATING EDIT POPUP */
+        .edit-popup {
+            position: absolute;
+            z-index: 1000;
+            background: var(--surface-1, #fff);
             border: 2px solid var(--accent, #6366f1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            padding: 12px;
+            display: none;
+            min-width: 280px;
+            max-width: 500px;
+        }
+
+        .edit-popup.active {
+            display: block;
+            animation: popupIn 0.15s ease-out;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .edit-popup-label {
+            font-size: 11px;
+            color: var(--text-muted, #71717a);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .edit-popup input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
+            border-radius: 8px;
+            font-size: 15px;
+            background: var(--bg, #fafafa);
+            color: var(--text-primary, #09090b);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .edit-popup input:focus {
+            border-color: var(--accent, #6366f1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .edit-popup-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .edit-popup-actions button {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .edit-popup-save {
+            background: var(--accent, #6366f1);
+            color: white;
+        }
+
+        .edit-popup-save:hover {
+            opacity: 0.9;
+        }
+
+        .edit-popup-cancel {
+            background: var(--surface-3, #e4e4e7);
+            color: var(--text-primary, #09090b);
+        }
+
+        .edit-popup-cancel:hover {
+            opacity: 0.8;
         }
 
         /* IMAGE ELEMENTS */
@@ -644,6 +738,15 @@
             <div class="page-wrapper" id="pageWrapper">
                 <canvas id="pdfCanvas"></canvas>
                 <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+                <!-- FLOATING EDIT POPUP -->
+                <div class="edit-popup" id="editPopup">
+                    <div class="edit-popup-label">✍️ Edit text (Enter to save)</div>
+                    <input type="text" id="editPopupInput" autocomplete="off" spellcheck="false">
+                    <div class="edit-popup-actions">
+                        <button class="edit-popup-cancel" onclick="closeEditPopup()">Cancel</button>
+                        <button class="edit-popup-save" onclick="saveEditPopup()">✓ Save</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -674,6 +777,16 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- FLOATING EDIT POPUP -->
+    <div class="edit-popup" id="editPopup">
+        <div class="edit-popup-label">✍️ Edit text (Enter to save)</div>
+        <input type="text" id="editPopupInput" autocomplete="off" spellcheck="false">
+        <div class="edit-popup-actions">
+            <button class="edit-popup-cancel" onclick="closeEditPopup()">Cancel</button>
+            <button class="edit-popup-save" onclick="saveEditPopup()">✓ Save</button>
+        </div>
     </div>
 
     <!-- UPLOAD SCREEN -->
@@ -807,30 +920,6 @@
             const textStyles = textContent.styles || {};
             if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
 
-            // Helper: detect font properties from PDF font name
-            function parseFontInfo(fontName) {
-                const styleDef = textStyles[fontName] || {};
-                const rawFamily = styleDef.fontFamily || 'sans-serif';
-                const name = (fontName || '').toLowerCase();
-
-                // Detect bold
-                const isBold = name.includes('bold') || name.includes('black') || name.includes('heavy');
-                // Detect italic
-                const isItalic = name.includes('italic') || name.includes('oblique');
-
-                // Map common PDF fonts to web-safe equivalents
-                let family = rawFamily;
-                if (name.includes('times') || rawFamily === 'serif') family = 'Times New Roman, serif';
-                else if (name.includes('courier') || rawFamily === 'monospace') family = 'Courier New, monospace';
-                else if (name.includes('arial') || name.includes('helvetica') || rawFamily === 'sans-serif') family = 'Arial, sans-serif';
-                else if (name.includes('georgia')) family = 'Georgia, serif';
-                else if (name.includes('verdana')) family = 'Verdana, sans-serif';
-                else if (name.includes('comic')) family = 'Comic Sans MS, cursive';
-                else family = rawFamily + ', sans-serif';
-
-                return { family, isBold, isItalic };
-            }
-
             // Group text items into lines (items with same Y position)
             const lines = [];
             let currentLine = null;
@@ -869,88 +958,141 @@
             lines.forEach((line, idx) => {
                 const div = document.createElement('div');
                 div.className = 'extracted-text';
-                div.contentEditable = true;
                 div.style.left = line.x + 'px';
                 div.style.top = (line.y - line.fontSize) + 'px';
                 div.style.fontSize = line.fontSize + 'px';
                 div.style.minWidth = Math.max(line.width, 30) + 'px';
                 div.style.height = line.height + 'px';
 
-                // Match original font style
-                const fontInfo = parseFontInfo(line.fontName);
-                div.style.fontFamily = fontInfo.family;
-                if (fontInfo.isBold) div.style.fontWeight = 'bold';
-                if (fontInfo.isItalic) div.style.fontStyle = 'italic';
-
-                // Restore modified text if it was previously edited
-                const savedMod = savedMods.find(m => m.lineIndex === idx);
-                if (savedMod && savedMod.newText !== line.text) {
-                    div.textContent = savedMod.newText;
-                    div.classList.add('modified');
-                } else {
-                    div.textContent = line.text;
-                }
-
+                // Store data
                 div.dataset.lineIndex = idx;
                 div.dataset.originalText = line.text;
+                div.dataset.currentText = line.text;
                 div.dataset.origX = line.x;
                 div.dataset.origY = line.y;
                 div.dataset.origFontSize = line.fontSize;
                 div.dataset.origWidth = line.width;
                 div.dataset.origHeight = line.height;
+                div.textContent = line.text;
 
-                // On focus, make text visible for editing
-                div.addEventListener('focus', () => {
-                    div.style.color = 'var(--text-primary, #000)';
-                    div.style.background = 'rgba(255, 255, 255, 0.95)';
-                });
+                // Restore modified text if it was previously edited
+                const savedMod = savedMods.find(m => m.lineIndex === idx);
+                if (savedMod && savedMod.newText !== line.text) {
+                    div.dataset.currentText = savedMod.newText;
+                    div.classList.add('modified');
+                }
 
-                // Enter key saves the edit
-                div.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        div.blur(); // triggers the blur handler below
-                    }
-                });
-
-                // On blur, check if text was modified
-                div.addEventListener('blur', () => {
-                    const newText = div.textContent;
-                    const origText = div.dataset.originalText;
-
-                    if (newText !== origText) {
-                        div.classList.add('modified');
-                        // Save modification
-                        const existingIdx = extractedTexts[currentPage].findIndex(m => m.lineIndex === idx);
-                        const mod = {
-                            lineIndex: idx,
-                            originalText: origText,
-                            newText: newText,
-                            x: parseFloat(div.dataset.origX),
-                            y: parseFloat(div.dataset.origY),
-                            fontSize: parseFloat(div.dataset.origFontSize),
-                            width: parseFloat(div.dataset.origWidth),
-                            height: parseFloat(div.dataset.origHeight)
-                        };
-                        if (existingIdx >= 0) {
-                            extractedTexts[currentPage][existingIdx] = mod;
-                        } else {
-                            extractedTexts[currentPage].push(mod);
-                        }
-                    } else {
-                        div.classList.remove('modified');
-                        div.style.color = 'transparent';
-                        div.style.background = 'transparent';
-                        // Remove from saved modifications
-                        extractedTexts[currentPage] = extractedTexts[currentPage].filter(m => m.lineIndex !== idx);
-                    }
-
-                    updateLayers();
+                // Click to open edit popup
+                div.addEventListener('click', (e) => {
+                    if (currentTool !== 'edit') return;
+                    e.stopPropagation();
+                    openEditPopup(div);
                 });
 
                 pageWrapper.appendChild(div);
             });
         }
+
+        // =============================================
+        // EDIT POPUP LOGIC
+        // =============================================
+        let activeEditTarget = null;
+
+        function openEditPopup(el) {
+            activeEditTarget = el;
+            const popup = document.getElementById('editPopup');
+            const input = document.getElementById('editPopupInput');
+
+            // Position popup above the text element
+            const elRect = el.getBoundingClientRect();
+            const wrapperRect = pageWrapper.getBoundingClientRect();
+            const popupLeft = parseFloat(el.style.left);
+            let popupTop = parseFloat(el.style.top) - 90;
+            if (popupTop < 0) popupTop = parseFloat(el.style.top) + parseFloat(el.style.height || el.offsetHeight) + 8;
+
+            popup.style.left = popupLeft + 'px';
+            popup.style.top = popupTop + 'px';
+
+            // Pre-fill with current text
+            input.value = el.dataset.currentText || el.dataset.originalText;
+            popup.classList.add('active');
+
+            // Highlight the text being edited
+            el.style.background = 'rgba(99, 102, 241, 0.15)';
+            el.style.borderColor = 'var(--accent, #6366f1)';
+
+            // Focus and select all
+            setTimeout(() => { input.focus(); input.select(); }, 50);
+        }
+
+        function closeEditPopup() {
+            const popup = document.getElementById('editPopup');
+            popup.classList.remove('active');
+
+            if (activeEditTarget) {
+                if (!activeEditTarget.classList.contains('modified')) {
+                    activeEditTarget.style.background = 'transparent';
+                    activeEditTarget.style.borderColor = 'transparent';
+                }
+                activeEditTarget = null;
+            }
+        }
+
+        function saveEditPopup() {
+            if (!activeEditTarget) return;
+            const input = document.getElementById('editPopupInput');
+            const newText = input.value.trim();
+            const el = activeEditTarget;
+            const idx = parseInt(el.dataset.lineIndex);
+            const origText = el.dataset.originalText;
+
+            if (newText && newText !== origText) {
+                el.dataset.currentText = newText;
+                el.classList.add('modified');
+
+                // Save modification
+                if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
+                const existingIdx = extractedTexts[currentPage].findIndex(m => m.lineIndex === idx);
+                const mod = {
+                    lineIndex: idx,
+                    originalText: origText,
+                    newText: newText,
+                    x: parseFloat(el.dataset.origX),
+                    y: parseFloat(el.dataset.origY),
+                    fontSize: parseFloat(el.dataset.origFontSize),
+                    width: parseFloat(el.dataset.origWidth),
+                    height: parseFloat(el.dataset.origHeight)
+                };
+                if (existingIdx >= 0) {
+                    extractedTexts[currentPage][existingIdx] = mod;
+                } else {
+                    extractedTexts[currentPage].push(mod);
+                }
+            } else if (newText === origText) {
+                el.dataset.currentText = origText;
+                el.classList.remove('modified');
+                el.style.background = 'transparent';
+                el.style.borderColor = 'transparent';
+                extractedTexts[currentPage] = (extractedTexts[currentPage] || []).filter(m => m.lineIndex !== idx);
+            }
+
+            closeEditPopup();
+            updateLayers();
+        }
+
+        // Enter key in popup saves
+        document.getElementById('editPopupInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); saveEditPopup(); }
+            if (e.key === 'Escape') { e.preventDefault(); closeEditPopup(); }
+        });
+
+        // Click outside popup closes it
+        document.addEventListener('mousedown', (e) => {
+            const popup = document.getElementById('editPopup');
+            if (popup.classList.contains('active') && !popup.contains(e.target) && !e.target.classList.contains('extracted-text')) {
+                closeEditPopup();
+            }
+        });
 
         function restoreDrawings() {
             const pageLayer = layers[currentPage];
