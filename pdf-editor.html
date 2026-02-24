@@ -24,6 +24,15 @@
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
+    <script>
+        // Sync theme with main site instantly to prevent FOUC
+        const savedTheme = localStorage.getItem('doctools-theme');
+        if (savedTheme === 'light' || (!savedTheme && !window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -1352,8 +1361,8 @@
             if (e.ctrlKey && e.key === 's') { e.preventDefault(); savePDF(); }
         };
     </script>
+    <script src="js/app.js"></script>
 
 </body>
 
 </html>
-
