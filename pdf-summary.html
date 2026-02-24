@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Summarizer Online Free - Summarize PDF | Online PDF Pro</title>
+    <meta name="description"
+        content="Summarize PDF documents online for free. Get key points, word frequency, reading time and document statistics instantly.">
+    <meta name="keywords" content="pdf summarizer, summarize pdf, pdf summary tool, extract key points from pdf free">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-summary.html">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <style>
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            border-radius: 24px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .upload-area:hover {
+            border-color: #2563eb;
+            background: #f0f9ff;
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: #333 !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .summary-box {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-size: 32px;
+            font-weight: 900;
+            display: block;
+        }
+
+        .stat-card .lbl {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .s1 {
+            background: #f0f9ff;
+        }
+
+        .s1 .num {
+            color: #2563eb;
+        }
+
+        .s2 {
+            background: #f0fdf4;
+        }
+
+        .s2 .num {
+            color: #10b981;
+        }
+
+        .s3 {
+            background: #fef3c7;
+        }
+
+        .s3 .num {
+            color: #d97706;
+        }
+
+        .s4 {
+            background: #fce7f3;
+        }
+
+        .s4 .num {
+            color: #ec4899;
+        }
+
+        .s5 {
+            background: #ede9fe;
+        }
+
+        .s5 .num {
+            color: #7c3aed;
+        }
+
+        .s6 {
+            background: #fee2e2;
+        }
+
+        .s6 .num {
+            color: #ef4444;
+        }
+
+        .section-card {
+            margin: 25px 0;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+        .section-card h3 {
+            margin: 0 0 15px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .key-point {
+            padding: 12px 15px;
+            background: white;
+            border-radius: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #2563eb;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .freq-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .freq-word {
+            width: 100px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .freq-fill {
+            height: 24px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 12px;
+            transition: width 0.5s;
+        }
+
+        .freq-count {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .dl-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .dl-btn {
+            padding: 14px 30px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .dl-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .summary-box {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body style="background:#f8fafc;">
+
+    <header>
+        <div class="container">
+            <h1><a href="index.html">← Online PDF Pro</a> / PDF Summarizer</h1>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="upload-area" id="dropArea" style="margin-top:50px;">
+            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Get instant summary, key points,
+                    statistics & word analysis</small></p>
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+        </div>
+
+        <div class="summary-box" id="summaryBox">
+            <h2 style="text-align:center; color:#333; margin:0 0 25px;">📊 Document Analysis</h2>
+
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <div class="section-card">
+                <h3>🎯 Key Points</h3>
+                <div id="keyPoints"></div>
+            </div>
+
+            <div class="section-card">
+                <h3>📈 Most Frequent Words</h3>
+                <div id="freqWords"></div>
+            </div>
+
+            <div class="section-card">
+                <h3>📝 Summary</h3>
+                <div id="summaryText" style="font-size:16px; line-height:1.8; color:#333;"></div>
+            </div>
+
+            <div class="dl-row">
+                <button onclick="downloadSummaryPDF()" class="dl-btn"
+                    style="background:linear-gradient(135deg,#ef4444,#dc2626);">📥 Download Summary PDF</button>
+                <button onclick="downloadSummaryTxt()" class="dl-btn"
+                    style="background:linear-gradient(135deg,#10b981,#059669);">📝 Download TXT</button>
+                <button onclick="copySummary()" class="dl-btn"
+                    style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">📋 Copy Summary</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+                <div>
+                    <h4 style="color:#2563eb; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+                    <p style="color:#666; font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+
+                        people worldwide. No registration, no watermark, no limits.</p>
+                </div>
+                <div>
+                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="/tools/merge-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Merge PDF</a></li>
+                        <li style="margin:8px 0;"><a href="/tools/compress-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Compress PDF</a></li>
+                        <li style="margin:8px 0;"><a href="/tools/sign-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Sign PDF</a></li>
+                        <li style="margin:8px 0;"><a href="/tools/pdf-to-word.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">PDF to Word</a></li>
+                        <li style="margin:8px 0;"><a href="/pdf-editor.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">PDF Editor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">More Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="/tools/ocr.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">OCR Extract Text</a></li>
+                        <li style="margin:8px 0;"><a href="/voice-to-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Voice to PDF</a></li>
+                        <li style="margin:8px 0;"><a href="/tools/pdf-to-images.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">PDF to JPG</a></li>
+                        <li style="margin:8px 0;"><a href="/compare-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Compare PDFs</a></li>
+                        <li style="margin:8px 0;"><a href="/qr-pdf.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">QR Code in PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Company</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="/about.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">About Us</a></li>
+                        <li style="margin:8px 0;"><a href="/contact.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Contact Us</a></li>
+                        <li style="margin:8px 0;"><a href="/privacy.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Privacy Policy</a></li>
+                        <li style="margin:8px 0;"><a href="/terms.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Terms of Service</a></li>
+                        <li style="margin:8px 0;"><a href="/blog.html"
+                                style="color:#666; text-decoration:none; font-size:14px;">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="height:1px; background:#e2e8f0; margin:20px 0;"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:#94a3b8; font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights reserved. Made
+                    with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span
+                        style="padding:6px 14px; background:#f0f9ff; border-radius:20px; font-size:12px; color:#2563eb; font-weight:bold;">🔒
+                        Your files are safe</span>
+                    <span
+                        style="padding:6px 14px; background:#f0fdf4; border-radius:20px; font-size:12px; color:#10b981; font-weight:bold;">⚡
+                        100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        let fullText = '';
+        let summaryData = {};
+
+        document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = e => analyzePDF(e.target.files[0]);
+        document.getElementById('dropArea').ondragover = e => e.preventDefault();
+        document.getElementById('dropArea').ondrop = e => { e.preventDefault(); analyzePDF(e.dataTransfer.files[0]); };
+
+        async function analyzePDF(file) {
+            if (!file) return;
+
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+            fullText = '';
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const tc = await page.getTextContent();
+                const lines = {};
+                tc.items.forEach(item => {
+                    const y = Math.round(item.transform[5]);
+                    if (!lines[y]) lines[y] = [];
+                    lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
+                });
+                Object.keys(lines).sort((a, b) => b - a).forEach(y => {
+                    const lt = lines[y].sort((a, b) => a.x - b.x).map(i => i.text).join(' ').trim();
+                    if (lt) fullText += lt + '\n';
+                });
+                fullText += '\n';
+            }
+
+            const words = fullText.split(/\s+/).filter(w => w.length > 0);
+            const sentences = fullText.split(/[.!?]+/).filter(s => s.trim().length > 10);
+            const paragraphs = fullText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            const readingTime = Math.ceil(words.length / 200);
+            const avgWordLength = words.length > 0 ? (words.reduce((sum, w) => sum + w.length, 0) / words.length).toFixed(1) : 0;
+
+            // Stats
+            document.getElementById('statsGrid').innerHTML =
+                '<div class="stat-card s1"><span class="num">' + pdf.numPages + '</span><span class="lbl">Pages</span></div>' +
+                '<div class="stat-card s2"><span class="num">' + words.length.toLocaleString() + '</span><span class="lbl">Words</span></div>' +
+                '<div class="stat-card s3"><span class="num">' + fullText.length.toLocaleString() + '</span><span class="lbl">Characters</span></div>' +
+                '<div class="stat-card s4"><span class="num">' + sentences.length + '</span><span class="lbl">Sentences</span></div>' +
+                '<div class="stat-card s5"><span class="num">' + readingTime + ' min</span><span class="lbl">Reading Time</span></div>' +
+                '<div class="stat-card s6"><span class="num">' + avgWordLength + '</span><span class="lbl">Avg Word Length</span></div>';
+
+            // Key points (longest sentences = most informative)
+            const keyPointsList = sentences
+                .map(s => s.trim())
+                .filter(s => s.length > 30 && s.length < 300)
+                .sort((a, b) => b.length - a.length)
+                .slice(0, 8);
+
+            document.getElementById('keyPoints').innerHTML = keyPointsList.length > 0
+                ? keyPointsList.map(p => '<div class="key-point">• ' + p.trim() + '.</div>').join('')
+                : '<p style="color:#666;">No key points could be extracted from this document.</p>';
+
+            // Word frequency
+            const stopWords = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'shall', 'can', 'need', 'dare', 'ought', 'used', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'between', 'out', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'each', 'every', 'both', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 'just', 'because', 'but', 'and', 'or', 'if', 'while', 'that', 'this', 'it', 'its', 'i', 'you', 'he', 'she', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'my', 'your', 'his', 'our', 'their', 'what', 'which', 'who', 'whom', 'these', 'those']);
+            const wordFreq = {};
+            words.forEach(w => {
+                const clean = w.toLowerCase().replace(/[^a-zA-Z]/g, '');
+                if (clean.length > 3 && !stopWords.has(clean)) {
+                    wordFreq[clean] = (wordFreq[clean] || 0) + 1;
+                }
+            });
+
+            const topWords = Object.entries(wordFreq).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            const maxFreq = topWords.length > 0 ? topWords[0][1] : 1;
+
+            document.getElementById('freqWords').innerHTML = topWords.length > 0
+                ? topWords.map(([word, count]) =>
+                    '<div class="freq-bar"><span class="freq-word">' + word + '</span>' +
+                    '<div class="freq-fill" style="width:' + Math.round((count / maxFreq) * 100) + '%;"></div>' +
+                    '<span class="freq-count">' + count + 'x</span></div>'
+                ).join('')
+                : '<p style="color:#666;">Not enough text to analyze word frequency.</p>';
+
+            // Summary (first sentence of each paragraph)
+            const summary = paragraphs
+                .map(p => {
+                    const firstSentence = p.split(/[.!?]/)[0];
+                    return firstSentence ? firstSentence.trim() : '';
+                })
+                .filter(s => s.length > 20)
+                .slice(0, 6)
+                .join('. ') + '.';
+
+            document.getElementById('summaryText').textContent = summary || 'Could not generate summary for this document.';
+
+            summaryData = { pages: pdf.numPages, words: words.length, chars: fullText.length, sentences: sentences.length, readingTime, keyPoints: keyPointsList, topWords, summary };
+
+            document.getElementById('summaryBox').style.display = 'block';
+            document.getElementById('dropArea').style.display = 'none';
+
+            incrementCounter('pdfSummarizer');
+            incrementTodayCount();
+        }
+
+        async function downloadSummaryPDF() {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            const boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+            let page = pdfDoc.addPage([595, 842]);
+            let y = 792;
+
+            function addText(text, size, f, color) {
+                if (y < 60) { page = pdfDoc.addPage([595, 842]); y = 792; }
+                try { page.drawText(text.substring(0, 80), { x: 50, y, size, font: f, color: PDFLib.rgb(color[0], color[1], color[2]) }); } catch { }
+                y -= size * 1.6;
+            }
+
+            addText('Document Summary', 24, boldFont, [0.15, 0.39, 0.92]);
+            addText('Generated by OnlinePDFPro.com', 10, font, [0.5, 0.5, 0.5]);
+            y -= 15;
+            addText('Pages: ' + summaryData.pages + ' | Words: ' + summaryData.words + ' | Reading Time: ' + summaryData.readingTime + ' min', 12, font, [0.3, 0.3, 0.3]);
+            y -= 15;
+            addText('Key Points:', 16, boldFont, [0.15, 0.39, 0.92]);
+            summaryData.keyPoints.forEach(kp => { addText('• ' + kp.substring(0, 75), 11, font, [0.2, 0.2, 0.2]); });
+            y -= 15;
+            addText('Top Words:', 16, boldFont, [0.15, 0.39, 0.92]);
+            summaryData.topWords.forEach(([w, c]) => { addText(w + ' (' + c + ' times)', 11, font, [0.2, 0.2, 0.2]); });
+            y -= 15;
+            addText('Summary:', 16, boldFont, [0.15, 0.39, 0.92]);
+            addText(summaryData.summary.substring(0, 80), 11, font, [0.2, 0.2, 0.2]);
+
+            const bytes = await pdfDoc.save();
+            download(bytes, 'Summary-OnlinePDFPro.pdf', 'application/pdf');
+        }
+
+        function downloadSummaryTxt() {
+            let txt = 'DOCUMENT SUMMARY\n================\n\n';
+            txt += 'Pages: ' + summaryData.pages + '\nWords: ' + summaryData.words + '\nReading Time: ' + summaryData.readingTime + ' min\n\n';
+            txt += 'KEY POINTS:\n';
+            summaryData.keyPoints.forEach(kp => { txt += '• ' + kp + '\n'; });
+            txt += '\nTOP WORDS:\n';
+            summaryData.topWords.forEach(([w, c]) => { txt += w + ' (' + c + 'x)\n'; });
+            txt += '\nSUMMARY:\n' + summaryData.summary;
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob); const a = document.createElement('a');
+            a.href = url; a.download = 'Summary.txt'; a.click();
+        }
+
+        function copySummary() {
+            navigator.clipboard.writeText(document.getElementById('summaryText').textContent);
+            alert('Summary copied!');
+        }
+    </script>
+    <script src="counter.js"></script>
+
+</body>
+
+</html>
