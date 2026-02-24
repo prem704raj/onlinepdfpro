@@ -1,20 +1,25 @@
-<!DOCTYPE html>
-<html>
+import os
+import re
+import urllib.request
 
-<head>
-    <meta http-equiv="refresh" content="0; url=tools/pdf-to-word.html" />
-    <title>Redirecting...</title>
+# 1. Download Favicons
+print("Downloading favicons...")
+try:
+    urllib.request.urlretrieve("https://placehold.co/32x32/2563eb/ffffff.png?text=PDF&font=Montserrat", "favicon-32x32.png")
+    urllib.request.urlretrieve("https://placehold.co/16x16/2563eb/ffffff.png?text=PDF&font=Montserrat", "favicon-16x16.png")
+    urllib.request.urlretrieve("https://placehold.co/180x180/2563eb/ffffff.png?text=PDF&font=Montserrat", "apple-touch-icon.png")
+    print("Favicons downloaded successfully.")
+except Exception as e:
+    print(f"Error downloading favicons: {e}")
 
+# 2. HTML to inject
+favicon_tags = """
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+"""
 
-</head>
-
-<body>
-    <p>Redirecting to <a href="tools/pdf-to-word.html">PDF to Word</a>...</p>
-    <script>window.location.href = "tools/pdf-to-word.html";</script>
-
+new_footer = """
 <footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
   <div style="max-width:1200px; margin:0 auto;">
     
@@ -79,7 +84,51 @@
 
   </div>
 </footer>
+"""
 
-</body>
+# 3. Process all HTML files
+html_files = []
+for root, dirs, files in os.walk('.'):
+    if '.git' in root or '.gemini' in root:
+        continue
+    for file in files:
+        if file.endswith('.html'):
+            html_files.append(os.path.join(root, file))
 
-</html>
+for file_path in html_files:
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    modified = False
+
+    # Inject Favicons
+    if 'href="/favicon-32x32.png"' not in content:
+        # replace existing <link rel="icon" href="/favicon.ico"> or similar
+        content = re.sub(r'<link rel="icon" href="/favicon\.ico">[\s]*<link rel="apple-touch-icon" href="/icon-192\.png">', '', content)
+        content = re.sub(r'<link rel="manifest" href="/manifest\.json">', f'<link rel="manifest" href="/manifest.json">\n{favicon_tags}', content)
+        if favicon_tags not in content:
+            # Fallback
+            content = content.replace('</head>', f'{favicon_tags}\n</head>')
+        modified = True
+
+    # Inject Footer
+    if 'Online PDF Pro. All rights reserved. Made with ❤️ in India.' not in content:
+        # Remove old footer if exists
+        content = re.sub(r'<footer class="footer".*?</footer>', '', content, flags=re.DOTALL)
+        content = re.sub(r'<footer style=".*?">.*?</footer>', '', content, flags=re.DOTALL)
+        
+        # Insert new footer before </body> or <script src="counter.js">
+        if '<script src="../counter.js"></script>' in content:
+            content = content.replace('<script src="../counter.js"></script>', f'{new_footer}\n<script src="../counter.js"></script>')
+        elif '<script src="counter.js"></script>' in content:
+            content = content.replace('<script src="counter.js"></script>', f'{new_footer}\n<script src="counter.js"></script>')
+        else:
+            content = content.replace('</body>', f'{new_footer}\n</body>')
+        modified = True
+
+    if modified:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Updated {file_path}")
+
+print("Deployment of Favicons and Footer complete.")

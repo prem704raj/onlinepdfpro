@@ -30,9 +30,13 @@
     <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
     <!-- Favicon + PWA -->
-    <link rel="icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/icon-192.png">
+    
     <link rel="manifest" href="/manifest.json">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -323,68 +327,7 @@
     </main>
 
 
-    <footer class="footer"
-        style="padding: 60px 0 20px; background: var(--surface-2); border-top: 1px solid var(--border);">
-        <div class="container">
-            <div class="footer-content"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
-                <div class="footer-brand">
-                    <a href="../index.html" class="logo" style="margin-bottom: 16px; display: inline-flex;">
-                        <span class="logo-icon">📄</span>
-                        <span class="logo-text">OnlinePDFPro</span>
-                    </a>
-                    <p class="footer-tagline" style="color: var(--text-muted); line-height: 1.5;">Fast, private document
-                        tools for everyone. Processing happens on your device.</p>
-                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);"><strong>Built by Prem
-                                Raj</strong><br />1st Year CSE Student at VIT</p>
-                    </div>
-                </div>
-                <div class="footer-links-group">
-                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Platform</h4>
-                    <ul
-                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../tools.html" style="color: var(--text-secondary); text-decoration: none;">View All
-                                Tools</a></li>
-                        <li><a href="../about.html" style="color: var(--text-secondary); text-decoration: none;">Our
-                                Story</a></li>
-                        <li><a href="../help.html" style="color: var(--text-secondary); text-decoration: none;">Help &
-                                FAQ</a></li>
-                        <li><a href="#" class="feedback-trigger-footer"
-                                style="color: var(--text-secondary); text-decoration: none;">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links-group">
-                    <h4 style="margin-bottom: 16px; font-size: 1rem;">Legal & SEO</h4>
-                    <ul
-                        style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <li><a href="../privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy
-                                Policy</a></li>
-                        <li><a href="../terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of
-                                Service</a></li>
-                        <li><a href="../sitemap.xml"
-                                style="color: var(--text-secondary); text-decoration: none;">Sitemap.xml</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div
-                style="padding-top: 24px; border-top: 1px solid var(--border); text-align: center; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">&copy; 2026 OnlinePDFPro. 100% Free
-                    Forever.</p>
-                <div style="display: flex; gap: 16px;">
-                    <a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank" rel="noopener"
-                        aria-label="GitHub Repository" style="color: var(--text-muted);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                            </path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    
 
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -620,7 +563,73 @@ resultsSection.style.display = 'block';
     </script>
 
 
-    <script src="../counter.js"></script>
+    
+<footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
+  <div style="max-width:1200px; margin:0 auto;">
+    
+    <!-- Top Footer -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+      
+      <!-- About -->
+      <div>
+        <h4 style="color:#2563eb; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+        <p style="color:#666; font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+      </div>
+
+      <!-- Popular Tools -->
+      <div>
+        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="margin:8px 0;"><a href="/tools/merge-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Merge PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/compress-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Compress PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/sign-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Sign PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/pdf-to-word.html" style="color:#666; text-decoration:none; font-size:14px;">PDF to Word</a></li>
+          <li style="margin:8px 0;"><a href="/pdf-editor.html" style="color:#666; text-decoration:none; font-size:14px;">PDF Editor</a></li>
+        </ul>
+      </div>
+
+      <!-- More Tools -->
+      <div>
+        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">More Tools</h4>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="margin:8px 0;"><a href="/tools/ocr.html" style="color:#666; text-decoration:none; font-size:14px;">OCR Extract Text</a></li>
+          <li style="margin:8px 0;"><a href="/voice-to-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Voice to PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/pdf-to-images.html" style="color:#666; text-decoration:none; font-size:14px;">PDF to JPG</a></li>
+          <li style="margin:8px 0;"><a href="/compare-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Compare PDFs</a></li>
+          <li style="margin:8px 0;"><a href="/qr-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">QR Code in PDF</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Company</h4>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="margin:8px 0;"><a href="/about.html" style="color:#666; text-decoration:none; font-size:14px;">About Us</a></li>
+          <li style="margin:8px 0;"><a href="/contact.html" style="color:#666; text-decoration:none; font-size:14px;">Contact Us</a></li>
+          <li style="margin:8px 0;"><a href="/privacy.html" style="color:#666; text-decoration:none; font-size:14px;">Privacy Policy</a></li>
+          <li style="margin:8px 0;"><a href="/terms.html" style="color:#666; text-decoration:none; font-size:14px;">Terms of Service</a></li>
+          <li style="margin:8px 0;"><a href="/blog.html" style="color:#666; text-decoration:none; font-size:14px;">Blog</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div style="height:1px; background:#e2e8f0; margin:20px 0;"></div>
+
+    <!-- Bottom Footer -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+      <p style="color:#94a3b8; font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights reserved. Made with ❤️ in India.</p>
+      <div style="display:flex; gap:15px;">
+        <span style="padding:6px 14px; background:#f0f9ff; border-radius:20px; font-size:12px; color:#2563eb; font-weight:bold;">🔒 Your files are safe</span>
+        <span style="padding:6px 14px; background:#f0fdf4; border-radius:20px; font-size:12px; color:#10b981; font-weight:bold;">⚡ 100% Client-Side</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../counter.js"></script>
 </body>
 
 </html>
