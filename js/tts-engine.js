@@ -114,4 +114,76 @@ function renderHistory() {
     l.innerHTML = history.map((h, i) => '<div class="history-item"><span class="history-text">' + h.preview + '</span><button class="history-play" onclick="playFromHistory(' + i + ')">▶️ Play</button></div>').join('');
 }
 function playFromHistory(i) { document.getElementById('textInput').value = history[i].full; updateStats(); switchTab('text'); playAudio(); }
+
+async function downloadAudio() {
+    const text = document.getElementById('textInput').value.trim();
+    if (!text) return alert('Please enter some text first!');
+
+    const btn = document.getElementById('dlAudioBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Generating MP3...';
+    btn.disabled = true;
+
+    try {
+        // We use Google Translate TTS API for downloading audio since SpeechSynthesis cannot be saved
+        // URL has a 200 char limit for 'q', so we must chunk
+        const langCode = document.getElementById('langFilter').value !== 'all' ? document.getElementById('langFilter').value : 'en';
+
+        // Chunk by sentences, keeping under ~150 chars
+        const chunks = [];
+        let current = '';
+        const words = text.split(' ');
+
+        for (let word of words) {
+            if ((current + ' ' + word).length < 150) {
+                current += (current ? ' ' : '') + word;
+            } else {
+                if (current) chunks.push(current);
+                current = word;
+            }
+        }
+        if (current) chunks.push(current);
+
+        // Fetch all audio chunks
+        const audioBuffers = [];
+        for (let i = 0; i < chunks.length; i++) {
+            btn.innerHTML = `⏳ Part ${i + 1}/${chunks.length}...`;
+            const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(chunks[i])}`;
+            // Use allorigins to bypass CORS
+            const proxyUrl = `https://api.allorigins.ml/raw?url=${encodeURIComponent(url)}`;
+            const res = await fetch(proxyUrl);
+            if (!res.ok) throw new Error('API failed');
+            const arrayBuffer = await res.arrayBuffer();
+            audioBuffers.push(arrayBuffer);
+            await new Promise(r => setTimeout(r, 300)); // anti-rate-limit
+        }
+
+        // Concatenate all ArrayBuffers
+        const totalLength = audioBuffers.reduce((acc, buf) => acc + buf.byteLength, 0);
+        const combined = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const buf of audioBuffers) {
+            combined.set(new Uint8Array(buf), offset);
+            offset += buf.byteLength;
+        }
+
+        // Create Blob and Download
+        const blob = new Blob([combined], { type: 'audio/mpeg' });
+        const urlObj = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = urlObj;
+        a.download = `Audio-${langCode}-OnlinePDFPro.mp3`;
+        a.click();
+
+        btn.innerHTML = '✅ Saved MP3!';
+        setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000);
+
+    } catch (e) {
+        console.error(e);
+        alert('Failed to generate audio directly. Please try shorter text.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+
 renderHistory(); updateStats();
