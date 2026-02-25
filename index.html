@@ -531,35 +531,58 @@
         <!-- HERO -->
         <section class="hp-hero">
             <div class="container">
-                <h1>Stop Uploading Sensitive Files<br>to <span>Unknown Servers.</span></h1>
-                <p>A privacy-first PDF toolkit that runs entirely in your browser. Your Aadhaar, PAN, contracts, and
-                    assignments never touch a server. Ever.</p>
+                <h1>Privacy-First PDF Tools<br>That Run in <span>Your Browser.</span></h1>
+                <p>Files are processed locally on your device — no uploads required. Open-source and auditable. <a
+                        href="https://github.com/Prem736raj/onlinepdfpro" target="_blank"
+                        style="color:#a5f3fc; text-decoration:underline;">Inspect the code on GitHub.</a></p>
                 <div class="hp-hero-actions">
-                    <a href="#tools-section" class="hp-btn-primary"
-                        style="padding: 16px 40px; font-size: 1.1rem;">Process PDFs Privately — Free</a>
+                    <a href="#tools-section" class="hp-btn-primary" id="heroCTA"
+                        style="padding: 16px 40px; font-size: 1.1rem;">Process PDFs — No Uploads</a>
+                    <a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank" class="hp-btn-ghost"
+                        style="font-size:0.95rem;">See the Code on GitHub</a>
                 </div>
                 <div class="hp-hero-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span>Open-source on GitHub · Auditable code · <a href="privacy.html"
+                    <img src="https://img.shields.io/github/stars/Prem736raj/onlinepdfpro?style=social"
+                        alt="GitHub stars" style="height:20px; vertical-align:middle;">
+                    <span style="margin-left:8px;">Open-source · <a href="privacy.html"
                             style="color:#a5f3fc; text-decoration:none;">Privacy Policy</a></span>
                 </div>
             </div>
         </section>
 
-        <!-- STATS BAR -->
+        <!-- HOW IT WORKS - 3 Step Microflow (Point 6) -->
+        <div
+            style="max-width:800px; margin:-20px auto 30px; position:relative; z-index:3; display:grid; grid-template-columns:repeat(3, 1fr); gap:0; background:white; border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,0.08); overflow:hidden;">
+            <div style="padding:24px 16px; text-align:center; border-right:1px solid #f1f5f9;">
+                <div style="font-size:28px; margin-bottom:6px;">1️⃣</div>
+                <strong style="font-size:14px; color:#1e293b; display:block;">Drop your file</strong>
+                <span style="font-size:13px; color:#64748b;">Drag a PDF into any tool</span>
+            </div>
+            <div style="padding:24px 16px; text-align:center; border-right:1px solid #f1f5f9;">
+                <div style="font-size:28px; margin-bottom:6px;">2️⃣</div>
+                <strong style="font-size:14px; color:#1e293b; display:block;">Processed locally</strong>
+                <span style="font-size:13px; color:#64748b;">Runs in your browser, not our server</span>
+            </div>
+            <div style="padding:24px 16px; text-align:center;">
+                <div style="font-size:28px; margin-bottom:6px;">3️⃣</div>
+                <strong style="font-size:14px; color:#1e293b; display:block;">Download result</strong>
+                <span style="font-size:13px; color:#64748b;">File never left your device</span>
+            </div>
+        </div>
+
+        <!-- STATS BAR (Point 2: Verifiable metrics) -->
         <div class="hp-stats" style="grid-template-columns: repeat(3, 1fr);">
             <div class="hp-stat">
                 <div class="hp-stat-icon" style="background:#eff6ff;"><span>📄</span></div>
                 <div class="hp-stat-num" style="color:#2563eb;" id="counter-total">0</div>
-                <div class="hp-stat-label">PDFs Processed Locally</div>
+                <div class="hp-stat-label">PDFs Processed in-Browser</div>
             </div>
             <div class="hp-stat">
-                <div class="hp-stat-icon" style="background:#fffbeb;"><span>⚡</span></div>
-                <div class="hp-stat-num" style="color:#f59e0b;" id="counter-today">0</div>
-                <div class="hp-stat-label">Processed Today</div>
+                <div class="hp-stat-icon" style="background:#f0fdf4;"><span>🔓</span></div>
+                <div class="hp-stat-num" style="color:#10b981;"><a href="https://github.com/Prem736raj/onlinepdfpro"
+                        target="_blank" style="color:inherit; text-decoration:none;">OSS</a></div>
+                <div class="hp-stat-label"><a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank"
+                        style="color:#64748b; text-decoration:underline;">Audit on GitHub</a></div>
             </div>
             <div class="hp-stat">
                 <div class="hp-stat-icon" style="background:#f5f3ff;"><span>🧰</span></div>
@@ -569,21 +592,20 @@
         </div>
         <script defer src="counter.js"></script>
 
-        <!-- TRUST PILLS - Competitive Contrast -->
+        <!-- TRUST PILLS - Linked to Proof (Point 6) -->
         <div class="hp-trust-row">
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🚫</span>
-                <div><strong>Zero Uploads</strong><span>Unlike iLovePDF & SmallPDF</span></div>
+            <a href="https://github.com/Prem736raj/onlinepdfpro" target="_blank" class="hp-trust-pill"
+                style="text-decoration:none; color:inherit;"><span class="hp-trust-pill-icon">🔓</span>
+                <div><strong>Open Source</strong><span style="color:#2563eb;">View code on GitHub →</span></div>
+            </a>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🛡️</span>
+                <div><strong>Client-Side Only</strong><span>Verified: no network requests</span></div>
             </div>
             <div class="hp-trust-pill"><span class="hp-trust-pill-icon">📡</span>
-                <div><strong>Works Offline</strong><span>No internet needed after install</span></div>
+                <div><strong>Works Offline</strong><span>Install as PWA app</span></div>
             </div>
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🔓</span>
-                <div><strong>Open Source</strong><span><a href="https://github.com/Prem736raj/onlinepdfpro"
-                            target="_blank" style="color:#2563eb; text-decoration:none;">Audit the code →</a></span>
-                </div>
-            </div>
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🏠</span>
-                <div><strong>Made in India</strong><span>For Indian documents & speeds</span></div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🇮🇳</span>
+                <div><strong>Made in India</strong><span>For Indian documents</span></div>
             </div>
         </div>
 
@@ -1057,6 +1079,34 @@
     "email": "support@onlinepdfpro.com"
   }
 }
+    </script>
+    <!-- Point 8: Analytics & Event Tracking -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hero CTA click
+            var heroCTA = document.getElementById('heroCTA');
+            if (heroCTA) {
+                heroCTA.addEventListener('click', function () {
+                    if (typeof gtag === 'function') gtag('event', 'hero_cta_click', { event_category: 'engagement', event_label: 'Process PDFs - No Uploads' });
+                });
+            }
+
+            // Tool card opens
+            document.querySelectorAll('.tc-card a, .tc-card').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    var name = card.querySelector('.tc-name') ? card.querySelector('.tc-name').textContent.trim() : 'unknown';
+                    if (typeof gtag === 'function') gtag('event', 'tool_open', { event_category: 'engagement', event_label: name });
+                });
+            });
+
+            // Newsletter signup
+            var nlForm = document.querySelector('form[action*="formspree"]');
+            if (nlForm) {
+                nlForm.addEventListener('submit', function () {
+                    if (typeof gtag === 'function') gtag('event', 'newsletter_signup', { event_category: 'conversion' });
+                });
+            }
+        });
     </script>
 </body>
 
