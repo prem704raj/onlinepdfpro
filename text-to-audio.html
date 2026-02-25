@@ -576,12 +576,7 @@
         
 
     <main class="container">
-        <nav class="breadcrumbs" style="padding: 15px 20px; font-size: 14px; color: #64748b; margin: 0 auto; max-width: 1060px;">
-            <a href="/" style="color: #2563eb; text-decoration: none;">Home</a> &gt; 
-            <a href="/tools.html" style="color: #2563eb; text-decoration: none;">Tools</a> &gt; 
-            <span style="color: #1e293b; font-weight: 500;">Text To Audio PDF</span>
-        </nav>
-        <div class="audio-container">
+<div class="audio-container">
             <h2 style="text-align:center;color:#333;margin:0 0 10px">🎧 Text to Speech &amp; PDF to Audio</h2>
             <p style="text-align:center;color:#666;margin:0 0 30px">Type text, paste content, or upload PDF — Listen
                 with 50+ voices</p>
@@ -831,32 +826,6 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
     });
-}
-</script>
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-        {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://onlinepdfpro.com"
-        },
-        {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Tools",
-            "item": "https://onlinepdfpro.com/tools.html"
-        },
-        {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Text To Audio PDF"
-        }
-    ]
 }
 </script>
 </body>
