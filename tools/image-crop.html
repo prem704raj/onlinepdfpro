@@ -69,6 +69,15 @@
     <!-- Google AdSense Head -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
     
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
+    </script>
 </head>
 
 <body class="fade-in">
@@ -134,6 +143,13 @@
             </div>
         </div>
     </header>
+
+        <nav class="breadcrumbs" style="padding: 15px 20px; font-size: 14px; color: #64748b; margin: 0 auto; max-width: 1060px;">
+            <a href="/" style="color: #2563eb; text-decoration: none;">Home</a> &gt; 
+            <a href="/tools.html" style="color: #2563eb; text-decoration: none;">Tools</a> &gt; 
+            <span style="color: #1e293b; font-weight: 500;">Image Crop PDF</span>
+        </nav>
+
 
     <main id="main" class="tool-page">
         <div class="container" style="max-width: 800px;">
@@ -483,6 +499,25 @@
         </div>
     </section>
 
+    
+    <section class="related-tools" style="margin: 40px auto; padding: 0 20px; max-width: 1060px;">
+        <h2 style="font-size: 22px; color: #1e293b; margin-bottom: 20px;">Related PDF Tools</h2>
+        <div class="tools-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <a href="/tools/split-pdf.html" style="display: block; padding: 20px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
+                <h3 style="margin: 0 0 8px; color: #2563eb; font-size: 18px;">Split PDF</h3>
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Extract pages from PDF files</p>
+            </a>
+            <a href="/tools/compress-pdf.html" style="display: block; padding: 20px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
+                <h3 style="margin: 0 0 8px; color: #2563eb; font-size: 18px;">Compress PDF</h3>
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Reduce PDF file size</p>
+            </a>
+            <a href="/tools/pdf-to-word.html" style="display: block; padding: 20px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
+                <h3 style="margin: 0 0 8px; color: #2563eb; font-size: 18px;">PDF to Word</h3>
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Convert PDF to DOCX</p>
+            </a>
+        </div>
+    </section>
+
     <section class="faq-section" style="margin: 40px 0;">
         <h2 style="font-size: 22px; color: #1e293b; margin-bottom: 20px;">Frequently Asked Questions</h2>
         
@@ -595,6 +630,32 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
     });
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinepdfpro.com"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Tools",
+            "item": "https://onlinepdfpro.com/tools.html"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Image Crop PDF"
+        }
+    ]
 }
 </script>
 </body>
