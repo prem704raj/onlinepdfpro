@@ -163,7 +163,8 @@
                         <ul class="lang-list"></ul>
                     </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
                     <span class="theme-icon-light">🌙</span>
                     <span class="theme-icon-dark">☀️</span>
                 </button>
@@ -530,12 +531,12 @@
         <!-- HERO -->
         <section class="hp-hero">
             <div class="container">
-                <h1>Your Files <span>Never Leave</span> Your Device.</h1>
-                <p>The only PDF toolkit that processes everything inside your browser. Zero uploads. Zero servers. Zero
-                    risk. Trusted by 100,000+ users across India.</p>
+                <h1>Stop Uploading Sensitive Files<br>to <span>Unknown Servers.</span></h1>
+                <p>A privacy-first PDF toolkit that runs entirely in your browser. Your Aadhaar, PAN, contracts, and
+                    assignments never touch a server. Ever.</p>
                 <div class="hp-hero-actions">
-                    <a href="#tools-section" class="hp-btn-primary" style="padding: 16px 40px; font-size: 1.1rem;">Start
-                        Using Tools — It's Free</a>
+                    <a href="#tools-section" class="hp-btn-primary"
+                        style="padding: 16px 40px; font-size: 1.1rem;">Process PDFs Privately — Free</a>
                 </div>
                 <div class="hp-hero-badge">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -549,21 +550,16 @@
         </section>
 
         <!-- STATS BAR -->
-        <div class="hp-stats">
+        <div class="hp-stats" style="grid-template-columns: repeat(3, 1fr);">
             <div class="hp-stat">
                 <div class="hp-stat-icon" style="background:#eff6ff;"><span>📄</span></div>
                 <div class="hp-stat-num" style="color:#2563eb;" id="counter-total">0</div>
-                <div class="hp-stat-label">PDFs Processed</div>
-            </div>
-            <div class="hp-stat">
-                <div class="hp-stat-icon" style="background:#ecfdf5;"><span>👥</span></div>
-                <div class="hp-stat-num" style="color:#10b981;" id="counter-users">0</div>
-                <div class="hp-stat-label">Happy Users</div>
+                <div class="hp-stat-label">PDFs Processed Locally</div>
             </div>
             <div class="hp-stat">
                 <div class="hp-stat-icon" style="background:#fffbeb;"><span>⚡</span></div>
                 <div class="hp-stat-num" style="color:#f59e0b;" id="counter-today">0</div>
-                <div class="hp-stat-label">PDFs Today</div>
+                <div class="hp-stat-label">Processed Today</div>
             </div>
             <div class="hp-stat">
                 <div class="hp-stat-icon" style="background:#f5f3ff;"><span>🧰</span></div>
@@ -573,19 +569,21 @@
         </div>
         <script defer src="counter.js"></script>
 
-        <!-- TRUST PILLS -->
+        <!-- TRUST PILLS - Competitive Contrast -->
         <div class="hp-trust-row">
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🔒</span>
-                <div><strong>100% Secure</strong><span>Files never leave your device</span></div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🚫</span>
+                <div><strong>Zero Uploads</strong><span>Unlike iLovePDF & SmallPDF</span></div>
             </div>
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">⚡</span>
-                <div><strong>Lightning Fast</strong><span>Instant browser processing</span></div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">📡</span>
+                <div><strong>Works Offline</strong><span>No internet needed after install</span></div>
             </div>
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🆓</span>
-                <div><strong>Free Forever</strong><span>No signup, no limits</span></div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🔓</span>
+                <div><strong>Open Source</strong><span><a href="https://github.com/Prem736raj/onlinepdfpro"
+                            target="_blank" style="color:#2563eb; text-decoration:none;">Audit the code →</a></span>
+                </div>
             </div>
-            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">📱</span>
-                <div><strong>Works Everywhere</strong><span>Mobile, tablet &amp; desktop</span></div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🏠</span>
+                <div><strong>Made in India</strong><span>For Indian documents & speeds</span></div>
             </div>
         </div>
 
@@ -798,87 +796,106 @@
                     style="font-size:1rem; padding:14px 36px;">View All 30+ Tools →</a></div>
         </div>
 
-        <!-- WHY ONLINEPDFPRO - DIFFERENTIATOR (Point 3, 6, 14) -->
-        <section style="max-width:1060px; margin:60px auto 0; padding:0 20px;">
-            <div style="text-align:center; margin-bottom:40px;">
-                <h2 style="font-size:28px; font-weight:800; color:#1e293b; margin:0 0 12px;">Why Choose OnlinePDFPro?
-                </h2>
-                <p style="font-size:16px; color:#64748b; max-width:600px; margin:0 auto;">We're not just another PDF
-                    tool. Here's what makes us fundamentally different.</p>
+        <!-- COMPETITIVE COMPARISON (Point 6: Contrast Framing) -->
+        <section style="max-width:900px; margin:60px auto 0; padding:0 20px;">
+            <div style="text-align:center; margin-bottom:30px;">
+                <h2 style="font-size:24px; font-weight:800; color:#1e293b; margin:0 0 8px;">How We're Different</h2>
+                <p style="font-size:15px; color:#64748b;">Most PDF websites upload your files to their servers. We
+                    don't.</p>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
-                <div style="padding:30px; background:#f0f9ff; border-radius:16px; border:1px solid #dbeafe;">
-                    <div style="font-size:32px; margin-bottom:12px;">🔐</div>
-                    <h3 style="font-size:18px; color:#1e293b; margin:0 0 8px;">Zero-Upload Architecture</h3>
-                    <p style="font-size:14px; color:#64748b; line-height:1.7; margin:0;">Unlike iLovePDF or SmallPDF,
-                        your files are <strong>never uploaded</strong> to any server. Everything runs inside your
-                        browser using WebAssembly. Even your ISP can't see your documents.</p>
-                </div>
-                <div style="padding:30px; background:#f0fdf4; border-radius:16px; border:1px solid #bbf7d0;">
-                    <div style="font-size:32px; margin-bottom:12px;">⚡</div>
-                    <h3 style="font-size:18px; color:#1e293b; margin:0 0 8px;">Works Offline (PWA)</h3>
-                    <p style="font-size:14px; color:#64748b; line-height:1.7; margin:0;">Install as a native app on your
-                        phone or laptop. Process PDFs even without internet. No other free PDF tool offers this level of
-                        availability.</p>
-                </div>
-                <div style="padding:30px; background:#faf5ff; border-radius:16px; border:1px solid #e9d5ff;">
-                    <div style="font-size:32px; margin-bottom:12px;">🇮🇳</div>
-                    <h3 style="font-size:18px; color:#1e293b; margin:0 0 8px;">Built for India</h3>
-                    <p style="font-size:14px; color:#64748b; line-height:1.7; margin:0;">Optimized for Indian internet
-                        speeds. Works perfectly on ₹8,000 phones. Supports Aadhaar PDF handling, Hindi OCR, and Indian
-                        document formats.</p>
-                </div>
+            <div style="overflow-x:auto;">
+                <table
+                    style="width:100%; border-collapse:collapse; background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.06); font-size:15px;">
+                    <thead>
+                        <tr style="background:#f8fafc;">
+                            <th
+                                style="padding:16px 20px; text-align:left; color:#64748b; font-weight:600; border-bottom:1px solid #e2e8f0;">
+                            </th>
+                            <th
+                                style="padding:16px 20px; text-align:center; color:#2563eb; font-weight:700; border-bottom:1px solid #e2e8f0;">
+                                OnlinePDFPro</th>
+                            <th
+                                style="padding:16px 20px; text-align:center; color:#94a3b8; font-weight:600; border-bottom:1px solid #e2e8f0;">
+                                iLovePDF / SmallPDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td
+                                style="padding:14px 20px; border-bottom:1px solid #f1f5f9; font-weight:500; color:#334155;">
+                                File uploads to server</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#10b981; font-weight:700;">
+                                Never ✅</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#ef4444;">
+                                Always ❌</td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="padding:14px 20px; border-bottom:1px solid #f1f5f9; font-weight:500; color:#334155;">
+                                Works offline</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#10b981; font-weight:700;">
+                                Yes ✅</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#ef4444;">
+                                No ❌</td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="padding:14px 20px; border-bottom:1px solid #f1f5f9; font-weight:500; color:#334155;">
+                                Open-source code</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#10b981; font-weight:700;">
+                                Yes ✅</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#ef4444;">
+                                No ❌</td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="padding:14px 20px; border-bottom:1px solid #f1f5f9; font-weight:500; color:#334155;">
+                                Free file limit</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#10b981; font-weight:700;">
+                                Unlimited ✅</td>
+                            <td
+                                style="padding:14px 20px; text-align:center; border-bottom:1px solid #f1f5f9; color:#f59e0b;">
+                                2-3/day 🔒</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:14px 20px; font-weight:500; color:#334155;">Signup required</td>
+                            <td style="padding:14px 20px; text-align:center; color:#10b981; font-weight:700;">Never ✅
+                            </td>
+                            <td style="padding:14px 20px; text-align:center; color:#ef4444;">Often ❌</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
-        <!-- TESTIMONIALS / SOCIAL PROOF (Point 6) -->
-        <section style="max-width:1060px; margin:60px auto 0; padding:0 20px;">
-            <div style="text-align:center; margin-bottom:30px;">
-                <h2 style="font-size:24px; font-weight:800; color:#1e293b; margin:0 0 8px;">💬 What Users Say</h2>
-                <p style="font-size:14px; color:#94a3b8;">Real feedback from students and professionals across India</p>
-            </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
-                <div
-                    style="padding:24px; background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                    <div style="display:flex; gap:4px; margin-bottom:12px; color:#f59e0b;">⭐⭐⭐⭐⭐</div>
-                    <p style="font-size:15px; color:#334155; line-height:1.6; margin:0 0 16px;">"Finally a PDF tool that
-                        doesn't upload my Aadhaar and PAN documents to unknown servers. I use this daily for my CA
-                        practice."</p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div
-                            style="width:36px; height:36px; border-radius:50%; background:#dbeafe; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2563eb; font-size:14px;">
-                            R</div>
-                        <div><strong style="font-size:14px; color:#1e293b;">Rahul S.</strong><br><span
-                                style="font-size:12px; color:#94a3b8;">CA Student, Mumbai</span></div>
-                    </div>
-                </div>
-                <div
-                    style="padding:24px; background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                    <div style="display:flex; gap:4px; margin-bottom:12px; color:#f59e0b;">⭐⭐⭐⭐⭐</div>
-                    <p style="font-size:15px; color:#334155; line-height:1.6; margin:0 0 16px;">"I compress 50+ PDF
-                        assignments every week. This works even on my 2G connection because nothing gets uploaded.
-                        Brilliant!"</p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div
-                            style="width:36px; height:36px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; font-weight:700; color:#16a34a; font-size:14px;">
-                            P</div>
-                        <div><strong style="font-size:14px; color:#1e293b;">Priya K.</strong><br><span
-                                style="font-size:12px; color:#94a3b8;">Engineering Student, Pune</span></div>
-                    </div>
-                </div>
-                <div
-                    style="padding:24px; background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                    <div style="display:flex; gap:4px; margin-bottom:12px; color:#f59e0b;">⭐⭐⭐⭐⭐</div>
-                    <p style="font-size:15px; color:#334155; line-height:1.6; margin:0 0 16px;">"Our law firm handles
-                        sensitive contracts. The fact that this tool runs 100% locally was verified by our IT team.
-                        We've switched from Adobe."</p>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div
-                            style="width:36px; height:36px; border-radius:50%; background:#fef3c7; display:flex; align-items:center; justify-content:center; font-weight:700; color:#d97706; font-size:14px;">
-                            A</div>
-                        <div><strong style="font-size:14px; color:#1e293b;">Adv. Mehra</strong><br><span
-                                style="font-size:12px; color:#94a3b8;">Legal Professional, Delhi</span></div>
-                    </div>
+        <!-- WHY WE BUILT THIS - Origin Story (Point 5) -->
+        <section style="max-width:700px; margin:60px auto 0; padding:0 20px;">
+            <div style="padding:36px; background:#f8fafc; border-radius:16px; border:1px solid #e2e8f0;">
+                <h2 style="font-size:20px; font-weight:700; color:#1e293b; margin:0 0 16px;">📖 Why We Built This</h2>
+                <p style="font-size:15px; color:#475569; line-height:1.8; margin:0 0 12px;">Every time I needed to merge
+                    a PDF for college, I had to upload my Aadhaar, marksheets, and personal documents to some random
+                    server — and just <em>hope</em> they'd delete them.</p>
+                <p style="font-size:15px; color:#475569; line-height:1.8; margin:0 0 12px;">So I built OnlinePDFPro.
+                    Every tool runs entirely in your browser using PDF.js and pdf-lib. Your files never leave your
+                    device. Not even for a millisecond.</p>
+                <p style="font-size:15px; color:#475569; line-height:1.8; margin:0 0 16px;">The entire codebase is
+                    open-source. You can inspect every line. That's the level of transparency I wish existed when I was
+                    searching for PDF tools.</p>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div
+                        style="width:40px; height:40px; border-radius:50%; background:#dbeafe; display:flex; align-items:center; justify-content:center; font-weight:700; color:#2563eb; font-size:16px;">
+                        P</div>
+                    <div><strong style="font-size:14px; color:#1e293b;">Prem Raj</strong><br><span
+                            style="font-size:13px; color:#94a3b8;">Creator, OnlinePDFPro · <a
+                                href="https://github.com/Prem736raj/onlinepdfpro" target="_blank"
+                                style="color:#2563eb; text-decoration:none;">View on GitHub →</a></span></div>
                 </div>
             </div>
         </section>
@@ -888,8 +905,8 @@
             <div
                 style="padding:40px; background:linear-gradient(135deg, #1e3a5f, #2563eb); border-radius:20px; color:white;">
                 <h2 style="font-size:24px; font-weight:800; margin:0 0 8px;">📬 Get New Tools & Tips</h2>
-                <p style="font-size:15px; opacity:0.85; margin:0 0 24px;">Join 5,000+ Indian students and professionals.
-                    We'll email you when we launch new tools.</p>
+                <p style="font-size:15px; opacity:0.85; margin:0 0 24px;">Get notified when we launch new tools. No
+                    spam, just updates.</p>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST"
                     style="display:flex; gap:10px; max-width:450px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
                     <input type="email" name="email" placeholder="Your email address" required
