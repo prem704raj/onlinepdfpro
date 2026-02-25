@@ -166,658 +166,617 @@
         </div>
     </header>
 
-<!-- Homepage Scoped Styles -->
-<style>
-    .hp-hero {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
-        color: white;
-        padding: 80px 20px 60px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
+    <!-- Homepage Scoped Styles -->
+    <style>
+        .hp-hero {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
+            color: white;
+            padding: 80px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .hp-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-        pointer-events: none;
-    }
+        .hp-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
 
-    .hp-hero h1 {
-        font-size: clamp(2rem, 5vw, 3.2rem);
-        font-weight: 800;
-        margin: 0 0 16px;
-        line-height: 1.15;
-    }
+        .hp-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            margin: 0 0 16px;
+            line-height: 1.15;
+        }
 
-    .hp-hero h1 span {
-        color: #a5f3fc;
-    }
+        .hp-hero h1 span {
+            color: #a5f3fc;
+        }
 
-    .hp-hero p {
-        font-size: clamp(1rem, 2.5vw, 1.2rem);
-        opacity: 0.9;
-        max-width: 600px;
-        margin: 0 auto 32px;
-        line-height: 1.6;
-    }
+        .hp-hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 32px;
+            line-height: 1.6;
+        }
 
-    .hp-hero-actions {
-        display: flex;
-        gap: 14px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 30px;
-    }
+        .hp-hero-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
 
-    .hp-hero-actions a {
-        padding: 14px 32px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: all 0.25s;
-    }
+        .hp-hero-actions a {
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
 
-    .hp-btn-primary {
-        background: white;
-        color: #2563eb;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    }
+        .hp-btn-primary {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
 
-    .hp-btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    }
+        .hp-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
 
-    .hp-btn-ghost {
-        background: rgba(255, 255, 255, 0.12);
-        color: white;
-        border: 1.5px solid rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(4px);
-    }
+        .hp-btn-ghost {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
 
-    .hp-btn-ghost:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
+        .hp-btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-    .hp-hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50px;
-        font-size: 0.85rem;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(4px);
-    }
+        .hp-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+        }
 
-    .hp-hero-badge svg {
-        color: #34d399;
-        flex-shrink: 0;
-    }
+        .hp-hero-badge svg {
+            color: #34d399;
+            flex-shrink: 0;
+        }
 
-    .hp-stats {
-        max-width: 900px;
-        margin: -40px auto 0;
-        padding: 28px 30px;
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-        position: relative;
-        z-index: 2;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    }
-
-    .hp-stat {
-        text-align: center;
-    }
-
-    .hp-stat-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 10px;
-        font-size: 20px;
-    }
-
-    .hp-stat-num {
-        font-size: 28px;
-        font-weight: 800;
-        line-height: 1;
-    }
-
-    .hp-stat-label {
-        font-size: 13px;
-        color: #64748b;
-        font-weight: 600;
-        margin-top: 4px;
-    }
-
-    @media (max-width: 600px) {
         .hp-stats {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: -30px;
-            padding: 22px;
+            max-width: 900px;
+            margin: -40px auto 0;
+            padding: 28px 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .hp-stat {
+            text-align: center;
+        }
+
+        .hp-stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 20px;
         }
 
         .hp-stat-num {
-            font-size: 24px;
-        }
-    }
-
-    .hp-trust-row {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-        flex-wrap: wrap;
-        margin: 40px auto;
-        max-width: 900px;
-        padding: 0 15px;
-    }
-
-    .hp-trust-pill {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 22px;
-        background: white;
-        border-radius: 60px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        border: 1px solid #f1f5f9;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .hp-trust-pill:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .hp-trust-pill-icon {
-        font-size: 22px;
-        flex-shrink: 0;
-    }
-
-    .hp-trust-pill strong {
-        font-size: 14px;
-        color: #1e293b;
-        display: block;
-    }
-
-    .hp-trust-pill span {
-        font-size: 12px;
-        color: #64748b;
-    }
-
-    .hp-section {
-        max-width: 1060px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    .hp-section-head {
-        margin: 50px 0 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .hp-section-head-line {
-        flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, #e2e8f0, transparent);
-    }
-
-    .hp-section-head h2 {
-        font-size: 20px;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0;
-        white-space: nowrap;
-    }
-
-    .hp-tag {
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .hp-tools-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-        gap: 16px;
-    }
-
-    .hp-tool-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 28px 18px 22px;
-        background: white;
-        border-radius: 16px;
-        text-decoration: none;
-        color: inherit;
-        border: 1.5px solid #f1f5f9;
-        transition: all 0.25s;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hp-tool-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-        border-color: transparent;
-    }
-
-    .hp-tool-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        border-radius: 16px 16px 0 0;
-        opacity: 0;
-        transition: opacity 0.25s;
-    }
-
-    .hp-tool-card:hover::before {
-        opacity: 1;
-    }
-
-    .hp-tool-card-icon {
-        font-size: 34px;
-        margin-bottom: 12px;
-    }
-
-    .hp-tool-card h3 {
-        font-size: 15px;
-        font-weight: 700;
-        margin: 0 0 6px;
-        color: #1e293b;
-    }
-
-    .hp-tool-card p {
-        font-size: 13px;
-        color: #64748b;
-        margin: 0;
-        line-height: 1.5;
-    }
-
-    .hp-tool-card[data-accent="blue"]::before {
-        background: #2563eb;
-    }
-
-    .hp-tool-card[data-accent="green"]::before {
-        background: #10b981;
-    }
-
-    .hp-tool-card[data-accent="orange"]::before {
-        background: #f59e0b;
-    }
-
-    .hp-tool-card[data-accent="red"]::before {
-        background: #ef4444;
-    }
-
-    .hp-tool-card[data-accent="purple"]::before {
-        background: #8b5cf6;
-    }
-
-    .hp-tool-card[data-accent="sky"]::before {
-        background: #0ea5e9;
-    }
-
-    .hp-tool-card[data-accent="rose"]::before {
-        background: #f43f5e;
-    }
-
-    .hp-cta {
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
-        color: white;
-        text-align: center;
-        padding: 60px 20px;
-        margin-top: 60px;
-        border-radius: 24px;
-        max-width: 1060px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hp-cta h2 {
-        font-size: clamp(1.4rem, 3vw, 2rem);
-        font-weight: 800;
-        margin: 0 0 8px;
-    }
-
-    .hp-cta p {
-        opacity: 0.85;
-        margin: 0 0 28px;
-        font-size: 1.05rem;
-    }
-
-    .hp-cta a {
-        display: inline-block;
-        padding: 16px 40px;
-        background: white;
-        color: #2563eb;
-        font-weight: 700;
-        font-size: 1.05rem;
-        border-radius: 14px;
-        text-decoration: none;
-        transition: all 0.25s;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .hp-cta a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    @keyframes blink {
-
-        0%,
-        100% {
-            opacity: 1
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
         }
 
-        50% {
-            opacity: 0.3
+        .hp-stat-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            margin-top: 4px;
         }
-    }
-</style>
 
-<main id="main">
-    <!-- HERO -->
-    <section class="hp-hero">
-        <div class="container">
-            <h1>Free PDF Tools,<br><span>100% Private.</span></h1>
-            <p>Compress, merge, split, and convert documents right in your browser. No uploads, no servers — just
-                results.</p>
-            <div class="hp-hero-actions">
-                <a href="tools.html" class="hp-btn-primary">Explore All Tools</a>
-                <a href="#tools-section" class="hp-btn-ghost">See What's Possible ↓</a>
+        @media (max-width: 600px) {
+            .hp-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                margin-top: -30px;
+                padding: 22px;
+            }
+
+            .hp-stat-num {
+                font-size: 24px;
+            }
+        }
+
+        .hp-trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 0 15px;
+        }
+
+        .hp-trust-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            background: white;
+            border-radius: 60px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hp-trust-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hp-trust-pill-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .hp-trust-pill strong {
+            font-size: 14px;
+            color: #1e293b;
+            display: block;
+        }
+
+        .hp-trust-pill span {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .hp-section {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hp-section-head {
+            margin: 50px 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hp-section-head-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, #e2e8f0, transparent);
+        }
+
+        .hp-section-head h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .hp-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hp-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
+        }
+
+        .hp-tool-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 28px 18px 22px;
+            background: white;
+            border-radius: 16px;
+            text-decoration: none;
+            color: inherit;
+            border: 1.5px solid #f1f5f9;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hp-tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
+        }
+
+        .hp-tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .hp-tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .hp-tool-card-icon {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .hp-tool-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0 0 6px;
+            color: #1e293b;
+        }
+
+        .hp-tool-card p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .hp-tool-card[data-accent="blue"]::before {
+            background: #2563eb;
+        }
+
+        .hp-tool-card[data-accent="green"]::before {
+            background: #10b981;
+        }
+
+        .hp-tool-card[data-accent="orange"]::before {
+            background: #f59e0b;
+        }
+
+        .hp-tool-card[data-accent="red"]::before {
+            background: #ef4444;
+        }
+
+        .hp-tool-card[data-accent="purple"]::before {
+            background: #8b5cf6;
+        }
+
+        .hp-tool-card[data-accent="sky"]::before {
+            background: #0ea5e9;
+        }
+
+        .hp-tool-card[data-accent="rose"]::before {
+            background: #f43f5e;
+        }
+
+
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.3
+            }
+        }
+    </style>
+
+    <main id="main">
+        <!-- HERO -->
+        <section class="hp-hero">
+            <div class="container">
+                <h1>Free PDF Tools,<br><span>100% Private.</span></h1>
+                <p>Compress, merge, split, and convert documents right in your browser. No uploads, no servers — just
+                    results.</p>
+                <div class="hp-hero-actions">
+                    <a href="tools.html" class="hp-btn-primary">Explore All Tools</a>
+                    <a href="#tools-section" class="hp-btn-ghost">See What's Possible ↓</a>
+                </div>
+                <div class="hp-hero-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Your files never leave your device · <a href="privacy.html"
+                            style="color:#a5f3fc; text-decoration:none;">Privacy Policy</a></span>
+                </div>
             </div>
-            <div class="hp-hero-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <span>Your files never leave your device · <a href="privacy.html"
-                        style="color:#a5f3fc; text-decoration:none;">Privacy Policy</a></span>
+        </section>
+
+        <!-- STATS BAR -->
+        <div class="hp-stats">
+            <div class="hp-stat">
+                <div class="hp-stat-icon" style="background:#eff6ff;"><span>📄</span></div>
+                <div class="hp-stat-num" style="color:#2563eb;" id="counter-total">0</div>
+                <div class="hp-stat-label">PDFs Processed</div>
+            </div>
+            <div class="hp-stat">
+                <div class="hp-stat-icon" style="background:#ecfdf5;"><span>👥</span></div>
+                <div class="hp-stat-num" style="color:#10b981;" id="counter-users">0</div>
+                <div class="hp-stat-label">Happy Users</div>
+            </div>
+            <div class="hp-stat">
+                <div class="hp-stat-icon" style="background:#fffbeb;"><span>⚡</span></div>
+                <div class="hp-stat-num" style="color:#f59e0b;" id="counter-today">0</div>
+                <div class="hp-stat-label">PDFs Today</div>
+            </div>
+            <div class="hp-stat">
+                <div class="hp-stat-icon" style="background:#f5f3ff;"><span>🧰</span></div>
+                <div class="hp-stat-num" style="color:#8b5cf6;">30+</div>
+                <div class="hp-stat-label">Free Tools</div>
             </div>
         </div>
-    </section>
+        <script src="counter.js"></script>
 
-    <!-- STATS BAR -->
-    <div class="hp-stats">
-        <div class="hp-stat">
-            <div class="hp-stat-icon" style="background:#eff6ff;"><span>📄</span></div>
-            <div class="hp-stat-num" style="color:#2563eb;" id="counter-total">0</div>
-            <div class="hp-stat-label">PDFs Processed</div>
-        </div>
-        <div class="hp-stat">
-            <div class="hp-stat-icon" style="background:#ecfdf5;"><span>👥</span></div>
-            <div class="hp-stat-num" style="color:#10b981;" id="counter-users">0</div>
-            <div class="hp-stat-label">Happy Users</div>
-        </div>
-        <div class="hp-stat">
-            <div class="hp-stat-icon" style="background:#fffbeb;"><span>⚡</span></div>
-            <div class="hp-stat-num" style="color:#f59e0b;" id="counter-today">0</div>
-            <div class="hp-stat-label">PDFs Today</div>
-        </div>
-        <div class="hp-stat">
-            <div class="hp-stat-icon" style="background:#f5f3ff;"><span>🧰</span></div>
-            <div class="hp-stat-num" style="color:#8b5cf6;">30+</div>
-            <div class="hp-stat-label">Free Tools</div>
-        </div>
-    </div>
-    <script src="counter.js"></script>
-
-    <!-- TRUST PILLS -->
-    <div class="hp-trust-row">
-        <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🔒</span>
-            <div><strong>100% Secure</strong><span>Files never leave your device</span></div>
-        </div>
-        <div class="hp-trust-pill"><span class="hp-trust-pill-icon">⚡</span>
-            <div><strong>Lightning Fast</strong><span>Instant browser processing</span></div>
-        </div>
-        <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🆓</span>
-            <div><strong>Free Forever</strong><span>No signup, no limits</span></div>
-        </div>
-        <div class="hp-trust-pill"><span class="hp-trust-pill-icon">📱</span>
-            <div><strong>Works Everywhere</strong><span>Mobile, tablet &amp; desktop</span></div>
-        </div>
-    </div>
-
-    <!-- AD SLOT -->
-    <div style="text-align:center; margin:30px 0;"><ins class="adsbygoogle" style="display:block"
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <!-- TOOLS SECTION -->
-    <div class="hp-section" id="tools-section">
-
-        <!-- Essential PDF Tools -->
-        <div class="hp-section-head">
-            <h2>📌 Essential PDF Tools</h2><span class="hp-tag" style="background:#eff6ff; color:#2563eb;">Core</span>
-            <div class="hp-section-head-line"></div>
-        </div>
-        <div class="hp-tools-grid">
-            <a href="tools/compress-pdf.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">📦</span>
-                <h3>Compress PDF</h3>
-                <p>Reduce file size up to 80%</p>
-            </a>
-            <a href="tools/merge-pdf.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">📎</span>
-                <h3>Merge PDF</h3>
-                <p>Combine multiple PDFs into one</p>
-            </a>
-            <a href="tools/split-pdf.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">✂️</span>
-                <h3>Split PDF</h3>
-                <p>Extract pages or split into files</p>
-            </a>
-            <a href="pdf-editor.html" class="hp-tool-card" data-accent="orange"><span
-                    class="hp-tool-card-icon">✏️</span>
-                <h3>PDF Editor</h3>
-                <p>Edit text, images, draw &amp; highlight</p>
-            </a>
-            <a href="pdf-reader.html" class="hp-tool-card" data-accent="rose"><span class="hp-tool-card-icon">📖</span>
-                <h3>PDF Reader</h3>
-                <p>Fast in-browser viewer with search</p>
-            </a>
-            <a href="tools/sign-pdf.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">✍️</span>
-                <h3>Sign PDF</h3>
-                <p>Draw or type your e-signature</p>
-            </a>
-            <a href="tools/pdf-lock.html" class="hp-tool-card" data-accent="red"><span
-                    class="hp-tool-card-icon">🔒</span>
-                <h3>PDF Lock</h3>
-                <p>Password-protect your files</p>
-            </a>
-            <a href="tools/repair-pdf.html" class="hp-tool-card" data-accent="green"><span
-                    class="hp-tool-card-icon">🔧</span>
-                <h3>Repair PDF</h3>
-                <p>Fix corrupted or broken PDFs</p>
-            </a>
+        <!-- TRUST PILLS -->
+        <div class="hp-trust-row">
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🔒</span>
+                <div><strong>100% Secure</strong><span>Files never leave your device</span></div>
+            </div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">⚡</span>
+                <div><strong>Lightning Fast</strong><span>Instant browser processing</span></div>
+            </div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">🆓</span>
+                <div><strong>Free Forever</strong><span>No signup, no limits</span></div>
+            </div>
+            <div class="hp-trust-pill"><span class="hp-trust-pill-icon">📱</span>
+                <div><strong>Works Everywhere</strong><span>Mobile, tablet &amp; desktop</span></div>
+            </div>
         </div>
 
-        <!-- Convert -->
-        <div class="hp-section-head">
-            <h2>🔄 Convert</h2><span class="hp-tag" style="background:#fef3c7; color:#b45309;">Format</span>
-            <div class="hp-section-head-line"></div>
-        </div>
-        <div class="hp-tools-grid">
-            <a href="tools/pdf-to-word.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">📄</span>
-                <h3>PDF to Word</h3>
-                <p>Extract text to editable DOCX</p>
-            </a>
-            <a href="tools/word-to-pdf.html" class="hp-tool-card" data-accent="red"><span
-                    class="hp-tool-card-icon">📝</span>
-                <h3>Word to PDF</h3>
-                <p>Convert Word documents instantly</p>
-            </a>
-            <a href="tools/excel-to-pdf.html" class="hp-tool-card" data-accent="green"><span
-                    class="hp-tool-card-icon">📊</span>
-                <h3>Excel to PDF</h3>
-                <p>Spreadsheets to PDF with tables</p>
-            </a>
-            <a href="tools/pdf-to-excel.html" class="hp-tool-card" data-accent="green"><span
-                    class="hp-tool-card-icon">📊</span>
-                <h3>PDF to Excel</h3>
-                <p>Extract tables to .xlsx format</p>
-            </a>
-            <a href="tools/ppt-to-pdf.html" class="hp-tool-card" data-accent="orange"><span
-                    class="hp-tool-card-icon">📽️</span>
-                <h3>PPT to PDF</h3>
-                <p>Slides to PDF pages instantly</p>
-            </a>
-            <a href="tools/pdf-to-ppt.html" class="hp-tool-card" data-accent="orange"><span
-                    class="hp-tool-card-icon">📽️</span>
-                <h3>PDF to PPT</h3>
-                <p>Pages to editable PowerPoint</p>
-            </a>
-            <a href="tools/pdf-to-images.html" class="hp-tool-card" data-accent="sky"><span
-                    class="hp-tool-card-icon">🖼️</span>
-                <h3>PDF to Images</h3>
-                <p>Convert pages to JPG or PNG</p>
-            </a>
-            <a href="tools/images-to-pdf.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">📑</span>
-                <h3>Images to PDF</h3>
-                <p>Create PDF from your photos</p>
-            </a>
-            <a href="tools/html-to-pdf.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">🌐</span>
-                <h3>HTML to PDF</h3>
-                <p>Code editor with live preview</p>
-            </a>
+        <!-- AD SLOT -->
+        <div style="text-align:center; margin:30px 0;"><ins class="adsbygoogle" style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
 
-        <!-- Edit & Organize -->
-        <div class="hp-section-head">
-            <h2>🛠️ Edit &amp; Organize</h2><span class="hp-tag"
-                style="background:#f0fdf4; color:#059669;">Modify</span>
-            <div class="hp-section-head-line"></div>
-        </div>
-        <div class="hp-tools-grid">
-            <a href="tools/crop-pdf.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">✂️</span>
-                <h3>Crop PDF</h3>
-                <p>Visual crop with precision controls</p>
-            </a>
-            <a href="tools/delete-pages.html" class="hp-tool-card" data-accent="red"><span
-                    class="hp-tool-card-icon">🗑️</span>
-                <h3>Delete Pages</h3>
-                <p>Select and remove unwanted pages</p>
-            </a>
-            <a href="tools/add-page-numbers.html" class="hp-tool-card" data-accent="blue"><span
-                    class="hp-tool-card-icon">#️⃣</span>
-                <h3>Add Page Numbers</h3>
-                <p>Professional page numbering</p>
-            </a>
-            <a href="flatten-pdf.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">📄</span>
-                <h3>Flatten PDF</h3>
-                <p>Remove forms &amp; make non-editable</p>
-            </a>
-            <a href="tools/image-compress.html" class="hp-tool-card" data-accent="green"><span
-                    class="hp-tool-card-icon">🗜️</span>
-                <h3>Image Compress</h3>
-                <p>Optimize JPG &amp; PNG in bulk</p>
-            </a>
-            <a href="pdf-bookmark.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">📑</span>
-                <h3>PDF Bookmarks</h3>
-                <p>Add TOC &amp; navigation to PDFs</p>
-            </a>
-            <a href="compare-pdf.html" class="hp-tool-card" data-accent="purple"><span
-                    class="hp-tool-card-icon">🔍</span>
-                <h3>Compare PDFs</h3>
-                <p>Side-by-side diff highlighting</p>
-            </a>
-            <a href="qr-pdf.html" class="hp-tool-card" data-accent="blue"><span class="hp-tool-card-icon">📱</span>
-                <h3>QR Code to PDF</h3>
-                <p>Insert scannable QR codes</p>
-            </a>
+        <!-- TOOLS SECTION -->
+        <div class="hp-section" id="tools-section">
+
+            <!-- Essential PDF Tools -->
+            <div class="hp-section-head">
+                <h2>📌 Essential PDF Tools</h2><span class="hp-tag"
+                    style="background:#eff6ff; color:#2563eb;">Core</span>
+                <div class="hp-section-head-line"></div>
+            </div>
+            <div class="hp-tools-grid">
+                <a href="tools/compress-pdf.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">📦</span>
+                    <h3>Compress PDF</h3>
+                    <p>Reduce file size up to 80%</p>
+                </a>
+                <a href="tools/merge-pdf.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">📎</span>
+                    <h3>Merge PDF</h3>
+                    <p>Combine multiple PDFs into one</p>
+                </a>
+                <a href="tools/split-pdf.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">✂️</span>
+                    <h3>Split PDF</h3>
+                    <p>Extract pages or split into files</p>
+                </a>
+                <a href="pdf-editor.html" class="hp-tool-card" data-accent="orange"><span
+                        class="hp-tool-card-icon">✏️</span>
+                    <h3>PDF Editor</h3>
+                    <p>Edit text, images, draw &amp; highlight</p>
+                </a>
+                <a href="pdf-reader.html" class="hp-tool-card" data-accent="rose"><span
+                        class="hp-tool-card-icon">📖</span>
+                    <h3>PDF Reader</h3>
+                    <p>Fast in-browser viewer with search</p>
+                </a>
+                <a href="tools/sign-pdf.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">✍️</span>
+                    <h3>Sign PDF</h3>
+                    <p>Draw or type your e-signature</p>
+                </a>
+                <a href="tools/pdf-lock.html" class="hp-tool-card" data-accent="red"><span
+                        class="hp-tool-card-icon">🔒</span>
+                    <h3>PDF Lock</h3>
+                    <p>Password-protect your files</p>
+                </a>
+                <a href="tools/repair-pdf.html" class="hp-tool-card" data-accent="green"><span
+                        class="hp-tool-card-icon">🔧</span>
+                    <h3>Repair PDF</h3>
+                    <p>Fix corrupted or broken PDFs</p>
+                </a>
+            </div>
+
+            <!-- Convert -->
+            <div class="hp-section-head">
+                <h2>🔄 Convert</h2><span class="hp-tag" style="background:#fef3c7; color:#b45309;">Format</span>
+                <div class="hp-section-head-line"></div>
+            </div>
+            <div class="hp-tools-grid">
+                <a href="tools/pdf-to-word.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">📄</span>
+                    <h3>PDF to Word</h3>
+                    <p>Extract text to editable DOCX</p>
+                </a>
+                <a href="tools/word-to-pdf.html" class="hp-tool-card" data-accent="red"><span
+                        class="hp-tool-card-icon">📝</span>
+                    <h3>Word to PDF</h3>
+                    <p>Convert Word documents instantly</p>
+                </a>
+                <a href="tools/excel-to-pdf.html" class="hp-tool-card" data-accent="green"><span
+                        class="hp-tool-card-icon">📊</span>
+                    <h3>Excel to PDF</h3>
+                    <p>Spreadsheets to PDF with tables</p>
+                </a>
+                <a href="tools/pdf-to-excel.html" class="hp-tool-card" data-accent="green"><span
+                        class="hp-tool-card-icon">📊</span>
+                    <h3>PDF to Excel</h3>
+                    <p>Extract tables to .xlsx format</p>
+                </a>
+                <a href="tools/ppt-to-pdf.html" class="hp-tool-card" data-accent="orange"><span
+                        class="hp-tool-card-icon">📽️</span>
+                    <h3>PPT to PDF</h3>
+                    <p>Slides to PDF pages instantly</p>
+                </a>
+                <a href="tools/pdf-to-ppt.html" class="hp-tool-card" data-accent="orange"><span
+                        class="hp-tool-card-icon">📽️</span>
+                    <h3>PDF to PPT</h3>
+                    <p>Pages to editable PowerPoint</p>
+                </a>
+                <a href="tools/pdf-to-images.html" class="hp-tool-card" data-accent="sky"><span
+                        class="hp-tool-card-icon">🖼️</span>
+                    <h3>PDF to Images</h3>
+                    <p>Convert pages to JPG or PNG</p>
+                </a>
+                <a href="tools/images-to-pdf.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">📑</span>
+                    <h3>Images to PDF</h3>
+                    <p>Create PDF from your photos</p>
+                </a>
+                <a href="tools/html-to-pdf.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">🌐</span>
+                    <h3>HTML to PDF</h3>
+                    <p>Code editor with live preview</p>
+                </a>
+            </div>
+
+            <!-- Edit & Organize -->
+            <div class="hp-section-head">
+                <h2>🛠️ Edit &amp; Organize</h2><span class="hp-tag"
+                    style="background:#f0fdf4; color:#059669;">Modify</span>
+                <div class="hp-section-head-line"></div>
+            </div>
+            <div class="hp-tools-grid">
+                <a href="tools/crop-pdf.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">✂️</span>
+                    <h3>Crop PDF</h3>
+                    <p>Visual crop with precision controls</p>
+                </a>
+                <a href="tools/delete-pages.html" class="hp-tool-card" data-accent="red"><span
+                        class="hp-tool-card-icon">🗑️</span>
+                    <h3>Delete Pages</h3>
+                    <p>Select and remove unwanted pages</p>
+                </a>
+                <a href="tools/add-page-numbers.html" class="hp-tool-card" data-accent="blue"><span
+                        class="hp-tool-card-icon">#️⃣</span>
+                    <h3>Add Page Numbers</h3>
+                    <p>Professional page numbering</p>
+                </a>
+                <a href="flatten-pdf.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">📄</span>
+                    <h3>Flatten PDF</h3>
+                    <p>Remove forms &amp; make non-editable</p>
+                </a>
+                <a href="tools/image-compress.html" class="hp-tool-card" data-accent="green"><span
+                        class="hp-tool-card-icon">🗜️</span>
+                    <h3>Image Compress</h3>
+                    <p>Optimize JPG &amp; PNG in bulk</p>
+                </a>
+                <a href="pdf-bookmark.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">📑</span>
+                    <h3>PDF Bookmarks</h3>
+                    <p>Add TOC &amp; navigation to PDFs</p>
+                </a>
+                <a href="compare-pdf.html" class="hp-tool-card" data-accent="purple"><span
+                        class="hp-tool-card-icon">🔍</span>
+                    <h3>Compare PDFs</h3>
+                    <p>Side-by-side diff highlighting</p>
+                </a>
+                <a href="qr-pdf.html" class="hp-tool-card" data-accent="blue"><span class="hp-tool-card-icon">📱</span>
+                    <h3>QR Code to PDF</h3>
+                    <p>Insert scannable QR codes</p>
+                </a>
+            </div>
+
+            <!-- AI & Smart Tools -->
+            <div class="hp-section-head">
+                <h2>🤖 AI &amp; Smart Tools</h2><span class="hp-tag"
+                    style="background:#faf5ff; color:#7c3aed;">AI</span>
+                <div class="hp-section-head-line"></div>
+            </div>
+            <div class="hp-tools-grid">
+                <a href="tools/ocr.html" class="hp-tool-card" data-accent="sky"><span class="hp-tool-card-icon">✨</span>
+                    <h3>OCR – Extract Text</h3>
+                    <p>Read text from scanned documents</p>
+                </a>
+                <a href="voice-to-pdf.html" class="hp-tool-card" data-accent="red"><span
+                        class="hp-tool-card-icon">🎤</span>
+                    <h3>Voice to PDF</h3>
+                    <p>Speech-to-text in 20+ languages</p>
+                </a>
+                <a href="pdf-translator.html" class="hp-tool-card" data-accent="sky"><span
+                        class="hp-tool-card-icon">🌐</span>
+                    <h3>Translate PDF</h3>
+                    <p>Translate to 20+ languages free</p>
+                </a>
+                <a href="pdf-summary.html" class="hp-tool-card" data-accent="orange"><span
+                        class="hp-tool-card-icon">📊</span>
+                    <h3>PDF Summarizer</h3>
+                    <p>Key points &amp; reading time analysis</p>
+                </a>
+                <a href="text-to-audio.html" class="hp-tool-card" data-accent="green"><span
+                        class="hp-tool-card-icon">🎧</span>
+                    <h3>Text to Audio</h3>
+                    <p>Convert text to speech, 50+ voices</p>
+                </a>
+            </div>
+
+            <!-- Resources -->
+            <div class="hp-section-head">
+                <h2>📚 Resources</h2><span class="hp-tag" style="background:#f0fdf4; color:#059669;">Learn</span>
+                <div class="hp-section-head-line"></div>
+            </div>
+            <div class="hp-tools-grid">
+                <a href="blog.html" class="hp-tool-card" data-accent="purple"><span class="hp-tool-card-icon">📝</span>
+                    <h3>Blog &amp; Guides</h3>
+                    <p>Tips, tricks &amp; student guides</p>
+                </a>
+            </div>
+
+            <div style="text-align:center; margin-top:40px;"><a href="tools.html" class="btn btn-secondary"
+                    style="font-size:1rem; padding:14px 36px;">View All 30+ Tools →</a></div>
         </div>
 
-        <!-- AI & Smart Tools -->
-        <div class="hp-section-head">
-            <h2>🤖 AI &amp; Smart Tools</h2><span class="hp-tag" style="background:#faf5ff; color:#7c3aed;">AI</span>
-            <div class="hp-section-head-line"></div>
-        </div>
-        <div class="hp-tools-grid">
-            <a href="tools/ocr.html" class="hp-tool-card" data-accent="sky"><span class="hp-tool-card-icon">✨</span>
-                <h3>OCR – Extract Text</h3>
-                <p>Read text from scanned documents</p>
-            </a>
-            <a href="voice-to-pdf.html" class="hp-tool-card" data-accent="red"><span class="hp-tool-card-icon">🎤</span>
-                <h3>Voice to PDF</h3>
-                <p>Speech-to-text in 20+ languages</p>
-            </a>
-            <a href="pdf-translator.html" class="hp-tool-card" data-accent="sky"><span
-                    class="hp-tool-card-icon">🌐</span>
-                <h3>Translate PDF</h3>
-                <p>Translate to 20+ languages free</p>
-            </a>
-            <a href="pdf-summary.html" class="hp-tool-card" data-accent="orange"><span
-                    class="hp-tool-card-icon">📊</span>
-                <h3>PDF Summarizer</h3>
-                <p>Key points &amp; reading time analysis</p>
-            </a>
-            <a href="text-to-audio.html" class="hp-tool-card" data-accent="green"><span
-                    class="hp-tool-card-icon">🎧</span>
-                <h3>Text to Audio</h3>
-                <p>Convert text to speech, 50+ voices</p>
-            </a>
-        </div>
 
-        <!-- Resources -->
-        <div class="hp-section-head">
-            <h2>📚 Resources</h2><span class="hp-tag" style="background:#f0fdf4; color:#059669;">Learn</span>
-            <div class="hp-section-head-line"></div>
-        </div>
-        <div class="hp-tools-grid">
-            <a href="blog.html" class="hp-tool-card" data-accent="purple"><span class="hp-tool-card-icon">📝</span>
-                <h3>Blog &amp; Guides</h3>
-                <p>Tips, tricks &amp; student guides</p>
-            </a>
-        </div>
-
-        <div style="text-align:center; margin-top:40px;"><a href="tools.html" class="btn btn-secondary"
-                style="font-size:1rem; padding:14px 36px;">View All 30+ Tools →</a></div>
-    </div>
-
-    <!-- BOTTOM CTA -->
-    <div class="hp-cta">
-        <h2>Ready to work smarter with PDFs?</h2>
-        <p>30+ tools, zero uploads, completely free. Start now.</p>
-        <a href="tools.html">Browse All Tools →</a>
-    </div>
-</main>
+    </main>
 
 
     <footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
