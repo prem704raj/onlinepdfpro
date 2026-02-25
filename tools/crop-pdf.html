@@ -839,6 +839,36 @@ if ('serviceWorker' in navigator) {
     });
 }
 </script>
+
+<!-- GA4 Event Tracking -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Track tool usage
+    document.querySelectorAll('.upload-btn, .btn-primary').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (typeof gtag === 'function') {
+                gtag('event', 'tool_interaction', {
+                    'event_category': 'Tool',
+                    'event_label': document.title,
+                    'value': 1
+                });
+            }
+        });
+    });
+    // Track downloads
+    document.querySelectorAll('[id*="download"], .download-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (typeof gtag === 'function') {
+                gtag('event', 'file_download', {
+                    'event_category': 'Download',
+                    'event_label': document.title,
+                    'value': 1
+                });
+            }
+        });
+    });
+});
+</script>
 </body>
 
 </html>

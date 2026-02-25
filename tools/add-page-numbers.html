@@ -11,7 +11,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Add Page Numbers to PDF - Online PDF Pro</title>
-<meta name="description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
+<meta name="description" content="Add page numbers to PDF online free — no uploads. Insert page numbering in your browser. No signup, no watermark.">
 <meta name="keywords" content="free pdf tools, merge pdf online free, compress pdf online, sign pdf online free, ocr pdf hindi, pdf to word free, unlock pdf online, online pdf editor">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -21,7 +21,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/tools/add-page-numbers.html">
 <meta property="og:title" content="Add Page Numbers to PDF - Online PDF Pro">
-<meta property="og:description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
+<meta property="og:description" content="Add page numbers to PDF online free — no uploads. Insert page numbering in your browser. No signup, no watermark.">
 <meta property="og:image" content="https://onlinepdfpro.com/images/og-add-page-numbers.png">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
@@ -30,7 +30,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/add-page-numbers.html">
 <meta name="twitter:title" content="Add Page Numbers to PDF - Online PDF Pro">
-<meta name="twitter:description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
+<meta name="twitter:description" content="Add page numbers to PDF online free — no uploads. Insert page numbering in your browser. No signup, no watermark.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-add-page-numbers.png">
 
 <!-- Favicons -->
@@ -585,7 +585,7 @@ function downloadResult() {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Add Page Numbers to PDF",
-  "description": "100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.",
+  "description": "Add page numbers to PDF online free — no uploads. Insert page numbering in your browser. No signup, no watermark.",
   "url": "https://onlinepdfpro.com/tools/add-page-numbers.html",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "Any",
@@ -648,6 +648,36 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
     });
 }
+</script>
+
+<!-- GA4 Event Tracking -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Track tool usage
+    document.querySelectorAll('.upload-btn, .btn-primary').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (typeof gtag === 'function') {
+                gtag('event', 'tool_interaction', {
+                    'event_category': 'Tool',
+                    'event_label': document.title,
+                    'value': 1
+                });
+            }
+        });
+    });
+    // Track downloads
+    document.querySelectorAll('[id*="download"], .download-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (typeof gtag === 'function') {
+                gtag('event', 'file_download', {
+                    'event_category': 'Download',
+                    'event_label': document.title,
+                    'value': 1
+                });
+            }
+        });
+    });
+});
 </script>
 </body>
 
