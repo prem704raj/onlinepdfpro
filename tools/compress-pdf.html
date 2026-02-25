@@ -143,13 +143,14 @@
         </div>
     </header>
 
+        
+
+    <main id="main" class="tool-page">
         <nav class="breadcrumbs" style="padding: 15px 20px; font-size: 14px; color: #64748b; margin: 0 auto; max-width: 1060px;">
             <a href="/" style="color: #2563eb; text-decoration: none;">Home</a> &gt; 
             <a href="/tools.html" style="color: #2563eb; text-decoration: none;">Tools</a> &gt; 
             <span style="color: #1e293b; font-weight: 500;">Compress PDF</span>
         </nav>
-
-    <main id="main" class="tool-page">
         <div class="container" style="max-width: 800px;">
             <div class="tool-header">
                 <span class="section-tag fade-in">Multi-File Optimizer</span>
@@ -161,7 +162,7 @@
             </div>
 
             <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
-                <span class="upload-icon">ðŸ“¦</span>
+                <span class="upload-icon">📦</span>
                 <p class="upload-text">Drop your documents here</p>
                 <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
                 <button class="btn btn-primary upload-btn">Choose Files</button>
@@ -373,7 +374,7 @@
                 fileList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" data-index="${index}">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -425,7 +426,7 @@
                 processingList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" id="process-${index}">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -526,7 +527,7 @@
                 resultsList.innerHTML = successResults.map((result, index) => `
                     <div class="batch-file-item">
                         <div class="batch-file-header">
-                            <span class="file-icon" style="font-size: 2rem;">ðŸ“„</span>
+                            <span class="file-icon" style="font-size: 2rem;">📄</span>
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${result.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} â†’ ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
