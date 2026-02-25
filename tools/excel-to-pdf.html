@@ -210,11 +210,11 @@
         
 
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     
 
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <script>
         let workbook = null;
         let currentSheet = '';
@@ -449,7 +449,15 @@ document.getElementById('resultBox').style.display = 'block';
   </div>
 </footer>
 
-<script src="../counter.js"></script>
+<script defer src="../counter.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
+}
+</script>
 </body>
 
 </html>

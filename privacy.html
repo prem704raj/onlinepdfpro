@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, OCR text extractor. No registration, No watermark, Works on mobile.">
 <meta name="keywords" content="free pdf tools, merge pdf online free, compress pdf online, sign pdf online free, ocr pdf hindi, pdf to word free, unlock pdf online, online pdf editor">
 <meta name="author" content="OnlinePDFPro">
@@ -242,7 +247,7 @@
     
 
 
-    <script src="js/app.js"></script>
+    <script defer src="js/app.js"></script>
 
     
 <footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
@@ -310,6 +315,14 @@
   </div>
 </footer>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
+}
+</script>
 </body>
 
 </html>

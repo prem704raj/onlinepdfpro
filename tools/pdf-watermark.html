@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Add Watermark to PDF Online Free | OnlinePDFPro</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="Add text or image watermarks to PDF documents for free. Customize opacity, position, and rotation. No upload, 100% private.">
 <meta name="keywords" content="add watermark to pdf, pdf watermark online free, stamp pdf, watermark pdf pages, text watermark pdf">
 <meta name="author" content="OnlinePDFPro">
@@ -263,7 +268,7 @@
         
 
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     <script>
         (function () {
             const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
@@ -579,6 +584,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

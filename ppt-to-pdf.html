@@ -7,6 +7,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Redirecting...</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="OnlinePDFPro">
@@ -220,6 +225,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

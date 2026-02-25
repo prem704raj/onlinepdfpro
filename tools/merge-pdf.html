@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Merge PDF Online Free - Combine PDF Files Instantly | OnlinePDFPro</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="Merge multiple PDF files into one document for free. Drag and drop to reorder pages. No upload, 100% private, works on mobile.">
 <meta name="keywords" content="merge pdf, combine pdf files, join pdf online free, pdf merger, merge pdf pages, combine pdf documents">
 <meta name="author" content="OnlinePDFPro">
@@ -225,7 +230,7 @@
         
 
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     <script>
         (function () {
             const { PDFDocument } = PDFLib;
@@ -534,7 +539,7 @@ resultsSection.style.display = 'block';
   </div>
 </footer>
 
-<script src="../counter.js"></script>
+<script defer src="../counter.js"></script>
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
 {
@@ -595,6 +600,14 @@ resultsSection.style.display = 'block';
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

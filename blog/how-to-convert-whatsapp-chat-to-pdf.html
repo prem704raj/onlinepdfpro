@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Convert WhatsApp Chat to PDF | OnlinePDFPro Blog</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
     <meta name="description" content="Learn how to convert whatsapp chat to pdf with our complete step-by-step guide. Free, fast, and secure.">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/tools.css">
@@ -69,5 +74,13 @@
     <footer style="background:#f8fafc; padding:40px 20px; text-align:center; border-top:1px solid #e2e8f0; margin-top:60px;">
         <p style="color:#64748b; font-size:14px;">© 2026 Online PDF Pro. 100% Client-Side Processing.</p>
     </footer>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
+}
+</script>
 </body>
 </html>

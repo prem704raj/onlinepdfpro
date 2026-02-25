@@ -65,7 +65,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
     <!-- PDF.js for client-side rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
 </head>
 
@@ -304,7 +304,7 @@
 
     
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     <script>
         (function () {
             const { PDFDocument } = PDFLib;
@@ -362,7 +362,7 @@
                     item.className = 'thumbnail-item';
                     item.dataset.page = i;
                     item.innerHTML = `
-                        <img src="${canvas.toDataURL()}" class="thumbnail-image" alt="Page ${i}">
+                        <img loading="lazy" src="${canvas.toDataURL()}" class="thumbnail-image" alt="Page ${i}">
                         <div class="thumbnail-number">Page ${i}</div>
                         <span class="thumbnail-check">✓</span>
                     `;
@@ -668,6 +668,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

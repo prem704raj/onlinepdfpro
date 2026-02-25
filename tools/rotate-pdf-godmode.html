@@ -262,9 +262,9 @@
 
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/downloadjs@1.4.8/download.min.js"></script>
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
@@ -321,7 +321,7 @@
 
                 card.innerHTML = `
       <div class="page-number">Page ${index + 1}</div>
-      <img src="${pageData.imageData}" style="width:180px; height:240px; object-fit:contain; display:block; background:#f9f9f9; transform:rotate(${pageData.rotation}deg);">
+      <img loading="lazy" src="${pageData.imageData}" style="width:180px; height:240px; object-fit:contain; display:block; background:#f9f9f9; transform:rotate(${pageData.rotation}deg);">
       <div class="page-info">
         <div class="rotation-label">${pageData.rotation === 0 ? 'Original' : pageData.rotation + '° rotated'}</div>
         <div class="page-buttons">
@@ -583,6 +583,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

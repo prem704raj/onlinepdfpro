@@ -7,6 +7,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog - PDF Tips, Tricks & Guides | Online PDF Pro</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="Learn PDF tips, tricks and guides. How to compress, merge, sign PDFs. Best free PDF tools. Student guides for document management.">
 <meta name="keywords" content="pdf tips, how to compress pdf, how to merge pdf, pdf guide, free pdf tools blog">
 <meta name="author" content="OnlinePDFPro">
@@ -556,6 +561,14 @@
         </div>
     </footer>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
+}
+</script>
 </body>
 
 </html>

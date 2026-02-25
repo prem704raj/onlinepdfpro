@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Excel to CSV Online Free - Convert XLSX to CSV | OnlinePDFPro</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="Convert Excel spreadsheets to CSV format for free. Export XLSX data as comma-separated values. No upload, 100% private.">
 <meta name="keywords" content="excel to csv, xlsx to csv, convert spreadsheet to csv, excel converter online free">
 <meta name="author" content="OnlinePDFPro">
@@ -233,7 +238,7 @@
         
 
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     <script>
         (function () {
             let workbook = null;
@@ -553,6 +558,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

@@ -323,9 +323,9 @@
 
     
 
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- download.js removed: CDN was broken (404). Using native Blob download instead -->
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
 
     <script>
         let images = [];
@@ -389,7 +389,7 @@
                 block.innerHTML = `
       <div class="page-label">Page ${index + 1}</div>
       <button class="remove-btn" onclick="removeImage(event, ${index})">×</button>
-      <img src="${src}" draggable="false">
+      <img loading="lazy" src="${src}" draggable="false">
     `;
 
                 // Drag to rearrange
@@ -663,7 +663,7 @@
   </div>
 </footer>
 
-<script src="../counter.js"></script>
+<script defer src="../counter.js"></script>
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
 {
@@ -724,6 +724,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

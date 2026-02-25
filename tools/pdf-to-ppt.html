@@ -65,7 +65,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
         crossorigin="anonymous"></script>
     <!-- PDF.js for client-side rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
 
     <style>
@@ -294,8 +294,8 @@
             </div>
         </div>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
@@ -343,7 +343,7 @@ async function processPDF(file) {
     const card = document.createElement('div');
     card.className = 'slide-card';
     card.innerHTML = `
-      <img src="${imageData}">
+      <img loading="lazy" src="${imageData}">
       <div class="slide-label">Slide ${i}</div>
     `;
     previewDiv.appendChild(card);
@@ -382,9 +382,9 @@ async function downloadPPT() {
     
 
 
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-    <script src="../js/app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script defer src="../js/app.js"></script>
     
 
 
@@ -503,7 +503,7 @@ async function downloadPPT() {
   </div>
 </footer>
 
-<script src="../counter.js"></script>
+<script defer src="../counter.js"></script>
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
 {
@@ -564,6 +564,14 @@ async function downloadPPT() {
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>

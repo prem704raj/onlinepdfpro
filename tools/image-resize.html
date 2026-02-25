@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resize Images Online Free - Change Image Dimensions | OnlinePDFPro</title>
+    <!-- Preconnect to CDNs for Speed -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <meta name="description" content="Resize images to any dimension for free. Maintain aspect ratio. Supports JPG, PNG, WEBP. No upload, 100% private.">
 <meta name="keywords" content="resize image online, change image size, image resizer free, scale image, resize photo online">
 <meta name="author" content="OnlinePDFPro">
@@ -274,7 +279,7 @@
         
 
 
-    <script src="../js/app.js"></script>
+    <script defer src="../js/app.js"></script>
     <script>
         (function () {
             let files = [];
@@ -389,7 +394,7 @@
                 fileList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" style="padding: 16px;">
                         <div class="batch-file-header" style="margin-bottom: 0;">
-                            <img src="${thumbnails[file.name]}" class="batch-file-thumb" style="width: 40px; height: 40px;">
+                            <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" style="width: 40px; height: 40px;">
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -426,7 +431,7 @@
                 processingList.innerHTML = files.map((file, index) => `
                     <div class="batch-file-item" id="process-${index}">
                         <div class="batch-file-header">
-                            <img src="${thumbnails[file.name]}" class="batch-file-thumb">
+                            <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb">
                             <div class="batch-file-info">
                                 <div class="batch-file-name">${file.name}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -713,6 +718,14 @@
       }
     }
   ]
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+    });
 }
 </script>
 </body>
