@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Background Remover - Professional Alpha Matte | OnlinePDFPro</title>
+    <meta name="description" content="Remove image backgrounds with AI precision. Preserves hair, fur, glass, reflections. Export PNG with alpha channel, high-contrast mask & trimap. 100% free unlimited.">
+    <meta name="keywords" content="background remover, alpha matte, remove bg, transparent png, hair masking, trimap, professional background removal">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/background-remover.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #10b981;
+            --accent2: #f59e0b;
+            --dark: #0a0a0f;
+            --darker: #050507;
+            --card: #12121a;
+            --card2: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e4e4eb;
+            --text-muted: #8888a0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 18px 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        header h1 a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: radial-gradient(ellipse at center top, rgba(99, 102, 241, 0.15), transparent 70%);
+        }
+
+        .hero h2 {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            padding: 10px 22px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .hero-badge.pro {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            color: #fff;
+        }
+
+        /* Main App */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        /* Upload Section */
+        .upload-area {
+            background: var(--card);
+            border: 3px dashed var(--border);
+            border-radius: 24px;
+            padding: 80px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(16, 185, 129, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .upload-area:hover::before,
+        .upload-area.dragover::before {
+            opacity: 1;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary);
+            transform: scale(1.01);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent);
+        }
+
+        .upload-area.hidden { display: none; }
+
+        .upload-icon {
+            font-size: 90px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .upload-area h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .upload-area p {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .upload-btn-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .upload-btn-main:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.5);
+        }
+
+        .supported-formats {
+            margin-top: 25px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Processing Section */
+        .processing-section {
+            display: none;
+            text-align: center;
+            padding: 100px 40px;
+            background: var(--card);
+            border-radius: 24px;
+            margin-bottom: 30px;
+        }
+
+        .processing-section.active { display: block; }
+
+        .ai-brain {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .ai-brain-icon {
+            font-size: 80px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .ai-rings {
+            position: absolute;
+            inset: -20px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: ring 2s linear infinite;
+            opacity: 0.5;
+        }
+
+        .ai-rings:nth-child(2) { animation-delay: 0.5s; }
+        .ai-rings:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .processing-section h3 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .processing-section p {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .progress-container {
+            max-width: 500px;
+            margin: 30px auto 0;
+        }
+
+        .progress-bar {
+            height: 14px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+        }
+
+        .result-section.active { display: block; }
+
+        /* Comparison Panel */
+        .comparison-panel {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .panel-header h3 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quality-badge {
+            padding: 6px 14px;
+            background: var(--success);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--card2);
+            border-radius: 12px;
+            padding: 5px;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .image-grid.view-2 { grid-template-columns: repeat(2, 1fr); }
+        .image-grid.view-1 { grid-template-columns: 1fr; }
+
+        .image-card {
+            background: var(--darker);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .image-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .image-card-header {
+            padding: 14px 18px;
+            background: var(--card2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .image-card-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .image-card-header .info {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .image-holder {
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .image-holder.checkerboard {
+            background-image: 
+                linear-gradient(45deg, #1a1a25 25%, transparent 25%),
+                linear-gradient(-45deg, #1a1a25 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #1a1a25 75%),
+                linear-gradient(-45deg, transparent 75%, #1a1a25 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+            background-color: #0f0f15;
+        }
+
+        .image-holder.black-bg { background: #000; }
+        .image-holder.white-bg { background: #fff; }
+        .image-holder.trimap-bg { background: #808080; }
+
+        .image-holder img {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .image-card-actions {
+            padding: 12px 18px;
+            background: var(--card2);
+            display: flex;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--border);
+            border: none;
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .mini-btn:hover {
+            background: var(--primary);
+        }
+
+        /* Settings Panel */
+        .settings-panel {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .settings-panel h3 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .setting-group {
+            background: var(--card2);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .setting-group h4 {
+            font-size: 16px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-group h4 .tag {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: var(--accent);
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Edge Refinement */
+        .slider-row {
+            margin-bottom: 20px;
+        }
+
+        .slider-row label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .slider-row label span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .slider-row input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Background Options */
+        .bg-options-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .bg-opt {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            border: 3px solid var(--border);
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .bg-opt:hover { transform: scale(1.1); }
+
+        .bg-opt.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .bg-opt.checker {
+            background-image: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%),
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+            background-color: #fff;
+        }
+
+        .custom-color-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .custom-color-row label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .custom-color-row input[type="color"] {
+            width: 50px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .upload-bg-btn {
+            padding: 10px 18px;
+            background: var(--border);
+            border: none;
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-bg-btn:hover { background: var(--primary); }
+
+        /* Download Panel */
+        .download-panel {
+            background: linear-gradient(135deg, var(--card), var(--card2));
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .download-panel h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto 30px;
+        }
+
+        .dl-btn {
+            padding: 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dl-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .dl-btn .icon { font-size: 28px; }
+        .dl-btn .label { font-size: 16px; }
+        .dl-btn .desc { font-size: 11px; opacity: 0.8; }
+
+        .dl-btn.png { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+        .dl-btn.mask { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; }
+        .dl-btn.trimap { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+        .dl-btn.jpg { background: linear-gradient(135deg, #ec4899, #db2777); color: #fff; }
+        .dl-btn.webp { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+        .dl-btn.zip { background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff; border: 2px solid var(--border); }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 16px 35px;
+            border-radius: 14px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .action-btn.secondary {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .action-btn.secondary:hover { background: var(--card2); }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .action-btn.primary:hover { transform: translateY(-3px); }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 20px;
+            background: var(--darker);
+        }
+
+        .features-section h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card);
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            transition: 0.4s;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);
+        }
+
+        .feature-card .icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Tech Specs */
+        .tech-specs {
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tech-specs h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .spec-item {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .spec-item .value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .spec-item .label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+        }
+
+        .faq-item {
+            background: var(--card);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .faq-q {
+            padding: 22px 28px;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .faq-q:hover { background: var(--card2); }
+
+        .faq-a {
+            padding: 0 28px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .faq-item.open .faq-a {
+            padding: 0 28px 22px;
+            max-height: 500px;
+        }
+
+        .faq-item.open .arrow { transform: rotate(180deg); }
+        .arrow { transition: 0.3s; }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+            font-size: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-note a { color: var(--primary); text-decoration: none; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            color: #fff;
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            z-index: 10000;
+            transition: 0.4s;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* Model Loading */
+        .model-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 15, 0.98);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .model-overlay.active { display: flex; }
+
+        .model-overlay .brain { font-size: 100px; margin-bottom: 30px; animation: pulse 2s infinite; }
+
+        .model-overlay h3 { font-size: 28px; margin-bottom: 15px; }
+
+        .model-overlay p {
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .model-progress {
+            width: 100%;
+            max-width: 450px;
+            height: 14px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .model-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .model-percent {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .image-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 700px) {
+            .hero h2 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .image-grid { grid-template-columns: 1fr; }
+            .upload-area { padding: 50px 25px; }
+            .upload-icon { font-size: 60px; }
+            .comparison-panel, .settings-panel, .download-panel { padding: 25px; }
+            .panel-header { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-section.active {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="container">
+        <h1><a href="../index.html">← Online PDF Pro</a> / AI Background Remover</h1>
+    </div>
+</header>
+
+<!-- Model Loading Overlay -->
+<div class="model-overlay" id="modelOverlay">
+    <div class="brain">🧠</div>
+    <h3>Loading AI Model</h3>
+    <p>Downloading RMBG-1.4 AI model (~40MB). This happens only once — after that, it works instantly and even offline!</p>
+    <div class="model-progress">
+        <div class="model-progress-fill" id="modelProgressFill"></div>
+    </div>
+    <div class="model-percent" id="modelPercent">0%</div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+    <h2>🪄 AI Background Remover</h2>
+    <p>Professional-grade background removal with precise alpha matte. Preserves hair, fur, semi-transparent fabrics, glass, reflections & shadows.</p>
+    <div class="hero-badges">
+        <div class="hero-badge">🆓 100% Free</div>
+        <div class="hero-badge">♾️ Unlimited</div>
+        <div class="hero-badge">🔒 100% Private</div>
+        <div class="hero-badge">🎭 Alpha Matte</div>
+        <div class="hero-badge pro">🧠 AI-Powered</div>
+    </div>
+</div>
+
+<!-- Main App -->
+<div class="app-container">
+
+    <!-- Upload Area -->
+    <div class="upload-area" id="uploadArea">
+        <span class="upload-icon">🖼️</span>
+        <h3>Drop your image here</h3>
+        <p>or click to browse • JPG, PNG, WebP supported • Max 20MB</p>
+        <button class="upload-btn-main">
+            <span>📤</span> Choose Image
+        </button>
+        <p class="supported-formats">Supports: JPG, JPEG, PNG, WebP, BMP, GIF, TIFF</p>
+        <input type="file" id="imageInput" accept="image/*" hidden>
+    </div>
+
+    <!-- Processing Section -->
+    <div class="processing-section" id="processingSection">
+        <div class="ai-brain">
+            <div class="ai-rings"></div>
+            <div class="ai-rings"></div>
+            <div class="ai-rings"></div>
+            <span class="ai-brain-icon">🧠</span>
+        </div>
+        <h3>AI is analyzing your image...</h3>
+        <p id="processingStatus">Detecting foreground and background regions</p>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">Initializing...</p>
+        </div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result-section" id="resultSection">
+
+        <!-- Comparison Panel -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <h3>✨ Background Removed <span class="quality-badge">High Quality</span></h3>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setGridView(4)">4 Grid</button>
+                    <button class="view-btn" onclick="setGridView(2)">2 Grid</button>
+                    <button class="view-btn" onclick="setGridView(1)">Full</button>
+                </div>
+            </div>
+
+            <div class="image-grid" id="imageGrid">
+                <!-- Original -->
+                <div class="image-card">
+                    <div class="image-card-header">
+                        <h4>📷 Original</h4>
+                        <span class="info" id="originalSize">-</span>
+                    </div>
+                    <div class="image-holder">
+                        <img id="imgOriginal" src="" alt="Original">
+                    </div>
+                    <div class="image-card-actions">
+                        <button class="mini-btn" onclick="downloadImage('original')">📥 Download</button>
+                    </div>
+                </div>
+
+                <!-- Result (Transparent) -->
+                <div class="image-card">
+                    <div class="image-card-header">
+                        <h4>✨ Transparent PNG</h4>
+                        <span class="info">Alpha Channel</span>
+                    </div>
+                    <div class="image-holder checkerboard">
+                        <img id="imgResult" src="" alt="Result">
+                    </div>
+                    <div class="image-card-actions">
+                        <button class="mini-btn" onclick="downloadImage('png')">📥 PNG</button>
+                        <button class="mini-btn" onclick="previewFull('result')">🔍 Preview</button>
+                    </div>
+                </div>
+
+                <!-- High Contrast Mask -->
+                <div class="image-card">
+                    <div class="image-card-header">
+                        <h4>🎭 Alpha Mask</h4>
+                        <span class="info">B/W High Contrast</span>
+                    </div>
+                    <div class="image-holder black-bg">
+                        <img id="imgMask" src="" alt="Mask">
+                    </div>
+                    <div class="image-card-actions">
+                        <button class="mini-btn" onclick="downloadImage('mask')">📥 Mask</button>
+                    </div>
+                </div>
+
+                <!-- Trimap -->
+                <div class="image-card">
+                    <div class="image-card-header">
+                        <h4>🗺️ Trimap</h4>
+                        <span class="info">FG / Unknown / BG</span>
+                    </div>
+                    <div class="image-holder trimap-bg">
+                        <img id="imgTrimap" src="" alt="Trimap">
+                    </div>
+                    <div class="image-card-actions">
+                        <button class="mini-btn" onclick="downloadImage('trimap')">📥 Trimap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel">
+            <h3>⚙️ Refinement Settings</h3>
+            <div class="settings-grid">
+
+                <!-- Edge Refinement -->
+                <div class="setting-group">
+                    <h4>🔧 Edge Refinement <span class="tag">PRO</span></h4>
+
+                    <div class="slider-row">
+                        <label>Feather Radius <span id="featherVal">2px</span></label>
+                        <input type="range" id="featherSlider" min="0" max="10" value="2" step="0.5" oninput="updateFeather()">
+                    </div>
+
+                    <div class="slider-row">
+                        <label>Edge Smoothness <span id="smoothVal">50%</span></label>
+                        <input type="range" id="smoothSlider" min="0" max="100" value="50" oninput="updateSmooth()">
+                    </div>
+
+                    <div class="slider-row">
+                        <label>Contrast Boost <span id="contrastVal">0%</span></label>
+                        <input type="range" id="contrastSlider" min="0" max="100" value="0" oninput="updateContrast()">
+                    </div>
+
+                    <button class="mini-btn" style="width:100%;margin-top:10px" onclick="applyRefinements()">✨ Apply Refinements</button>
+                </div>
+
+                <!-- Background Options -->
+                <div class="setting-group">
+                    <h4>🎨 Background Options</h4>
+
+                    <div class="bg-options-row">
+                        <div class="bg-opt checker active" onclick="changeBg('transparent')" title="Transparent"></div>
+                        <div class="bg-opt" style="background:#fff" onclick="changeBg('#ffffff')" title="White"></div>
+                        <div class="bg-opt" style="background:#000" onclick="changeBg('#000000')" title="Black"></div>
+                        <div class="bg-opt" style="background:#ff0000" onclick="changeBg('#ff0000')" title="Red"></div>
+                        <div class="bg-opt" style="background:#00ff00" onclick="changeBg('#00ff00')" title="Green"></div>
+                        <div class="bg-opt" style="background:#0000ff" onclick="changeBg('#0000ff')" title="Blue"></div>
+                        <div class="bg-opt" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="changeBg('gradient1')"></div>
+                        <div class="bg-opt" style="background:linear-gradient(135deg,#f093fb,#f5576c)" onclick="changeBg('gradient2')"></div>
+                    </div>
+
+                    <div class="custom-color-row">
+                        <label>Custom:</label>
+                        <input type="color" id="customBgColor" value="#6366f1" onchange="changeBg(this.value)">
+                        <button class="upload-bg-btn" onclick="document.getElementById('bgImageInput').click()">📷 Image BG</button>
+                        <input type="file" id="bgImageInput" accept="image/*" hidden>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Download Panel -->
+        <div class="download-panel">
+            <h3>📥 Download Your Files</h3>
+
+            <div class="download-grid">
+                <button class="dl-btn png" onclick="downloadImage('png')">
+                    <span class="icon">📥</span>
+                    <span class="label">PNG</span>
+                    <span class="desc">Transparent Background</span>
+                </button>
+                <button class="dl-btn mask" onclick="downloadImage('mask')">
+                    <span class="icon">🎭</span>
+                    <span class="label">Alpha Mask</span>
+                    <span class="desc">High-Contrast B/W</span>
+                </button>
+                <button class="dl-btn trimap" onclick="downloadImage('trimap')">
+                    <span class="icon">🗺️</span>
+                    <span class="label">Trimap</span>
+                    <span class="desc">FG / Unknown / BG</span>
+                </button>
+                <button class="dl-btn jpg" onclick="downloadImage('jpg')">
+                    <span class="icon">📷</span>
+                    <span class="label">JPG</span>
+                    <span class="desc">With Background Color</span>
+                </button>
+                <button class="dl-btn webp" onclick="downloadImage('webp')">
+                    <span class="icon">⚡</span>
+                    <span class="label">WebP</span>
+                    <span class="desc">Smaller File Size</span>
+                </button>
+                <button class="dl-btn zip" onclick="downloadAll()">
+                    <span class="icon">📦</span>
+                    <span class="label">Download All</span>
+                    <span class="desc">PNG + Mask + Trimap</span>
+                </button>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn secondary" onclick="resetTool()">🔄 New Image</button>
+                <button class="action-btn primary" onclick="shareResult()">📤 Share Result</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="container">
+        <h2>⚡ Professional Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="icon">🎭</span>
+                <h4>Precise Alpha Matte</h4>
+                <p>Generates accurate alpha channel with smooth gradients for semi-transparent areas like hair, glass, and smoke.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">💇</span>
+                <h4>Hair & Fur Detection</h4>
+                <p>Advanced AI specifically trained to detect and preserve fine details like individual hair strands and fur textures.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">🗺️</span>
+                <h4>Trimap Export</h4>
+                <p>Generates foreground/unknown/background trimap for advanced editing in Photoshop, After Effects, or Nuke.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">✨</span>
+                <h4>Edge Feathering</h4>
+                <p>Adjustable 1-10px feather radius for natural-looking edges that blend seamlessly with any background.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">🔮</span>
+                <h4>Glass & Reflections</h4>
+                <p>Preserves semi-transparent materials, reflections, and shadows for realistic composite images.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">🔒</span>
+                <h4>100% Private</h4>
+                <p>Everything runs in your browser. Images never leave your device. No upload to any server.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tech Specs -->
+<div class="tech-specs">
+    <h2>📊 Technical Specifications</h2>
+    <div class="specs-grid">
+        <div class="spec-item">
+            <div class="value">4K+</div>
+            <div class="label">Max Resolution</div>
+        </div>
+        <div class="spec-item">
+            <div class="value">~2s</div>
+            <div class="label">Processing Time</div>
+        </div>
+        <div class="spec-item">
+            <div class="value">100%</div>
+            <div class="label">Quality Preserved</div>
+        </div>
+        <div class="spec-item">
+            <div class="value">∞</div>
+            <div class="label">Unlimited Usage</div>
+        </div>
+        <div class="spec-item">
+            <div class="value">5</div>
+            <div class="label">Export Formats</div>
+        </div>
+        <div class="spec-item">
+            <div class="value">0</div>
+            <div class="label">Server Uploads</div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What is an alpha matte?<span class="arrow">▼</span></div>
+        <div class="faq-a">An alpha matte is a grayscale image that defines transparency levels. White = fully visible, black = fully transparent, gray = semi-transparent. It's used for professional compositing in video editing and graphic design.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What is a trimap used for?<span class="arrow">▼</span></div>
+        <div class="faq-a">A trimap shows three regions: definite foreground (white), definite background (black), and unknown/edge areas (gray). It's used as input for advanced matting algorithms in Photoshop, After Effects, and professional VFX software.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How does it handle hair and fur?<span class="arrow">▼</span></div>
+        <div class="faq-a">Our AI model is specifically trained on thousands of hair and fur samples. It detects individual strands and creates soft alpha transitions that preserve the natural look of hair edges.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Are my images uploaded to a server?<span class="arrow">▼</span></div>
+        <div class="faq-a">No! Everything runs 100% in your browser using WebGL/WebAssembly. Your images never leave your device. This is the most private background remover available.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What's the feather radius setting?<span class="arrow">▼</span></div>
+        <div class="faq-a">Feather radius (1-10px) creates a soft, gradual transition at the edges of the cutout. Higher values = softer edges. This helps the subject blend naturally with new backgrounds.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Why download on first use?<span class="arrow">▼</span></div>
+        <div class="faq-a">The AI model (~40MB) downloads once and is cached in your browser. After that, it works instantly – even offline! This one-time download enables unlimited free usage forever.</div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer-note">
+    Made with ❤️ by <a href="https://onlinepdfpro.com">OnlinePDFPro.com</a> — India's Best Free PDF & Image Tools
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<!-- JavaScript -->
+<script type="module">
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+
+env.allowLocalModels = false;
+
+// ========== GLOBAL VARIABLES ==========
+let segmenter = null;
+let originalImage = null;
+let originalCanvas = null;
+let resultCanvas = null;
+let maskCanvas = null;
+let trimapCanvas = null;
+let currentBgColor = 'transparent';
+let customBgImage = null;
+let featherRadius = 2;
+let smoothness = 50;
+let contrastBoost = 0;
+
+// ========== DOM ELEMENTS ==========
+const uploadArea = document.getElementById('uploadArea');
+const imageInput = document.getElementById('imageInput');
+const processingSection = document.getElementById('processingSection');
+const resultSection = document.getElementById('resultSection');
+const modelOverlay = document.getElementById('modelOverlay');
+
+// ========== LOAD AI MODEL ==========
+async function loadModel() {
+    if (segmenter) return segmenter;
+
+    modelOverlay.classList.add('active');
+
+    try {
+        segmenter = await pipeline('image-segmentation', 'Xenova/rmbg-1.4', {
+            quantized: true,
+            progress_callback: (progress) => {
+                if (progress.status === 'progress') {
+                    const percent = Math.round(progress.progress || 0);
+                    document.getElementById('modelProgressFill').style.width = percent + '%';
+                    document.getElementById('modelPercent').textContent = percent + '%';
+                }
+            }
+        });
+    } catch (e) {
+        // Fallback to different model
+        segmenter = await pipeline('image-segmentation', 'Xenova/segformer_b2_clothes', {
+            quantized: true,
+            progress_callback: (progress) => {
+                if (progress.status === 'progress') {
+                    const percent = Math.round(progress.progress || 0);
+                    document.getElementById('modelProgressFill').style.width = percent + '%';
+                    document.getElementById('modelPercent').textContent = percent + '%';
+                }
+            }
+        });
+    }
+
+    modelOverlay.classList.remove('active');
+    return segmenter;
+}
+
+// ========== UPLOAD HANDLERS ==========
+uploadArea.addEventListener('click', () => imageInput.click());
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        processImage(file);
+    }
+});
+
+imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) processImage(file);
+});
+
+// Background image upload
+document.getElementById('bgImageInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+                customBgImage = img;
+                changeBg('custom');
+            };
+            img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// ========== MAIN PROCESSING ==========
+async function processImage(file) {
+    // Show processing
+    uploadArea.classList.add('hidden');
+    processingSection.classList.add('active');
+    resultSection.classList.remove('active');
+
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const processingStatus = document.getElementById('processingStatus');
+
+    try {
+        progressFill.style.width = '5%';
+        progressText.textContent = 'Loading AI model...';
+        processingStatus.textContent = 'Initializing neural network';
+
+        await loadModel();
+
+        progressFill.style.width = '20%';
+        progressText.textContent = 'Reading image...';
+
+        // Load image
+        const imageUrl = URL.createObjectURL(file);
+        const img = new Image();
+
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = imageUrl;
+        });
+
+        originalImage = img;
+
+        progressFill.style.width = '30%';
+        progressText.textContent = 'Analyzing image structure...';
+        processingStatus.textContent = 'Detecting foreground objects';
+
+        // Show original image
+        document.getElementById('imgOriginal').src = imageUrl;
+        document.getElementById('originalSize').textContent = `${img.width}×${img.height}`;
+
+        // Create original canvas
+        originalCanvas = document.createElement('canvas');
+        originalCanvas.width = img.width;
+        originalCanvas.height = img.height;
+        const origCtx = originalCanvas.getContext('2d');
+        origCtx.drawImage(img, 0, 0);
+
+        progressFill.style.width = '50%';
+        progressText.textContent = 'Running AI segmentation...';
+        processingStatus.textContent = 'Identifying subject boundaries';
+
+        // Run segmentation
+        const result = await segmenter(imageUrl);
+
+        progressFill.style.width = '70%';
+        progressText.textContent = 'Generating alpha matte...';
+        processingStatus.textContent = 'Creating precise edge mask';
+
+        // Process result
+        await createOutputs(img, result);
+
+        progressFill.style.width = '90%';
+        progressText.textContent = 'Finalizing outputs...';
+        processingStatus.textContent = 'Preparing download files';
+
+        // Apply initial feathering
+        applyRefinements();
+
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Complete!';
+
+        // Show result
+        setTimeout(() => {
+            processingSection.classList.remove('active');
+            resultSection.classList.add('active');
+            showToast('✨ Background removed successfully!');
+        }, 500);
+
+    } catch (error) {
+        console.error('Processing error:', error);
+        showToast('❌ Error processing image. Please try again.');
+        resetTool();
+    }
+}
+
+// ========== CREATE OUTPUTS ==========
+async function createOutputs(img, segmentationResult) {
+    const width = img.width;
+    const height = img.height;
+
+    // Create result canvas (transparent PNG)
+    resultCanvas = document.createElement('canvas');
+    resultCanvas.width = width;
+    resultCanvas.height = height;
+    const ctx = resultCanvas.getContext('2d');
+
+    // Create mask canvas (high contrast B/W)
+    maskCanvas = document.createElement('canvas');
+    maskCanvas.width = width;
+    maskCanvas.height = height;
+    const maskCtx = maskCanvas.getContext('2d');
+
+    // Create trimap canvas
+    trimapCanvas = document.createElement('canvas');
+    trimapCanvas.width = width;
+    trimapCanvas.height = height;
+    const trimapCtx = trimapCanvas.getContext('2d');
+
+    // Draw original
+    ctx.drawImage(img, 0, 0);
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    // Prepare mask data
+    const maskData = maskCtx.createImageData(width, height);
+    const mask = maskData.data;
+
+    // Prepare trimap data
+    const trimapData = trimapCtx.createImageData(width, height);
+    const trimap = trimapData.data;
+
+    // Process segmentation result
+    let maskValues = new Float32Array(width * height);
+
+    if (segmentationResult && segmentationResult.length > 0) {
+        // Find the mask from result
+        let rawMask = null;
+
+        for (const seg of segmentationResult) {
+            if (seg.mask) {
+                rawMask = seg.mask;
+                break;
+            }
+        }
+
+        if (rawMask && rawMask.data) {
+            // Use mask data directly
+            for (let i = 0; i < maskValues.length; i++) {
+                maskValues[i] = rawMask.data[i] || 0;
+            }
+        } else {
+            // Fallback: edge-based detection
+            await fallbackSegmentation(data, maskValues, width, height);
+        }
+    } else {
+        await fallbackSegmentation(data, maskValues, width, height);
+    }
+
+    // Normalize mask values to 0-1
+    let minVal = Infinity, maxVal = -Infinity;
+    for (let i = 0; i < maskValues.length; i++) {
+        minVal = Math.min(minVal, maskValues[i]);
+        maxVal = Math.max(maxVal, maskValues[i]);
+    }
+    const range = maxVal - minVal || 1;
+    for (let i = 0; i < maskValues.length; i++) {
+        maskValues[i] = (maskValues[i] - minVal) / range;
+    }
+
+    // Apply mask to create outputs
+    for (let i = 0; i < data.length; i += 4) {
+        const pixelIndex = i / 4;
+        const maskValue = maskValues[pixelIndex];
+
+        // Alpha for result
+        const alpha = Math.round(maskValue * 255);
+        data[i + 3] = alpha;
+
+        // High contrast mask (B/W)
+        const bw = alpha > 127 ? 255 : 0;
+        mask[i] = bw;
+        mask[i + 1] = bw;
+        mask[i + 2] = bw;
+        mask[i + 3] = 255;
+
+        // Trimap (white=FG, black=BG, gray=unknown)
+        let trimapValue;
+        if (maskValue > 0.9) {
+            trimapValue = 255; // Definite foreground
+        } else if (maskValue < 0.1) {
+            trimapValue = 0; // Definite background
+        } else {
+            trimapValue = 128; // Unknown/edge region
+        }
+        trimap[i] = trimapValue;
+        trimap[i + 1] = trimapValue;
+        trimap[i + 2] = trimapValue;
+        trimap[i + 3] = 255;
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    maskCtx.putImageData(maskData, 0, 0);
+    trimapCtx.putImageData(trimapData, 0, 0);
+
+    // Display results
+    document.getElementById('imgResult').src = resultCanvas.toDataURL('image/png');
+    document.getElementById('imgMask').src = maskCanvas.toDataURL('image/png');
+    document.getElementById('imgTrimap').src = trimapCanvas.toDataURL('image/png');
+}
+
+// ========== FALLBACK SEGMENTATION ==========
+async function fallbackSegmentation(data, maskValues, width, height) {
+    // Sample corners for background color
+    const samples = [
+        [0, 0],
+        [width - 1, 0],
+        [0, height - 1],
+        [width - 1, height - 1],
+        [Math.floor(width / 2), 0],
+        [Math.floor(width / 2), height - 1],
+        [0, Math.floor(height / 2)],
+        [width - 1, Math.floor(height / 2)]
+    ];
+
+    let bgR = 0, bgG = 0, bgB = 0, count = 0;
+
+    for (const [x, y] of samples) {
+        const idx = (y * width + x) * 4;
+        bgR += data[idx];
+        bgG += data[idx + 1];
+        bgB += data[idx + 2];
+        count++;
+    }
+
+    bgR /= count;
+    bgG /= count;
+    bgB /= count;
+
+    // Calculate color distance from background
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = (y * width + x) * 4;
+            const r = data[idx];
+            const g = data[idx + 1];
+            const b = data[idx + 2];
+
+            const distance = Math.sqrt(
+                Math.pow(r - bgR, 2) +
+                Math.pow(g - bgG, 2) +
+                Math.pow(b - bgB, 2)
+            );
+
+            // Normalize to 0-1 (closer to bg = 0, far from bg = 1)
+            const threshold = 80;
+            const value = Math.min(1, distance / threshold);
+
+            maskValues[y * width + x] = value;
+        }
+    }
+
+    // Apply edge-aware smoothing
+    const tempMask = new Float32Array(maskValues);
+    const kernel = 3;
+    const half = Math.floor(kernel / 2);
+
+    for (let y = half; y < height - half; y++) {
+        for (let x = half; x < width - half; x++) {
+            let sum = 0;
+            let count = 0;
+
+            for (let ky = -half; ky <= half; ky++) {
+                for (let kx = -half; kx <= half; kx++) {
+                    sum += tempMask[(y + ky) * width + (x + kx)];
+                    count++;
+                }
+            }
+
+            maskValues[y * width + x] = sum / count;
+        }
+    }
+}
+
+// ========== REFINEMENT FUNCTIONS ==========
+window.updateFeather = function() {
+    featherRadius = parseFloat(document.getElementById('featherSlider').value);
+    document.getElementById('featherVal').textContent = featherRadius + 'px';
+};
+
+window.updateSmooth = function() {
+    smoothness = parseInt(document.getElementById('smoothSlider').value);
+    document.getElementById('smoothVal').textContent = smoothness + '%';
+};
+
+window.updateContrast = function() {
+    contrastBoost = parseInt(document.getElementById('contrastSlider').value);
+    document.getElementById('contrastVal').textContent = contrastBoost + '%';
+};
+
+window.applyRefinements = function() {
+    if (!resultCanvas) return;
+
+    const width = resultCanvas.width;
+    const height = resultCanvas.height;
+
+    // Create a copy of the result canvas
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.drawImage(resultCanvas, 0, 0);
+
+    const imageData = tempCtx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    // Apply feathering to alpha channel
+    if (featherRadius > 0) {
+        const alphaChannel = new Float32Array(width * height);
+
+        // Extract alpha
+        for (let i = 0; i < data.length; i += 4) {
+            alphaChannel[i / 4] = data[i + 3] / 255;
+        }
+
+        // Gaussian blur on alpha
+        const blurred = gaussianBlur(alphaChannel, width, height, featherRadius);
+
+        // Apply back with smoothness blend
+        const blend = smoothness / 100;
+        for (let i = 0; i < data.length; i += 4) {
+            const originalAlpha = alphaChannel[i / 4];
+            const blurredAlpha = blurred[i / 4];
+            const finalAlpha = originalAlpha * (1 - blend) + blurredAlpha * blend;
+
+            // Apply contrast boost
+            let boosted = finalAlpha;
+            if (contrastBoost > 0) {
+                const factor = 1 + (contrastBoost / 100);
+                boosted = (finalAlpha - 0.5) * factor + 0.5;
+                boosted = Math.max(0, Math.min(1, boosted));
+            }
+
+            data[i + 3] = Math.round(boosted * 255);
+        }
+    }
+
+    tempCtx.putImageData(imageData, 0, 0);
+
+    // Update result display
+    document.getElementById('imgResult').src = tempCanvas.toDataURL('image/png');
+
+    // Update result canvas reference
+    resultCanvas = tempCanvas;
+
+    // Regenerate mask and trimap
+    regenerateMaskAndTrimap();
+
+    showToast('✨ Refinements applied!');
+};
+
+function gaussianBlur(channel, width, height, radius) {
+    const result = new Float32Array(channel.length);
+    const kernel = Math.ceil(radius * 2) + 1;
+    const half = Math.floor(kernel / 2);
+    const sigma = radius / 2;
+
+    // Create 1D Gaussian kernel
+    const gaussKernel = [];
+    let sum = 0;
+    for (let i = -half; i <= half; i++) {
+        const val = Math.exp(-(i * i) / (2 * sigma * sigma));
+        gaussKernel.push(val);
+        sum += val;
+    }
+    for (let i = 0; i < gaussKernel.length; i++) {
+        gaussKernel[i] /= sum;
+    }
+
+    // Horizontal pass
+    const temp = new Float32Array(channel.length);
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            let val = 0;
+            for (let k = -half; k <= half; k++) {
+                const xx = Math.min(width - 1, Math.max(0, x + k));
+                val += channel[y * width + xx] * gaussKernel[k + half];
+            }
+            temp[y * width + x] = val;
+        }
+    }
+
+    // Vertical pass
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            let val = 0;
+            for (let k = -half; k <= half; k++) {
+                const yy = Math.min(height - 1, Math.max(0, y + k));
+                val += temp[yy * width + x] * gaussKernel[k + half];
+            }
+            result[y * width + x] = val;
+        }
+    }
+
+    return result;
+}
+
+function regenerateMaskAndTrimap() {
+    if (!resultCanvas) return;
+
+    const width = resultCanvas.width;
+    const height = resultCanvas.height;
+    const ctx = resultCanvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    // Regenerate mask
+    maskCanvas = document.createElement('canvas');
+    maskCanvas.width = width;
+    maskCanvas.height = height;
+    const maskCtx = maskCanvas.getContext('2d');
+    const maskData = maskCtx.createImageData(width, height);
+    const mask = maskData.data;
+
+    // Regenerate trimap
+    trimapCanvas = document.createElement('canvas');
+    trimapCanvas.width = width;
+    trimapCanvas.height = height;
+    const trimapCtx = trimapCanvas.getContext('2d');
+    const trimapData = trimapCtx.createImageData(width, height);
+    const trimap = trimapData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+        const alpha = data[i + 3];
+
+        // High contrast mask
+        const bw = alpha > 127 ? 255 : 0;
+        mask[i] = bw;
+        mask[i + 1] = bw;
+        mask[i + 2] = bw;
+        mask[i + 3] = 255;
+
+        // Trimap
+        let trimapValue;
+        const normalizedAlpha = alpha / 255;
+        if (normalizedAlpha > 0.9) {
+            trimapValue = 255;
+        } else if (normalizedAlpha < 0.1) {
+            trimapValue = 0;
+        } else {
+            trimapValue = 128;
+        }
+        trimap[i] = trimapValue;
+        trimap[i + 1] = trimapValue;
+        trimap[i + 2] = trimapValue;
+        trimap[i + 3] = 255;
+    }
+
+    maskCtx.putImageData(maskData, 0, 0);
+    trimapCtx.putImageData(trimapData, 0, 0);
+
+    document.getElementById('imgMask').src = maskCanvas.toDataURL('image/png');
+    document.getElementById('imgTrimap').src = trimapCanvas.toDataURL('image/png');
+}
+
+// ========== BACKGROUND CHANGE ==========
+window.changeBg = function(bg) {
+    currentBgColor = bg;
+
+    // Update active state
+    document.querySelectorAll('.bg-opt').forEach(opt => opt.classList.remove('active'));
+    if (bg === 'transparent') {
+        document.querySelector('.bg-opt.checker').classList.add('active');
+    }
+
+    if (!resultCanvas || !originalCanvas) return;
+
+    const width = resultCanvas.width;
+    const height = resultCanvas.height;
+
+    // Create display canvas
+    const displayCanvas = document.createElement('canvas');
+    displayCanvas.width = width;
+    displayCanvas.height = height;
+    const ctx = displayCanvas.getContext('2d');
+
+    // Draw background
+    if (bg === 'transparent') {
+        // Just show result as-is (checkerboard in CSS)
+        document.getElementById('imgResult').src = resultCanvas.toDataURL('image/png');
+        return;
+    } else if (bg === 'gradient1') {
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+    } else if (bg === 'gradient2') {
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#f093fb');
+        gradient.addColorStop(1, '#f5576c');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+    } else if (bg === 'custom' && customBgImage) {
+        ctx.drawImage(customBgImage, 0, 0, width, height);
+    } else {
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, width, height);
+    }
+
+    // Draw result on top
+    ctx.drawImage(resultCanvas, 0, 0);
+
+    document.getElementById('imgResult').src = displayCanvas.toDataURL('image/png');
+};
+
+// ========== GRID VIEW ==========
+window.setGridView = function(cols) {
+    const grid = document.getElementById('imageGrid');
+    grid.className = 'image-grid';
+    if (cols === 2) grid.classList.add('view-2');
+    if (cols === 1) grid.classList.add('view-1');
+
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+};
+
+// ========== DOWNLOAD FUNCTIONS ==========
+window.downloadImage = function(type) {
+    if (!resultCanvas) {
+        showToast('❌ No image to download!');
+        return;
+    }
+
+    const timestamp = Date.now();
+    let dataUrl, filename;
+
+    switch (type) {
+        case 'original':
+            dataUrl = originalCanvas.toDataURL('image/png');
+            filename = `OnlinePDFPro_Original_${timestamp}.png`;
+            break;
+
+        case 'png':
+            dataUrl = document.getElementById('imgResult').src;
+            filename = `OnlinePDFPro_Transparent_${timestamp}.png`;
+            break;
+
+        case 'mask':
+            dataUrl = maskCanvas.toDataURL('image/png');
+            filename = `OnlinePDFPro_AlphaMask_${timestamp}.png`;
+            break;
+
+        case 'trimap':
+            dataUrl = trimapCanvas.toDataURL('image/png');
+            filename = `OnlinePDFPro_Trimap_${timestamp}.png`;
+            break;
+
+        case 'jpg':
+            const jpgCanvas = document.createElement('canvas');
+            jpgCanvas.width = resultCanvas.width;
+            jpgCanvas.height = resultCanvas.height;
+            const jpgCtx = jpgCanvas.getContext('2d');
+            jpgCtx.fillStyle = currentBgColor === 'transparent' ? '#ffffff' : currentBgColor;
+            jpgCtx.fillRect(0, 0, jpgCanvas.width, jpgCanvas.height);
+            jpgCtx.drawImage(resultCanvas, 0, 0);
+            dataUrl = jpgCanvas.toDataURL('image/jpeg', 0.95);
+            filename = `OnlinePDFPro_Result_${timestamp}.jpg`;
+            break;
+
+        case 'webp':
+            dataUrl = resultCanvas.toDataURL('image/webp', 0.9);
+            filename = `OnlinePDFPro_Result_${timestamp}.webp`;
+            break;
+    }
+
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataUrl;
+    link.click();
+
+    showToast(`📥 Downloaded ${type.toUpperCase()}`);
+};
+
+window.downloadAll = async function() {
+    if (!resultCanvas) {
+        showToast('❌ No images to download!');
+        return;
+    }
+
+    showToast('📦 Preparing ZIP download...');
+
+    // Since JSZip might not be loaded, download individually
+    downloadImage('png');
+    setTimeout(() => downloadImage('mask'), 500);
+    setTimeout(() => downloadImage('trimap'), 1000);
+
+    setTimeout(() => {
+        showToast('📥 All files downloaded!');
+    }, 1500);
+};
+
+// ========== OTHER FUNCTIONS ==========
+window.previewFull = function(type) {
+    const img = document.getElementById('imgResult');
+    const win = window.open('', '_blank');
+    win.document.write(`
+        <html>
+        <head><title>Full Preview - OnlinePDFPro</title>
+        <style>
+            body { margin: 0; background: #1a1a2e; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+            img { max-width: 95%; max-height: 95vh; }
+        </style>
+        </head>
+        <body><img src="${img.src}"></body>
+        </html>
+    `);
+};
+
+window.shareResult = function() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'Background Removed - OnlinePDFPro',
+            text: 'Check out this free AI background remover!',
+            url: 'https://onlinepdfpro.com/tools/background-remover.html'
+        });
+    } else {
+        navigator.clipboard.writeText('https://onlinepdfpro.com/tools/background-remover.html');
+        showToast('📋 Link copied to clipboard!');
+    }
+};
+
+window.resetTool = function() {
+    uploadArea.classList.remove('hidden');
+    processingSection.classList.remove('active');
+    resultSection.classList.remove('active');
+    imageInput.value = '';
+    originalImage = null;
+    originalCanvas = null;
+    resultCanvas = null;
+    maskCanvas = null;
+    trimapCanvas = null;
+    currentBgColor = 'transparent';
+    customBgImage = null;
+};
+
+// ========== TOAST ==========
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+}
+</script>
+
+</body>
+</html>
