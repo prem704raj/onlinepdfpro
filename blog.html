@@ -2,63 +2,80 @@
 <html lang="en">
 
 <head>
-<!-- ===== MUST HAVE SEO META TAGS ===== -->
-<!-- Primary Meta Tags -->
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog - PDF Tips, Tricks & Guides | Online PDF Pro</title>
-    <!-- Preconnect to CDNs for Speed -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-<meta name="description" content="Learn PDF tips, tricks and guides. How to compress, merge, sign PDFs. Best free PDF tools. Student guides for document management.">
-<meta name="keywords" content="pdf tips, how to compress pdf, how to merge pdf, pdf guide, free pdf tools blog">
-<meta name="author" content="OnlinePDFPro">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://onlinepdfpro.com/blog.html">
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://onlinepdfpro.com/blog.html">
-<meta property="og:title" content="Blog - PDF Tips, Tricks & Guides | Online PDF Pro">
-<meta property="og:description" content="Learn PDF tips, tricks and guides. How to compress, merge, sign PDFs. Best free PDF tools. Student guides for document management.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-blog.png">
-<meta property="og:site_name" content="OnlinePDFPro">
-<meta property="og:locale" content="en_US">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://onlinepdfpro.com/blog.html">
-<meta name="twitter:title" content="Blog - PDF Tips, Tricks & Guides | Online PDF Pro">
-<meta name="twitter:description" content="Learn PDF tips, tricks and guides. How to compress, merge, sign PDFs. Best free PDF tools. Student guides for document management.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-blog.png">
-
-<!-- Favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#2563eb">
-
-<!-- Hreflang (if you plan multilingual) -->
-<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/blog.html">
-<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/blog.html">
-
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - PDF Tips, Guides & Tutorials | OnlinePDFPro</title>
+    <meta name="description"
+        content="Learn how to merge, split, compress, convert PDFs and more. Free guides, tutorials, and tips for working with PDF documents.">
+    <link rel="canonical" href="https://onlinepdfpro.com/blog.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blog - PDF Tips, Guides & Tutorials | OnlinePDFPro">
+    <meta property="og:description" content="Free guides, tutorials, and tips for working with PDF documents.">
+    <meta property="og:url" content="https://onlinepdfpro.com/blog.html">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog - PDF Tips & Guides | OnlinePDFPro">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #333;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 20px;
+        }
+
+        header .container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #fff;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        header h1 a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        header nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        header nav a:hover {
+            color: #fff;
+        }
+
         .blog-hero {
             text-align: center;
             padding: 60px 20px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
-            border-radius: 24px;
-            margin: 30px 0;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
+            color: #fff;
         }
 
-        .blog-hero h1 {
-            font-size: 42px;
-            margin: 0 0 15px;
+        .blog-hero h2 {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 15px;
+            font-weight: 800;
         }
 
         .blog-hero p {
@@ -69,515 +86,213 @@
         }
 
         .blog-grid {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
         }
 
         .blog-card {
-            background: white;
-            border-radius: 20px;
+            background: #fff;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            transition: 0.3s;
+            border: 2px solid #e2e8f0;
             text-decoration: none;
             color: inherit;
-            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            border-color: #2563eb;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
         }
 
-        .blog-card-image {
-            width: 100%;
-            height: 200px;
+        .blog-card-img {
+            height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 50px;
+            flex-shrink: 0;
         }
 
         .blog-card-body {
-            padding: 25px;
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .blog-card-body .tag {
+        .category {
             display: inline-block;
-            padding: 5px 12px;
-            background: #f0f9ff;
+            padding: 5px 14px;
+            background: rgba(37, 99, 235, 0.1);
             color: #2563eb;
-            border-radius: 20px;
+            border-radius: 50px;
             font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            align-self: flex-start;
         }
 
-        .blog-card-body h2 {
-            font-size: 20px;
-            margin: 0 0 10px;
-            color: #333;
+        .blog-card-body h3 {
+            font-size: 19px;
+            margin-bottom: 10px;
+            color: #1e293b;
             line-height: 1.4;
         }
 
         .blog-card-body p {
-            color: #666;
-            font-size: 15px;
+            color: #64748b;
+            font-size: 14px;
             line-height: 1.6;
-            margin: 0 0 15px;
+            margin-bottom: 15px;
+            flex: 1;
         }
 
-        .blog-card-body .read-more {
-            color: #2563eb;
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .blog-card-body .date {
+        .meta {
             font-size: 13px;
             color: #94a3b8;
+            display: flex;
+            gap: 15px;
         }
 
-        .article-content {
-            display: none;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-            line-height: 2;
-            font-size: 17px;
-        }
-
-        .article-content h1 {
-            font-size: 36px;
-            color: #333;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-
-        .article-content .meta {
-            color: #94a3b8;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        .article-content h2 {
-            color: #2563eb;
-            margin: 30px 0 15px;
-            font-size: 24px;
-        }
-
-        .article-content ul,
-        .article-content ol {
-            margin: 15px 0;
-            padding-left: 25px;
-        }
-
-        .article-content li {
-            margin: 8px 0;
-        }
-
-        .article-content a {
-            color: #2563eb;
-            font-weight: bold;
-        }
-
-        .article-content .cta-box {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            padding: 25px;
-            border-radius: 16px;
-            border: 2px solid #2563eb;
+        .blog-footer {
             text-align: center;
-            margin: 30px 0;
+            padding: 50px 20px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 50px;
         }
 
-        .article-content .cta-box a {
-            display: inline-block;
-            padding: 14px 30px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .back-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #f0f9ff;
+        .blog-footer a {
             color: #2563eb;
-            border-radius: 12px;
             text-decoration: none;
-            font-weight: bold;
-            margin-bottom: 20px;
-            cursor: pointer;
-            border: 2px solid #2563eb;
         }
 
-        .back-btn:hover {
-            background: #2563eb;
-            color: white;
+        @media (max-width:768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
-    </script>
 </head>
 
-<body style="background:#f8fafc;">
-
-    <header style="background:var(--surface-1); padding:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+<body>
+    <header>
         <div class="container">
-            <h1 style="margin:0; font-size:24px;"><a href="index.html"
-                    style="text-decoration:none; color:var(--text-primary);">← Online PDF Pro</a> / Blog</h1>
+            <h1><a href="index.html">OnlinePDFPro</a></h1>
+            <nav>
+                <a href="tools.html">Tools</a>
+                <a href="blog.html" style="color:#fff;">Blog</a>
+                <a href="about.html">About</a>
+            </nav>
         </div>
     </header>
 
-    <main class="container">
+    <div class="blog-hero">
+        <h2>📚 OnlinePDFPro Blog</h2>
+        <p>Free guides, tutorials, and tips for working with PDFs — privacy first, always.</p>
+    </div>
 
-        <div id="blogList">
-            <div class="blog-hero">
-                <h1>📝 PDF Tips & Guides</h1>
-                <p>Learn how to work smarter with PDFs. Free guides for students and professionals.</p>
+    <div class="blog-grid">
+
+        <a href="blog/how-to-merge-pdf-online-free.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">📄</div>
+            <div class="blog-card-body">
+                <span class="category">PDF Guide</span>
+                <h3>How to Merge PDF Files Online for Free (2025 Guide)</h3>
+                <p>Combine multiple PDF files into one document in 3 easy steps. No signup, no watermark, no upload.</p>
+                <div class="meta"><span>📅 Jan 26, 2025</span><span>⏱️ 8 min</span></div>
             </div>
+        </a>
 
-            
-        <div class="hp-section" style="max-width: 1060px; margin: 40px auto; padding: 0 20px;">
-            
-            <div style="margin-bottom: 60px;">
-                <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display:flex; align-items:center; gap:10px;">
-                    <span style="background:#fef3c7; color:#d97706; padding:4px 10px; border-radius:6px; font-size:14px;">Month 1</span> High Priority Guides
-                </h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
-                    
-            <a href="blog/how-to-merge-pdf-files-online-for-free-2025-guide.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Merge PDF Files Online for Free (2025 Guide)</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to merge pdf files online for free (2025 guide) with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-compress-pdf-files-without-losing-quality.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Compress PDF Files Without Losing Quality</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to compress pdf files without losing quality with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-pdf-to-word-online-free.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert PDF to Word Online Free</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert pdf to word online free with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-split-pdf-into-multiple-files.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Split PDF into Multiple Files</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to split pdf into multiple files with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/best-free-online-pdf-tools-in-2025-comparison.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">Best Free Online PDF Tools in 2025 (Comparison)</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn best free online pdf tools in 2025 (comparison) with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-remove-password-from-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Remove Password from PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to remove password from pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-add-page-numbers-to-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Add Page Numbers to PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to add page numbers to pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-images-to-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert Images to PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert images to pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-                </div>
+        <a href="blog/how-to-compress-pdf-without-losing-quality.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#10b981,#059669);">📦</div>
+            <div class="blog-card-body">
+                <span class="category">Compression</span>
+                <h3>How to Compress PDF Without Losing Quality</h3>
+                <p>Reduce PDF file size by up to 90% while keeping text and images sharp. Perfect for email.</p>
+                <div class="meta"><span>📅 Jan 27, 2025</span><span>⏱️ 7 min</span></div>
             </div>
-            
-            <div style="margin-bottom: 60px;">
-                <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display:flex; align-items:center; gap:10px;">
-                    <span style="background:#e0e7ff; color:#4f46e5; padding:4px 10px; border-radius:6px; font-size:14px;">Month 2</span> Intermediate Content
-                </h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
-                    
-            <a href="blog/pdf-vs-docx-which-format-should-you-use.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">PDF vs DOCX: Which Format Should You Use?</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn pdf vs docx: which format should you use? with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-edit-pdf-files-online-without-adobe-acrobat.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Edit PDF Files Online Without Adobe Acrobat</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to edit pdf files online without adobe acrobat with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-sign-pdf-documents-online-for-free.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Sign PDF Documents Online for Free</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to sign pdf documents online for free with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-excel-to-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert Excel to PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert excel to pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/ocr-technology-how-to-extract-text-from-images.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">OCR Technology: How to Extract Text from Images</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn ocr technology: how to extract text from images with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-reduce-pdf-file-size-for-email.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Reduce PDF File Size for Email</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to reduce pdf file size for email with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-ppt-to-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert PPT to PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert ppt to pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-                </div>
+        </a>
+
+        <a href="blog/how-to-convert-pdf-to-word-free.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">📝</div>
+            <div class="blog-card-body">
+                <span class="category">Conversion</span>
+                <h3>How to Convert PDF to Word Online Free</h3>
+                <p>Convert PDF documents to editable Word files in seconds. Preserves formatting perfectly.</p>
+                <div class="meta"><span>📅 Jan 28, 2025</span><span>⏱️ 6 min</span></div>
             </div>
-            
-            <div style="margin-bottom: 60px;">
-                <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display:flex; align-items:center; gap:10px;">
-                    <span style="background:#dcfce7; color:#16a34a; padding:4px 10px; border-radius:6px; font-size:14px;">Month 3</span> Long-Tail Articles
-                </h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
-                    
-            <a href="blog/how-to-merge-pdf-on-iphone-without-app.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Merge PDF on iPhone Without App</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to merge pdf on iphone without app with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-compress-pdf-below-100kb.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Compress PDF Below 100KB</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to compress pdf below 100kb with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-scanned-pdf-to-word.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert Scanned PDF to Word</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert scanned pdf to word with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-add-watermark-to-pdf-online.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Add Watermark to PDF Online</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to add watermark to pdf online with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-whatsapp-chat-to-pdf.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert WhatsApp Chat to PDF</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert whatsapp chat to pdf with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/how-to-convert-aadhaar-pdf-to-jpg.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">How to Convert Aadhaar PDF to JPG</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn how to convert aadhaar pdf to jpg with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-            <a href="blog/best-pdf-tools-for-students-in-india.html" style="display:block; text-decoration:none; color:inherit; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:24px; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                    <span style="background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">GUIDE</span>
-                    <span style="color:#64748b; font-size:13px;">5 min read</span>
-                </div>
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">Best PDF Tools for Students in India</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.6;">Learn best pdf tools for students in india with our complete step-by-step guide. Fast and secure.</p>
-            </a>
-                </div>
+        </a>
+
+        <a href="blog/how-to-split-pdf-online.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">✂️</div>
+            <div class="blog-card-body">
+                <span class="category">PDF Guide</span>
+                <h3>How to Split PDF into Multiple Files Online</h3>
+                <p>Extract specific pages or split a large PDF into smaller files. Free and instant.</p>
+                <div class="meta"><span>📅 Jan 29, 2025</span><span>⏱️ 6 min</span></div>
             </div>
-            
-        </div>
-    
-</main>
+        </a>
 
-    <script>
-        function showArticle(id) {
-            document.getElementById('blogList').style.display = 'none';
-            document.querySelectorAll('.article-content').forEach(a => a.style.display = 'none');
-            document.getElementById('article-' + id).style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        function hideArticle() {
-            document.querySelectorAll('.article-content').forEach(a => a.style.display = 'none');
-            document.getElementById('blogList').style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-    </script>
-
-
-    <footer style="background:white; padding:40px 20px; margin-top:60px; box-shadow:0 -2px 20px rgba(0,0,0,0.05);">
-        <div style="max-width:1200px; margin:0 auto;">
-
-            <!-- Top Footer -->
-            <div
-                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
-
-                <!-- About -->
-                <div>
-                    <h4 style="color:#2563eb; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
-                    <p style="color:#666; font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+
-                        people worldwide. No registration, no watermark, no limits.</p>
-                </div>
-
-                <!-- Popular Tools -->
-                <div>
-                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Popular Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="/tools/merge-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Merge PDF</a></li>
-                        <li style="margin:8px 0;"><a href="/tools/compress-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Compress PDF</a></li>
-                        <li style="margin:8px 0;"><a href="/tools/sign-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Sign PDF</a></li>
-                        <li style="margin:8px 0;"><a href="/tools/pdf-to-word.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">PDF to Word</a></li>
-                        <li style="margin:8px 0;"><a href="/pdf-editor.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">PDF Editor</a></li>
-                    </ul>
-                </div>
-
-                <!-- More Tools -->
-                <div>
-                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">More Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="/tools/ocr.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">OCR Extract Text</a></li>
-                        <li style="margin:8px 0;"><a href="/voice-to-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Voice to PDF</a></li>
-                        <li style="margin:8px 0;"><a href="/tools/pdf-to-images.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">PDF to JPG</a></li>
-                        <li style="margin:8px 0;"><a href="/compare-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Compare PDFs</a></li>
-                        <li style="margin:8px 0;"><a href="/qr-pdf.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">QR Code in PDF</a></li>
-                    </ul>
-                </div>
-
-                <!-- Company -->
-                <div>
-                    <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Company</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="/about.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">About Us</a></li>
-                        <li style="margin:8px 0;"><a href="/contact.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Contact Us</a></li>
-                        <li style="margin:8px 0;"><a href="/privacy.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Privacy Policy</a></li>
-                        <li style="margin:8px 0;"><a href="/terms.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Terms of Service</a></li>
-                        <li style="margin:8px 0;"><a href="/blog.html"
-                                style="color:#666; text-decoration:none; font-size:14px;">Blog</a></li>
-                    </ul>
-                </div>
-
+        <a href="blog/best-free-pdf-tools-2025.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">⭐</div>
+            <div class="blog-card-body">
+                <span class="category">Comparison</span>
+                <h3>Best Free Online PDF Tools in 2025 (Complete Comparison)</h3>
+                <p>OnlinePDFPro vs iLovePDF vs SmallPDF vs Adobe. Which is truly the best free option?</p>
+                <div class="meta"><span>📅 Jan 30, 2025</span><span>⏱️ 10 min</span></div>
             </div>
+        </a>
 
-            <!-- Divider -->
-            <div style="height:1px; background:#e2e8f0; margin:20px 0;"></div>
-
-            <!-- Bottom Footer -->
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-                <p style="color:#94a3b8; font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights reserved. Made
-                    with ❤️ in India.</p>
-                <div style="display:flex; gap:15px;">
-                    <span
-                        style="padding:6px 14px; background:#f0f9ff; border-radius:20px; font-size:12px; color:#2563eb; font-weight:bold;">🔒
-                        Your files are safe</span>
-                    <span
-                        style="padding:6px 14px; background:#f0fdf4; border-radius:20px; font-size:12px; color:#10b981; font-weight:bold;">⚡
-                        100% Client-Side</span>
-                </div>
+        <a href="blog/how-to-convert-images-to-pdf.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">🖼️</div>
+            <div class="blog-card-body">
+                <span class="category">Conversion</span>
+                <h3>How to Convert Images to PDF (JPG, PNG to PDF)</h3>
+                <p>Convert multiple images into a single PDF. Perfect for scanned documents and portfolios.</p>
+                <div class="meta"><span>📅 Feb 1, 2025</span><span>⏱️ 5 min</span></div>
             </div>
+        </a>
 
-        </div>
-    </footer>
+        <a href="blog/how-to-edit-pdf-online-free.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#ec4899,#db2777);">✏️</div>
+            <div class="blog-card-body">
+                <span class="category">PDF Guide</span>
+                <h3>How to Edit PDF Files Online Free (Without Adobe)</h3>
+                <p>Edit text, add images, annotate, and modify PDFs online without expensive software.</p>
+                <div class="meta"><span>📅 Feb 3, 2025</span><span>⏱️ 7 min</span></div>
+            </div>
+        </a>
 
+        <a href="blog/how-to-reduce-pdf-size-for-email.html" class="blog-card">
+            <div class="blog-card-img" style="background:linear-gradient(135deg,#14b8a6,#0d9488);">📧</div>
+            <div class="blog-card-body">
+                <span class="category">Tips</span>
+                <h3>How to Reduce PDF Size for Email (Under 5MB, 1MB, 100KB)</h3>
+                <p>Compress PDFs to specific sizes for Gmail, Outlook, and government portals.</p>
+                <div class="meta"><span>📅 Feb 5, 2025</span><span>⏱️ 6 min</span></div>
+            </div>
+        </a>
 
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
-    });
-}
-</script>
+    </div>
+
+    <div class="blog-footer">
+        <p>© 2026 <a href="index.html">OnlinePDFPro.com</a> — Privacy-First PDF Tools</p>
+        <p style="margin-top:10px">
+            <a href="tools.html">All Tools</a> ·
+            <a href="about.html">About</a> ·
+            <a href="privacy.html">Privacy</a>
+        </p>
+    </div>
 </body>
 
 </html>
