@@ -169,9 +169,9 @@
     <!-- Homepage Scoped Styles -->
     <style>
         .hp-hero {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
+            background: linear-gradient(90deg, #2b6df6 0%, #8b5cf6 100%);
             color: white;
-            padding: 80px 20px 60px;
+            padding: 56px 20px 60px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -195,12 +195,8 @@
             line-height: 1.15;
         }
 
-        .hp-hero h1 span {
-            color: #a5f3fc;
-        }
-
         .hp-hero p {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.25rem);
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto 32px;
@@ -208,54 +204,62 @@
         }
 
         .hp-hero-actions {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
-        .hp-hero-actions a {
-            padding: 14px 32px;
+        .hp-hero-btn-primary {
+            background: #fff;
+            color: #2b6df6;
+            padding: 14px 26px;
             border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
             text-decoration: none;
             transition: all 0.25s;
-        }
-
-        .hp-btn-primary {
-            background: white;
-            color: #2563eb;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .hp-btn-primary:hover {
+        .hp-hero-btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .hp-btn-ghost {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
+        .hp-hero-cta-link {
+            margin-left: 16px;
+            color: rgba(255, 255, 255, 0.92);
+            text-decoration: underline;
+            font-weight: 500;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .hp-hero-cta-link:hover {
+            opacity: 1;
+            color: #fff;
+        }
+
+        .hp-hero-trust-row {
+            margin-top: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
             backdrop-filter: blur(4px);
-        }
-
-        .hp-btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .hp-hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            font-size: 0.85rem;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 600px) {
+            .hp-hero-cta-link {
+                margin-left: 0;
+                margin-top: 16px;
+            }
+
+            .hp-hero-actions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
         .hp-hero-badge svg {
@@ -523,21 +527,13 @@
         <!-- HERO -->
         <section class="hp-hero">
             <div class="container">
-                <h1>Free PDF Tools,<br><span>100% Private.</span></h1>
-                <p>Compress, merge, split, and convert documents right in your browser. No uploads, no servers — just
-                    results.</p>
+                <h1>OnlinePDFPro — 100% Private PDF Tools</h1>
+                <p>No uploads. All processing runs in your browser. Fast, secure, and free.</p>
                 <div class="hp-hero-actions">
-                    <a href="tools.html" class="hp-btn-primary">Explore All Tools</a>
-                    <a href="#tools-section" class="hp-btn-ghost">See What's Possible ↓</a>
+                    <a class="hp-hero-btn-primary" href="/#tools-section">Try Tools — No Uploads, Starts in Browser</a>
+                    <a class="hp-hero-cta-link" href="/about.html#privacy">Learn Why This Is Private</a>
                 </div>
-                <div class="hp-hero-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span>Your files never leave your device · <a href="privacy.html"
-                            style="color:#a5f3fc; text-decoration:none;">Privacy Policy</a></span>
-                </div>
+                <div class="hp-hero-trust-row">🔒 Files never leave your device — client-side processing</div>
             </div>
         </section>
 
