@@ -243,14 +243,21 @@ a {
     background: var(--surface-2);
 }
 
-[data-theme="light"] .theme-icon-dark,
-:not([data-theme="light"]) .theme-icon-light {
-    display: inline !important;
+/* Hide dark icon in light mode, hide light icon in dark mode */
+[data-theme="light"] .theme-icon-dark {
+    display: none;
 }
 
-[data-theme="light"] .theme-icon-light,
+[data-theme="light"] .theme-icon-light {
+    display: inline;
+}
+
+:not([data-theme="light"]) .theme-icon-light {
+    display: none;
+}
+
 :not([data-theme="light"]) .theme-icon-dark {
-    display: none !important;
+    display: inline;
 }
 
 /* ---- Buttons ---- */
