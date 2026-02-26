@@ -243,21 +243,21 @@ a {
     background: var(--surface-2);
 }
 
-/* Hide dark icon in light mode, hide light icon in dark mode */
+/* Show sun in light mode, show moon in dark mode */
 [data-theme="light"] .theme-icon-dark {
-    display: none;
+    display: inline;
 }
 
 [data-theme="light"] .theme-icon-light {
-    display: inline;
-}
-
-:not([data-theme="light"]) .theme-icon-light {
     display: none;
 }
 
-:not([data-theme="light"]) .theme-icon-dark {
+:not([data-theme="light"]) .theme-icon-light {
     display: inline;
+}
+
+:not([data-theme="light"]) .theme-icon-dark {
+    display: none;
 }
 
 /* ---- Buttons ---- */
