@@ -1,15 +1,10 @@
 """
-Fix all tool page intros to match the OCR page pattern exactly.
-- For root pages (14): Replace the inline-style tool-header with the proper 
-  OCR-style pattern using section-tag, tool-title, tool-description classes
-- For tools/ pages (4): Add the proper intro where missing
-- Also loads css/style.css + css/tools.css if not already loaded
+FINAL FIX: Replace all tool-header intros with hardcoded inline styles
+that match OCR's visual output exactly. No CSS variable dependencies.
 """
 import re, glob
 
-# ===== DEFINITIONS =====
 PAGES = {
-    # Root pages
     'compare-pdf.html': ('PDF Comparison', 'Compare PDFs Side by Side', 'Compare two PDF documents and spot differences instantly. Your files never leave your device.'),
     'excel-to-pdf.html': ('File Conversion', 'Excel to PDF Converter', 'Convert Excel spreadsheets to PDF format online for free. No signup, no watermark.'),
     'flatten-pdf.html': ('PDF Processing', 'Flatten PDF', 'Flatten PDF form fields and annotations into a clean, non-editable document. Your files never leave your device.'),
@@ -24,105 +19,67 @@ PAGES = {
     'text-to-audio.html': ('Accessibility', 'Text to Speech & PDF to Audio', 'Convert text or PDF documents to audio with 50+ voices in multiple languages. Free and instant.'),
     'voice-to-pdf.html': ('Document Creation', 'Voice to PDF', 'Speak and convert your voice to a professional PDF document instantly. No typing needed.'),
     'word-to-pdf.html': ('File Conversion', 'Word to PDF Converter', 'Convert Word documents (.doc, .docx) to PDF format online for free. No signup required.'),
-    # Tools pages missing intro
     'tools/images-to-pdf.html': ('File Conversion', 'Images to PDF', 'Convert JPG, PNG, and other images to a single PDF document. Arrange pages in any order.'),
     'tools/qr-generator.html': ('Utility', 'QR Code Generator', 'Generate QR codes from any text or URL instantly. Download as PNG or SVG.'),
     'tools/repair-pdf.html': ('PDF Recovery', 'Repair Corrupted PDF', 'Fix and recover damaged or corrupted PDF files. Restore your documents instantly.'),
     'tools/rotate-pdf-godmode.html': ('PDF Processing', 'Rotate PDF Pages', 'Rotate individual PDF pages or entire documents. Choose 90, 180, or 270 degrees.'),
 }
 
-# The proper intro HTML matching OCR page pattern
-INTRO_HTML = """
-    <div class="tool-header">
-        <span class="section-tag fade-in">{category}</span>
-        <h1 class="tool-title fade-in">{title}</h1>
-        <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-            {description}
-        </p>
+# Exact visual match of OCR page - hardcoded colors, no CSS vars
+def make_intro(cat, title, desc):
+    return f'''
+    <div class="tool-header" style="text-align:center; margin-bottom:48px;">
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">{cat}</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">{title}</h1>
+        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">{desc}</p>
     </div>
-"""
+'''
 
 count = 0
-for filename, (category, title, description) in PAGES.items():
+for filename, (cat, title, desc) in PAGES.items():
     try:
         html = open(filename, 'r', encoding='utf-8').read()
     except FileNotFoundError:
-        print(f"  SKIP (not found): {filename}")
         continue
 
-    new_intro = INTRO_HTML.format(category=category, title=title, description=description)
-    changed = False
+    new_intro = make_intro(cat, title, desc)
 
-    # STEP 1: Remove old inline-style tool-header if present
-    old_pattern = re.search(
-        r'<div class="tool-header"[^>]*>.*?</div>\s*',
-        html,
-        re.DOTALL
-    )
-    if old_pattern:
-        # Count closing divs - the tool-header has 3 child elements, so find the right closing </div>
-        start = old_pattern.start()
-        # Find the boundaries more carefully  
-        block_start = html.find('<div class="tool-header"', start)
-        if block_start >= 0:
-            # Count nested divs to find the correct closing tag
-            depth = 0
-            i = block_start
-            block_end = -1
-            while i < len(html):
-                if html[i:i+4] == '<div':
-                    depth += 1
-                elif html[i:i+6] == '</div>':
-                    depth -= 1
-                    if depth == 0:
-                        block_end = i + 6
-                        break
-                i += 1
-            
-            if block_end > block_start:
-                # Also remove any trailing whitespace
-                while block_end < len(html) and html[block_end] in '\r\n ':
-                    block_end += 1
-                html = html[:block_start] + new_intro + html[block_end:]
-                changed = True
-
-    if not changed:
-        # STEP 2: No old tool-header found, insert after <main...> or first container
-        main_match = re.search(r'(<main[^>]*>)', html)
-        if main_match:
-            pos = main_match.end()
-            # Check if there's a container div right after
-            after_main = html[pos:pos+200]
-            container_match = re.search(r'(\s*<div[^>]*class="container"[^>]*>)', after_main)
-            if container_match:
-                pos = pos + container_match.end()
-            html = html[:pos] + new_intro + html[pos:]
-            changed = True
-        else:
-            body_match = re.search(r'(<body[^>]*>)', html)
-            if body_match:
-                pos = body_match.end()
-                html = html[:pos] + new_intro + html[pos:]
-                changed = True
-
-    # STEP 3: Ensure css/tools.css is loaded (needed for section-tag, tool-title, etc.)
-    is_tools_subdir = filename.startswith('tools/')
-    tools_css_path = '/css/tools.css' if is_tools_subdir else 'css/tools.css'
-    style_css_path = '/css/style.css' if is_tools_subdir else 'css/style.css'
-    
-    if 'tools.css' not in html:
-        # Add tools.css link before </head>
-        head_end = html.find('</head>')
-        if head_end > 0:
-            css_link = f'\n    <link rel="stylesheet" href="{tools_css_path}">\n'
-            html = html[:head_end] + css_link + html[head_end:]
-            changed = True
-
-    if changed:
-        open(filename, 'w', encoding='utf-8').write(html)
-        count += 1
-        print(f"  FIXED: {filename}")
+    # Remove existing tool-header div (find start and matching close)
+    match = re.search(r'<div class="tool-header"', html)
+    if match:
+        start = match.start()
+        depth = 0
+        i = start
+        end = -1
+        while i < len(html):
+            if html[i:i+4] == '<div':
+                depth += 1
+            elif html[i:i+6] == '</div>':
+                depth -= 1
+                if depth == 0:
+                    end = i + 6
+                    break
+            i += 1
+        if end > start:
+            # Trim trailing whitespace
+            while end < len(html) and html[end] in '\r\n\t ':
+                end += 1
+            html = html[:start] + new_intro + html[end:]
+            open(filename, 'w', encoding='utf-8').write(html)
+            count += 1
+            print(f"FIXED: {filename}")
     else:
-        print(f"  NO CHANGE: {filename}")
+        # No tool-header exists, insert after <main> or container
+        main_m = re.search(r'(<main[^>]*>)', html)
+        if main_m:
+            pos = main_m.end()
+            after = html[pos:pos+300]
+            cont_m = re.search(r'(\s*<div[^>]*class="container"[^>]*>)', after)
+            if cont_m:
+                pos += cont_m.end()
+            html = html[:pos] + new_intro + html[pos:]
+            open(filename, 'w', encoding='utf-8').write(html)
+            count += 1
+            print(f"ADDED: {filename}")
 
-print(f"\n✅ Fixed intro on {count} pages")
+print(f"\nDone: {count} pages")
