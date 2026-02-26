@@ -247,18 +247,21 @@
 
 
     /* ══════════════════════════════════════════
-       TRUST PILLS — Compact Inline Row
+       TRUST PILLS — All 3 visible, no scroll
        ══════════════════════════════════════════ */
     .hp-trust-row {
         display: flex !important;
         flex-wrap: nowrap !important;
-        overflow-x: auto !important;
+        overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         scrollbar-width: none !important;
-        gap: 8px !important;
-        padding: 8px 16px !important;
+        gap: 6px !important;
+        padding: 8px 12px !important;
         margin: 0 0 8px !important;
         max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        justify-content: center !important;
     }
 
     .hp-trust-row::-webkit-scrollbar {
@@ -266,24 +269,31 @@
     }
 
     .hp-trust-pill {
-        padding: 8px 12px !important;
+        padding: 6px 8px !important;
         border-radius: 10px !important;
-        gap: 6px !important;
-        flex-shrink: 0 !important;
-        white-space: nowrap !important;
+        gap: 4px !important;
+        flex-shrink: 1 !important;
+        flex: 1 !important;
+        max-width: 33% !important;
+        white-space: normal !important;
         background: var(--surface-1) !important;
         border: 1px solid var(--border) !important;
         box-shadow: none !important;
-        min-width: auto !important;
+        min-width: 0 !important;
+        text-align: center !important;
+        justify-content: center !important;
     }
 
     .hp-trust-pill strong {
-        font-size: 11px !important;
+        font-size: 10px !important;
         margin-bottom: 0 !important;
+        line-height: 1.2 !important;
     }
 
     .hp-trust-pill div span {
-        font-size: 10px !important;
+        font-size: 0px !important;
+        display: none !important;
+        /* Hide subtitle to keep pills compact */
     }
 
     .hp-trust-pill-icon {
