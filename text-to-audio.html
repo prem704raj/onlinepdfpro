@@ -40,8 +40,8 @@
 <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/text-to-audio.html">
 <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/text-to-audio.html">
 
-<link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/tools.css">
+<link rel="stylesheet" href="/css/style.css?v=5">
+    <link rel="stylesheet" href="/css/tools.css?v=5">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -564,6 +564,10 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
     </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -595,7 +599,8 @@
 
         
 
-    <main class="container">
+    <main id="main" class="tool-page">
+<div class="container">
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
@@ -781,6 +786,7 @@
             <p style="font-size: 15px; color: #64748b; line-height: 1.6; margin: 0;">Since processing happens in your browser, there's no server-side file size limit. You can process files as large as your device can handle.</p>
         </div>
     </section>
+</div>
 </main>
     <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script defer src="js/tts-engine.js"></script>
