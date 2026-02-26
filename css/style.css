@@ -550,7 +550,12 @@ html[data-theme="dark"] .theme-icon-dark {
     color: var(--text-primary);
 }
 
-/* ---- Mobile ---- */
+/* ---- Mobile-only elements (hidden on desktop) ---- */
+.mobile-search-toggle,
+.mobile-search-bar {
+    display: none;
+}
+
 .menu-toggle {
     display: none;
     background: none;

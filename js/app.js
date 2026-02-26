@@ -85,10 +85,10 @@ const MobileMenu = {
                 if (question) {
                     question.addEventListener('click', () => {
                         const isActive = item.classList.contains('active');
-                        
+
                         // Close all others
                         faqItems.forEach(i => i.classList.remove('active'));
-                        
+
                         // Toggle current
                         if (!isActive) {
                             item.classList.add('active');
@@ -111,6 +111,50 @@ const MobileMenu = {
                         const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
                         window.location.href = targetUrl;
                     }
+                }
+            });
+        }
+
+        // Mobile Search Toggle
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        const mobileSearchBar = document.getElementById('mobileSearchBar');
+        const mobileSearchClose = document.getElementById('mobileSearchClose');
+        const mobileToolSearch = document.getElementById('mobileToolSearch');
+
+        if (mobileSearchToggle && mobileSearchBar) {
+            mobileSearchToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileSearchBar.classList.toggle('active');
+                if (mobileSearchBar.classList.contains('active') && mobileToolSearch) {
+                    setTimeout(() => mobileToolSearch.focus(), 100);
+                }
+            });
+
+            if (mobileSearchClose) {
+                mobileSearchClose.addEventListener('click', () => {
+                    mobileSearchBar.classList.remove('active');
+                });
+            }
+
+            if (mobileToolSearch) {
+                mobileToolSearch.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const q = e.target.value.trim();
+                        if (q) {
+                            const isToolsDir = window.location.pathname.includes('/tools/');
+                            const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+                            window.location.href = targetUrl;
+                        }
+                    }
+                });
+            }
+
+            // Close search bar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (mobileSearchBar.classList.contains('active') &&
+                    !mobileSearchBar.contains(e.target) &&
+                    !mobileSearchToggle.contains(e.target)) {
+                    mobileSearchBar.classList.remove('active');
                 }
             });
         }

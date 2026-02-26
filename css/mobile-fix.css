@@ -111,10 +111,90 @@
         z-index: 9998 !important;
     }
 
-    /* Header search — compact */
+    /* Header search — hidden by default, shown via toggle */
     .header-search {
         display: none !important;
-        /* hide search on mobile to save space */
+    }
+
+    /* Mobile search toggle button (🔍) */
+    .mobile-search-toggle {
+        display: flex !important;
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        padding: 0 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 16px !important;
+        flex-shrink: 0 !important;
+        background: transparent !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 10px !important;
+        color: var(--text-secondary) !important;
+        cursor: pointer !important;
+        order: -1 !important;
+    }
+
+    /* Full-width search bar that appears below header */
+    .mobile-search-bar {
+        display: none;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        padding: 8px 12px;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideDown 0.2s ease;
+    }
+
+    .mobile-search-bar.active {
+        display: flex;
+    }
+
+    .mobile-search-bar input {
+        width: 100%;
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface-1);
+        color: var(--text-primary);
+        font-size: 15px;
+        outline: none;
+        font-family: inherit;
+    }
+
+    .mobile-search-bar input:focus {
+        border-color: var(--accent);
+    }
+
+    .mobile-search-close {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 6px;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     /* Navbar action buttons */
