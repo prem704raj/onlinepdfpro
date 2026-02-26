@@ -608,14 +608,28 @@
 
 
     /* ══════════════════════════════════════════
-       AD SLOTS — Compact
+       AD SLOTS — Hide empty, compact loaded
        ══════════════════════════════════════════ */
+    /* Empty ad containers create huge blank gaps */
     ins.adsbygoogle {
-        margin: 8px 0 !important;
+        margin: 4px 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
     }
 
+    ins.adsbygoogle[data-ad-status="filled"] {
+        max-height: none !important;
+        margin: 12px 0 !important;
+    }
+
+    /* The wrapper div around ads */
     div[style*="text-align:center"][style*="margin:30px"] {
-        margin: 8px 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
     }
 
 
