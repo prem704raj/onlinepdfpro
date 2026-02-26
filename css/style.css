@@ -5,27 +5,48 @@
    ========================================= */
 
 :root {
-    /* Palette */
-    --bg: #0a0a0b;
-    --surface-1: #111113;
-    --surface-2: #1a1a1e;
-    --surface-3: #252529;
-    --accent: #6366f1;
-    --accent-hover: #818cf8;
-    --accent-subtle: rgba(99, 102, 241, 0.08);
+    /* ===== DARK MODE (Default) =====
+       Modern, eye-friendly slate palette.
+       Soft deep background, elevated cards, muted text.
+    */
 
-    --success: #22c55e;
-    --warning: #eab308;
-    --error: #ef4444;
+    /* Backgrounds — layered elevation */
+    --bg: #0F172A;
+    /* Deep slate — softer than pure black */
+    --surface-1: #1E293B;
+    /* Card surface — slate-800            */
+    --surface-2: #334155;
+    /* Hovered/nested surface — slate-700  */
+    --surface-3: #475569;
+    /* Subtle accent surfaces — slate-600  */
 
-    /* Text */
-    --text-primary: #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
+    /* Accent */
+    --accent: #818cf8;
+    /* Indigo-400 — softer on dark bg */
+    --accent-hover: #a5b4fc;
+    /* Indigo-300                      */
+    --accent-subtle: rgba(129, 140, 248, 0.12);
 
-    /* Borders */
-    --border: rgba(255, 255, 255, 0.3);
-    --border-hover: rgba(255, 255, 255, 0.4);
+    --success: #4ade80;
+    /* green-400  */
+    --warning: #fbbf24;
+    /* amber-400  */
+    --error: #f87171;
+    /* red-400    */
+
+    /* Text — off-white hierarchy */
+    --text-primary: #E2E8F0;
+    /* slate-200 — readable, not blinding */
+    --text-secondary: #94A3B8;
+    /* slate-400 — secondary info         */
+    --text-muted: #64748B;
+    /* slate-500 — placeholders/hints     */
+
+    /* Borders — subtle, no harsh shadows */
+    --border: rgba(148, 163, 184, 0.15);
+    /* slate-400 at low opacity */
+    --border-hover: rgba(148, 163, 184, 0.30);
+    /* slightly more visible    */
 
     /* Sizing */
     --radius-sm: 6px;
@@ -43,7 +64,8 @@
 
     /* Legacy compat aliases */
     --aurora-violet: var(--accent);
-    --aurora-azure: #0ea5e9;
+    --aurora-azure: #38bdf8;
+    /* sky-400 — softer on dark bg */
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --glass-glow: transparent;
