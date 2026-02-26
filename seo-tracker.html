@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SEO Tracker - All Search Engines | OnlinePDFPro</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00ff88;
+            font-size: 28px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        th {
+            background: #1e293b;
+            padding: 12px 8px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #222;
+        }
+
+        tr:hover {
+            background: #1a1a2e;
+        }
+
+        .yes {
+            color: #00ff88;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .no {
+            color: #ff4444;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .pending {
+            color: #ffaa00;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            padding: 15px 25px;
+            background: #1e293b;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-box .num {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .green .num {
+            color: #00ff88;
+        }
+
+        .red .num {
+            color: #ff4444;
+        }
+
+        .blue .num {
+            color: #00a4ef;
+        }
+
+        .yellow .num {
+            color: #ffaa00;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 2px solid #333;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: #1e293b;
+            border: 2px solid #333;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .filter-btn.active {
+            border-color: #2563eb;
+            background: #2563eb;
+        }
+
+        .check-btn {
+            padding: 4px 10px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 2px;
+        }
+
+        .check-btn.bing {
+            background: #00a4ef;
+        }
+
+        .check-btn.yandex {
+            background: #ff0000;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .bulk-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .bulk-btn.google {
+            background: #4285f4;
+            color: #fff;
+        }
+
+        .bulk-btn.bing {
+            background: #00a4ef;
+            color: #fff;
+        }
+
+        .bulk-btn.yandex {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .bulk-btn.reset {
+            background: #333;
+            color: #fff;
+        }
+
+        .bulk-btn.export {
+            background: #00ff88;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📊 SEO URL Tracker (Google + Bing + Yandex)</h1>
+    <p>Click status to toggle: ❌ No → ⏳ Pending → ✅ Yes</p>
+
+    <div class="stats">
+        <div class="stat-box green">
+            <div class="num" id="googleYes">0</div>
+            <div class="label">Google Indexed</div>
+        </div>
+        <div class="stat-box blue">
+            <div class="num" id="bingYes">0</div>
+            <div class="label">Bing Indexed</div>
+        </div>
+        <div class="stat-box yellow">
+            <div class="num" id="yandexYes">0</div>
+            <div class="label">Yandex Indexed</div>
+        </div>
+        <div class="stat-box red">
+            <div class="num" id="noneIndexed">0</div>
+            <div class="label">Not Indexed Anywhere</div>
+        </div>
+        <div class="stat-box">
+            <div class="num" id="totalUrls">0</div>
+            <div class="label">Total URLs</div>
+        </div>
+    </div>
+
+    <input type="text" id="search" placeholder="🔍 Search URLs..." oninput="render()">
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('google-no',this)">❌ Not on Google</button>
+        <button class="filter-btn" onclick="setFilter('bing-no',this)">❌ Not on Bing</button>
+        <button class="filter-btn" onclick="setFilter('yandex-no',this)">❌ Not on Yandex</button>
+        <button class="filter-btn" onclick="setFilter('all-indexed',this)">✅ All Indexed</button>
+        <button class="filter-btn" onclick="setFilter('none-indexed',this)">🔴 None Indexed</button>
+    </div>
+
+    <div class="bulk-actions">
+        <button class="bulk-btn google" onclick="checkAllGoogle()">🔍 Check All on Google</button>
+        <button class="bulk-btn bing" onclick="checkAllBing()">🔍 Check All on Bing</button>
+        <button class="bulk-btn export" onclick="exportCSV()">📥 Export CSV</button>
+        <button class="bulk-btn reset" onclick="resetAll()">🔄 Reset All</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>URL</th>
+                <th>Type</th>
+                <th>Google</th>
+                <th>Bing</th>
+                <th>Yandex</th>
+                <th>Quick Check</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+
+    <script>
+        const urls = [
+            { url: "/", type: "Home" },
+            { url: "/tools.html", type: "Main" },
+            { url: "/about.html", type: "Page" },
+            { url: "/blog.html", type: "Blog" },
+            { url: "/help.html", type: "Page" },
+            { url: "/privacy.html", type: "Page" },
+            { url: "/terms.html", type: "Page" },
+            { url: "/pdf-editor.html", type: "Tool" },
+            { url: "/pdf-reader.html", type: "Tool" },
+            { url: "/pdf-summary.html", type: "Tool" },
+            { url: "/pdf-translator.html", type: "Tool" },
+            { url: "/pdf-bookmark.html", type: "Tool" },
+            { url: "/compare-pdf.html", type: "Tool" },
+            { url: "/flatten-pdf.html", type: "Tool" },
+            { url: "/text-to-audio.html", type: "Tool" },
+            { url: "/voice-to-pdf.html", type: "Tool" },
+            { url: "/qr-pdf.html", type: "Tool" },
+            { url: "/pdf-to-word.html", type: "Tool" },
+            { url: "/word-to-pdf.html", type: "Tool" },
+            { url: "/excel-to-pdf.html", type: "Tool" },
+            { url: "/ppt-to-pdf.html", type: "Tool" },
+            { url: "/tools/merge-pdf.html", type: "Tool" },
+            { url: "/tools/split-pdf.html", type: "Tool" },
+            { url: "/tools/compress-pdf.html", type: "Tool" },
+            { url: "/tools/pdf-to-word.html", type: "Tool" },
+            { url: "/tools/word-to-pdf.html", type: "Tool" },
+            { url: "/tools/pdf-to-excel.html", type: "Tool" },
+            { url: "/tools/excel-to-pdf.html", type: "Tool" },
+            { url: "/tools/pdf-to-ppt.html", type: "Tool" },
+            { url: "/tools/ppt-to-pdf.html", type: "Tool" },
+            { url: "/tools/pdf-to-images.html", type: "Tool" },
+            { url: "/tools/images-to-pdf.html", type: "Tool" },
+            { url: "/tools/rotate-pdf.html", type: "Tool" },
+            { url: "/tools/rotate-pdf-godmode.html", type: "Tool" },
+            { url: "/tools/delete-pages.html", type: "Tool" },
+            { url: "/tools/add-page-numbers.html", type: "Tool" },
+            { url: "/tools/pdf-watermark.html", type: "Tool" },
+            { url: "/tools/sign-pdf.html", type: "Tool" },
+            { url: "/tools/pdf-lock.html", type: "Tool" },
+            { url: "/tools/repair-pdf.html", type: "Tool" },
+            { url: "/tools/crop-pdf.html", type: "Tool" },
+            { url: "/tools/ocr.html", type: "Tool" },
+            { url: "/tools/html-to-pdf.html", type: "Tool" },
+            { url: "/tools/image-compress.html", type: "Tool" },
+            { url: "/tools/image-resize.html", type: "Tool" },
+            { url: "/tools/image-crop.html", type: "Tool" },
+            { url: "/tools/csv-to-xlsx.html", type: "Tool" },
+            { url: "/tools/xlsx-to-csv.html", type: "Tool" }
+        ];
+
+        const domain = 'onlinepdfpro.com';
+        let data = JSON.parse(localStorage.getItem('seoTrackerV2') || '{}');
+        let filter = 'all';
+
+        // Initialize data
+        urls.forEach(u => {
+            if (!data[u.url]) {
+                data[u.url] = { google: 'no', bing: 'no', yandex: 'no' };
+            }
+        });
+
+        function save() {
+            localStorage.setItem('seoTrackerV2', JSON.stringify(data));
+        }
+
+        function toggle(url, engine) {
+            const states = ['no', 'pending', 'yes'];
+            const current = data[url][engine];
+            const next = states[(states.indexOf(current) + 1) % 3];
+            data[url][engine] = next;
+            save();
+            render();
+        }
+
+        function getIcon(status) {
+            if (status === 'yes') return '<span class="yes">✅ Yes</span>';
+            if (status === 'pending') return '<span class="pending">⏳ Pending</span>';
+            return '<span class="no">❌ No</span>';
+        }
+
+        function setFilter(f, btn) {
+            filter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            render();
+        }
+
+        function render() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const tbody = document.getElementById('tbody');
+            tbody.innerHTML = '';
+
+            let googleYes = 0, bingYes = 0, yandexYes = 0, noneIndexed = 0, num = 0;
+
+            urls.forEach((u, i) => {
+                const d = data[u.url];
+                if (d.google === 'yes') googleYes++;
+                if (d.bing === 'yes') bingYes++;
+                if (d.yandex === 'yes') yandexYes++;
+                if (d.google === 'no' && d.bing === 'no' && d.yandex === 'no') noneIndexed++;
+
+                // Search filter
+                if (search && !u.url.toLowerCase().includes(search)) return;
+
+                // Status filter
+                if (filter === 'google-no' && d.google !== 'no') return;
+                if (filter === 'bing-no' && d.bing !== 'no') return;
+                if (filter === 'yandex-no' && d.yandex !== 'no') return;
+                if (filter === 'all-indexed' && !(d.google === 'yes' && d.bing === 'yes' && d.yandex === 'yes')) return;
+                if (filter === 'none-indexed' && !(d.google === 'no' && d.bing === 'no' && d.yandex === 'no')) return;
+
+                num++;
+                const fullUrl = 'https://' + domain + u.url;
+
+                tbody.innerHTML += `
+                <tr>
+                    <td>${num}</td>
+                    <td><a href="${fullUrl}" target="_blank" style="color:#60a5fa;text-decoration:none;word-break:break-all">${u.url}</a></td>
+                    <td>${u.type}</td>
+                    <td onclick="toggle('${u.url}','google')">${getIcon(d.google)}</td>
+                    <td onclick="toggle('${u.url}','bing')">${getIcon(d.bing)}</td>
+                    <td onclick="toggle('${u.url}','yandex')">${getIcon(d.yandex)}</td>
+                    <td>
+                        <button class="check-btn" onclick="window.open('https://www.google.com/search?q=site:${fullUrl}')">G</button>
+                        <button class="check-btn bing" onclick="window.open('https://www.bing.com/search?q=site:${fullUrl}')">B</button>
+                        <button class="check-btn yandex" onclick="window.open('https://yandex.com/search/?text=site:${fullUrl}')">Y</button>
+                    </td>
+                </tr>
+            `;
+            });
+
+            document.getElementById('googleYes').textContent = googleYes;
+            document.getElementById('bingYes').textContent = bingYes;
+            document.getElementById('yandexYes').textContent = yandexYes;
+            document.getElementById('noneIndexed').textContent = noneIndexed;
+            document.getElementById('totalUrls').textContent = urls.length;
+        }
+
+        function checkAllGoogle() {
+            window.open('https://www.google.com/search?q=site:onlinepdfpro.com');
+        }
+
+        function checkAllBing() {
+            window.open('https://www.bing.com/search?q=site:onlinepdfpro.com');
+        }
+
+        function exportCSV() {
+            let csv = 'URL,Type,Google,Bing,Yandex\\n';
+            urls.forEach(u => {
+                const d = data[u.url];
+                csv += `https://${domain}${u.url},${u.type},${d.google},${d.bing},${d.yandex}\\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'seo-tracker-onlinepdfpro.csv';
+            a.click();
+        }
+
+        function resetAll() {
+            if (confirm('Reset all tracking data?')) {
+                urls.forEach(u => {
+                    data[u.url] = { google: 'no', bing: 'no', yandex: 'no' };
+                });
+                save();
+                render();
+            }
+        }
+
+        render();
+    </script>
+</body>
+
+</html>
