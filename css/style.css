@@ -987,3 +987,381 @@ body {
     max-height: 500px;
     opacity: 1;
 }
+
+/* =============================================
+   ONLINEPDFPRO MOBILE FIX - 100% DESKTOP SAFE
+   Only affects screens smaller than 768px
+   ============================================= */
+
+/* ===== SAFE GLOBAL RESETS ===== */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* ===== MOBILE ONLY (768px and below) ===== */
+/* NOTHING below this line affects desktop */
+@media screen and (max-width: 768px) {
+
+    /* Kill the black gap */
+    body {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Force all containers full width on mobile */
+    .container,
+    .main-container,
+    main,
+    section,
+    header,
+    footer,
+    nav,
+    .wrapper,
+    .content,
+    .hero,
+    .hero-section,
+    .about-section,
+    .newsletter-section,
+    .footer-content,
+    .tools-section,
+    .features-section,
+    .stats-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Header */
+    header,
+    header .container,
+    nav,
+    .navbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .navbar,
+    .nav-content,
+    header .container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+    }
+
+    .search-box,
+    .search-input,
+    input[type="search"] {
+        max-width: 120px !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+    }
+
+    .theme-toggle,
+    .lang-toggle,
+    .dark-mode-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        padding: 6px !important;
+        font-size: 16px !important;
+    }
+
+    /* Hero */
+    .hero,
+    .hero-section,
+    .hero-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 40px 20px !important;
+        margin: 0 !important;
+    }
+
+    .hero h1,
+    .hero-title {
+        font-size: 28px !important;
+        line-height: 1.3 !important;
+        text-align: center !important;
+    }
+
+    .hero p {
+        font-size: 16px !important;
+        text-align: center !important;
+        max-width: 100% !important;
+    }
+
+    .hero .btn,
+    .hero button,
+    .cta-btn {
+        width: 100% !important;
+        padding: 16px 24px !important;
+        font-size: 16px !important;
+        display: block !important;
+        margin: 10px 0 !important;
+    }
+
+    /* Stats */
+    .stats-row,
+    .stats-grid,
+    .stats-container {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+    }
+
+    .stat-box,
+    .stat-item {
+        text-align: center !important;
+        padding: 16px 8px !important;
+    }
+
+    .stat-number {
+        font-size: 24px !important;
+    }
+
+    .stat-label {
+        font-size: 12px !important;
+    }
+
+    /* Badge bar */
+    .badges-row,
+    .feature-badges,
+    .trust-badges {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .badge,
+    .trust-badge {
+        font-size: 12px !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Tool Cards */
+    .tools-grid,
+    .tool-grid,
+    .grid-container,
+    .cards-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 16px !important;
+    }
+
+    .tool-card,
+    .card,
+    .grid-item {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 20px 12px !important;
+        border-radius: 12px !important;
+        text-align: center !important;
+    }
+
+    .tool-card .icon,
+    .tool-card img {
+        font-size: 32px !important;
+        margin: 0 auto 8px !important;
+    }
+
+    .tool-card h3 {
+        font-size: 14px !important;
+    }
+
+    .tool-card p {
+        font-size: 12px !important;
+    }
+
+    /* About / Content */
+    .about-section,
+    .content-section,
+    .about-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 24px 16px !important;
+    }
+
+    .about-card,
+    .content-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 24px 16px !important;
+        margin: 0 0 16px 0 !important;
+    }
+
+    /* Newsletter */
+    .newsletter-section,
+    .newsletter-box,
+    .subscribe-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 24px 16px !important;
+    }
+
+    .newsletter-box input[type="email"],
+    .newsletter-box input[type="text"] {
+        width: 100% !important;
+        padding: 14px 16px !important;
+        font-size: 16px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .newsletter-box button {
+        width: 100% !important;
+        padding: 14px !important;
+        font-size: 16px !important;
+    }
+
+    /* Footer */
+    footer,
+    footer .container,
+    .footer,
+    .site-footer {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 32px 16px !important;
+    }
+
+    .footer-content,
+    .footer-grid,
+    .footer-columns {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .footer-section,
+    .footer-column {
+        width: 100% !important;
+    }
+
+    .footer-section h4 {
+        font-size: 16px !important;
+    }
+
+    .footer-section a {
+        display: block !important;
+        padding: 8px 0 !important;
+        font-size: 14px !important;
+    }
+
+    .footer-bottom {
+        text-align: center !important;
+        padding: 20px 16px !important;
+    }
+
+    .footer-badges {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+
+    /* Typography */
+    h1 {
+        font-size: 28px !important;
+    }
+
+    h2 {
+        font-size: 22px !important;
+    }
+
+    h3 {
+        font-size: 18px !important;
+    }
+
+    p,
+    li,
+    a,
+    span {
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Prevent overflow */
+    img,
+    video,
+    iframe,
+    table,
+    pre {
+        max-width: 100% !important;
+    }
+
+    /* Touch targets */
+    a,
+    button,
+    input,
+    select {
+        min-height: 44px !important;
+    }
+
+    /* Full width buttons */
+    .btn,
+    .button,
+    button[type="submit"] {
+        width: 100% !important;
+        padding: 14px 20px !important;
+    }
+
+    /* Dark mode full width */
+    body.dark,
+    body.dark-mode,
+    [data-theme="dark"] body {
+        width: 100% !important;
+    }
+
+    body.dark header,
+    body.dark footer,
+    body.dark main,
+    body.dark section {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ===== TINY PHONES (320px - 380px) ===== */
+@media screen and (max-width: 380px) {
+
+    .tools-grid,
+    .tool-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .stats-grid,
+    .stats-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    h1 {
+        font-size: 24px !important;
+    }
+
+    h2 {
+        font-size: 20px !important;
+    }
+}
