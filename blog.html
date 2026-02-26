@@ -25,7 +25,7 @@
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #f8fafc;
+            background: var(--surface-2);
             color: #333;
         }
 
@@ -109,7 +109,7 @@
 
         .blog-card:hover {
             transform: translateY(-5px);
-            border-color: #2563eb;
+            border-color: var(--accent);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
         }
 
@@ -133,7 +133,7 @@
             display: inline-block;
             padding: 5px 14px;
             background: rgba(37, 99, 235, 0.1);
-            color: #2563eb;
+            color: var(--accent);
             border-radius: 50px;
             font-size: 12px;
             font-weight: 700;
@@ -144,12 +144,12 @@
         .blog-card-body h3 {
             font-size: 19px;
             margin-bottom: 10px;
-            color: #1e293b;
+            color: var(--text-primary);
             line-height: 1.4;
         }
 
         .blog-card-body p {
-            color: #64748b;
+            color: var(--text-secondary);
             font-size: 14px;
             line-height: 1.6;
             margin-bottom: 15px;
@@ -172,7 +172,7 @@
         }
 
         .blog-footer a {
-            color: #2563eb;
+            color: var(--accent);
             text-decoration: none;
         }
 
