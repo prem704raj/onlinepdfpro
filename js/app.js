@@ -67,8 +67,8 @@ const MobileMenu = {
                 }
             });
 
-            // Close on nav link click
-            nav.querySelectorAll('.nav-link').forEach(link => {
+            // Close on nav link click (except install link)
+            nav.querySelectorAll('.nav-link:not(.pwa-install-link)').forEach(link => {
                 link.addEventListener('click', () => {
                     nav.classList.remove('active');
                     menuToggle.textContent = '☰';
@@ -542,7 +542,19 @@ if (pwaInstallPill) {
 // =========================================
 
 function triggerPwaInstall(e) {
-    if (e) e.preventDefault();
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // Check if already running as PWA
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+    if (isStandalone) {
+        alert('✅ OnlinePDFPro is already installed as an app!');
+        return;
+    }
+
     if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(result => {
@@ -551,10 +563,28 @@ function triggerPwaInstall(e) {
                 deferredPrompt = null;
                 const banner = document.getElementById('installBanner');
                 if (banner) banner.remove();
+                // Close the nav menu
+                const nav = document.getElementById('nav');
+                const menuToggle = document.getElementById('menuToggle');
+                if (nav) nav.classList.remove('active');
+                if (menuToggle) menuToggle.textContent = '☰';
             }
         });
     } else {
-        alert('To install: tap your browser menu (⋮) → "Add to Home Screen" or "Install App"');
+        // No install prompt available — show instructions
+        const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge|OPR/.test(navigator.userAgent);
+        const isSamsung = /SamsungBrowser/.test(navigator.userAgent);
+        const isFirefox = /Firefox/.test(navigator.userAgent);
+
+        let instructions = '';
+        if (isChrome || isSamsung) {
+            instructions = '👉 Tap the browser menu (⋮) at the top right → "Add to Home Screen" or "Install App"';
+        } else if (isFirefox) {
+            instructions = '👉 Tap the browser menu (⋯) → "Install"';
+        } else {
+            instructions = '👉 Tap your browser\'s menu → "Add to Home Screen" or "Install App"';
+        }
+        alert('📲 Install OnlinePDFPro\n\n' + instructions);
     }
 }
 
