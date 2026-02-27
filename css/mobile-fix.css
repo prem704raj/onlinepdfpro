@@ -22,6 +22,11 @@
         background: var(--bg) !important;
     }
 
+    html {
+        top: 0 !important;
+        margin-top: 0 !important;
+    }
+
     body {
         padding-top: 52px !important;
         /* space for fixed navbar — must match header height */
