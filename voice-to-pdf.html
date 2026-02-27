@@ -73,13 +73,13 @@
         .lang-section label {
             font-weight: bold;
             font-size: 16px;
-            color: #333;
+            color: var(--text-primary);
             margin-right: 10px;
         }
 
         .lang-section select {
             padding: 12px 20px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 12px;
             font-size: 16px;
             outline: none;
@@ -142,7 +142,7 @@
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .mic-status.active {
@@ -254,7 +254,7 @@
             display: block;
             font-weight: bold;
             font-size: 16px;
-            color: #333;
+            color: var(--text-primary);
             margin-bottom: 10px;
         }
 
@@ -262,7 +262,7 @@
             width: 100%;
             min-height: 300px;
             padding: 20px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 16px;
             font-size: 16px;
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -288,7 +288,7 @@
 
         .stat-badge {
             padding: 10px 20px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border-radius: 12px;
             font-size: 14px;
             color: var(--accent);
@@ -306,7 +306,7 @@
         .format-section h3 {
             margin: 0 0 20px;
             font-size: 18px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .format-grid {
@@ -324,13 +324,13 @@
         .format-group label {
             font-weight: bold;
             font-size: 14px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .format-group select,
         .format-group input {
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 12px;
             font-size: 14px;
             outline: none;
@@ -414,7 +414,7 @@
 
         .tips-section li {
             margin: 8px 0;
-            color: #333;
+            color: var(--text-primary);
             font-size: 15px;
         }
 
@@ -541,15 +541,15 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Document Creation</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">Voice to PDF</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Speak and convert your voice to a professional PDF document instantly. No typing needed.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Document Creation</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Voice to PDF</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Speak and convert your voice to a professional PDF document instantly. No typing needed.</p>
     </div>
 <div class="voice-container">
 
             <div style="text-align:center; margin-bottom:30px;">
-                <h2 style="font-size:28px; color:#333; margin:0 0 10px;">🎤 Speak & Create PDF</h2>
-                <p style="color:#666; font-size:16px;">Press the mic button, speak, and download as PDF instantly</p>
+                <h2 style="font-size:28px; color:var(--text-primary); margin:0 0 10px;">🎤 Speak & Create PDF</h2>
+                <p style="color:var(--text-secondary); font-size:16px;">Press the mic button, speak, and download as PDF instantly</p>
             </div>
 
             <!-- Language Selection -->
@@ -1264,42 +1264,42 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
       <!-- About -->
       <div>
         <h4 style="color:var(--accent); margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
-        <p style="color:#666; font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+        <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
       </div>
 
       <!-- Popular Tools -->
       <div>
-        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+        <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
         <ul style="list-style:none; padding:0; margin:0;">
-          <li style="margin:8px 0;"><a href="/tools/merge-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Merge PDF</a></li>
-          <li style="margin:8px 0;"><a href="/tools/compress-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Compress PDF</a></li>
-          <li style="margin:8px 0;"><a href="/tools/sign-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Sign PDF</a></li>
-          <li style="margin:8px 0;"><a href="/tools/pdf-to-word.html" style="color:#666; text-decoration:none; font-size:14px;">PDF to Word</a></li>
-          <li style="margin:8px 0;"><a href="/pdf-editor.html" style="color:#666; text-decoration:none; font-size:14px;">PDF Editor</a></li>
+          <li style="margin:8px 0;"><a href="/tools/merge-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Merge PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/compress-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Compress PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/sign-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Sign PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/pdf-to-word.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">PDF to Word</a></li>
+          <li style="margin:8px 0;"><a href="/pdf-editor.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">PDF Editor</a></li>
         </ul>
       </div>
 
       <!-- More Tools -->
       <div>
-        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">More Tools</h4>
+        <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
         <ul style="list-style:none; padding:0; margin:0;">
-          <li style="margin:8px 0;"><a href="/tools/ocr.html" style="color:#666; text-decoration:none; font-size:14px;">OCR Extract Text</a></li>
-          <li style="margin:8px 0;"><a href="/voice-to-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Voice to PDF</a></li>
-          <li style="margin:8px 0;"><a href="/tools/pdf-to-images.html" style="color:#666; text-decoration:none; font-size:14px;">PDF to JPG</a></li>
-          <li style="margin:8px 0;"><a href="/compare-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">Compare PDFs</a></li>
-          <li style="margin:8px 0;"><a href="/qr-pdf.html" style="color:#666; text-decoration:none; font-size:14px;">QR Code in PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/ocr.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">OCR Extract Text</a></li>
+          <li style="margin:8px 0;"><a href="/voice-to-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Voice to PDF</a></li>
+          <li style="margin:8px 0;"><a href="/tools/pdf-to-images.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">PDF to JPG</a></li>
+          <li style="margin:8px 0;"><a href="/compare-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Compare PDFs</a></li>
+          <li style="margin:8px 0;"><a href="/qr-pdf.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">QR Code in PDF</a></li>
         </ul>
       </div>
 
       <!-- Company -->
       <div>
-        <h4 style="color:#333; margin:0 0 15px; font-size:16px;">Company</h4>
+        <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
         <ul style="list-style:none; padding:0; margin:0;">
-          <li style="margin:8px 0;"><a href="/about.html" style="color:#666; text-decoration:none; font-size:14px;">About Us</a></li>
-          <li style="margin:8px 0;"><a href="/contact.html" style="color:#666; text-decoration:none; font-size:14px;">Contact Us</a></li>
-          <li style="margin:8px 0;"><a href="/privacy.html" style="color:#666; text-decoration:none; font-size:14px;">Privacy Policy</a></li>
-          <li style="margin:8px 0;"><a href="/terms.html" style="color:#666; text-decoration:none; font-size:14px;">Terms of Service</a></li>
-          <li style="margin:8px 0;"><a href="/blog.html" style="color:#666; text-decoration:none; font-size:14px;">Blog</a></li>
+          <li style="margin:8px 0;"><a href="/about.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">About Us</a></li>
+          <li style="margin:8px 0;"><a href="/contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Contact Us</a></li>
+          <li style="margin:8px 0;"><a href="/privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Privacy Policy</a></li>
+          <li style="margin:8px 0;"><a href="/terms.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Terms of Service</a></li>
+          <li style="margin:8px 0;"><a href="/blog.html" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Blog</a></li>
         </ul>
       </div>
 
@@ -1312,7 +1312,7 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
       <p style="color:#94a3b8; font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights reserved. Made with ❤️ in India.</p>
       <div style="display:flex; gap:15px;">
-        <span style="padding:6px 14px; background:#f0f9ff; border-radius:20px; font-size:12px; color:var(--accent); font-weight:bold;">🔒 Your files are safe</span>
+        <span style="padding:6px 14px; background:var(--surface-2); border-radius:20px; font-size:12px; color:var(--accent); font-weight:bold;">🔒 Your files are safe</span>
         <span style="padding:6px 14px; background:#f0fdf4; border-radius:20px; font-size:12px; color:#10b981; font-weight:bold;">⚡ 100% Client-Side</span>
       </div>
     </div>

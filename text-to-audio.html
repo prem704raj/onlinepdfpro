@@ -48,7 +48,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <style>
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
             background: var(--surface-2)
         }
 
@@ -79,7 +79,7 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 40px;
-            background: #fff;
+            background: var(--surface-1);
             border-radius: 24px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, .12)
         }
@@ -107,7 +107,7 @@
         }
 
         .tab-btn.active {
-            background: #fff;
+            background: var(--surface-1);
             color: var(--accent);
             box-shadow: 0 4px 15px rgba(0, 0, 0, .1)
         }
@@ -145,7 +145,7 @@
         }
 
         .upload-box {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 16px;
             padding: 50px 30px;
             text-align: center;
@@ -155,7 +155,7 @@
 
         .upload-box:hover {
             border-color: var(--accent);
-            background: #f0f9ff
+            background: var(--surface-2)
         }
 
         .upload-box.loaded {
@@ -174,7 +174,7 @@
 
         .stat-badge {
             padding: 10px 20px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border-radius: 12px;
             font-size: 14px;
             color: var(--accent);
@@ -382,7 +382,7 @@
 
         .settings-section h3 {
             margin: 0 0 20px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px
         }
 
@@ -401,13 +401,13 @@
         .setting-group label {
             font-weight: 700;
             font-size: 14px;
-            color: #333
+            color: var(--text-primary)
         }
 
         .setting-group select,
         .setting-group input {
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 12px;
             font-size: 14px;
             outline: none;
@@ -454,7 +454,7 @@
 
         .templates-section h3 {
             margin: 0 0 15px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 16px
         }
 
@@ -466,7 +466,7 @@
 
         .template-btn {
             padding: 10px 18px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border: 2px solid #2563eb;
             border-radius: 10px;
             cursor: pointer;
@@ -490,7 +490,7 @@
 
         .history-section h3 {
             margin: 0 0 15px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 16px
         }
 
@@ -501,7 +501,7 @@
 
         .history-item {
             padding: 10px 15px;
-            background: #fff;
+            background: var(--surface-1);
             border-radius: 10px;
             margin: 8px 0;
             cursor: pointer;
@@ -513,7 +513,7 @@
         }
 
         .history-item:hover {
-            background: #f0f9ff
+            background: var(--surface-2)
         }
 
         .history-text {
@@ -521,7 +521,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: #333
+            color: var(--text-primary)
         }
 
         .history-play {
@@ -632,13 +632,13 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Accessibility</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">Text to Speech & PDF to Audio</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Convert text or PDF documents to audio with 50+ voices in multiple languages. Free and instant.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Accessibility</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Text to Speech & PDF to Audio</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Convert text or PDF documents to audio with 50+ voices in multiple languages. Free and instant.</p>
     </div>
 <div class="audio-container">
-            <h2 style="text-align:center;color:#333;margin:0 0 10px">🎧 Text to Speech &amp; PDF to Audio</h2>
-            <p style="text-align:center;color:#666;margin:0 0 30px">Type text, paste content, or upload PDF — Listen
+            <h2 style="text-align:center;color:var(--text-primary);margin:0 0 10px">🎧 Text to Speech &amp; PDF to Audio</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin:0 0 30px">Type text, paste content, or upload PDF — Listen
                 with 50+ voices</p>
             <div class="tab-switcher"><button class="tab-btn active" onclick="switchTab('text')">✏️ Type
                     Text</button><button class="tab-btn" onclick="switchTab('pdf')">📄 Upload PDF</button></div>
@@ -659,8 +659,8 @@
             <div class="input-section" id="pdfTab">
                 <div class="upload-box" id="uploadBox" onclick="document.getElementById('pdfInput').click()">
                     <div style="font-size:48px;margin-bottom:15px">📄</div>
-                    <p style="font-size:18px;color:#333;margin:0 0 10px">Drop your PDF here or Click to Upload</p>
-                    <p style="font-size:14px;color:#666;margin:0">Text will be extracted and converted to speech</p>
+                    <p style="font-size:18px;color:var(--text-primary);margin:0 0 10px">Drop your PDF here or Click to Upload</p>
+                    <p style="font-size:14px;color:var(--text-secondary);margin:0">Text will be extracted and converted to speech</p>
                     <input type="file" id="pdfInput" accept=".pdf" hidden>
                 </div>
                 <p id="pdfFileName"

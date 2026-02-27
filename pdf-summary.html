@@ -48,19 +48,19 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <style>
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 24px;
             padding: 60px 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             background: var(--surface-1);
-            color: #333;
+            color: var(--text-primary);
         }
 
         .upload-area:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .container {
@@ -70,7 +70,7 @@
         }
 
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
         }
 
         header {
@@ -114,12 +114,12 @@
 
         .stat-card .lbl {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
         .s1 {
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .s1 .num {
@@ -175,7 +175,7 @@
 
         .section-card h3 {
             margin: 0 0 15px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px;
         }
 
@@ -187,7 +187,7 @@
             border-left: 4px solid #2563eb;
             font-size: 15px;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .freq-bar {
@@ -201,7 +201,7 @@
             width: 100px;
             font-weight: bold;
             font-size: 14px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .freq-fill {
@@ -213,7 +213,7 @@
 
         .freq-count {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .dl-row {
@@ -322,9 +322,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">AI Tools</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">AI PDF Summarizer</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Get instant summary, key points, statistics and word analysis from any PDF. 100% free.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">AI Tools</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">AI PDF Summarizer</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Get instant summary, key points, statistics and word analysis from any PDF. 100% free.</p>
     </div>
 <div class="upload-area" id="dropArea" style="margin-top:50px;">
             <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Get instant summary, key points,
@@ -333,7 +333,7 @@
         </div>
 
         <div class="summary-box" id="summaryBox">
-            <h2 style="text-align:center; color:#333; margin:0 0 25px;">📊 Document Analysis</h2>
+            <h2 style="text-align:center; color:var(--text-primary); margin:0 0 25px;">📊 Document Analysis</h2>
 
             <div class="stats-grid" id="statsGrid"></div>
 
@@ -349,7 +349,7 @@
 
             <div class="section-card">
                 <h3>📝 Summary</h3>
-                <div id="summaryText" style="font-size:16px; line-height:1.8; color:#333;"></div>
+                <div id="summaryText" style="font-size:16px; line-height:1.8; color:var(--text-primary);"></div>
             </div>
 
             <div class="dl-row">
@@ -594,7 +594,7 @@
 
             document.getElementById('keyPoints').innerHTML = keyPointsList.length > 0
                 ? keyPointsList.map(p => '<div class="key-point">• ' + p.trim() + '.</div>').join('')
-                : '<p style="color:#666;">No key points could be extracted from this document.</p>';
+                : '<p style="color:var(--text-secondary);">No key points could be extracted from this document.</p>';
 
             // Word frequency
             const stopWords = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'shall', 'can', 'need', 'dare', 'ought', 'used', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'between', 'out', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'each', 'every', 'both', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 'just', 'because', 'but', 'and', 'or', 'if', 'while', 'that', 'this', 'it', 'its', 'i', 'you', 'he', 'she', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'my', 'your', 'his', 'our', 'their', 'what', 'which', 'who', 'whom', 'these', 'those']);
@@ -615,7 +615,7 @@
                     '<div class="freq-fill" style="width:' + Math.round((count / maxFreq) * 100) + '%;"></div>' +
                     '<span class="freq-count">' + count + 'x</span></div>'
                 ).join('')
-                : '<p style="color:#666;">Not enough text to analyze word frequency.</p>';
+                : '<p style="color:var(--text-secondary);">Not enough text to analyze word frequency.</p>';
 
             // Summary (first sentence of each paragraph)
             const summary = paragraphs

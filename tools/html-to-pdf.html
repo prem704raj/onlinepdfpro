@@ -157,7 +157,7 @@
         .options-row select {
             padding: 10px 15px;
             border-radius: 10px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             font-size: 14px;
         }
 
@@ -190,7 +190,7 @@
 
         .template-btn {
             padding: 10px 18px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border: 2px solid #2563eb;
             border-radius: 10px;
             cursor: pointer;
@@ -284,7 +284,7 @@
 
             <div style="margin-top:20px; width:100%;">
 
-        <p style="text-align:center; color:#666; margin:20px 0; font-size:16px;">Write or paste HTML content below →
+        <p style="text-align:center; color:var(--text-secondary); margin:20px 0; font-size:16px;">Write or paste HTML content below →
             Download as professional PDF</p>
 
         <div class="templates">
@@ -435,13 +435,13 @@ Example:
 
         function loadTemplate(type) {
             const templates = {
-                resume: '<h1 style="color:var(--accent); border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\\n<p style="color:#666;">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\\n\\n<h2 style="color:#333;">Education</h2>\\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\\n\\n<h2 style="color:#333;">Skills</h2>\\n<ul>\\n<li>HTML, CSS, JavaScript</li>\\n<li>Python, Java</li>\\n<li>React, Node.js</li>\\n</ul>\\n\\n<h2 style="color:#333;">Projects</h2>\\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 20+ tools</p>',
+                resume: '<h1 style="color:var(--accent); border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\\n<p style="color:var(--text-secondary);">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\\n\\n<h2 style="color:var(--text-primary);">Education</h2>\\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\\n\\n<h2 style="color:var(--text-primary);">Skills</h2>\\n<ul>\\n<li>HTML, CSS, JavaScript</li>\\n<li>Python, Java</li>\\n<li>React, Node.js</li>\\n</ul>\\n\\n<h2 style="color:var(--text-primary);">Projects</h2>\\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 20+ tools</p>',
 
                 invoice: '<div style="text-align:center;">\\n<h1 style="color:#ef4444;">INVOICE</h1>\\n<p>Invoice #001 | Date: ' + new Date().toLocaleDateString() + '</p>\\n</div>\\n\\n<table style="width:100%; border-collapse:collapse; margin:20px 0;">\\n<tr style="background:#333; color:white;">\\n<th style="padding:12px; text-align:left;">Item</th>\\n<th style="padding:12px;">Qty</th>\\n<th style="padding:12px;">Price</th>\\n<th style="padding:12px;">Total</th>\\n</tr>\\n<tr>\\n<td style="padding:12px; border-bottom:1px solid #eee;">Web Development</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\\n</tr>\\n</table>\\n\\n<h3 style="text-align:right;">Total: ₹50,000</h3>',
 
                 letter: '<div style="text-align:right; margin-bottom:30px;">\\n<p>Date: ' + new Date().toLocaleDateString() + '</p>\\n</div>\\n\\n<p>Dear Sir/Madam,</p>\\n\\n<p>I am writing to express my interest in the position of Software Developer at your esteemed company.</p>\\n\\n<p>I am a 2nd year B.Tech CSE student with strong skills in web development. I have built Online PDF Pro, a free PDF tools website used by thousands of people.</p>\\n\\n<p>I would be grateful for the opportunity to discuss how I can contribute to your team.</p>\\n\\n<p>Yours sincerely,<br><strong>Your Name</strong></p>',
 
-                report: '<h1 style="text-align:center; color:var(--accent);">Project Report</h1>\\n<p style="text-align:center; color:#666;">Online PDF Pro — Free PDF Tools Platform</p>\\n\\n<h2>1. Introduction</h2>\\n<p>Online PDF Pro is a web-based platform providing free PDF tools including merge, compress, sign, OCR, and 15+ more utilities.</p>\\n\\n<h2>2. Technologies Used</h2>\\n<ul>\\n<li>HTML5, CSS3, JavaScript</li>\\n<li>pdf-lib, pdfjs, Tesseract.js</li>\\n<li>Client-side processing (zero server cost)</li>\\n</ul>\\n\\n<h2>3. Features</h2>\\n<ol>\\n<li>Merge PDF</li>\\n<li>Compress PDF</li>\\n<li>Sign PDF</li>\\n<li>OCR Text Extraction</li>\\n<li>And 15+ more tools</li>\\n</ol>\\n\\n<h2>4. Conclusion</h2>\\n<p>The platform serves thousands of users with zero hosting cost, demonstrating the power of client-side web applications.</p>'
+                report: '<h1 style="text-align:center; color:var(--accent);">Project Report</h1>\\n<p style="text-align:center; color:var(--text-secondary);">Online PDF Pro — Free PDF Tools Platform</p>\\n\\n<h2>1. Introduction</h2>\\n<p>Online PDF Pro is a web-based platform providing free PDF tools including merge, compress, sign, OCR, and 15+ more utilities.</p>\\n\\n<h2>2. Technologies Used</h2>\\n<ul>\\n<li>HTML5, CSS3, JavaScript</li>\\n<li>pdf-lib, pdfjs, Tesseract.js</li>\\n<li>Client-side processing (zero server cost)</li>\\n</ul>\\n\\n<h2>3. Features</h2>\\n<ol>\\n<li>Merge PDF</li>\\n<li>Compress PDF</li>\\n<li>Sign PDF</li>\\n<li>OCR Text Extraction</li>\\n<li>And 15+ more tools</li>\\n</ol>\\n\\n<h2>4. Conclusion</h2>\\n<p>The platform serves thousands of users with zero hosting cost, demonstrating the power of client-side web applications.</p>'
             };
 
             document.getElementById('codeArea').value = templates[type];

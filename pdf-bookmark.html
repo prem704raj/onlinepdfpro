@@ -48,7 +48,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <style>
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
             background: var(--surface-2)
         }
 
@@ -76,26 +76,26 @@
         }
 
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 24px;
             padding: 60px 30px;
             text-align: center;
             cursor: pointer;
             transition: .3s;
-            background: #fff;
-            color: #333
+            background: var(--surface-1);
+            color: var(--text-primary)
         }
 
         .upload-area:hover {
             border-color: var(--accent);
-            background: #f0f9ff
+            background: var(--surface-2)
         }
 
         .bookmark-editor {
             max-width: 900px;
             margin: 40px auto;
             padding: 40px;
-            background: #fff;
+            background: var(--surface-1);
             border-radius: 24px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
             display: none
@@ -116,7 +116,7 @@
 
         .bookmarks-panel h3 {
             margin: 0 0 20px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 18px;
             display: flex;
             justify-content: space-between;
@@ -144,7 +144,7 @@
         }
 
         .bookmark-item {
-            background: #fff;
+            background: var(--surface-1);
             border-radius: 12px;
             padding: 15px;
             margin: 10px 0;
@@ -168,7 +168,7 @@
 
         .bookmark-item input {
             padding: 10px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 8px;
             font-size: 14px;
             outline: none;
@@ -188,7 +188,7 @@
 
         .bookmark-row select {
             padding: 8px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 8px;
             font-size: 14px;
             flex: 1
@@ -295,7 +295,7 @@
             max-width: 500px;
             margin: 20px auto;
             padding: 15px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border-radius: 14px;
             border: 2px solid #2563eb;
             text-align: center;
@@ -390,9 +390,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Enhancement</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">PDF Bookmark Editor</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Add, edit, or remove bookmarks in your PDF documents. Fast, free, and private.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Enhancement</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF Bookmark Editor</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Add, edit, or remove bookmarks in your PDF documents. Fast, free, and private.</p>
     </div>
 <div class="upload-area" id="dropArea" style="margin-top:50px">
             <p style="font-size:20px">Drop your PDF here or Click to Upload<br><small>Add bookmarks, table of contents
@@ -401,8 +401,8 @@
         </div>
         <div class="file-info" id="fileInfo"></div>
         <div class="bookmark-editor" id="bookmarkEditor">
-            <h2 style="text-align:center;color:#333;margin:0 0 5px">📑 PDF Bookmark Editor</h2>
-            <p style="text-align:center;color:#666;margin:0 0 25px">Add bookmarks to quickly navigate to important pages
+            <h2 style="text-align:center;color:var(--text-primary);margin:0 0 5px">📑 PDF Bookmark Editor</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin:0 0 25px">Add bookmarks to quickly navigate to important pages
             </p>
             <div class="editor-layout">
                 <div class="bookmarks-panel">
@@ -525,7 +525,7 @@
             empty.style.display = 'none'; let h = '';
             bookmarks.forEach(bm => {
                 let opts = ''; for (let i = 1; i <= totalPages; i++)opts += '<option value="' + i + '"' + (bm.page === i ? ' selected' : '') + '>Page ' + i + '</option>';
-                h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:#f0f9ff;border:none;border-radius:8px;cursor:pointer;font-size:14px">👁️</button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')">🗑️</button></div></div>';
+                h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:var(--surface-2);border:none;border-radius:8px;cursor:pointer;font-size:14px">👁️</button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')">🗑️</button></div></div>';
             });
             list.innerHTML = h;
             const items = list.querySelectorAll('.bookmark-item'); items.forEach(item => {

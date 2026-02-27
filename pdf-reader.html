@@ -174,7 +174,7 @@
 
         .search-box input {
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 16px;
             width: 250px;
@@ -200,7 +200,7 @@
         }
 
         .search-result-item:hover {
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .search-highlight {
@@ -215,18 +215,18 @@
 
     <style>
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 24px;
             padding: 60px 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             background: var(--surface-1);
-            color: #333;
+            color: var(--text-primary);
         }
         .upload-area:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
         .container {
             max-width: 1120px;
@@ -234,7 +234,7 @@
             padding: 0 20px;
         }
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
         }
         header {
             background: #1e293b !important;
@@ -317,9 +317,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Viewer</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">PDF Reader</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Read and view PDF documents directly in your browser. Fast, lightweight, and private.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Viewer</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF Reader</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Read and view PDF documents directly in your browser. Fast, lightweight, and private.</p>
     </div>
 <div class="upload-area" id="dropArea" style="margin-top: 50px;">
             <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Read PDF directly in your browser
@@ -559,7 +559,7 @@
             });
 
             if (resultsDiv.children.length === 0) {
-                resultsDiv.innerHTML = '<p style="padding:10px; color:#666;">No results found</p>';
+                resultsDiv.innerHTML = '<p style="padding:10px; color:var(--text-secondary);">No results found</p>';
             }
         }
 

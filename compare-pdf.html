@@ -68,7 +68,7 @@
             width: 300px;
             padding: 40px 20px;
             background: var(--surface-1);
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 20px;
             text-align: center;
             cursor: pointer;
@@ -77,7 +77,7 @@
 
         .upload-box:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .upload-box.loaded {
@@ -92,7 +92,7 @@
         }
 
         .upload-box p {
-            color: #666;
+            color: var(--text-secondary);
             margin: 0;
             font-size: 14px;
         }
@@ -157,7 +157,7 @@
 
         .summary-card .label {
             font-size: 14px;
-            color: #666;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
@@ -178,7 +178,7 @@
         }
 
         .card-only1 {
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .card-only1 .number {
@@ -186,7 +186,7 @@
         }
 
         .card-only2 {
-            background: #fffbeb;
+            background: var(--surface-1)beb;
         }
 
         .card-only2 .number {
@@ -245,7 +245,7 @@
         }
 
         .line-only {
-            background: #fffbeb;
+            background: var(--surface-1)beb;
             color: #d97706;
         }
 
@@ -351,9 +351,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Comparison</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">Compare PDFs Side by Side</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Compare two PDF documents and spot differences instantly. Your files never leave your device.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Comparison</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Compare PDFs Side by Side</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Compare two PDF documents and spot differences instantly. Your files never leave your device.</p>
     </div>
 <h2 style="text-align:center; margin:30px 0;">Upload Two PDF Files to Compare</h2>
 
@@ -384,7 +384,7 @@
         </div>
 
         <div class="results-section" id="resultsSection">
-            <h2 style="text-align:center; color:#333;">Comparison Results</h2>
+            <h2 style="text-align:center; color:var(--text-primary);">Comparison Results</h2>
 
             <div class="summary-cards" id="summaryCards"></div>
 

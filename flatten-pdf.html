@@ -67,7 +67,7 @@
         .info-section h2 {
             text-align: center;
             margin: 0 0 25px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 24px;
         }
 
@@ -92,12 +92,12 @@
         .info-card h3 {
             font-size: 15px;
             margin: 0 0 5px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .info-card p {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin: 0;
         }
 
@@ -106,11 +106,11 @@
         }
 
         .card-anno {
-            background: #fffbeb;
+            background: var(--surface-1)beb;
         }
 
         .card-comment {
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .card-layer {
@@ -130,7 +130,7 @@
         .options-box h2 {
             text-align: center;
             margin: 0 0 25px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .option-item {
@@ -146,7 +146,7 @@
         }
 
         .option-item:hover {
-            background: #f0f9ff;
+            background: var(--surface-2);
             transform: translateX(5px);
         }
 
@@ -166,12 +166,12 @@
         .option-item .option-text h3 {
             font-size: 16px;
             margin: 0 0 3px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .option-item .option-text p {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin: 0;
         }
 
@@ -261,7 +261,7 @@
 
         .stat-item .label {
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
@@ -293,7 +293,7 @@
 
         .size-arrow {
             font-size: 28px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .download-btn {
@@ -320,7 +320,7 @@
             max-width: 600px;
             margin: 20px auto;
             padding: 18px 25px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border-radius: 14px;
             border: 2px solid #2563eb;
             text-align: center;
@@ -351,18 +351,18 @@
 
     <style>
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 24px;
             padding: 60px 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             background: var(--surface-1);
-            color: #333;
+            color: var(--text-primary);
         }
         .upload-area:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
         .container {
             max-width: 1120px;
@@ -370,7 +370,7 @@
             padding: 0 20px;
         }
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
         }
         header {
             background: #1e293b !important;
@@ -457,9 +457,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Processing</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">Flatten PDF</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Flatten PDF form fields and annotations into a clean, non-editable document. Your files never leave your device.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Processing</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Flatten PDF</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Flatten PDF form fields and annotations into a clean, non-editable document. Your files never leave your device.</p>
     </div>
 <div class="upload-area" id="dropArea">
             <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Remove all editable fields and
@@ -471,7 +471,7 @@
 
         <div class="info-section" id="infoSection">
             <h2>What Does "Flatten PDF" Mean?</h2>
-            <p style="text-align:center; color:#666; margin-bottom:25px;">Flattening converts all interactive elements
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:25px;">Flattening converts all interactive elements
                 into static content. The PDF becomes non-editable and looks the same on every device.</p>
             <div class="info-cards">
                 <div class="info-card card-form">
@@ -553,12 +553,12 @@
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <p id="progressText" style="color:#666;">Processing...</p>
+            <p id="progressText" style="color:var(--text-secondary);">Processing...</p>
         </div>
 
         <div class="result-box" id="resultBox">
             <h2>✅ PDF Flattened Successfully!</h2>
-            <p style="color:#666;">All interactive elements have been removed</p>
+            <p style="color:var(--text-secondary);">All interactive elements have been removed</p>
 
             <div class="result-stats" id="resultStats"></div>
 

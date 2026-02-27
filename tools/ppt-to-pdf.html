@@ -184,7 +184,7 @@
 
         <div class="result-box glass-card" id="resultBox" style="display:none; margin: 40px auto; padding: 40px; text-align: center; max-width: 800px; width: 100%;">
             <h2 style="color:#f59e0b;">✅ PowerPoint Processed!</h2>
-            <p id="resultInfo" style="color:#666;"></p>
+            <p id="resultInfo" style="color:var(--text-secondary);"></p>
 
             <div class="slides-grid" id="slidesGrid"></div>
 
@@ -363,7 +363,7 @@ document.getElementById('resultBox').style.display = 'block';
                 title.style.cssText = 'color:#f59e0b; margin-bottom:30px; font-size:28px;';
 
                 const content = document.createElement('div');
-                content.style.cssText = 'font-size:20px; line-height:2; color:#333; white-space:pre-line;';
+                content.style.cssText = 'font-size:20px; line-height:2; color:var(--text-primary); white-space:pre-line;';
                 content.textContent = slide.text;
 
                 slideDiv.appendChild(title);

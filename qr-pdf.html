@@ -69,7 +69,7 @@
         .settings-box h2 {
             text-align: center;
             margin: 0 0 30px;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .input-group {
@@ -80,7 +80,7 @@
             display: block;
             font-weight: bold;
             margin-bottom: 8px;
-            color: #333;
+            color: var(--text-primary);
             font-size: 16px;
         }
 
@@ -89,7 +89,7 @@
         .input-group textarea {
             width: 100%;
             padding: 14px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 14px;
             font-size: 16px;
             outline: none;
@@ -108,7 +108,7 @@
         }
 
         .qr-preview canvas {
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 12px;
         }
 
@@ -121,7 +121,7 @@
 
         .pos-btn {
             padding: 14px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 12px;
             background: var(--surface-1);
             cursor: pointer;
@@ -133,7 +133,7 @@
 
         .pos-btn:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
 
         .pos-btn.active {
@@ -178,7 +178,7 @@
             max-width: 500px;
             margin: 20px auto;
             padding: 15px 20px;
-            background: #f0f9ff;
+            background: var(--surface-2);
             border-radius: 14px;
             border: 2px solid #2563eb;
             text-align: center;
@@ -221,18 +221,18 @@
 
     <style>
         .upload-area {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed var(--border);
             border-radius: 24px;
             padding: 60px 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             background: var(--surface-1);
-            color: #333;
+            color: var(--text-primary);
         }
         .upload-area:hover {
             border-color: var(--accent);
-            background: #f0f9ff;
+            background: var(--surface-2);
         }
         .container {
             max-width: 1120px;
@@ -240,7 +240,7 @@
             padding: 0 20px;
         }
         body {
-            color: #333 !important;
+            color: var(--text-primary) !important;
         }
         header {
             background: #1e293b !important;
@@ -323,9 +323,9 @@
         
     
     <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:#5b6abf; border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Enhancement</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:#1a1a2e; margin:0 0 12px; line-height:1.2;">QR Code in PDF</h1>
-        <p class="tool-description" style="color:#6b7280; font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Generate QR codes and embed them directly into your PDF documents. Free and instant.</p>
+        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Enhancement</span>
+        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">QR Code in PDF</h1>
+        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Generate QR codes and embed them directly into your PDF documents. Free and instant.</p>
     </div>
 <div class="upload-area" id="dropArea" style="margin-top: 50px;">
             <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Add QR code to any page of your
@@ -385,7 +385,7 @@
 
         <div class="success-box" id="successBox">
             <h2 style="color:#10b981;">✅ QR Code Added!</h2>
-            <p style="color:#666;">Your PDF now has a scannable QR code</p>
+            <p style="color:var(--text-secondary);">Your PDF now has a scannable QR code</p>
             <button onclick="downloadResult()" class="dl-btn">📥 Download PDF</button>
         </div>
 
