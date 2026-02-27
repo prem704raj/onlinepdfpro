@@ -22,8 +22,16 @@
     }
 
     body {
-        padding-top: 56px !important;
-        /* space for fixed navbar */
+        padding-top: 52px !important;
+        /* space for fixed navbar — must match header height */
+        top: 0 !important;
+        /* prevent Google Translate from pushing body down */
+    }
+
+    /* Hide Google Translate banner that creates blue bar at top */
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-banner-frame {
+        display: none !important;
     }
 
     body>* {
