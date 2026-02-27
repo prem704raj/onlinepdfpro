@@ -552,7 +552,8 @@ html[data-theme="dark"] .theme-icon-dark {
 
 /* ---- Mobile-only elements (hidden on desktop) ---- */
 .mobile-search-toggle,
-.mobile-search-bar {
+.mobile-search-bar,
+.pwa-install-link {
     display: none;
 }
 

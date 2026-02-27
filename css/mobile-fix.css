@@ -231,6 +231,17 @@
         display: flex !important;
     }
 
+    /* Show Install App link in mobile menu */
+    .pwa-install-link {
+        display: block !important;
+        color: var(--accent) !important;
+        font-weight: 600 !important;
+        padding: 10px 16px !important;
+        background: var(--accent-subtle) !important;
+        border-radius: 10px !important;
+        text-align: center !important;
+        margin-top: 4px !important;
+    }
 
     /* ══════════════════════════════════════════
        HERO — Compact, Punchy

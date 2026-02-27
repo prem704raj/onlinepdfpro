@@ -537,6 +537,26 @@ if (pwaInstallPill) {
         }
     });
 }
+// =========================================
+// Global PWA Install Trigger (used by nav Install App link)
+// =========================================
+
+function triggerPwaInstall(e) {
+    if (e) e.preventDefault();
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(result => {
+            console.log('[PWA] Nav install result:', result.outcome);
+            if (result.outcome === 'accepted') {
+                deferredPrompt = null;
+                const banner = document.getElementById('installBanner');
+                if (banner) banner.remove();
+            }
+        });
+    } else {
+        alert('To install: tap your browser menu (⋮) → "Add to Home Screen" or "Install App"');
+    }
+}
 
 // =========================================
 // Language Selector (Google Translate powered)
