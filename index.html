@@ -192,6 +192,19 @@
             overflow: hidden;
         }
 
+        /* Newsletter must keep blue gradient in both modes */
+        .newsletter-box {
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
+            border-radius: 20px;
+            color: white !important;
+        }
+
+        .newsletter-box h2,
+        .newsletter-box p {
+            color: white !important;
+        }
+
         .hp-hero::before {
             content: '';
             position: absolute;
@@ -916,8 +929,7 @@
 
         <!-- NEWSLETTER SIGNUP (Point 10: Retention) -->
         <section style="max-width:700px; margin:60px auto 0; padding:0 20px; text-align:center;">
-            <div
-                style="padding:40px; background:linear-gradient(135deg, #1e3a5f, #2563eb); border-radius:20px; color:white;">
+            <div class="newsletter-box">
                 <h2 style="font-size:24px; font-weight:800; margin:0 0 8px; color:white;">📬 Get New Tools &amp; Tips
                 </h2>
                 <p style="font-size:15px; opacity:0.85; margin:0 0 24px; color:white;">Get notified when we launch new
@@ -1070,7 +1082,7 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
-    }
+        }
     </script>
     <script type="application/ld+json">
 {
@@ -1118,7 +1130,7 @@
                     if (typeof gtag === 'function') gtag('event', 'newsletter_signup', { event_category: 'conversion' });
                 });
             }
-      ;
+            ;
     </script>
 </body>
 
