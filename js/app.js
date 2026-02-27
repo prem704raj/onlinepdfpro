@@ -518,6 +518,26 @@ window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
 });
 
+// "Works Offline" trust pill → trigger PWA install
+const pwaInstallPill = document.getElementById('pwaInstallPill');
+if (pwaInstallPill) {
+    pwaInstallPill.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const result = await deferredPrompt.userChoice;
+            console.log('[PWA] Install from pill result:', result.outcome);
+            if (result.outcome === 'accepted') {
+                deferredPrompt = null;
+                const banner = document.getElementById('installBanner');
+                if (banner) banner.remove();
+            }
+        } else {
+            // Already installed or prompt not available
+            alert('To install: tap your browser menu (⋮) → "Add to Home Screen" or "Install App"');
+        }
+    });
+}
+
 // =========================================
 // Language Selector (Google Translate powered)
 // =========================================
