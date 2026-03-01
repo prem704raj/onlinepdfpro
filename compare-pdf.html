@@ -629,63 +629,73 @@
 
             // Make comparePDFs available globally
             window.comparePDFs = function () {
-                if (!pdf1Text || !pdf2Text) return;
-
-                document.getElementById('compareBtnSection').style.display = 'none';
-                document.getElementById('progressSection').style.display = 'block';
-                document.getElementById('progressFill').style.width = '50%';
-
-                var lines1 = pdf1Text.split('\n');
-                var lines2 = pdf2Text.split('\n');
-
-                var matchCount = 0;
-                var diffCount = 0;
-                var only1Count = 0;
-                var only2Count = 0;
-
-                var html1 = '';
-                var html2 = '';
-
-                var maxLines = Math.max(lines1.length, lines2.length);
-
-                for (var i = 0; i < maxLines; i++) {
-                    var line1 = lines1[i] || '';
-                    var line2 = lines2[i] || '';
-
-                    if (line1 === line2) {
-                        html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
-                        if (line1.trim().length > 0) matchCount++;
-                    } else if (line1.trim().length === 0 && line2.trim().length > 0) {
-                        html1 += '<div class="line-only">(empty)</div>';
-                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                        only2Count++;
-                    } else if (line2.trim().length === 0 && line1.trim().length > 0) {
-                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-only">(empty)</div>';
-                        only1Count++;
-                    } else {
-                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                        diffCount++;
-                    }
+                if (pdf1Text === null || pdf2Text === null) {
+                    alert('Please upload both PDF files first.');
+                    return;
                 }
 
-                document.getElementById('progressFill').style.width = '100%';
+                try {
+                    document.getElementById('compareBtnSection').style.display = 'none';
+                    document.getElementById('progressSection').style.display = 'block';
+                    document.getElementById('progressFill').style.width = '50%';
 
-                document.getElementById('summaryCards').innerHTML =
-                    '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
-                    '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
-                    '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
-                    '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
+                    var lines1 = pdf1Text.split('\n');
+                    var lines2 = pdf2Text.split('\n');
 
-                document.getElementById('diffContent1').innerHTML = html1;
-                document.getElementById('diffContent2').innerHTML = html2;
+                    var matchCount = 0;
+                    var diffCount = 0;
+                    var only1Count = 0;
+                    var only2Count = 0;
 
-                document.getElementById('progressSection').style.display = 'none';
-                incrementCounter('comparePDF');
-                incrementTodayCount();
-                document.getElementById('resultsSection').style.display = 'block';
+                    var html1 = '';
+                    var html2 = '';
+
+                    var maxLines = Math.max(lines1.length, lines2.length);
+
+                    for (var i = 0; i < maxLines; i++) {
+                        var line1 = lines1[i] || '';
+                        var line2 = lines2[i] || '';
+
+                        if (line1 === line2) {
+                            html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
+                            html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
+                            if (line1.trim().length > 0) matchCount++;
+                        } else if (line1.trim().length === 0 && line2.trim().length > 0) {
+                            html1 += '<div class="line-only">(empty)</div>';
+                            html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                            only2Count++;
+                        } else if (line2.trim().length === 0 && line1.trim().length > 0) {
+                            html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                            html2 += '<div class="line-only">(empty)</div>';
+                            only1Count++;
+                        } else {
+                            html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                            html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                            diffCount++;
+                        }
+                    }
+
+                    document.getElementById('progressFill').style.width = '100%';
+
+                    document.getElementById('summaryCards').innerHTML =
+                        '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
+                        '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
+                        '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
+                        '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
+
+                    document.getElementById('diffContent1').innerHTML = html1;
+                    document.getElementById('diffContent2').innerHTML = html2;
+
+                    document.getElementById('progressSection').style.display = 'none';
+                    if (typeof incrementCounter === 'function') incrementCounter('comparePDF');
+                    if (typeof incrementTodayCount === 'function') incrementTodayCount();
+                    document.getElementById('resultsSection').style.display = 'block';
+                } catch (err) {
+                    console.error('Compare error:', err);
+                    alert('Error comparing PDFs: ' + err.message);
+                    document.getElementById('progressSection').style.display = 'none';
+                    document.getElementById('compareBtnSection').style.display = 'block';
+                }
             };
 
             function escapeHtml(text) {
