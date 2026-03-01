@@ -397,14 +397,14 @@
         .tips-section {
             margin: 30px 0;
             padding: 25px;
-            background: #f0fdf4;
+            background: rgba(16, 185, 129, 0.1);
             border-radius: 16px;
-            border: 2px solid #10b981;
+            border: 2px solid var(--accent);
         }
 
         .tips-section h3 {
             margin: 0 0 15px;
-            color: #059669;
+            color: var(--accent);
             font-size: 18px;
         }
 
@@ -415,7 +415,7 @@
 
         .tips-section li {
             margin: 8px 0;
-            color: var(--text-primary);
+            color: var(--text-secondary);
             font-size: 15px;
         }
 
@@ -1087,17 +1087,15 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
 
             // Simple HTML to Word method
             const title = document.getElementById('docTitle').value || 'My Document';
-            const html = '<html><head><meta charset="UTF-8">
+            const html = `<html><head><meta charset="UTF-8">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-</head><body>' +
-                '<h1>' + title + '</h1>' +
-                '<p style="color:gray;">' + new Date().toLocaleDateString() + '</p><hr>' +
-                text.split('\n').map(p => '<p>' + p + '</p>').join('') +
-                '
-<footer
+</head><body>
+    <h1>${title}</h1>
+    <p style="color:gray;">${new Date().toLocaleDateString()}</p><hr>
+    ${text.split('\n').map(p => '<p>' + p + '</p>').join('')}
+    <footer
         style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
         <div style="max-width:1200px; margin:0 auto;">
 
@@ -1200,11 +1198,11 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
 
         </div>
     </footer>
-
-<script defer src="counter.js"></script>
+    <script defer src="counter.js"></script>
 
     <script defer src="/js/app.js"></script>
-</body></html>';
+
+</body></html>`;
 
             const blob = new Blob([html], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
