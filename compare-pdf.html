@@ -523,126 +523,158 @@
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
     <script>
-        // Disable the worker — process on the main thread for maximum reliability
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-
-        let pdf1Text = null;
-        let pdf2Text = null;
-
-        document.getElementById('file1').onchange = async e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                document.getElementById('name1').textContent = '⏳ Loading ' + file.name + '...';
-                document.getElementById('box1').classList.add('loaded');
-                pdf1Text = await extractText(file);
-                document.getElementById('name1').textContent = '✅ ' + file.name;
-                checkBothLoaded();
-            } catch (err) {
-                console.error('Error loading PDF 1:', err);
-                document.getElementById('name1').textContent = '❌ Error loading file';
-                alert('Error loading PDF 1: ' + err.message);
+        // Wait for everything to load before setting up
+        window.addEventListener('load', function () {
+            // Check if PDF.js loaded
+            if (typeof pdfjsLib === 'undefined') {
+                alert('PDF library failed to load. Please refresh the page or check your internet connection.');
+                return;
             }
-        };
 
-        document.getElementById('file2').onchange = async e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                document.getElementById('name2').textContent = '⏳ Loading ' + file.name + '...';
-                document.getElementById('box2').classList.add('loaded');
-                pdf2Text = await extractText(file);
-                document.getElementById('name2').textContent = '✅ ' + file.name;
-                checkBothLoaded();
-            } catch (err) {
-                console.error('Error loading PDF 2:', err);
-                document.getElementById('name2').textContent = '❌ Error loading file';
-                alert('Error loading PDF 2: ' + err.message);
+            // Disable worker for reliability
+            pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+
+            var pdf1Text = null;
+            var pdf2Text = null;
+
+            var file1Input = document.getElementById('file1');
+            var file2Input = document.getElementById('file2');
+            var name1El = document.getElementById('name1');
+            var name2El = document.getElementById('name2');
+            var box1El = document.getElementById('box1');
+            var box2El = document.getElementById('box2');
+            var compareBtnSection = document.getElementById('compareBtnSection');
+
+            if (!file1Input || !file2Input) {
+                console.error('File inputs not found!');
+                return;
             }
-        };
 
-        function checkBothLoaded() {
-            if (pdf1Text !== null && pdf2Text !== null) {
-                document.getElementById('compareBtnSection').style.display = 'block';
+            file1Input.addEventListener('change', function (e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                name1El.textContent = '⏳ Loading...';
+                box1El.classList.add('loaded');
+                extractText(file).then(function (text) {
+                    pdf1Text = text;
+                    name1El.textContent = '✅ ' + file.name;
+                    checkBothLoaded();
+                }).catch(function (err) {
+                    name1El.textContent = '❌ Error';
+                    alert('Error reading PDF 1: ' + err.message);
+                });
+            });
+
+            file2Input.addEventListener('change', function (e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                name2El.textContent = '⏳ Loading...';
+                box2El.classList.add('loaded');
+                extractText(file).then(function (text) {
+                    pdf2Text = text;
+                    name2El.textContent = '✅ ' + file.name;
+                    checkBothLoaded();
+                }).catch(function (err) {
+                    name2El.textContent = '❌ Error';
+                    alert('Error reading PDF 2: ' + err.message);
+                });
+            });
+
+            function checkBothLoaded() {
+                if (pdf1Text !== null && pdf2Text !== null) {
+                    compareBtnSection.style.display = 'block';
+                }
             }
-        }
 
-        async function extractText(file) {
-            const arrayBuffer = await file.arrayBuffer();
-            try {
-                const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-                let fullText = '';
+            function extractText(file) {
+                return new Promise(function (resolve, reject) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        var typedArray = new Uint8Array(reader.result);
+                        var loadingTask = pdfjsLib.getDocument({ data: typedArray });
+                        loadingTask.promise.then(function (pdf) {
+                            var fullText = '';
+                            var pagePromises = [];
+                            for (var i = 1; i <= pdf.numPages; i++) {
+                                pagePromises.push(
+                                    pdf.getPage(i).then(function (page) {
+                                        return page.getTextContent().then(function (textContent) {
+                                            var lines = {};
+                                            textContent.items.forEach(function (item) {
+                                                var y = Math.round(item.transform[5]);
+                                                if (!lines[y]) lines[y] = [];
+                                                lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
+                                            });
+                                            var pageText = '';
+                                            Object.keys(lines).sort(function (a, b) { return b - a; }).forEach(function (y) {
+                                                var lineText = lines[y].sort(function (a, b) { return a.x - b.x; }).map(function (i) { return i.text; }).join(' ').trim();
+                                                if (lineText.length > 0) pageText += lineText + '\n';
+                                            });
+                                            return pageText;
+                                        });
+                                    })
+                                );
+                            }
+                            Promise.all(pagePromises).then(function (pages) {
+                                resolve(pages.join('\n').trim());
+                            }).catch(reject);
+                        }).catch(reject);
+                    };
+                    reader.onerror = function () {
+                        reject(new Error('Could not read the file'));
+                    };
+                    reader.readAsArrayBuffer(file);
+                });
+            }
 
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const textContent = await page.getTextContent();
-                    const lines = {};
+            // Make comparePDFs available globally
+            window.comparePDFs = function () {
+                if (!pdf1Text || !pdf2Text) return;
 
-                    textContent.items.forEach(item => {
-                        const y = Math.round(item.transform[5]);
-                        if (!lines[y]) lines[y] = [];
-                        lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
-                    });
+                document.getElementById('compareBtnSection').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'block';
+                document.getElementById('progressFill').style.width = '50%';
 
-                    Object.keys(lines).sort((a, b) => b - a).forEach(y => {
-                        const lineText = lines[y].sort((a, b) => a.x - b.x).map(i => i.text).join(' ').trim();
-                        if (lineText.length > 0) fullText += lineText + '\n';
-                    });
+                var lines1 = pdf1Text.split('\n');
+                var lines2 = pdf2Text.split('\n');
 
-                    fullText += '\n';
+                var matchCount = 0;
+                var diffCount = 0;
+                var only1Count = 0;
+                var only2Count = 0;
+
+                var html1 = '';
+                var html2 = '';
+
+                var maxLines = Math.max(lines1.length, lines2.length);
+
+                for (var i = 0; i < maxLines; i++) {
+                    var line1 = lines1[i] || '';
+                    var line2 = lines2[i] || '';
+
+                    if (line1 === line2) {
+                        html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
+                        if (line1.trim().length > 0) matchCount++;
+                    } else if (line1.trim().length === 0 && line2.trim().length > 0) {
+                        html1 += '<div class="line-only">(empty)</div>';
+                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                        only2Count++;
+                    } else if (line2.trim().length === 0 && line1.trim().length > 0) {
+                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-only">(empty)</div>';
+                        only1Count++;
+                    } else {
+                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                        diffCount++;
+                    }
                 }
 
-                return fullText.trim();
-            } catch (pdfErr) {
-                console.error('PDF.js error:', pdfErr);
-                throw pdfErr;
-            }
-        }
+                document.getElementById('progressFill').style.width = '100%';
 
-        function comparePDFs() {
-            if (!pdf1Text || !pdf2Text) return;
-
-            document.getElementById('compareBtnSection').style.display = 'none';
-            document.getElementById('progressSection').style.display = 'block';
-            document.getElementById('progressFill').style.width = '50%';
-
-            const lines1 = pdf1Text.split('\n');
-            const lines2 = pdf2Text.split('\n');
-
-            let matchCount = 0;
-            let diffCount = 0;
-            let only1Count = 0;
-            let only2Count = 0;
-
-            let html1 = '';
-            let html2 = '';
-
-            const maxLines = Math.max(lines1.length, lines2.length);
-
-            for (let i = 0; i < maxLines; i++) {
-                const line1 = lines1[i] || '';
-                const line2 = lines2[i] || '';
-
-                if (line1 === line2) {
-                    html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
-                    html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
-                    if (line1.trim().length > 0) matchCount++;
-                } else if (line1.trim().length === 0 && line2.trim().length > 0) {
-                    html1 += '<div class="line-only">(empty)</div>';
-                    html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                    only2Count++;
-                } else if (line2.trim().length === 0 && line1.trim().length > 0) {
-                    html1 += '<div class="line-di            ff">' + escapeHtml(line            1) + '</div>';
-                    html2 += '<div class="line-only">(empty)</div>';
-                    only1Count++;
-                } else {
-                    html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                    l2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                    diffCount++;
-                }
-
-                document.getEle            ById('progressFill').style.width = '100%                        document.getElementById('summaryCards').innerHTML =
-                '<div class="sum            -car        d card-<span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
+                document.getElementById('summaryCards').innerHTML =
+                    '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
                     '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
                     '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
                     '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
@@ -654,13 +686,15 @@
                 incrementCounter('comparePDF');
                 incrementTodayCount();
                 document.getElementById('resultsSection').style.display = 'block';
-            }
+            };
 
             function escapeHtml(text) {
-                const div = document.createElement('div');
+                var div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
             }
+
+        }); // end window.addEventListener('load')
     </script>
 
     <footer
@@ -770,11 +804,11 @@
     <script defer src="counter.js"></script>
 
     <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Reg Failed', err));
-                });
-            }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Reg Failed', err));
+            });
+        }
     </script>
 
     <script defer src="js/app.js"></script>
