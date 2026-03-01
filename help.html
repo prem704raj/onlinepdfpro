@@ -293,6 +293,28 @@
                 </div>
             </div>
         </section>
+    
+        <section class="container" style="padding: var(--space-xl) 0; max-width: 800px; margin: 0 auto; color: var(--text-secondary); line-height: 1.8;">
+            <h2 style="font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px;">Comprehensive User Guide</h2>
+            <p style="margin-bottom: 20px;">Welcome to the detailed help section for OnlinePDFPro. Here, we aim to provide comprehensive answers to the most complex questions regarding document processing, browser compatibility, and troubleshooting. Our goal is to ensure that your experience with our platform is completely frictionless.</p>
+
+            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Troubleshooting File Processing Errors</h3>
+            <p style="margin-bottom: 15px;">Because OnlinePDFPro relies on your browser's internal engine to process files locally, you might occasionally encounter performance limitations if you are working with exceptionally large documents (e.g., PDFs over 200MB) or devices with limited RAM (such as older smartphones).</p>
+            <ul style="margin-bottom: 15px; padding-left: 20px;">
+                <li style="margin-bottom: 10px;"><strong>Browser Crashes / Out of Memory:</strong> If your browser tab crashes during processing, it means your device ran out of available memory. To fix this, close other background tabs and applications to free up RAM, then try again. Alternatively, try using a desktop computer instead of a mobile device for very large files.</li>
+                <li style="margin-bottom: 10px;"><strong>Processing Gets Stuck:</strong> If the progress bar halts and doesn't advance for several minutes, the file may be corrupted or contain highly complex vector graphics that the browser engine is struggling to parse. Try re-saving the PDF using a different program before processing it here.</li>
+                <li style="margin-bottom: 10px;"><strong>"Invalid PDF" Error:</strong> This occurs when the file you uploaded is not a genuine standard PDF format (even if the extension is .pdf), or if the file header is corrupted.</li>
+            </ul>
+
+            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Optimization Best Practices</h3>
+            <p style="margin-bottom: 15px;">When using our compression tool, you might notice varying results. The effectiveness of PDF compression depends heavily on the internal structure of the document.</p>
+            <p style="margin-bottom: 15px;">If your PDF consists entirely of uncompressed high-resolution photographs, our tool can significantly reduce the file size by re-encoding and downsampling the images. However, if your PDF is mostly text, or if the images contained within it have already been heavily optimized by the software that originally generated the PDF, the size reduction will be minimal. Our algorithm prioritizes maintaining reading quality over destructive compression.</p>
+
+            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Security and Encryption Mechanisms</h3>
+            <p style="margin-bottom: 15px;">Many users ask how we can guarantee privacy. The answer lies in modern web APIs (like JavaScript FileReader and Web Worker APIs). When you select a file via our interface, your browser reads the file directly into its local memory. The WebAssembly scripts we provide then execute directly upon that memory block to merge, split, or compress the data.</p>
+            <p>At no point is an HTTP POST request made to transmit your document data across the internet. You can easily verify this yourself by opening your browser's Developer Tools (F12), navigating to the 'Network' tab, and observing that no file data is ever dispatched when you click a processing button.</p>
+        </section>
+    
     </main>
 
 
