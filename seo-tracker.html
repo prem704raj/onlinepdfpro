@@ -196,7 +196,8 @@
             color: #000;
         }
     </style>
-    <!-- MOBILE FIX - Add this RIGHT BEFORE </head> tag -->
+    <!-- MOBILE FIX - Add this RIGHT BEFORE     <link rel="alternate" type="application/rss+xml" title="OnlinePDFPro Blog" href="https://onlinepdfpro.com/feed.xml">
+</head> tag -->
 </head>
 
 <body>
@@ -378,7 +379,7 @@
                 tbody.innerHTML += `
                 <tr>
                     <td>${num}</td>
-                    <td><a href="${fullUrl}" target="_blank" style="color:#60a5fa;text-decoration:none;word-break:break-all">${u.url}</a></td>
+                    <td><a href="${fullUrl}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:none;word-break:break-all">${u.url}</a></td>
                     <td>${u.type}</td>
                     <td onclick="toggle('${u.url}','google')">${getIcon(d.google)}</td>
                     <td onclick="toggle('${u.url}','bing')">${getIcon(d.bing)}</td>
