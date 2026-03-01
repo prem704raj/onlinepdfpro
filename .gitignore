@@ -15,3 +15,10 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
+
+# Dev scripts
+_scripts/
+
+# Test files
+test*.pdf
+test_tts*.js
