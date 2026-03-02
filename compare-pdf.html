@@ -232,17 +232,17 @@
         .page-controls {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .page-controls button {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border: 1px solid var(--border);
             background: var(--surface-1);
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-primary);
             display: flex;
             align-items: center;
@@ -261,11 +261,26 @@
             cursor: not-allowed;
         }
 
-        .page-info {
+        .page-input {
+            width: 42px;
+            height: 28px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .page-input:focus {
+            border-color: var(--accent);
+        }
+
+        .page-total {
             font-size: 12px;
             color: var(--text-secondary);
-            min-width: 60px;
-            text-align: center;
         }
 
         .canvas-wrapper {
@@ -309,8 +324,9 @@
         }
 
         .text-layer span.highlight {
-            background: rgba(16, 185, 129, 0.45);
+            background: rgba(255, 193, 7, 0.55);
             border-radius: 2px;
+            box-shadow: 0 0 2px rgba(255, 152, 0, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -434,7 +450,9 @@
                             <span class="panel-title">📄 <span id="viewer-name1">PDF 1</span></span>
                             <div class="page-controls">
                                 <button onclick="changePage(1, -1)" id="prev1">◀</button>
-                                <span class="page-info" id="pageInfo1">1 / 1</span>
+                                <input type="number" class="page-input" id="pageInput1" value="1" min="1"
+                                    onchange="jumpToPage(1)" />
+                                <span class="page-total" id="pageTotal1">/ 1</span>
                                 <button onclick="changePage(1, 1)" id="next1">▶</button>
                             </div>
                         </div>
@@ -452,7 +470,9 @@
                             <span class="panel-title">📄 <span id="viewer-name2">PDF 2</span></span>
                             <div class="page-controls">
                                 <button onclick="changePage(2, -1)" id="prev2">◀</button>
-                                <span class="page-info" id="pageInfo2">1 / 1</span>
+                                <input type="number" class="page-input" id="pageInput2" value="1" min="1"
+                                    onchange="jumpToPage(2)" />
+                                <span class="page-total" id="pageTotal2">/ 1</span>
                                 <button onclick="changePage(2, 1)" id="next2">▶</button>
                             </div>
                         </div>
@@ -652,7 +672,9 @@
 
             // Update page info
             var totalPages = pdfDoc.numPages;
-            document.getElementById('pageInfo' + panelNum).textContent = pageNum + ' / ' + totalPages;
+            document.getElementById('pageInput' + panelNum).value = pageNum;
+            document.getElementById('pageInput' + panelNum).max = totalPages;
+            document.getElementById('pageTotal' + panelNum).textContent = '/ ' + totalPages;
             document.getElementById('prev' + panelNum).disabled = pageNum <= 1;
             document.getElementById('next' + panelNum).disabled = pageNum >= totalPages;
 
@@ -672,6 +694,20 @@
             else currentPage2 = newPage;
 
             renderPage(panelNum, newPage);
+        }
+
+        function jumpToPage(panelNum) {
+            var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
+            var input = document.getElementById('pageInput' + panelNum);
+            var page = parseInt(input.value);
+            if (isNaN(page) || page < 1) page = 1;
+            if (page > pdfDoc.numPages) page = pdfDoc.numPages;
+            input.value = page;
+
+            if (panelNum === 1) currentPage1 = page;
+            else currentPage2 = page;
+
+            renderPage(panelNum, page);
         }
 
         function toggleHighlight() {
@@ -696,41 +732,39 @@
 
             if (!spans1.length || !spans2.length) return;
 
-            // Collect all words from PDF 2 text spans
-            var wordsInPdf2 = {};
-            spans2.forEach(function (span) {
-                var text = span.getAttribute('data-text') || '';
-                var words = text.split(/\s+/);
-                words.forEach(function (w) {
-                    if (w.length >= 2) wordsInPdf2[w] = true;
+            // Extract meaningful words (3+ chars, no numbers-only, no noise)
+            function getWords(spans) {
+                var words = {};
+                spans.forEach(function (span) {
+                    var text = (span.getAttribute('data-text') || '').replace(/[^a-z\s]/g, ' ');
+                    text.split(/\s+/).forEach(function (w) {
+                        if (w.length >= 3 && !/^\d+$/.test(w)) words[w] = true;
+                    });
                 });
-            });
+                return words;
+            }
 
-            // Highlight spans in PDF 1 that contain matching words
-            spans1.forEach(function (span) {
-                var text = span.getAttribute('data-text') || '';
-                var words = text.split(/\s+/);
-                var hasMatch = words.some(function (w) { return w.length >= 2 && wordsInPdf2[w]; });
-                if (hasMatch) span.classList.add('highlight');
-            });
+            var words1 = getWords(spans1);
+            var words2 = getWords(spans2);
 
-            // Collect words from PDF 1
-            var wordsInPdf1 = {};
-            spans1.forEach(function (span) {
-                var text = span.getAttribute('data-text') || '';
-                var words = text.split(/\s+/);
-                words.forEach(function (w) {
-                    if (w.length >= 2) wordsInPdf1[w] = true;
+            // Find common words
+            var common = {};
+            for (var w in words1) {
+                if (words2[w]) common[w] = true;
+            }
+
+            // Highlight spans that contain at least one common meaningful word
+            function highlightSpans(spans) {
+                spans.forEach(function (span) {
+                    var text = (span.getAttribute('data-text') || '').replace(/[^a-z\s]/g, ' ');
+                    var spanWords = text.split(/\s+/);
+                    var hasMatch = spanWords.some(function (w) { return w.length >= 3 && common[w]; });
+                    if (hasMatch) span.classList.add('highlight');
                 });
-            });
+            }
 
-            // Highlight spans in PDF 2 that contain matching words
-            spans2.forEach(function (span) {
-                var text = span.getAttribute('data-text') || '';
-                var words = text.split(/\s+/);
-                var hasMatch = words.some(function (w) { return w.length >= 2 && wordsInPdf1[w]; });
-                if (hasMatch) span.classList.add('highlight');
-            });
+            highlightSpans(spans1);
+            highlightSpans(spans2);
         }
 
         function clearHighlights() {
