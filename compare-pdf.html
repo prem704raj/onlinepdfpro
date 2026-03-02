@@ -523,188 +523,151 @@
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
     <script>
-        // Wait for everything to load before setting up
-        window.addEventListener('load', function () {
-            // Check if PDF.js loaded
-            if (typeof pdfjsLib === 'undefined') {
-                alert('PDF library failed to load. Please refresh the page or check your internet connection.');
+        // Set up PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        var pdf1Text = null;
+        var pdf2Text = null;
+
+        async function extractText(file) {
+            var arrayBuffer = await file.arrayBuffer();
+            var pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+            var fullText = '';
+
+            for (var i = 1; i <= pdf.numPages; i++) {
+                var page = await pdf.getPage(i);
+                var textContent = await page.getTextContent();
+                var lines = {};
+
+                textContent.items.forEach(function (item) {
+                    var y = Math.round(item.transform[5]);
+                    if (!lines[y]) lines[y] = [];
+                    lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
+                });
+
+                var sortedKeys = Object.keys(lines).sort(function (a, b) { return b - a; });
+                for (var k = 0; k < sortedKeys.length; k++) {
+                    var y = sortedKeys[k];
+                    var lineText = lines[y].sort(function (a, b) { return a.x - b.x; }).map(function (item) { return item.text; }).join(' ').trim();
+                    if (lineText.length > 0) fullText += lineText + '\n';
+                }
+                fullText += '\n';
+            }
+
+            return fullText.trim();
+        }
+
+        function checkBothLoaded() {
+            if (pdf1Text !== null && pdf2Text !== null) {
+                document.getElementById('compareBtnSection').style.display = 'block';
+            }
+        }
+
+        document.getElementById('file1').addEventListener('change', async function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            try {
+                document.getElementById('name1').textContent = '⏳ Loading...';
+                document.getElementById('box1').classList.add('loaded');
+                pdf1Text = await extractText(file);
+                document.getElementById('name1').textContent = '✅ ' + file.name;
+                checkBothLoaded();
+            } catch (err) {
+                document.getElementById('name1').textContent = '❌ Error';
+                alert('Error reading PDF 1: ' + err.message);
+            }
+        });
+
+        document.getElementById('file2').addEventListener('change', async function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            try {
+                document.getElementById('name2').textContent = '⏳ Loading...';
+                document.getElementById('box2').classList.add('loaded');
+                pdf2Text = await extractText(file);
+                document.getElementById('name2').textContent = '✅ ' + file.name;
+                checkBothLoaded();
+            } catch (err) {
+                document.getElementById('name2').textContent = '❌ Error';
+                alert('Error reading PDF 2: ' + err.message);
+            }
+        });
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function comparePDFs() {
+            if (pdf1Text === null || pdf2Text === null) {
+                alert('Please upload both PDF files first.');
                 return;
             }
 
-            // Disable worker for reliability
-            pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+            try {
+                document.getElementById('compareBtnSection').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'block';
+                document.getElementById('progressFill').style.width = '50%';
 
-            var pdf1Text = null;
-            var pdf2Text = null;
+                var lines1 = pdf1Text.split('\n');
+                var lines2 = pdf2Text.split('\n');
 
-            var file1Input = document.getElementById('file1');
-            var file2Input = document.getElementById('file2');
-            var name1El = document.getElementById('name1');
-            var name2El = document.getElementById('name2');
-            var box1El = document.getElementById('box1');
-            var box2El = document.getElementById('box2');
-            var compareBtnSection = document.getElementById('compareBtnSection');
+                var matchCount = 0;
+                var diffCount = 0;
+                var only1Count = 0;
+                var only2Count = 0;
 
-            if (!file1Input || !file2Input) {
-                console.error('File inputs not found!');
-                return;
-            }
+                var html1 = '';
+                var html2 = '';
 
-            file1Input.addEventListener('change', function (e) {
-                var file = e.target.files[0];
-                if (!file) return;
-                name1El.textContent = '⏳ Loading...';
-                box1El.classList.add('loaded');
-                extractText(file).then(function (text) {
-                    pdf1Text = text;
-                    name1El.textContent = '✅ ' + file.name;
-                    checkBothLoaded();
-                }).catch(function (err) {
-                    name1El.textContent = '❌ Error';
-                    alert('Error reading PDF 1: ' + err.message);
-                });
-            });
+                var maxLines = Math.max(lines1.length, lines2.length);
 
-            file2Input.addEventListener('change', function (e) {
-                var file = e.target.files[0];
-                if (!file) return;
-                name2El.textContent = '⏳ Loading...';
-                box2El.classList.add('loaded');
-                extractText(file).then(function (text) {
-                    pdf2Text = text;
-                    name2El.textContent = '✅ ' + file.name;
-                    checkBothLoaded();
-                }).catch(function (err) {
-                    name2El.textContent = '❌ Error';
-                    alert('Error reading PDF 2: ' + err.message);
-                });
-            });
+                for (var i = 0; i < maxLines; i++) {
+                    var line1 = lines1[i] || '';
+                    var line2 = lines2[i] || '';
 
-            function checkBothLoaded() {
-                if (pdf1Text !== null && pdf2Text !== null) {
-                    compareBtnSection.style.display = 'block';
-                }
-            }
-
-            function extractText(file) {
-                return new Promise(function (resolve, reject) {
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        var typedArray = new Uint8Array(reader.result);
-                        var loadingTask = pdfjsLib.getDocument({ data: typedArray });
-                        loadingTask.promise.then(function (pdf) {
-                            var fullText = '';
-                            var pagePromises = [];
-                            for (var i = 1; i <= pdf.numPages; i++) {
-                                pagePromises.push(
-                                    pdf.getPage(i).then(function (page) {
-                                        return page.getTextContent().then(function (textContent) {
-                                            var lines = {};
-                                            textContent.items.forEach(function (item) {
-                                                var y = Math.round(item.transform[5]);
-                                                if (!lines[y]) lines[y] = [];
-                                                lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
-                                            });
-                                            var pageText = '';
-                                            Object.keys(lines).sort(function (a, b) { return b - a; }).forEach(function (y) {
-                                                var lineText = lines[y].sort(function (a, b) { return a.x - b.x; }).map(function (i) { return i.text; }).join(' ').trim();
-                                                if (lineText.length > 0) pageText += lineText + '\n';
-                                            });
-                                            return pageText;
-                                        });
-                                    })
-                                );
-                            }
-                            Promise.all(pagePromises).then(function (pages) {
-                                resolve(pages.join('\n').trim());
-                            }).catch(reject);
-                        }).catch(reject);
-                    };
-                    reader.onerror = function () {
-                        reject(new Error('Could not read the file'));
-                    };
-                    reader.readAsArrayBuffer(file);
-                });
-            }
-
-            // Make comparePDFs available globally
-            window.comparePDFs = function () {
-                if (pdf1Text === null || pdf2Text === null) {
-                    alert('Please upload both PDF files first.');
-                    return;
-                }
-
-                try {
-                    document.getElementById('compareBtnSection').style.display = 'none';
-                    document.getElementById('progressSection').style.display = 'block';
-                    document.getElementById('progressFill').style.width = '50%';
-
-                    var lines1 = pdf1Text.split('\n');
-                    var lines2 = pdf2Text.split('\n');
-
-                    var matchCount = 0;
-                    var diffCount = 0;
-                    var only1Count = 0;
-                    var only2Count = 0;
-
-                    var html1 = '';
-                    var html2 = '';
-
-                    var maxLines = Math.max(lines1.length, lines2.length);
-
-                    for (var i = 0; i < maxLines; i++) {
-                        var line1 = lines1[i] || '';
-                        var line2 = lines2[i] || '';
-
-                        if (line1 === line2) {
-                            html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
-                            html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
-                            if (line1.trim().length > 0) matchCount++;
-                        } else if (line1.trim().length === 0 && line2.trim().length > 0) {
-                            html1 += '<div class="line-only">(empty)</div>';
-                            html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                            only2Count++;
-                        } else if (line2.trim().length === 0 && line1.trim().length > 0) {
-                            html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                            html2 += '<div class="line-only">(empty)</div>';
-                            only1Count++;
-                        } else {
-                            html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                            html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                            diffCount++;
-                        }
+                    if (line1 === line2) {
+                        html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
+                        if (line1.trim().length > 0) matchCount++;
+                    } else if (line1.trim().length === 0 && line2.trim().length > 0) {
+                        html1 += '<div class="line-only">(empty)</div>';
+                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                        only2Count++;
+                    } else if (line2.trim().length === 0 && line1.trim().length > 0) {
+                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-only">(empty)</div>';
+                        only1Count++;
+                    } else {
+                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
+                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
+                        diffCount++;
                     }
-
-                    document.getElementById('progressFill').style.width = '100%';
-
-                    document.getElementById('summaryCards').innerHTML =
-                        '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
-                        '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
-                        '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
-                        '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
-
-                    document.getElementById('diffContent1').innerHTML = html1;
-                    document.getElementById('diffContent2').innerHTML = html2;
-
-                    document.getElementById('progressSection').style.display = 'none';
-                    if (typeof incrementCounter === 'function') incrementCounter('comparePDF');
-                    if (typeof incrementTodayCount === 'function') incrementTodayCount();
-                    document.getElementById('resultsSection').style.display = 'block';
-                } catch (err) {
-                    console.error('Compare error:', err);
-                    alert('Error comparing PDFs: ' + err.message);
-                    document.getElementById('progressSection').style.display = 'none';
-                    document.getElementById('compareBtnSection').style.display = 'block';
                 }
-            };
 
-            function escapeHtml(text) {
-                var div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
+                document.getElementById('progressFill').style.width = '100%';
+
+                document.getElementById('summaryCards').innerHTML =
+                    '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
+                    '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
+                    '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
+                    '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
+
+                document.getElementById('diffContent1').innerHTML = html1;
+                document.getElementById('diffContent2').innerHTML = html2;
+
+                document.getElementById('progressSection').style.display = 'none';
+                if (typeof incrementCounter === 'function') incrementCounter('comparePDF');
+                if (typeof incrementTodayCount === 'function') incrementTodayCount();
+                document.getElementById('resultsSection').style.display = 'block';
+            } catch (err) {
+                console.error('Compare error:', err);
+                alert('Error comparing PDFs: ' + err.message);
+                document.getElementById('progressSection').style.display = 'none';
+                document.getElementById('compareBtnSection').style.display = 'block';
             }
-
-        }); // end window.addEventListener('load')
+        }
     </script>
 
     <footer
