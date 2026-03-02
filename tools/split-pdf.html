@@ -101,8 +101,111 @@
             }
       ]
 }
+      ]
+}
     </script>
-</head> tag -->
+
+    <style>
+        /* ----- High Definition Text Layer ----- */
+        .pdf-text-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            opacity: 0.25;
+            line-height: 1.4;
+            --hl-color: 255, 213, 0;
+            --hl-opacity: 0.85;
+            z-index: 10;
+        }
+
+        .pdf-text-layer span {
+            position: absolute;
+            white-space: pre;
+            color: transparent;
+            cursor: text;
+            transform-origin: 0% 0%;
+            line-height: 1.4;
+        }
+
+        .pdf-text-layer span::selection {
+            background: rgba(var(--hl-color), var(--hl-opacity));
+            color: transparent;
+        }
+
+        .pdf-text-layer span::-moz-selection {
+            background: rgba(var(--hl-color), var(--hl-opacity));
+            color: transparent;
+        }
+
+        /* Color Picker UI */
+        .hl-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface-1);
+            padding: 6px 12px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .hl-color-btn {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hl-color-btn::-webkit-color-swatch {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .hl-color-btn::-moz-color-swatch {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .hl-opacity-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hl-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .hl-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        .hl-opacity-val {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            min-width: 36px;
+        }
+    </style>
 </head>
 
 <body class="fade-in">
@@ -128,39 +231,38 @@
             <div class="header-actions">
                 <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
                 <!-- Compact Header Search -->
-                <div class="header-search" style="position: relative; margin-right: 8px;">
-                    <span
-                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
-                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
-                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
-                </div>
+    <div class="header-search" style="position: relative; margin-right: 8px;">
+        <span
+            style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+        <input type="text" id="globalToolSearch" placeholder="Search tools..."
+            style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
+    </div>
 
-                <div class="lang-selector">
-                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
-                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                            <path d="M2 12h20"></path>
-                        </svg></button>
-                    <div class="lang-dropdown">
-                        <div class="lang-search-wrap">
-                            <input type="text" class="lang-search" placeholder="Search language...">
-                        </div>
-                        <ul class="lang-list"></ul>
-                    </div>
-                </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
-                    style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-
+    <div class="lang-selector">
+        <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                </path>
+                <path d="M2 12h20"></path>
+            </svg></button>
+        <div class="lang-dropdown">
+            <div class="lang-search-wrap">
+                <input type="text" class="lang-search" placeholder="Search language...">
             </div>
+            <ul class="lang-list"></ul>
         </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+        style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+        <span class="theme-icon-light">🌙</span>
+        <span class="theme-icon-dark">☀️</span>
+    </button>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+
+    </div>
+    </div>
     </header>
 
 
@@ -201,12 +303,27 @@
                         style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 24px;">Refine
                         Selection</h3>
 
-                    <div class="option-group" style="margin-bottom: 32px;">
+                    <div class="option-group" style="margin-bottom: 24px;">
                         <label class="option-label" style="display: block; margin-bottom: 12px; font-weight: 500;">Page
                             Range Selection</label>
                         <input type="text" class="form-input" id="pageRange"
                             style="width: 100%; padding: 16px; background: var(--surface-1); border: 1px solid var(--glass-border); border-radius: var(--radius-md); color: white;"
                             placeholder="e.g., 1-3, 5, 7-10">
+                    </div>
+
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; padding: 16px; background: rgba(0,0,0,0.1); border-radius: var(--radius-md);">
+                        <span style="font-weight: 600; color: var(--text-secondary);">Selection Highlight:</span>
+                        <div class="hl-controls">
+                            <input type="color" id="hlColorPicker" class="hl-color-btn" value="#FFD500"
+                                title="Choose highlight color" oninput="updateHlColor(this.value)">
+                            <div class="hl-opacity-container">
+                                <span style="font-size: 0.85rem; color: var(--text-secondary);">Opacity:</span>
+                                <input type="range" id="hlOpacitySlider" class="hl-slider" min="10" max="100" value="85"
+                                    oninput="updateHlOpacity(this.value)">
+                                <span id="hlOpacityVal" class="hl-opacity-val">85%</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
@@ -562,27 +679,63 @@
             async function renderThumbnails() {
                 thumbnailsGrid.innerHTML = '';
                 const numPages = pdfDoc.numPages;
+
+                // Get High-DPI for sharp rendering
+                const dpr = Math.max(window.devicePixelRatio || 1, 2);
+                const renderScale = 1.5 * dpr;
+
                 for (let i = 1; i <= numPages; i++) {
                     const page = await pdfDoc.getPage(i);
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    // Use a higher scale for "4K" crisp thumbnails
-                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    const viewport = page.getViewport({ scale: renderScale });
+                    const cssViewport = page.getViewport({ scale: 1.5 }); // CSS display scale maintains previous physical sizes
+
                     canvas.width = viewport.width;
                     canvas.height = viewport.height;
+                    canvas.style.width = cssViewport.width + 'px';
+                    canvas.style.height = cssViewport.height + 'px';
+
                     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
                     const item = document.createElement('div');
                     item.className = 'thumbnail-item';
                     item.dataset.page = i;
-                    // Use high quality JPEG to save DOM memory while keeping sharpness
+
                     item.innerHTML = `
-                        <img loading="lazy" src="${canvas.toDataURL('image/jpeg', 0.9)}" class="thumbnail-image" alt="Page ${i}">
-                        <div class="thumbnail-number">Page ${i}</div>
+                        <div class="page-container" style="position: relative; width: ${cssViewport.width}px; height: ${cssViewport.height}px; margin: 0 auto; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                            <img loading="lazy" src="${canvas.toDataURL('image/jpeg', 0.9)}" class="thumbnail-image" alt="Page ${i}" style="width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0;">
+                            <div class="pdf-text-layer" id="text-layer-${i}" style="width: ${cssViewport.width}px; height: ${cssViewport.height}px;"></div>
+                        </div>
+                        <div class="thumbnail-number" style="margin-top: 8px;">Page ${i}</div>
                         <span class="thumbnail-check">✓</span>
                     `;
 
-                    item.addEventListener('click', () => togglePage(i, item));
+                    // Generate text layer overlay
+                    const textLayerNode = item.querySelector(`#text-layer-${i}`);
+                    const textContent = await page.getTextContent();
+                    textContent.items.forEach(textItem => {
+                        const tx = pdfjsLib.Util.transform(cssViewport.transform, textItem.transform);
+                        const fontHeight = Math.sqrt((tx[2] * tx[2]) + (tx[3] * tx[3]));
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = textItem.str;
+                        textSpan.style.left = tx[4] + 'px';
+                        textSpan.style.top = (tx[5] - fontHeight * 1.05) + 'px'; // Ascender shift
+                        textSpan.style.fontSize = fontHeight + 'px';
+                        textSpan.style.fontFamily = textItem.fontName;
+                        textSpan.style.width = (textItem.width * cssViewport.scale) + 'px';
+                        textSpan.style.height = (fontHeight * 1.4) + 'px'; // Covers descenders
+                        textSpan.style.transform = `scaleX(${(textItem.width * cssViewport.scale) / textItem.width})`;
+                        textLayerNode.appendChild(textSpan);
+                    });
+
+                    // Update click logic so text interaction is allowed without triggering page selection
+                    item.addEventListener('click', (e) => {
+                        if (window.getSelection().toString().length > 0) return; // Prevent selection toggle when copying text
+                        togglePage(i, item);
+                    });
+
                     thumbnailsGrid.appendChild(item);
                 }
             }
@@ -705,6 +858,37 @@
                     reader.readAsArrayBuffer(file);
                 });
             }
+
+            // Highlighting Color and Opacity Management
+            let hlColor = '255, 213, 0';
+            let hlOpacity = 0.85;
+
+            window.hexToRgb = function (hex) {
+                var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ?
+                    parseInt(result[1], 16) + ', ' +
+                    parseInt(result[2], 16) + ', ' +
+                    parseInt(result[3], 16) : '255, 213, 0';
+            };
+
+            window.updateHlColor = function (hexStr) {
+                hlColor = window.hexToRgb(hexStr);
+                window.applyHlStyle();
+            };
+
+            window.updateHlOpacity = function (val) {
+                hlOpacity = parseInt(val) / 100;
+                document.getElementById('hlOpacityVal').textContent = val + '%';
+                window.applyHlStyle();
+            };
+
+            window.applyHlStyle = function () {
+                document.querySelectorAll('.pdf-text-layer').forEach(layer => {
+                    layer.style.setProperty('--hl-color', hlColor);
+                    layer.style.setProperty('--hl-opacity', hlOpacity);
+                });
+            };
+
         })();
     </script>
 
@@ -912,6 +1096,6 @@
             });
         });
     </script>
-</body>
+    </body>
 
 </html>
