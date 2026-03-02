@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v19'; // Force refresh for text selection line-height fix
+const CACHE_NAME = 'onlinepdfpro-v20'; // Force refresh for app.js defer fix
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
