@@ -225,7 +225,7 @@
             left: 0;
             overflow: hidden;
             opacity: 0.25;
-            line-height: 1;
+            line-height: 1.4;
             z-index: 2;
             --hl-color: 255, 213, 0;
             --hl-opacity: 0.85;
@@ -236,6 +236,8 @@
             white-space: pre;
             color: transparent;
             cursor: text;
+            line-height: 1.4;
+            transform-origin: 0% 0%;
         }
 
         .pdf-text-layer span::selection {
@@ -733,9 +735,9 @@
                 span.style.fontSize = fontSize + 'px';
                 span.style.fontFamily = item.fontName || 'sans-serif';
                 span.style.left = tx[4] + 'px';
-                span.style.top = (tx[5] - fontSize) + 'px';
+                span.style.top = (tx[5] - fontSize * 1.05) + 'px';
                 span.style.width = (item.width * currentScale) + 'px';
-                span.style.height = (fontSize * 1.45) + 'px';
+                span.style.height = (fontSize * 1.4) + 'px';
                 span.style.letterSpacing = '0px';
                 textLayerDiv.appendChild(span);
             });
