@@ -272,8 +272,6 @@
             position: relative;
             overflow: auto;
             max-height: 80vh;
-            display: flex;
-            justify-content: center;
             padding: 10px;
             background: #f1f5f9;
         }
@@ -283,26 +281,36 @@
         }
 
         .canvas-wrapper canvas {
-            max-width: 100%;
-            height: auto !important;
+            display: block;
+        }
+
+        .page-container {
+            position: relative;
+            margin: 0 auto;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
+            overflow: hidden;
         }
 
-        .text-overlay {
+        .text-layer {
             position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .text-layer span {
+            position: absolute;
+            white-space: pre;
+            color: transparent;
             pointer-events: none;
         }
 
-        .highlight-word {
-            position: absolute;
-            background: rgba(16, 185, 129, 0.35);
-            border: 1px solid rgba(16, 185, 129, 0.7);
+        .text-layer span.highlight {
+            background: rgba(16, 185, 129, 0.45);
             border-radius: 2px;
-            pointer-events: none;
         }
 
         @media (max-width: 768px) {
@@ -431,8 +439,10 @@
                             </div>
                         </div>
                         <div class="canvas-wrapper" id="wrapper1">
-                            <canvas id="canvas1"></canvas>
-                            <div class="text-overlay" id="overlay1"></div>
+                            <div class="page-container" id="pageContainer1">
+                                <canvas id="canvas1"></canvas>
+                                <div class="text-layer" id="textLayer1"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -447,8 +457,10 @@
                             </div>
                         </div>
                         <div class="canvas-wrapper" id="wrapper2">
-                            <canvas id="canvas2"></canvas>
-                            <div class="text-overlay" id="overlay2"></div>
+                            <div class="page-container" id="pageContainer2">
+                                <canvas id="canvas2"></canvas>
+                                <div class="text-layer" id="textLayer2"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -588,6 +600,8 @@
             var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
             var canvas = document.getElementById('canvas' + panelNum);
             var wrapper = document.getElementById('wrapper' + panelNum);
+            var container = document.getElementById('pageContainer' + panelNum);
+            var textLayerDiv = document.getElementById('textLayer' + panelNum);
             var ctx = canvas.getContext('2d');
 
             var page = await pdfDoc.getPage(pageNum);
@@ -597,21 +611,44 @@
             var wrapperWidth = wrapper.clientWidth - 20;
             var scale = wrapperWidth / viewport.width;
             if (scale < 0.5) scale = 0.5;
-            if (scale > 2) scale = 2;
+            if (scale > 2.5) scale = 2.5;
 
             var scaledViewport = page.getViewport({ scale: scale });
             canvas.width = scaledViewport.width;
             canvas.height = scaledViewport.height;
 
-            if (panelNum === 1) canvasScale1 = scale;
-            else canvasScale2 = scale;
+            container.style.width = scaledViewport.width + 'px';
+            container.style.height = scaledViewport.height + 'px';
 
             await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
 
-            // Get text content for highlighting
+            // Build text layer with positioned spans
+            textLayerDiv.innerHTML = '';
+            textLayerDiv.style.width = scaledViewport.width + 'px';
+            textLayerDiv.style.height = scaledViewport.height + 'px';
+
             var textContent = await page.getTextContent();
-            if (panelNum === 1) textItems1 = textContent.items;
-            else textItems2 = textContent.items;
+            var textItems = textContent.items;
+
+            textItems.forEach(function (item) {
+                if (!item.str || item.str.length === 0) return;
+
+                var tx = pdfjsLib.Util.transform(scaledViewport.transform, item.transform);
+                var span = document.createElement('span');
+                span.textContent = item.str;
+                span.setAttribute('data-text', item.str.toLowerCase());
+
+                var fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]);
+                span.style.fontSize = fontSize + 'px';
+                span.style.fontFamily = item.fontName || 'sans-serif';
+                span.style.left = tx[4] + 'px';
+                span.style.top = (tx[5] - fontSize) + 'px';
+                span.style.width = (item.width * scale) + 'px';
+                span.style.height = (fontSize * 1.2) + 'px';
+                span.style.letterSpacing = '0px';
+
+                textLayerDiv.appendChild(span);
+            });
 
             // Update page info
             var totalPages = pdfDoc.numPages;
@@ -622,8 +659,6 @@
             // Re-apply highlights if active
             if (highlightActive) {
                 applyHighlights();
-            } else {
-                clearHighlights(panelNum);
             }
         }
 
@@ -649,98 +684,59 @@
             } else {
                 btn.textContent = '✨ Highlight Similar Text';
                 btn.classList.remove('active');
-                clearHighlights(1);
-                clearHighlights(2);
+                clearHighlights();
             }
         }
 
         function applyHighlights() {
-            clearHighlights(1);
-            clearHighlights(2);
+            clearHighlights();
 
-            if (!textItems1.length || !textItems2.length) return;
+            var spans1 = document.querySelectorAll('#textLayer1 span');
+            var spans2 = document.querySelectorAll('#textLayer2 span');
 
-            // Extract words from both pages
-            var words1 = extractWords(textItems1);
-            var words2 = extractWords(textItems2);
+            if (!spans1.length || !spans2.length) return;
 
-            // Find common words (case-insensitive, ignoring short words)
-            var wordSet2 = {};
-            words2.forEach(function (w) {
-                var key = w.text.toLowerCase();
-                if (key.length >= 3) {
-                    if (!wordSet2[key]) wordSet2[key] = [];
-                    wordSet2[key].push(w);
-                }
-            });
-
-            var matchedKeys = {};
-
-            // Highlight in PDF 1
-            words1.forEach(function (w) {
-                var key = w.text.toLowerCase();
-                if (key.length >= 3 && wordSet2[key]) {
-                    matchedKeys[key] = true;
-                    addHighlight(1, w);
-                }
-            });
-
-            // Highlight in PDF 2
-            words2.forEach(function (w) {
-                var key = w.text.toLowerCase();
-                if (matchedKeys[key]) {
-                    addHighlight(2, w);
-                }
-            });
-        }
-
-        function extractWords(items) {
-            var words = [];
-            items.forEach(function (item) {
-                if (!item.str || item.str.trim().length === 0) return;
-                var parts = item.str.split(/\s+/);
-                var x = item.transform[4];
-                var y = item.transform[5];
-                var fontSize = Math.abs(item.transform[0]) || 12;
-                var charWidth = item.width / Math.max(item.str.length, 1);
-                var currentX = x;
-
-                parts.forEach(function (part) {
-                    if (part.length > 0) {
-                        words.push({
-                            text: part,
-                            x: currentX,
-                            y: y,
-                            width: charWidth * part.length,
-                            height: fontSize
-                        });
-                    }
-                    currentX += charWidth * (part.length + 1);
+            // Collect all words from PDF 2 text spans
+            var wordsInPdf2 = {};
+            spans2.forEach(function (span) {
+                var text = span.getAttribute('data-text') || '';
+                var words = text.split(/\s+/);
+                words.forEach(function (w) {
+                    if (w.length >= 2) wordsInPdf2[w] = true;
                 });
             });
-            return words;
+
+            // Highlight spans in PDF 1 that contain matching words
+            spans1.forEach(function (span) {
+                var text = span.getAttribute('data-text') || '';
+                var words = text.split(/\s+/);
+                var hasMatch = words.some(function (w) { return w.length >= 2 && wordsInPdf2[w]; });
+                if (hasMatch) span.classList.add('highlight');
+            });
+
+            // Collect words from PDF 1
+            var wordsInPdf1 = {};
+            spans1.forEach(function (span) {
+                var text = span.getAttribute('data-text') || '';
+                var words = text.split(/\s+/);
+                words.forEach(function (w) {
+                    if (w.length >= 2) wordsInPdf1[w] = true;
+                });
+            });
+
+            // Highlight spans in PDF 2 that contain matching words
+            spans2.forEach(function (span) {
+                var text = span.getAttribute('data-text') || '';
+                var words = text.split(/\s+/);
+                var hasMatch = words.some(function (w) { return w.length >= 2 && wordsInPdf1[w]; });
+                if (hasMatch) span.classList.add('highlight');
+            });
         }
 
-        function addHighlight(panelNum, word) {
-            var overlay = document.getElementById('overlay' + panelNum);
-            var canvas = document.getElementById('canvas' + panelNum);
-            var scale = panelNum === 1 ? canvasScale1 : canvasScale2;
-
-            // Set overlay size to match canvas
-            overlay.style.width = canvas.width + 'px';
-            overlay.style.height = canvas.height + 'px';
-
-            var div = document.createElement('div');
-            div.className = 'highlight-word';
-            div.style.left = (word.x * scale) + 'px';
-            div.style.top = (canvas.height - word.y * scale - word.height * scale) + 'px';
-            div.style.width = (word.width * scale) + 'px';
-            div.style.height = (word.height * scale * 1.2) + 'px';
-            overlay.appendChild(div);
-        }
-
-        function clearHighlights(panelNum) {
-            document.getElementById('overlay' + panelNum).innerHTML = '';
+        function clearHighlights() {
+            document.querySelectorAll('.text-layer span.highlight').forEach(function (s) {
+                s.classList.remove('highlight');
+            });
         }
 
         function newCompare() {
