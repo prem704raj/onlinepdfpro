@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v13'; // Force refresh for compare-pdf highlight improvements
+const CACHE_NAME = 'onlinepdfpro-v14'; // Force refresh for high-DPI 4K rendering across all tools
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
