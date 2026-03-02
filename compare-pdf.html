@@ -324,10 +324,45 @@
         }
 
         .text-layer span.highlight {
-            background: rgba(255, 235, 59, 0.75);
             border-radius: 3px;
-            box-shadow: 0 0 4px rgba(255, 152, 0, 0.5);
-            outline: 1px solid rgba(255, 152, 0, 0.4);
+        }
+
+        .color-picker-row {
+            display: none;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .color-picker-row.visible {
+            display: flex;
+        }
+
+        .color-picker-row span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .color-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .color-dot.selected {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            transform: scale(1.15);
         }
 
         @media (max-width: 768px) {
@@ -442,6 +477,22 @@
                     <button class="btn-highlight" id="btnHighlight" onclick="toggleHighlight()">✨ Highlight Similar
                         Text</button>
                     <button class="btn-new-compare" onclick="newCompare()">🔄 New Compare</button>
+                </div>
+
+                <div class="color-picker-row" id="colorPicker">
+                    <span>Color:</span>
+                    <div class="color-dot selected" style="background:#FFEB3B" onclick="setColor('#FFEB3B', this)"
+                        title="Yellow"></div>
+                    <div class="color-dot" style="background:#4CAF50" onclick="setColor('#4CAF50', this)" title="Green">
+                    </div>
+                    <div class="color-dot" style="background:#42A5F5" onclick="setColor('#42A5F5', this)" title="Blue">
+                    </div>
+                    <div class="color-dot" style="background:#F06292" onclick="setColor('#F06292', this)" title="Pink">
+                    </div>
+                    <div class="color-dot" style="background:#FF9800" onclick="setColor('#FF9800', this)"
+                        title="Orange"></div>
+                    <div class="color-dot" style="background:#EF5350" onclick="setColor('#EF5350', this)" title="Red">
+                    </div>
                 </div>
 
                 <div class="viewer-row">
@@ -563,6 +614,7 @@
         var currentPage1 = 1;
         var currentPage2 = 1;
         var highlightActive = false;
+        var highlightColor = '#FFEB3B';
         var textItems1 = [];
         var textItems2 = [];
         var canvasScale1 = 1;
@@ -714,15 +766,25 @@
         function toggleHighlight() {
             highlightActive = !highlightActive;
             var btn = document.getElementById('btnHighlight');
+            var picker = document.getElementById('colorPicker');
             if (highlightActive) {
                 btn.textContent = '❌ Hide Highlights';
                 btn.classList.add('active');
+                picker.classList.add('visible');
                 applyHighlights();
             } else {
                 btn.textContent = '✨ Highlight Similar Text';
                 btn.classList.remove('active');
+                picker.classList.remove('visible');
                 clearHighlights();
             }
+        }
+
+        function setColor(color, el) {
+            highlightColor = color;
+            document.querySelectorAll('.color-dot').forEach(function (d) { d.classList.remove('selected'); });
+            el.classList.add('selected');
+            if (highlightActive) applyHighlights();
         }
 
         function applyHighlights() {
@@ -760,7 +822,11 @@
                     var text = (span.getAttribute('data-text') || '').replace(/[^a-z\s]/g, ' ');
                     var spanWords = text.split(/\s+/);
                     var hasMatch = spanWords.some(function (w) { return w.length >= 3 && common[w]; });
-                    if (hasMatch) span.classList.add('highlight');
+                    if (hasMatch) {
+                        span.classList.add('highlight');
+                        span.style.background = highlightColor + 'B0';
+                        span.style.boxShadow = '0 0 3px ' + highlightColor + '80';
+                    }
                 });
             }
 
@@ -771,6 +837,8 @@
         function clearHighlights() {
             document.querySelectorAll('.text-layer span.highlight').forEach(function (s) {
                 s.classList.remove('highlight');
+                s.style.background = '';
+                s.style.boxShadow = '';
             });
         }
 
