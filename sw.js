@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v24'; // Force refresh for split pdf text layer update
+const CACHE_NAME = 'onlinepdfpro-v25'; // Force refresh for split pdf text layer update
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
