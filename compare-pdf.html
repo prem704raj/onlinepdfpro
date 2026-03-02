@@ -61,6 +61,7 @@
   }
   </script>
     <style>
+        /* Upload Section */
         .upload-row {
             display: flex;
             gap: 30px;
@@ -88,215 +89,222 @@
         .upload-box.loaded {
             border-color: #10b981;
             border-style: solid;
-            background: #f0fdf4;
+            background: rgba(16, 185, 129, 0.05);
         }
 
         .upload-box h3 {
             margin: 0 0 10px;
             font-size: 20px;
+            color: var(--text-primary);
         }
 
         .upload-box p {
             color: var(--text-secondary);
-            margin: 0;
             font-size: 14px;
+            margin: 0;
         }
 
-        .upload-box .file-name {
-            color: #10b981;
-            font-weight: bold;
+        .file-name {
             margin-top: 10px;
             font-size: 13px;
+            color: #10b981;
+            font-weight: 600;
+            word-break: break-all;
         }
 
-        .compare-btn-section {
-            text-align: center;
-            margin: 30px 0;
+        /* Viewer Section */
+        #viewerSection {
             display: none;
+            margin-top: 20px;
         }
 
-        .compare-btn {
-            padding: 18px 60px;
-            font-size: 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
+        .viewer-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-highlight {
+            padding: 12px 28px;
             border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-highlight:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-highlight.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-highlight.active:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-new-compare {
+            padding: 12px 28px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--surface-1);
+            color: var(--text-primary);
             transition: all 0.3s;
         }
 
-        .compare-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.5);
-        }
-
-        .results-section {
-            display: none;
-            margin: 40px 0;
-        }
-
-        .summary-cards {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 30px 0;
-        }
-
-        .summary-card {
-            width: 200px;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .summary-card .number {
-            font-size: 48px;
-            font-weight: bold;
-            display: block;
-        }
-
-        .summary-card .label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
-
-        .card-match {
-            background: #f0fdf4;
-        }
-
-        .card-match .number {
-            color: #10b981;
-        }
-
-        .card-diff {
-            background: #fef2f2;
-        }
-
-        .card-diff .number {
-            color: #ef4444;
-        }
-
-        .card-only1 {
+        .btn-new-compare:hover {
             background: var(--surface-2);
+            transform: translateY(-2px);
         }
 
-        .card-only1 .number {
-            color: var(--accent);
-        }
-
-        .card-only2 {
-            background: var(--surface-1)beb;
-        }
-
-        .card-only2 .number {
-            color: #f59e0b;
-        }
-
-        .diff-container {
+        .viewer-row {
             display: flex;
-            gap: 20px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .diff-panel {
+        .pdf-panel {
             flex: 1;
-            min-width: 300px;
+            min-width: 0;
             background: var(--surface-1);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             overflow: hidden;
         }
 
-        .diff-panel-header {
-            padding: 15px 20px;
-            font-weight: bold;
-            font-size: 16px;
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .panel-1 .panel-header {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .panel-2 .panel-header {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-controls button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .page-controls button:hover:not(:disabled) {
+            background: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
 
-        .panel-1 .diff-panel-header {
-            background: #2563eb;
+        .page-controls button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
-        .panel-2 .diff-panel-header {
-            background: #f59e0b;
-        }
-
-        .diff-content {
-            padding: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-            font-size: 15px;
-            line-height: 2;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .line-match {
-            background: var(--surface-1);
-        }
-
-        .line-diff {
-            background: #fef2f2;
-            color: #ef4444;
-            font-weight: bold;
-        }
-
-        .line-only {
-            background: var(--surface-1)beb;
-            color: #d97706;
-        }
-
-        .progress-section {
-            display: none;
+        .page-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 60px;
             text-align: center;
-            margin: 20px 0;
         }
 
-        .progress-bar {
-            width: 100%;
-            max-width: 500px;
-            height: 20px;
-            background: #e2e8f0;
-            border-radius: 50px;
-            margin: 20px auto;
-            overflow: hidden;
+        .canvas-wrapper {
+            position: relative;
+            overflow: auto;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background: #f1f5f9;
         }
 
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
-            border-radius: 50px;
-            transition: width 0.5s;
+        [data-theme="dark"] .canvas-wrapper {
+            background: #1e1e2e;
+        }
+
+        .canvas-wrapper canvas {
+            max-width: 100%;
+            height: auto !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .highlight-word {
+            position: absolute;
+            background: rgba(16, 185, 129, 0.35);
+            border: 1px solid rgba(16, 185, 129, 0.7);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .viewer-row {
+                flex-direction: column;
+            }
+
+            .upload-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .canvas-wrapper {
+                max-height: 50vh;
+            }
         }
     </style>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- MOBILE FIX - Add this RIGHT BEFORE     <link rel="alternate" type="application/rss+xml" title="OnlinePDFPro Blog" href="https://onlinepdfpro.com/feed.xml">
-</head> tag -->
 </head>
 
-<body style="background:var(--surface-2);">
-    <a href="#main" class="skip-link">Skip to main content</a>
-
-    <header class="header">
-        <div class="header-content">
+<body>
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="header-inner">
             <a href="index.html" class="logo">
                 <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon"
                     style="width:28px; height:28px; border-radius:6px;">
@@ -347,11 +355,8 @@
         </div>
     </header>
 
-
-
     <main id="main" class="tool-page">
         <div class="container">
-
 
             <div class="tool-header" style="text-align:center; margin-bottom:48px;">
                 <span class="section-tag"
@@ -362,116 +367,113 @@
                     Compare PDFs Side by Side</h1>
                 <p class="tool-description"
                     style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">
-                    Compare two PDF documents and spot differences instantly. Your files never leave your device.</p>
-            </div>
-            <h2 style="text-align:center; margin:30px 0;">Upload Two PDF Files to Compare</h2>
-
-            <div class="upload-row">
-                <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
-                    <h3>📄 PDF 1</h3>
-                    <p>Click to upload first PDF</p>
-                    <div class="file-name" id="name1"></div>
-                    <input type="file" id="file1" accept=".pdf" hidden />
-                </div>
-                <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
-                    <h3>📄 PDF 2</h3>
-                    <p>Click to upload second PDF</p>
-                    <div class="file-name" id="name2"></div>
-                    <input type="file" id="file2" accept=".pdf" hidden />
-                </div>
+                    Upload two PDFs to view them side by side. Navigate pages independently and highlight similar text.
+                </p>
             </div>
 
-            <div class="compare-btn-section" id="compareBtnSection">
-                <button onclick="comparePDFs()" class="compare-btn">🔍 Compare Now</button>
-            </div>
-
-            <div class="progress-section" id="progressSection">
-                <h3>Comparing documents...</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <div class="results-section" id="resultsSection">
-                <h2 style="text-align:center; color:var(--text-primary);">Comparison Results</h2>
-
-                <div class="summary-cards" id="summaryCards"></div>
-
-                <div class="diff-container">
-                    <div class="diff-panel panel-1">
-                        <div class="diff-panel-header">📄 PDF 1</div>
-                        <div class="diff-content" id="diffContent1"></div>
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <h2 style="text-align:center; margin:30px 0;">Upload Two PDF Files to Compare</h2>
+                <div class="upload-row">
+                    <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
+                        <h3>📄 PDF 1</h3>
+                        <p>Click to upload first PDF</p>
+                        <div class="file-name" id="name1"></div>
+                        <input type="file" id="file1" accept=".pdf" hidden />
                     </div>
-                    <div class="diff-panel panel-2">
-                        <div class="diff-panel-header">📄 PDF 2</div>
-                        <div class="diff-content" id="diffContent2"></div>
+                    <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
+                        <h3>📄 PDF 2</h3>
+                        <p>Click to upload second PDF</p>
+                        <div class="file-name" id="name2"></div>
+                        <input type="file" id="file2" accept=".pdf" hidden />
                     </div>
                 </div>
             </div>
 
-            <!-- Added SEO Sections -->
+            <!-- Side-by-Side Viewer -->
+            <div id="viewerSection">
+                <div class="viewer-toolbar">
+                    <button class="btn-highlight" id="btnHighlight" onclick="toggleHighlight()">✨ Highlight Similar
+                        Text</button>
+                    <button class="btn-new-compare" onclick="newCompare()">🔄 New Compare</button>
+                </div>
+
+                <div class="viewer-row">
+                    <!-- PDF 1 Panel -->
+                    <div class="pdf-panel panel-1">
+                        <div class="panel-header">
+                            <span class="panel-title">📄 <span id="viewer-name1">PDF 1</span></span>
+                            <div class="page-controls">
+                                <button onclick="changePage(1, -1)" id="prev1">◀</button>
+                                <span class="page-info" id="pageInfo1">1 / 1</span>
+                                <button onclick="changePage(1, 1)" id="next1">▶</button>
+                            </div>
+                        </div>
+                        <div class="canvas-wrapper" id="wrapper1">
+                            <canvas id="canvas1"></canvas>
+                            <div class="text-overlay" id="overlay1"></div>
+                        </div>
+                    </div>
+
+                    <!-- PDF 2 Panel -->
+                    <div class="pdf-panel panel-2">
+                        <div class="panel-header">
+                            <span class="panel-title">📄 <span id="viewer-name2">PDF 2</span></span>
+                            <div class="page-controls">
+                                <button onclick="changePage(2, -1)" id="prev2">◀</button>
+                                <span class="page-info" id="pageInfo2">1 / 1</span>
+                                <button onclick="changePage(2, 1)" id="next2">▶</button>
+                            </div>
+                        </div>
+                        <div class="canvas-wrapper" id="wrapper2">
+                            <canvas id="canvas2"></canvas>
+                            <div class="text-overlay" id="overlay2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Sections -->
             <section class="how-it-works"
-                style="margin: 20px auto; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                style="margin: 40px auto; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px;">
                 <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Compare PDF Files
                     Online</h2>
                 <div class="steps"
                     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                     <div class="step">
                         <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Upload Files</h3>
-                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the upload button or
-                            drag and drop your files into the tool.</p>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the upload boxes to
+                            select your two PDF files.</p>
                     </div>
                     <div class="step">
-                        <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Adjust Settings</h3>
-                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Configure your options or
-                            arrange files if needed.</p>
+                        <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: View Side by Side
+                        </h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Both PDFs open
+                            side by side. Navigate pages independently.</p>
                     </div>
                     <div class="step">
-                        <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Click Compare &
-                            Download</h3>
-                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the process button
-                            and download your processed file instantly.</p>
+                        <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Highlight Similar
+                            Text</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click "Highlight Similar
+                            Text" to see matching content highlighted in both PDFs.</p>
                     </div>
                 </div>
             </section>
-            <section class="related-tools" style="margin: 40px auto 20px; padding: 0 20px; max-width: 900px;">
-                <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Related PDF Tools</h2>
-                <div class="tools-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <a href="/tools/split-pdf.html"
-                        style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                        <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">Split PDF</h3>
-                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Extract pages from PDF
-                            files</p>
-                    </a>
-                    <a href="/tools/compress-pdf.html"
-                        style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                        <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">Compress PDF</h3>
-                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Reduce PDF file size</p>
-                    </a>
-                    <a href="/tools/pdf-to-word.html"
-                        style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                        <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">PDF to Word</h3>
-                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Convert PDF to DOCX</p>
-                    </a>
-                </div>
-            </section>
+
             <section class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
                 <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Frequently Asked Questions
                 </h2>
-
                 <div class="faq-item"
                     style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                     <h3
                         style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        <span style="color: var(--accent);">Q.</span> How to compare files online for free?
+                        <span style="color: var(--accent);">Q.</span> How does the side-by-side comparison work?
                     </h3>
-                    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload
-                        your files to OnlinePDFPro's compare tool, adjust any settings, and click "Compare." Your
-                        processed document will be ready to download in seconds. No signup required, completely free.
-                    </p>
+                    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Upload two
+                        PDF files and they will be rendered side by side. You can navigate each PDF's pages
+                        independently and use the "Highlight Similar Text" button to see matching text highlighted in
+                        green on both documents.</p>
                 </div>
-
                 <div class="faq-item"
                     style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                     <h3
@@ -480,21 +482,8 @@
                     </h3>
                     <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes!
                         OnlinePDFPro processes all files directly in your browser. Your documents never leave your
-                        device and are never uploaded to any server. This makes it the most secure PDF tool available.
-                    </p>
+                        device and are never uploaded to any server.</p>
                 </div>
-
-                <div class="faq-item"
-                    style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-                    <h3
-                        style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?
-                    </h3>
-                    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes, our
-                        tools support processing multiple files at once. There is no limit on the number of files or
-                        total file size.</p>
-                </div>
-
                 <div class="faq-item"
                     style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                     <h3
@@ -502,19 +491,8 @@
                         <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?
                     </h3>
                     <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes!
-                        OnlinePDFPro works perfectly on all devices - Android phones, iPhones, tablets, laptops and
-                        desktops. No app download needed.</p>
-                </div>
-
-                <div class="faq-item"
-                    style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-                    <h3
-                        style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        <span style="color: var(--accent);">Q.</span> Is there a file size limit?
-                    </h3>
-                    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Since
-                        processing happens in your browser, there's no server-side file size limit. You can process
-                        files as large as your device can handle.</p>
+                        On mobile, the PDFs stack vertically for easy viewing. Works on Android, iPhone, tablets and
+                        desktops.</p>
                 </div>
             </section>
         </div>
@@ -526,55 +504,31 @@
         // Set up PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
-        var pdf1Text = null;
-        var pdf2Text = null;
+        var pdfDoc1 = null;
+        var pdfDoc2 = null;
+        var currentPage1 = 1;
+        var currentPage2 = 1;
+        var highlightActive = false;
+        var textItems1 = [];
+        var textItems2 = [];
+        var canvasScale1 = 1;
+        var canvasScale2 = 1;
 
-        async function extractText(file) {
-            var arrayBuffer = await file.arrayBuffer();
-            var pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-            var fullText = '';
-
-            for (var i = 1; i <= pdf.numPages; i++) {
-                var page = await pdf.getPage(i);
-                var textContent = await page.getTextContent();
-                var lines = {};
-
-                textContent.items.forEach(function (item) {
-                    var y = Math.round(item.transform[5]);
-                    if (!lines[y]) lines[y] = [];
-                    lines[y].push({ text: item.str, x: Math.round(item.transform[4]) });
-                });
-
-                var sortedKeys = Object.keys(lines).sort(function (a, b) { return b - a; });
-                for (var k = 0; k < sortedKeys.length; k++) {
-                    var y = sortedKeys[k];
-                    var lineText = lines[y].sort(function (a, b) { return a.x - b.x; }).map(function (item) { return item.text; }).join(' ').trim();
-                    if (lineText.length > 0) fullText += lineText + '\n';
-                }
-                fullText += '\n';
-            }
-
-            return fullText.trim();
-        }
-
-        function checkBothLoaded() {
-            if (pdf1Text !== null && pdf2Text !== null) {
-                document.getElementById('compareBtnSection').style.display = 'block';
-            }
-        }
-
+        // File upload handlers
         document.getElementById('file1').addEventListener('change', async function (e) {
             var file = e.target.files[0];
             if (!file) return;
             try {
                 document.getElementById('name1').textContent = '⏳ Loading...';
                 document.getElementById('box1').classList.add('loaded');
-                pdf1Text = await extractText(file);
+                var arrayBuffer = await file.arrayBuffer();
+                pdfDoc1 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
                 document.getElementById('name1').textContent = '✅ ' + file.name;
+                document.getElementById('viewer-name1').textContent = file.name;
                 checkBothLoaded();
             } catch (err) {
-                document.getElementById('name1').textContent = '❌ Error';
-                alert('Error reading PDF 1: ' + err.message);
+                document.getElementById('name1').textContent = '❌ Error loading PDF';
+                alert('Error loading PDF 1: ' + err.message);
             }
         });
 
@@ -584,89 +538,210 @@
             try {
                 document.getElementById('name2').textContent = '⏳ Loading...';
                 document.getElementById('box2').classList.add('loaded');
-                pdf2Text = await extractText(file);
+                var arrayBuffer = await file.arrayBuffer();
+                pdfDoc2 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
                 document.getElementById('name2').textContent = '✅ ' + file.name;
+                document.getElementById('viewer-name2').textContent = file.name;
                 checkBothLoaded();
             } catch (err) {
-                document.getElementById('name2').textContent = '❌ Error';
-                alert('Error reading PDF 2: ' + err.message);
+                document.getElementById('name2').textContent = '❌ Error loading PDF';
+                alert('Error loading PDF 2: ' + err.message);
             }
         });
 
-        function escapeHtml(text) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function comparePDFs() {
-            if (pdf1Text === null || pdf2Text === null) {
-                alert('Please upload both PDF files first.');
-                return;
-            }
-
-            try {
-                document.getElementById('compareBtnSection').style.display = 'none';
-                document.getElementById('progressSection').style.display = 'block';
-                document.getElementById('progressFill').style.width = '50%';
-
-                var lines1 = pdf1Text.split('\n');
-                var lines2 = pdf2Text.split('\n');
-
-                var matchCount = 0;
-                var diffCount = 0;
-                var only1Count = 0;
-                var only2Count = 0;
-
-                var html1 = '';
-                var html2 = '';
-
-                var maxLines = Math.max(lines1.length, lines2.length);
-
-                for (var i = 0; i < maxLines; i++) {
-                    var line1 = lines1[i] || '';
-                    var line2 = lines2[i] || '';
-
-                    if (line1 === line2) {
-                        html1 += '<div class="line-match">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-match">' + escapeHtml(line2) + '</div>';
-                        if (line1.trim().length > 0) matchCount++;
-                    } else if (line1.trim().length === 0 && line2.trim().length > 0) {
-                        html1 += '<div class="line-only">(empty)</div>';
-                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                        only2Count++;
-                    } else if (line2.trim().length === 0 && line1.trim().length > 0) {
-                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-only">(empty)</div>';
-                        only1Count++;
-                    } else {
-                        html1 += '<div class="line-diff">' + escapeHtml(line1) + '</div>';
-                        html2 += '<div class="line-diff">' + escapeHtml(line2) + '</div>';
-                        diffCount++;
-                    }
-                }
-
-                document.getElementById('progressFill').style.width = '100%';
-
-                document.getElementById('summaryCards').innerHTML =
-                    '<div class="summary-card card-match"><span class="number">' + matchCount + '</span><span class="label">Matching Lines</span></div>' +
-                    '<div class="summary-card card-diff"><span class="number">' + diffCount + '</span><span class="label">Different Lines</span></div>' +
-                    '<div class="summary-card card-only1"><span class="number">' + only1Count + '</span><span class="label">Only in PDF 1</span></div>' +
-                    '<div class="summary-card card-only2"><span class="number">' + only2Count + '</span><span class="label">Only in PDF 2</span></div>';
-
-                document.getElementById('diffContent1').innerHTML = html1;
-                document.getElementById('diffContent2').innerHTML = html2;
-
-                document.getElementById('progressSection').style.display = 'none';
+        function checkBothLoaded() {
+            if (pdfDoc1 && pdfDoc2) {
+                // Hide upload, show viewer
+                document.getElementById('uploadSection').style.display = 'none';
+                document.getElementById('viewerSection').style.display = 'block';
+                currentPage1 = 1;
+                currentPage2 = 1;
+                renderPage(1, currentPage1);
+                renderPage(2, currentPage2);
                 if (typeof incrementCounter === 'function') incrementCounter('comparePDF');
                 if (typeof incrementTodayCount === 'function') incrementTodayCount();
-                document.getElementById('resultsSection').style.display = 'block';
-            } catch (err) {
-                console.error('Compare error:', err);
-                alert('Error comparing PDFs: ' + err.message);
-                document.getElementById('progressSection').style.display = 'none';
-                document.getElementById('compareBtnSection').style.display = 'block';
             }
+        }
+
+        async function renderPage(panelNum, pageNum) {
+            var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
+            var canvas = document.getElementById('canvas' + panelNum);
+            var wrapper = document.getElementById('wrapper' + panelNum);
+            var ctx = canvas.getContext('2d');
+
+            var page = await pdfDoc.getPage(pageNum);
+            var viewport = page.getViewport({ scale: 1 });
+
+            // Scale to fit the panel width
+            var wrapperWidth = wrapper.clientWidth - 20;
+            var scale = wrapperWidth / viewport.width;
+            if (scale < 0.5) scale = 0.5;
+            if (scale > 2) scale = 2;
+
+            var scaledViewport = page.getViewport({ scale: scale });
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+
+            if (panelNum === 1) canvasScale1 = scale;
+            else canvasScale2 = scale;
+
+            await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+
+            // Get text content for highlighting
+            var textContent = await page.getTextContent();
+            if (panelNum === 1) textItems1 = textContent.items;
+            else textItems2 = textContent.items;
+
+            // Update page info
+            var totalPages = pdfDoc.numPages;
+            document.getElementById('pageInfo' + panelNum).textContent = pageNum + ' / ' + totalPages;
+            document.getElementById('prev' + panelNum).disabled = pageNum <= 1;
+            document.getElementById('next' + panelNum).disabled = pageNum >= totalPages;
+
+            // Re-apply highlights if active
+            if (highlightActive) {
+                applyHighlights();
+            } else {
+                clearHighlights(panelNum);
+            }
+        }
+
+        function changePage(panelNum, delta) {
+            var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
+            var currentPage = panelNum === 1 ? currentPage1 : currentPage2;
+            var newPage = currentPage + delta;
+            if (newPage < 1 || newPage > pdfDoc.numPages) return;
+
+            if (panelNum === 1) currentPage1 = newPage;
+            else currentPage2 = newPage;
+
+            renderPage(panelNum, newPage);
+        }
+
+        function toggleHighlight() {
+            highlightActive = !highlightActive;
+            var btn = document.getElementById('btnHighlight');
+            if (highlightActive) {
+                btn.textContent = '❌ Hide Highlights';
+                btn.classList.add('active');
+                applyHighlights();
+            } else {
+                btn.textContent = '✨ Highlight Similar Text';
+                btn.classList.remove('active');
+                clearHighlights(1);
+                clearHighlights(2);
+            }
+        }
+
+        function applyHighlights() {
+            clearHighlights(1);
+            clearHighlights(2);
+
+            if (!textItems1.length || !textItems2.length) return;
+
+            // Extract words from both pages
+            var words1 = extractWords(textItems1);
+            var words2 = extractWords(textItems2);
+
+            // Find common words (case-insensitive, ignoring short words)
+            var wordSet2 = {};
+            words2.forEach(function (w) {
+                var key = w.text.toLowerCase();
+                if (key.length >= 3) {
+                    if (!wordSet2[key]) wordSet2[key] = [];
+                    wordSet2[key].push(w);
+                }
+            });
+
+            var matchedKeys = {};
+
+            // Highlight in PDF 1
+            words1.forEach(function (w) {
+                var key = w.text.toLowerCase();
+                if (key.length >= 3 && wordSet2[key]) {
+                    matchedKeys[key] = true;
+                    addHighlight(1, w);
+                }
+            });
+
+            // Highlight in PDF 2
+            words2.forEach(function (w) {
+                var key = w.text.toLowerCase();
+                if (matchedKeys[key]) {
+                    addHighlight(2, w);
+                }
+            });
+        }
+
+        function extractWords(items) {
+            var words = [];
+            items.forEach(function (item) {
+                if (!item.str || item.str.trim().length === 0) return;
+                var parts = item.str.split(/\s+/);
+                var x = item.transform[4];
+                var y = item.transform[5];
+                var fontSize = Math.abs(item.transform[0]) || 12;
+                var charWidth = item.width / Math.max(item.str.length, 1);
+                var currentX = x;
+
+                parts.forEach(function (part) {
+                    if (part.length > 0) {
+                        words.push({
+                            text: part,
+                            x: currentX,
+                            y: y,
+                            width: charWidth * part.length,
+                            height: fontSize
+                        });
+                    }
+                    currentX += charWidth * (part.length + 1);
+                });
+            });
+            return words;
+        }
+
+        function addHighlight(panelNum, word) {
+            var overlay = document.getElementById('overlay' + panelNum);
+            var canvas = document.getElementById('canvas' + panelNum);
+            var scale = panelNum === 1 ? canvasScale1 : canvasScale2;
+
+            // Set overlay size to match canvas
+            overlay.style.width = canvas.width + 'px';
+            overlay.style.height = canvas.height + 'px';
+
+            var div = document.createElement('div');
+            div.className = 'highlight-word';
+            div.style.left = (word.x * scale) + 'px';
+            div.style.top = (canvas.height - word.y * scale - word.height * scale) + 'px';
+            div.style.width = (word.width * scale) + 'px';
+            div.style.height = (word.height * scale * 1.2) + 'px';
+            overlay.appendChild(div);
+        }
+
+        function clearHighlights(panelNum) {
+            document.getElementById('overlay' + panelNum).innerHTML = '';
+        }
+
+        function newCompare() {
+            // Reset everything
+            pdfDoc1 = null;
+            pdfDoc2 = null;
+            currentPage1 = 1;
+            currentPage2 = 1;
+            highlightActive = false;
+            textItems1 = [];
+            textItems2 = [];
+
+            document.getElementById('viewerSection').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('name1').textContent = '';
+            document.getElementById('name2').textContent = '';
+            document.getElementById('box1').classList.remove('loaded');
+            document.getElementById('box2').classList.remove('loaded');
+            document.getElementById('file1').value = '';
+            document.getElementById('file2').value = '';
+            document.getElementById('btnHighlight').textContent = '✨ Highlight Similar Text';
+            document.getElementById('btnHighlight').classList.remove('active');
         }
     </script>
 
