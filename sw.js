@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v16'; // Force refresh for text selection support
+const CACHE_NAME = 'onlinepdfpro-v18'; // Force refresh for text selection coverage fix
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
