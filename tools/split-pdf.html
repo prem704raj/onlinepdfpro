@@ -117,6 +117,8 @@
             --hl-color: 255, 213, 0;
             --hl-opacity: 0.85;
             z-index: 10;
+            user-select: text !important;
+            -webkit-user-select: text !important;
         }
 
         .pdf-text-layer span {
@@ -126,6 +128,8 @@
             cursor: text;
             transform-origin: 0% 0%;
             line-height: 1.4;
+            user-select: text !important;
+            -webkit-user-select: text !important;
         }
 
         .pdf-text-layer span::selection {
@@ -705,8 +709,8 @@
 
                     item.innerHTML = `
                         <div class="page-container" style="position: relative; width: ${cssViewport.width}px; height: ${cssViewport.height}px; margin: 0 auto; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                            <img loading="lazy" src="${canvas.toDataURL('image/jpeg', 0.9)}" class="thumbnail-image" alt="Page ${i}" style="width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0;">
-                            <div class="pdf-text-layer" id="text-layer-${i}" style="width: ${cssViewport.width}px; height: ${cssViewport.height}px;"></div>
+                            <img loading="lazy" src="${canvas.toDataURL('image/jpeg', 0.9)}" class="thumbnail-image" alt="Page ${i}" style="width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0; pointer-events: none;">
+                            <div class="pdf-text-layer" id="text-layer-${i}" style="width: ${cssViewport.width}px; height: ${cssViewport.height}px; z-index: 2;"></div>
                         </div>
                         <div class="thumbnail-number" style="margin-top: 8px;">Page ${i}</div>
                         <span class="thumbnail-check">✓</span>
@@ -733,6 +737,13 @@
                     // Update click logic so text interaction is allowed without triggering page selection
                     item.addEventListener('click', (e) => {
                         if (window.getSelection().toString().length > 0) return; // Prevent selection toggle when copying text
+
+                        // Additionally prevent toggle if a span (piece of text) was explicitly clicked 
+                        // Instead, native browser text caret behaviors should handle it
+                        if (e.target.tagName.toLowerCase() === 'span' && e.target.parentElement.classList.contains('pdf-text-layer')) {
+                            return;
+                        }
+
                         togglePage(i, item);
                     });
 
