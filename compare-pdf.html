@@ -686,14 +686,23 @@
             if (scale < 0.5) scale = 0.5;
             if (scale > 2.5) scale = 2.5;
 
+            // High-DPI rendering: render at 2x+ for crisp text & images
+            var dpr = Math.max(window.devicePixelRatio || 1, 2);
             var scaledViewport = page.getViewport({ scale: scale });
-            canvas.width = scaledViewport.width;
-            canvas.height = scaledViewport.height;
+            var hiResViewport = page.getViewport({ scale: scale * dpr });
+
+            // Canvas pixel size = high resolution
+            canvas.width = hiResViewport.width;
+            canvas.height = hiResViewport.height;
+
+            // CSS display size = normal size
+            canvas.style.width = scaledViewport.width + 'px';
+            canvas.style.height = scaledViewport.height + 'px';
 
             container.style.width = scaledViewport.width + 'px';
             container.style.height = scaledViewport.height + 'px';
 
-            await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+            await page.render({ canvasContext: ctx, viewport: hiResViewport }).promise;
 
             // Build text layer with positioned spans
             textLayerDiv.innerHTML = '';
