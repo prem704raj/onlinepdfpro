@@ -1587,6 +1587,26 @@
             function zoomIn() { currentScale += 0.25; renderPage(); }
             function zoomOut() { if (currentScale > 0.5) { currentScale -= 0.25; renderPage(); } }
 
+            // Re-render on browser zoom (Ctrl+scroll / pinch) so text stays crisp
+            (function watchBrowserZoom() {
+                let lastDpr = window.devicePixelRatio || 1;
+                let debounceTimer = null;
+                function onDprChange() {
+                    const newDpr = window.devicePixelRatio || 1;
+                    if (newDpr !== lastDpr) {
+                        lastDpr = newDpr;
+                        if (pdfDoc) {
+                            clearTimeout(debounceTimer);
+                            debounceTimer = setTimeout(() => renderPage(), 200);
+                        }
+                    }
+                    matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+                        .addEventListener('change', onDprChange, { once: true });
+                }
+                matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+                    .addEventListener('change', onDprChange, { once: true });
+            })();
+
             function clearDomElements() {
                 pageWrapper.querySelectorAll('.text-element, .image-element, .sticky-note, .shape-element').forEach(el => el.remove());
             }
@@ -1941,7 +1961,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> How to editor files online for free?</h3>
+                    <span style="color: var(--accent);">Q.</span> How to editor files online for free?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload
                     your files to OnlinePDFPro's editor tool, adjust any settings, and click "Editor." Your processed
                     document will be ready to download in seconds. No signup required, completely free.</p>
@@ -1951,7 +1972,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     processes all files directly in your browser. Your documents never leave your device and are never
                     uploaded to any server. This makes it the most secure PDF tool available.</p>
@@ -1961,7 +1983,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?</h3>
+                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes, our tools
                     support processing multiple files at once. There is no limit on the number of files or total file
                     size.</p>
@@ -1971,7 +1994,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?</h3>
+                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     works perfectly on all devices - Android phones, iPhones, tablets, laptops and desktops. No app
                     download needed.</p>
@@ -1981,7 +2005,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Since processing
                     happens in your browser, there's no server-side file size limit. You can process files as large as
                     your device can handle.</p>

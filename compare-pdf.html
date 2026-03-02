@@ -746,6 +746,29 @@
             }
         }
 
+        // Re-render on browser zoom (Ctrl+scroll / pinch) so text stays crisp
+        (function watchBrowserZoom() {
+            var lastDpr = window.devicePixelRatio || 1;
+            var debounceTimer = null;
+            function onDprChange() {
+                var newDpr = window.devicePixelRatio || 1;
+                if (newDpr !== lastDpr) {
+                    lastDpr = newDpr;
+                    if (pdfDoc1 && pdfDoc2) {
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(function () {
+                            renderPage(1, currentPage1);
+                            renderPage(2, currentPage2);
+                        }, 200);
+                    }
+                }
+                matchMedia('(resolution: ' + window.devicePixelRatio + 'dppx)')
+                    .addEventListener('change', onDprChange, { once: true });
+            }
+            matchMedia('(resolution: ' + window.devicePixelRatio + 'dppx)')
+                .addEventListener('change', onDprChange, { once: true });
+        })();
+
         function changePage(panelNum, delta) {
             var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
             var currentPage = panelNum === 1 ? currentPage1 : currentPage2;
