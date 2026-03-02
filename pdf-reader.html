@@ -212,6 +212,39 @@
             background: yellow;
             font-weight: bold;
         }
+
+        /* Text selection layer for copy support */
+        .pdf-page-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .pdf-text-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            opacity: 0.25;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .pdf-text-layer span {
+            position: absolute;
+            white-space: pre;
+            color: transparent;
+            cursor: text;
+        }
+
+        .pdf-text-layer span::selection {
+            background: rgba(0, 100, 255, 0.4);
+            color: transparent;
+        }
+
+        .pdf-text-layer span::-moz-selection {
+            background: rgba(0, 100, 255, 0.4);
+            color: transparent;
+        }
     </style>
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -535,6 +568,12 @@
             const viewer = document.getElementById('pdfViewer');
             viewer.innerHTML = '';
 
+            // Create a container for canvas + text layer
+            const container = document.createElement('div');
+            container.className = 'pdf-page-container';
+            container.style.width = viewport.width + 'px';
+            container.style.height = viewport.height + 'px';
+
             const canvas = document.createElement('canvas');
             const dpr = Math.max(window.devicePixelRatio || 1, 2);
             const hiResViewport = page.getViewport({ scale: currentScale * dpr });
@@ -544,7 +583,34 @@
             canvas.style.height = viewport.height + 'px';
             await page.render({ canvasContext: canvas.getContext('2d'), viewport: hiResViewport }).promise;
 
-            viewer.appendChild(canvas);
+            container.appendChild(canvas);
+
+            // Build text layer for text selection/copy
+            const textLayerDiv = document.createElement('div');
+            textLayerDiv.className = 'pdf-text-layer';
+            textLayerDiv.style.width = viewport.width + 'px';
+            textLayerDiv.style.height = viewport.height + 'px';
+
+            const textContent = await page.getTextContent();
+            textContent.items.forEach(item => {
+                if (!item.str || item.str.length === 0) return;
+                const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+                const span = document.createElement('span');
+                span.textContent = item.str;
+                const fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]);
+                span.style.fontSize = fontSize + 'px';
+                span.style.fontFamily = item.fontName || 'sans-serif';
+                span.style.left = tx[4] + 'px';
+                span.style.top = (tx[5] - fontSize) + 'px';
+                span.style.width = (item.width * currentScale) + 'px';
+                span.style.height = (fontSize * 1.2) + 'px';
+                span.style.letterSpacing = '0px';
+                textLayerDiv.appendChild(span);
+            });
+
+            container.appendChild(textLayerDiv);
+            viewer.appendChild(container);
+
             document.getElementById('pageInfo').textContent = num + ' / ' + totalPages;
             document.getElementById('zoomLevel').textContent = Math.round(currentScale * 100) + '%';
 

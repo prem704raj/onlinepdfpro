@@ -320,7 +320,17 @@
             position: absolute;
             white-space: pre;
             color: transparent;
-            pointer-events: none;
+            cursor: text;
+        }
+
+        .text-layer span::selection {
+            background: rgba(0, 100, 255, 0.4);
+            color: transparent;
+        }
+
+        .text-layer span::-moz-selection {
+            background: rgba(0, 100, 255, 0.4);
+            color: transparent;
         }
 
         .text-layer span.highlight {

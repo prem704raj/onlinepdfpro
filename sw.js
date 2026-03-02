@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v15'; // Force refresh for browser zoom re-render fix
+const CACHE_NAME = 'onlinepdfpro-v16'; // Force refresh for text selection support
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
