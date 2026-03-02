@@ -548,7 +548,8 @@
                 try {
                     const arrayBuffer = await readFileAsArrayBuffer(pdfFile);
                     pdfBytes = arrayBuffer;
-                    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+                    // Pass a copy so PDF.js doesn't detach the underlying ArrayBuffer
+                    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
                     pdfDoc = await loadingTask.promise;
                     await renderThumbnails();
                     uploadZone.style.display = 'none';
@@ -565,20 +566,18 @@
                     const page = await pdfDoc.getPage(i);
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 0.3 });
-                    const dpr = Math.max(window.devicePixelRatio || 1, 2);
-                    const hiResViewport = page.getViewport({ scale: 0.3 * dpr });
-                    canvas.width = hiResViewport.width;
-                    canvas.height = hiResViewport.height;
-                    canvas.style.width = viewport.width + 'px';
-                    canvas.style.height = viewport.height + 'px';
-                    await page.render({ canvasContext: ctx, viewport: hiResViewport }).promise;
+                    // Use a higher scale for "4K" crisp thumbnails
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
                     const item = document.createElement('div');
                     item.className = 'thumbnail-item';
                     item.dataset.page = i;
+                    // Use high quality JPEG to save DOM memory while keeping sharpness
                     item.innerHTML = `
-                        <img loading="lazy" src="${canvas.toDataURL()}" class="thumbnail-image" alt="Page ${i}">
+                        <img loading="lazy" src="${canvas.toDataURL('image/jpeg', 0.9)}" class="thumbnail-image" alt="Page ${i}">
                         <div class="thumbnail-number">Page ${i}</div>
                         <span class="thumbnail-check">✓</span>
                     `;
