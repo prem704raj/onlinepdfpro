@@ -312,8 +312,10 @@
             top: 0;
             left: 0;
             overflow: hidden;
-            opacity: 0.6;
-            line-height: 1;
+            opacity: 0.25;
+            line-height: 1.4;
+            --hl-color: 255, 213, 0;
+            --hl-opacity: 0.85;
         }
 
         .text-layer span {
@@ -321,15 +323,17 @@
             white-space: pre;
             color: transparent;
             cursor: text;
+            line-height: 1.4;
+            transform-origin: 0% 0%;
         }
 
         .text-layer span::selection {
-            background: rgba(0, 100, 255, 0.4);
+            background: rgba(var(--hl-color), var(--hl-opacity));
             color: transparent;
         }
 
         .text-layer span::-moz-selection {
-            background: rgba(0, 100, 255, 0.4);
+            background: rgba(var(--hl-color), var(--hl-opacity));
             color: transparent;
         }
 
@@ -356,23 +360,71 @@
             color: var(--text-secondary);
         }
 
-        .color-dot {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid transparent;
+        .hl-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface-1);
+            padding: 6px 12px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .hl-color-btn {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            background-color: transparent;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            padding: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .color-dot:hover {
-            transform: scale(1.2);
+        .hl-color-btn::-webkit-color-swatch {
+            border-radius: 50%;
+            border: 2px solid white;
         }
 
-        .color-dot.selected {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-            transform: scale(1.15);
+        .hl-color-btn::-moz-color-swatch {
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .hl-opacity-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hl-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .hl-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        .hl-opacity-val {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            min-width: 36px;
         }
 
         @media (max-width: 768px) {
@@ -489,19 +541,20 @@
                     <button class="btn-new-compare" onclick="newCompare()">🔄 New Compare</button>
                 </div>
 
-                <div class="color-picker-row" id="colorPicker">
-                    <span>Color:</span>
-                    <div class="color-dot selected" style="background:#FFEB3B" onclick="setColor('#FFEB3B', this)"
-                        title="Yellow"></div>
-                    <div class="color-dot" style="background:#4CAF50" onclick="setColor('#4CAF50', this)" title="Green">
-                    </div>
-                    <div class="color-dot" style="background:#42A5F5" onclick="setColor('#42A5F5', this)" title="Blue">
-                    </div>
-                    <div class="color-dot" style="background:#F06292" onclick="setColor('#F06292', this)" title="Pink">
-                    </div>
-                    <div class="color-dot" style="background:#FF9800" onclick="setColor('#FF9800', this)"
-                        title="Orange"></div>
-                    <div class="color-dot" style="background:#EF5350" onclick="setColor('#EF5350', this)" title="Red">
+                <div class="color-picker-row" id="colorPicker"
+                    style="display: none; align-items: center; justify-content: center; margin-bottom: 20px;">
+                    <span style="font-weight: 600; color: var(--text-secondary); margin-right: 12px;">Highlight
+                        Settings:</span>
+                    <div class="hl-controls">
+                        <input type="color" id="hlColorPicker" class="hl-color-btn" value="#FFD500"
+                            title="Choose highlight color" oninput="updateHlColor(this.value)">
+
+                        <div class="hl-opacity-container">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Opacity:</span>
+                            <input type="range" id="hlOpacitySlider" class="hl-slider" min="10" max="100" value="85"
+                                oninput="updateHlOpacity(this.value)">
+                            <span id="hlOpacityVal" class="hl-opacity-val">85%</span>
+                        </div>
                     </div>
                 </div>
 
@@ -734,13 +787,15 @@
                 span.style.fontSize = fontSize + 'px';
                 span.style.fontFamily = item.fontName || 'sans-serif';
                 span.style.left = tx[4] + 'px';
-                span.style.top = (tx[5] - fontSize) + 'px';
+                span.style.top = (tx[5] - fontSize * 1.05) + 'px';
                 span.style.width = (item.width * scale) + 'px';
-                span.style.height = (fontSize * 1.2) + 'px';
+                span.style.height = (fontSize * 1.4) + 'px';
                 span.style.letterSpacing = '0px';
 
                 textLayerDiv.appendChild(span);
             });
+
+            applyHlStyle(panelNum);
 
             // Update page info
             var totalPages = pdfDoc.numPages;
@@ -812,21 +867,49 @@
             if (highlightActive) {
                 btn.textContent = '❌ Hide Highlights';
                 btn.classList.add('active');
-                picker.classList.add('visible');
+                picker.style.display = 'flex';
                 applyHighlights();
             } else {
                 btn.textContent = '✨ Highlight Similar Text';
                 btn.classList.remove('active');
-                picker.classList.remove('visible');
+                picker.style.display = 'none';
                 clearHighlights();
             }
         }
 
-        function setColor(color, el) {
-            highlightColor = color;
-            document.querySelectorAll('.color-dot').forEach(function (d) { d.classList.remove('selected'); });
-            el.classList.add('selected');
+        // Color & Opacity Management
+        let hlColor = '255, 213, 0'; // #FFD500 Yellow
+        let hlOpacity = '0.85'; // 85%
+
+        function hexToRgb(hex) {
+            let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ?
+                parseInt(result[1], 16) + ', ' +
+                parseInt(result[2], 16) + ', ' +
+                parseInt(result[3], 16) : '255, 213, 0';
+        }
+
+        function updateHlColor(hexStr) {
+            hlColor = hexToRgb(hexStr);
+            applyHlStyle(1);
+            applyHlStyle(2);
             if (highlightActive) applyHighlights();
+        }
+
+        function updateHlOpacity(valIndex) {
+            document.getElementById('hlOpacityVal').innerText = valIndex + '%';
+            hlOpacity = (valIndex / 100).toFixed(2);
+            applyHlStyle(1);
+            applyHlStyle(2);
+            if (highlightActive) applyHighlights();
+        }
+
+        function applyHlStyle(panelNum) {
+            const tl = document.getElementById('textLayer' + panelNum);
+            if (tl) {
+                tl.style.setProperty('--hl-color', hlColor);
+                tl.style.setProperty('--hl-opacity', hlOpacity);
+            }
         }
 
         function applyHighlights() {
@@ -866,8 +949,8 @@
                     var hasMatch = spanWords.some(function (w) { return w.length >= 3 && common[w]; });
                     if (hasMatch) {
                         span.classList.add('highlight');
-                        span.style.background = highlightColor + 'B0';
-                        span.style.boxShadow = '0 0 3px ' + highlightColor + '80';
+                        span.style.background = `rgba(${hlColor}, ${hlOpacity})`;
+                        span.style.boxShadow = `0 0 3px rgba(${hlColor}, 0.5)`;
                     }
                 });
             }
