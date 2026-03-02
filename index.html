@@ -2,6 +2,23 @@
 <html lang="en">
 
 <head>
+    <!-- One-time cache clear for v12 update -->
+    <script>
+        (function () {
+            var cleared = sessionStorage.getItem('cache_cleared_v12');
+            if (!cleared && 'serviceWorker' in navigator) {
+                sessionStorage.setItem('cache_cleared_v12', '1');
+                navigator.serviceWorker.getRegistrations().then(function (regs) {
+                    regs.forEach(function (r) { r.unregister(); });
+                    if (typeof caches !== 'undefined') {
+                        caches.keys().then(function (names) {
+                            names.forEach(function (n) { caches.delete(n); });
+                        });
+                    }
+                });
+            }
+        })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -128,7 +145,8 @@
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo">
-                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
@@ -178,7 +196,7 @@
             </div>
         </div>
     </header>
-    
+
 
     <!-- Homepage Scoped Styles -->
     <style>

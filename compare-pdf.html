@@ -2,6 +2,27 @@
 <html lang="en">
 
 <head>
+    <!-- Force clear stale service worker cache -->
+    <script>
+        (function () {
+            if (window.location.search.indexOf('nocache') === -1 && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    var needsReload = false;
+                    registrations.forEach(function (reg) { reg.unregister(); needsReload = true; });
+                    if (typeof caches !== 'undefined') {
+                        caches.keys().then(function (names) {
+                            names.forEach(function (name) { caches.delete(name); });
+                            if (needsReload) {
+                                window.location.href = window.location.pathname + '?nocache=' + Date.now();
+                            }
+                        });
+                    } else if (needsReload) {
+                        window.location.href = window.location.pathname + '?nocache=' + Date.now();
+                    }
+                });
+            }
+        })();
+    </script>
     <!-- ===== MUST HAVE SEO META TAGS ===== -->
     <!-- Primary Meta Tags -->
     <meta charset="UTF-8">
