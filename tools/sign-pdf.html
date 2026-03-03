@@ -103,7 +103,6 @@
 }
     </script>
 </head>
-</head>
 
 <body>
     <a href="#main" class="skip-link">Skip to main content</a>
@@ -183,19 +182,14 @@
             </div>
 
             <div id="editor" style="display:none; margin-top: 32px;">
-                <div class="fixed-top-bar">
-                    <button onclick="openSignatureModal()" style="background:var(--surface-1); color:var(--accent);">✍️
-                        Draw
-                        Signature</button>
+                <div class="fixed-top-bar" style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 16px 24px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                    <button onclick="openSignatureModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">✍️ Draw Signature</button>
 
-                    <select id="pageSelector" class="select-styled"
-                        style="display: inline-block; padding: 12px 24px; color: var(--text-primary);"></select>
+                    <select id="pageSelector" style="padding: 12px 20px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 12px; font-size: 0.9rem; font-weight: 500; cursor: pointer; outline: none; min-width: 120px; transition: all 0.2s;"></select>
 
-                    <button id="applyAllBtn" onclick="applyToAll()"
-                        style="display: none; background:#10b981; color:white;">Apply to All Pages</button>
+                    <button id="applyAllBtn" onclick="applyToAll()" style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">📋 Apply to All Pages</button>
 
-                    <button onclick="downloadPDF()" style="background:#f59e0b; color:white;">Download Signed
-                        PDF</button>
+                    <button onclick="downloadPDF()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">📥 Download Signed PDF</button>
                 </div>
 
                 <div id="pages-container" class="fade-in">
