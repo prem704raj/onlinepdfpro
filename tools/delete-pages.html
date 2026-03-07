@@ -517,7 +517,8 @@
             pdfBytes = await file.arrayBuffer();
             document.getElementById('progressSection').style.display = 'block';
 
-            const pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+            // Pass a COPY to pdfjsLib — it detaches the ArrayBuffer, making it unusable for PDFLib later
+            const pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
             totalPages = pdfJsDoc.numPages;
 
             document.getElementById('fileInfo').style.display = 'block';
