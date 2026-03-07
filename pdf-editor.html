@@ -216,14 +216,17 @@
             padding: 24px;
             padding-top: 85px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .page-wrapper {
             position: relative;
-            display: inline-block;
+            display: block;
             margin: 20px auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            background: var(--surface-1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            background: white;
             border-radius: 4px;
         }
 
@@ -767,7 +770,7 @@
     <main class="tool-page">
 
 
-        <div class="tool-header" style="text-align:center; margin-bottom:48px;">
+        <div class="tool-header" id="toolHeader" style="text-align:center; margin-bottom:48px;">
             <span class="section-tag"
                 style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Document
                 Editing</span>
@@ -1015,6 +1018,7 @@
                 }
 
                 document.getElementById('uploadScreen').style.display = 'none';
+                document.getElementById('toolHeader').style.display = 'none';
                 document.getElementById('editorLayout').style.display = 'flex';
 
                 await renderPage();
