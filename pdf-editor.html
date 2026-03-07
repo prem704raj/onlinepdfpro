@@ -1128,7 +1128,7 @@
 
                     // Click to open edit popup
                     div.addEventListener('click', (e) => {
-                        if (currentTool !== 'edit') return;
+                        if (currentTool !== 'edit' && currentTool !== 'cursor') return;
                         e.stopPropagation();
                         openEditPopup(div);
                     });
@@ -1305,12 +1305,12 @@
                     overlayCanvas.style.cursor = 'default';
                 }
 
-                // Toggle extracted text visibility when edit tool is active
+                // Toggle extracted text visibility when edit/select tool is active
                 const extractedEls = pageWrapper.querySelectorAll('.extracted-text');
-                if (tool === 'edit') {
+                if (tool === 'edit' || tool === 'cursor') {
                     extractedEls.forEach(el => {
                         el.style.pointerEvents = 'auto';
-                        el.style.borderColor = 'rgba(99, 102, 241, 0.15)';
+                        el.style.borderColor = tool === 'edit' ? 'rgba(99, 102, 241, 0.15)' : 'transparent';
                     });
                 } else {
                     extractedEls.forEach(el => {
