@@ -486,8 +486,10 @@ Example:
 
     <script src="../js/app.js"></script>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-    <script>function showTab(tab) {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function showTab(tab) {
             document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
 
             if (tab === 'code') {
@@ -504,38 +506,116 @@ Example:
 
         function loadTemplate(type) {
             const templates = {
-                resume: '<h1 style="color:var(--accent); border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\\n<p style="color:var(--text-secondary);">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\\n\\n<h2 style="color:var(--text-primary);">Education</h2>\\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\\n\\n<h2 style="color:var(--text-primary);">Skills</h2>\\n<ul>\\n<li>HTML, CSS, JavaScript</li>\\n<li>Python, Java</li>\\n<li>React, Node.js</li>\\n</ul>\\n\\n<h2 style="color:var(--text-primary);">Projects</h2>\\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 20+ tools</p>',
+                resume: '<h1 style="color:#2563eb; border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\n<p style="color:#666;">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\n\n<h2 style="color:#333;">Education</h2>\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\n\n<h2 style="color:#333;">Skills</h2>\n<ul>\n<li>HTML, CSS, JavaScript</li>\n<li>Python, Java</li>\n<li>React, Node.js</li>\n</ul>\n\n<h2 style="color:#333;">Projects</h2>\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 20+ tools</p>',
 
-                invoice: '<div style="text-align:center;">\\n<h1 style="color:#ef4444;">INVOICE</h1>\\n<p>Invoice #001 | Date: ' + new Date().toLocaleDateString() + '</p>\\n</div>\\n\\n<table style="width:100%; border-collapse:collapse; margin:20px 0;">\\n<tr style="background:#333; color:white;">\\n<th style="padding:12px; text-align:left;">Item</th>\\n<th style="padding:12px;">Qty</th>\\n<th style="padding:12px;">Price</th>\\n<th style="padding:12px;">Total</th>\\n</tr>\\n<tr>\\n<td style="padding:12px; border-bottom:1px solid #eee;">Web Development</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\\n</tr>\\n</table>\\n\\n<h3 style="text-align:right;">Total: ₹50,000</h3>',
+                invoice: '<div style="text-align:center;">\n<h1 style="color:#ef4444;">INVOICE</h1>\n<p>Invoice #001 | Date: ' + new Date().toLocaleDateString() + '</p>\n</div>\n\n<table style="width:100%; border-collapse:collapse; margin:20px 0;">\n<tr style="background:#333; color:white;">\n<th style="padding:12px; text-align:left;">Item</th>\n<th style="padding:12px;">Qty</th>\n<th style="padding:12px;">Price</th>\n<th style="padding:12px;">Total</th>\n</tr>\n<tr>\n<td style="padding:12px; border-bottom:1px solid #eee;">Web Development</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\n</tr>\n</table>\n\n<h3 style="text-align:right;">Total: ₹50,000</h3>',
 
-                letter: '<div style="text-align:right; margin-bottom:30px;">\\n<p>Date: ' + new Date().toLocaleDateString() + '</p>\\n</div>\\n\\n<p>Dear Sir/Madam,</p>\\n\\n<p>I am writing to express my interest in the position of Software Developer at your esteemed company.</p>\\n\\n<p>I am a 2nd year B.Tech CSE student with strong skills in web development. I have built Online PDF Pro, a free PDF tools website used by thousands of people.</p>\\n\\n<p>I would be grateful for the opportunity to discuss how I can contribute to your team.</p>\\n\\n<p>Yours sincerely,<br><strong>Your Name</strong></p>',
+                letter: '<div style="text-align:right; margin-bottom:30px;">\n<p>Date: ' + new Date().toLocaleDateString() + '</p>\n</div>\n\n<p>Dear Sir/Madam,</p>\n\n<p>I am writing to express my interest in the position of Software Developer at your esteemed company.</p>\n\n<p>I am a 2nd year B.Tech CSE student with strong skills in web development. I have built Online PDF Pro, a free PDF tools website used by thousands of people.</p>\n\n<p>I would be grateful for the opportunity to discuss how I can contribute to your team.</p>\n\n<p>Yours sincerely,<br><strong>Your Name</strong></p>',
 
-                report: '<h1 style="text-align:center; color:var(--accent);">Project Report</h1>\\n<p style="text-align:center; color:var(--text-secondary);">Online PDF Pro — Free PDF Tools Platform</p>\\n\\n<h2>1. Introduction</h2>\\n<p>Online PDF Pro is a web-based platform providing free PDF tools including merge, compress, sign, OCR, and 15+ more utilities.</p>\\n\\n<h2>2. Technologies Used</h2>\\n<ul>\\n<li>HTML5, CSS3, JavaScript</li>\\n<li>pdf-lib, pdfjs, Tesseract.js</li>\\n<li>Client-side processing (zero server cost)</li>\\n</ul>\\n\\n<h2>3. Features</h2>\\n<ol>\\n<li>Merge PDF</li>\\n<li>Compress PDF</li>\\n<li>Sign PDF</li>\\n<li>OCR Text Extraction</li>\\n<li>And 15+ more tools</li>\\n</ol>\\n\\n<h2>4. Conclusion</h2>\\n<p>The platform serves thousands of users with zero hosting cost, demonstrating the power of client-side web applications.</p>'
+                report: '<h1 style="text-align:center; color:#2563eb;">Project Report</h1>\n<p style="text-align:center; color:#666;">Online PDF Pro — Free PDF Tools Platform</p>\n\n<h2>1. Introduction</h2>\n<p>Online PDF Pro is a web-based platform providing free PDF tools including merge, compress, sign, OCR, and 15+ more utilities.</p>\n\n<h2>2. Technologies Used</h2>\n<ul>\n<li>HTML5, CSS3, JavaScript</li>\n<li>pdf-lib, pdfjs, Tesseract.js</li>\n<li>Client-side processing (zero server cost)</li>\n</ul>\n\n<h2>3. Features</h2>\n<ol>\n<li>Merge PDF</li>\n<li>Compress PDF</li>\n<li>Sign PDF</li>\n<li>OCR Text Extraction</li>\n<li>And 15+ more tools</li>\n</ol>\n\n<h2>4. Conclusion</h2>\n<p>The platform serves thousands of users with zero hosting cost, demonstrating the power of client-side web applications.</p>'
             };
 
             document.getElementById('codeArea').value = templates[type];
             showTab('preview');
         }
 
-        function downloadPDF() {
+        async function downloadPDF() {
             const html = document.getElementById('codeArea').value;
             if (!html.trim()) return alert('Write or paste some HTML first!');
 
-            const wrappedHtml = `<div style="font-family: Calibri, Arial, sans-serif; line-height: 1.8; color: #333; padding: 20px; background: #fff;">${html}</div>`;
+            const btn = document.querySelector('.dl-btn');
+            btn.textContent = '⏳ Generating PDF...';
+            btn.disabled = true;
 
-            const margin = parseInt(document.getElementById('margin').value);
-            const orientation = document.getElementById('orientation').value;
-            const pageSize = document.getElementById('pageSize').value;
+            try {
+                // Page size dimensions in mm
+                const pageSizes = {
+                    a4: [210, 297],
+                    letter: [215.9, 279.4],
+                    legal: [215.9, 355.6]
+                };
 
-            const options = {
-                margin: margin,
-                filename: 'HTML-to-PDF-OnlinePDFPro.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: pageSize, orientation: orientation }
-            };
+                const margin = parseInt(document.getElementById('margin').value);
+                const orientation = document.getElementById('orientation').value;
+                const pageSize = document.getElementById('pageSize').value;
 
-            html2pdf().set(options).from(wrappedHtml).save();
+                let [pageW, pageH] = pageSizes[pageSize] || pageSizes.a4;
+                if (orientation === 'landscape') [pageW, pageH] = [pageH, pageW];
+
+                const contentW = pageW - (margin * 2);
+                // Convert mm to pixels (96dpi: 1mm ≈ 3.7795px), then multiply by scale
+                const scale = 2;
+                const containerWidthPx = Math.round(contentW * 3.7795 * scale);
+
+                // Create a rendering container that is VISIBLE on-page
+                const container = document.createElement('div');
+                container.innerHTML = html;
+                container.style.cssText = `
+                    position: fixed; top: 0; left: 0;
+                    width: ${containerWidthPx / scale}px;
+                    padding: 0; margin: 0;
+                    font-family: Calibri, Arial, sans-serif;
+                    line-height: 1.8; color: #000;
+                    background: #fff;
+                    z-index: -1; opacity: 0.01;
+                `;
+                document.body.appendChild(container);
+
+                // Wait for browser to paint
+                await new Promise(r => setTimeout(r, 300));
+
+                const canvas = await html2canvas(container, {
+                    scale: scale,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                document.body.removeChild(container);
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation, unit: 'mm', format: pageSize });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const imgW = contentW;
+                const imgH = (canvas.height * contentW) / canvas.width;
+
+                // If content fits one page
+                if (imgH <= (pageH - margin * 2)) {
+                    pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
+                } else {
+                    // Multi-page: slice the canvas
+                    const pageContentH = pageH - (margin * 2);
+                    const totalPages = Math.ceil(imgH / pageContentH);
+
+                    for (let i = 0; i < totalPages; i++) {
+                        if (i > 0) pdf.addPage();
+
+                        // Calculate source crop from canvas
+                        const srcY = (i * pageContentH / imgH) * canvas.height;
+                        const srcH = (pageContentH / imgH) * canvas.height;
+
+                        const pageCanvas = document.createElement('canvas');
+                        pageCanvas.width = canvas.width;
+                        pageCanvas.height = Math.min(srcH, canvas.height - srcY);
+                        const ctx = pageCanvas.getContext('2d');
+                        ctx.drawImage(canvas, 0, srcY, canvas.width, pageCanvas.height, 0, 0, canvas.width, pageCanvas.height);
+
+                        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+                        const drawH = (pageCanvas.height * contentW) / canvas.width;
+                        pdf.addImage(pageImgData, 'JPEG', margin, margin, imgW, drawH);
+                    }
+                }
+
+                pdf.save('HTML-to-PDF-OnlinePDFPro.pdf');
+
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                alert('Error generating PDF: ' + err.message);
+            } finally {
+                btn.textContent = '📥 Download PDF';
+                btn.disabled = false;
+            }
         }
     </script>
 
