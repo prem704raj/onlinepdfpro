@@ -211,7 +211,7 @@
         /* CANVAS AREA */
         .canvas-area {
             flex: 1;
-            background: var(--bg);
+            background: #e8ecf1;
             overflow: auto;
             padding: 24px;
             padding-top: 85px;
@@ -221,13 +221,17 @@
             align-items: center;
         }
 
+        [data-theme="dark"] .canvas-area {
+            background: #1a1f2e;
+        }
+
         .page-wrapper {
             position: relative;
             display: block;
-            margin: 20px auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin: 30px auto 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             background: white;
-            border-radius: 4px;
+            border-radius: 2px;
         }
 
         .page-wrapper canvas {
@@ -373,6 +377,30 @@
 
         .text-element:focus {
             border-color: var(--accent);
+        }
+
+        .text-delete {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 28px;
+            height: 28px;
+            background: #ef4444;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .text-element:hover .text-delete {
+            display: flex;
         }
 
         /* EXTRACTED TEXT (from original PDF) */
@@ -1018,7 +1046,11 @@
                 }
 
                 document.getElementById('uploadScreen').style.display = 'none';
-                document.getElementById('toolHeader').style.display = 'none';
+                // Show compact editing banner instead of hiding title entirely
+                const toolHeader = document.getElementById('toolHeader');
+                toolHeader.style.marginBottom = '0';
+                toolHeader.style.padding = '12px 20px';
+                toolHeader.innerHTML = '<h1 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0; display:flex; align-items:center; gap:8px; justify-content:center;">✍️ PDF Editor <span style="font-size:0.85rem; font-weight:500; color:var(--text-secondary);">— ' + file.name + '</span></h1>';
                 document.getElementById('editorLayout').style.display = 'flex';
 
                 await renderPage();
@@ -1497,6 +1529,18 @@
                 div.style.color = document.getElementById('fontColor').value;
                 div.style.zIndex = '50';
                 div.textContent = 'Type here...';
+
+                // Add delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'text-delete';
+                deleteBtn.textContent = '×';
+                deleteBtn.onclick = function (e) {
+                    e.stopPropagation();
+                    div.remove();
+                    updateLayers();
+                };
+                div.appendChild(deleteBtn);
+
                 pageWrapper.appendChild(div);
                 div.focus();
                 document.execCommand('selectAll');
