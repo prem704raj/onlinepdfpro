@@ -430,7 +430,8 @@ Example:
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> How to html to files online for free?</h3>
+                    <span style="color: var(--accent);">Q.</span> How to html to files online for free?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload
                     your files to OnlinePDFPro's html to tool, adjust any settings, and click "Html To." Your processed
                     document will be ready to download in seconds. No signup required, completely free.</p>
@@ -440,7 +441,8 @@ Example:
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     processes all files directly in your browser. Your documents never leave your device and are never
                     uploaded to any server. This makes it the most secure PDF tool available.</p>
@@ -450,7 +452,8 @@ Example:
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?</h3>
+                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes, our tools
                     support processing multiple files at once. There is no limit on the number of files or total file
                     size.</p>
@@ -460,7 +463,8 @@ Example:
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?</h3>
+                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     works perfectly on all devices - Android phones, iPhones, tablets, laptops and desktops. No app
                     download needed.</p>
@@ -470,7 +474,8 @@ Example:
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Since processing
                     happens in your browser, there's no server-side file size limit. You can process files as large as
                     your device can handle.</p>
@@ -516,40 +521,21 @@ Example:
             const html = document.getElementById('codeArea').value;
             if (!html.trim()) return alert('Write or paste some HTML first!');
 
-            const container = document.createElement('div');
-            container.innerHTML = html;
-            container.style.fontFamily = 'Calibri, Arial, sans-serif';
-            container.style.lineHeight = '1.8';
-            container.style.color = '#333';
-            container.style.padding = '20px';
-            container.style.background = '#fff';
-
-            // Position fixed ensures it's within the viewport so html2canvas doesn't clip it
-            // z-index -9999 hides it behind the main content
-            container.style.position = 'fixed';
-            container.style.top = '0';
-            container.style.left = '0';
-            container.style.width = '800px';
-            container.style.zIndex = '-9999';
-
-            document.body.appendChild(container);
+            const wrappedHtml = `<div style="font-family: Calibri, Arial, sans-serif; line-height: 1.8; color: #333; padding: 20px; background: #fff;">${html}</div>`;
 
             const margin = parseInt(document.getElementById('margin').value);
             const orientation = document.getElementById('orientation').value;
             const pageSize = document.getElementById('pageSize').value;
 
             const options = {
-                margin: [margin, margin, margin, margin],
+                margin: margin,
                 filename: 'HTML-to-PDF-OnlinePDFPro.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
-                jsPDF: { unit: 'mm', format: pageSize, orientation: orientation },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: pageSize, orientation: orientation }
             };
 
-            html2pdf().set(options).from(container).save().then(() => {
-                document.body.removeChild(container);
-            });
+            html2pdf().set(options).from(wrappedHtml).save();
         }
     </script>
 
