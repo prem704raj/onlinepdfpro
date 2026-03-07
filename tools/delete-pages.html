@@ -153,8 +153,9 @@
         }
 
         .page-card canvas {
-            width: 180px;
-            height: 240px;
+            width: 100%;
+            height: auto;
+            max-height: 240px;
             object-fit: contain;
             display: block;
             background: #f9f9f9;
@@ -437,7 +438,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> How to delete pages files online for free?</h3>
+                    <span style="color: var(--accent);">Q.</span> How to delete pages files online for free?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload
                     your files to OnlinePDFPro's delete pages tool, adjust any settings, and click "Delete Pages." Your
                     processed document will be ready to download in seconds. No signup required, completely free.</p>
@@ -447,7 +449,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     processes all files directly in your browser. Your documents never leave your device and are never
                     uploaded to any server. This makes it the most secure PDF tool available.</p>
@@ -457,7 +460,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?</h3>
+                    <span style="color: var(--accent);">Q.</span> Can I process multiple files at once?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes, our tools
                     support processing multiple files at once. There is no limit on the number of files or total file
                     size.</p>
@@ -467,7 +471,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?</h3>
+                    <span style="color: var(--accent);">Q.</span> Does it work on mobile phones?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro
                     works perfectly on all devices - Android phones, iPhones, tablets, laptops and desktops. No app
                     download needed.</p>
@@ -477,7 +482,8 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?</h3>
+                    <span style="color: var(--accent);">Q.</span> Is there a file size limit?
+                </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Since processing
                     happens in your browser, there's no server-side file size limit. You can process files as large as
                     your device can handle.</p>
@@ -787,22 +793,30 @@
 
             for (let i = 1; i <= totalPages; i++) {
                 const page = await pdfJsDoc.getPage(i);
-                const viewport = page.getViewport({ scale: 1.0 });
-                const dpr = Math.max(window.devicePixelRatio || 1, 2);
-                const hiResViewport = page.getViewport({ scale: 1.0 * dpr });
+                // Render at a small scale for thumbnails
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
                 const canvas = document.createElement('canvas');
-                canvas.width = hiResViewport.width;
-                canvas.height = hiResViewport.height;
-                canvas.style.width = viewport.width + 'px';
-                canvas.style.height = viewport.height + 'px';
-                await page.render({ canvasContext: canvas.getContext('2d'), viewport: hiResViewport }).promise;
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
 
                 const card = document.createElement('div');
                 card.className = 'page-card';
                 card.dataset.page = i;
-                card.innerHTML = '<div class="page-label">Page ' + i + '</div>';
+
+                // Use DOM methods instead of innerHTML to preserve the canvas pixel data
+                const label = document.createElement('div');
+                label.className = 'page-label';
+                label.textContent = 'Page ' + i;
+                card.appendChild(label);
+
                 card.appendChild(canvas);
-                card.innerHTML += '<div class="page-footer">Page ' + i + '</div>';
+
+                const footer = document.createElement('div');
+                footer.className = 'page-footer';
+                footer.textContent = 'Page ' + i;
+                card.appendChild(footer);
 
                 card.onclick = () => togglePage(card, i);
                 grid.appendChild(card);
@@ -810,8 +824,13 @@
                 document.getElementById('progressFill').style.width = Math.round((i / totalPages) * 100) + '%';
             }
 
+            // Hide upload area and show controls
+            document.getElementById('dropArea').style.display = 'none';
             document.getElementById('progressSection').style.display = 'none';
             document.getElementById('topControls').style.display = 'block';
+
+            // Auto-scroll to page grid
+            document.getElementById('topControls').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function togglePage(card, pageNum) {
