@@ -612,26 +612,35 @@
         async function deleteAndDownload() {
             if (selectedPages.size === 0) return alert('Select at least 1 page to delete!');
 
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-            const pagesToKeep = [];
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const pagesToKeep = [];
 
-            for (let i = 0; i < totalPages; i++) {
-                if (!selectedPages.has(i + 1)) {
-                    pagesToKeep.push(i);
+                for (let i = 0; i < totalPages; i++) {
+                    if (!selectedPages.has(i + 1)) {
+                        pagesToKeep.push(i);
+                    }
                 }
+
+                const newDoc = await PDFLib.PDFDocument.create();
+                const copiedPages = await newDoc.copyPages(pdfDoc, pagesToKeep);
+                copiedPages.forEach(page => newDoc.addPage(page));
+
+                const newPdfBytes = await newDoc.save();
+                const blob = new Blob([newPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'Edited-PDF-OnlinePDFPro.pdf';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+            } catch (err) {
+                console.error('Delete PDF error:', err);
+                alert('Error: ' + err.message);
             }
-
-            const newDoc = await PDFLib.PDFDocument.create();
-            const copiedPages = await newDoc.copyPages(pdfDoc, pagesToKeep);
-            copiedPages.forEach(page => newDoc.addPage(page));
-
-            const newPdfBytes = await newDoc.save();
-            const blob = new Blob([newPdfBytes], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'Edited-PDF-OnlinePDFPro.pdf';
-            link.click();
-            URL.revokeObjectURL(link.href);
         }
     </script>
 
