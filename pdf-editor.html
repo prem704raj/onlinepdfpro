@@ -990,7 +990,8 @@
             const pageWrapper = document.getElementById('pageWrapper');
 
             // File upload
-            document.getElementById('uploadBtn').onclick = () => document.getElementById('fileInput').click();
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn) uploadBtn.onclick = () => document.getElementById('fileInput').click();
             document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
             document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
 
@@ -1003,7 +1004,8 @@
             async function loadPDF(file) {
                 if (!file) return;
                 pdfBytes = await file.arrayBuffer();
-                pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+                // Pass a copy to pdfjsLib — it detaches the ArrayBuffer
+                pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
                 totalPages = pdfDoc.numPages;
                 currentPage = 1;
 
