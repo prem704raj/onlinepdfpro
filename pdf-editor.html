@@ -403,6 +403,44 @@
             display: flex;
         }
 
+        /* EXTRACTED IMAGES (from original PDF) */
+        .extracted-image {
+            position: absolute;
+            z-index: 44;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+
+        .extracted-image:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .extracted-image .img-replace-btn {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 14px;
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 45;
+        }
+
+        .extracted-image:hover .img-replace-btn {
+            display: block;
+        }
+
         /* EXTRACTED TEXT (from original PDF) */
         .extracted-text {
             position: absolute;
@@ -822,6 +860,7 @@
 
         <input type="file" id="fileInput" accept=".pdf" hidden />
         <input type="file" id="imageInput" accept="image/*" hidden />
+        <input type="file" id="replaceImageInput" accept="image/*" hidden />
 
         <div class="editor-layout" id="editorLayout" style="display:none;">
 
@@ -1079,6 +1118,9 @@
                 // Extract existing text from PDF for editing
                 await extractPageContent(page, viewport);
 
+                // Extract images from PDF for replacement
+                await extractPageImages(page, viewport);
+
                 document.getElementById('pageInfo').textContent = currentPage + ' / ' + totalPages;
                 document.getElementById('zoomLevel').textContent = Math.round(currentScale * 100) + '%';
                 updateLayers();
@@ -1168,6 +1210,148 @@
                     pageWrapper.appendChild(div);
                 });
             }
+
+            // =============================================
+            // EXTRACT IMAGES FROM PDF
+            // =============================================
+            let imageReplacements = {}; // page -> [{imgIndex, dataUrl, x, y, w, h}]
+            let activeReplaceTarget = null;
+
+            async function extractPageImages(page, viewport) {
+                // Remove any previously extracted image overlays
+                pageWrapper.querySelectorAll('.extracted-image').forEach(el => el.remove());
+
+                try {
+                    const opList = await page.getOperatorList();
+                    const OPS = pdfjsLib.OPS;
+                    let imgIndex = 0;
+
+                    // Track current transform matrix
+                    let ctmStack = [];
+                    let ctm = [1, 0, 0, 1, 0, 0];
+
+                    for (let i = 0; i < opList.fnArray.length; i++) {
+                        const fn = opList.fnArray[i];
+                        const args = opList.argsArray[i];
+
+                        if (fn === OPS.save) {
+                            ctmStack.push([...ctm]);
+                        } else if (fn === OPS.restore) {
+                            ctm = ctmStack.pop() || [1, 0, 0, 1, 0, 0];
+                        } else if (fn === OPS.transform) {
+                            // Multiply current transform matrix with new one
+                            const [a, b, c, d, e, f] = args;
+                            const [A, B, C, D, E, F] = ctm;
+                            ctm = [
+                                A * a + B * c,
+                                A * b + B * d,
+                                C * a + D * c,
+                                C * b + D * d,
+                                E * a + F * c + e,
+                                E * b + F * d + f
+                            ];
+                        } else if (fn === OPS.paintImageXObject || fn === OPS.paintJpegXObject) {
+                            // Image found! Calculate its position
+                            const imgW = Math.abs(ctm[0]);
+                            const imgH = Math.abs(ctm[3]);
+
+                            // Skip tiny images (icons, bullets etc)
+                            if (imgW < 20 || imgH < 20) {
+                                imgIndex++;
+                                continue;
+                            }
+
+                            // Convert PDF coordinates to viewport
+                            const x = ctm[4] * viewport.scale;
+                            const y = viewport.height - (ctm[5] * viewport.scale) - (imgH * viewport.scale);
+                            const w = imgW * viewport.scale;
+                            const h = imgH * viewport.scale;
+
+                            createImageOverlay(imgIndex, x, y, w, h);
+                            imgIndex++;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Could not extract images:', err);
+                }
+            }
+
+            function createImageOverlay(imgIdx, x, y, w, h) {
+                const div = document.createElement('div');
+                div.className = 'extracted-image';
+                div.style.left = x + 'px';
+                div.style.top = y + 'px';
+                div.style.width = w + 'px';
+                div.style.height = h + 'px';
+                div.dataset.imgIndex = imgIdx;
+
+                // Check if there's already a replacement
+                const replacements = imageReplacements[currentPage] || [];
+                const existing = replacements.find(r => r.imgIndex === imgIdx);
+                if (existing) {
+                    // Show replacement image preview
+                    div.style.backgroundImage = 'url(' + existing.dataUrl + ')';
+                    div.style.backgroundSize = 'cover';
+                    div.style.backgroundPosition = 'center';
+                    div.style.borderColor = '#22c55e';
+                }
+
+                // Replace button
+                const btn = document.createElement('button');
+                btn.className = 'img-replace-btn';
+                btn.textContent = existing ? '✅ Change Again' : '🖼️ Replace Image';
+                btn.onclick = function (e) {
+                    e.stopPropagation();
+                    activeReplaceTarget = {
+                        page: currentPage,
+                        imgIndex: imgIdx,
+                        div: div,
+                        x: x, y: y, w: w, h: h
+                    };
+                    document.getElementById('replaceImageInput').click();
+                };
+                div.appendChild(btn);
+
+                pageWrapper.appendChild(div);
+            }
+
+            // Handle replacement image selection
+            document.getElementById('replaceImageInput').onchange = function (e) {
+                const file = e.target.files[0];
+                if (!file || !activeReplaceTarget) return;
+
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    const dataUrl = ev.target.result;
+                    const target = activeReplaceTarget;
+
+                    // Store replacement
+                    if (!imageReplacements[target.page]) imageReplacements[target.page] = [];
+                    const existingIdx = imageReplacements[target.page].findIndex(r => r.imgIndex === target.imgIndex);
+                    const replacement = {
+                        imgIndex: target.imgIndex,
+                        dataUrl: dataUrl,
+                        x: target.x, y: target.y, w: target.w, h: target.h
+                    };
+                    if (existingIdx >= 0) {
+                        imageReplacements[target.page][existingIdx] = replacement;
+                    } else {
+                        imageReplacements[target.page].push(replacement);
+                    }
+
+                    // Show preview on the overlay
+                    target.div.style.backgroundImage = 'url(' + dataUrl + ')';
+                    target.div.style.backgroundSize = 'cover';
+                    target.div.style.backgroundPosition = 'center';
+                    target.div.style.borderColor = '#22c55e';
+                    target.div.querySelector('.img-replace-btn').textContent = '✅ Change Again';
+
+                    activeReplaceTarget = null;
+                    updateLayers();
+                };
+                reader.readAsDataURL(file);
+                e.target.value = '';
+            };
 
             // =============================================
             // EDIT POPUP LOGIC
@@ -1863,6 +2047,45 @@
                                 size: textSize > 0 ? textSize : 10,
                                 color: PDFLib.rgb(0, 0, 0),
                             });
+                        }
+                    }
+
+                    // ============================================
+                    // Handle REPLACED IMAGES for every page
+                    // ============================================
+                    const pageImgReplacements = imageReplacements[pageNum] || [];
+                    if (pageImgReplacements.length > 0) {
+                        const canvasW = parseFloat(pdfCanvas.style.width);
+                        const canvasH = parseFloat(pdfCanvas.style.height);
+                        const imgScaleX = width / canvasW;
+                        const imgScaleY = height / canvasH;
+
+                        for (const rep of pageImgReplacements) {
+                            try {
+                                const repBytes = Uint8Array.from(atob(rep.dataUrl.split(',')[1]), c => c.charCodeAt(0));
+                                const isJpeg = rep.dataUrl.startsWith('data:image/jpeg');
+                                const embeddedImg = isJpeg
+                                    ? await pdfLibDoc.embedJpg(repBytes)
+                                    : await pdfLibDoc.embedPng(repBytes);
+
+                                const rx = rep.x * imgScaleX;
+                                const ry = height - (rep.y * imgScaleY) - (rep.h * imgScaleY);
+                                const rw = rep.w * imgScaleX;
+                                const rh = rep.h * imgScaleY;
+
+                                // White-out original image area
+                                page.drawRectangle({
+                                    x: rx, y: ry, width: rw, height: rh,
+                                    color: PDFLib.rgb(1, 1, 1),
+                                });
+
+                                // Draw replacement image
+                                page.drawImage(embeddedImg, {
+                                    x: rx, y: ry, width: rw, height: rh
+                                });
+                            } catch (imgErr) {
+                                console.warn('Failed to embed replacement image:', imgErr);
+                            }
                         }
                     }
 
