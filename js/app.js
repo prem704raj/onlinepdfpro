@@ -608,6 +608,7 @@ const LanguageSelector = {
         { code: 'ko', name: 'Korean', native: '한국어' },
         { code: 'ar', name: 'Arabic', native: 'العربية' },
         { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
+        { code: 'hi', name: 'Hinglish', native: 'हिंग्लिश (Hindi+English)' },
         { code: 'bn', name: 'Bengali', native: 'বাংলা' },
         { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ' },
         { code: 'ur', name: 'Urdu', native: 'اردو' },
