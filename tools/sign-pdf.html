@@ -310,8 +310,18 @@
                         style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">✍️
                         Draw Signature</button>
 
-                    <select id="pageSelector"
-                        style="padding: 12px 20px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 12px; font-size: 0.9rem; font-weight: 500; cursor: pointer; outline: none; min-width: 120px; transition: all 0.2s;"></select>
+                    <!-- Page navigation: prev/next instead of scroll -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button id="prevPageBtn" onclick="prevPage()"
+                            style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                            disabled>◀</button>
+                        <span id="pageIndicator"
+                            style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); min-width: 100px; text-align: center;">Page
+                            1 / 1</span>
+                        <button id="nextPageBtn" onclick="nextPage()"
+                            style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">▶</button>
+                    </div>
+                    <select id="pageSelector" style="display:none;"></select>
 
                     <button id="applyAllBtn" onclick="applyToAll()"
                         style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">📋
@@ -320,16 +330,15 @@
                     <button onclick="downloadPDF()"
                         style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">📥
                         Download Signed PDF</button>
+
+                    <button onclick="clearAll()"
+                        style="padding: 10px 20px; background: var(--surface-2); color: #ef4444; border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">🗑
+                        Clear All</button>
                 </div>
 
                 <div id="pages-container" class="fade-in">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 16px; padding: 0 16px;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Scroll to view pages. Use
-                            buttons above to add signatures, then drag them anywhere.</p>
-                        <button onclick="clearAll()" class="btn btn-secondary text-only"
-                            style="font-size: 0.9rem; padding: 6px 12px;">Clear All Signatures</button>
-                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 12px; text-align: center;">Draw
+                        a signature, then drag it anywhere on the page. Use ◀ ▶ to switch pages.</p>
                     <div id="pages" style="text-align: center;"></div>
                 </div>
             </div>
@@ -498,6 +507,9 @@
             if (e.target.files.length > 0) loadPDF(e.target.files[0]);
         };
 
+        let currentPageIndex = 0;
+        let totalPages = 0;
+
         async function loadPDF(file) {
             if (!file || file.type !== 'application/pdf') return alert('Please upload a valid PDF.');
 
@@ -509,6 +521,7 @@
             const selector = document.getElementById('pageSelector');
             pagesDiv.innerHTML = '';
             selector.innerHTML = '';
+            totalPages = pdf.numPages;
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -524,7 +537,8 @@
 
                 const pageDiv = document.createElement('div');
                 pageDiv.className = 'page';
-                pageDiv.innerHTML = `<div class="page-label">Page ${i}</div>`;
+                pageDiv.style.display = 'none'; // Hide all initially
+                pageDiv.innerHTML = `<div class="page-label">Page ${i} of ${pdf.numPages}</div>`;
                 pageDiv.appendChild(canvas);
                 pagesDiv.appendChild(pageDiv);
 
@@ -536,9 +550,42 @@
 
             dropArea.style.display = 'none';
             document.getElementById('editor').style.display = 'block';
-            selector.style.display = 'inline-block';
-            document.getElementById('applyAllBtn').style.display = 'inline-block';
-            selector.selectedIndex = 0;
+            document.getElementById('applyAllBtn').style.display = totalPages > 1 ? 'inline-block' : 'none';
+
+            currentPageIndex = 0;
+            showPage(0);
+        }
+
+        function showPage(index) {
+            const pages = document.querySelectorAll('.page');
+            if (pages.length === 0) return;
+
+            // Clamp index
+            index = Math.max(0, Math.min(index, pages.length - 1));
+            currentPageIndex = index;
+
+            // Hide all, show current
+            pages.forEach((p, i) => {
+                p.style.display = i === index ? 'inline-block' : 'none';
+            });
+
+            // Update indicator
+            document.getElementById('pageIndicator').textContent = `Page ${index + 1} / ${totalPages}`;
+
+            // Update selector (hidden but used for signature placement)
+            document.getElementById('pageSelector').value = index;
+
+            // Update button states
+            document.getElementById('prevPageBtn').disabled = index === 0;
+            document.getElementById('nextPageBtn').disabled = index === pages.length - 1;
+        }
+
+        function prevPage() {
+            showPage(currentPageIndex - 1);
+        }
+
+        function nextPage() {
+            showPage(currentPageIndex + 1);
         }
 
         // Modal logic
