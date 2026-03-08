@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v26'; // Force refresh for split pdf text layer update
+const CACHE_NAME = 'onlinepdfpro-v27'; // Force refresh for query param matching fix
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
@@ -48,14 +48,14 @@ self.addEventListener('fetch', (event) => {
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                     return response;
                 })
-                .catch(() => caches.match(request))
+                .catch(() => caches.match(request, { ignoreSearch: true }))
         );
         return;
     }
 
     // Cache-first for static assets
     event.respondWith(
-        caches.match(request).then((cached) => {
+        caches.match(request, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
                 const clone = response.clone();
                 caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
