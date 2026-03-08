@@ -937,9 +937,11 @@
                 <input type="color" id="strokeColor" value="#ff0000" class="color-picker">
                 <label>Opacity:</label>
                 <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:65px;">
-                <button class="opt-btn" onclick="makeBold()" title="Bold"><b>B</b></button>
-                <button class="opt-btn" onclick="makeItalic()" title="Italic"><i>I</i></button>
-                <button class="opt-btn" onclick="makeUnderlineText()" title="Underline"><u>U</u></button>
+                <button class="opt-btn" onmousedown="event.preventDefault(); makeBold()" title="Bold"><b>B</b></button>
+                <button class="opt-btn" onmousedown="event.preventDefault(); makeItalic()"
+                    title="Italic"><i>I</i></button>
+                <button class="opt-btn" onmousedown="event.preventDefault(); makeUnderlineText()"
+                    title="Underline"><u>U</u></button>
                 <button class="opt-btn danger" onclick="clearOverlay()">Clear Page</button>
             </div>
 
@@ -1052,6 +1054,7 @@
             let undoStack = [];
             let redoStack = [];
             let extractedTexts = {};  // page -> [{originalText, element, ...}]
+            let selectedTextElement = null; // Track currently selected text element for toolbar
 
             // Elements
             const pdfCanvas = document.getElementById('pdfCanvas');
@@ -1721,9 +1724,22 @@
                 deleteBtn.onclick = function (e) {
                     e.stopPropagation();
                     div.remove();
+                    if (selectedTextElement === div) selectedTextElement = null;
                     updateLayers();
                 };
                 div.appendChild(deleteBtn);
+
+                // Track selection for toolbar
+                div.addEventListener('focus', () => {
+                    selectedTextElement = div;
+                    // Sync toolbar to element's current style
+                    document.getElementById('fontFamily').value = div.style.fontFamily.replace(/["']/g, '') || 'Arial';
+                    document.getElementById('fontSize').value = parseInt(div.style.fontSize) || 18;
+                    document.getElementById('fontColor').value = rgbToHex(div.style.color) || '#000000';
+                });
+                div.addEventListener('click', (e) => {
+                    selectedTextElement = div;
+                });
 
                 pageWrapper.appendChild(div);
                 div.focus();
@@ -1741,23 +1757,46 @@
                 saveState();
             }
 
+            // Helper to convert rgb() to hex
+            function rgbToHex(rgb) {
+                if (!rgb || rgb.startsWith('#')) return rgb || '#000000';
+                const match = rgb.match(/\d+/g);
+                if (!match || match.length < 3) return '#000000';
+                return '#' + match.slice(0, 3).map(n => parseInt(n).toString(16).padStart(2, '0')).join('');
+            }
+
             function updateTextStyle() {
-                const focused = document.querySelector('.text-element:focus');
-                if (focused) {
-                    focused.style.fontFamily = document.getElementById('fontFamily').value;
-                    focused.style.fontSize = document.getElementById('fontSize').value + 'px';
-                    focused.style.color = document.getElementById('fontColor').value;
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.style.fontFamily = document.getElementById('fontFamily').value;
+                    el.style.fontSize = document.getElementById('fontSize').value + 'px';
+                    el.style.color = document.getElementById('fontColor').value;
                 }
             }
 
             function makeBold() {
-                document.execCommand('bold');
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.focus();
+                    document.execCommand('selectAll');
+                    document.execCommand('bold');
+                }
             }
             function makeItalic() {
-                document.execCommand('italic');
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.focus();
+                    document.execCommand('selectAll');
+                    document.execCommand('italic');
+                }
             }
             function makeUnderlineText() {
-                document.execCommand('underline');
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.focus();
+                    document.execCommand('selectAll');
+                    document.execCommand('underline');
+                }
             }
 
             // Add sticky note
