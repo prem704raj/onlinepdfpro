@@ -937,11 +937,9 @@
                 <input type="color" id="strokeColor" value="#ff0000" class="color-picker">
                 <label>Opacity:</label>
                 <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:65px;">
-                <button class="opt-btn" onmousedown="event.preventDefault(); makeBold()" title="Bold"><b>B</b></button>
-                <button class="opt-btn" onmousedown="event.preventDefault(); makeItalic()"
-                    title="Italic"><i>I</i></button>
-                <button class="opt-btn" onmousedown="event.preventDefault(); makeUnderlineText()"
-                    title="Underline"><u>U</u></button>
+                <button class="opt-btn" onclick="makeBold()" title="Bold"><b>B</b></button>
+                <button class="opt-btn" onclick="makeItalic()" title="Italic"><i>I</i></button>
+                <button class="opt-btn" onclick="makeUnderlineText()" title="Underline"><u>U</u></button>
                 <button class="opt-btn danger" onclick="clearOverlay()">Clear Page</button>
             </div>
 
@@ -1777,25 +1775,19 @@
             function makeBold() {
                 const el = selectedTextElement || document.querySelector('.text-element:focus');
                 if (el) {
-                    el.focus();
-                    document.execCommand('selectAll');
-                    document.execCommand('bold');
+                    el.style.fontWeight = el.style.fontWeight === 'bold' ? 'normal' : 'bold';
                 }
             }
             function makeItalic() {
                 const el = selectedTextElement || document.querySelector('.text-element:focus');
                 if (el) {
-                    el.focus();
-                    document.execCommand('selectAll');
-                    document.execCommand('italic');
+                    el.style.fontStyle = el.style.fontStyle === 'italic' ? 'normal' : 'italic';
                 }
             }
             function makeUnderlineText() {
                 const el = selectedTextElement || document.querySelector('.text-element:focus');
                 if (el) {
-                    el.focus();
-                    document.execCommand('selectAll');
-                    document.execCommand('underline');
+                    el.style.textDecoration = el.style.textDecoration === 'underline' ? 'none' : 'underline';
                 }
             }
 
