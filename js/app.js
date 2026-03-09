@@ -1149,6 +1149,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+// =========================================
+// Analytics Event Tracking
+// =========================================
+
+const Analytics = {
+    track(eventName, params = {}) {
+        // Google Analytics 4 event
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+        }
+        // Console fallback for dev
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('[Analytics]', eventName, params);
+        }
+    },
+
+    trackToolUse(toolName) {
+        this.track('tool_used', {
+            tool_name: toolName,
+            timestamp: new Date().toISOString()
+        });
+    },
+
+    trackDownload(toolName, fileType) {
+        this.track('file_download', {
+            tool_name: toolName,
+            file_type: fileType
+        });
+    },
+
+    trackShare(toolName, platform) {
+        this.track('share', {
+            tool_name: toolName,
+            method: platform
+        });
+    }
+};
+
 // =========================================
 // Public API
 // =========================================
@@ -1167,7 +1206,8 @@ const _exports = {
     LoadingSpinner,
     Toast,
     SocialShare,
-    UserPreferences
+    UserPreferences,
+    Analytics
 };
 
 window.OnlinePDFPro = _exports;

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What's New — Changelog | OnlinePDFPro</title>
+    <meta name="description"
+        content="See the latest updates, new tools, and improvements to OnlinePDFPro. We ship new features every week to make your PDF workflow faster and easier.">
+    <link rel="canonical" href="https://onlinepdfpro.com/changelog.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-fix.css?v=9">
+    <link rel="stylesheet" href="css/tools.css">
+    <style>
+        .changelog-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .changelog-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .changelog-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .changelog-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .changelog-entry {
+            position: relative;
+            padding: 28px 28px 28px 48px;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .changelog-entry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .changelog-entry::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 36px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent, #3b82f6);
+        }
+
+        .changelog-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .changelog-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .changelog-body {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .changelog-body ul {
+            padding-left: 18px;
+            margin: 8px 0;
+        }
+
+        .changelog-body li {
+            margin: 4px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        .tag-new {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .tag-fix {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .tag-improve {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .tag-perf {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="/logo.jpg" alt="OnlinePDFPro - Free PDF Tools" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <div class="changelog-container">
+            <div class="changelog-header">
+                <h1>🚀 What's New</h1>
+                <p>Latest updates and improvements to OnlinePDFPro</p>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 9, 2026</div>
+                <div class="changelog-title"><span class="tag tag-new">NEW</span> PDF Unlock Tool & Social Sharing</div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>🔓 <strong>PDF Unlock</strong> — Remove password protection from PDFs (client-side
+                            decryption)</li>
+                        <li>📤 <strong>Social Share Buttons</strong> — Share any tool via WhatsApp, Twitter, or
+                            clipboard</li>
+                        <li>🕒 <strong>Recently Used Tools</strong> — Your last-used tools are now tracked and displayed
+                        </li>
+                        <li>⚙️ <strong>User Preferences</strong> — Settings are saved locally for a personalized
+                            experience</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 9, 2026</div>
+                <div class="changelog-title"><span class="tag tag-improve">SEO</span> Blog & Structured Data Overhaul
+                </div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>📝 Added <strong>BlogPosting schema</strong> to all 30 blog posts for Google rich snippets
+                        </li>
+                        <li>🔗 Added <strong>internal links</strong> — each blog now links to related tools + articles
+                        </li>
+                        <li>📋 Added <strong>ItemList schema</strong> to tools.html (38 tools cataloged for Google)</li>
+                        <li>🗺️ Added <strong>30 blog posts to sitemap.xml</strong></li>
+                        <li>🖼️ Fixed missing <strong>alt text</strong> on images</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 9, 2026</div>
+                <div class="changelog-title"><span class="tag tag-perf">PERF</span> Performance Optimizations</div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>📸 Compressed <strong>og-image.jpg</strong> from 386KB to 34KB (91% smaller)</li>
+                        <li>📦 Created <strong>minified CSS</strong> files — saving 22KB in total</li>
+                        <li>🎨 Added <strong>shared CSS utility classes</strong> for cleaner code</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 9, 2026</div>
+                <div class="changelog-title"><span class="tag tag-improve">UX</span> User Experience Improvements</div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>⏳ <strong>Loading Spinner</strong> — Full-screen overlay during processing</li>
+                        <li>✅ <strong>Success Toast</strong> — Animated confirmation after actions</li>
+                        <li>☰ <strong>Hamburger Animation</strong> — Smooth rotation on mobile menu toggle</li>
+                        <li>🔍 <strong>404 Page Search</strong> — Search for tools directly from the error page</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 8, 2026</div>
+                <div class="changelog-title"><span class="tag tag-fix">FIX</span> Critical Bug Fixes</div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>🖼️ <strong>Favicon Optimization</strong> — Reduced from 222KB to under 5KB each</li>
+                        <li>🔄 <strong>Duplicate Tool Pages</strong> — Removed duplicate root pages, fixed links</li>
+                        <li>💾 <strong>Service Worker Cache</strong> — Fixed stale CSS by adding
+                            <code>ignoreSearch: true</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-date">March 2026</div>
+                <div class="changelog-title"><span class="tag tag-new">NEW</span> Accessibility & Performance</div>
+                <div class="changelog-body">
+                    <ul>
+                        <li>♿ <strong>Accessibility</strong> — Added aria-labels to all interactive elements</li>
+                        <li>🖼️ <strong>Lazy Loading</strong> — Images and below-fold content now load on demand</li>
+                        <li>📊 <strong>Analytics Events</strong> — Tool usage tracking prepared for GA integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:0;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights
+                    reserved. Made with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span class="trust-badge trust-badge-blue">🔒 Your files are safe</span>
+                    <span class="trust-badge trust-badge-green">⚡ 100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

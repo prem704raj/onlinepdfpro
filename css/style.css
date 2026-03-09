@@ -1507,3 +1507,12 @@ body {
         font-size: 20px !important;
     }
 }
+
+/* Progressive Loading - Below-fold optimization */
+.how-it-works,
+.related-tools,
+.faq-section,
+footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+}
