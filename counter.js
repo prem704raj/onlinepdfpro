@@ -1,6 +1,6 @@
 // ============================================
 // ONLINE PDF PRO - USAGE COUNTER SYSTEM
-// Tracks real usage + shows impressive numbers
+// Tracks usage on this device (localStorage-based)
 // ============================================
 
 const COUNTER_KEY = 'onlinepdfpro_counter';
@@ -130,7 +130,10 @@ function updateCounterDisplay() {
 
     // Update elements if they exist
     const totalEl = document.getElementById('counter-total');
-    if (totalEl) totalEl.textContent = formatNumber(total);
+    if (totalEl) {
+        totalEl.textContent = formatNumber(total);
+        totalEl.title = 'Count on this device';
+    }
 
     const totalShortEl = document.getElementById('counter-total-short');
     if (totalShortEl) totalShortEl.textContent = formatNumberShort(total);

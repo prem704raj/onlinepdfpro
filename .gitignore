@@ -22,3 +22,7 @@ _scripts/
 # Test files
 test*.pdf
 test_tts*.js
+
+# Internal/test files
+test-pdf.html
+SEO_1_MONTH_PLAN.txt
