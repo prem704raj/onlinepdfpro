@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HTML to PDF Test</title>
+    <!-- Include html2pdf.bundle.min.js the same way we do in the main app -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+    <h1>PDF Test Page</h1>
+    <textarea id="code" style="width:100%; height:200px;"><h1>Hello World</h1><p>Test</p></textarea>
+    <button onclick="downloadPDF()">Generate PDF</button>
+    <button onclick="downloadPDF2()">Generate PDF (Method 2)</button>
+
+    <div id="target" style="border: 1px solid red; margin-top:20px;">
+        Will render here.
+    </div>
+
+    <script>
+        function downloadPDF() {
+            var html = document.getElementById('code').value;
+            var target = document.getElementById('target');
+            target.innerHTML = html;
+
+            var opt = {
+                margin: 10,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Promise-based usage:
+            html2pdf().set(opt).from(target).save();
+        }
+
+        function downloadPDF2() {
+            var html = document.getElementById('code').value;
+            // Trying html string directly again, just to see what happens in a pure isolated env.
+            html2pdf().from(html).save();
+        }
+    </script>
+</body>
+
+</html>
