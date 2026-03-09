@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unlock PDF — Remove Password from PDF Online Free | OnlinePDFPro</title>
+    <meta name="description"
+        content="Remove password from PDF files online for free. Unlock protected PDFs instantly in your browser. No upload, 100% private. Enter the password to decrypt.">
+    <meta name="keywords"
+        content="unlock pdf, remove password from pdf, pdf unlock online free, pdf password remover, decrypt pdf">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-unlock.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-unlock.html">
+    <meta property="og:title" content="Unlock PDF — Remove Password from PDF Online Free | OnlinePDFPro">
+    <meta property="og:description"
+        content="Remove password from PDF files online for free. Unlock protected PDFs instantly in your browser.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unlock PDF — Remove Password from PDF Online Free">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix.css?v=9">
+    <link rel="stylesheet" href="../css/tools.css">
+
+    <style>
+        .unlock-box {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+
+        .unlock-box h2 {
+            margin: 0 0 10px;
+            color: var(--text-primary);
+            font-size: 24px;
+        }
+
+        .unlock-box p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-primary);
+            border-radius: 14px;
+            font-size: 18px;
+            outline: none;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-subtle);
+        }
+
+        .toggle-password {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .unlock-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .unlock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-box {
+            display: none;
+            margin: 40px auto;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 24px;
+            border: 2px solid #10b981;
+            text-align: center;
+        }
+
+        .success-box h2 {
+            color: #10b981;
+            font-size: 28px;
+        }
+
+        .download-btn {
+            padding: 18px 50px;
+            font-size: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .file-info {
+            display: none;
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 15px 20px;
+            background: var(--surface-2);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlinepdfpro.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://onlinepdfpro.com/tools.html" },
+            { "@type": "ListItem", "position": 3, "name": "Unlock PDF", "item": "https://onlinepdfpro.com/tools/pdf-unlock.html" }
+      ]
+    }
+    </script>
+</head>
+
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <img src="/logo.jpg" alt="OnlinePDFPro - Free PDF Tools" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                    Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 900px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">PDF Security</span>
+                <h1 class="tool-title fade-in">Unlock PDF — Remove Password Protection</h1>
+                <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+                    Remove password from protected PDF files. Enter the current password to decrypt and download an
+                    unlocked copy. 100% private — your files never leave your browser.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
+                <span class="upload-icon">🔓</span>
+                <p class="upload-text">Select password-protected PDF</p>
+                <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
+                    <span>🔒 100% Local</span> <span>•</span> <span>Works best with files under 50MB</span>
+                    <span>•</span> <span>⚡ Instant</span>
+                </p>
+                <input type="file" id="fileInput" accept=".pdf" hidden />
+                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose
+                    PDF</button>
+            </div>
+
+            <div class="file-info" id="fileInfo"></div>
+
+            <div class="unlock-box" id="unlockBox" style="display:none;">
+                <h2>🔓 Enter PDF Password</h2>
+                <p>This PDF is password-protected. Enter the password to unlock it.</p>
+
+                <div class="input-group">
+                    <label>Current Password</label>
+                    <div class="toggle-password">
+                        <input type="password" id="pdfPassword" placeholder="Enter PDF password"
+                            onkeydown="if(event.key==='Enter')unlockPDF()">
+                        <button class="toggle-btn" onclick="togglePass()">👁️</button>
+                    </div>
+                </div>
+
+                <p class="error-msg" id="errorMsg">❌ Incorrect password. Please try again.</p>
+
+                <button onclick="unlockPDF()" class="unlock-btn" id="unlockBtn">🔓 Unlock PDF</button>
+            </div>
+
+            <div class="success-box" id="successBox">
+                <h2>✅ PDF Unlocked Successfully!</h2>
+                <p style="color:var(--text-secondary);">Password protection has been removed</p>
+                <button onclick="downloadUnlocked()" class="download-btn">📥 Download Unlocked PDF</button>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
+                <span class="privacy-reminder-icon">🛡️</span>
+                <span>Your password is never stored or transmitted. Everything runs locally.</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="../js/app.js"></script>
+
+    <script>
+        let pdfFileBytes = null;
+        let unlockedPdfBytes = null;
+        let fileName = '';
+
+        document.getElementById('dropArea').onclick = (e) => {
+            if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
+                document.getElementById('fileInput').click();
+            }
+        };
+        document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
+        document.getElementById('dropArea').ondragover = e => e.preventDefault();
+        document.getElementById('dropArea').ondrop = e => {
+            e.preventDefault();
+            loadFile(e.dataTransfer.files[0]);
+        };
+
+        async function loadFile(file) {
+            if (!file) return;
+            fileName = file.name;
+            pdfFileBytes = await file.arrayBuffer();
+            document.getElementById('dropArea').style.display = 'none';
+            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('fileInfo').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+
+            // Try loading without password first
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfFileBytes);
+                // Not password-protected — just save and offer download
+                unlockedPdfBytes = await pdfDoc.save();
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+                document.getElementById('successBox').querySelector('h2').textContent = '✅ PDF is Not Password-Protected';
+                document.getElementById('successBox').querySelector('p').textContent = 'This PDF has no password. You can download it directly.';
+            } catch (e) {
+                // Likely password-protected
+                document.getElementById('unlockBox').style.display = 'block';
+                document.getElementById('pdfPassword').focus();
+            }
+        }
+
+        function togglePass() {
+            const input = document.getElementById('pdfPassword');
+            const btn = event.target;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🔒';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        async function unlockPDF() {
+            if (!pdfFileBytes) return;
+            const password = document.getElementById('pdfPassword').value;
+            if (!password) return;
+
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('unlockBtn').disabled = true;
+            document.getElementById('unlockBtn').textContent = '⏳ Unlocking...';
+
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { password: password });
+                // Save without encryption
+                unlockedPdfBytes = await pdfDoc.save();
+
+                document.getElementById('unlockBox').style.display = 'none';
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+            } catch (e) {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('unlockBtn').disabled = false;
+                document.getElementById('unlockBtn').textContent = '🔓 Unlock PDF';
+            }
+        }
+
+        function downloadUnlocked() {
+            if (!unlockedPdfBytes) return;
+            const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Unlocked-' + fileName;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <!-- SEO Content -->
+    <section class="how-it-works"
+        style="margin: 20px auto; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px;">
+        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Unlock PDF Files Online
+        </h2>
+        <div class="steps"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div class="step">
+                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Upload PDF</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Select or drag your
+                    password-protected PDF file.</p>
+            </div>
+            <div class="step">
+                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Enter Password</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Type the current password to
+                    decrypt the file.</p>
+            </div>
+            <div class="step">
+                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Download</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download the unlocked,
+                    password-free PDF.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
+        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Frequently Asked Questions</h2>
+        <div class="faq-item"
+            style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600;"><span
+                    style="color: var(--accent);">Q.</span> Can I unlock any PDF?</h3>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">You need to know the
+                current password. This tool removes protection from PDFs you have authorized access to — it is not a
+                password cracker.</p>
+        </div>
+        <div class="faq-item"
+            style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600;"><span
+                    style="color: var(--accent);">Q.</span> Is my password safe?</h3>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! Your password is
+                never sent to any server. The decryption happens entirely in your browser using pdf-lib.</p>
+        </div>
+        <div class="faq-item"
+            style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600;"><span
+                    style="color: var(--accent);">Q.</span> Does it work on mobile?</h3>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! Works perfectly
+                on all devices — Android, iPhone, tablets, and desktops. No app needed.</p>
+        </div>
+    </section>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Unlock PDF - Remove Password",
+      "description": "Remove password from PDF files online for free. Unlock protected PDFs in your browser. No uploads.",
+      "url": "https://onlinepdfpro.com/tools/pdf-unlock.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+</body>
+
+</html>

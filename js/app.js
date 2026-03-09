@@ -1009,6 +1009,150 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export for use in tool pages
+
+// =========================================
+// Recently Used Tools — UI Renderer
+// =========================================
+
+const RecentlyUsedUI = {
+    render() {
+        const container = document.getElementById('recentlyUsedTools');
+        const recentToolsSection = document.getElementById('recentToolsSection');
+        const homePlaceholder = document.querySelector('.recently-used-placeholder');
+        const target = container || homePlaceholder;
+
+        if (!target) return;
+
+        const recent = RecentlyUsed.get();
+        if (recent.length === 0) {
+            if (recentToolsSection) recentToolsSection.style.display = 'none';
+            return;
+        }
+
+        if (recentToolsSection) recentToolsSection.style.display = 'block';
+
+        const toolUrls = {
+            'compress-pdf': 'tools/compress-pdf.html',
+            'merge-pdf': 'tools/merge-pdf.html',
+            'split-pdf': 'tools/split-pdf.html',
+            'sign-pdf': 'tools/sign-pdf.html',
+            'pdf-to-word': 'tools/pdf-to-word.html',
+            'word-to-pdf': 'tools/word-to-pdf.html',
+            'pdf-editor': 'pdf-editor.html',
+            'pdf-lock': 'tools/pdf-lock.html',
+            'pdf-unlock': 'tools/pdf-unlock.html',
+            'delete-pages': 'tools/delete-pages.html',
+            'rotate-pdf': 'tools/rotate-pdf.html',
+            'add-page-numbers': 'tools/add-page-numbers.html',
+            'pdf-watermark': 'tools/pdf-watermark.html',
+            'ocr': 'tools/ocr.html',
+            'image-compress': 'tools/image-compress.html',
+            'image-resize': 'tools/image-resize.html',
+            'image-crop': 'tools/image-crop.html',
+            'pdf-to-images': 'tools/pdf-to-images.html',
+            'images-to-pdf': 'tools/images-to-pdf.html',
+            'crop-pdf': 'tools/crop-pdf.html',
+            'html-to-pdf': 'tools/html-to-pdf.html',
+            'pdf-to-excel': 'tools/pdf-to-excel.html',
+            'excel-to-pdf': 'tools/excel-to-pdf.html',
+            'pdf-to-ppt': 'tools/pdf-to-ppt.html',
+            'ppt-to-pdf': 'tools/ppt-to-pdf.html',
+        };
+
+        const isInTools = window.location.pathname.includes('/tools/');
+        const prefix = isInTools ? '../' : '';
+
+        let html = '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
+        recent.forEach(item => {
+            const url = toolUrls[item.id] || 'tools.html';
+            html += `<a href="${prefix}${url}" style="padding:10px 18px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">${item.name}</a>`;
+        });
+        html += '</div>';
+
+        target.innerHTML = html;
+    }
+};
+
+// =========================================
+// Social Share Widget
+// =========================================
+
+const SocialShare = {
+    init() {
+        const toolPage = document.querySelector('.tool-page');
+        if (!toolPage) return;
+
+        const title = document.title.split('|')[0].trim();
+        const url = window.location.href;
+
+        const shareDiv = document.createElement('div');
+        shareDiv.style.cssText = 'max-width:900px;margin:20px auto;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;';
+        shareDiv.innerHTML = `
+            <span style="font-weight:700;font-size:14px;color:var(--text-secondary);">📤 Share this tool:</span>
+            <a href="https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}" target="_blank" rel="noopener" style="padding:8px 16px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener" style="padding:8px 16px;background:#1DA1F2;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Twitter</a>
+            <button onclick="navigator.clipboard.writeText('${url}');this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000)" style="padding:8px 16px;background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">📋 Copy Link</button>
+        `;
+
+        const main = document.querySelector('main');
+        if (main && main.nextSibling) {
+            main.parentNode.insertBefore(shareDiv, main.nextSibling);
+        }
+    }
+};
+
+// =========================================
+// User Preferences (localStorage)
+// =========================================
+
+const UserPreferences = {
+    KEY: 'doctools-preferences',
+
+    get() {
+        try {
+            return JSON.parse(localStorage.getItem(this.KEY)) || {};
+        } catch {
+            return {};
+        }
+    },
+
+    set(key, value) {
+        const prefs = this.get();
+        prefs[key] = value;
+        localStorage.setItem(this.KEY, JSON.stringify(prefs));
+    },
+
+    getVal(key, defaultVal) {
+        const prefs = this.get();
+        return prefs[key] !== undefined ? prefs[key] : defaultVal;
+    }
+};
+
+// =========================================
+// Auto-Initialize Features
+// =========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    RecentlyUsedUI.render();
+    SocialShare.init();
+
+    // Auto-track tool usage
+    const toolPage = document.querySelector('.tool-page');
+    if (toolPage) {
+        const titleEl = document.querySelector('.tool-title');
+        if (titleEl) {
+            const toolName = titleEl.textContent.split('—')[0].split('–')[0].trim();
+            const pathParts = window.location.pathname.split('/');
+            const filename = pathParts[pathParts.length - 1].replace('.html', '');
+            RecentlyUsed.add(filename, toolName);
+        }
+    }
+});
+
+// =========================================
+// Public API
+// =========================================
+
 const _exports = {
     ThemeManager,
     MobileMenu,
@@ -1016,11 +1160,16 @@ const _exports = {
     FileUploader,
     ProgressHandler,
     RecentlyUsed,
+    RecentlyUsedUI,
     AutoClear,
     Downloader,
-    Utils
+    Utils,
+    LoadingSpinner,
+    Toast,
+    SocialShare,
+    UserPreferences
 };
 
 window.OnlinePDFPro = _exports;
-window.DocTools = _exports; // backward compatibility
+window.DocTools = _exports;
 
