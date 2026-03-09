@@ -57,6 +57,7 @@ const MobileMenu = {
                 e.stopPropagation();
                 const isOpen = nav.classList.toggle('active');
                 menuToggle.textContent = isOpen ? '✕' : '☰';
+                menuToggle.classList.toggle('open', isOpen);
             });
 
             // Close menu when clicking outside
@@ -64,6 +65,7 @@ const MobileMenu = {
                 if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
                     nav.classList.remove('active');
                     menuToggle.textContent = '☰';
+                    menuToggle.classList.remove('open');
                 }
             });
 
@@ -72,6 +74,7 @@ const MobileMenu = {
                 link.addEventListener('click', () => {
                     nav.classList.remove('active');
                     menuToggle.textContent = '☰';
+                    menuToggle.classList.remove('open');
                 });
             });
         }
@@ -434,6 +437,49 @@ const Utils = {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    }
+};
+
+// =========================================
+// Loading Spinner (Global)
+// =========================================
+
+const LoadingSpinner = {
+    _el: null,
+    show(message = 'Processing...') {
+        if (!this._el) {
+            this._el = document.createElement('div');
+            this._el.className = 'loading-overlay';
+            this._el.innerHTML = `<div class="loading-box"><div class="loading-spinner"></div><p></p></div>`;
+            document.body.appendChild(this._el);
+        }
+        this._el.querySelector('p').textContent = message;
+        requestAnimationFrame(() => this._el.classList.add('active'));
+    },
+    hide() {
+        if (this._el) {
+            this._el.classList.remove('active');
+        }
+    }
+};
+
+// =========================================
+// Toast Notification
+// =========================================
+
+const Toast = {
+    show(message = 'Done!', duration = 3000) {
+        let toast = document.querySelector('.toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'toast';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        requestAnimationFrame(() => toast.classList.add('show'));
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, duration);
     }
 };
 

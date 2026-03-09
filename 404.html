@@ -25,7 +25,8 @@
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo">
-                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
@@ -87,6 +88,16 @@
                         Editor</a>
                 </div>
             </div>
+
+            <div style="margin-top: 24px; text-align: center;">
+                <input type="text" id="search404" placeholder="🔍 Search for a tool..."
+                    style="padding: 14px 24px; border-radius: 14px; border: 2px solid var(--border); background: var(--surface-1); color: var(--text-primary); font-size: 1rem; width: 100%; max-width: 400px; outline: none; transition: border-color 0.2s;"
+                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
+                    onkeydown="if(event.key==='Enter'){const q=this.value.trim();if(q)window.location.href='/tools.html?q='+encodeURIComponent(q)}">
+            </div>
+
+            <p class="file-limit-note" style="margin-top: 24px; text-align: center;">💡 All our tools process files
+                locally in your browser. Works best with files under 50MB.</p>
         </div>
     </main>
 
