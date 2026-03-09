@@ -300,6 +300,49 @@
         let unlockedPdfBytes = null;
         let fileName = '';
 
+        // ---- Step-by-step back navigation ----
+        // Step 1: Upload (initial)
+        // Step 2: Password input
+        // Step 3: Download/success
+        history.replaceState({ step: 'upload' }, '');
+
+        window.addEventListener('popstate', (e) => {
+            const step = e.state ? e.state.step : 'upload';
+            showStep(step);
+        });
+
+        function showStep(step) {
+            if (step === 'upload') {
+                // Reset to upload view
+                document.getElementById('dropArea').style.display = '';
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('unlockBox').style.display = 'none';
+                document.getElementById('successBox').style.display = 'none';
+                document.getElementById('errorMsg').style.display = 'none';
+                // Reset file input
+                document.getElementById('fileInput').value = '';
+                pdfFileBytes = null;
+                unlockedPdfBytes = null;
+            } else if (step === 'password') {
+                // Show password input, hide others
+                document.getElementById('dropArea').style.display = 'none';
+                document.getElementById('fileInfo').style.display = 'block';
+                document.getElementById('unlockBox').style.display = 'block';
+                document.getElementById('successBox').style.display = 'none';
+                document.getElementById('errorMsg').style.display = 'none';
+                document.getElementById('unlockBtn').disabled = false;
+                document.getElementById('unlockBtn').textContent = '🔓 Unlock PDF';
+                document.getElementById('pdfPassword').focus();
+            } else if (step === 'success') {
+                // Show success/download
+                document.getElementById('dropArea').style.display = 'none';
+                document.getElementById('fileInfo').style.display = 'none';
+                document.getElementById('unlockBox').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+            }
+        }
+
+        // ---- File upload ----
         document.getElementById('dropArea').onclick = (e) => {
             if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
                 document.getElementById('fileInput').click();
@@ -330,10 +373,14 @@
                 document.getElementById('successBox').style.display = 'block';
                 document.getElementById('successBox').querySelector('h2').textContent = '✅ PDF is Not Password-Protected';
                 document.getElementById('successBox').querySelector('p').textContent = 'This PDF has no password. You can download it directly.';
+                // Push success step
+                history.pushState({ step: 'success' }, '');
             } catch (e) {
                 // PDF.js throws PasswordException for encrypted PDFs
                 document.getElementById('unlockBox').style.display = 'block';
                 document.getElementById('pdfPassword').focus();
+                // Push password step
+                history.pushState({ step: 'password' }, '');
             }
         }
 
@@ -372,6 +419,9 @@
                 document.getElementById('unlockBox').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
+
+                // Push success step (so back goes to password)
+                history.pushState({ step: 'success' }, '');
             } catch (e) {
                 console.error("Decryption error:", e);
                 document.getElementById('errorMsg').style.display = 'block';
