@@ -281,10 +281,16 @@
         </div>
     </main>
 
-    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
+    <!-- PDF.js for password verification (has proper decryption support) -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <!-- pdf-lib for saving without encryption -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="../js/app.js"></script>
 
     <script>
+        // Set PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
         let pdfFileBytes = null;
         let unlockedPdfBytes = null;
         let fileName = '';
@@ -304,22 +310,24 @@
         async function loadFile(file) {
             if (!file) return;
             fileName = file.name;
-            pdfFileBytes = await file.arrayBuffer();
+            pdfFileBytes = new Uint8Array(await file.arrayBuffer());
             document.getElementById('dropArea').style.display = 'none';
             document.getElementById('fileInfo').style.display = 'block';
             document.getElementById('fileInfo').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
 
-            // Try loading without password first
+            // Try loading without password using PDF.js
             try {
-                const pdfDoc = await PDFLib.PDFDocument.load(pdfFileBytes);
-                // Not password-protected — just save and offer download
-                unlockedPdfBytes = await pdfDoc.save();
+                const loadTask = pdfjsLib.getDocument({ data: pdfFileBytes.slice() });
+                const pdfDoc = await loadTask.promise;
+                // Not password-protected — use pdf-lib to save a clean copy
+                const libDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { ignoreEncryption: true });
+                unlockedPdfBytes = await libDoc.save();
                 document.getElementById('fileInfo').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
                 document.getElementById('successBox').querySelector('h2').textContent = '✅ PDF is Not Password-Protected';
                 document.getElementById('successBox').querySelector('p').textContent = 'This PDF has no password. You can download it directly.';
             } catch (e) {
-                // Likely password-protected
+                // PDF.js throws PasswordException for encrypted PDFs
                 document.getElementById('unlockBox').style.display = 'block';
                 document.getElementById('pdfPassword').focus();
             }
@@ -344,12 +352,19 @@
 
             document.getElementById('errorMsg').style.display = 'none';
             document.getElementById('unlockBtn').disabled = true;
-            document.getElementById('unlockBtn').textContent = '⏳ Unlocking...';
+            document.getElementById('unlockBtn').textContent = '⏳ Verifying password...';
 
             try {
-                const pdfDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { password: password });
-                // Save without encryption
-                unlockedPdfBytes = await pdfDoc.save();
+                // Step 1: Use PDF.js to verify the password (it has full decryption support)
+                const loadTask = pdfjsLib.getDocument({ data: pdfFileBytes.slice(), password: password });
+                const pdfDoc = await loadTask.promise;
+
+                // Password verified! Now render to a new clean unencrypted PDF
+                document.getElementById('unlockBtn').textContent = '⏳ Removing encryption...';
+
+                // Step 2: Load with pdf-lib ignoring encryption and save clean
+                const libDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { ignoreEncryption: true });
+                unlockedPdfBytes = await libDoc.save();
 
                 document.getElementById('unlockBox').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
@@ -357,8 +372,14 @@
             } catch (e) {
                 console.error("Decryption error:", e);
                 document.getElementById('errorMsg').style.display = 'block';
-                let msg = '❌ Incorrect password or unsupported encryption.';
-                if (e.message) msg += ' (' + e.message + ')';
+                // Check if it's a wrong password vs other error
+                let msg = '❌ ';
+                if (e.name === 'PasswordException' || (e.message && e.message.includes('password'))) {
+                    msg += 'Incorrect password. Please check and try again.';
+                } else {
+                    msg += 'Could not unlock this PDF. ';
+                    if (e.message) msg += '(' + e.message + ')';
+                }
                 document.getElementById('errorMsg').textContent = msg;
                 document.getElementById('unlockBtn').disabled = false;
                 document.getElementById('unlockBtn').textContent = '🔓 Unlock PDF';
