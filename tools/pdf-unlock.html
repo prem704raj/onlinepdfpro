@@ -319,9 +319,8 @@
             try {
                 const loadTask = pdfjsLib.getDocument({ data: pdfFileBytes.slice() });
                 const pdfDoc = await loadTask.promise;
-                // Not password-protected — use pdf-lib to save a clean copy
-                const libDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { ignoreEncryption: true });
-                unlockedPdfBytes = await libDoc.save();
+                // Not password-protected — rebuild clean
+                await rebuildCleanPDF(pdfDoc);
                 document.getElementById('fileInfo').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
                 document.getElementById('successBox').querySelector('h2').textContent = '✅ PDF is Not Password-Protected';
@@ -355,16 +354,15 @@
             document.getElementById('unlockBtn').textContent = '⏳ Verifying password...';
 
             try {
-                // Step 1: Use PDF.js to verify the password (it has full decryption support)
+                // Step 1: Use PDF.js to load with password (full decryption)
                 const loadTask = pdfjsLib.getDocument({ data: pdfFileBytes.slice(), password: password });
                 const pdfDoc = await loadTask.promise;
 
-                // Password verified! Now render to a new clean unencrypted PDF
-                document.getElementById('unlockBtn').textContent = '⏳ Removing encryption...';
+                // Password verified! Now rebuild a completely clean PDF
+                document.getElementById('unlockBtn').textContent = '⏳ Rebuilding clean PDF...';
 
-                // Step 2: Load with pdf-lib ignoring encryption and save clean
-                const libDoc = await PDFLib.PDFDocument.load(pdfFileBytes, { ignoreEncryption: true });
-                unlockedPdfBytes = await libDoc.save();
+                // Step 2: Render each page and build a brand new unencrypted PDF
+                await rebuildCleanPDF(pdfDoc);
 
                 document.getElementById('unlockBox').style.display = 'none';
                 document.getElementById('fileInfo').style.display = 'none';
@@ -372,7 +370,6 @@
             } catch (e) {
                 console.error("Decryption error:", e);
                 document.getElementById('errorMsg').style.display = 'block';
-                // Check if it's a wrong password vs other error
                 let msg = '❌ ';
                 if (e.name === 'PasswordException' || (e.message && e.message.includes('password'))) {
                     msg += 'Incorrect password. Please check and try again.';
@@ -384,6 +381,55 @@
                 document.getElementById('unlockBtn').disabled = false;
                 document.getElementById('unlockBtn').textContent = '🔓 Unlock PDF';
             }
+        }
+
+        /**
+         * Uses PDF.js (which has already decrypted the PDF) to render every page
+         * to a canvas, then builds a brand-new PDF with pdf-lib using those images.
+         * The output has ZERO encryption metadata.
+         */
+        async function rebuildCleanPDF(pdfJsDoc) {
+            const numPages = pdfJsDoc.numPages;
+            const newDoc = await PDFLib.PDFDocument.create();
+            const SCALE = 2; // 2x for high quality
+
+            for (let i = 1; i <= numPages; i++) {
+                const page = await pdfJsDoc.getPage(i);
+                const viewport = page.getViewport({ scale: SCALE });
+
+                // Create an offscreen canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const ctx = canvas.getContext('2d');
+
+                // Render the fully-decrypted page onto the canvas
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                // Convert canvas to PNG bytes
+                const pngDataUrl = canvas.toDataURL('image/png');
+                const pngBytes = Uint8Array.from(atob(pngDataUrl.split(',')[1]), c => c.charCodeAt(0));
+
+                // Embed in the new PDF
+                const pngImage = await newDoc.embedPng(pngBytes);
+
+                // Use original page dimensions (in PDF points, not scaled pixels)
+                const origViewport = page.getViewport({ scale: 1 });
+                const newPage = newDoc.addPage([origViewport.width, origViewport.height]);
+                newPage.drawImage(pngImage, {
+                    x: 0,
+                    y: 0,
+                    width: origViewport.width,
+                    height: origViewport.height,
+                });
+
+                // Update button progress
+                if (document.getElementById('unlockBtn')) {
+                    document.getElementById('unlockBtn').textContent = `⏳ Page ${i}/${numPages}...`;
+                }
+            }
+
+            unlockedPdfBytes = await newDoc.save();
         }
 
         function downloadUnlocked() {
