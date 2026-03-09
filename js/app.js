@@ -1133,42 +1133,26 @@ const UserPreferences = {
 // =========================================
 
 const ToolReset = {
-    _initialState: null,
     _hasFile: false,
 
     init() {
         // Only run on tool pages
         if (!document.querySelector('.tool-page')) return;
 
-        // Save initial state
-        this._saveState();
+        // Replace current state to mark this as a tool page
+        history.replaceState({ toolPage: true }, '', window.location.href);
 
-        // Watch for file uploads to push history state
+        // Watch for file uploads to push a "working" state
         this._watchFileInput();
-
-        // Watch for result/success sections appearing → inject reset button
-        this._watchResults();
 
         // Handle browser back button
         window.addEventListener('popstate', (e) => {
-            if (e.state && e.state.toolReset) {
+            // When user presses back after uploading, they land on the toolPage state
+            // At that point, reload to reset the tool
+            if (this._hasFile) {
                 this.reset();
             }
         });
-    },
-
-    _saveState() {
-        // Store which elements are visible/hidden at page load
-        const container = document.querySelector('.tool-page .container') || document.querySelector('.tool-page');
-        if (container) {
-            this._initialState = {};
-            container.querySelectorAll('[id]').forEach(el => {
-                this._initialState[el.id] = {
-                    display: el.style.display,
-                    className: el.className
-                };
-            });
-        }
     },
 
     _watchFileInput() {
@@ -1176,10 +1160,10 @@ const ToolReset = {
         const fileInputs = document.querySelectorAll('input[type="file"]');
         fileInputs.forEach(input => {
             input.addEventListener('change', () => {
-                if (!this._hasFile) {
+                if (!this._hasFile && input.files && input.files.length > 0) {
                     this._hasFile = true;
-                    // Push state so back button resets instead of leaving
-                    history.pushState({ toolReset: true }, '', window.location.href);
+                    // Push a new state so back button has somewhere to go
+                    history.pushState({ toolWorking: true }, '', window.location.href);
                 }
             });
         });
@@ -1190,88 +1174,14 @@ const ToolReset = {
             area.addEventListener('drop', () => {
                 if (!this._hasFile) {
                     this._hasFile = true;
-                    history.pushState({ toolReset: true }, '', window.location.href);
+                    history.pushState({ toolWorking: true }, '', window.location.href);
                 }
             });
         });
-    },
-
-    _watchResults() {
-        // Use MutationObserver to detect when result/success/download sections appear
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach(mutation => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                    const el = mutation.target;
-                    if (el.style.display !== 'none' && el.style.display !== '') {
-                        this._maybeInjectResetButton(el);
-                    }
-                }
-            });
-        });
-
-        // Observe common result/success containers
-        const watchTargets = document.querySelectorAll(
-            '.success-box, #successBox, #resultArea, #result, #output, ' +
-            '[id*="success"], [id*="result"], [id*="output"], [id*="download"]'
-        );
-        watchTargets.forEach(el => {
-            observer.observe(el, { attributes: true, attributeFilter: ['style'] });
-        });
-
-        // Also inject into any already-visible download buttons
-        this._scanForDownloadButtons();
-    },
-
-    _scanForDownloadButtons() {
-        // Find download buttons and add reset buttons after them (if not already present)
-        const downloadBtns = document.querySelectorAll(
-            '.download-btn, [id*="download"], button[onclick*="download"]'
-        );
-        downloadBtns.forEach(btn => {
-            const parent = btn.parentElement;
-            if (parent && !parent.querySelector('.tool-reset-btn')) {
-                this._addResetButton(parent);
-            }
-        });
-    },
-
-    _maybeInjectResetButton(container) {
-        if (container.querySelector('.tool-reset-btn')) return;
-        this._addResetButton(container);
-    },
-
-    _addResetButton(container) {
-        const btn = document.createElement('button');
-        btn.className = 'tool-reset-btn';
-        btn.innerHTML = '🔄 Process Another File';
-        btn.style.cssText = `
-            display: block;
-            margin: 20px auto 0;
-            padding: 14px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            background: transparent;
-            color: var(--accent, #2563eb);
-            border: 2px solid var(--accent, #2563eb);
-            cursor: pointer;
-            transition: all 0.3s;
-        `;
-        btn.onmouseenter = () => {
-            btn.style.background = 'var(--accent, #2563eb)';
-            btn.style.color = '#fff';
-        };
-        btn.onmouseleave = () => {
-            btn.style.background = 'transparent';
-            btn.style.color = 'var(--accent, #2563eb)';
-        };
-        btn.onclick = () => this.reset();
-        container.appendChild(btn);
     },
 
     reset() {
         this._hasFile = false;
-        // Simple approach: reload the page to reset all state cleanly
         window.location.reload();
     }
 };
