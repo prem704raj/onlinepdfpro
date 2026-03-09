@@ -1129,59 +1129,135 @@ const UserPreferences = {
 };
 
 // =========================================
-// Tool Reset — "Process Another File" + Back Button
+// Tool Reset — Step-by-step Back Navigation
 // =========================================
 
 const ToolReset = {
-    _hasFile: false,
+    _stepCount: 0,
 
     init() {
         // Only run on tool pages
-        if (!document.querySelector('.tool-page')) return;
+        const toolPage = document.querySelector('.tool-page');
+        if (!toolPage) return;
 
-        // Replace current state to mark this as a tool page
-        history.replaceState({ toolPage: true }, '', window.location.href);
+        // Save initial DOM state as step 0
+        const initialSnapshot = this._takeSnapshot();
+        history.replaceState({ toolStep: 0, snapshot: initialSnapshot }, '');
 
-        // Watch for file uploads to push a "working" state
-        this._watchFileInput();
+        // Watch for UI transitions to push new steps
+        this._watchTransitions();
 
-        // Handle browser back button
+        // Handle browser back/forward
         window.addEventListener('popstate', (e) => {
-            // When user presses back after uploading, they land on the toolPage state
-            // At that point, reload to reset the tool
-            if (this._hasFile) {
-                this.reset();
+            if (e.state && e.state.snapshot) {
+                this._restoreSnapshot(e.state.snapshot);
             }
         });
     },
 
-    _watchFileInput() {
-        // Listen for file input changes across all tools
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-            input.addEventListener('change', () => {
-                if (!this._hasFile && input.files && input.files.length > 0) {
-                    this._hasFile = true;
-                    // Push a new state so back button has somewhere to go
-                    history.pushState({ toolWorking: true }, '', window.location.href);
-                }
-            });
+    /**
+     * Take a snapshot of the display state of all elements with IDs in .tool-page
+     */
+    _takeSnapshot() {
+        const snapshot = {};
+        const toolPage = document.querySelector('.tool-page');
+        if (!toolPage) return snapshot;
+
+        toolPage.querySelectorAll('[id]').forEach(el => {
+            // Get computed display — covers both inline and CSS-set display
+            const computedDisplay = window.getComputedStyle(el).display;
+            const inlineDisplay = el.style.display;
+            snapshot[el.id] = {
+                inlineDisplay: inlineDisplay,
+                hidden: computedDisplay === 'none'
+            };
+        });
+        return snapshot;
+    },
+
+    /**
+     * Restore a DOM snapshot — show/hide elements to match saved state
+     */
+    _restoreSnapshot(snapshot) {
+        const toolPage = document.querySelector('.tool-page');
+        if (!toolPage) return;
+
+        Object.keys(snapshot).forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const saved = snapshot[id];
+            el.style.display = saved.inlineDisplay;
         });
 
-        // Also watch drop events on upload zones
-        const dropAreas = document.querySelectorAll('.upload-zone, #dropArea, [id*="drop"]');
-        dropAreas.forEach(area => {
-            area.addEventListener('drop', () => {
-                if (!this._hasFile) {
-                    this._hasFile = true;
-                    history.pushState({ toolWorking: true }, '', window.location.href);
-                }
-            });
+        // Re-enable any disabled buttons
+        toolPage.querySelectorAll('button[disabled]').forEach(btn => {
+            btn.disabled = false;
         });
     },
 
+    /**
+     * Push a new step whenever a major UI change is detected
+     */
+    pushStep() {
+        this._stepCount++;
+        const snapshot = this._takeSnapshot();
+        history.pushState({ toolStep: this._stepCount, snapshot: snapshot }, '');
+    },
+
+    /**
+     * Watch for common UI transitions across all tools
+     */
+    _watchTransitions() {
+        const self = this;
+
+        // 1. Watch file inputs — push step when file is selected
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', () => {
+                if (input.files && input.files.length > 0) {
+                    // Delay slightly to let the tool's own JS update the DOM first
+                    setTimeout(() => self.pushStep(), 300);
+                }
+            });
+        });
+
+        // 2. Watch drop areas
+        document.querySelectorAll('.upload-zone, #dropArea, [id*="drop"]').forEach(area => {
+            area.addEventListener('drop', () => {
+                setTimeout(() => self.pushStep(), 300);
+            });
+        });
+
+        // 3. Use MutationObserver to detect when major sections show/hide
+        // This catches result areas, success boxes, download sections, etc.
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const el = mutation.target;
+                    const id = el.id || '';
+                    // Only push step for significant containers (not minor elements)
+                    const isSignificant = id.match(/success|result|output|download|preview|unlock|lock/i) ||
+                        el.classList.contains('success-box') ||
+                        el.classList.contains('result-area');
+
+                    if (isSignificant && el.style.display === 'block') {
+                        // A major section just became visible — push new step
+                        setTimeout(() => self.pushStep(), 100);
+                    }
+                }
+            }
+        });
+
+        // Observe all elements with IDs inside tool-page for style changes
+        const toolPage = document.querySelector('.tool-page');
+        if (toolPage) {
+            toolPage.querySelectorAll('[id]').forEach(el => {
+                observer.observe(el, { attributes: true, attributeFilter: ['style'] });
+            });
+        }
+    },
+
     reset() {
-        this._hasFile = false;
+        this._stepCount = 0;
         window.location.reload();
     }
 };
