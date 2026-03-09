@@ -355,7 +355,11 @@
                 document.getElementById('fileInfo').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
             } catch (e) {
+                console.error("Decryption error:", e);
                 document.getElementById('errorMsg').style.display = 'block';
+                let msg = '❌ Incorrect password or unsupported encryption.';
+                if (e.message) msg += ' (' + e.message + ')';
+                document.getElementById('errorMsg').textContent = msg;
                 document.getElementById('unlockBtn').disabled = false;
                 document.getElementById('unlockBtn').textContent = '🔓 Unlock PDF';
             }
