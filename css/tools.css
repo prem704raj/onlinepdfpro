@@ -589,3 +589,99 @@
     color: var(--text-muted);
     font-size: 0.75rem;
 }
+
+/* =========================================
+   SHARED UTILITY CLASSES
+   Replace common inline styles
+   ========================================= */
+
+/* Common card/section patterns */
+.tool-section-card {
+    background: var(--surface-1);
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+}
+
+/* Common heading pattern in tool pages */
+.tool-section-title {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.tool-section-subtitle {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+/* Common text patterns */
+.tool-text {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+/* Common list patterns */
+.tool-list {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+.tool-list li {
+    margin-bottom: 10px;
+}
+
+/* Upload zone file limit */
+.upload-info {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+/* Footer link pattern */
+.footer-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+.footer-link:hover {
+    color: var(--accent);
+}
+
+/* CTA button for blog/tool pages */
+.cta-primary {
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--accent, #2563eb);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* Trust badges */
+.trust-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.trust-badge-blue {
+    background: rgba(37, 99, 235, 0.15);
+    color: #60a5fa;
+}
+.trust-badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #4ade80;
+}
