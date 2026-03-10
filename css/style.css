@@ -568,7 +568,8 @@ html[data-theme="dark"] .theme-icon-dark {
     margin-bottom: 10px;
 }
 
-.footer-links-group a {
+.footer-links-group a,
+footer a {
     text-decoration: none;
     color: var(--text-muted);
     font-size: 0.875rem;
@@ -576,14 +577,16 @@ html[data-theme="dark"] .theme-icon-dark {
     transform: none;
 }
 
-.footer-links-group a:hover {
-    color: var(--accent);
+.footer-links-group a:hover,
+footer a:hover {
+    color: var(--accent) !important;
     text-decoration: underline;
     transform: none;
 }
 
-.footer-links-group a:active {
-    color: var(--accent-hover);
+.footer-links-group a:active,
+footer a:active {
+    color: var(--accent-hover) !important;
     transform: none;
 }
 
