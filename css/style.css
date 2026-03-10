@@ -573,10 +573,20 @@ html[data-theme="dark"] .theme-icon-dark {
     color: var(--text-muted);
     font-size: 0.875rem;
     transition: color var(--transition);
+    transform: none;
 }
 
 .footer-links-group a:hover {
     color: var(--text-primary);
+    transform: none;
+}
+
+.footer-links-group a:active {
+    transform: none;
+}
+
+.footer-links-group ul li {
+    transform: none;
 }
 
 /* ---- Mobile-only elements (hidden on desktop) ---- */
