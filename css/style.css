@@ -259,12 +259,14 @@ a {
     color: var(--text-muted);
     font-weight: 500;
     font-size: 0.875rem;
-    transition: color var(--transition);
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
 }
 
 .nav-link:hover,
 .nav-link.active {
     color: var(--text-primary);
+    transform: scale(1.08);
 }
 
 .header-actions {
