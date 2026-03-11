@@ -631,6 +631,7 @@
     padding-left: 20px;
     margin-bottom: 25px;
 }
+
 .tool-list li {
     margin-bottom: 10px;
 }
@@ -649,6 +650,7 @@
     font-size: 14px;
     transition: color 0.2s;
 }
+
 .footer-link:hover {
     color: var(--accent);
 }
@@ -665,6 +667,7 @@
     font-size: 16px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .cta-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
@@ -677,11 +680,45 @@
     font-size: 12px;
     font-weight: bold;
 }
+
 .trust-badge-blue {
     background: rgba(37, 99, 235, 0.15);
     color: #60a5fa;
 }
+
 .trust-badge-green {
     background: rgba(16, 185, 129, 0.15);
     color: #4ade80;
+}
+
+/* Share File Button */
+.share-file-btn {
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background 0.2s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.share-file-btn:hover {
+    background: #059669;
+    transform: scale(1.05);
+}
+
+.share-file-btn:active {
+    transform: scale(0.97);
+}
+
+.result-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }

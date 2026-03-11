@@ -375,7 +375,14 @@ const AutoClear = {
 // =========================================
 
 const Downloader = {
+    _lastBlob: null,
+    _lastName: null,
+
     saveBlob(blob, filename) {
+        // Store for share functionality
+        this._lastBlob = blob;
+        this._lastName = filename;
+
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -384,6 +391,87 @@ const Downloader = {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        // Show share floating button
+        this._showShareToast(blob, filename);
+    },
+
+    _showShareToast(blob, filename) {
+        // Remove existing share toast
+        const existing = document.getElementById('shareFileToast');
+        if (existing) existing.remove();
+
+        // Determine MIME type from filename
+        const ext = filename.split('.').pop().toLowerCase();
+        const mimeMap = {
+            pdf: 'application/pdf',
+            zip: 'application/zip',
+            txt: 'text/plain',
+            csv: 'text/csv',
+            docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            png: 'image/png',
+            jpg: 'image/jpeg',
+            jpeg: 'image/jpeg',
+            webp: 'image/webp'
+        };
+        const mimeType = mimeMap[ext] || 'application/octet-stream';
+
+        const toast = document.createElement('div');
+        toast.id = 'shareFileToast';
+        toast.innerHTML = `
+            <div style="
+                position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px);
+                background: linear-gradient(135deg, #10b981, #059669); color: white;
+                padding: 12px 24px; border-radius: 14px; font-weight: 600; font-size: 0.95rem;
+                box-shadow: 0 8px 30px rgba(16,185,129,0.4); z-index: 10001;
+                display: flex; align-items: center; gap: 12px; cursor: pointer;
+                opacity: 0; transition: all 0.4s ease; font-family: 'Inter', sans-serif;
+                max-width: 90vw;
+            " id="shareFileToastInner">
+                <span style="font-size: 1.3rem;">📤</span>
+                <span>Share this file</span>
+                <button style="
+                    background: rgba(255,255,255,0.2); border: none; color: white;
+                    padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+                    margin-left: 8px;
+                " id="shareToastClose">✕</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        const inner = document.getElementById('shareFileToastInner');
+        const closeBtn = document.getElementById('shareToastClose');
+
+        // Animate in
+        requestAnimationFrame(() => {
+            inner.style.opacity = '1';
+            inner.style.transform = 'translateX(-50%) translateY(0)';
+        });
+
+        // Click to share
+        inner.addEventListener('click', (e) => {
+            if (e.target === closeBtn) return;
+            FileSharer.share(blob, filename, mimeType);
+        });
+
+        // Close button
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateX(-50%) translateY(100px)';
+            setTimeout(() => toast.remove(), 400);
+        });
+
+        // Auto-hide after 15 seconds
+        setTimeout(() => {
+            if (document.getElementById('shareFileToast')) {
+                inner.style.opacity = '0';
+                inner.style.transform = 'translateX(-50%) translateY(100px)';
+                setTimeout(() => toast.remove(), 400);
+            }
+        }, 15000);
     },
 
     async saveAsZip(files, zipName = 'doctools-download.zip') {
@@ -1324,6 +1412,61 @@ const Analytics = {
 };
 
 // =========================================
+// File Sharer (Web Share API)
+// =========================================
+
+const FileSharer = {
+    /**
+     * Check if the browser supports sharing files
+     */
+    canShareFiles() {
+        return navigator.share && navigator.canShare;
+    },
+
+    /**
+     * Share a file using the Web Share API
+     * @param {Blob} blob - The file blob to share
+     * @param {string} filename - The filename
+     * @param {string} mimeType - MIME type (default: application/pdf)
+     */
+    async share(blob, filename, mimeType = 'application/pdf') {
+        const file = new File([blob], filename, { type: mimeType });
+
+        // Check if browser supports sharing this file
+        if (this.canShareFiles() && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: filename,
+                    text: `Processed with OnlinePDFPro`
+                });
+                Toast.show('File shared successfully!');
+                return true;
+            } catch (err) {
+                if (err.name === 'AbortError') {
+                    // User cancelled — that's ok
+                    return false;
+                }
+                console.error('Share failed:', err);
+                this._fallbackShare(blob, filename);
+                return false;
+            }
+        } else {
+            this._fallbackShare(blob, filename);
+            return false;
+        }
+    },
+
+    /**
+     * Fallback: download the file + show a message
+     */
+    _fallbackShare(blob, filename) {
+        Toast.show('File sharing is available on mobile. Downloading instead...');
+        Downloader.saveBlob(blob, filename);
+    }
+};
+
+// =========================================
 // Public API
 // =========================================
 
@@ -1343,7 +1486,8 @@ const _exports = {
     SocialShare,
     UserPreferences,
     Analytics,
-    ToolReset
+    ToolReset,
+    FileSharer
 };
 
 window.OnlinePDFPro = _exports;
