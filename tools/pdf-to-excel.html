@@ -448,7 +448,9 @@ function downloadExcel() {
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(extractedData);
   XLSX.utils.book_append_sheet(wb, ws, "PDF Data");
-  XLSX.writeFile(wb, "PDF-to-Excel-OnlinePDFPro.xlsx");
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-Excel-OnlinePDFPro.xlsx');
 }
 
 function downloadCSV() {

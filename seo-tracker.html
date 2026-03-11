@@ -426,10 +426,14 @@
                 csv += `https://${domain}${u.url},${u.type},${d.google},${d.bing},${d.yandex}\\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'seo-tracker-onlinepdfpro.csv';
-            a.click();
+            if (window.OnlinePDFPro && OnlinePDFPro.Downloader) {
+                OnlinePDFPro.Downloader.saveBlob(blob, 'seo-tracker-onlinepdfpro.csv');
+            } else {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'seo-tracker-onlinepdfpro.csv';
+                a.click();
+            }
         }
 
         function resetAll() {

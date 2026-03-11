@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -435,10 +435,9 @@
                             <div style="padding: 8px; font-size: 0.75rem; text-align: center; font-weight: 600; font-family: 'Outfit', sans-serif;">P${i}</div>
                         `;
                         preview.querySelector('img').onclick = () => {
-                            const a = document.createElement('a');
-                            a.href = dataUrl;
-                            a.download = `page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`;
-                            a.click();
+                            fetch(dataUrl).then(r => r.blob()).then(blob => {
+                                OnlinePDFPro.Downloader.saveBlob(blob, `page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`);
+                            });
                         };
                         previewGrid.appendChild(preview);
                     }

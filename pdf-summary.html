@@ -660,7 +660,8 @@
             addText(summaryData.summary.substring(0, 80), 11, font, [0.2, 0.2, 0.2]);
 
             const bytes = await pdfDoc.save();
-            download(bytes, 'Summary-OnlinePDFPro.pdf', 'application/pdf');
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(blob, 'Summary-OnlinePDFPro.pdf');
         }
 
         function downloadSummaryTxt() {

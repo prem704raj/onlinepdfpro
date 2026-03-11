@@ -1089,7 +1089,8 @@
             const pdfBytesOut = await pdfDoc.save();
                 incrementCounter('voiceToPDF');
 incrementTodayCount();
-download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'application/pdf');
+            const pdfBlob = new Blob([pdfBytesOut], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(pdfBlob, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf');
         }
 
         // Download as Word
@@ -1204,11 +1205,7 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
 </body></html>`;
 
             const blob = new Blob([html], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = title.replace(/\s+/g, '-') + '-OnlinePDFPro.doc';
-            a.click();
+            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '-OnlinePDFPro.doc');
         }
 
         // Download as TXT
@@ -1218,11 +1215,7 @@ download(pdfBytesOut, title.replace(/\s+/g, '-') + '-OnlinePDFPro.pdf', 'applica
 
             const title = document.getElementById('docTitle').value || 'My Document';
             const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = title.replace(/\s+/g, '-') + '-OnlinePDFPro.txt';
-            a.click();
+            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '-OnlinePDFPro.txt');
         }
 
         // Copy text
