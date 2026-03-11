@@ -239,17 +239,25 @@ a {
     gap: 10px;
     text-decoration: none;
     color: var(--text-primary);
-    transition: transform 0.2s ease;
-    transform-origin: left center;
-}
-
-.logo:hover {
-    transform: scale(1.08);
 }
 
 .logo img,
-.logo span {
-    pointer-events: none;
+.logo .logo-icon {
+    transition: transform 0.2s ease;
+}
+
+.logo img:hover,
+.logo .logo-icon:hover {
+    transform: scale(1.15);
+}
+
+.logo .logo-text {
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.logo .logo-text:hover {
+    transform: scale(1.08);
 }
 
 .logo-icon {
