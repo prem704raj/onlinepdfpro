@@ -234,16 +234,22 @@ a {
 }
 
 .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
     color: var(--text-primary);
     transition: transform 0.2s ease;
+    transform-origin: left center;
 }
 
 .logo:hover {
     transform: scale(1.08);
+}
+
+.logo img,
+.logo span {
+    pointer-events: none;
 }
 
 .logo-icon {
