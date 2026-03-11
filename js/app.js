@@ -371,6 +371,163 @@ const AutoClear = {
 };
 
 // =========================================
+// History Database (IndexedDB)
+// =========================================
+
+const HistoryDB = {
+    DB_NAME: 'pdfpro-history',
+    DB_VERSION: 1,
+    STORE_NAME: 'files',
+    _db: null,
+
+    async init() {
+        if (this._db) return this._db;
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains(this.STORE_NAME)) {
+                    const store = db.createObjectStore(this.STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                    store.createIndex('date', 'date', { unique: false });
+                    store.createIndex('tool', 'tool', { unique: false });
+                }
+            };
+            request.onsuccess = (e) => {
+                this._db = e.target.result;
+                resolve(this._db);
+            };
+            request.onerror = (e) => {
+                console.warn('[HistoryDB] Failed to open:', e.target.error);
+                reject(e.target.error);
+            };
+        });
+    },
+
+    _getToolName() {
+        const titleEl = document.querySelector('.tool-title');
+        if (titleEl) {
+            return titleEl.textContent.split('\u2014')[0].split('\u2013')[0].trim();
+        }
+        const pageTitle = document.title.split('|')[0].split('\u2014')[0].trim();
+        return pageTitle || 'Unknown Tool';
+    },
+
+    async saveEntry(blob, filename) {
+        try {
+            const db = await this.init();
+            const tool = this._getToolName();
+            const entry = {
+                filename: filename,
+                tool: tool,
+                size: blob.size,
+                type: blob.type || 'application/octet-stream',
+                date: new Date().toISOString(),
+                blob: blob
+            };
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readwrite');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.add(entry);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) {
+            console.warn('[HistoryDB] Save failed:', err);
+        }
+    },
+
+    async getAll() {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readonly');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.getAll();
+                req.onsuccess = () => {
+                    const results = req.result || [];
+                    results.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    resolve(results);
+                };
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) {
+            console.warn('[HistoryDB] GetAll failed:', err);
+            return [];
+        }
+    },
+
+    async getFile(id) {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readonly');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) {
+            console.warn('[HistoryDB] GetFile failed:', err);
+            return null;
+        }
+    },
+
+    async deleteEntry(id) {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readwrite');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) {
+            console.warn('[HistoryDB] Delete failed:', err);
+        }
+    },
+
+    async clearAll() {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readwrite');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.clear();
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) {
+            console.warn('[HistoryDB] Clear failed:', err);
+        }
+    },
+
+    async getStorageUsage() {
+        try {
+            const entries = await this.getAll();
+            let totalBytes = 0;
+            entries.forEach(e => { totalBytes += e.size || 0; });
+            return { count: entries.length, bytes: totalBytes };
+        } catch (err) {
+            return { count: 0, bytes: 0 };
+        }
+    },
+
+    formatSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+};
+
+// Auto-init HistoryDB on page load
+if (typeof indexedDB !== 'undefined') {
+    HistoryDB.init().catch(() => {});
+}
+
+// =========================================
 // Download Helper
 // =========================================
 
@@ -391,6 +548,11 @@ const Downloader = {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        // Save to history (non-blocking)
+        if (typeof indexedDB !== 'undefined') {
+            HistoryDB.saveEntry(blob, filename).catch(() => {});
+        }
 
         // Show share floating button
         this._showShareToast(blob, filename);
@@ -1487,7 +1649,8 @@ const _exports = {
     UserPreferences,
     Analytics,
     ToolReset,
-    FileSharer
+    FileSharer,
+    HistoryDB
 };
 
 window.OnlinePDFPro = _exports;
