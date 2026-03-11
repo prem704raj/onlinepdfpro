@@ -698,27 +698,17 @@
         font-size: 12px !important;
         color: var(--text-secondary) !important;
         padding: 3px 0 !important;
-        display: block !important;
+        display: inline-block !important;
         min-height: 28px !important;
         /* smaller touch target for footer */
         line-height: 28px !important;
-        transform: none !important;
-        transition: color 0.2s !important;
+        transition: transform 0.2s ease, color 0.2s ease !important;
     }
 
     footer a:hover,
-    footer a:active,
-    footer a:focus {
-        transform: none !important;
-    }
-
-    footer li {
-        transform: none !important;
-    }
-
-    footer li:hover,
-    footer li:active {
-        transform: none !important;
+    footer a:active {
+        color: var(--accent) !important;
+        transform: scale(1.08) !important;
     }
 
     footer p {

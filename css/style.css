@@ -573,21 +573,21 @@ footer a {
     text-decoration: none;
     color: var(--text-muted);
     font-size: 0.875rem;
-    transition: color 0.2s ease;
-    transform: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
 }
 
 .footer-links-group a:hover,
 footer a:hover {
     color: var(--accent) !important;
-    text-decoration: underline;
-    transform: none;
+    transform: scale(1.08) !important;
+    text-decoration: none;
 }
 
 .footer-links-group a:active,
 footer a:active {
     color: var(--accent-hover) !important;
-    transform: none;
+    transform: scale(1.05) !important;
 }
 
 /* ---- Mobile-only elements (hidden on desktop) ---- */
