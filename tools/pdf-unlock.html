@@ -303,7 +303,7 @@
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <!-- pdf-lib for saving without encryption -->
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="../js/app.js?v=6"></script>
+    <script src="../js/app.js?v=7"></script>
 
     <script>
         // Set PDF.js worker
@@ -503,12 +503,7 @@
         function downloadUnlocked() {
             if (!unlockedPdfBytes) return;
             const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Unlocked-' + fileName;
-            a.click();
-            URL.revokeObjectURL(url);
+            OnlinePDFPro.Downloader.saveBlob(blob, 'Unlocked-' + fileName);
         }
     </script>
 

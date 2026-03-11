@@ -428,7 +428,7 @@
         </div>
     </footer>
 
-    <script defer src="js/app.js?v=6"></script>
+    <script defer src="js/app.js?v=7"></script>
     <script>
         const ICON_MAP = {
             'pdf': '📄', 'zip': '📦', 'docx': '📝', 'xlsx': '📊',
@@ -598,20 +598,152 @@
             }
         }
 
-        // Wait for app.js to load, then render
-        function initHistory() {
-            if (window.OnlinePDFPro && window.OnlinePDFPro.HistoryDB) {
-                renderHistory();
-            } else {
-                setTimeout(initHistory, 100);
+        // Direct IndexedDB access — no dependency on app.js
+        function openHistoryDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('OnlinePDFProHistory', 1);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('files')) {
+                        const store = db.createObjectStore('files', { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('date', 'date', { unique: false });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Override renderHistory to use direct DB access
+        async function renderHistoryDirect() {
+            const container = document.getElementById('historyContent');
+            try {
+                const db = await openHistoryDB();
+                const tx = db.transaction('files', 'readonly');
+                const store = tx.objectStore('files');
+                const entries = await new Promise((resolve, reject) => {
+                    const req = store.getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => reject(req.error);
+                });
+
+                // Sort newest first
+                entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Calculate storage
+                let totalBytes = 0;
+                entries.forEach(e => { totalBytes += (e.size || 0); });
+
+                if (entries.length === 0) {
+                    container.innerHTML = `
+                        <div class="history-empty">
+                            <div class="history-empty-icon">📂</div>
+                            <h2>No files yet</h2>
+                            <p>When you process and download files using any tool, they'll automatically appear here for re-download.</p>
+                            <a href="tools.html">Browse Tools</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = `
+                    <div class="history-warning">
+                        <span class="history-warning-icon">⚠️</span>
+                        <span>Files are stored locally in your browser. Clearing browser data, using incognito mode, or uninstalling the browser will permanently erase all saved files.</span>
+                    </div>
+
+                    <div class="history-bar">
+                        <div class="history-bar-left">
+                            <span class="history-stat"><strong>${entries.length}</strong> file${entries.length !== 1 ? 's' : ''}</span>
+                            <span class="history-stat"><strong>${formatSize(totalBytes)}</strong> used</span>
+                        </div>
+                        <button class="history-btn history-btn-clear" onclick="clearAllHistory()">🗑️ Clear All</button>
+                    </div>
+
+                    <div class="history-list">
+                `;
+
+                entries.forEach(entry => {
+                    html += `
+                        <div class="history-item" id="history-item-${entry.id}">
+                            <div class="history-item-icon">${getFileIcon(entry.filename)}</div>
+                            <div class="history-item-info">
+                                <div class="history-item-name" title="${entry.filename}">${entry.filename}</div>
+                                <div class="history-item-meta">
+                                    <span>🛠️ ${entry.tool || 'Unknown'}</span>
+                                    <span>📦 ${formatSize(entry.size)}</span>
+                                    <span>🕐 ${formatDate(entry.date)}</span>
+                                </div>
+                            </div>
+                            <div class="history-item-actions">
+                                <button class="history-btn history-btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
+                                <button class="history-btn history-btn-delete" onclick="deleteEntry(${entry.id})">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error('History render error:', err);
+                container.innerHTML = '<div class="history-empty"><div class="history-empty-icon">❌</div><h2>Error loading history</h2><p>' + err.message + '</p></div>';
             }
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => setTimeout(initHistory, 200));
-        } else {
-            setTimeout(initHistory, 200);
+        // Override redownload/delete to use direct DB
+        async function redownload(id) {
+            try {
+                const db = await openHistoryDB();
+                const tx = db.transaction('files', 'readonly');
+                const req = tx.objectStore('files').get(id);
+                const entry = await new Promise((resolve, reject) => {
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+                if (!entry || !entry.blob) { alert('File not found.'); return; }
+                const url = URL.createObjectURL(entry.blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = entry.filename;
+                document.body.appendChild(a); a.click();
+                document.body.removeChild(a); URL.revokeObjectURL(url);
+            } catch (err) { alert('Download failed: ' + err.message); }
         }
+
+        async function deleteEntry(id) {
+            try {
+                const db = await openHistoryDB();
+                const tx = db.transaction('files', 'readwrite');
+                tx.objectStore('files').delete(id);
+                await new Promise((resolve, reject) => {
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+                const el = document.getElementById('history-item-' + id);
+                if (el) {
+                    el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all 0.3s ease';
+                    setTimeout(() => { el.remove(); const list = document.querySelector('.history-list'); if (list && list.children.length === 0) renderHistoryDirect(); }, 300);
+                }
+            } catch (err) { alert('Delete failed: ' + err.message); }
+        }
+
+        async function clearAllHistory() {
+            if (!confirm('Delete all saved files? This cannot be undone.')) return;
+            try {
+                const db = await openHistoryDB();
+                const tx = db.transaction('files', 'readwrite');
+                tx.objectStore('files').clear();
+                await new Promise((resolve, reject) => {
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+                renderHistoryDirect();
+            } catch (err) { alert('Clear failed: ' + err.message); }
+        }
+
+        // Run immediately — no dependency on app.js
+        renderHistoryDirect();
     </script>
 </body>
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -361,7 +361,7 @@
 
     </main>
 
-    <script src="../js/app.js?v=6"></script>
+    <script src="../js/app.js?v=7"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/index.umd.min.js"></script>
@@ -552,11 +552,7 @@
         function downloadTxt() {
             const text = document.getElementById('previewText').value;
             const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'PDF-to-Text-OnlinePDFPro.txt';
-            a.click();
+            OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-Text-OnlinePDFPro.txt');
         }
 
         function copyAll() {

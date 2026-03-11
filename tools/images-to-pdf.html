@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -422,7 +422,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- download.js removed: CDN was broken (404). Using native Blob download instead -->
-    <script src="../js/app.js?v=6"></script>
+    <script src="../js/app.js?v=7"></script>
 
     <script>
         let images = [];
@@ -624,16 +624,9 @@
 
                 const pdfBytes = await pdfDoc.save();
 
-                // Native Blob download (zero external dependencies)
+                // Download via shared Downloader (auto-saves to history)
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'My-Beautiful-PDF-OnlinePDFPro.pdf';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                OnlinePDFPro.Downloader.saveBlob(blob, 'My-Beautiful-PDF-OnlinePDFPro.pdf');
             } catch (err) {
                 console.error("PDF Generation Error (Universal Sanitizer):", err);
                 alert("An unexpected error occurred building the PDF. Please try again.");

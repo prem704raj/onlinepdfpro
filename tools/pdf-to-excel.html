@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -455,11 +455,7 @@ function downloadCSV() {
   if (extractedData.length === 0) return;
   const csv = extractedData.map(row => row.map(cell => `"${cell}"`).join(',')).join('');
   const blob = new Blob([csv], {type: 'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'PDF-to-CSV-OnlinePDFPro.csv';
-  a.click();
+  OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-CSV-OnlinePDFPro.csv');
 }
 </script>
 
@@ -531,7 +527,7 @@ function downloadCSV() {
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-    <script src="../js/app.js?v=6"></script>
+    <script src="../js/app.js?v=7"></script>
 
 <footer
         style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">

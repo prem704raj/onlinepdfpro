@@ -672,8 +672,7 @@
             summaryData.topWords.forEach(([w, c]) => { txt += w + ' (' + c + 'x)\n'; });
             txt += '\nSUMMARY:\n' + summaryData.summary;
             const blob = new Blob([txt], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob); const a = document.createElement('a');
-            a.href = url; a.download = 'Summary.txt'; a.click();
+            OnlinePDFPro.Downloader.saveBlob(blob, 'Summary.txt');
         }
 
         function copySummary() {
@@ -754,7 +753,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-    <script defer src="/js/app.js?v=6"></script>
+    <script defer src="/js/app.js?v=7"></script>
 </body>
 
 </html>
