@@ -239,6 +239,11 @@ a {
     gap: 10px;
     text-decoration: none;
     color: var(--text-primary);
+    transition: transform 0.2s ease;
+}
+
+.logo:hover {
+    transform: scale(1.08);
 }
 
 .logo-icon {
