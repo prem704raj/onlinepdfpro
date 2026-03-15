@@ -492,22 +492,54 @@
         async function downloadPPT() {
             if (slideImages.length === 0) return;
 
-            const pptx = new PptxGenJS();
-
-            for (let i = 0; i < slideImages.length; i++) {
-                const slide = pptx.addSlide();
-                slide.addImage({
-                    data: slideImages[i],
-                    x: 0,
-                    y: 0,
-                    w: '100%',
-                    h: '100%'
-                });
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.innerHTML;
+            
+            if (!document.getElementById('spinner-style')) {
+                const style = document.createElement('style');
+                style.id = 'spinner-style';
+                style.textContent = '@keyframes spin { 100% { transform: rotate(360deg); } }';
+                document.head.appendChild(style);
             }
 
-            pptx.write('blob').then(function(blob) {
-                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
-            });
+            btn.innerHTML = '<svg style="animation: spin 1s linear infinite; width: 20px; height: 20px; margin-right: 8px; vertical-align: middle;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity:0.25"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating PPT...';
+            btn.disabled = true;
+            btn.style.opacity = '0.8';
+            btn.style.cursor = 'wait';
+
+            // Allow the UI to update the button text before intensive generation
+            setTimeout(() => {
+                try {
+                    const pptx = new PptxGenJS();
+
+                    for (let i = 0; i < slideImages.length; i++) {
+                        const slide = pptx.addSlide();
+                        slide.addImage({
+                            data: slideImages[i],
+                            x: 0,
+                            y: 0,
+                            w: '100%',
+                            h: '100%'
+                        });
+                    }
+
+                    pptx.write('blob').then(function(blob) {
+                        OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                    }).finally(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                } catch (error) {
+                    console.error(error);
+                    alert("Error generating PPT: " + error.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            }, 50);
         }
     </script>
 

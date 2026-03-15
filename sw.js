@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v28'; // Force refresh for filename preservation + rename modal
+const CACHE_NAME = 'onlinepdfpro-v29'; // Force refresh for pdf-to-ppt performance fix
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
