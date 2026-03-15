@@ -370,6 +370,7 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let extractedPages = [];
+        let _originalFileName = '';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => processPDF(e.target.files[0]);
@@ -382,6 +383,7 @@
 
         async function processPDF(file) {
             if (!file) return;
+            _originalFileName = file.name.replace(/\.pdf$/i, '');
 
             document.getElementById('fileInfo').style.display = 'block';
             document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
@@ -546,13 +548,13 @@
             });
 
             const blob = await docx.Packer.toBlob(doc);
-            OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-Word-OnlinePDFPro.docx');
+            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.docx');
         }
 
         function downloadTxt() {
             const text = document.getElementById('previewText').value;
             const blob = new Blob([text], { type: 'text/plain' });
-            OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-Text-OnlinePDFPro.txt');
+            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.txt');
         }
 
         function copyAll() {

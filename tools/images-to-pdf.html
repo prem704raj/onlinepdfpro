@@ -626,7 +626,7 @@
 
                 // Download via shared Downloader (auto-saves to history)
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, 'My-Beautiful-PDF-OnlinePDFPro.pdf');
+                OnlinePDFPro.Downloader.saveBlob(blob, 'images.pdf');
             } catch (err) {
                 console.error("PDF Generation Error (Universal Sanitizer):", err);
                 alert("An unexpected error occurred building the PDF. Please try again.");

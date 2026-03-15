@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -293,14 +293,14 @@
         };
 
         let repairedPdf;
-        let originalFileName = "Repaired-by-OnlinePDFPro.pdf";
+        let _originalFileName = 'repaired.pdf';
 
         async function repair(file) {
             document.getElementById('progress').style.display = 'block';
             document.getElementById('result').style.display = 'none';
             document.getElementById('dropArea').style.display = 'none';
 
-            originalFileName = file.name.replace('.pdf', '') + "-repaired.pdf";
+            _originalFileName = file.name;
 
             const arrayBuffer = await file.arrayBuffer();
 
@@ -350,7 +350,8 @@
         document.getElementById('downloadBtn').onclick = () => {
                incrementCounter('repairPDF');
 incrementTodayCount();
- download(repairedPdf, originalFileName, "application/pdf");
+            const blob = new Blob([repairedPdf], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
         };
     </script>
 

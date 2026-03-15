@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -493,6 +493,7 @@
     <script>
         let pdfBytes = null;
         let lockedPdfBytes = null;
+        let _originalFileName = '';
 
         document.getElementById('dropArea').onclick = (e) => {
             if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -509,6 +510,7 @@
 
         async function loadFile(file) {
             if (!file) return;
+            _originalFileName = file.name;
             pdfBytes = await file.arrayBuffer();
             document.getElementById('dropArea').style.display = 'none';
             document.getElementById('fileInfo').style.display = 'block';
@@ -601,7 +603,7 @@
 
         function downloadLocked() {
             if (!lockedPdfBytes) return;
-            OnlinePDFPro.Downloader.saveBlob(new Blob([lockedPdfBytes], { type: 'application/pdf' }), 'Password-Protected-OnlinePDFPro.pdf');
+            OnlinePDFPro.Downloader.saveBlob(new Blob([lockedPdfBytes], { type: 'application/pdf' }), _originalFileName || 'protected.pdf');
         }
     </script>
     

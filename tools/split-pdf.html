@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -700,7 +700,7 @@
             document.getElementById('downloadBtn').addEventListener('click', () => {
                 if (!extractedPdfBytes) return;
                 const blob = new Blob([extractedPdfBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, 'split-document.pdf');
+                OnlinePDFPro.Downloader.saveBlob(blob, (pdfFile ? pdfFile.name : 'split-document.pdf'));
             });
 
             document.getElementById('splitAnother').addEventListener('click', resetTool);

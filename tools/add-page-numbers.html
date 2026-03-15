@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -374,6 +374,7 @@ let pdfBytes = null;
 let resultBytes = null;
 let selectedPosition = 'bottom-left';
 let totalPages = 0;
+let _originalFileName = '';
 
 document.getElementById('dropArea').onclick = (e) => {
     if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -390,6 +391,7 @@ document.getElementById('dropArea').ondrop = e => {
 
 async function loadFile(file) {
   if (!file) return;
+  _originalFileName = file.name;
   pdfBytes = await file.arrayBuffer();
 
   const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
@@ -465,7 +467,7 @@ async function addPageNumbers() {
 
 function downloadResult() {
   if (!resultBytes) return;
-  OnlinePDFPro.Downloader.saveBlob(new Blob([resultBytes], {type: 'application/pdf'}), 'Numbered-PDF-OnlinePDFPro.pdf');
+  OnlinePDFPro.Downloader.saveBlob(new Blob([resultBytes], {type: 'application/pdf'}), _originalFileName || 'numbered.pdf');
 }
 </script>
 

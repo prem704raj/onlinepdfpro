@@ -503,7 +503,7 @@
         function downloadUnlocked() {
             if (!unlockedPdfBytes) return;
             const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
-            OnlinePDFPro.Downloader.saveBlob(blob, 'Unlocked-' + fileName);
+            OnlinePDFPro.Downloader.saveBlob(blob, fileName || 'unlocked.pdf');
         }
     </script>
 

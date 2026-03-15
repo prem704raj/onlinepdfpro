@@ -349,6 +349,7 @@
             let outputFormat = 'jpeg';
             let outputScale = 2;
             let generatedImages = [];
+            let _originalFileName = '';
 
             const uploadZone = document.getElementById('uploadZone');
             const optionsSection = document.getElementById('optionsSection');
@@ -364,6 +365,7 @@
 
             async function handleFileSelected(files) {
                 const file = files[0];
+                _originalFileName = file.name.replace(/\.pdf$/i, '');
                 try {
                     const arrayBuffer = await readFile(file);
                     const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
@@ -423,8 +425,9 @@
                         const qualityVal = outputFormat === 'png' ? undefined : 0.92;
                         const dataUrl = canvas.toDataURL(mimeType, qualityVal);
 
+                        const baseName = _originalFileName || 'page';
                         generatedImages.push({
-                            name: `page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`,
+                            name: `${baseName}-page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`,
                             dataUrl: dataUrl
                         });
 
@@ -436,7 +439,7 @@
                         `;
                         preview.querySelector('img').onclick = () => {
                             fetch(dataUrl).then(r => r.blob()).then(blob => {
-                                OnlinePDFPro.Downloader.saveBlob(blob, `page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`);
+                                OnlinePDFPro.Downloader.saveBlob(blob, `${_originalFileName || 'page'}-page-${i}.${outputFormat === 'png' ? 'png' : 'jpg'}`);
                             });
                         };
                         previewGrid.appendChild(preview);
@@ -466,7 +469,7 @@ resultsSection.style.display = 'block';
                     zip.file(img.name, base64, { base64: true });
                 }
                 const content = await zip.generateAsync({ type: 'blob' });
-                OnlinePDFPro.Downloader.saveBlob(content, 'pdf-images.zip');
+                OnlinePDFPro.Downloader.saveBlob(content, (_originalFileName || 'pdf-images') + '.zip');
             });
 
             document.getElementById('convertAnother').addEventListener('click', resetTool);

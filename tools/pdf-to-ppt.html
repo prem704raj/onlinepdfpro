@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -426,6 +426,7 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let slideImages = [];
+        let _originalFileName = 'presentation.pptx';
 
         document.getElementById('dropArea').onclick = (e) => {
             if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -442,6 +443,7 @@
 
         async function processPDF(file) {
             if (!file) return;
+            _originalFileName = file.name.replace(/\.pdf$/i, '.pptx');
 
             document.getElementById('dropArea').style.display = 'none';
             document.getElementById('progress').style.display = 'block';
@@ -503,7 +505,9 @@
                 });
             }
 
-            pptx.writeFile({ fileName: 'PDF-to-PPT-OnlinePDFPro.pptx' });
+            pptx.write('blob').then(function(blob) {
+                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+            });
         }
     </script>
 

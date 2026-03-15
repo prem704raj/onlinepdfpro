@@ -599,7 +599,8 @@ Example:
                     }
                 }
 
-                pdf.save('HTML-to-PDF-OnlinePDFPro.pdf');
+                const pdfBlob = pdf.output('blob');
+                OnlinePDFPro.Downloader.saveBlob(pdfBlob, 'document.pdf');
 
             } catch (err) {
                 console.error('PDF generation error:', err);

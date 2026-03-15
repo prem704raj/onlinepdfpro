@@ -528,18 +528,154 @@ if (typeof indexedDB !== 'undefined') {
 }
 
 // =========================================
-// Download Helper
+// Download Helper (with Rename Modal)
 // =========================================
 
 const Downloader = {
     _lastBlob: null,
     _lastName: null,
+    _cssInjected: false,
+
+    _injectCSS() {
+        if (this._cssInjected) return;
+        this._cssInjected = true;
+        const style = document.createElement('style');
+        style.textContent = `
+            .rename-overlay {
+                position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+                z-index: 10100; display: flex; align-items: flex-end; justify-content: center;
+                opacity: 0; transition: opacity 0.3s ease;
+                font-family: 'Inter', sans-serif;
+            }
+            .rename-overlay.active { opacity: 1; }
+            .rename-sheet {
+                background: var(--surface-1, #fff); width: 100%; max-width: 480px;
+                border-radius: 20px 20px 0 0; padding: 28px 24px 32px;
+                transform: translateY(100%); transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+            }
+            .rename-overlay.active .rename-sheet { transform: translateY(0); }
+            .rename-sheet-title {
+                display: flex; align-items: center; gap: 10px;
+                font-size: 1.1rem; font-weight: 700; color: var(--text-primary, #1a1a2e);
+                margin-bottom: 20px;
+            }
+            .rename-sheet-title span { font-size: 1.4rem; }
+            .rename-input-wrap {
+                display: flex; align-items: center; gap: 0;
+                border: 2px solid var(--border, #e2e8f0); border-radius: 12px;
+                overflow: hidden; transition: border-color 0.2s;
+                background: var(--surface-2, #f8fafc);
+            }
+            .rename-input-wrap:focus-within { border-color: var(--accent, #2563eb); }
+            .rename-input-name {
+                flex: 1; border: none; outline: none; padding: 14px 16px;
+                font-size: 1rem; font-weight: 500; background: transparent;
+                color: var(--text-primary, #1a1a2e); min-width: 0;
+            }
+            .rename-input-ext {
+                padding: 14px 16px 14px 0; font-size: 1rem; font-weight: 600;
+                color: var(--text-secondary, #64748b); white-space: nowrap;
+                user-select: none; background: transparent;
+            }
+            .rename-actions {
+                display: flex; gap: 10px; margin-top: 18px;
+            }
+            .rename-dl-btn {
+                flex: 1; padding: 14px; border: none; border-radius: 12px;
+                font-size: 1rem; font-weight: 700; cursor: pointer;
+                background: linear-gradient(135deg, #2563eb, #7c3aed);
+                color: white; transition: all 0.2s;
+                box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+            }
+            .rename-dl-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,235,0.4); }
+            .rename-cancel-btn {
+                padding: 14px 20px; border: 2px solid var(--border, #e2e8f0);
+                border-radius: 12px; font-size: 1rem; font-weight: 600;
+                cursor: pointer; background: transparent;
+                color: var(--text-primary, #1a1a2e); transition: all 0.2s;
+            }
+            .rename-cancel-btn:hover { background: var(--surface-2, #f1f5f9); }
+            @media (min-width: 600px) {
+                .rename-sheet { border-radius: 20px; margin-bottom: 40px; }
+                .rename-overlay { align-items: center; }
+            }
+        `;
+        document.head.appendChild(style);
+    },
 
     saveBlob(blob, filename) {
+        this._injectCSS();
+
         // Store for share functionality
         this._lastBlob = blob;
         this._lastName = filename;
 
+        // Split filename into name and extension
+        const dotIdx = filename.lastIndexOf('.');
+        const baseName = dotIdx > 0 ? filename.substring(0, dotIdx) : filename;
+        const ext = dotIdx > 0 ? filename.substring(dotIdx) : '';
+
+        // Build overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'rename-overlay';
+        overlay.innerHTML = `
+            <div class="rename-sheet">
+                <div class="rename-sheet-title">
+                    <span>📄</span> Save File
+                </div>
+                <div class="rename-input-wrap">
+                    <input type="text" class="rename-input-name" id="renameInputName" value="${baseName.replace(/"/g, '&quot;')}" spellcheck="false" autocomplete="off">
+                    <span class="rename-input-ext">${ext}</span>
+                </div>
+                <div class="rename-actions">
+                    <button class="rename-cancel-btn" id="renameCancelBtn">Cancel</button>
+                    <button class="rename-dl-btn" id="renameDlBtn">⬇ Download</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const nameInput = overlay.querySelector('#renameInputName');
+        const dlBtn = overlay.querySelector('#renameDlBtn');
+        const cancelBtn = overlay.querySelector('#renameCancelBtn');
+
+        // Animate in
+        requestAnimationFrame(() => overlay.classList.add('active'));
+
+        // Focus & select input
+        setTimeout(() => { nameInput.focus(); nameInput.select(); }, 350);
+
+        const doDownload = () => {
+            const finalName = (nameInput.value.trim() || baseName) + ext;
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.remove();
+                this._directSave(blob, finalName);
+            }, 300);
+        };
+
+        const doCancel = () => {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 300);
+        };
+
+        dlBtn.addEventListener('click', doDownload);
+        cancelBtn.addEventListener('click', doCancel);
+
+        // Enter to download
+        nameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); doDownload(); }
+            if (e.key === 'Escape') { e.preventDefault(); doCancel(); }
+        });
+
+        // Click overlay backdrop to cancel
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) doCancel();
+        });
+    },
+
+    _directSave(blob, filename) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

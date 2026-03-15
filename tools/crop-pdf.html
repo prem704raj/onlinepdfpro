@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -608,6 +608,7 @@
         let pdfJsDoc = null;
         let currentPage = 1;
         let totalPages = 0;
+        let _originalFileName = '';
 
         // Store ratios instead of absolute pixels so it works flawlessly across different page sizes
         // ratio format: { rLeft, rTop, rWidth, rHeight }
@@ -631,7 +632,7 @@
 
         async function loadPDF(file) {
             if (!file) return;
-
+            _originalFileName = file.name;
             pdfBytes = await file.arrayBuffer();
             pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
             totalPages = pdfJsDoc.numPages;
@@ -862,7 +863,8 @@
             const croppedBytes = await pdfDoc.save();
             incrementCounter('cropPDF');
             incrementTodayCount();
-            download(croppedBytes, 'Cropped-PDF-OnlinePDFPro.pdf', 'application/pdf');
+            const blob = new Blob([croppedBytes], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'cropped.pdf');
         }
     </script>
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -499,6 +499,7 @@
 
     <script>
         let pdfDoc = null;
+        let _originalFileName = '';
 
         // Worker setup for PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
@@ -524,7 +525,7 @@
 
         async function loadPDF(file) {
             if (!file || file.type !== 'application/pdf') return alert('Please upload a valid PDF.');
-
+            _originalFileName = file.name;
             const arrayBuffer = await file.arrayBuffer();
             pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
 
@@ -891,16 +892,7 @@
                 const finalBytes = await pdfDoc.save();
 
                 const blob = new Blob([finalBytes], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = "Signed-by-OnlinePDFPro.pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                if (window.OnlinePDFPro && window.OnlinePDFPro.RecentlyUsed) {
-                    window.OnlinePDFPro.RecentlyUsed.add('sign-pdf', 'Sign PDF');
-                }
+                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'signed.pdf');
             } catch (err) {
                 alert('Error generating PDF: ' + err.message);
                 console.error(err);

@@ -287,6 +287,7 @@
     <script src="../js/app.js?v=7"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+        let _originalFileName = '';
 
         // OCR logic matching user request utilizing OCR.Space API
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -319,6 +320,7 @@
         });
 
         async function processFile(file) {
+            _originalFileName = file.name.replace(/\.[^.]+$/, '');
             document.getElementById('progress').style.display = 'block';
             document.getElementById('result').style.display = 'none';
             document.getElementById('dropArea').style.display = 'none';
@@ -424,7 +426,7 @@
 
         function downloadText() {
             const blob = new Blob([document.getElementById('textOutput').value], { type: 'text/plain;charset=utf-8' });
-            OnlinePDFPro.Downloader.saveBlob(blob, 'extracted-text.txt');
+            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'extracted-text') + '.txt');
         }
     </script>
 

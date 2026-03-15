@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -492,8 +492,7 @@
 
             document.getElementById('downloadBtn').onclick = () => {
                 if (!croppedBlob) return;
-                const ext = imageFile.type === 'image/png' ? 'png' : 'jpg';
-                OnlinePDFPro.Downloader.saveBlob(croppedBlob, `cropped.${ext}`);
+                OnlinePDFPro.Downloader.saveBlob(croppedBlob, imageFile.name || 'cropped.jpg');
             };
 
             document.getElementById('cropAnother').onclick = resetTool;

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -372,6 +372,7 @@
             let pdfBytes = null;
             let watermarkedPdfBytes = null;
             let position = 'center';
+            let _originalFileName = '';
 
             const uploadZone = document.getElementById('uploadZone');
             const optionsSection = document.getElementById('optionsSection');
@@ -402,6 +403,7 @@
 
             async function handleFileSelected(files) {
                 const file = files[0];
+                _originalFileName = file.name;
                 try {
                     pdfBytes = await readFile(file);
                     document.getElementById('fileName').textContent = file.name;
@@ -482,7 +484,7 @@
             document.getElementById('downloadBtn').onclick = () => {
                 if (!watermarkedPdfBytes) return;
                 const blob = new Blob([watermarkedPdfBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, 'watermarked.pdf');
+                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'watermarked.pdf');
             };
 
             document.getElementById('watermarkAnother').onclick = resetTool;

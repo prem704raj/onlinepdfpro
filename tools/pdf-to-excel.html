@@ -335,6 +335,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/
 
 let extractedData = [];
 let allText = [];
+let _originalFileName = '';
 
 document.getElementById('dropArea').onclick = (e) => {
     if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -351,6 +352,7 @@ document.getElementById('dropArea').ondrop = e => {
 
 async function processPDF(file) {
   if (!file) return;
+  _originalFileName = file.name.replace(/\.pdf$/i, '');
 
   document.getElementById('dropArea').style.display = 'none';
   document.getElementById('progress').style.display = 'block';
@@ -450,14 +452,14 @@ function downloadExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "PDF Data");
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
   const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-Excel-OnlinePDFPro.xlsx');
+  OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.xlsx');
 }
 
 function downloadCSV() {
   if (extractedData.length === 0) return;
   const csv = extractedData.map(row => row.map(cell => `"${cell}"`).join(',')).join('');
   const blob = new Blob([csv], {type: 'text/csv'});
-  OnlinePDFPro.Downloader.saveBlob(blob, 'PDF-to-CSV-OnlinePDFPro.csv');
+  OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.csv');
 }
 </script>
 

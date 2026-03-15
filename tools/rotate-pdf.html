@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -466,6 +466,7 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
             let originalPdfBytes = null;
+            let _originalFileName = '';
             let pages = []; // [{index, originalIndex, rotation, imageData}]
             let dragIndex = null;
 
@@ -483,6 +484,7 @@
 
             async function handleFileSelected(files) {
                 const file = files[0];
+                _originalFileName = file.name;
                 try {
                     const arrayBuffer = await readFile(file);
                     originalPdfBytes = arrayBuffer;
@@ -662,7 +664,7 @@
 
             document.getElementById('downloadBtn').onclick = () => {
                 if (!window.rotatedPdfBytes) return;
-                OnlinePDFPro.Downloader.saveBlob(new Blob([window.rotatedPdfBytes]), 'Rotated-Reordered.pdf');
+                OnlinePDFPro.Downloader.saveBlob(new Blob([window.rotatedPdfBytes]), _originalFileName || 'rotated.pdf');
             };
 
             document.getElementById('rotateAnother').onclick = resetTool;

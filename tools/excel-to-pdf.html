@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -304,6 +304,7 @@
 <script>
         let workbook = null;
         let currentSheet = '';
+        let _originalFileName = 'spreadsheet.pdf';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => processExcel(e.target.files[0]);
@@ -316,6 +317,7 @@
 
         async function processExcel(file) {
             if (!file) return;
+            _originalFileName = file.name.replace(/\.(xlsx?|xls|csv)$/i, '.pdf');
 
             document.getElementById('fileInfo').style.display = 'block';
             document.getElementById('fileInfo').textContent = '📊 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
@@ -411,13 +413,15 @@ document.getElementById('resultBox').style.display = 'block';
 
             const options = {
                 margin: [10, 10, 10, 10],
-                filename: 'Excel-to-PDF-OnlinePDFPro.pdf',
+                filename: _originalFileName,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
 
-            html2pdf().set(options).from(container).save();
+            html2pdf().set(options).from(container).outputPdf('blob').then(function(blob) {
+                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+            });
         }
     </script>
 
