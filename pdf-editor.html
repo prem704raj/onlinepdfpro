@@ -1081,8 +1081,10 @@
                 loadPDF(e.dataTransfer.files[0]);
             };
 
+            let _originalFileName = 'edited.pdf';
             async function loadPDF(file) {
                 if (!file) return;
+                _originalFileName = file.name;
                 pdfBytes = await file.arrayBuffer();
                 // Pass a copy to pdfjsLib — it detaches the ArrayBuffer
                 pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
@@ -2198,7 +2200,8 @@
                 const savedBytes = await pdfLibDoc.save();
                 incrementCounter('pdfEditor');
                 incrementTodayCount();
-                download(savedBytes, 'Edited-PDF-OnlinePDFPro.pdf', 'application/pdf');
+                const blob = new Blob([savedBytes], { type: 'application/pdf' });
+                OnlinePDFPro.Downloader.saveBlob(blob, (typeof _originalFileName !== 'undefined' && _originalFileName) || 'edited.pdf');
             }
 
             function hexToRgb(hex) {

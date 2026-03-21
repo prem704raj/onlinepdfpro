@@ -471,6 +471,7 @@
         let resultBytes = null;
         let selectedPos = 'bottom-right';
         let totalPages = 0;
+        let _originalFileName = 'qr-pdf.pdf';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
@@ -483,6 +484,7 @@
 
         async function loadFile(file) {
             if (!file) return;
+            _originalFileName = file.name;
             pdfBytes = await file.arrayBuffer();
 
             const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
@@ -583,7 +585,8 @@
             if (!resultBytes) return;
                incrementCounter('qrPDF');
 incrementTodayCount();
- download(resultBytes, 'QR-PDF-OnlinePDFPro.pdf', 'application/pdf');
+            const blob = new Blob([resultBytes], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
         }
     </script>
 

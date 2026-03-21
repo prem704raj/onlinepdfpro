@@ -502,13 +502,13 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-        let pdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 0, bookmarks = [], bookmarkCounter = 0;
+        let pdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 0, bookmarks = [], bookmarkCounter = 0, _originalFileName = 'bookmarked.pdf';
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
         document.getElementById('dropArea').ondragover = e => e.preventDefault();
         document.getElementById('dropArea').ondrop = e => { e.preventDefault(); loadPDF(e.dataTransfer.files[0]); };
         async function loadPDF(file) {
-            if (!file) return; pdfBytes = await file.arrayBuffer();
+            if (!file) return; _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
             pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
             document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
             document.getElementById('bookmarkEditor').style.display = 'block'; document.getElementById('dropArea').style.display = 'none'; await renderPage(currentPage);
@@ -549,7 +549,7 @@
             if (!pdfBytes || bookmarks.length === 0) return alert('Add at least one bookmark!');
             const doc = await PDFLib.PDFDocument.load(pdfBytes); doc.setTitle('PDF with Bookmarks - OnlinePDFPro');
             doc.setSubject('Bookmarks: ' + bookmarks.map(b => b.title + ' (Page ' + b.page + ')').join(', '));
-            const bytes = await doc.save(); download(bytes, 'Bookmarked-PDF-OnlinePDFPro.pdf', 'application/pdf');
+            const bytes = await doc.save(); const blob = new Blob([bytes], { type: 'application/pdf' }); OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
             if (typeof incrementCounter === 'function') { incrementCounter('pdfBookmark'); incrementTodayCount(); }
             let msg = 'PDF saved!\\n\\nYour bookmarks:\\n'; bookmarks.forEach((b, i) => { msg += (i + 1) + '. ' + b.title + ' → Page ' + b.page + '\\n'; });
             msg += '\\nBookmarks are saved in PDF metadata.'; alert(msg);

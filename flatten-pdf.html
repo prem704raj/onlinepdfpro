@@ -650,6 +650,7 @@
         let originalBytes = null;
         let flattenedBytes = null;
         let originalSize = 0;
+        let _originalFileName = 'flattened.pdf';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => loadFile(e.target.files[0]);
@@ -662,7 +663,7 @@
 
         async function loadFile(file) {
             if (!file) return;
-
+            _originalFileName = file.name;
             originalBytes = await file.arrayBuffer();
             originalSize = file.size;
 
@@ -782,7 +783,8 @@ document.getElementById('resultBox').style.display = 'block';
 
         function downloadFlattened() {
             if (!flattenedBytes) return;
-            download(flattenedBytes, 'Flattened-PDF-OnlinePDFPro.pdf', 'application/pdf');
+            const blob = new Blob([flattenedBytes], { type: 'application/pdf' });
+            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
         }
 
         function formatSize(bytes) {
