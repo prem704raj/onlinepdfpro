@@ -618,6 +618,11 @@
         /* Fix #4,5: Orphaned cards — align left instead of stretch */
         .hp-tools-grid {
             justify-items: start;
+            grid-auto-rows: 1fr;
+        }
+        .hp-tool-card {
+            height: 100%;
+            box-sizing: border-box;
         }
 
         /* Fix #7: Hero-to-body smooth transition */
@@ -697,9 +702,7 @@
         <!-- HERO -->
         <section class="hp-hero">
             <div class="container">
-                <h1>Free Online PDF Tools — <br><span>No Upload Required.</span></h1>
-                <p style="font-size:clamp(1rem, 2.5vw, 1.15rem); opacity:0.92; max-width:600px; margin:0 auto 32px; line-height:1.6;">Privacy-first PDF tools that run 100% in your browser. Merge, compress, sign, convert — your files never leave your device.</p>
-
+                <h1>Privacy-First PDF Tools That Run in <br><span>Your Browser.</span></h1>
 
                 <div class="hp-hero-actions">
                     <a href="#tools-section" class="hp-btn-primary" id="heroCTA"
