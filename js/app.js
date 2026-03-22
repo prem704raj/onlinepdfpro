@@ -1308,8 +1308,8 @@ const FeedbackHandler = {
 
     createModal() {
         // Build email target dynamically to avoid scraping
-        const u = 'prem0734raj';
-        const d = 'gmail.com';
+        const u = 'support';
+        const d = 'onlinepdfpro.com';
         const target = `${u}@${d}`;
 
         const overlay = document.createElement('div');
