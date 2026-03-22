@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /test-pdf.html
 
 Sitemap: https://onlinepdfpro.com/sitemap.xml
