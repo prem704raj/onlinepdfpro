@@ -50,7 +50,6 @@
     <style>
         body {
             color: var(--text-primary) !important;
-            background: var(--surface-2)
         }
 
         header {
@@ -395,16 +394,19 @@
 <div class="container">
         
     
-    <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Enhancement</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF Bookmark Editor</h1>
-        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Add, edit, or remove bookmarks in your PDF documents. Fast, free, and private.</p>
+    <div class="tool-header">
+        <span class="section-tag fade-in">PDF Enhancement</span>
+        <h1 class="tool-title fade-in">PDF Bookmark Editor</h1>
+        <p class="tool-description fade-in" style="animation-delay: 0.1s;">Add, edit, or remove bookmarks in your PDF documents. Fast, free, and private.</p>
     </div>
-<div class="upload-area" id="dropArea" style="margin-top:50px">
-            <p style="font-size:20px">Drop your PDF here or Click to Upload<br><small>Add bookmarks, table of contents
-                    &amp; navigation to your PDF</small></p>
-            <input type="file" id="fileInput" accept=".pdf" hidden>
-        </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
+                <span class="upload-icon">📑</span>
+                <p class="upload-text">Drop your PDF here or Click to Upload</p>
+                <p class="upload-hint">Add bookmarks, table of contents &amp; navigation to your PDF</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <button class="btn btn-primary upload-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+            </div>
         <div class="file-info" id="fileInfo"></div>
         <div class="bookmark-editor" id="bookmarkEditor">
             <h2 style="text-align:center;color:var(--text-primary);margin:0 0 5px">📑 PDF Bookmark Editor</h2>
