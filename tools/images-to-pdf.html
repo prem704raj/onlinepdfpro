@@ -323,19 +323,20 @@
 
         
 
-    <main class="container" style="padding: 40px 20px; text-align: center; max-width: 1200px; margin: 0 auto;">
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width: 1200px; text-align: center;">
     
-    <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">File Conversion</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Images to PDF Free — Convert JPG/PNG to PDF Online</h1>
-        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">
+    <div class="tool-header">
+        <span class="section-tag fade-in">File Conversion</span>
+        <h1 class="tool-title fade-in">Images to PDF Free — Convert JPG/PNG to PDF Online</h1>
+        <p class="tool-description fade-in" style="animation-delay: 0.1s;">
                     Combine multiple images (JPG, PNG, WEBP) into a single PDF document. Drag to reorder, adjust page size and orientation. No server upload — processed locally.
                 </p>
     </div>
 <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
             <span class="upload-icon">🖼️</span>
-            <p class="upload-text" style="font-size:20px; color:var(--accent);">Drop Images Here or Click to Upload<br><span
-                    style="font-size: 0.8em; color: var(--text-muted);">JPG, PNG, WebP — Multiple images allowed</span>
+            <p class="upload-text">Drop Images Here or Click to Upload</p>
+            <p class="upload-hint">JPG, PNG, WebP — Multiple images allowed
             </p>
             <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
         </div>
@@ -418,6 +419,7 @@
         </div>
     </section>
 
+        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
