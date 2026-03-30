@@ -48,21 +48,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <style>
-        .upload-area {
-            border: 3px dashed var(--border);
-            border-radius: 24px;
-            padding: 60px 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--surface-1);
-            color: var(--text-primary);
-        }
-
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: var(--surface-2);
-        }
 
         .container {
             max-width: 1120px;
@@ -128,7 +113,7 @@
         }
 
         .s2 {
-            background: #f0fdf4;
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .s2 .num {
@@ -136,7 +121,7 @@
         }
 
         .s3 {
-            background: #fef3c7;
+            background: rgba(217, 119, 6, 0.1);
         }
 
         .s3 .num {
@@ -144,7 +129,7 @@
         }
 
         .s4 {
-            background: #fce7f3;
+            background: rgba(236, 72, 153, 0.1);
         }
 
         .s4 .num {
@@ -152,7 +137,7 @@
         }
 
         .s5 {
-            background: #ede9fe;
+            background: rgba(124, 58, 237, 0.1);
         }
 
         .s5 .num {
@@ -160,7 +145,7 @@
         }
 
         .s6 {
-            background: #fee2e2;
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .s6 .num {
@@ -268,7 +253,7 @@
     </script>
 </head>
 
-<body style="background:var(--surface-2);">
+<body>
     <a href="#main" class="skip-link">Skip to main content</a>
 
     <header class="header">
@@ -332,9 +317,11 @@
         <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">AI PDF Summarizer</h1>
         <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Get instant summary, key points, statistics and word analysis from any PDF. 100% free.</p>
     </div>
-<div class="upload-area" id="dropArea" style="margin-top:50px;">
-            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Get instant summary, key points,
-                    statistics & word analysis</small></p>
+<div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
+            <span class="upload-icon">📊</span>
+            <p class="upload-text">Drop your PDF here or Click to Upload</p>
+            <p class="upload-hint">Get instant summary, key points, statistics & word analysis</p>
+            <button class="btn btn-primary upload-btn">Choose PDF File</button>
             <input type="file" id="fileInput" accept=".pdf" hidden />
         </div>
 

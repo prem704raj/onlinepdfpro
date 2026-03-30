@@ -90,7 +90,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 30px;
-            background: #f1f5f9;
+            background: var(--surface-2);
             padding: 8px;
             border-radius: 16px
         }
@@ -129,7 +129,7 @@
             width: 100%;
             min-height: 250px;
             padding: 20px;
-            border: 3px solid #e2e8f0;
+            border: 3px solid var(--border);
             border-radius: 16px;
             font-size: 16px;
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -137,7 +137,9 @@
             resize: vertical;
             outline: none;
             box-sizing: border-box;
-            transition: .3s
+            transition: .3s;
+            background: var(--surface-2);
+            color: var(--text-primary)
         }
 
         .text-input-area:focus {
@@ -162,7 +164,7 @@
         .upload-box.loaded {
             border-color: #10b981;
             border-style: solid;
-            background: #f0fdf4
+            background: rgba(16, 185, 129, 0.1)
         }
 
         .stats-row {
@@ -412,7 +414,9 @@
             border-radius: 12px;
             font-size: 14px;
             outline: none;
-            box-sizing: border-box
+            box-sizing: border-box;
+            background: var(--surface-2);
+            color: var(--text-primary)
         }
 
         .setting-group select:focus,
