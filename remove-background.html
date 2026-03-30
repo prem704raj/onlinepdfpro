@@ -1268,59 +1268,150 @@ se<!DOCTYPE html>
 
     <!-- ========== JAVASCRIPT ========== -->
     <script type="module">
-        // ===== Import AI Background Removal Library =====
+
+        // ============================
+        // FIXED: Proper AI Model Loading
+        // ============================
+
         let removeBackgroundFn = null;
-        let libraryLoaded = false;
+        let libraryReady = false;
+        let libraryLoading = false;
 
         async function loadLibrary() {
-            if (libraryLoaded) return;
+            if (libraryReady) return true;
+            if (libraryLoading) {
+                // Wait for existing load
+                while (libraryLoading && !libraryReady) {
+                    await new Promise(r => setTimeout(r, 200));
+                }
+                return libraryReady;
+            }
+
+            libraryLoading = true;
+
             try {
-                const module = await import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm");
-                removeBackgroundFn = module.default || module.removeBackground;
-                libraryLoaded = true;
-                console.log("✅ Background removal library loaded");
+                console.log("⏳ Loading @imgly/background-removal...");
+
+                const module = await import(
+                    "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.1/dist/index.js"
+                );
+
+                removeBackgroundFn = module.removeBackground || module.default;
+
+                if (!removeBackgroundFn) {
+                    // Try alternate access
+                    for (const key of Object.keys(module)) {
+                        if (typeof module[key] === "function") {
+                            removeBackgroundFn = module[key];
+                            break;
+                        }
+                    }
+                }
+
+                if (removeBackgroundFn) {
+                    libraryReady = true;
+                    console.log("✅ Library loaded successfully!");
+                    return true;
+                } else {
+                    throw new Error("Could not find removeBackground function in module");
+                }
             } catch (err) {
-                console.error("❌ Failed to load library:", err);
-                showToast("Failed to load AI model. Please refresh and try again.", "error");
+                console.error("❌ Primary load failed:", err);
+
+                // ====== FALLBACK: Try alternate CDN ======
+                try {
+                    console.log("⏳ Trying alternate CDN...");
+                    const module2 = await import(
+                        "https://unpkg.com/@imgly/background-removal@1.5.1/dist/index.js"
+                    );
+
+                    removeBackgroundFn = module2.removeBackground || module2.default;
+
+                    if (!removeBackgroundFn) {
+                        for (const key of Object.keys(module2)) {
+                            if (typeof module2[key] === "function") {
+                                removeBackgroundFn = module2[key];
+                                break;
+                            }
+                        }
+                    }
+
+                    if (removeBackgroundFn) {
+                        libraryReady = true;
+                        console.log("✅ Library loaded from alternate CDN!");
+                        return true;
+                    }
+                } catch (err2) {
+                    console.error("❌ Alternate CDN also failed:", err2);
+                }
+
+                // ====== FALLBACK 2: Try ESM version ======
+                try {
+                    console.log("⏳ Trying ESM import...");
+                    const module3 = await import(
+                        "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm"
+                    );
+
+                    removeBackgroundFn = module3.removeBackground || module3.default;
+
+                    if (removeBackgroundFn) {
+                        libraryReady = true;
+                        console.log("✅ Library loaded via ESM!");
+                        return true;
+                    }
+                } catch (err3) {
+                    console.error("❌ ESM import also failed:", err3);
+                }
+
+                libraryLoading = false;
+                return false;
             }
         }
 
-        // Preload library
+        // Start preloading immediately
         loadLibrary();
 
-        // ===== DOM Elements =====
-        const uploadSection = document.getElementById("uploadSection");
-        const processingSection = document.getElementById("processingSection");
-        const editorSection = document.getElementById("editorSection");
-        const batchSection = document.getElementById("batchSection");
-        const uploadZone = document.getElementById("uploadZone");
-        const fileInput = document.getElementById("fileInput");
-        const batchToggle = document.getElementById("batchToggle");
-        const progressBar = document.getElementById("progressBar");
-        const progressText = document.getElementById("progressText");
-        const processingTitle = document.getElementById("processingTitle");
-        const modelNotice = document.getElementById("modelNotice");
-        const resultImage = document.getElementById("resultImage");
-        const originalImage = document.getElementById("originalImage");
-        const resultView = document.getElementById("resultView");
-        const originalView = document.getElementById("originalView");
-        const compareView = document.getElementById("compareView");
-        const compareAfter = document.getElementById("compareAfter");
-        const compareBefore = document.getElementById("compareBefore");
-        const comparisonBefore = document.getElementById("comparisonBefore");
-        const comparisonSlider = document.getElementById("comparisonSlider");
-        const comparisonWrapper = document.getElementById("comparisonWrapper");
-        const colorPicker = document.getElementById("colorPicker");
-        const hexInput = document.getElementById("hexInput");
-        const customColorBtn = document.getElementById("customColorBtn");
-        const bgImageInput = document.getElementById("bgImageInput");
-        const batchGrid = document.getElementById("batchGrid");
-        const batchCount = document.getElementById("batchCount");
-        const batchProcessBtn = document.getElementById("batchProcessBtn");
-        const batchDownloadBtn = document.getElementById("batchDownloadBtn");
-        const toast = document.getElementById("toast");
+        // ============================
+        // DOM Elements
+        // ============================
+        const $ = id => document.getElementById(id);
 
-        // ===== State =====
+        const uploadSection = $("uploadSection");
+        const processingSection = $("processingSection");
+        const editorSection = $("editorSection");
+        const batchSection = $("batchSection");
+        const errorSection = $("errorSection");
+        const uploadZone = $("uploadZone");
+        const fileInput = $("fileInput");
+        const batchToggle = $("batchToggle");
+        const progressBar = $("progressBar");
+        const progressText = $("progressText");
+        const processingTitle = $("processingTitle");
+        const modelNotice = $("modelNotice");
+        const resultImage = $("resultImage");
+        const originalImage = $("originalImage");
+        const resultView = $("resultView");
+        const originalView = $("originalView");
+        const compareView = $("compareView");
+        const compareAfter = $("compareAfter");
+        const compareBefore = $("compareBefore");
+        const comparisonBefore = $("comparisonBefore");
+        const comparisonSlider = $("comparisonSlider");
+        const comparisonWrapper = $("comparisonWrapper");
+        const colorPicker = $("colorPicker");
+        const hexInput = $("hexInput");
+        const customColorBtn = $("customColorBtn");
+        const bgImageInput = $("bgImageInput");
+        const batchGrid = $("batchGrid");
+        const batchCount = $("batchCount");
+        const batchProcessBtn = $("batchProcessBtn");
+        const batchDownloadBtn = $("batchDownloadBtn");
+        const toast = $("toast");
+        const errorMessage = $("errorMessage");
+
+        // ============================
+        // State
+        // ============================
         let currentOriginalFile = null;
         let currentResultBlob = null;
         let currentBackground = "transparent";
@@ -1328,33 +1419,45 @@ se<!DOCTYPE html>
         let batchResults = [];
         let isBatchMode = false;
 
-        // ===== Toast =====
+        // ============================
+        // Toast
+        // ============================
         function showToast(msg, type = "info") {
             toast.textContent = msg;
             toast.className = `toast ${type} show`;
-            setTimeout(() => toast.classList.remove("show"), 3500);
+            setTimeout(() => toast.classList.remove("show"), 4000);
         }
 
-        // ===== Theme Toggle =====
-        const themeToggle = document.getElementById("themeToggle");
-        const savedTheme = localStorage.getItem("theme") || "light";
-        document.documentElement.setAttribute("data-theme", savedTheme);
+        // ============================
+        // Theme Toggle
+        // ============================
+        const themeToggle = $("themeToggle");
+        document.documentElement.setAttribute(
+            "data-theme",
+            localStorage.getItem("theme") || "light"
+        );
         updateThemeIcon();
 
         themeToggle.addEventListener("click", () => {
-            const current = document.documentElement.getAttribute("data-theme");
-            const next = current === "light" ? "dark" : "light";
+            const next =
+                document.documentElement.getAttribute("data-theme") === "light"
+                    ? "dark"
+                    : "light";
             document.documentElement.setAttribute("data-theme", next);
             localStorage.setItem("theme", next);
             updateThemeIcon();
         });
 
         function updateThemeIcon() {
-            const theme = document.documentElement.getAttribute("data-theme");
-            themeToggle.innerHTML = theme === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            const dark = document.documentElement.getAttribute("data-theme") === "dark";
+            themeToggle.innerHTML = dark
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
         }
 
-        // ===== FAQ Accordion =====
+        // ============================
+        // FAQ Accordion
+        // ============================
         document.querySelectorAll(".faq-question").forEach(btn => {
             btn.addEventListener("click", () => {
                 const item = btn.parentElement;
@@ -1365,58 +1468,52 @@ se<!DOCTYPE html>
             });
         });
 
-        // ===== Upload Handlers =====
-        // Click to upload
-        document.getElementById("uploadBtn").addEventListener("click", (e) => {
+        // ============================
+        // Upload Handlers
+        // ============================
+        $("uploadBtn").addEventListener("click", e => {
             e.stopPropagation();
             fileInput.click();
         });
 
         uploadZone.addEventListener("click", () => fileInput.click());
 
-        // File input change
-        fileInput.addEventListener("change", (e) => {
-            handleFiles(e.target.files);
-        });
+        fileInput.addEventListener("change", e => handleFiles(e.target.files));
 
         // Drag & Drop
-        uploadZone.addEventListener("dragover", (e) => {
+        uploadZone.addEventListener("dragover", e => {
             e.preventDefault();
             uploadZone.classList.add("dragover");
         });
-
-        uploadZone.addEventListener("dragleave", () => {
-            uploadZone.classList.remove("dragover");
-        });
-
-        uploadZone.addEventListener("drop", (e) => {
+        uploadZone.addEventListener("dragleave", () =>
+            uploadZone.classList.remove("dragover")
+        );
+        uploadZone.addEventListener("drop", e => {
             e.preventDefault();
             uploadZone.classList.remove("dragover");
             handleFiles(e.dataTransfer.files);
         });
 
-        // Paste from clipboard
-        document.getElementById("pasteBtn").addEventListener("click", async () => {
+        // Paste
+        $("pasteBtn").addEventListener("click", async () => {
             try {
-                const clipboardItems = await navigator.clipboard.read();
-                for (const item of clipboardItems) {
+                const items = await navigator.clipboard.read();
+                for (const item of items) {
                     for (const type of item.types) {
                         if (type.startsWith("image/")) {
                             const blob = await item.getType(type);
-                            const file = new File([blob], "pasted-image.png", { type });
-                            handleFiles([file]);
+                            handleFiles([new File([blob], "pasted.png", { type })]);
                             return;
                         }
                     }
                 }
-                showToast("No image found in clipboard", "error");
-            } catch (err) {
-                showToast("Paste not supported or permission denied. Try Ctrl+V", "error");
+                showToast("No image in clipboard", "error");
+            } catch {
+                showToast("Paste failed. Try Ctrl+V instead.", "error");
             }
         });
 
-        // Ctrl+V paste
-        document.addEventListener("paste", (e) => {
+        document.addEventListener("paste", e => {
             const items = e.clipboardData?.items;
             if (!items) return;
             for (const item of items) {
@@ -1427,156 +1524,160 @@ se<!DOCTYPE html>
             }
         });
 
+        // ============================
         // Sample Image
-        document.getElementById("sampleBtn").addEventListener("click", async () => {
+        // ============================
+        $("sampleBtn").addEventListener("click", async () => {
             showToast("Loading sample image...", "info");
             try {
-                // Use a free sample image
-                const canvas = document.createElement("canvas");
-                canvas.width = 400;
-                canvas.height = 500;
-                const ctx = canvas.getContext("2d");
-                
-                // Create a simple sample: gradient background with a circle "subject"
-                // Draw gradient background
-                const grad = ctx.createLinearGradient(0, 0, 400, 500);
-                grad.addColorStop(0, "#FF6B6B");
-                grad.addColorStop(1, "#4ECDC4");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, 400, 500);
-                
-                // Draw a "person-like" shape
+                const res = await fetch("https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=600&q=80");
+                const blob = await res.blob();
+                handleFiles([new File([blob], "sample.jpg", { type: "image/jpeg" })]);
+            } catch {
+                // Fallback: create canvas sample
+                const c = document.createElement("canvas");
+                c.width = 500; c.height = 600;
+                const ctx = c.getContext("2d");
+                const g = ctx.createLinearGradient(0, 0, 500, 600);
+                g.addColorStop(0, "#667eea"); g.addColorStop(1, "#764ba2");
+                ctx.fillStyle = g; ctx.fillRect(0, 0, 500, 600);
                 ctx.fillStyle = "#FFE0BD";
-                ctx.beginPath();
-                ctx.arc(200, 180, 70, 0, Math.PI * 2); // head
-                ctx.fill();
-                
+                ctx.beginPath(); ctx.arc(250, 200, 80, 0, Math.PI * 2); ctx.fill();
                 ctx.fillStyle = "#3498DB";
-                ctx.beginPath();
-                ctx.moveTo(120, 260);
-                ctx.lineTo(280, 260);
-                ctx.lineTo(300, 480);
-                ctx.lineTo(100, 480);
-                ctx.closePath();
-                ctx.fill(); // body
-
-                ctx.fillStyle = "#2C3E50";
-                // eyes
-                ctx.beginPath();
-                ctx.arc(178, 170, 6, 0, Math.PI * 2);
-                ctx.arc(222, 170, 6, 0, Math.PI * 2);
-                ctx.fill();
-                // mouth
-                ctx.beginPath();
-                ctx.arc(200, 200, 20, 0, Math.PI);
-                ctx.stroke();
-                
-                canvas.toBlob((blob) => {
-                    const file = new File([blob], "sample-image.png", { type: "image/png" });
-                    handleFiles([file]);
-                });
-            } catch (err) {
-                showToast("Failed to load sample image", "error");
+                ctx.beginPath(); ctx.moveTo(140, 300); ctx.lineTo(360, 300);
+                ctx.lineTo(380, 580); ctx.lineTo(120, 580); ctx.closePath(); ctx.fill();
+                c.toBlob(b => handleFiles([new File([b], "sample.png", { type: "image/png" })]));
             }
         });
 
+        // ============================
         // Batch toggle
+        // ============================
         batchToggle.addEventListener("change", () => {
             isBatchMode = batchToggle.checked;
             fileInput.multiple = isBatchMode;
         });
 
-        // ===== Handle Files =====
+        // ============================
+        // Handle Files
+        // ============================
         function handleFiles(files) {
             if (!files || files.length === 0) return;
-
-            const validFiles = [];
-            for (const file of files) {
-                if (!file.type.startsWith("image/")) {
-                    showToast(`${file.name} is not an image file`, "error");
+            const valid = [];
+            for (const f of files) {
+                if (!f.type.startsWith("image/")) {
+                    showToast(`${f.name} is not an image`, "error");
                     continue;
                 }
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast(`${file.name} is too large (max 10MB)`, "error");
+                if (f.size > 10 * 1024 * 1024) {
+                    showToast(`${f.name} exceeds 10MB limit`, "error");
                     continue;
                 }
-                validFiles.push(file);
+                valid.push(f);
             }
+            if (!valid.length) return;
 
-            if (validFiles.length === 0) return;
-
-            if (isBatchMode || validFiles.length > 1) {
-                if (validFiles.length > 10) {
-                    showToast("Maximum 10 images allowed in batch mode", "error");
-                    validFiles.length = 10;
+            if (isBatchMode || valid.length > 1) {
+                if (valid.length > 10) {
+                    showToast("Max 10 images in batch mode", "error");
+                    valid.length = 10;
                 }
-                startBatchMode(validFiles);
+                startBatchMode(valid);
             } else {
-                startSingleMode(validFiles[0]);
+                startSingleMode(valid[0]);
             }
         }
 
-        // ===== Single Mode =====
+        // ============================
+        // MAIN: Process Single Image
+        // ============================
         async function startSingleMode(file) {
             currentOriginalFile = file;
             showSection("processing");
 
-            try {
-                await loadLibrary();
+            progressBar.style.width = "5%";
+            progressText.textContent = "Loading AI library...";
+            processingTitle.textContent = "Loading AI Model...";
+            modelNotice.style.display = "block";
 
-                if (!removeBackgroundFn) {
-                    throw new Error("AI model not available");
+            try {
+                // Step 1: Load library
+                const loaded = await loadLibrary();
+
+                if (!loaded || !removeBackgroundFn) {
+                    throw new Error(
+                        "Could not load AI model. Check your internet connection and try again."
+                    );
                 }
 
-                let progressPhase = "";
-                const config = {
-                    progress: (key, current, total) => {
-                        if (key !== progressPhase) {
-                            progressPhase = key;
-                        }
-                        const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+                progressBar.style.width = "15%";
+                progressText.textContent = "AI model ready. Processing image...";
+                processingTitle.textContent = "Removing Background...";
 
-                        if (key.includes("fetch") || key.includes("download") || key.includes("load")) {
-                            progressBar.style.width = (pct * 0.5) + "%";
+                // Step 2: Process image
+                const config = {
+                    publicPath:
+                        "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.1/dist/",
+                    progress: (key, current, total) => {
+                        const pct =
+                            total > 0 ? Math.round((current / total) * 100) : 0;
+
+                        if (
+                            key.includes("fetch") ||
+                            key.includes("download") ||
+                            key.includes("load")
+                        ) {
+                            progressBar.style.width = 15 + pct * 0.4 + "%";
                             progressText.textContent = `Downloading AI model... ${pct}%`;
-                            processingTitle.textContent = "Loading AI Model...";
+                            processingTitle.textContent = "Downloading AI Model...";
                         } else {
-                            progressBar.style.width = (50 + pct * 0.5) + "%";
+                            modelNotice.style.display = "none";
+                            progressBar.style.width = 55 + pct * 0.45 + "%";
                             progressText.textContent = `Removing background... ${pct}%`;
                             processingTitle.textContent = "Removing Background...";
-                            modelNotice.style.display = "none";
                         }
                     }
                 };
 
+                console.log("🚀 Starting background removal...");
                 const blob = await removeBackgroundFn(file, config);
-                currentResultBlob = blob;
+                console.log("✅ Background removed! Blob size:", blob.size);
 
+                currentResultBlob = blob;
                 progressBar.style.width = "100%";
                 progressText.textContent = "Done! 🎉";
 
+                // Set images
                 const origURL = URL.createObjectURL(file);
-                const resultURL = URL.createObjectURL(blob);
+                const resURL = URL.createObjectURL(blob);
 
                 originalImage.src = origURL;
-                resultImage.src = resultURL;
-                compareAfter.src = resultURL;
+                resultImage.src = resURL;
+                compareAfter.src = resURL;
                 compareBefore.src = origURL;
 
                 currentBackground = "transparent";
                 resetBgButtons();
+                document
+                    .querySelector('.bg-opt-btn[data-bg="transparent"]')
+                    ?.classList.add("active");
+                resultView.classList.add("checkerboard");
 
-                setTimeout(() => showSection("editor"), 500);
-                showToast("Background removed successfully!", "success");
-
+                setTimeout(() => {
+                    showSection("editor");
+                    showToast("Background removed successfully!", "success");
+                }, 600);
             } catch (err) {
-                console.error("Processing error:", err);
-                showToast("Error: " + err.message, "error");
-                showSection("upload");
+                console.error("❌ Processing error:", err);
+                errorMessage.textContent = err.message || "Failed to process image.";
+                showSection("error");
+                showToast("Error: " + (err.message || "Processing failed"), "error");
             }
         }
 
-        // ===== Batch Mode =====
+        // ============================
+        // Batch Mode
+        // ============================
         async function startBatchMode(files) {
             batchFiles = Array.from(files);
             batchResults = new Array(files.length).fill(null);
@@ -1585,6 +1686,9 @@ se<!DOCTYPE html>
             batchCount.textContent = `${batchFiles.length} images loaded`;
             batchGrid.innerHTML = "";
             batchDownloadBtn.style.display = "none";
+            batchProcessBtn.disabled = false;
+            batchProcessBtn.innerHTML =
+                '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds';
 
             batchFiles.forEach((file, i) => {
                 const url = URL.createObjectURL(file);
@@ -1604,47 +1708,51 @@ se<!DOCTYPE html>
             });
         }
 
-        // Batch Process Button
         batchProcessBtn.addEventListener("click", async () => {
-            await loadLibrary();
-            if (!removeBackgroundFn) {
-                showToast("AI model not loaded. Please refresh.", "error");
+            const loaded = await loadLibrary();
+            if (!loaded || !removeBackgroundFn) {
+                showToast("AI model failed to load. Refresh and retry.", "error");
                 return;
             }
 
             batchProcessBtn.disabled = true;
-            batchProcessBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            batchProcessBtn.innerHTML =
+                '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            const config = {
+                publicPath:
+                    "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.1/dist/"
+            };
 
             for (let i = 0; i < batchFiles.length; i++) {
-                const statusEl = document.getElementById(`batch-status-${i}`);
-                const progressEl = document.getElementById(`batch-progress-${i}`);
+                const statusEl = $(`batch-status-${i}`);
+                const progressEl = $(`batch-progress-${i}`);
 
                 statusEl.className = "batch-item-status processing";
-                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                statusEl.innerHTML =
+                    '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
                 try {
-                    const config = {
+                    const itemConfig = {
+                        ...config,
                         progress: (key, current, total) => {
+                            if (key.includes("fetch") || key.includes("download") || key.includes("load")) return;
                             const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-                            if (!key.includes("fetch") && !key.includes("download") && !key.includes("load")) {
-                                progressEl.style.width = pct + "%";
-                            }
+                            progressEl.style.width = pct + "%";
                         }
                     };
 
-                    const blob = await removeBackgroundFn(batchFiles[i], config);
+                    const blob = await removeBackgroundFn(batchFiles[i], itemConfig);
                     batchResults[i] = blob;
 
-                    // Replace image with result
-                    const img = document.querySelector(`#batch-item-${i} .batch-item-img`);
-                    img.src = URL.createObjectURL(blob);
+                    document.querySelector(`#batch-item-${i} .batch-item-img`).src =
+                        URL.createObjectURL(blob);
 
                     progressEl.style.width = "100%";
                     statusEl.className = "batch-item-status done";
                     statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Done!';
-
                 } catch (err) {
-                    console.error(`Error processing image ${i}:`, err);
+                    console.error(`Error on image ${i}:`, err);
                     statusEl.className = "batch-item-status error";
                     statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Error';
                 }
@@ -1655,16 +1763,17 @@ se<!DOCTYPE html>
             showToast("Batch processing complete!", "success");
         });
 
-        // Batch Download ZIP
         batchDownloadBtn.addEventListener("click", async () => {
-            batchDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
+            batchDownloadBtn.innerHTML =
+                '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
 
             const zip = new JSZip();
             const folder = zip.folder("removed-backgrounds");
 
             for (let i = 0; i < batchResults.length; i++) {
                 if (batchResults[i]) {
-                    const name = batchFiles[i].name.replace(/\.[^.]+$/, "") + "_no_bg.png";
+                    const name =
+                        batchFiles[i].name.replace(/\.[^.]+$/, "") + "_no_bg.png";
                     folder.file(name, batchResults[i]);
                 }
             }
@@ -1672,19 +1781,21 @@ se<!DOCTYPE html>
             const content = await zip.generateAsync({ type: "blob" });
             saveAs(content, "background-removed-images.zip");
 
-            batchDownloadBtn.innerHTML = '<i class="fas fa-file-zipper"></i> Download All as ZIP';
-            showToast("ZIP downloaded successfully!", "success");
+            batchDownloadBtn.innerHTML =
+                '<i class="fas fa-file-zipper"></i> Download All as ZIP';
+            showToast("ZIP downloaded!", "success");
         });
 
-        // Batch New
-        document.getElementById("batchNewBtn").addEventListener("click", () => {
-            resetAll();
-        });
+        $("batchNewBtn").addEventListener("click", resetAll);
 
-        // ===== View Tabs =====
+        // ============================
+        // View Tabs
+        // ============================
         document.querySelectorAll(".view-tab").forEach(tab => {
             tab.addEventListener("click", () => {
-                document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+                document
+                    .querySelectorAll(".view-tab")
+                    .forEach(t => t.classList.remove("active"));
                 tab.classList.add("active");
 
                 const view = tab.dataset.view;
@@ -1692,116 +1803,98 @@ se<!DOCTYPE html>
                 originalView.classList.add("hidden");
                 compareView.classList.remove("active");
 
-                if (view === "result") {
-                    resultView.classList.remove("hidden");
-                } else if (view === "original") {
-                    originalView.classList.remove("hidden");
-                } else if (view === "compare") {
-                    compareView.classList.add("active");
-                }
+                if (view === "result") resultView.classList.remove("hidden");
+                else if (view === "original") originalView.classList.remove("hidden");
+                else if (view === "compare") compareView.classList.add("active");
             });
         });
 
-        // ===== Comparison Slider =====
+        // ============================
+        // Comparison Slider
+        // ============================
         let isDragging = false;
+        comparisonSlider.addEventListener("mousedown", () => (isDragging = true));
+        comparisonSlider.addEventListener("touchstart", () => (isDragging = true));
+        document.addEventListener("mouseup", () => (isDragging = false));
+        document.addEventListener("touchend", () => (isDragging = false));
+        document.addEventListener("mousemove", handleSlider);
+        document.addEventListener("touchmove", handleSlider);
 
-        comparisonSlider.addEventListener("mousedown", () => isDragging = true);
-        comparisonSlider.addEventListener("touchstart", () => isDragging = true);
-        document.addEventListener("mouseup", () => isDragging = false);
-        document.addEventListener("touchend", () => isDragging = false);
-
-        document.addEventListener("mousemove", handleSliderMove);
-        document.addEventListener("touchmove", handleSliderMove);
-
-        function handleSliderMove(e) {
+        function handleSlider(e) {
             if (!isDragging) return;
             e.preventDefault();
-
             const rect = comparisonWrapper.getBoundingClientRect();
-            let x = (e.clientX || e.touches[0].clientX) - rect.left;
+            let x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
             x = Math.max(0, Math.min(x, rect.width));
             const pct = (x / rect.width) * 100;
-
             comparisonBefore.style.width = pct + "%";
             comparisonSlider.style.left = pct + "%";
         }
 
-        // ===== Background Options =====
+        // ============================
+        // Background Options
+        // ============================
         document.querySelectorAll(".bg-opt-btn[data-bg]").forEach(btn => {
             if (btn.id === "customColorBtn") return;
             btn.addEventListener("click", () => {
                 const bg = btn.dataset.bg;
-                if (bg === "transparent") {
-                    applyBackground("transparent");
-                } else {
-                    applyBackground(bg);
-                }
+                applyBackground(bg === "transparent" ? "transparent" : bg);
                 resetBgButtons();
                 btn.classList.add("active");
             });
         });
 
-        // Custom color button
         customColorBtn.addEventListener("click", () => {
             applyBackground(colorPicker.value);
             resetBgButtons();
             customColorBtn.classList.add("active");
         });
 
-        // Color picker change
-        colorPicker.addEventListener("input", (e) => {
+        colorPicker.addEventListener("input", e => {
             hexInput.value = e.target.value;
             customColorBtn.style.background = e.target.value;
         });
 
-        // Hex input change
-        hexInput.addEventListener("input", (e) => {
-            let val = e.target.value;
-            if (!val.startsWith("#")) val = "#" + val;
-            if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-                colorPicker.value = val;
-                customColorBtn.style.background = val;
+        hexInput.addEventListener("input", e => {
+            let v = e.target.value;
+            if (!v.startsWith("#")) v = "#" + v;
+            if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+                colorPicker.value = v;
+                customColorBtn.style.background = v;
             }
         });
 
-        // Upload background image
-        document.getElementById("uploadBgBtn").addEventListener("click", () => {
-            bgImageInput.click();
-        });
+        $("uploadBgBtn").addEventListener("click", () => bgImageInput.click());
 
-        bgImageInput.addEventListener("change", (e) => {
+        bgImageInput.addEventListener("change", e => {
             const file = e.target.files[0];
             if (!file) return;
-            const url = URL.createObjectURL(file);
-            applyBackground(url, true);
+            applyBackground(URL.createObjectURL(file), true);
             resetBgButtons();
             showToast("Custom background applied!", "success");
         });
 
         function resetBgButtons() {
-            document.querySelectorAll(".bg-opt-btn").forEach(b => b.classList.remove("active"));
+            document
+                .querySelectorAll(".bg-opt-btn")
+                .forEach(b => b.classList.remove("active"));
         }
 
         async function applyBackground(bg, isImage = false) {
             currentBackground = bg;
-
             if (!currentResultBlob) return;
 
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
+            const img = new Image();
+            img.src = URL.createObjectURL(currentResultBlob);
+            await new Promise(r => (img.onload = r));
 
-            const resultImg = new Image();
-            resultImg.src = URL.createObjectURL(currentResultBlob);
-
-            await new Promise(resolve => resultImg.onload = resolve);
-
-            canvas.width = resultImg.naturalWidth;
-            canvas.height = resultImg.naturalHeight;
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
 
             if (bg === "transparent") {
                 resultView.classList.add("checkerboard");
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(resultImg, 0, 0);
                 resultImage.src = URL.createObjectURL(currentResultBlob);
                 compareAfter.src = resultImage.src;
                 return;
@@ -1811,90 +1904,103 @@ se<!DOCTYPE html>
 
             if (isImage) {
                 const bgImg = new Image();
+                bgImg.crossOrigin = "anonymous";
                 bgImg.src = bg;
-                await new Promise(resolve => bgImg.onload = resolve);
+                await new Promise(r => (bgImg.onload = r));
                 ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
             } else {
                 ctx.fillStyle = bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            ctx.drawImage(resultImg, 0, 0);
-
-            canvas.toBlob((blob) => {
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(blob => {
                 const url = URL.createObjectURL(blob);
                 resultImage.src = url;
                 compareAfter.src = url;
             });
         }
 
-        // ===== Download =====
-        document.getElementById("downloadPng").addEventListener("click", () => {
-            downloadResult("png");
-        });
-
-        document.getElementById("downloadJpg").addEventListener("click", () => {
-            downloadResult("jpg");
-        });
+        // ============================
+        // Download
+        // ============================
+        $("downloadPng").addEventListener("click", () => downloadResult("png"));
+        $("downloadJpg").addEventListener("click", () => downloadResult("jpg"));
 
         async function downloadResult(format) {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
-
             const img = new Image();
             img.src = resultImage.src;
-            await new Promise(resolve => img.onload = resolve);
+            await new Promise(r => (img.onload = r));
 
             canvas.width = img.naturalWidth;
             canvas.height = img.naturalHeight;
 
             if (format === "jpg") {
-                ctx.fillStyle = currentBackground === "transparent" ? "#FFFFFF" : currentBackground;
+                ctx.fillStyle =
+                    currentBackground === "transparent"
+                        ? "#FFFFFF"
+                        : currentBackground;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
             ctx.drawImage(img, 0, 0);
 
-            const mimeType = format === "png" ? "image/png" : "image/jpeg";
-            const quality = format === "jpg" ? 0.92 : undefined;
-
-            canvas.toBlob((blob) => {
-                const fileName = currentOriginalFile
-                    ? currentOriginalFile.name.replace(/\.[^.]+$/, "") + `_no_bg.${format}`
-                    : `removed_background.${format}`;
-                saveAs(blob, fileName);
-                showToast(`Downloaded as ${format.toUpperCase()}!`, "success");
-            }, mimeType, quality);
+            const mime = format === "png" ? "image/png" : "image/jpeg";
+            canvas.toBlob(
+                blob => {
+                    const name = currentOriginalFile
+                        ? currentOriginalFile.name.replace(/\.[^.]+$/, "") +
+                          `_no_bg.${format}`
+                        : `removed_bg.${format}`;
+                    saveAs(blob, name);
+                    showToast(`Downloaded as ${format.toUpperCase()}!`, "success");
+                },
+                mime,
+                format === "jpg" ? 0.92 : undefined
+            );
         }
 
-        // ===== New Image =====
-        document.getElementById("newImageBtn").addEventListener("click", () => {
-            resetAll();
+        // ============================
+        // New Image / Retry / Reset
+        // ============================
+        $("newImageBtn").addEventListener("click", resetAll);
+
+        $("retryBtn").addEventListener("click", () => {
+            if (currentOriginalFile) {
+                startSingleMode(currentOriginalFile);
+            } else {
+                resetAll();
+            }
         });
 
-        // ===== Section Management =====
-        function showSection(section) {
+        // ============================
+        // Section Management
+        // ============================
+        function showSection(name) {
             uploadSection.style.display = "none";
             processingSection.classList.remove("active");
             editorSection.classList.remove("active");
             batchSection.classList.remove("active");
+            errorSection.classList.remove("active");
 
-            switch (section) {
+            switch (name) {
                 case "upload":
                     uploadSection.style.display = "block";
                     break;
                 case "processing":
                     processingSection.classList.add("active");
                     progressBar.style.width = "0%";
-                    progressText.textContent = "Initializing AI model...";
-                    processingTitle.textContent = "Removing Background...";
-                    modelNotice.style.display = "block";
                     break;
                 case "editor":
                     editorSection.classList.add("active");
                     break;
                 case "batch":
                     batchSection.classList.add("active");
+                    break;
+                case "error":
+                    errorSection.classList.add("active");
                     break;
             }
 
@@ -1909,11 +2015,10 @@ se<!DOCTYPE html>
             batchResults = [];
             fileInput.value = "";
             bgImageInput.value = "";
-            batchProcessBtn.disabled = false;
-            batchProcessBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds';
-            batchDownloadBtn.style.display = "none";
             resetBgButtons();
-            document.querySelector('.bg-opt-btn[data-bg="transparent"]')?.classList.add("active");
+            document
+                .querySelector('.bg-opt-btn[data-bg="transparent"]')
+                ?.classList.add("active");
             showSection("upload");
         }
 
