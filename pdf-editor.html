@@ -66,7 +66,24 @@
             document.documentElement.setAttribute('data-theme', 'dark');
         }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Poppins&family=Raleway&family=Nunito&family=Inter&family=Playfair+Display&family=Merriweather&family=Source+Sans+3&family=PT+Sans&family=Noto+Sans&family=Ubuntu&family=Rubik&family=Work+Sans&family=Quicksand&family=Mulish&family=Barlow&family=Josefin+Sans&family=Dancing+Script&family=Pacifico&family=Caveat&family=Satisfy&family=Great+Vibes&family=Libre+Baskerville&family=Crimson+Text&family=EB+Garamond&family=Bitter&family=Tinos&family=Noto+Serif&display=swap" rel="stylesheet">
     <style>
+        #fontSelect option {
+            padding: 8px;
+            font-size: 16px;
+        }
+        
+        /* Show font preview in dropdown */
+        #fontSelect optgroup {
+            font-weight: 700;
+            font-size: 12px;
+            color: #64748b;
+            font-style: normal;
+            padding: 8px 0 4px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -914,6 +931,15 @@
                 <button class="tool-btn" onclick="setTool('underline', event)" title="Underline">
                     📘<span>Under</span>
                 </button>
+                <button class="tool-btn" onclick="openSignatureModal()" title="E-Signature">
+                    ✍️<span>Sign</span>
+                </button>
+                <button class="tool-btn" onclick="activateWhiteout()" title="Whiteout">
+                    ⬜<span>Whiteout</span>
+                </button>
+                <button class="tool-btn" onclick="openStampMenu()" title="Stamps">
+                    📌<span>Stamp</span>
+                </button>
                 <button class="tool-btn" onclick="undoAction()" title="Undo">
                     ↩️<span>Undo</span>
                 </button>
@@ -923,33 +949,358 @@
             </div>
 
             <!-- TOP OPTIONS BAR -->
-            <div class="top-options" id="topOptions">
+            <div class="top-options" id="topOptions" style="flex-wrap: wrap; gap: 8px;">
                 <label>Font:</label>
-                <select id="fontFamily" onchange="updateTextStyle()">
-                    <option value="Arial">Arial</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Courier New">Courier New</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="cursive">Cursive</option>
-                    <option value="Comic Sans MS">Comic Sans</option>
-                    <option value="Impact">Impact</option>
+                <select id="fontSelect" onchange="changeFont(this.value)" 
+                    style="padding:6px 10px;border:1px solid var(--border);
+                    border-radius:8px;font-size:13px;min-width:140px;
+                    cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                    
+                    <optgroup label="━━ Sans Serif (Modern) ━━">
+                        <option value="Inter" style="font-family:Inter">Inter</option>
+                        <option value="Roboto" style="font-family:Roboto">Roboto</option>
+                        <option value="Open Sans" style="font-family:'Open Sans'">Open Sans</option>
+                        <option value="Lato" style="font-family:Lato">Lato</option>
+                        <option value="Montserrat" style="font-family:Montserrat">Montserrat</option>
+                        <option value="Poppins" style="font-family:Poppins">Poppins</option>
+                        <option value="Raleway" style="font-family:Raleway">Raleway</option>
+                        <option value="Nunito" style="font-family:Nunito">Nunito</option>
+                        <option value="Source Sans 3" style="font-family:'Source Sans 3'">Source Sans</option>
+                        <option value="PT Sans" style="font-family:'PT Sans'">PT Sans</option>
+                        <option value="Noto Sans" style="font-family:'Noto Sans'">Noto Sans</option>
+                        <option value="Ubuntu" style="font-family:Ubuntu">Ubuntu</option>
+                        <option value="Rubik" style="font-family:Rubik">Rubik</option>
+                        <option value="Work Sans" style="font-family:'Work Sans'">Work Sans</option>
+                        <option value="Quicksand" style="font-family:Quicksand">Quicksand</option>
+                        <option value="Mulish" style="font-family:Mulish">Mulish</option>
+                        <option value="Barlow" style="font-family:Barlow">Barlow</option>
+                        <option value="Josefin Sans" style="font-family:'Josefin Sans'">Josefin Sans</option>
+                    </optgroup>
+
+                    <optgroup label="━━ Serif (Classic) ━━">
+                        <option value="Playfair Display" style="font-family:'Playfair Display'">Playfair Display</option>
+                        <option value="Merriweather" style="font-family:Merriweather">Merriweather</option>
+                        <option value="Libre Baskerville" style="font-family:'Libre Baskerville'">Libre Baskerville</option>
+                        <option value="Crimson Text" style="font-family:'Crimson Text'">Crimson Text</option>
+                        <option value="EB Garamond" style="font-family:'EB Garamond'">EB Garamond</option>
+                        <option value="Bitter" style="font-family:Bitter">Bitter</option>
+                        <option value="Tinos" style="font-family:Tinos">Tinos</option>
+                        <option value="Noto Serif" style="font-family:'Noto Serif'">Noto Serif</option>
+                    </optgroup>
+
+                    <optgroup label="━━ Handwriting / Script ━━">
+                        <option value="Dancing Script" style="font-family:'Dancing Script'">Dancing Script</option>
+                        <option value="Pacifico" style="font-family:Pacifico">Pacifico</option>
+                        <option value="Caveat" style="font-family:Caveat">Caveat</option>
+                        <option value="Satisfy" style="font-family:Satisfy">Satisfy</option>
+                        <option value="Great Vibes" style="font-family:'Great Vibes'">Great Vibes</option>
+                    </optgroup>
+
+                    <optgroup label="━━ System Fonts ━━">
+                        <option value="Arial" selected>Arial</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Tahoma">Tahoma</option>
+                    </optgroup>
                 </select>
+
                 <label>Size:</label>
-                <input type="number" id="fontSize" value="18" min="8" max="120" style="width:70px;"
-                    onchange="updateTextStyle()">
+                <select id="fontSizeSelect" onchange="changeFontSize(this.value)"
+                    style="padding:6px 8px;border:1px solid var(--border);
+                    border-radius:8px;font-size:13px;width:60px;
+                    cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18" selected>18</option>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
+                    <option value="28">28</option>
+                    <option value="32">32</option>
+                    <option value="36">36</option>
+                    <option value="40">40</option>
+                    <option value="48">48</option>
+                    <option value="56">56</option>
+                    <option value="64">64</option>
+                    <option value="72">72</option>
+                    <option value="96">96</option>
+                </select>
+
+                <!-- Alignment Controls -->
+                <div class="alignment-controls" 
+                    style="display:inline-flex;gap:2px;
+                    background:var(--surface-2);border-radius:8px;padding:2px;border:1px solid var(--border)">
+                    
+                    <button onclick="setTextAlign('left')" id="btnAlignLeft" title="Align Left"
+                        style="padding:6px 8px;background:var(--accent);color:#fff;
+                        border:none;border-radius:6px;cursor:pointer;
+                        transition:0.2s;display:flex;align-items:center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                    <button onclick="setTextAlign('center')" id="btnAlignCenter" title="Align Center"
+                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                        border:none;border-radius:6px;cursor:pointer;
+                        transition:0.2s;display:flex;align-items:center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+                        </svg>
+                    </button>
+                    <button onclick="setTextAlign('right')" id="btnAlignRight" title="Align Right"
+                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                        border:none;border-radius:6px;cursor:pointer;
+                        transition:0.2s;display:flex;align-items:center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <button onclick="setTextAlign('justify')" id="btnAlignJustify" title="Justify"
+                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                        border:none;border-radius:6px;cursor:pointer;
+                        transition:0.2s;display:flex;align-items:center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
                 <label>Color:</label>
                 <input type="color" id="fontColor" value="#000000" class="color-picker" onchange="updateTextStyle()">
-                <label>Stroke:</label>
-                <input type="number" id="strokeWidth" value="3" min="1" max="30" style="width:60px;">
-                <label>Stroke Color:</label>
-                <input type="color" id="strokeColor" value="#ff0000" class="color-picker">
-                <label>Opacity:</label>
-                <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:65px;">
                 <button class="opt-btn" onclick="makeBold()" title="Bold"><b>B</b></button>
                 <button class="opt-btn" onclick="makeItalic()" title="Italic"><i>I</i></button>
                 <button class="opt-btn" onclick="makeUnderlineText()" title="Underline"><u>U</u></button>
-                <button class="opt-btn danger" onclick="clearOverlay()">Clear Page</button>
+
+                <div style="display:inline-flex;align-items:center;gap:4px">
+                    <label>Line:</label>
+                    <select onchange="setLineHeight(this.value)"
+                        style="padding:6px;border:1px solid var(--border);
+                        border-radius:8px;font-size:13px;cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                        <option value="1.0">1.0</option>
+                        <option value="1.2">1.2</option>
+                        <option value="1.4" selected>1.4</option>
+                        <option value="1.6">1.6</option>
+                        <option value="1.8">1.8</option>
+                        <option value="2.0">2.0</option>
+                    </select>
+                </div>
+
+                <div style="display:inline-flex;align-items:center;gap:4px">
+                    <label>Space:</label>
+                    <input type="range" id="letterSpacing" 
+                        min="-2" max="20" value="0" step="0.5"
+                        onchange="setLetterSpacing(this.value)"
+                        style="width:50px;cursor:pointer">
+                    <span id="spacingValue" style="font-size:12px;color:var(--accent);font-weight:700;min-width:25px">0px</span>
+                </div>
+
+                <div style="width: 1px; height: 30px; background: var(--border); margin: 0 4px;"></div>
+
+                <label>Stroke:</label>
+                <input type="number" id="strokeWidth" value="3" min="1" max="30" style="width:45px;">
+                <input type="color" id="strokeColor" value="#ff0000" class="color-picker" style="margin-left: -5px">
+                <label>Opacity:</label>
+                <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:55px;">
+                
+                <button class="opt-btn danger" onclick="clearPage()">Clear Page</button>
+            </div>
+            
+            <div id="stampMenu" style="display:none;position:absolute;
+                background:#fff;border-radius:16px;padding:20px;
+                box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:1000;
+                width:300px;top:130px;left:80px;">
+                <h4 style="margin:0 0 15px;color:#333;">📌 Add Stamp</h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                    <button onclick="addStamp('APPROVED')" 
+                        style="padding:16px;background:#dcfce7;color:#16a34a;
+                        border:2px solid #16a34a;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        ✅ APPROVED
+                    </button>
+                    <button onclick="addStamp('REJECTED')"
+                        style="padding:16px;background:#fef2f2;color:#dc2626;
+                        border:2px solid #dc2626;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        ❌ REJECTED
+                    </button>
+                    <button onclick="addStamp('DRAFT')"
+                        style="padding:16px;background:#fef3c7;color:#d97706;
+                        border:2px solid #d97706;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        📝 DRAFT
+                    </button>
+                    <button onclick="addStamp('CONFIDENTIAL')"
+                        style="padding:16px;background:#fef2f2;color:#dc2626;
+                        border:2px solid #dc2626;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        🔒 CONFIDENTIAL
+                    </button>
+                    <button onclick="addStamp('PAID')"
+                        style="padding:16px;background:#dcfce7;color:#16a34a;
+                        border:2px solid #16a34a;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        💰 PAID
+                    </button>
+                    <button onclick="addStamp('FINAL')"
+                        style="padding:16px;background:#dbeafe;color:#2563eb;
+                        border:2px solid #2563eb;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        ✅ FINAL
+                    </button>
+                    <button onclick="addStamp('COPY')"
+                        style="padding:16px;background:#f3e8ff;color:#7c3aed;
+                        border:2px solid #7c3aed;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        📋 COPY
+                    </button>
+                    <button onclick="addStamp('VOID')"
+                        style="padding:16px;background:#fef2f2;color:#dc2626;
+                        border:2px solid #dc2626;border-radius:10px;
+                        font-weight:900;font-size:14px;cursor:pointer;
+                        letter-spacing:2px">
+                        🚫 VOID
+                    </button>
+                </div>
+                <button onclick="document.getElementById('stampMenu').style.display='none'"
+                    style="width:100%;padding:12px;background:#f1f5f9;color:#333;
+                    border:none;border-radius:10px;margin-top:15px;
+                    cursor:pointer;font-weight:600">
+                    Close
+                </button>
+            </div>
+
+            <!-- Search Bar Modal -->
+            <div id="searchBar" 
+                style="display:none;position:absolute;top:130px;right:320px;
+                background:var(--surface-1);border-radius:16px;padding:20px;
+                box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:10000;
+                width:350px;border:1px solid var(--border)">
+                
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">
+                    <h4 style="margin:0;font-size:16px;color:var(--text-primary)">
+                        🔍 Find in PDF
+                    </h4>
+                    <button onclick="closeSearch()" 
+                        style="margin-left:auto;background:none;
+                        border:none;font-size:20px;cursor:pointer;
+                        color:var(--text-secondary)">
+                        ✕
+                    </button>
+                </div>
+                
+                <div style="display:flex;gap:8px">
+                    <input type="text" id="searchInput" 
+                        placeholder="Search text..."
+                        onkeyup="if(event.key==='Enter') searchPDF()"
+                        style="flex:1;padding:12px 16px;
+                        border:1px solid var(--border);border-radius:10px;
+                        font-size:15px;outline:none;background:var(--surface-3);color:var(--text-primary)">
+                    <button onclick="searchPDF()" 
+                        style="padding:12px 20px;background:var(--accent);
+                        color:#fff;border:none;border-radius:10px;
+                        font-weight:700;cursor:pointer;font-size:14px">
+                        Find
+                    </button>
+                </div>
+                
+                <div style="display:flex;gap:15px;margin-top:12px;
+                    font-size:13px;color:var(--text-secondary)">
+                    <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+                        <input type="checkbox" id="matchCase"> Match Case
+                    </label>
+                    <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+                        <input type="checkbox" id="wholeWord"> Whole Word
+                    </label>
+                </div>
+                
+                <div id="searchResults" style="margin-top:15px;display:none">
+                    <div style="display:flex;justify-content:space-between;
+                        align-items:center;margin-bottom:10px">
+                        <span id="resultCount" style="font-size:14px;color:var(--text-primary);font-weight:600">
+                            0 results found
+                        </span>
+                        <div style="display:flex;gap:5px">
+                            <button onclick="prevResult()" 
+                                style="padding:8px 14px;background:var(--surface-3);color:var(--text-primary);
+                                border:none;border-radius:8px;cursor:pointer;font-weight:700">
+                                ▲
+                            </button>
+                            <button onclick="nextResult()" 
+                                style="padding:8px 14px;background:var(--surface-3);color:var(--text-primary);
+                                border:none;border-radius:8px;cursor:pointer;font-weight:700">
+                                ▼
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resultList" style="max-height:200px;overflow-y:auto;border-top:1px solid var(--border);padding-top:10px">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Management Bar -->
+            <div id="pageManagementBar" 
+                style="display:flex;align-items:center;gap:12px;
+                padding:8px 16px;background:var(--surface-2);
+                border-bottom:1px solid var(--border);
+                justify-content:center;flex-wrap:wrap">
+                
+                <div style="display:flex;gap:6px">
+                    <button onclick="rotatePage(-90)" title="Rotate Left 90°"
+                        style="padding:6px 12px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
+                        ↺ Left
+                    </button>
+                    <button onclick="rotatePage(90)" title="Rotate Right 90°"
+                        style="padding:6px 12px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
+                        ↻ Right
+                    </button>
+                    <button onclick="deleteCurrentPage()" title="Delete Current Page"
+                        style="padding:6px 12px;background:var(--surface-3);color:#ef4444;
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
+                        🗑️ Delete
+                    </button>
+                    <button onclick="insertBlankPage()" title="Add Blank Page After Current"
+                        style="padding:6px 12px;background:var(--surface-3);color:#10b981;
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
+                        ➕ Blank
+                    </button>
+                </div>
+                
+                <div style="width:1px;height:24px;background:var(--border)"></div>
+                
+                <div style="display:flex;gap:6px">
+                    <button onclick="movePage('up')" title="Move Page Up Tracker"
+                        style="padding:6px 10px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600">
+                        ⬆️ Move Up
+                    </button>
+                    <button onclick="movePage('down')" title="Move Page Down Tracker"
+                        style="padding:6px 10px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;
+                        cursor:pointer;font-size:13px;font-weight:600">
+                        ⬇️ Move Down
+                    </button>
+                </div>
             </div>
 
             <!-- CANVAS AREA -->
@@ -969,14 +1320,48 @@
                     <button onclick="nextPage()">→</button>
                 </div>
 
+                <h3>🔍 Search</h3>
+                <button onclick="toggleSearch()" title="Find in PDF (Ctrl+F)"
+                    style="width:100%;padding:10px 14px;background:var(--surface-3);color:var(--text-primary);
+                    border:1px solid var(--border);border-radius:8px;cursor:pointer;
+                    font-size:14px;font-weight:600;display:flex;justify-content:center;
+                    align-items:center;gap:8px;margin-bottom:20px;">
+                    🔍 Find text (Ctrl+F)
+                </button>
+
                 <h3>🔍 Zoom</h3>
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <button onclick="zoomOut()"
-                        style="flex:1; padding:8px; background: var(--surface-3); color: var(--text-primary); border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:18px; transition: all 0.2s;">➖</button>
-                    <span id="zoomLevel"
-                        style="flex:1; text-align:center; line-height:40px; font-weight:bold; color: var(--text-primary);">150%</span>
-                    <button onclick="zoomIn()"
-                        style="flex:1; padding:8px; background: var(--surface-3); color: var(--text-primary); border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:18px; transition: all 0.2s;">➕</button>
+                <div style="display:flex;align-items:center;gap:6px; margin-bottom: 20px;">
+                    <button onclick="zoomOut()" title="Zoom Out"
+                        style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;cursor:pointer;
+                        font-size:18px">
+                        ➖
+                    </button>
+                    <select id="zoomSelect" onchange="setZoom(this.value)"
+                        style="padding:8px 12px;border:1px solid var(--border);background:var(--surface-3);color:var(--text-primary);
+                        border-radius:8px;font-size:14px;font-weight:600;
+                        min-width:80px;text-align:center">
+                        <option value="50">50%</option>
+                        <option value="75">75%</option>
+                        <option value="100">100%</option>
+                        <option value="125">125%</option>
+                        <option value="150" selected>150%</option>
+                        <option value="175">175%</option>
+                        <option value="200">200%</option>
+                        <option value="300">300%</option>
+                    </select>
+                    <button onclick="zoomIn()" title="Zoom In"
+                        style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;cursor:pointer;
+                        font-size:18px">
+                        ➕
+                    </button>
+                    <button onclick="fitToWidth()" title="Fit to Width"
+                        style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
+                        border:1px solid var(--border);border-radius:8px;cursor:pointer;
+                        font-size:14px">
+                        ↔️
+                    </button>
                 </div>
 
                 <h3>📋 Layers</h3>
@@ -998,6 +1383,152 @@
                 <button class="edit-popup-save" onclick="saveEditPopup()">✓ Save</button>
             </div>
         </div>
+
+        <div id="thumbnailPanel" style="position:fixed;left:0;top:60px;
+            bottom:0;width:120px;background:#1e293b;overflow-y:auto;
+            padding:10px;z-index:100;display:none">
+            
+            <h4 style="color:#fff;font-size:12px;text-align:center;
+                margin:0 0 10px;padding-bottom:10px;
+                border-bottom:1px solid #334155">
+                Pages
+            </h4>
+            
+            <div id="thumbnailList">
+                <!-- Thumbnails generated by JavaScript -->
+            </div>
+        </div>
+
+        <button id="thumbnailsToggleBtn" onclick="toggleThumbnails()" 
+            style="position:fixed;left:10px;top:65px;z-index:101;
+            padding:8px 12px;background:#1e293b;color:#fff;
+            border:none;border-radius:8px;cursor:pointer;
+            font-size:14px;display:none;">
+            📄 Pages
+        </button>
+
+        <!-- Signature Modal -->
+        <div id="signatureModal" style="display:none;position:fixed;
+            inset:0;background:rgba(0,0,0,0.7);z-index:10000;
+            justify-content:center;align-items:center">
+            <div style="background:#fff;border-radius:20px;
+                padding:30px;max-width:500px;width:90%">
+                
+                <h3 style="margin:0 0 20px;color:#333">
+                    ✍️ Add Your Signature
+                </h3>
+                
+                <!-- Tabs: Draw / Type / Upload -->
+                <div style="display:flex;gap:8px;margin-bottom:20px">
+                    <button onclick="showSignTab('draw')" 
+                        id="tab-draw" class="sig-tab active"
+                        style="flex:1;padding:12px;border:2px solid #2563eb;
+                        background:#2563eb;color:#fff;border-radius:10px;
+                        font-weight:700;cursor:pointer">
+                        ✏️ Draw
+                    </button>
+                    <button onclick="showSignTab('type')" 
+                        id="tab-type" class="sig-tab"
+                        style="flex:1;padding:12px;border:2px solid #e2e8f0;
+                        background:#fff;color:#333;border-radius:10px;
+                        font-weight:700;cursor:pointer">
+                        ⌨️ Type
+                    </button>
+                    <button onclick="showSignTab('upload')" 
+                        id="tab-upload" class="sig-tab"
+                        style="flex:1;padding:12px;border:2px solid #e2e8f0;
+                        background:#fff;color:#333;border-radius:10px;
+                        font-weight:700;cursor:pointer">
+                        📤 Upload
+                    </button>
+                </div>
+                
+                <!-- Draw Signature -->
+                <div id="sigDraw">
+                    <canvas id="signatureCanvas" width="440" height="200"
+                        style="border:2px solid #e2e8f0;border-radius:12px;
+                        width:100%;cursor:crosshair;touch-action:none;background:#fff;">
+                    </canvas>
+                    <div style="display:flex;gap:10px;margin-top:15px">
+                        <select id="sigColor" 
+                            style="padding:10px;border-radius:8px;
+                            border:2px solid #e2e8f0;color:#333;background:#fff;">
+                            <option value="#000000">Black</option>
+                            <option value="#0000ff">Blue</option>
+                            <option value="#ff0000">Red</option>
+                        </select>
+                        <button onclick="clearSignature()"
+                            style="padding:10px 20px;background:#f1f5f9;color:#333;
+                            border:none;border-radius:8px;cursor:pointer">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Type Signature -->
+                <div id="sigType" style="display:none">
+                    <input type="text" id="sigTextInput" 
+                        placeholder="Type your name"
+                        style="width:100%;padding:15px;font-size:24px;
+                        border:2px solid #e2e8f0;border-radius:12px;
+                        font-family:'Dancing Script',cursive;
+                        margin-bottom:10px;color:#333;background:#fff;">
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button onclick="setSigFont('Dancing Script')"
+                            style="padding:10px 16px;border:2px solid #e2e8f0;
+                            border-radius:8px;font-family:'Dancing Script';
+                            font-size:18px;cursor:pointer;background:#fff;color:#333;">
+                            Signature
+                        </button>
+                        <button onclick="setSigFont('Pacifico')"
+                            style="padding:10px 16px;border:2px solid #e2e8f0;
+                            border-radius:8px;font-family:'Pacifico';
+                            font-size:18px;cursor:pointer;background:#fff;color:#333;">
+                            Signature
+                        </button>
+                        <button onclick="setSigFont('Caveat')"
+                            style="padding:10px 16px;border:2px solid #e2e8f0;
+                            border-radius:8px;font-family:'Caveat';
+                            font-size:18px;cursor:pointer;background:#fff;color:#333;">
+                            Signature
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Upload Signature -->
+                <div id="sigUpload" style="display:none">
+                    <div style="border:2px dashed #e2e8f0;
+                        border-radius:12px;padding:40px;
+                        text-align:center;cursor:pointer"
+                        onclick="document.getElementById('sigFileInput').click()">
+                        <p style="font-size:40px;margin:0">📤</p>
+                        <p style="color:#333;">Click to upload signature image</p>
+                        <p style="font-size:13px;color:#94a3b8">
+                            PNG with transparent background works best
+                        </p>
+                        <input type="file" id="sigFileInput" 
+                            accept="image/*" hidden>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div style="display:flex;gap:10px;margin-top:20px">
+                    <button onclick="addSignatureToPDF()"
+                        style="flex:1;padding:16px;background:#2563eb;
+                        color:#fff;border:none;border-radius:12px;
+                        font-size:16px;font-weight:700;cursor:pointer">
+                        ✅ Add Signature
+                    </button>
+                    <button onclick="closeSignatureModal()"
+                        style="padding:16px 24px;background:#f1f5f9;color:#333;
+                        border:none;border-radius:12px;font-size:16px;
+                        cursor:pointer">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Pacifico&display=swap" rel="stylesheet">
 
         <!-- UPLOAD SCREEN -->
         <div id="uploadScreen" class="container"
@@ -1039,6 +1570,14 @@
                     <span
                         style="padding: 8px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 20px; font-size: 13px; color: #f87171; font-weight: 600;">⬜
                         Shapes</span>
+                </div>
+                
+                <div style="display:inline-flex;align-items:center;gap:6px;
+                    padding:8px 16px;background:rgba(16,185,129,0.1);
+                    border:1px solid #10b981;border-radius:50px;
+                    font-size:13px;font-weight:600;color:#10b981;
+                    margin:20px auto 0 auto;">
+                    🔒 Your file never leaves your device — 100% private
                 </div>
             </div>
         </div>
@@ -1105,6 +1644,13 @@
                 document.getElementById('editorLayout').style.display = 'flex';
 
                 await renderPage();
+                
+                generateThumbnails();
+                document.getElementById('thumbnailsToggleBtn').style.display = 'block';
+                
+                // Extract text for search functionality
+                extractPDFText(pdfDoc);
+                initPageManagement(pdfDoc);
             }
 
             async function renderPage() {
@@ -1477,9 +2023,14 @@
                     } else if (drawing.type === 'arrow') {
                         drawArrow(ctx, drawing.x1, drawing.y1, drawing.x2, drawing.y2, drawing.color, drawing.width);
                     } else if (drawing.type === 'rect') {
-                        ctx.strokeStyle = drawing.color;
-                        ctx.lineWidth = drawing.width;
-                        ctx.strokeRect(drawing.x, drawing.y, drawing.w, drawing.h);
+                        if (drawing.isFilled) {
+                            ctx.fillStyle = drawing.color;
+                            ctx.fillRect(drawing.x, drawing.y, drawing.w, drawing.h);
+                        } else {
+                            ctx.strokeStyle = drawing.color;
+                            ctx.lineWidth = drawing.width;
+                            ctx.strokeRect(drawing.x, drawing.y, drawing.w, drawing.h);
+                        }
                     } else if (drawing.type === 'highlight') {
                         ctx.fillStyle = drawing.color;
                         ctx.globalAlpha = 0.3;
@@ -1518,7 +2069,7 @@
 
                 // Key fix: disable overlay canvas pointer-events for cursor/text tools
                 // so users can click on existing text elements to edit them
-                const needsCanvasEvents = ['draw', 'highlight', 'eraser', 'line', 'arrow', 'shape', 'strikethrough', 'underline'];
+                const needsCanvasEvents = ['draw', 'highlight', 'eraser', 'line', 'arrow', 'shape', 'strikethrough', 'underline', 'whiteout'];
                 if (needsCanvasEvents.includes(tool)) {
                     overlayCanvas.style.pointerEvents = 'auto';
                     overlayCanvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
@@ -1637,11 +2188,16 @@
                     } else {
                         drawArrow(ctx, startX, startY, x, y, document.getElementById('strokeColor').value, parseInt(document.getElementById('strokeWidth').value));
                     }
-                } else if (currentTool === 'shape') {
+                } else if (currentTool === 'shape' || currentTool === 'whiteout') {
                     restoreDrawings();
-                    ctx.strokeStyle = document.getElementById('strokeColor').value;
-                    ctx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
-                    ctx.strokeRect(startX, startY, x - startX, y - startY);
+                    if(currentTool === 'whiteout') {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(startX, startY, x - startX, y - startY);
+                    } else {
+                        ctx.strokeStyle = document.getElementById('strokeColor').value;
+                        ctx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
+                        ctx.strokeRect(startX, startY, x - startX, y - startY);
+                    }
                 }
             };
 
@@ -1683,13 +2239,14 @@
                         color: document.getElementById('strokeColor').value,
                         width: parseInt(document.getElementById('strokeWidth').value)
                     });
-                } else if (currentTool === 'shape') {
+                } else if (currentTool === 'shape' || currentTool === 'whiteout') {
                     layers[currentPage].drawings.push({
                         type: 'rect',
                         x: startX, y: startY,
                         w: endX - startX, h: endY - startY,
-                        color: document.getElementById('strokeColor').value,
-                        width: parseInt(document.getElementById('strokeWidth').value)
+                        color: currentTool === 'whiteout' ? '#ffffff' : document.getElementById('strokeColor').value,
+                        width: currentTool === 'whiteout' ? 0 : parseInt(document.getElementById('strokeWidth').value),
+                        isFilled: currentTool === 'whiteout'
                     });
                 }
 
@@ -1777,9 +2334,51 @@
             function updateTextStyle() {
                 const el = selectedTextElement || document.querySelector('.text-element:focus');
                 if (el) {
-                    el.style.fontFamily = document.getElementById('fontFamily').value;
-                    el.style.fontSize = document.getElementById('fontSize').value + 'px';
+                    el.style.fontFamily = document.getElementById('fontSelect') ? document.getElementById('fontSelect').value : 'Arial';
+                    let sizeVal = document.getElementById('fontSizeSelect') ? document.getElementById('fontSizeSelect').value : 18;
+                    el.style.fontSize = sizeVal + 'px';
                     el.style.color = document.getElementById('fontColor').value;
+                }
+            }
+
+            function changeFont(val) {
+                // Update dropdown visually if needed, though native select already shows it
+                document.getElementById('fontSelect').style.fontFamily = val;
+                updateTextStyle();
+            }
+
+            function changeFontSize(val) {
+                updateTextStyle();
+            }
+
+            function setTextAlign(alignment) {
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.style.textAlign = alignment;
+                }
+                
+                // Update active state of buttons
+                ['Left', 'Center', 'Right', 'Justify'].forEach(align => {
+                    const btn = document.getElementById('btnAlign' + align);
+                    if (btn) {
+                        btn.style.background = (alignment === align.toLowerCase()) ? 'var(--accent)' : 'transparent';
+                        btn.style.color = (alignment === align.toLowerCase()) ? '#fff' : 'var(--text-primary)';
+                    }
+                });
+            }
+
+            function setLineHeight(val) {
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.style.lineHeight = val;
+                }
+            }
+
+            function setLetterSpacing(val) {
+                document.getElementById('spacingValue').textContent = val + 'px';
+                const el = selectedTextElement || document.querySelector('.text-element:focus');
+                if (el) {
+                    el.style.letterSpacing = val + 'px';
                 }
             }
 
@@ -1887,8 +2486,14 @@
                 pageWrapper.querySelectorAll('.text-element, .image-element, .sticky-note, .shape-element').forEach(el => el.remove());
             }
 
-            function clearOverlay() {
-                if (confirm('Clear all edits on this page?')) {
+            function clearPage() {
+                const confirmed = confirm(
+                    "⚠️ Are you sure?\n\n" +
+                    "This will erase ALL your edits on this page.\n" +
+                    "This action cannot be undone."
+                );
+                
+                if (confirmed) {
                     ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
                     clearDomElements();
                     if (layers[currentPage]) layers[currentPage] = { drawings: [], elements: [] };
@@ -1940,7 +2545,10 @@
                         html: el.innerHTML,
                         fontWeight: el.style.fontWeight,
                         fontStyle: el.style.fontStyle,
-                        textDecoration: el.style.textDecoration
+                        textDecoration: el.style.textDecoration,
+                        textAlign: el.style.textAlign,
+                        lineHeight: el.style.lineHeight,
+                        letterSpacing: el.style.letterSpacing
                     });
                 });
                 pageWrapper.querySelectorAll('.image-element').forEach(el => {
@@ -1982,6 +2590,9 @@
                         if (el.fontWeight) div.style.fontWeight = el.fontWeight;
                         if (el.fontStyle) div.style.fontStyle = el.fontStyle;
                         if (el.textDecoration) div.style.textDecoration = el.textDecoration;
+                        if (el.textAlign) div.style.textAlign = el.textAlign;
+                        if (el.lineHeight) div.style.lineHeight = el.lineHeight;
+                        if (el.letterSpacing) div.style.letterSpacing = el.letterSpacing;
                         div.innerHTML = el.html;
                         pageWrapper.appendChild(div);
                         makeDraggable(div);
@@ -2213,6 +2824,264 @@
                 };
             }
 
+            // ===== E-SIGNATURE TOOL =====
+            let sigCanvas, sigCtx, isDrawingSig = false;
+
+            function openSignatureModal() {
+                document.getElementById('signatureModal').style.display = 'flex';
+                initSignatureCanvas();
+            }
+
+            function closeSignatureModal() {
+                document.getElementById('signatureModal').style.display = 'none';
+            }
+
+            function initSignatureCanvas() {
+                sigCanvas = document.getElementById('signatureCanvas');
+                if(!sigCanvas) return;
+                sigCtx = sigCanvas.getContext('2d');
+                sigCtx.lineWidth = 3;
+                sigCtx.lineCap = 'round';
+                sigCtx.strokeStyle = '#000000';
+
+                sigCanvas.onmousedown = (e) => {
+                    isDrawingSig = true;
+                    sigCtx.strokeStyle = document.getElementById('sigColor').value;
+                    sigCtx.beginPath();
+                    sigCtx.moveTo(e.offsetX, e.offsetY);
+                };
+                sigCanvas.onmousemove = (e) => {
+                    if (!isDrawingSig) return;
+                    sigCtx.lineTo(e.offsetX, e.offsetY);
+                    sigCtx.stroke();
+                };
+                sigCanvas.onmouseup = () => isDrawingSig = false;
+                sigCanvas.onmouseout = () => isDrawingSig = false;
+
+                // Touch events (mobile)
+                sigCanvas.ontouchstart = (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const rect = sigCanvas.getBoundingClientRect();
+                    isDrawingSig = true;
+                    sigCtx.strokeStyle = document.getElementById('sigColor').value;
+                    sigCtx.beginPath();
+                    sigCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                };
+
+                sigCanvas.ontouchmove = (e) => {
+                    e.preventDefault();
+                    if (!isDrawingSig) return;
+                    const touch = e.touches[0];
+                    const rect = sigCanvas.getBoundingClientRect();
+                    sigCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                    sigCtx.stroke();
+                };
+
+                sigCanvas.ontouchend = () => isDrawingSig = false;
+            }
+
+            function clearSignature() {
+                if(sigCtx && sigCanvas) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            }
+
+            function showSignTab(tab) {
+                document.querySelectorAll('.sig-tab').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = '#fff';
+                    b.style.color = '#333';
+                    b.style.borderColor = '#e2e8f0';
+                });
+                const activeBtn = document.getElementById('tab-' + tab);
+                if(activeBtn) {
+                    activeBtn.classList.add('active');
+                    activeBtn.style.background = '#2563eb';
+                    activeBtn.style.color = '#fff';
+                    activeBtn.style.borderColor = '#2563eb';
+                }
+
+                document.getElementById('sigDraw').style.display = tab === 'draw' ? 'block' : 'none';
+                document.getElementById('sigType').style.display = tab === 'type' ? 'block' : 'none';
+                document.getElementById('sigUpload').style.display = tab === 'upload' ? 'block' : 'none';
+            }
+
+            function setSigFont(font) {
+                document.getElementById('sigTextInput').style.fontFamily = font;
+            }
+
+            function addSignatureToPDF() {
+                let sigData;
+                const activeTab = document.getElementById('sigDraw').style.display !== 'none' ? 'draw' :
+                    document.getElementById('sigType').style.display !== 'none' ? 'type' : 'upload';
+
+                if (activeTab === 'draw') {
+                    sigData = sigCanvas.toDataURL('image/png');
+                } else if (activeTab === 'type') {
+                    const text = document.getElementById('sigTextInput').value;
+                    if(!text) return;
+                    const font = document.getElementById('sigTextInput').style.fontFamily || 'Dancing Script';
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 400;
+                    tempCanvas.height = 150;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.font = `60px "${font}", cursive`;
+                    tempCtx.fillStyle = '#000';
+                    tempCtx.fillText(text, 20, 100);
+                    sigData = tempCanvas.toDataURL('image/png');
+                }
+
+                if (sigData) {
+                    addImageElement(sigData, 100, 100, 300);
+                    closeSignatureModal();
+                }
+            }
+
+            const sigFileInput = document.getElementById('sigFileInput');
+            if(sigFileInput) {
+                sigFileInput.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        addImageElement(ev.target.result, 100, 100, 300);
+                        closeSignatureModal();
+                    };
+                    reader.readAsDataURL(file);
+                    e.target.value = '';
+                };
+            }
+
+            // ===== WHITEOUT TOOL =====
+            function activateWhiteout() {
+                setTool('whiteout', event);
+            }
+
+            // ===== STAMP TOOL =====
+            function openStampMenu() {
+                const menu = document.getElementById('stampMenu');
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function addStamp(text) {
+                const stampCanvas = document.createElement('canvas');
+                stampCanvas.width = 300;
+                stampCanvas.height = 100;
+                const stampCtx = stampCanvas.getContext('2d');
+
+                const colors = {
+                    'APPROVED': '#16a34a', 'REJECTED': '#dc2626', 'DRAFT': '#d97706',
+                    'CONFIDENTIAL': '#dc2626', 'PAID': '#16a34a', 'FINAL': '#2563eb',
+                    'COPY': '#7c3aed', 'VOID': '#dc2626'
+                };
+                const color = colors[text] || '#dc2626';
+
+                stampCtx.strokeStyle = color;
+                stampCtx.lineWidth = 4;
+                stampCtx.roundRect(10, 10, 280, 80, 10);
+                stampCtx.stroke();
+
+                stampCtx.fillStyle = color;
+                stampCtx.font = 'bold 36px Arial';
+                stampCtx.textAlign = 'center';
+                stampCtx.textBaseline = 'middle';
+                stampCtx.fillText(text, 150, 50);
+
+                const dataUrl = stampCanvas.toDataURL('image/png');
+                addImageElement(dataUrl, 100, 100, 250);
+                document.getElementById('stampMenu').style.display = 'none';
+            }
+
+            // ===== ZOOM LOGIC ======
+            let currentZoom = 150;
+
+            function setZoom(percent) {
+                currentZoom = parseInt(percent);
+                currentScale = currentZoom / 100;
+                const select = document.getElementById('zoomSelect');
+                if(select) select.value = currentZoom;
+                renderPage();
+            }
+
+            function zoomIn() {
+                const levels = [50, 75, 100, 125, 150, 175, 200, 300];
+                const nextLevel = levels.find(l => l > currentZoom);
+                if (nextLevel) setZoom(nextLevel);
+            }
+
+            function zoomOut() {
+                const levels = [50, 75, 100, 125, 150, 175, 200, 300];
+                const prevLevel = [...levels].reverse().find(l => l < currentZoom);
+                if (prevLevel) setZoom(prevLevel);
+            }
+
+            function fitToWidth() {
+                const container = document.getElementById('canvasArea');
+                const pdfW = pdfCanvas.width / (window.devicePixelRatio || 1);
+                const unscaledPdfW = pdfW / currentScale;
+                const ratio = (container.clientWidth - 48) / unscaledPdfW;
+                setZoom(Math.round(ratio * 100));
+            }
+
+            // ===== THUMBNAILS =====
+            function toggleThumbnails() {
+                const panel = document.getElementById('thumbnailPanel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            }
+
+            function generateThumbnails() {
+                if(!pdfDoc) return;
+                const list = document.getElementById('thumbnailList');
+                list.innerHTML = '';
+
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    pdfDoc.getPage(i).then(page => {
+                        const viewport = page.getViewport({ scale: 0.2 });
+                        const canvas = document.createElement('canvas');
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        canvas.style.width = '100%';
+                        canvas.style.borderRadius = '6px';
+                        canvas.style.cursor = 'pointer';
+                        canvas.style.marginBottom = '8px';
+                        canvas.style.border = currentPage === i ? '2px solid #2563eb' : '2px solid transparent';
+                        canvas.style.display = 'block';
+
+                        const tnCtx = canvas.getContext('2d');
+                        page.render({ canvasContext: tnCtx, viewport: viewport });
+
+                        canvas.onclick = () => {
+                            currentPage = i;
+                            clearDomElements();
+                            renderPage();
+                            document.querySelectorAll('#thumbnailList canvas').forEach(c => c.style.border = '2px solid transparent');
+                            canvas.style.border = '2px solid #2563eb';
+                        };
+
+                        const label = document.createElement('div');
+                        label.textContent = `Page ${i}`;
+                        label.style.cssText = 'color:#94a3b8;font-size:11px;text-align:center;margin-bottom:12px';
+
+                        const wrapper = document.createElement('div');
+                        wrapper.id = `thumb-${i}`;
+                        wrapper.style.order = i;
+                        wrapper.style.display = 'flex';
+                        wrapper.style.flexDirection = 'column';
+                        wrapper.appendChild(canvas);
+                        wrapper.appendChild(label);
+                        
+                        list.appendChild(wrapper);
+                        
+                        // force order just in case they load async unordered
+                        requestAnimationFrame(() => {
+                            Array.from(list.children)
+                                 .sort((a,b) => parseInt(a.style.order) - parseInt(b.style.order))
+                                 .forEach(node => list.appendChild(node));
+                        });
+                    });
+                }
+            }
+
+
             // Keyboard shortcuts
             document.onkeydown = e => {
                 if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
@@ -2225,25 +3094,33 @@
         <!-- Added SEO Sections -->
         <section class="how-it-works"
             style="margin: 20px auto; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Editor PDF Files Online
-            </h2>
-            <div class="steps"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div class="step">
-                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Upload Files</h3>
-                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the upload button or drag
-                        and drop your files into the tool.</p>
-                </div>
-                <div class="step">
-                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Adjust Settings</h3>
-                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Configure your options or
-                        arrange files if needed.</p>
-                </div>
-                <div class="step">
-                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Click Editor & Download
-                    </h3>
-                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the process button and
-                        download your processed file instantly.</p>
+            <div class="steps-section">
+                <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Edit PDF Online Free</h2>
+                
+                <div class="steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div class="step">
+                        <div class="step-number" style="font-size:24px; font-weight:bold; color:var(--accent); margin-bottom:10px;">1</div>
+                        <h3 style="font-size: 16px; color: var(--text-primary); margin: 0 0 8px;">Upload Your PDF</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click "Choose File" or drag & drop your PDF. 
+                        Your file stays in your browser — never uploaded 
+                        to any server.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number" style="font-size:24px; font-weight:bold; color:var(--accent); margin-bottom:10px;">2</div>
+                        <h3 style="font-size: 16px; color: var(--text-primary); margin: 0 0 8px;">Edit with Powerful Tools</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Add text, draw, highlight, insert images, add 
+                        shapes, use strikethrough, change fonts, adjust 
+                        colors and more using the toolbar above.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number" style="font-size:24px; font-weight:bold; color:var(--accent); margin-bottom:10px;">3</div>
+                        <h3 style="font-size: 16px; color: var(--text-primary); margin: 0 0 8px;">Download Edited PDF</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the "Download" button to save your edited 
+                        PDF. All changes are applied instantly. No watermark, 
+                        no signup needed.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2277,10 +3154,10 @@
                 style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3
                     style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                    <span style="color: var(--accent);">Q.</span> How to editor files online for free?
+                    <span style="color: var(--accent);">Q.</span> How to edit PDF files online for free?
                 </h3>
                 <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload
-                    your files to OnlinePDFPro's editor tool, adjust any settings, and click "Editor." Your processed
+                    your files to OnlinePDFPro's editor tool, edit your PDF using the toolbar, and click "Editor." Your processed
                     document will be ready to download in seconds. No signup required, completely free.</p>
             </div>
 
