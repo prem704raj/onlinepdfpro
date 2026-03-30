@@ -103,7 +103,7 @@
         }
 
         .card-form {
-            background: #fef2f2;
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .card-anno {
@@ -115,7 +115,7 @@
         }
 
         .card-layer {
-            background: #f0fdf4;
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .options-box {
@@ -283,12 +283,12 @@
         }
 
         .size-before {
-            background: #fef2f2;
+            background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
         }
 
         .size-after {
-            background: #f0fdf4;
+            background: rgba(16, 185, 129, 0.1);
             color: #10b981;
         }
 
@@ -351,20 +351,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <style>
-        .upload-area {
-            border: 3px dashed var(--border);
-            border-radius: 24px;
-            padding: 60px 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--surface-1);
-            color: var(--text-primary);
-        }
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: var(--surface-2);
-        }
         .container {
             max-width: 1120px;
             margin: 0 auto;
@@ -467,9 +453,11 @@
         <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Flatten PDF</h1>
         <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Flatten PDF form fields and annotations into a clean, non-editable document. Your files never leave your device.</p>
     </div>
-<div class="upload-area" id="dropArea">
-            <p style="font-size:20px;">Drop your PDF here or Click to Upload<br><small>Remove all editable fields and
-                    make PDF flat</small></p>
+<div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
+            <span class="upload-icon">📤</span>
+            <p class="upload-text">Drop your PDF here or Click to Upload</p>
+            <p class="upload-hint">Remove all editable fields and make PDF flat</p>
+            <button class="btn btn-primary upload-btn">Choose PDF File</button>
             <input type="file" id="fileInput" accept=".pdf" hidden />
         </div>
 
