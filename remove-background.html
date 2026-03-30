@@ -1,0 +1,1925 @@
+se<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Background from Image Free | OnlinePDFPro</title>
+    <meta name="description" content="Remove background from any image for free. 100% private, AI-powered, works in your browser.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --primary-light: #8B83FF;
+            --secondary: #FF6584;
+            --success: #2ED573;
+            --warning: #FFA502;
+            --bg: #F0F2FF;
+            --bg2: #FFFFFF;
+            --bg3: #F8F9FF;
+            --text: #1A1A2E;
+            --text2: #555;
+            --text3: #888;
+            --border: #E0E0F0;
+            --shadow: 0 4px 20px rgba(108,99,255,0.1);
+            --shadow2: 0 8px 40px rgba(108,99,255,0.15);
+            --radius: 16px;
+            --radius2: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary: #8B83FF;
+            --primary-dark: #6C63FF;
+            --primary-light: #A89FFF;
+            --bg: #0B0B1A;
+            --bg2: #151528;
+            --bg3: #1C1C35;
+            --text: #E8E8F0;
+            --text2: #AAAABB;
+            --text3: #777790;
+            --border: #2A2A45;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow2: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--secondary); }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
+        .theme-toggle {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover { background: var(--primary); color: #fff; }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ========== HERO ========== */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 30px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text2);
+            max-width: 600px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .privacy-badge {
+            background: #1B3A1B;
+            color: #66BB6A;
+        }
+
+        /* ========== UPLOAD SECTION ========== */
+        .upload-section { padding: 20px 0 50px; }
+
+        .upload-zone {
+            max-width: 700px;
+            margin: 0 auto;
+            border: 3px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 60px 30px;
+            text-align: center;
+            background: var(--bg2);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: var(--bg3);
+            transform: scale(1.01);
+        }
+
+        .upload-zone.dragover { box-shadow: 0 0 0 4px rgba(108,99,255,0.2); }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .upload-zone h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .upload-zone p { color: var(--text3); margin-bottom: 20px; }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
+
+        .upload-options {
+            max-width: 700px;
+            margin: 20px auto 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .upload-opt-btn {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .upload-opt-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        .file-info {
+            max-width: 700px;
+            margin: 15px auto 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text3);
+        }
+
+        .batch-toggle {
+            max-width: 700px;
+            margin: 15px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--border);
+            border-radius: 26px;
+            transition: var(--transition);
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
+
+        .batch-label { font-size: 0.9rem; color: var(--text2); font-weight: 500; }
+
+        #fileInput { display: none; }
+
+        /* ========== PROCESSING ========== */
+        .processing-section {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .processing-section.active { display: block; }
+
+        .processing-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg2);
+            border-radius: var(--radius);
+            padding: 50px 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid var(--border);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text { font-size: 0.9rem; color: var(--text2); margin-top: 10px; }
+
+        .model-notice {
+            background: #FFF8E1;
+            color: #F57F17;
+            padding: 12px 18px;
+            border-radius: var(--radius2);
+            font-size: 0.82rem;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        [data-theme="dark"] .model-notice { background: #332B00; color: #FFD54F; }
+
+        /* ========== EDITOR ========== */
+        .editor-section {
+            display: none;
+            padding: 30px 0 60px;
+        }
+
+        .editor-section.active { display: block; }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .image-display {
+            background: var(--bg2);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: var(--bg3);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .view-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text2);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .view-tab.active { background: var(--primary); color: #fff; }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius2);
+            min-height: 350px;
+        }
+
+        .checkerboard {
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #ccc 75%),
+                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        [data-theme="dark"] .checkerboard {
+            background-image: linear-gradient(45deg, #333 25%, transparent 25%),
+                              linear-gradient(-45deg, #333 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #333 75%),
+                              linear-gradient(-45deg, transparent 75%, #333 75%);
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 450px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Before/After Slider */
+        .comparison-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: none;
+            overflow: hidden;
+        }
+
+        .comparison-container.active { display: flex; align-items: center; justify-content: center; }
+
+        .comparison-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .comparison-wrapper img {
+            max-width: 100%;
+            max-height: 450px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .comparison-before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            overflow: hidden;
+            width: 50%;
+        }
+
+        .comparison-before img {
+            max-height: 450px;
+            object-fit: contain;
+        }
+
+        .comparison-slider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            cursor: ew-resize;
+            z-index: 10;
+            transform: translateX(-50%);
+        }
+
+        .comparison-slider::after {
+            content: "⟨ ⟩";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .comparison-label {
+            position: absolute;
+            top: 12px;
+            padding: 4px 12px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 20px;
+            z-index: 5;
+        }
+
+        .label-before { left: 12px; }
+        .label-after { right: 12px; }
+
+        /* Side Panel */
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-card {
+            background: var(--bg2);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-card h3 i { color: var(--primary); }
+
+        .bg-options { display: flex; flex-direction: column; gap: 12px; }
+
+        .bg-option-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .bg-opt-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .bg-opt-btn:hover, .bg-opt-btn.active {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .bg-opt-btn.active::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .bg-transparent {
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #ccc 75%),
+                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 12px 12px;
+            background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+        }
+
+        .color-picker-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .color-picker-wrap input[type="color"] {
+            width: 45px;
+            height: 38px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 2px;
+            background: var(--bg3);
+        }
+
+        .hex-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', monospace;
+            font-size: 0.85rem;
+            background: var(--bg3);
+            color: var(--text);
+        }
+
+        .upload-bg-btn {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            background: var(--bg3);
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .upload-bg-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        #bgImageInput { display: none; }
+
+        /* Download Buttons */
+        .download-buttons { display: flex; flex-direction: column; gap: 10px; }
+
+        .dl-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dl-btn:hover { transform: translateY(-2px); }
+
+        .dl-png {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .dl-jpg {
+            background: var(--bg3);
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .new-image-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* ========== BATCH SECTION ========== */
+        .batch-section {
+            display: none;
+            padding: 30px 0 60px;
+        }
+
+        .batch-section.active { display: block; }
+
+        .batch-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .batch-header h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+
+        .batch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto 30px;
+        }
+
+        .batch-item {
+            background: var(--bg2);
+            border-radius: var(--radius2);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .batch-item-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .batch-item-status {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .batch-item-status.pending { color: var(--text3); }
+        .batch-item-status.processing { color: var(--warning); }
+        .batch-item-status.done { color: var(--success); }
+        .batch-item-status.error { color: var(--secondary); }
+
+        .batch-item-progress {
+            height: 4px;
+            background: var(--border);
+        }
+
+        .batch-item-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .batch-actions {
+            text-align: center;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .batch-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .batch-process-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .batch-download-btn {
+            background: linear-gradient(135deg, var(--success), #20B862);
+            color: #fff;
+            display: none;
+        }
+
+        .batch-new-btn {
+            background: var(--bg2);
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        /* ========== HOW TO USE ========== */
+        .how-section { padding: 70px 0; }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--bg2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .step-card:hover { transform: translateY(-5px); box-shadow: var(--shadow2); }
+
+        .step-number {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0 auto 18px;
+        }
+
+        .step-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .step-card p { font-size: 0.9rem; color: var(--text2); line-height: 1.5; }
+
+        /* ========== FEATURES ========== */
+        .features-section { padding: 70px 0; background: var(--bg3); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg2);
+            padding: 25px;
+            border-radius: var(--radius2);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover { transform: translateY(-3px); }
+
+        .feature-card i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .feature-card h4 { font-size: 1rem; margin-bottom: 6px; }
+        .feature-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+        /* ========== FAQ ========== */
+        .faq-section { padding: 70px 0; }
+
+        .faq-list {
+            max-width: 750px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--bg2);
+            border-radius: var(--radius2);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 18px 22px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .faq-question i { transition: var(--transition); color: var(--primary); }
+        .faq-item.open .faq-question i { transform: rotate(180deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer { max-height: 200px; }
+
+        .faq-answer p {
+            padding: 0 22px 18px;
+            font-size: 0.9rem;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer p { color: var(--text3); font-size: 0.85rem; }
+        .footer a { color: var(--primary); text-decoration: none; }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .editor-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .upload-zone { padding: 40px 20px; }
+            .upload-icon { font-size: 3rem; }
+            .batch-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.6rem; }
+            .upload-options { flex-direction: column; align-items: center; }
+            .batch-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ========== TOAST ========== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--secondary); }
+        .toast.info { background: var(--primary); }
+
+        /* ========== HIDDEN ========== */
+        .hidden { display: none !important; }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <a href="https://onlinepdfpro.com" class="logo">OnlinePDF<span>Pro</span></a>
+            <div class="header-actions">
+                <a href="https://onlinepdfpro.com" class="back-link"><i class="fas fa-arrow-left"></i> All Tools</a>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Remove Background from Image</h1>
+        <p>100% free, AI-powered background remover. Works entirely in your browser — your images never leave your device.</p>
+        <div class="privacy-badge">
+            <i class="fas fa-shield-halved"></i>
+            100% Private — Images processed on YOUR device
+        </div>
+    </section>
+
+    <!-- UPLOAD SECTION -->
+    <section class="upload-section" id="uploadSection">
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+            <h3>Drag & Drop Your Image Here</h3>
+            <p>or click to browse files</p>
+            <button class="upload-btn" id="uploadBtn">
+                <i class="fas fa-image"></i> Choose Image
+            </button>
+            <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+
+        <div class="upload-options">
+            <button class="upload-opt-btn" id="pasteBtn">
+                <i class="fas fa-clipboard"></i> Paste from Clipboard
+            </button>
+            <button class="upload-opt-btn" id="sampleBtn">
+                <i class="fas fa-images"></i> Try Sample Image
+            </button>
+        </div>
+
+        <div class="batch-toggle">
+            <label class="toggle-switch">
+                <input type="checkbox" id="batchToggle">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="batch-label">Batch Mode (up to 10 images)</span>
+        </div>
+
+        <div class="file-info">
+            Supports: JPG, PNG, WEBP • Max size: 10MB per image
+        </div>
+    </section>
+
+    <!-- PROCESSING SECTION -->
+    <section class="processing-section" id="processingSection">
+        <div class="processing-card">
+            <div class="spinner"></div>
+            <h3 id="processingTitle">Removing Background...</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="progress-text" id="progressText">Initializing AI model...</p>
+            <div class="model-notice" id="modelNotice">
+                <i class="fas fa-info-circle"></i>
+                First time may take 30-60 seconds to download the AI model (~40MB). It gets cached for future use!
+            </div>
+        </div>
+    </section>
+
+    <!-- EDITOR SECTION (Single Image) -->
+    <section class="editor-section" id="editorSection">
+        <div class="container">
+            <div class="editor-grid">
+                <!-- Image Display -->
+                <div class="image-display">
+                    <div class="view-tabs">
+                        <button class="view-tab active" data-view="result">Result</button>
+                        <button class="view-tab" data-view="original">Original</button>
+                        <button class="view-tab" data-view="compare">Compare</button>
+                    </div>
+
+                    <!-- Result View -->
+                    <div class="image-container checkerboard" id="resultView">
+                        <img id="resultImage" alt="Result">
+                    </div>
+
+                    <!-- Original View -->
+                    <div class="image-container hidden" id="originalView">
+                        <img id="originalImage" alt="Original">
+                    </div>
+
+                    <!-- Compare View -->
+                    <div class="comparison-container" id="compareView">
+                        <div class="comparison-wrapper" id="comparisonWrapper">
+                            <img id="compareAfter" alt="After">
+                            <div class="comparison-before" id="comparisonBefore">
+                                <img id="compareBefore" alt="Before">
+                            </div>
+                            <div class="comparison-slider" id="comparisonSlider"></div>
+                            <span class="comparison-label label-before">Before</span>
+                            <span class="comparison-label label-after">After</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Panel -->
+                <div class="side-panel">
+                    <!-- Background Options -->
+                    <div class="panel-card">
+                        <h3><i class="fas fa-palette"></i> Background</h3>
+                        <div class="bg-options">
+                            <div class="bg-option-row">
+                                <button class="bg-opt-btn bg-transparent active" data-bg="transparent" title="Transparent"></button>
+                                <button class="bg-opt-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
+                                <button class="bg-opt-btn" data-bg="#000000" style="background:#000" title="Black"></button>
+                                <button class="bg-opt-btn" data-bg="#FF0000" style="background:#FF0000" title="Red"></button>
+                                <button class="bg-opt-btn" data-bg="#00AA00" style="background:#00AA00" title="Green"></button>
+                                <button class="bg-opt-btn" data-bg="#0066FF" style="background:#0066FF" title="Blue"></button>
+                                <button class="bg-opt-btn" data-bg="#FF69B4" style="background:#FF69B4" title="Pink"></button>
+                            </div>
+                            <div class="color-picker-wrap">
+                                <input type="color" id="colorPicker" value="#6C63FF" title="Pick custom color">
+                                <input type="text" class="hex-input" id="hexInput" value="#6C63FF" placeholder="#HEX">
+                                <button class="bg-opt-btn" id="customColorBtn" data-bg="custom" style="background:#6C63FF" title="Apply custom color"></button>
+                            </div>
+                            <button class="upload-bg-btn" id="uploadBgBtn">
+                                <i class="fas fa-image"></i> Upload Background Image
+                            </button>
+                            <input type="file" id="bgImageInput" accept="image/*">
+                        </div>
+                    </div>
+
+                    <!-- Download -->
+                    <div class="panel-card">
+                        <h3><i class="fas fa-download"></i> Download</h3>
+                        <div class="download-buttons">
+                            <button class="dl-btn dl-png" id="downloadPng">
+                                <i class="fas fa-download"></i> Download PNG (Transparent)
+                            </button>
+                            <button class="dl-btn dl-jpg" id="downloadJpg">
+                                <i class="fas fa-download"></i> Download JPG
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- New Image -->
+                    <div class="panel-card">
+                        <button class="dl-btn new-image-btn" id="newImageBtn">
+                            <i class="fas fa-rotate"></i> Upload New Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BATCH SECTION -->
+    <section class="batch-section" id="batchSection">
+        <div class="container">
+            <div class="batch-header">
+                <h2>Batch Processing</h2>
+                <p style="color:var(--text2)" id="batchCount">0 images loaded</p>
+            </div>
+            <div class="batch-grid" id="batchGrid"></div>
+            <div class="batch-actions">
+                <button class="batch-btn batch-process-btn" id="batchProcessBtn">
+                    <i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds
+                </button>
+                <button class="batch-btn batch-download-btn" id="batchDownloadBtn">
+                    <i class="fas fa-file-zipper"></i> Download All as ZIP
+                </button>
+                <button class="batch-btn batch-new-btn" id="batchNewBtn">
+                    <i class="fas fa-rotate"></i> Start Over
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO USE -->
+    <section class="how-section" id="howToUse">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Upload Image</h3>
+                    <p>Drag & drop, paste, or browse to upload your image. Supports JPG, PNG, WEBP formats.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>AI Removes Background</h3>
+                    <p>Our AI model processes the image entirely in your browser. No data is sent to any server.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Download Result</h3>
+                    <p>Choose a new background color or keep it transparent. Download as PNG or JPG for free.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Our Tool?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-halved"></i>
+                    <h4>100% Private</h4>
+                    <p>Images never leave your device. Everything processed in your browser.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4>AI Powered</h4>
+                    <p>Advanced machine learning model detects subjects with high accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-indian-rupee-sign"></i>
+                    <h4>Completely Free</h4>
+                    <p>No signup, no watermark, no hidden charges. Free HD downloads.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-layer-group"></i>
+                    <h4>Batch Processing</h4>
+                    <p>Process up to 10 images at once and download all as a ZIP file.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-palette"></i>
+                    <h4>Custom Backgrounds</h4>
+                    <p>Replace with any color, custom image, or keep transparent.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-screen"></i>
+                    <h4>Works Everywhere</h4>
+                    <p>Works on mobile, tablet, and desktop. No app installation needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is this tool really free? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! 100% free with no hidden charges. No signup required, no watermarks, and you get full HD downloads.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Are my images safe and private? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely. Your images are processed entirely in your browser using AI. They are never uploaded to any server. Your data stays on your device.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Why is the first processing slow? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>The first time you use the tool, it downloads the AI model (~40MB). This is cached by your browser, so subsequent uses will be much faster.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What image formats are supported? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We support JPG, JPEG, PNG, WEBP, and BMP formats. Maximum file size is 10MB per image.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How many images can I process at once? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>In batch mode, you can process up to 10 images at once. They are processed one by one to ensure your browser remains responsive.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Does it work on mobile phones? <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! It works on all modern mobile browsers. However, processing may be slower on low-end devices due to limited memory and CPU.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 <a href="https://onlinepdfpro.com">OnlinePDFPro.com</a> — All tools are free to use. Built with ❤️</p>
+        </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script type="module">
+        // ===== Import AI Background Removal Library =====
+        let removeBackgroundFn = null;
+        let libraryLoaded = false;
+
+        async function loadLibrary() {
+            if (libraryLoaded) return;
+            try {
+                const module = await import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm");
+                removeBackgroundFn = module.default || module.removeBackground;
+                libraryLoaded = true;
+                console.log("✅ Background removal library loaded");
+            } catch (err) {
+                console.error("❌ Failed to load library:", err);
+                showToast("Failed to load AI model. Please refresh and try again.", "error");
+            }
+        }
+
+        // Preload library
+        loadLibrary();
+
+        // ===== DOM Elements =====
+        const uploadSection = document.getElementById("uploadSection");
+        const processingSection = document.getElementById("processingSection");
+        const editorSection = document.getElementById("editorSection");
+        const batchSection = document.getElementById("batchSection");
+        const uploadZone = document.getElementById("uploadZone");
+        const fileInput = document.getElementById("fileInput");
+        const batchToggle = document.getElementById("batchToggle");
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const processingTitle = document.getElementById("processingTitle");
+        const modelNotice = document.getElementById("modelNotice");
+        const resultImage = document.getElementById("resultImage");
+        const originalImage = document.getElementById("originalImage");
+        const resultView = document.getElementById("resultView");
+        const originalView = document.getElementById("originalView");
+        const compareView = document.getElementById("compareView");
+        const compareAfter = document.getElementById("compareAfter");
+        const compareBefore = document.getElementById("compareBefore");
+        const comparisonBefore = document.getElementById("comparisonBefore");
+        const comparisonSlider = document.getElementById("comparisonSlider");
+        const comparisonWrapper = document.getElementById("comparisonWrapper");
+        const colorPicker = document.getElementById("colorPicker");
+        const hexInput = document.getElementById("hexInput");
+        const customColorBtn = document.getElementById("customColorBtn");
+        const bgImageInput = document.getElementById("bgImageInput");
+        const batchGrid = document.getElementById("batchGrid");
+        const batchCount = document.getElementById("batchCount");
+        const batchProcessBtn = document.getElementById("batchProcessBtn");
+        const batchDownloadBtn = document.getElementById("batchDownloadBtn");
+        const toast = document.getElementById("toast");
+
+        // ===== State =====
+        let currentOriginalFile = null;
+        let currentResultBlob = null;
+        let currentBackground = "transparent";
+        let batchFiles = [];
+        let batchResults = [];
+        let isBatchMode = false;
+
+        // ===== Toast =====
+        function showToast(msg, type = "info") {
+            toast.textContent = msg;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        }
+
+        // ===== Theme Toggle =====
+        const themeToggle = document.getElementById("themeToggle");
+        const savedTheme = localStorage.getItem("theme") || "light";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        updateThemeIcon();
+
+        themeToggle.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-theme");
+            const next = current === "light" ? "dark" : "light";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+            updateThemeIcon();
+        });
+
+        function updateThemeIcon() {
+            const theme = document.documentElement.getAttribute("data-theme");
+            themeToggle.innerHTML = theme === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+
+        // ===== FAQ Accordion =====
+        document.querySelectorAll(".faq-question").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const item = btn.parentElement;
+                document.querySelectorAll(".faq-item").forEach(i => {
+                    if (i !== item) i.classList.remove("open");
+                });
+                item.classList.toggle("open");
+            });
+        });
+
+        // ===== Upload Handlers =====
+        // Click to upload
+        document.getElementById("uploadBtn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+
+        uploadZone.addEventListener("click", () => fileInput.click());
+
+        // File input change
+        fileInput.addEventListener("change", (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // Drag & Drop
+        uploadZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadZone.classList.add("dragover");
+        });
+
+        uploadZone.addEventListener("dragleave", () => {
+            uploadZone.classList.remove("dragover");
+        });
+
+        uploadZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove("dragover");
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // Paste from clipboard
+        document.getElementById("pasteBtn").addEventListener("click", async () => {
+            try {
+                const clipboardItems = await navigator.clipboard.read();
+                for (const item of clipboardItems) {
+                    for (const type of item.types) {
+                        if (type.startsWith("image/")) {
+                            const blob = await item.getType(type);
+                            const file = new File([blob], "pasted-image.png", { type });
+                            handleFiles([file]);
+                            return;
+                        }
+                    }
+                }
+                showToast("No image found in clipboard", "error");
+            } catch (err) {
+                showToast("Paste not supported or permission denied. Try Ctrl+V", "error");
+            }
+        });
+
+        // Ctrl+V paste
+        document.addEventListener("paste", (e) => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith("image/")) {
+                    const file = item.getAsFile();
+                    if (file) handleFiles([file]);
+                }
+            }
+        });
+
+        // Sample Image
+        document.getElementById("sampleBtn").addEventListener("click", async () => {
+            showToast("Loading sample image...", "info");
+            try {
+                // Use a free sample image
+                const canvas = document.createElement("canvas");
+                canvas.width = 400;
+                canvas.height = 500;
+                const ctx = canvas.getContext("2d");
+                
+                // Create a simple sample: gradient background with a circle "subject"
+                // Draw gradient background
+                const grad = ctx.createLinearGradient(0, 0, 400, 500);
+                grad.addColorStop(0, "#FF6B6B");
+                grad.addColorStop(1, "#4ECDC4");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 400, 500);
+                
+                // Draw a "person-like" shape
+                ctx.fillStyle = "#FFE0BD";
+                ctx.beginPath();
+                ctx.arc(200, 180, 70, 0, Math.PI * 2); // head
+                ctx.fill();
+                
+                ctx.fillStyle = "#3498DB";
+                ctx.beginPath();
+                ctx.moveTo(120, 260);
+                ctx.lineTo(280, 260);
+                ctx.lineTo(300, 480);
+                ctx.lineTo(100, 480);
+                ctx.closePath();
+                ctx.fill(); // body
+
+                ctx.fillStyle = "#2C3E50";
+                // eyes
+                ctx.beginPath();
+                ctx.arc(178, 170, 6, 0, Math.PI * 2);
+                ctx.arc(222, 170, 6, 0, Math.PI * 2);
+                ctx.fill();
+                // mouth
+                ctx.beginPath();
+                ctx.arc(200, 200, 20, 0, Math.PI);
+                ctx.stroke();
+                
+                canvas.toBlob((blob) => {
+                    const file = new File([blob], "sample-image.png", { type: "image/png" });
+                    handleFiles([file]);
+                });
+            } catch (err) {
+                showToast("Failed to load sample image", "error");
+            }
+        });
+
+        // Batch toggle
+        batchToggle.addEventListener("change", () => {
+            isBatchMode = batchToggle.checked;
+            fileInput.multiple = isBatchMode;
+        });
+
+        // ===== Handle Files =====
+        function handleFiles(files) {
+            if (!files || files.length === 0) return;
+
+            const validFiles = [];
+            for (const file of files) {
+                if (!file.type.startsWith("image/")) {
+                    showToast(`${file.name} is not an image file`, "error");
+                    continue;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast(`${file.name} is too large (max 10MB)`, "error");
+                    continue;
+                }
+                validFiles.push(file);
+            }
+
+            if (validFiles.length === 0) return;
+
+            if (isBatchMode || validFiles.length > 1) {
+                if (validFiles.length > 10) {
+                    showToast("Maximum 10 images allowed in batch mode", "error");
+                    validFiles.length = 10;
+                }
+                startBatchMode(validFiles);
+            } else {
+                startSingleMode(validFiles[0]);
+            }
+        }
+
+        // ===== Single Mode =====
+        async function startSingleMode(file) {
+            currentOriginalFile = file;
+            showSection("processing");
+
+            try {
+                await loadLibrary();
+
+                if (!removeBackgroundFn) {
+                    throw new Error("AI model not available");
+                }
+
+                let progressPhase = "";
+                const config = {
+                    progress: (key, current, total) => {
+                        if (key !== progressPhase) {
+                            progressPhase = key;
+                        }
+                        const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+
+                        if (key.includes("fetch") || key.includes("download") || key.includes("load")) {
+                            progressBar.style.width = (pct * 0.5) + "%";
+                            progressText.textContent = `Downloading AI model... ${pct}%`;
+                            processingTitle.textContent = "Loading AI Model...";
+                        } else {
+                            progressBar.style.width = (50 + pct * 0.5) + "%";
+                            progressText.textContent = `Removing background... ${pct}%`;
+                            processingTitle.textContent = "Removing Background...";
+                            modelNotice.style.display = "none";
+                        }
+                    }
+                };
+
+                const blob = await removeBackgroundFn(file, config);
+                currentResultBlob = blob;
+
+                progressBar.style.width = "100%";
+                progressText.textContent = "Done! 🎉";
+
+                const origURL = URL.createObjectURL(file);
+                const resultURL = URL.createObjectURL(blob);
+
+                originalImage.src = origURL;
+                resultImage.src = resultURL;
+                compareAfter.src = resultURL;
+                compareBefore.src = origURL;
+
+                currentBackground = "transparent";
+                resetBgButtons();
+
+                setTimeout(() => showSection("editor"), 500);
+                showToast("Background removed successfully!", "success");
+
+            } catch (err) {
+                console.error("Processing error:", err);
+                showToast("Error: " + err.message, "error");
+                showSection("upload");
+            }
+        }
+
+        // ===== Batch Mode =====
+        async function startBatchMode(files) {
+            batchFiles = Array.from(files);
+            batchResults = new Array(files.length).fill(null);
+            showSection("batch");
+
+            batchCount.textContent = `${batchFiles.length} images loaded`;
+            batchGrid.innerHTML = "";
+            batchDownloadBtn.style.display = "none";
+
+            batchFiles.forEach((file, i) => {
+                const url = URL.createObjectURL(file);
+                const item = document.createElement("div");
+                item.className = "batch-item";
+                item.id = `batch-item-${i}`;
+                item.innerHTML = `
+                    <img src="${url}" class="batch-item-img" alt="${file.name}">
+                    <div class="batch-item-progress">
+                        <div class="batch-item-progress-bar" id="batch-progress-${i}"></div>
+                    </div>
+                    <div class="batch-item-status pending" id="batch-status-${i}">
+                        <i class="fas fa-clock"></i> Pending
+                    </div>
+                `;
+                batchGrid.appendChild(item);
+            });
+        }
+
+        // Batch Process Button
+        batchProcessBtn.addEventListener("click", async () => {
+            await loadLibrary();
+            if (!removeBackgroundFn) {
+                showToast("AI model not loaded. Please refresh.", "error");
+                return;
+            }
+
+            batchProcessBtn.disabled = true;
+            batchProcessBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            for (let i = 0; i < batchFiles.length; i++) {
+                const statusEl = document.getElementById(`batch-status-${i}`);
+                const progressEl = document.getElementById(`batch-progress-${i}`);
+
+                statusEl.className = "batch-item-status processing";
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                try {
+                    const config = {
+                        progress: (key, current, total) => {
+                            const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+                            if (!key.includes("fetch") && !key.includes("download") && !key.includes("load")) {
+                                progressEl.style.width = pct + "%";
+                            }
+                        }
+                    };
+
+                    const blob = await removeBackgroundFn(batchFiles[i], config);
+                    batchResults[i] = blob;
+
+                    // Replace image with result
+                    const img = document.querySelector(`#batch-item-${i} .batch-item-img`);
+                    img.src = URL.createObjectURL(blob);
+
+                    progressEl.style.width = "100%";
+                    statusEl.className = "batch-item-status done";
+                    statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Done!';
+
+                } catch (err) {
+                    console.error(`Error processing image ${i}:`, err);
+                    statusEl.className = "batch-item-status error";
+                    statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Error';
+                }
+            }
+
+            batchProcessBtn.innerHTML = '<i class="fas fa-check"></i> All Done!';
+            batchDownloadBtn.style.display = "inline-flex";
+            showToast("Batch processing complete!", "success");
+        });
+
+        // Batch Download ZIP
+        batchDownloadBtn.addEventListener("click", async () => {
+            batchDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
+
+            const zip = new JSZip();
+            const folder = zip.folder("removed-backgrounds");
+
+            for (let i = 0; i < batchResults.length; i++) {
+                if (batchResults[i]) {
+                    const name = batchFiles[i].name.replace(/\.[^.]+$/, "") + "_no_bg.png";
+                    folder.file(name, batchResults[i]);
+                }
+            }
+
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, "background-removed-images.zip");
+
+            batchDownloadBtn.innerHTML = '<i class="fas fa-file-zipper"></i> Download All as ZIP';
+            showToast("ZIP downloaded successfully!", "success");
+        });
+
+        // Batch New
+        document.getElementById("batchNewBtn").addEventListener("click", () => {
+            resetAll();
+        });
+
+        // ===== View Tabs =====
+        document.querySelectorAll(".view-tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+
+                const view = tab.dataset.view;
+                resultView.classList.add("hidden");
+                originalView.classList.add("hidden");
+                compareView.classList.remove("active");
+
+                if (view === "result") {
+                    resultView.classList.remove("hidden");
+                } else if (view === "original") {
+                    originalView.classList.remove("hidden");
+                } else if (view === "compare") {
+                    compareView.classList.add("active");
+                }
+            });
+        });
+
+        // ===== Comparison Slider =====
+        let isDragging = false;
+
+        comparisonSlider.addEventListener("mousedown", () => isDragging = true);
+        comparisonSlider.addEventListener("touchstart", () => isDragging = true);
+        document.addEventListener("mouseup", () => isDragging = false);
+        document.addEventListener("touchend", () => isDragging = false);
+
+        document.addEventListener("mousemove", handleSliderMove);
+        document.addEventListener("touchmove", handleSliderMove);
+
+        function handleSliderMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const rect = comparisonWrapper.getBoundingClientRect();
+            let x = (e.clientX || e.touches[0].clientX) - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            const pct = (x / rect.width) * 100;
+
+            comparisonBefore.style.width = pct + "%";
+            comparisonSlider.style.left = pct + "%";
+        }
+
+        // ===== Background Options =====
+        document.querySelectorAll(".bg-opt-btn[data-bg]").forEach(btn => {
+            if (btn.id === "customColorBtn") return;
+            btn.addEventListener("click", () => {
+                const bg = btn.dataset.bg;
+                if (bg === "transparent") {
+                    applyBackground("transparent");
+                } else {
+                    applyBackground(bg);
+                }
+                resetBgButtons();
+                btn.classList.add("active");
+            });
+        });
+
+        // Custom color button
+        customColorBtn.addEventListener("click", () => {
+            applyBackground(colorPicker.value);
+            resetBgButtons();
+            customColorBtn.classList.add("active");
+        });
+
+        // Color picker change
+        colorPicker.addEventListener("input", (e) => {
+            hexInput.value = e.target.value;
+            customColorBtn.style.background = e.target.value;
+        });
+
+        // Hex input change
+        hexInput.addEventListener("input", (e) => {
+            let val = e.target.value;
+            if (!val.startsWith("#")) val = "#" + val;
+            if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+                colorPicker.value = val;
+                customColorBtn.style.background = val;
+            }
+        });
+
+        // Upload background image
+        document.getElementById("uploadBgBtn").addEventListener("click", () => {
+            bgImageInput.click();
+        });
+
+        bgImageInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            applyBackground(url, true);
+            resetBgButtons();
+            showToast("Custom background applied!", "success");
+        });
+
+        function resetBgButtons() {
+            document.querySelectorAll(".bg-opt-btn").forEach(b => b.classList.remove("active"));
+        }
+
+        async function applyBackground(bg, isImage = false) {
+            currentBackground = bg;
+
+            if (!currentResultBlob) return;
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const resultImg = new Image();
+            resultImg.src = URL.createObjectURL(currentResultBlob);
+
+            await new Promise(resolve => resultImg.onload = resolve);
+
+            canvas.width = resultImg.naturalWidth;
+            canvas.height = resultImg.naturalHeight;
+
+            if (bg === "transparent") {
+                resultView.classList.add("checkerboard");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(resultImg, 0, 0);
+                resultImage.src = URL.createObjectURL(currentResultBlob);
+                compareAfter.src = resultImage.src;
+                return;
+            }
+
+            resultView.classList.remove("checkerboard");
+
+            if (isImage) {
+                const bgImg = new Image();
+                bgImg.src = bg;
+                await new Promise(resolve => bgImg.onload = resolve);
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            ctx.drawImage(resultImg, 0, 0);
+
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                resultImage.src = url;
+                compareAfter.src = url;
+            });
+        }
+
+        // ===== Download =====
+        document.getElementById("downloadPng").addEventListener("click", () => {
+            downloadResult("png");
+        });
+
+        document.getElementById("downloadJpg").addEventListener("click", () => {
+            downloadResult("jpg");
+        });
+
+        async function downloadResult(format) {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const img = new Image();
+            img.src = resultImage.src;
+            await new Promise(resolve => img.onload = resolve);
+
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+
+            if (format === "jpg") {
+                ctx.fillStyle = currentBackground === "transparent" ? "#FFFFFF" : currentBackground;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            ctx.drawImage(img, 0, 0);
+
+            const mimeType = format === "png" ? "image/png" : "image/jpeg";
+            const quality = format === "jpg" ? 0.92 : undefined;
+
+            canvas.toBlob((blob) => {
+                const fileName = currentOriginalFile
+                    ? currentOriginalFile.name.replace(/\.[^.]+$/, "") + `_no_bg.${format}`
+                    : `removed_background.${format}`;
+                saveAs(blob, fileName);
+                showToast(`Downloaded as ${format.toUpperCase()}!`, "success");
+            }, mimeType, quality);
+        }
+
+        // ===== New Image =====
+        document.getElementById("newImageBtn").addEventListener("click", () => {
+            resetAll();
+        });
+
+        // ===== Section Management =====
+        function showSection(section) {
+            uploadSection.style.display = "none";
+            processingSection.classList.remove("active");
+            editorSection.classList.remove("active");
+            batchSection.classList.remove("active");
+
+            switch (section) {
+                case "upload":
+                    uploadSection.style.display = "block";
+                    break;
+                case "processing":
+                    processingSection.classList.add("active");
+                    progressBar.style.width = "0%";
+                    progressText.textContent = "Initializing AI model...";
+                    processingTitle.textContent = "Removing Background...";
+                    modelNotice.style.display = "block";
+                    break;
+                case "editor":
+                    editorSection.classList.add("active");
+                    break;
+                case "batch":
+                    batchSection.classList.add("active");
+                    break;
+            }
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function resetAll() {
+            currentOriginalFile = null;
+            currentResultBlob = null;
+            currentBackground = "transparent";
+            batchFiles = [];
+            batchResults = [];
+            fileInput.value = "";
+            bgImageInput.value = "";
+            batchProcessBtn.disabled = false;
+            batchProcessBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds';
+            batchDownloadBtn.style.display = "none";
+            resetBgButtons();
+            document.querySelector('.bg-opt-btn[data-bg="transparent"]')?.classList.add("active");
+            showSection("upload");
+        }
+
+        // Initialize
+        showSection("upload");
+
+    </script>
+</body>
+</html>
