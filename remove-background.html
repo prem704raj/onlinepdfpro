@@ -1,4 +1,4 @@
-se<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -350,6 +350,57 @@ se<!DOCTYPE html>
         }
 
         [data-theme="dark"] .model-notice { background: #332B00; color: #FFD54F; }
+
+        
+        /* ========== ERROR ========== */
+        .error-section {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .error-section.active { display: block; }
+        .error-card {
+            max-width: 550px;
+            margin: 0 auto;
+            background: var(--bg2);
+            border-radius: var(--radius);
+            padding: 50px 30px;
+            box-shadow: var(--shadow);
+        }
+        .error-card .error-icon { font-size: 3.5rem; color: var(--secondary); margin-bottom: 15px; }
+        .error-card h3 { margin-bottom: 10px; font-size: 1.3rem; }
+        .error-card p { color: var(--text2); font-size: 0.95rem; margin-bottom: 5px; line-height: 1.5; }
+        .error-details {
+            background: var(--bg3);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            color: var(--secondary);
+            margin: 18px 0;
+            word-break: break-all;
+            text-align: left;
+            max-height: 120px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+        .error-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .retry-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .retry-btn:hover { transform: translateY(-2px); }
+        .retry-btn.secondary { background: var(--bg3); color: var(--text); border: 2px solid var(--border); }
 
         /* ========== EDITOR ========== */
         .editor-section {
@@ -1026,6 +1077,20 @@ se<!DOCTYPE html>
             </div>
         </div>
     </section>
+    <!-- ERROR -->
+    <section class="error-section" id="errorSection">
+        <div class="error-card">
+            <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3>Something Went Wrong</h3>
+            <p id="errorMessage">Failed to process image.</p>
+            <div class="error-details" id="errorDetails"></div>
+            <div class="error-actions">
+                <button class="retry-btn" id="retryBtn"><i class="fas fa-rotate"></i> Try Again</button>
+                <button class="retry-btn secondary" id="backBtn"><i class="fas fa-arrow-left"></i> Go Back</button>
+            </div>
+        </div>
+    </section>
+
 
     <!-- EDITOR SECTION (Single Image) -->
     <section class="editor-section" id="editorSection">
@@ -1266,765 +1331,748 @@ se<!DOCTYPE html>
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
-    <!-- ========== JAVASCRIPT ========== -->
-    <script type="module">
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT - COMPLETELY REWRITTEN & FIXED    -->
+    <!-- ============================================ -->
+    <script>
+    // ============================================
+    // WAIT FOR DOM TO FULLY LOAD (KEY FIX #1)
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
 
-        // ============================
-        // FIXED: Proper AI Model Loading
-        // ============================
+        console.log('🚀 DOM loaded, initializing...');
 
-        let removeBackgroundFn = null;
-        let libraryReady = false;
-        let libraryLoading = false;
-
-        async function loadLibrary() {
-            if (libraryReady) return true;
-            if (libraryLoading) {
-                // Wait for existing load
-                while (libraryLoading && !libraryReady) {
-                    await new Promise(r => setTimeout(r, 200));
-                }
-                return libraryReady;
+        // ============================================
+        // SAFE ELEMENT GETTER (KEY FIX #2)
+        // ============================================
+        function getEl(id) {
+            var el = document.getElementById(id);
+            if (!el) {
+                console.warn('⚠️ Element not found: #' + id);
             }
-
-            libraryLoading = true;
-
-            try {
-                console.log("⏳ Loading @imgly/background-removal...");
-
-                const module = await import(
-                    "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/index.js"
-                );
-
-                removeBackgroundFn = module.removeBackground || module.default;
-
-                if (!removeBackgroundFn) {
-                    // Try alternate access
-                    for (const key of Object.keys(module)) {
-                        if (typeof module[key] === "function") {
-                            removeBackgroundFn = module[key];
-                            break;
-                        }
-                    }
-                }
-
-                if (removeBackgroundFn) {
-                    libraryReady = true;
-                    console.log("✅ Library loaded successfully!");
-                    return true;
-                } else {
-                    throw new Error("Could not find removeBackground function in module");
-                }
-            } catch (err) {
-                console.error("❌ Primary load failed:", err);
-
-                // ====== FALLBACK: Try alternate CDN ======
-                try {
-                    console.log("⏳ Trying alternate CDN...");
-                    const module2 = await import(
-                        "https://unpkg.com/@imgly/background-removal@1.7.0/dist/index.js"
-                    );
-
-                    removeBackgroundFn = module2.removeBackground || module2.default;
-
-                    if (!removeBackgroundFn) {
-                        for (const key of Object.keys(module2)) {
-                            if (typeof module2[key] === "function") {
-                                removeBackgroundFn = module2[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    if (removeBackgroundFn) {
-                        libraryReady = true;
-                        console.log("✅ Library loaded from alternate CDN!");
-                        return true;
-                    }
-                } catch (err2) {
-                    console.error("❌ Alternate CDN also failed:", err2);
-                }
-
-                // ====== FALLBACK 2: Try ESM version ======
-                try {
-                    console.log("⏳ Trying ESM import...");
-                    const module3 = await import(
-                        "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm"
-                    );
-
-                    removeBackgroundFn = module3.removeBackground || module3.default;
-
-                    if (removeBackgroundFn) {
-                        libraryReady = true;
-                        console.log("✅ Library loaded via ESM!");
-                        return true;
-                    }
-                } catch (err3) {
-                    console.error("❌ ESM import also failed:", err3);
-                }
-
-                libraryLoading = false;
-                return false;
-            }
+            return el;
         }
 
-        // Start preloading immediately
-        loadLibrary();
+        // ============================================
+        // STATE
+        // ============================================
+        var removeBackgroundFn = null;
+        var libraryReady = false;
+        var currentOriginalFile = null;
+        var currentResultBlob = null;
+        var currentBackground = 'transparent';
+        var batchFiles = [];
+        var batchResults = [];
+        var isBatchMode = false;
 
-        // ============================
-        // DOM Elements
-        // ============================
-        const $ = id => document.getElementById(id);
-
-        const uploadSection = $("uploadSection");
-        const processingSection = $("processingSection");
-        const editorSection = $("editorSection");
-        const batchSection = $("batchSection");
-        const errorSection = $("errorSection");
-        const uploadZone = $("uploadZone");
-        const fileInput = $("fileInput");
-        const batchToggle = $("batchToggle");
-        const progressBar = $("progressBar");
-        const progressText = $("progressText");
-        const processingTitle = $("processingTitle");
-        const modelNotice = $("modelNotice");
-        const resultImage = $("resultImage");
-        const originalImage = $("originalImage");
-        const resultView = $("resultView");
-        const originalView = $("originalView");
-        const compareView = $("compareView");
-        const compareAfter = $("compareAfter");
-        const compareBefore = $("compareBefore");
-        const comparisonBefore = $("comparisonBefore");
-        const comparisonSlider = $("comparisonSlider");
-        const comparisonWrapper = $("comparisonWrapper");
-        const colorPicker = $("colorPicker");
-        const hexInput = $("hexInput");
-        const customColorBtn = $("customColorBtn");
-        const bgImageInput = $("bgImageInput");
-        const batchGrid = $("batchGrid");
-        const batchCount = $("batchCount");
-        const batchProcessBtn = $("batchProcessBtn");
-        const batchDownloadBtn = $("batchDownloadBtn");
-        const toast = $("toast");
-        const errorMessage = $("errorMessage");
-
-        // ============================
-        // State
-        // ============================
-        let currentOriginalFile = null;
-        let currentResultBlob = null;
-        let currentBackground = "transparent";
-        let batchFiles = [];
-        let batchResults = [];
-        let isBatchMode = false;
-
-        // ============================
-        // Toast
-        // ============================
-        function showToast(msg, type = "info") {
-            toast.textContent = msg;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => toast.classList.remove("show"), 4000);
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(msg, type) {
+            var t = getEl('toast');
+            if (!t) return;
+            t.textContent = msg;
+            t.className = 'toast ' + (type || 'info') + ' show';
+            setTimeout(function() { t.classList.remove('show'); }, 4000);
         }
 
-        // ============================
-        // Theme Toggle
-        // ============================
-        const themeToggle = $("themeToggle");
-        document.documentElement.setAttribute(
-            "data-theme",
-            localStorage.getItem("theme") || "light"
-        );
+        // ============================================
+        // SECTION MANAGEMENT (KEY FIX #3)
+        // ============================================
+        function showSection(name) {
+            console.log('📌 Section:', name);
+
+            var sections = {
+                'uploadSection': 'upload',
+                'processingSection': 'processing',
+                'editorSection': 'editor',
+                'batchSection': 'batch',
+                'errorSection': 'error'
+            };
+
+            // Hide all sections safely
+            for (var id in sections) {
+                var el = getEl(id);
+                if (el) {
+                    if (id === 'uploadSection') {
+                        el.style.display = 'none';
+                    } else {
+                        el.classList.remove('active');
+                    }
+                }
+            }
+
+            // Show requested section
+            if (name === 'upload') {
+                var u = getEl('uploadSection');
+                if (u) u.style.display = 'block';
+            } else if (name === 'processing') {
+                var p = getEl('processingSection');
+                if (p) p.classList.add('active');
+                var pb = getEl('progressBar');
+                if (pb) pb.style.width = '0%';
+                var pt = getEl('progressText');
+                if (pt) pt.textContent = 'Loading AI model...';
+                var pti = getEl('processingTitle');
+                if (pti) pti.textContent = 'Loading AI Model...';
+                var mn = getEl('modelNotice');
+                if (mn) mn.style.display = 'block';
+            } else if (name === 'editor') {
+                var ed = getEl('editorSection');
+                if (ed) ed.classList.add('active');
+            } else if (name === 'batch') {
+                var ba = getEl('batchSection');
+                if (ba) ba.classList.add('active');
+            } else if (name === 'error') {
+                var er = getEl('errorSection');
+                if (er) er.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================
+        // THEME TOGGLE
+        // ============================================
+        function updateThemeIcon() {
+            var btn = getEl('themeToggle');
+            if (!btn) return;
+            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            btn.innerHTML = dark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+
+        var savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon();
 
-        themeToggle.addEventListener("click", () => {
-            const next =
-                document.documentElement.getAttribute("data-theme") === "light"
-                    ? "dark"
-                    : "light";
-            document.documentElement.setAttribute("data-theme", next);
-            localStorage.setItem("theme", next);
-            updateThemeIcon();
-        });
-
-        function updateThemeIcon() {
-            const dark = document.documentElement.getAttribute("data-theme") === "dark";
-            themeToggle.innerHTML = dark
-                ? '<i class="fas fa-sun"></i>'
-                : '<i class="fas fa-moon"></i>';
+        var themeBtn = getEl('themeToggle');
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function() {
+                var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                updateThemeIcon();
+            });
         }
 
-        // ============================
-        // FAQ Accordion
-        // ============================
-        document.querySelectorAll(".faq-question").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const item = btn.parentElement;
-                document.querySelectorAll(".faq-item").forEach(i => {
-                    if (i !== item) i.classList.remove("open");
+        // ============================================
+        // FAQ
+        // ============================================
+        document.querySelectorAll('.faq-question').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var item = btn.parentElement;
+                document.querySelectorAll('.faq-item').forEach(function(i) {
+                    if (i !== item) i.classList.remove('open');
                 });
-                item.classList.toggle("open");
+                item.classList.toggle('open');
             });
         });
 
-        // ============================
-        // Upload Handlers
-        // ============================
-        $("uploadBtn").addEventListener("click", e => {
-            e.stopPropagation();
-            fileInput.click();
-        });
+        // ============================================
+        // LOAD AI LIBRARY (KEY FIX #4 - CORRECT URL)
+        // ============================================
+        async function loadAILibrary() {
+            if (libraryReady && removeBackgroundFn) {
+                console.log('✅ Already loaded');
+                return true;
+            }
 
-        uploadZone.addEventListener("click", () => fileInput.click());
-
-        fileInput.addEventListener("change", e => handleFiles(e.target.files));
-
-        // Drag & Drop
-        uploadZone.addEventListener("dragover", e => {
-            e.preventDefault();
-            uploadZone.classList.add("dragover");
-        });
-        uploadZone.addEventListener("dragleave", () =>
-            uploadZone.classList.remove("dragover")
-        );
-        uploadZone.addEventListener("drop", e => {
-            e.preventDefault();
-            uploadZone.classList.remove("dragover");
-            handleFiles(e.dataTransfer.files);
-        });
-
-        // Paste
-        $("pasteBtn").addEventListener("click", async () => {
+            // ATTEMPT 1: esm.sh (BEST for complex packages)
             try {
-                const items = await navigator.clipboard.read();
-                for (const item of items) {
-                    for (const type of item.types) {
-                        if (type.startsWith("image/")) {
-                            const blob = await item.getType(type);
-                            handleFiles([new File([blob], "pasted.png", { type })]);
-                            return;
-                        }
+                console.log('⏳ Try 1: esm.sh...');
+                var mod = await import('https://esm.sh/@imgly/background-removal@1.5.5');
+                removeBackgroundFn = mod.removeBackground || mod.default;
+                if (typeof removeBackgroundFn === 'function') {
+                    libraryReady = true;
+                    console.log('✅ Loaded via esm.sh!');
+                    return true;
+                }
+                for (var key in mod) {
+                    if (typeof mod[key] === 'function') {
+                        removeBackgroundFn = mod[key];
+                        libraryReady = true;
+                        console.log('✅ Loaded via esm.sh (key: ' + key + ')');
+                        return true;
                     }
                 }
-                showToast("No image in clipboard", "error");
-            } catch {
-                showToast("Paste failed. Try Ctrl+V instead.", "error");
+            } catch(e) {
+                console.warn('❌ Try 1 failed:', e.message);
             }
-        });
 
-        document.addEventListener("paste", e => {
-            const items = e.clipboardData?.items;
-            if (!items) return;
-            for (const item of items) {
-                if (item.type.startsWith("image/")) {
-                    const file = item.getAsFile();
-                    if (file) handleFiles([file]);
-                }
-            }
-        });
-
-        // ============================
-        // Sample Image
-        // ============================
-        $("sampleBtn").addEventListener("click", async () => {
-            showToast("Loading sample image...", "info");
+            // ATTEMPT 2: esm.sh without version pin
             try {
-                const res = await fetch("https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=600&q=80");
-                const blob = await res.blob();
-                handleFiles([new File([blob], "sample.jpg", { type: "image/jpeg" })]);
-            } catch {
-                // Fallback: create canvas sample
-                const c = document.createElement("canvas");
-                c.width = 500; c.height = 600;
-                const ctx = c.getContext("2d");
-                const g = ctx.createLinearGradient(0, 0, 500, 600);
-                g.addColorStop(0, "#667eea"); g.addColorStop(1, "#764ba2");
-                ctx.fillStyle = g; ctx.fillRect(0, 0, 500, 600);
-                ctx.fillStyle = "#FFE0BD";
-                ctx.beginPath(); ctx.arc(250, 200, 80, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = "#3498DB";
-                ctx.beginPath(); ctx.moveTo(140, 300); ctx.lineTo(360, 300);
-                ctx.lineTo(380, 580); ctx.lineTo(120, 580); ctx.closePath(); ctx.fill();
-                c.toBlob(b => handleFiles([new File([b], "sample.png", { type: "image/png" })]));
+                console.log('⏳ Try 2: esm.sh latest...');
+                var mod2 = await import('https://esm.sh/@imgly/background-removal');
+                removeBackgroundFn = mod2.removeBackground || mod2.default;
+                if (typeof removeBackgroundFn === 'function') {
+                    libraryReady = true;
+                    console.log('✅ Loaded via esm.sh latest!');
+                    return true;
+                }
+            } catch(e) {
+                console.warn('❌ Try 2 failed:', e.message);
+            }
+
+            // ATTEMPT 3: skypack
+            try {
+                console.log('⏳ Try 3: skypack...');
+                var mod3 = await import('https://cdn.skypack.dev/@imgly/background-removal@1.5.5');
+                removeBackgroundFn = mod3.removeBackground || mod3.default;
+                if (typeof removeBackgroundFn === 'function') {
+                    libraryReady = true;
+                    console.log('✅ Loaded via skypack!');
+                    return true;
+                }
+            } catch(e) {
+                console.warn('❌ Try 3 failed:', e.message);
+            }
+
+            // ATTEMPT 4: jsdelivr ESM for older version
+            try {
+                console.log('⏳ Try 4: jsdelivr v1.3.0...');
+                var mod4 = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.3.0/+esm');
+                removeBackgroundFn = mod4.removeBackground || mod4.default;
+                if (typeof removeBackgroundFn === 'function') {
+                    libraryReady = true;
+                    console.log('✅ Loaded via jsdelivr v1.3.0!');
+                    return true;
+                }
+            } catch(e) {
+                console.warn('❌ Try 4 failed:', e.message);
+            }
+
+            console.error('❌ ALL attempts failed to load AI library');
+            return false;
+        }
+
+        // ============================================
+        // UPLOAD HANDLERS
+        // ============================================
+        var uploadBtn = getEl('uploadBtn');
+        var uploadZone = getEl('uploadZone');
+        var fileInput = getEl('fileInput');
+        var pasteBtn = getEl('pasteBtn');
+        var sampleBtn = getEl('sampleBtn');
+        var batchToggleEl = getEl('batchToggle');
+
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (fileInput) fileInput.click();
+            });
+        }
+
+        if (uploadZone) {
+            uploadZone.addEventListener('click', function(e) {
+                if (e.target === uploadBtn || uploadBtn.contains(e.target)) return;
+                if (fileInput) fileInput.click();
+            });
+
+            uploadZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadZone.classList.remove('dragover');
+                if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files.length > 0) {
+                    handleFiles(e.target.files);
+                }
+            });
+        }
+
+        if (pasteBtn) {
+            pasteBtn.addEventListener('click', async function() {
+                try {
+                    var items = await navigator.clipboard.read();
+                    for (var ci = 0; ci < items.length; ci++) {
+                        var types = items[ci].types;
+                        for (var ti = 0; ti < types.length; ti++) {
+                            if (types[ti].startsWith('image/')) {
+                                var blob = await items[ci].getType(types[ti]);
+                                handleFiles([new File([blob], 'pasted.png', { type: types[ti] })]);
+                                return;
+                            }
+                        }
+                    }
+                    showToast('No image in clipboard', 'error');
+                } catch(e) {
+                    showToast('Paste failed. Try Ctrl+V instead', 'error');
+                }
+            });
+        }
+
+        document.addEventListener('paste', function(e) {
+            var items = e.clipboardData ? e.clipboardData.items : null;
+            if (!items) return;
+            for (var pi = 0; pi < items.length; pi++) {
+                if (items[pi].type.startsWith('image/')) {
+                    var file = items[pi].getAsFile();
+                    if (file) handleFiles([file]);
+                    return;
+                }
             }
         });
 
-        // ============================
-        // Batch toggle
-        // ============================
-        batchToggle.addEventListener("change", () => {
-            isBatchMode = batchToggle.checked;
-            fileInput.multiple = isBatchMode;
-        });
+        if (sampleBtn) {
+            sampleBtn.addEventListener('click', function() {
+                showToast('Creating sample image...', 'info');
+                var c = document.createElement('canvas');
+                c.width = 500; c.height = 600;
+                var ctx = c.getContext('2d');
+                var g = ctx.createLinearGradient(0, 0, 500, 600);
+                g.addColorStop(0, '#667eea');
+                g.addColorStop(1, '#764ba2');
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, 500, 600);
+                ctx.fillStyle = '#FFE0BD';
+                ctx.beginPath();
+                ctx.arc(250, 200, 80, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#3498DB';
+                ctx.beginPath();
+                ctx.moveTo(140, 300);
+                ctx.lineTo(360, 300);
+                ctx.lineTo(380, 580);
+                ctx.lineTo(120, 580);
+                ctx.closePath();
+                ctx.fill();
+                c.toBlob(function(blob) {
+                    if (blob) handleFiles([new File([blob], 'sample.png', { type: 'image/png' })]);
+                });
+            });
+        }
 
-        // ============================
-        // Handle Files
-        // ============================
+        if (batchToggleEl) {
+            batchToggleEl.addEventListener('change', function() {
+                isBatchMode = batchToggleEl.checked;
+                if (fileInput) fileInput.multiple = isBatchMode;
+            });
+        }
+
+        // ============================================
+        // HANDLE FILES
+        // ============================================
         function handleFiles(files) {
-            if (!files || files.length === 0) return;
-            const valid = [];
-            for (const f of files) {
-                if (!f.type.startsWith("image/")) {
-                    showToast(`${f.name} is not an image`, "error");
-                    continue;
-                }
-                if (f.size > 10 * 1024 * 1024) {
-                    showToast(`${f.name} exceeds 10MB limit`, "error");
-                    continue;
-                }
+            console.log('📁 Files:', files.length);
+            var valid = [];
+            for (var fi = 0; fi < files.length; fi++) {
+                var f = files[fi];
+                if (!f.type.startsWith('image/')) { showToast(f.name + ' is not an image', 'error'); continue; }
+                if (f.size > 10 * 1024 * 1024) { showToast(f.name + ' exceeds 10MB', 'error'); continue; }
                 valid.push(f);
             }
-            if (!valid.length) return;
-
+            if (valid.length === 0) { showToast('No valid images', 'error'); return; }
             if (isBatchMode || valid.length > 1) {
-                if (valid.length > 10) {
-                    showToast("Max 10 images in batch mode", "error");
-                    valid.length = 10;
-                }
+                if (valid.length > 10) valid = valid.slice(0, 10);
                 startBatchMode(valid);
             } else {
                 startSingleMode(valid[0]);
             }
         }
 
-        // ============================
-        // MAIN: Process Single Image
-        // ============================
+        // ============================================
+        // SINGLE MODE
+        // ============================================
         async function startSingleMode(file) {
+            console.log('🖼️ Processing:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
             currentOriginalFile = file;
-            showSection("processing");
-
-            progressBar.style.width = "5%";
-            progressText.textContent = "Loading AI library...";
-            processingTitle.textContent = "Loading AI Model...";
-            modelNotice.style.display = "block";
+            showSection('processing');
+            var pb = getEl('progressBar');
+            var pt = getEl('progressText');
+            var pti = getEl('processingTitle');
+            var mn = getEl('modelNotice');
 
             try {
-                // Step 1: Load library
-                const loaded = await loadLibrary();
-
-                if (!loaded || !removeBackgroundFn) {
-                    throw new Error(
-                        "Could not load AI model. Check your internet connection and try again."
-                    );
+                if (pb) pb.style.width = '5%';
+                if (pt) pt.textContent = 'Loading AI library...';
+                console.log('⏳ Loading AI...');
+                var loaded = await loadAILibrary();
+                if (!loaded || typeof removeBackgroundFn !== 'function') {
+                    throw new Error('Could not load AI model. Check internet and refresh page.');
                 }
+                console.log('✅ AI ready! Processing...');
+                if (pb) pb.style.width = '20%';
+                if (pt) pt.textContent = 'AI ready. Removing background...';
+                if (pti) pti.textContent = 'Removing Background...';
 
-                progressBar.style.width = "15%";
-                progressText.textContent = "AI model ready. Processing image...";
-                processingTitle.textContent = "Removing Background...";
-
-                // Step 2: Process image
-                const config = {
-                    publicPath:
-                        "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/",
-                    progress: (key, current, total) => {
-                        const pct =
-                            total > 0 ? Math.round((current / total) * 100) : 0;
-
-                        if (
-                            key.includes("fetch") ||
-                            key.includes("download") ||
-                            key.includes("load")
-                        ) {
-                            progressBar.style.width = 15 + pct * 0.4 + "%";
-                            progressText.textContent = `Downloading AI model... ${pct}%`;
-                            processingTitle.textContent = "Downloading AI Model...";
+                var config = {
+                    progress: function(key, current, total) {
+                        var pct = total > 0 ? Math.round((current / total) * 100) : 0;
+                        if (key.indexOf('fetch') > -1 || key.indexOf('download') > -1 || key.indexOf('load') > -1) {
+                            if (pb) pb.style.width = (20 + pct * 0.35) + '%';
+                            if (pt) pt.textContent = 'Downloading AI model... ' + pct + '%';
+                            if (pti) pti.textContent = 'Downloading AI Model...';
                         } else {
-                            modelNotice.style.display = "none";
-                            progressBar.style.width = 55 + pct * 0.45 + "%";
-                            progressText.textContent = `Removing background... ${pct}%`;
-                            processingTitle.textContent = "Removing Background...";
+                            if (mn) mn.style.display = 'none';
+                            if (pb) pb.style.width = (55 + pct * 0.45) + '%';
+                            if (pt) pt.textContent = 'Removing background... ' + pct + '%';
+                            if (pti) pti.textContent = 'Removing Background...';
                         }
                     }
                 };
 
-                console.log("🚀 Starting background removal...");
-                const blob = await removeBackgroundFn(file, config);
-                console.log("✅ Background removed! Blob size:", blob.size);
+                console.log('🚀 removeBackground() called...');
+                var resultBlob = await removeBackgroundFn(file, config);
+                console.log('✅ Done! Blob:', resultBlob.size, 'bytes');
+                currentResultBlob = resultBlob;
+                if (pb) pb.style.width = '100%';
+                if (pt) pt.textContent = 'Done! 🎉';
 
-                currentResultBlob = blob;
-                progressBar.style.width = "100%";
-                progressText.textContent = "Done! 🎉";
-
-                // Set images
-                const origURL = URL.createObjectURL(file);
-                const resURL = URL.createObjectURL(blob);
-
-                originalImage.src = origURL;
-                resultImage.src = resURL;
-                compareAfter.src = resURL;
-                compareBefore.src = origURL;
-
-                currentBackground = "transparent";
+                var origURL = URL.createObjectURL(file);
+                var resURL = URL.createObjectURL(resultBlob);
+                var ri = getEl('resultImage');
+                var oi = getEl('originalImage');
+                var ca = getEl('compareAfter');
+                var cb = getEl('compareBefore');
+                var rv = getEl('resultView');
+                if (ri) ri.src = resURL;
+                if (oi) oi.src = origURL;
+                if (ca) ca.src = resURL;
+                if (cb) cb.src = origURL;
+                if (rv) rv.classList.add('checkerboard');
+                currentBackground = 'transparent';
                 resetBgButtons();
-                document
-                    .querySelector('.bg-opt-btn[data-bg="transparent"]')
-                    ?.classList.add("active");
-                resultView.classList.add("checkerboard");
+                var transBtn = document.querySelector('.bg-opt-btn[data-bg="transparent"]');
+                if (transBtn) transBtn.classList.add('active');
 
-                setTimeout(() => {
-                    showSection("editor");
-                    showToast("Background removed successfully!", "success");
-                }, 600);
-            } catch (err) {
-                console.error("❌ Processing error:", err);
-                errorMessage.textContent = err.message || "Failed to process image.";
-                showSection("error");
-                showToast("Error: " + (err.message || "Processing failed"), "error");
+                setTimeout(function() {
+                    showSection('editor');
+                    showToast('Background removed!', 'success');
+                }, 700);
+
+            } catch(err) {
+                console.error('❌ Error:', err);
+                var em = getEl('errorMessage');
+                var ed = getEl('errorDetails');
+                if (em) em.textContent = err.message || 'Processing failed';
+                if (ed) ed.textContent = String(err.stack || err).substring(0, 500);
+                showSection('error');
+                showToast('Error occurred', 'error');
             }
         }
 
-        // ============================
-        // Batch Mode
-        // ============================
-        async function startBatchMode(files) {
-            batchFiles = Array.from(files);
-            batchResults = new Array(files.length).fill(null);
-            showSection("batch");
-
-            batchCount.textContent = `${batchFiles.length} images loaded`;
-            batchGrid.innerHTML = "";
-            batchDownloadBtn.style.display = "none";
-            batchProcessBtn.disabled = false;
-            batchProcessBtn.innerHTML =
-                '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds';
-
-            batchFiles.forEach((file, i) => {
-                const url = URL.createObjectURL(file);
-                const item = document.createElement("div");
-                item.className = "batch-item";
-                item.id = `batch-item-${i}`;
-                item.innerHTML = `
-                    <img src="${url}" class="batch-item-img" alt="${file.name}">
-                    <div class="batch-item-progress">
-                        <div class="batch-item-progress-bar" id="batch-progress-${i}"></div>
-                    </div>
-                    <div class="batch-item-status pending" id="batch-status-${i}">
-                        <i class="fas fa-clock"></i> Pending
-                    </div>
-                `;
-                batchGrid.appendChild(item);
+        // ============================================
+        // BATCH MODE
+        // ============================================
+        function startBatchMode(files) {
+            batchFiles = [];
+            for (var bi = 0; bi < files.length; bi++) batchFiles.push(files[bi]);
+            batchResults = new Array(batchFiles.length).fill(null);
+            showSection('batch');
+            var bc = getEl('batchCount');
+            var bg = getEl('batchGrid');
+            var bdb = getEl('batchDownloadBtn');
+            var bpb = getEl('batchProcessBtn');
+            if (bc) bc.textContent = batchFiles.length + ' images loaded';
+            if (bg) bg.innerHTML = '';
+            if (bdb) bdb.style.display = 'none';
+            if (bpb) { bpb.disabled = false; bpb.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds'; }
+            batchFiles.forEach(function(file, i) {
+                var url = URL.createObjectURL(file);
+                var item = document.createElement('div');
+                item.className = 'batch-item';
+                item.id = 'batch-item-' + i;
+                item.innerHTML = '<img src="' + url + '" class="batch-item-img" alt="' + file.name + '"><div class="batch-item-progress"><div class="batch-item-progress-bar" id="batch-progress-' + i + '"></div></div><div class="batch-item-status pending" id="batch-status-' + i + '"><i class="fas fa-clock"></i> Pending</div>';
+                if (bg) bg.appendChild(item);
             });
         }
 
-        batchProcessBtn.addEventListener("click", async () => {
-            const loaded = await loadLibrary();
-            if (!loaded || !removeBackgroundFn) {
-                showToast("AI model failed to load. Refresh and retry.", "error");
-                return;
-            }
-
-            batchProcessBtn.disabled = true;
-            batchProcessBtn.innerHTML =
-                '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-            const config = {
-                publicPath:
-                    "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/"
-            };
-
-            for (let i = 0; i < batchFiles.length; i++) {
-                const statusEl = $(`batch-status-${i}`);
-                const progressEl = $(`batch-progress-${i}`);
-
-                statusEl.className = "batch-item-status processing";
-                statusEl.innerHTML =
-                    '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-                try {
-                    const itemConfig = {
-                        ...config,
-                        progress: (key, current, total) => {
-                            if (key.includes("fetch") || key.includes("download") || key.includes("load")) return;
-                            const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-                            progressEl.style.width = pct + "%";
-                        }
-                    };
-
-                    const blob = await removeBackgroundFn(batchFiles[i], itemConfig);
-                    batchResults[i] = blob;
-
-                    document.querySelector(`#batch-item-${i} .batch-item-img`).src =
-                        URL.createObjectURL(blob);
-
-                    progressEl.style.width = "100%";
-                    statusEl.className = "batch-item-status done";
-                    statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Done!';
-                } catch (err) {
-                    console.error(`Error on image ${i}:`, err);
-                    statusEl.className = "batch-item-status error";
-                    statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Error';
+        var batchProcessBtn = getEl('batchProcessBtn');
+        if (batchProcessBtn) {
+            batchProcessBtn.addEventListener('click', async function() {
+                var loaded = await loadAILibrary();
+                if (!loaded) { showToast('AI model failed. Refresh page.', 'error'); return; }
+                batchProcessBtn.disabled = true;
+                batchProcessBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                for (var i = 0; i < batchFiles.length; i++) {
+                    var statusEl = getEl('batch-status-' + i);
+                    var progressEl = getEl('batch-progress-' + i);
+                    if (statusEl) { statusEl.className = 'batch-item-status processing'; statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'; }
+                    try {
+                        var blob = await removeBackgroundFn(batchFiles[i], {
+                            progress: (function(pEl) {
+                                return function(key, current, total) {
+                                    if (key.indexOf('fetch') > -1) return;
+                                    var pct = total > 0 ? Math.round((current / total) * 100) : 0;
+                                    if (pEl) pEl.style.width = pct + '%';
+                                };
+                            })(progressEl)
+                        });
+                        batchResults[i] = blob;
+                        var img = document.querySelector('#batch-item-' + i + ' .batch-item-img');
+                        if (img) img.src = URL.createObjectURL(blob);
+                        if (progressEl) progressEl.style.width = '100%';
+                        if (statusEl) { statusEl.className = 'batch-item-status done'; statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Done!'; }
+                    } catch(err) {
+                        console.error('Batch error ' + i + ':', err);
+                        if (statusEl) { statusEl.className = 'batch-item-status error'; statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Error'; }
+                    }
                 }
-            }
+                batchProcessBtn.innerHTML = '<i class="fas fa-check"></i> All Done!';
+                var bdb = getEl('batchDownloadBtn');
+                if (bdb) bdb.style.display = 'inline-flex';
+                showToast('Batch complete!', 'success');
+            });
+        }
 
-            batchProcessBtn.innerHTML = '<i class="fas fa-check"></i> All Done!';
-            batchDownloadBtn.style.display = "inline-flex";
-            showToast("Batch processing complete!", "success");
-        });
-
-        batchDownloadBtn.addEventListener("click", async () => {
-            batchDownloadBtn.innerHTML =
-                '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
-
-            const zip = new JSZip();
-            const folder = zip.folder("removed-backgrounds");
-
-            for (let i = 0; i < batchResults.length; i++) {
-                if (batchResults[i]) {
-                    const name =
-                        batchFiles[i].name.replace(/\.[^.]+$/, "") + "_no_bg.png";
-                    folder.file(name, batchResults[i]);
+        var batchDlBtn = getEl('batchDownloadBtn');
+        if (batchDlBtn) {
+            batchDlBtn.addEventListener('click', async function() {
+                batchDlBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
+                var zip = new JSZip();
+                var folder = zip.folder('removed-backgrounds');
+                for (var i = 0; i < batchResults.length; i++) {
+                    if (batchResults[i]) {
+                        var name = batchFiles[i].name.replace(/\.[^.]+$/, '') + '_no_bg.png';
+                        folder.file(name, batchResults[i]);
+                    }
                 }
-            }
+                var content = await zip.generateAsync({ type: 'blob' });
+                saveAs(content, 'background-removed.zip');
+                batchDlBtn.innerHTML = '<i class="fas fa-file-zipper"></i> Download All as ZIP';
+                showToast('ZIP downloaded!', 'success');
+            });
+        }
 
-            const content = await zip.generateAsync({ type: "blob" });
-            saveAs(content, "background-removed-images.zip");
+        var batchNewBtn = getEl('batchNewBtn');
+        if (batchNewBtn) batchNewBtn.addEventListener('click', resetAll);
 
-            batchDownloadBtn.innerHTML =
-                '<i class="fas fa-file-zipper"></i> Download All as ZIP';
-            showToast("ZIP downloaded!", "success");
-        });
-
-        $("batchNewBtn").addEventListener("click", resetAll);
-
-        // ============================
-        // View Tabs
-        // ============================
-        document.querySelectorAll(".view-tab").forEach(tab => {
-            tab.addEventListener("click", () => {
-                document
-                    .querySelectorAll(".view-tab")
-                    .forEach(t => t.classList.remove("active"));
-                tab.classList.add("active");
-
-                const view = tab.dataset.view;
-                resultView.classList.add("hidden");
-                originalView.classList.add("hidden");
-                compareView.classList.remove("active");
-
-                if (view === "result") resultView.classList.remove("hidden");
-                else if (view === "original") originalView.classList.remove("hidden");
-                else if (view === "compare") compareView.classList.add("active");
+        // ============================================
+        // VIEW TABS
+        // ============================================
+        document.querySelectorAll('.view-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.view-tab').forEach(function(t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                var view = tab.getAttribute('data-view');
+                var rv = getEl('resultView');
+                var ov = getEl('originalView');
+                var cv = getEl('compareView');
+                if (rv) rv.classList.add('hidden');
+                if (ov) ov.classList.add('hidden');
+                if (cv) cv.classList.remove('active');
+                if (view === 'result' && rv) rv.classList.remove('hidden');
+                else if (view === 'original' && ov) ov.classList.remove('hidden');
+                else if (view === 'compare' && cv) cv.classList.add('active');
             });
         });
 
-        // ============================
-        // Comparison Slider
-        // ============================
-        let isDragging = false;
-        comparisonSlider.addEventListener("mousedown", () => (isDragging = true));
-        comparisonSlider.addEventListener("touchstart", () => (isDragging = true));
-        document.addEventListener("mouseup", () => (isDragging = false));
-        document.addEventListener("touchend", () => (isDragging = false));
-        document.addEventListener("mousemove", handleSlider);
-        document.addEventListener("touchmove", handleSlider);
-
-        function handleSlider(e) {
-            if (!isDragging) return;
+        // ============================================
+        // COMPARISON SLIDER
+        // ============================================
+        var isDragging = false;
+        var slider = getEl('comparisonSlider');
+        var cWrapper = getEl('comparisonWrapper');
+        var cBefore = getEl('comparisonBefore');
+        if (slider) {
+            slider.addEventListener('mousedown', function() { isDragging = true; });
+            slider.addEventListener('touchstart', function() { isDragging = true; });
+        }
+        document.addEventListener('mouseup', function() { isDragging = false; });
+        document.addEventListener('touchend', function() { isDragging = false; });
+        document.addEventListener('mousemove', moveSlider);
+        document.addEventListener('touchmove', moveSlider);
+        function moveSlider(e) {
+            if (!isDragging || !cWrapper || !cBefore || !slider) return;
             e.preventDefault();
-            const rect = comparisonWrapper.getBoundingClientRect();
-            let x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
-            x = Math.max(0, Math.min(x, rect.width));
-            const pct = (x / rect.width) * 100;
-            comparisonBefore.style.width = pct + "%";
-            comparisonSlider.style.left = pct + "%";
+            var rect = cWrapper.getBoundingClientRect();
+            var cx = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            var x = Math.max(0, Math.min(cx - rect.left, rect.width));
+            var pct = (x / rect.width) * 100;
+            cBefore.style.width = pct + '%';
+            slider.style.left = pct + '%';
         }
 
-        // ============================
-        // Background Options
-        // ============================
-        document.querySelectorAll(".bg-opt-btn[data-bg]").forEach(btn => {
-            if (btn.id === "customColorBtn") return;
-            btn.addEventListener("click", () => {
-                const bg = btn.dataset.bg;
-                applyBackground(bg === "transparent" ? "transparent" : bg);
+        // ============================================
+        // BACKGROUND OPTIONS
+        // ============================================
+        document.querySelectorAll('.bg-opt-btn[data-bg]').forEach(function(btn) {
+            if (btn.id === 'customColorBtn') return;
+            btn.addEventListener('click', function() {
+                var bg = btn.getAttribute('data-bg');
+                applyBackground(bg);
                 resetBgButtons();
-                btn.classList.add("active");
+                btn.classList.add('active');
             });
         });
 
-        customColorBtn.addEventListener("click", () => {
-            applyBackground(colorPicker.value);
-            resetBgButtons();
-            customColorBtn.classList.add("active");
-        });
+        var customBtn = getEl('customColorBtn');
+        var cpicker = getEl('colorPicker');
+        var hinput = getEl('hexInput');
+        if (customBtn) {
+            customBtn.addEventListener('click', function() {
+                if (cpicker) { applyBackground(cpicker.value); resetBgButtons(); customBtn.classList.add('active'); }
+            });
+        }
+        if (cpicker) {
+            cpicker.addEventListener('input', function(e) {
+                if (hinput) hinput.value = e.target.value;
+                if (customBtn) customBtn.style.background = e.target.value;
+            });
+        }
+        if (hinput) {
+            hinput.addEventListener('input', function(e) {
+                var v = e.target.value;
+                if (!v.startsWith('#')) v = '#' + v;
+                if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+                    if (cpicker) cpicker.value = v;
+                    if (customBtn) customBtn.style.background = v;
+                }
+            });
+        }
 
-        colorPicker.addEventListener("input", e => {
-            hexInput.value = e.target.value;
-            customColorBtn.style.background = e.target.value;
-        });
-
-        hexInput.addEventListener("input", e => {
-            let v = e.target.value;
-            if (!v.startsWith("#")) v = "#" + v;
-            if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
-                colorPicker.value = v;
-                customColorBtn.style.background = v;
-            }
-        });
-
-        $("uploadBgBtn").addEventListener("click", () => bgImageInput.click());
-
-        bgImageInput.addEventListener("change", e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            applyBackground(URL.createObjectURL(file), true);
-            resetBgButtons();
-            showToast("Custom background applied!", "success");
-        });
+        var uploadBgBtn = getEl('uploadBgBtn');
+        var bgImgInput = getEl('bgImageInput');
+        if (uploadBgBtn && bgImgInput) {
+            uploadBgBtn.addEventListener('click', function() { bgImgInput.click(); });
+            bgImgInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                applyBackground(URL.createObjectURL(file), true);
+                resetBgButtons();
+                showToast('Background applied!', 'success');
+            });
+        }
 
         function resetBgButtons() {
-            document
-                .querySelectorAll(".bg-opt-btn")
-                .forEach(b => b.classList.remove("active"));
+            document.querySelectorAll('.bg-opt-btn').forEach(function(b) { b.classList.remove('active'); });
         }
 
-        async function applyBackground(bg, isImage = false) {
+        async function applyBackground(bg, isImage) {
             currentBackground = bg;
             if (!currentResultBlob) return;
-
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const img = new Image();
-            img.src = URL.createObjectURL(currentResultBlob);
-            await new Promise(r => (img.onload = r));
-
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-
-            if (bg === "transparent") {
-                resultView.classList.add("checkerboard");
-                resultImage.src = URL.createObjectURL(currentResultBlob);
-                compareAfter.src = resultImage.src;
+            var rv = getEl('resultView');
+            var ri = getEl('resultImage');
+            var ca = getEl('compareAfter');
+            if (bg === 'transparent') {
+                if (rv) rv.classList.add('checkerboard');
+                var url = URL.createObjectURL(currentResultBlob);
+                if (ri) ri.src = url;
+                if (ca) ca.src = url;
                 return;
             }
-
-            resultView.classList.remove("checkerboard");
-
+            if (rv) rv.classList.remove('checkerboard');
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var img = new Image();
+            img.src = URL.createObjectURL(currentResultBlob);
+            await new Promise(function(r) { img.onload = r; });
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
             if (isImage) {
-                const bgImg = new Image();
-                bgImg.crossOrigin = "anonymous";
+                var bgImg = new Image();
                 bgImg.src = bg;
-                await new Promise(r => (bgImg.onload = r));
+                await new Promise(function(r) { bgImg.onload = r; });
                 ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
             } else {
                 ctx.fillStyle = bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
-
             ctx.drawImage(img, 0, 0);
-            canvas.toBlob(blob => {
-                const url = URL.createObjectURL(blob);
-                resultImage.src = url;
-                compareAfter.src = url;
+            canvas.toBlob(function(blob) {
+                var u = URL.createObjectURL(blob);
+                if (ri) ri.src = u;
+                if (ca) ca.src = u;
             });
         }
 
-        // ============================
-        // Download
-        // ============================
-        $("downloadPng").addEventListener("click", () => downloadResult("png"));
-        $("downloadJpg").addEventListener("click", () => downloadResult("jpg"));
+        // ============================================
+        // DOWNLOAD
+        // ============================================
+        var dlPng = getEl('downloadPng');
+        var dlJpg = getEl('downloadJpg');
+        if (dlPng) dlPng.addEventListener('click', function() { downloadResult('png'); });
+        if (dlJpg) dlJpg.addEventListener('click', function() { downloadResult('jpg'); });
 
         async function downloadResult(format) {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const img = new Image();
-            img.src = resultImage.src;
-            await new Promise(r => (img.onload = r));
-
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var ri = getEl('resultImage');
+            if (!ri || !ri.src) return;
+            var img = new Image();
+            img.src = ri.src;
+            await new Promise(function(r) { img.onload = r; });
             canvas.width = img.naturalWidth;
             canvas.height = img.naturalHeight;
-
-            if (format === "jpg") {
-                ctx.fillStyle =
-                    currentBackground === "transparent"
-                        ? "#FFFFFF"
-                        : currentBackground;
+            if (format === 'jpg') {
+                ctx.fillStyle = currentBackground === 'transparent' ? '#FFFFFF' : currentBackground;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
-
             ctx.drawImage(img, 0, 0);
-
-            const mime = format === "png" ? "image/png" : "image/jpeg";
-            canvas.toBlob(
-                blob => {
-                    const name = currentOriginalFile
-                        ? currentOriginalFile.name.replace(/\.[^.]+$/, "") +
-                          `_no_bg.${format}`
-                        : `removed_bg.${format}`;
-                    saveAs(blob, name);
-                    showToast(`Downloaded as ${format.toUpperCase()}!`, "success");
-                },
-                mime,
-                format === "jpg" ? 0.92 : undefined
-            );
+            var mime = format === 'png' ? 'image/png' : 'image/jpeg';
+            canvas.toBlob(function(blob) {
+                var name = currentOriginalFile
+                    ? currentOriginalFile.name.replace(/\.[^.]+$/, '') + '_no_bg.' + format
+                    : 'result.' + format;
+                saveAs(blob, name);
+                showToast('Downloaded ' + format.toUpperCase() + '!', 'success');
+            }, mime, format === 'jpg' ? 0.92 : undefined);
         }
 
-        // ============================
-        // New Image / Retry / Reset
-        // ============================
-        $("newImageBtn").addEventListener("click", resetAll);
-
-        $("retryBtn").addEventListener("click", () => {
-            if (currentOriginalFile) {
-                startSingleMode(currentOriginalFile);
-            } else {
-                resetAll();
-            }
-        });
-
-        // ============================
-        // Section Management
-        // ============================
-        function showSection(name) {
-            uploadSection.style.display = "none";
-            processingSection.classList.remove("active");
-            editorSection.classList.remove("active");
-            batchSection.classList.remove("active");
-            errorSection.classList.remove("active");
-
-            switch (name) {
-                case "upload":
-                    uploadSection.style.display = "block";
-                    break;
-                case "processing":
-                    processingSection.classList.add("active");
-                    progressBar.style.width = "0%";
-                    break;
-                case "editor":
-                    editorSection.classList.add("active");
-                    break;
-                case "batch":
-                    batchSection.classList.add("active");
-                    break;
-                case "error":
-                    errorSection.classList.add("active");
-                    break;
-            }
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
+        // ============================================
+        // NEW IMAGE / RETRY / RESET
+        // ============================================
+        var newBtn = getEl('newImageBtn');
+        var retryBtn = getEl('retryBtn');
+        var backBtn = getEl('backBtn');
+        if (newBtn) newBtn.addEventListener('click', resetAll);
+        if (backBtn) backBtn.addEventListener('click', resetAll);
+        if (retryBtn) {
+            retryBtn.addEventListener('click', function() {
+                if (currentOriginalFile) startSingleMode(currentOriginalFile);
+                else resetAll();
+            });
         }
 
         function resetAll() {
             currentOriginalFile = null;
             currentResultBlob = null;
-            currentBackground = "transparent";
+            currentBackground = 'transparent';
             batchFiles = [];
             batchResults = [];
-            fileInput.value = "";
-            bgImageInput.value = "";
+            var fi = getEl('fileInput');
+            var bi = getEl('bgImageInput');
+            if (fi) fi.value = '';
+            if (bi) bi.value = '';
             resetBgButtons();
-            document
-                .querySelector('.bg-opt-btn[data-bg="transparent"]')
-                ?.classList.add("active");
-            showSection("upload");
+            var tb = document.querySelector('.bg-opt-btn[data-bg="transparent"]');
+            if (tb) tb.classList.add('active');
+            showSection('upload');
         }
 
-        // Initialize
-        showSection("upload");
+        // ============================================
+        // INIT
+        // ============================================
+        showSection('upload');
+        console.log('✅ Tool ready!');
 
+        // Pre-load library
+        setTimeout(function() {
+            loadAILibrary().then(function(ok) {
+                console.log(ok ? '✅ AI pre-loaded!' : '⚠️ AI pre-load failed (will retry on use)');
+            });
+        }, 3000);
+
+    }); // END DOMContentLoaded
     </script>
+
+
 </body>
 </html>
