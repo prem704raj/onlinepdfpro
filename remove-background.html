@@ -1,2078 +1,524 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remove Background from Image Free | OnlinePDFPro</title>
-    <meta name="description" content="Remove background from any image for free. 100% private, AI-powered, works in your browser.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Remove Background from Image Free Online | OnlinePDFPro</title>
+    <meta name="description" content="Remove background from any image for free using AI. 100% private, works in your browser. No upload needed. Supports JPG, PNG, WEBP.">
+    <meta name="keywords" content="remove background, background remover, remove bg, transparent background, image background remover free">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <link rel="canonical" href="https://onlinepdfpro.com/remove-background.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/remove-background.html">
+    <meta property="og:title" content="Remove Background from Image Free Online | OnlinePDFPro">
+    <meta property="og:description" content="Remove background from any image for free using AI. 100% private, works in your browser.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-fix.css?v=9">
+    <link rel="stylesheet" href="css/tools.css">
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-VMPCXTN3ES');</script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools.html"},{"@type":"ListItem","position":3,"name":"Remove Background","item":"https://onlinepdfpro.com/remove-background.html"}]}</script>
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","vu83gydexm");</script>
     <style>
-        :root {
-            --primary: #6C63FF;
-            --primary-dark: #5A52D5;
-            --primary-light: #8B83FF;
-            --secondary: #FF6584;
-            --success: #2ED573;
-            --warning: #FFA502;
-            --bg: #F0F2FF;
-            --bg2: #FFFFFF;
-            --bg3: #F8F9FF;
-            --text: #1A1A2E;
-            --text2: #555;
-            --text3: #888;
-            --border: #E0E0F0;
-            --shadow: 0 4px 20px rgba(108,99,255,0.1);
-            --shadow2: 0 8px 40px rgba(108,99,255,0.15);
-            --radius: 16px;
-            --radius2: 12px;
-            --transition: all 0.3s ease;
-        }
-
-        [data-theme="dark"] {
-            --primary: #8B83FF;
-            --primary-dark: #6C63FF;
-            --primary-light: #A89FFF;
-            --bg: #0B0B1A;
-            --bg2: #151528;
-            --bg3: #1C1C35;
-            --text: #E8E8F0;
-            --text2: #AAAABB;
-            --text3: #777790;
-            --border: #2A2A45;
-            --shadow: 0 4px 20px rgba(0,0,0,0.3);
-            --shadow2: 0 8px 40px rgba(0,0,0,0.4);
-        }
-
-        * { margin:0; padding:0; box-sizing:border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: var(--transition);
-            overflow-x: hidden;
-        }
-
-        /* ========== HEADER ========== */
-        .header {
-            background: var(--bg2);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .logo span { color: var(--secondary); }
-
-        .header-actions { display: flex; align-items: center; gap: 15px; }
-
-        .theme-toggle {
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            color: var(--text);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .theme-toggle:hover { background: var(--primary); color: #fff; }
-
-        .back-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-        /* ========== HERO ========== */
-        .hero {
-            text-align: center;
-            padding: 60px 20px 30px;
-        }
-
-        .hero h1 {
-            font-size: 2.8rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text2);
-            max-width: 600px;
-            margin: 0 auto 20px;
-            line-height: 1.6;
-        }
-
-        .privacy-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #E8F5E9;
-            color: #2E7D32;
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        [data-theme="dark"] .privacy-badge {
-            background: #1B3A1B;
-            color: #66BB6A;
-        }
-
-        /* ========== UPLOAD SECTION ========== */
-        .upload-section { padding: 20px 0 50px; }
-
-        .upload-zone {
-            max-width: 700px;
-            margin: 0 auto;
-            border: 3px dashed var(--border);
-            border-radius: var(--radius);
-            padding: 60px 30px;
-            text-align: center;
-            background: var(--bg2);
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .upload-zone:hover, .upload-zone.dragover {
-            border-color: var(--primary);
-            background: var(--bg3);
-            transform: scale(1.01);
-        }
-
-        .upload-zone.dragover { box-shadow: 0 0 0 4px rgba(108,99,255,0.2); }
-
-        .upload-icon {
-            font-size: 4rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .upload-zone h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .upload-zone p { color: var(--text3); margin-bottom: 20px; }
-
-        .upload-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            border: none;
-            padding: 14px 36px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
-
-        .upload-options {
-            max-width: 700px;
-            margin: 20px auto 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .upload-opt-btn {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            color: var(--text2);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .upload-opt-btn:hover { border-color: var(--primary); color: var(--primary); }
-
-        .file-info {
-            max-width: 700px;
-            margin: 15px auto 0;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text3);
-        }
-
-        .batch-toggle {
-            max-width: 700px;
-            margin: 15px auto 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-        }
-
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--border);
-            border-radius: 26px;
-            transition: var(--transition);
-        }
-
-        .toggle-slider:before {
-            content: "";
-            position: absolute;
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
-
-        .batch-label { font-size: 0.9rem; color: var(--text2); font-weight: 500; }
-
-        #fileInput { display: none; }
-
-        /* ========== PROCESSING ========== */
-        .processing-section {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .processing-section.active { display: block; }
-
-        .processing-card {
-            max-width: 500px;
-            margin: 0 auto;
-            background: var(--bg2);
-            border-radius: var(--radius);
-            padding: 50px 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .spinner {
-            width: 70px;
-            height: 70px;
-            border: 5px solid var(--border);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 10px;
-            background: var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text { font-size: 0.9rem; color: var(--text2); margin-top: 10px; }
-
-        .model-notice {
-            background: #FFF8E1;
-            color: #F57F17;
-            padding: 12px 18px;
-            border-radius: var(--radius2);
-            font-size: 0.82rem;
-            margin-top: 20px;
-            line-height: 1.5;
-        }
-
-        [data-theme="dark"] .model-notice { background: #332B00; color: #FFD54F; }
-
-        
-        /* ========== ERROR ========== */
-        .error-section {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        .error-section.active { display: block; }
-        .error-card {
-            max-width: 550px;
-            margin: 0 auto;
-            background: var(--bg2);
-            border-radius: var(--radius);
-            padding: 50px 30px;
-            box-shadow: var(--shadow);
-        }
-        .error-card .error-icon { font-size: 3.5rem; color: var(--secondary); margin-bottom: 15px; }
-        .error-card h3 { margin-bottom: 10px; font-size: 1.3rem; }
-        .error-card p { color: var(--text2); font-size: 0.95rem; margin-bottom: 5px; line-height: 1.5; }
-        .error-details {
-            background: var(--bg3);
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 0.78rem;
-            color: var(--secondary);
-            margin: 18px 0;
-            word-break: break-all;
-            text-align: left;
-            max-height: 120px;
-            overflow-y: auto;
-            font-family: monospace;
-        }
-        .error-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .retry-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .retry-btn:hover { transform: translateY(-2px); }
-        .retry-btn.secondary { background: var(--bg3); color: var(--text); border: 2px solid var(--border); }
-
-        /* ========== EDITOR ========== */
-        .editor-section {
-            display: none;
-            padding: 30px 0 60px;
-        }
-
-        .editor-section.active { display: block; }
-
-        .editor-grid {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .image-display {
-            background: var(--bg2);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .view-tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            background: var(--bg3);
-            padding: 4px;
-            border-radius: 10px;
-        }
-
-        .view-tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            color: var(--text2);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-        }
-
-        .view-tab.active { background: var(--primary); color: #fff; }
-
-        .image-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--radius2);
-            min-height: 350px;
-        }
-
-        .checkerboard {
-            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
-                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
-                              linear-gradient(45deg, transparent 75%, #ccc 75%),
-                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        }
-
-        [data-theme="dark"] .checkerboard {
-            background-image: linear-gradient(45deg, #333 25%, transparent 25%),
-                              linear-gradient(-45deg, #333 25%, transparent 25%),
-                              linear-gradient(45deg, transparent 75%, #333 75%),
-                              linear-gradient(-45deg, transparent 75%, #333 75%);
-        }
-
-        .image-container img {
-            max-width: 100%;
-            max-height: 450px;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* Before/After Slider */
-        .comparison-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: none;
-            overflow: hidden;
-        }
-
-        .comparison-container.active { display: flex; align-items: center; justify-content: center; }
-
-        .comparison-wrapper {
-            position: relative;
-            display: inline-block;
-            max-width: 100%;
-        }
-
-        .comparison-wrapper img {
-            max-width: 100%;
-            max-height: 450px;
-            display: block;
-            object-fit: contain;
-        }
-
-        .comparison-before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            overflow: hidden;
-            width: 50%;
-        }
-
-        .comparison-before img {
-            max-height: 450px;
-            object-fit: contain;
-        }
-
-        .comparison-slider {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            cursor: ew-resize;
-            z-index: 10;
-            transform: translateX(-50%);
-        }
-
-        .comparison-slider::after {
-            content: "⟨ ⟩";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .comparison-label {
-            position: absolute;
-            top: 12px;
-            padding: 4px 12px;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 20px;
-            z-index: 5;
-        }
-
-        .label-before { left: 12px; }
-        .label-after { right: 12px; }
-
-        /* Side Panel */
-        .side-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .panel-card {
-            background: var(--bg2);
-            border-radius: var(--radius);
-            padding: 22px;
-            box-shadow: var(--shadow);
-        }
-
-        .panel-card h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .panel-card h3 i { color: var(--primary); }
-
-        .bg-options { display: flex; flex-direction: column; gap: 12px; }
-
-        .bg-option-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-        .bg-opt-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .bg-opt-btn:hover, .bg-opt-btn.active {
-            border-color: var(--primary);
-            transform: scale(1.1);
-        }
-
-        .bg-opt-btn.active::after {
-            content: "✓";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--primary);
-            font-weight: 900;
-            font-size: 0.9rem;
-        }
-
-        .bg-transparent {
-            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
-                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
-                              linear-gradient(45deg, transparent 75%, #ccc 75%),
-                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
-            background-size: 12px 12px;
-            background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
-        }
-
-        .color-picker-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .color-picker-wrap input[type="color"] {
-            width: 45px;
-            height: 38px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            padding: 2px;
-            background: var(--bg3);
-        }
-
-        .hex-input {
-            flex: 1;
-            padding: 9px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Inter', monospace;
-            font-size: 0.85rem;
-            background: var(--bg3);
-            color: var(--text);
-        }
-
-        .upload-bg-btn {
-            width: 100%;
-            padding: 10px;
-            border: 2px dashed var(--border);
-            border-radius: 10px;
-            background: var(--bg3);
-            color: var(--text2);
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .upload-bg-btn:hover { border-color: var(--primary); color: var(--primary); }
-
-        #bgImageInput { display: none; }
-
-        /* Download Buttons */
-        .download-buttons { display: flex; flex-direction: column; gap: 10px; }
-
-        .dl-btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .dl-btn:hover { transform: translateY(-2px); }
-
-        .dl-png {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-        }
-
-        .dl-jpg {
-            background: var(--bg3);
-            border: 2px solid var(--border);
-            color: var(--text);
-        }
-
-        .new-image-btn {
-            background: transparent;
-            border: 2px solid var(--secondary);
-            color: var(--secondary);
-        }
-
-        /* ========== BATCH SECTION ========== */
-        .batch-section {
-            display: none;
-            padding: 30px 0 60px;
-        }
-
-        .batch-section.active { display: block; }
-
-        .batch-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .batch-header h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
-
-        .batch-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto 30px;
-        }
-
-        .batch-item {
-            background: var(--bg2);
-            border-radius: var(--radius2);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        .batch-item-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .batch-item-status {
-            padding: 12px;
-            text-align: center;
-            font-size: 0.82rem;
-            font-weight: 600;
-        }
-
-        .batch-item-status.pending { color: var(--text3); }
-        .batch-item-status.processing { color: var(--warning); }
-        .batch-item-status.done { color: var(--success); }
-        .batch-item-status.error { color: var(--secondary); }
-
-        .batch-item-progress {
-            height: 4px;
-            background: var(--border);
-        }
-
-        .batch-item-progress-bar {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .batch-actions {
-            text-align: center;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .batch-btn {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .batch-process-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-        }
-
-        .batch-download-btn {
-            background: linear-gradient(135deg, var(--success), #20B862);
-            color: #fff;
-            display: none;
-        }
-
-        .batch-new-btn {
-            background: var(--bg2);
-            border: 2px solid var(--border);
-            color: var(--text);
-        }
-
-        /* ========== HOW TO USE ========== */
-        .how-section { padding: 70px 0; }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 50px;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .step-card {
-            text-align: center;
-            padding: 30px 20px;
-            background: var(--bg2);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .step-card:hover { transform: translateY(-5px); box-shadow: var(--shadow2); }
-
-        .step-number {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin: 0 auto 18px;
-        }
-
-        .step-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
-        .step-card p { font-size: 0.9rem; color: var(--text2); line-height: 1.5; }
-
-        /* ========== FEATURES ========== */
-        .features-section { padding: 70px 0; background: var(--bg3); }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: var(--bg2);
-            padding: 25px;
-            border-radius: var(--radius2);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover { transform: translateY(-3px); }
-
-        .feature-card i {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .feature-card h4 { font-size: 1rem; margin-bottom: 6px; }
-        .feature-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
-
-        /* ========== FAQ ========== */
-        .faq-section { padding: 70px 0; }
-
-        .faq-list {
-            max-width: 750px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .faq-item {
-            background: var(--bg2);
-            border-radius: var(--radius2);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .faq-question {
-            width: 100%;
-            padding: 18px 22px;
-            border: none;
-            background: transparent;
-            color: var(--text);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .faq-question i { transition: var(--transition); color: var(--primary); }
-        .faq-item.open .faq-question i { transform: rotate(180deg); }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer { max-height: 200px; }
-
-        .faq-answer p {
-            padding: 0 22px 18px;
-            font-size: 0.9rem;
-            color: var(--text2);
-            line-height: 1.6;
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            background: var(--bg2);
-            border-top: 1px solid var(--border);
-            padding: 30px 0;
-            text-align: center;
-        }
-
-        .footer p { color: var(--text3); font-size: 0.85rem; }
-        .footer a { color: var(--primary); text-decoration: none; }
-
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .editor-grid { grid-template-columns: 1fr; }
-            .steps-grid { grid-template-columns: 1fr; }
-            .upload-zone { padding: 40px 20px; }
-            .upload-icon { font-size: 3rem; }
-            .batch-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 1.6rem; }
-            .upload-options { flex-direction: column; align-items: center; }
-            .batch-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ========== TOAST ========== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 14px 24px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 600;
-            z-index: 9999;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.4s ease;
-        }
-
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--secondary); }
-        .toast.info { background: var(--primary); }
-
-        /* ========== HIDDEN ========== */
-        .hidden { display: none !important; }
+    .bg-tool-editor{display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:24px}
+    .bg-tool-preview{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:20px;min-height:400px;display:flex;flex-direction:column}
+    .bg-tool-sidebar{display:flex;flex-direction:column;gap:16px}
+    .bg-tool-sidebar .panel{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:20px}
+    .bg-tool-sidebar .panel h3{font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--text-primary);display:flex;align-items:center;gap:8px}
+    .view-tabs{display:flex;gap:4px;margin-bottom:14px;background:var(--surface-2);padding:3px;border-radius:10px}
+    .view-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--text-secondary);font-size:.82rem;font-weight:600;cursor:pointer;border-radius:8px;transition:all .2s;font-family:inherit}
+    .view-tab.active{background:var(--accent);color:#fff}
+    .preview-area{flex:1;display:flex;align-items:center;justify-content:center;border-radius:12px;overflow:hidden;min-height:350px;position:relative}
+    .preview-area img{max-width:100%;max-height:450px;object-fit:contain}
+    .checker-bg{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+    [data-theme="dark"] .checker-bg{background-image:linear-gradient(45deg,#333 25%,transparent 25%),linear-gradient(-45deg,#333 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#333 75%),linear-gradient(-45deg,transparent 75%,#333 75%)}
+    .bg-colors{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .bg-color-btn{width:36px;height:36px;border-radius:10px;border:2px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
+    .bg-color-btn:hover,.bg-color-btn.active{border-color:var(--accent);transform:scale(1.1)}
+    .bg-color-btn.active::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;color:var(--accent)}
+    .bg-transparent-swatch{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0}
+    .color-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .color-row input[type="color"]{width:40px;height:36px;border:2px solid var(--border);border-radius:10px;cursor:pointer;padding:2px;background:var(--surface-2)}
+    .hex-field{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--surface-2);color:var(--text-primary);font-family:monospace}
+    .dl-btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-bottom:8px}
+    .dl-btn:hover{transform:translateY(-2px)}
+    .dl-btn-primary{background:var(--accent);color:#fff}
+    .dl-btn-secondary{background:var(--surface-2);border:2px solid var(--border);color:var(--text-primary)}
+    .processing-overlay{text-align:center;padding:48px 24px}
+    .processing-overlay .spinner{width:60px;height:60px;border:4px solid var(--border);border-top:4px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .progress-track{width:100%;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;margin:16px 0}
+    .progress-fill-bar{height:100%;background:var(--accent);border-radius:4px;width:0%;transition:width .3s}
+    .model-info{background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);color:#f59e0b;padding:12px 16px;border-radius:12px;font-size:.8rem;margin-top:16px;line-height:1.5}
+    .error-box{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;max-width:500px;margin:0 auto}
+    .error-box h3{margin:12px 0 8px;font-size:1.2rem}
+    .error-box p{color:var(--text-secondary);font-size:.9rem;margin-bottom:16px}
+    .error-detail{background:var(--surface-2);padding:12px;border-radius:8px;font-size:.75rem;color:var(--text-secondary);text-align:left;max-height:100px;overflow-y:auto;font-family:monospace;word-break:break-all;margin-bottom:16px}
+    .compare-wrap{position:relative;display:inline-block;max-width:100%}
+    .compare-wrap img{max-width:100%;max-height:450px;display:block;object-fit:contain}
+    .compare-before{position:absolute;top:0;left:0;height:100%;overflow:hidden;width:50%}
+    .compare-slider-line{position:absolute;top:0;left:50%;width:4px;height:100%;background:var(--accent);cursor:ew-resize;z-index:10;transform:translateX(-50%)}
+    .compare-slider-line::after{content:"⟨⟩";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700}
+    .compare-label{position:absolute;top:10px;padding:4px 10px;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;font-weight:600;border-radius:16px;z-index:5}
+    .compare-label-before{left:10px}
+    .compare-label-after{right:10px}
+    @media(max-width:768px){.bg-tool-editor{grid-template-columns:1fr}.bg-tool-preview{min-height:280px}}
     </style>
 </head>
-
-<body>
-    <!-- HEADER -->
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
     <header class="header">
-        <div class="container">
-            <a href="https://onlinepdfpro.com" class="logo">OnlinePDF<span>Pro</span></a>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px;height:28px;border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242; Install App</a>
+            </nav>
             <div class="header-actions">
-                <a href="https://onlinepdfpro.com" class="back-link"><i class="fas fa-arrow-left"></i> All Tools</a>
-                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
-                    <i class="fas fa-moon"></i>
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
+                <div class="header-search" style="position:relative;margin-right:8px;">
+                    <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.9rem;opacity:0.5;">&#128269;</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..." style="padding:8px 12px 8px 32px;border-radius:20px;border:1px solid var(--border,#e2e8f0);background:var(--bg-primary,#fff);color:var(--text-primary,#1a1a2e);font-size:0.85rem;width:180px;transition:width 0.2s;outline:none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg></button>
+                    <div class="lang-dropdown"><div class="lang-search-wrap"><input type="text" class="lang-search" placeholder="Search language..."></div><ul class="lang-list"></ul></div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px;background:none;border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;">
+                    <span class="theme-icon-light">&#127769;</span>
+                    <span class="theme-icon-dark">&#9728;&#65039;</span>
                 </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
             </div>
         </div>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h1>Remove Background from Image</h1>
-        <p>100% free, AI-powered background remover. Works entirely in your browser — your images never leave your device.</p>
-        <div class="privacy-badge">
-            <i class="fas fa-shield-halved"></i>
-            100% Private — Images processed on YOUR device
-        </div>
-    </section>
-
-    <!-- UPLOAD SECTION -->
-    <section class="upload-section" id="uploadSection">
-        <div class="upload-zone" id="uploadZone">
-            <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
-            <h3>Drag & Drop Your Image Here</h3>
-            <p>or click to browse files</p>
-            <button class="upload-btn" id="uploadBtn">
-                <i class="fas fa-image"></i> Choose Image
-            </button>
-            <input type="file" id="fileInput" accept="image/*" multiple>
-        </div>
-
-        <div class="upload-options">
-            <button class="upload-opt-btn" id="pasteBtn">
-                <i class="fas fa-clipboard"></i> Paste from Clipboard
-            </button>
-            <button class="upload-opt-btn" id="sampleBtn">
-                <i class="fas fa-images"></i> Try Sample Image
-            </button>
-        </div>
-
-        <div class="batch-toggle">
-            <label class="toggle-switch">
-                <input type="checkbox" id="batchToggle">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="batch-label">Batch Mode (up to 10 images)</span>
-        </div>
-
-        <div class="file-info">
-            Supports: JPG, PNG, WEBP • Max size: 10MB per image
-        </div>
-    </section>
-
-    <!-- PROCESSING SECTION -->
-    <section class="processing-section" id="processingSection">
-        <div class="processing-card">
-            <div class="spinner"></div>
-            <h3 id="processingTitle">Removing Background...</h3>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progressBar"></div>
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width:900px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">AI Image Tool</span>
+                <h1 class="tool-title fade-in">Remove Background from Image — Free & Private</h1>
+                <p class="tool-description fade-in" style="animation-delay:0.1s;">AI-powered background remover. Works 100% in your browser — images never leave your device. No signup, no watermark.</p>
             </div>
-            <p class="progress-text" id="progressText">Initializing AI model...</p>
-            <div class="model-notice" id="modelNotice">
-                <i class="fas fa-info-circle"></i>
-                First time may take 30-60 seconds to download the AI model (~40MB). It gets cached for future use!
+
+            <!-- UPLOAD -->
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay:0.2s;">
+                <span class="upload-icon">&#9986;&#127912;</span>
+                <p class="upload-text">Drop image here or click to upload</p>
+                <p class="upload-hint" style="display:flex;gap:12px;justify-content:center;align-items:center;">
+                    <span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span>
+                    <span>&bull;</span><span>Max: 10MB</span>
+                    <span>&bull;</span><span>JPG, PNG, WEBP</span>
+                </p>
+                <button class="btn btn-primary upload-btn">Choose Image</button>
             </div>
-        </div>
-    </section>
-    <!-- ERROR -->
-    <section class="error-section" id="errorSection">
-        <div class="error-card">
-            <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
-            <h3>Something Went Wrong</h3>
-            <p id="errorMessage">Failed to process image.</p>
-            <div class="error-details" id="errorDetails"></div>
-            <div class="error-actions">
-                <button class="retry-btn" id="retryBtn"><i class="fas fa-rotate"></i> Try Again</button>
-                <button class="retry-btn secondary" id="backBtn"><i class="fas fa-arrow-left"></i> Go Back</button>
+            <input type="file" id="fileInput" accept="image/*" style="display:none">
+            <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-secondary" id="pasteBtn" style="padding:8px 18px;font-size:.85rem;">&#128203; Paste from Clipboard</button>
+                <button class="btn btn-secondary" id="sampleBtn" style="padding:8px 18px;font-size:.85rem;">&#128248; Try Sample</button>
             </div>
-        </div>
-    </section>
 
+            <!-- PROCESSING -->
+            <div id="processingSection" style="display:none;">
+                <div class="glass-card processing-overlay">
+                    <div class="spinner"></div>
+                    <h3 id="processingTitle" style="font-size:1.3rem;margin-bottom:4px;">Loading AI Model...</h3>
+                    <div class="progress-track"><div class="progress-fill-bar" id="progressBar"></div></div>
+                    <p id="progressText" style="color:var(--text-secondary);font-size:.9rem;">Initializing...</p>
+                    <div class="model-info" id="modelNotice">&#9432; First time takes 30-90s to download the AI model (~45MB). It gets cached for future use!</div>
+                </div>
+            </div>
 
-    <!-- EDITOR SECTION (Single Image) -->
-    <section class="editor-section" id="editorSection">
-        <div class="container">
-            <div class="editor-grid">
-                <!-- Image Display -->
-                <div class="image-display">
-                    <div class="view-tabs">
-                        <button class="view-tab active" data-view="result">Result</button>
-                        <button class="view-tab" data-view="original">Original</button>
-                        <button class="view-tab" data-view="compare">Compare</button>
+            <!-- ERROR -->
+            <div id="errorSection" style="display:none;">
+                <div class="error-box">
+                    <span style="font-size:3rem;">&#9888;&#65039;</span>
+                    <h3>Something Went Wrong</h3>
+                    <p id="errorMessage">Failed to process image.</p>
+                    <div class="error-detail" id="errorDetails"></div>
+                    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                        <button class="btn btn-primary" id="retryBtn">&#128260; Try Again</button>
+                        <button class="btn btn-secondary" id="backBtn">&#8592; Go Back</button>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Result View -->
-                    <div class="image-container checkerboard" id="resultView">
-                        <img id="resultImage" alt="Result">
-                    </div>
-
-                    <!-- Original View -->
-                    <div class="image-container hidden" id="originalView">
-                        <img id="originalImage" alt="Original">
-                    </div>
-
-                    <!-- Compare View -->
-                    <div class="comparison-container" id="compareView">
-                        <div class="comparison-wrapper" id="comparisonWrapper">
-                            <img id="compareAfter" alt="After">
-                            <div class="comparison-before" id="comparisonBefore">
-                                <img id="compareBefore" alt="Before">
+            <!-- EDITOR -->
+            <div id="editorSection" style="display:none;">
+                <div class="bg-tool-editor">
+                    <div class="bg-tool-preview">
+                        <div class="view-tabs">
+                            <button class="view-tab active" data-view="result">Result</button>
+                            <button class="view-tab" data-view="original">Original</button>
+                            <button class="view-tab" data-view="compare">Compare</button>
+                        </div>
+                        <div class="preview-area checker-bg" id="resultView"><img id="resultImage" alt="Result"></div>
+                        <div class="preview-area" id="originalView" style="display:none;"><img id="originalImage" alt="Original"></div>
+                        <div class="preview-area" id="compareView" style="display:none;">
+                            <div class="compare-wrap" id="compareWrap">
+                                <img id="compareAfter" alt="After">
+                                <div class="compare-before" id="compareBefore"><img id="compareBefore_img" alt="Before"></div>
+                                <div class="compare-slider-line" id="compareSlider"></div>
+                                <span class="compare-label compare-label-before">Before</span>
+                                <span class="compare-label compare-label-after">After</span>
                             </div>
-                            <div class="comparison-slider" id="comparisonSlider"></div>
-                            <span class="comparison-label label-before">Before</span>
-                            <span class="comparison-label label-after">After</span>
+                        </div>
+                    </div>
+                    <div class="bg-tool-sidebar">
+                        <div class="panel">
+                            <h3>&#127912; Background</h3>
+                            <div class="bg-colors">
+                                <button class="bg-color-btn bg-transparent-swatch active" data-bg="transparent" title="Transparent"></button>
+                                <button class="bg-color-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
+                                <button class="bg-color-btn" data-bg="#000000" style="background:#000" title="Black"></button>
+                                <button class="bg-color-btn" data-bg="#FF0000" style="background:#FF0000" title="Red"></button>
+                                <button class="bg-color-btn" data-bg="#00AA00" style="background:#00AA00" title="Green"></button>
+                                <button class="bg-color-btn" data-bg="#0066FF" style="background:#0066FF" title="Blue"></button>
+                            </div>
+                            <div class="color-row">
+                                <input type="color" id="colorPicker" value="#6C63FF">
+                                <input type="text" class="hex-field" id="hexInput" value="#6C63FF" placeholder="#HEX">
+                                <button class="bg-color-btn" id="applyColorBtn" style="background:#6C63FF" title="Apply"></button>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <h3>&#128229; Download</h3>
+                            <button class="dl-btn dl-btn-primary" id="downloadPng">&#128229; Download PNG</button>
+                            <button class="dl-btn dl-btn-secondary" id="downloadJpg">&#128229; Download JPG</button>
+                        </div>
+                        <div class="panel">
+                            <button class="dl-btn dl-btn-secondary" id="newImageBtn" style="border-color:var(--accent);color:var(--accent);">&#128260; Upload New Image</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Side Panel -->
-                <div class="side-panel">
-                    <!-- Background Options -->
-                    <div class="panel-card">
-                        <h3><i class="fas fa-palette"></i> Background</h3>
-                        <div class="bg-options">
-                            <div class="bg-option-row">
-                                <button class="bg-opt-btn bg-transparent active" data-bg="transparent" title="Transparent"></button>
-                                <button class="bg-opt-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
-                                <button class="bg-opt-btn" data-bg="#000000" style="background:#000" title="Black"></button>
-                                <button class="bg-opt-btn" data-bg="#FF0000" style="background:#FF0000" title="Red"></button>
-                                <button class="bg-opt-btn" data-bg="#00AA00" style="background:#00AA00" title="Green"></button>
-                                <button class="bg-opt-btn" data-bg="#0066FF" style="background:#0066FF" title="Blue"></button>
-                                <button class="bg-opt-btn" data-bg="#FF69B4" style="background:#FF69B4" title="Pink"></button>
-                            </div>
-                            <div class="color-picker-wrap">
-                                <input type="color" id="colorPicker" value="#6C63FF" title="Pick custom color">
-                                <input type="text" class="hex-input" id="hexInput" value="#6C63FF" placeholder="#HEX">
-                                <button class="bg-opt-btn" id="customColorBtn" data-bg="custom" style="background:#6C63FF" title="Apply custom color"></button>
-                            </div>
-                            <button class="upload-bg-btn" id="uploadBgBtn">
-                                <i class="fas fa-image"></i> Upload Background Image
-                            </button>
-                            <input type="file" id="bgImageInput" accept="image/*">
-                        </div>
-                    </div>
-
-                    <!-- Download -->
-                    <div class="panel-card">
-                        <h3><i class="fas fa-download"></i> Download</h3>
-                        <div class="download-buttons">
-                            <button class="dl-btn dl-png" id="downloadPng">
-                                <i class="fas fa-download"></i> Download PNG (Transparent)
-                            </button>
-                            <button class="dl-btn dl-jpg" id="downloadJpg">
-                                <i class="fas fa-download"></i> Download JPG
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- New Image -->
-                    <div class="panel-card">
-                        <button class="dl-btn new-image-btn" id="newImageBtn">
-                            <i class="fas fa-rotate"></i> Upload New Image
-                        </button>
-                    </div>
-                </div>
+            <div class="privacy-reminder fade-in" style="animation-delay:0.3s;margin-top:20px;">
+                <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+                <span>AI runs in your browser. Images never leave your device.</span>
             </div>
         </div>
-    </section>
 
-    <!-- BATCH SECTION -->
-    <section class="batch-section" id="batchSection">
-        <div class="container">
-            <div class="batch-header">
-                <h2>Batch Processing</h2>
-                <p style="color:var(--text2)" id="batchCount">0 images loaded</p>
+        <section class="how-it-works" style="margin:20px auto;padding:30px;background:var(--surface-1);border-radius:16px;border:1px solid var(--border);max-width:900px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">How to Remove Background from Images</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 1: Upload Image</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Click upload or drag & drop your image into the tool.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 2: AI Processes</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Our AI model runs in your browser to detect and remove the background.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 3: Download</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Choose a background color or keep transparent, then download PNG or JPG.</p></div>
             </div>
-            <div class="batch-grid" id="batchGrid"></div>
-            <div class="batch-actions">
-                <button class="batch-btn batch-process-btn" id="batchProcessBtn">
-                    <i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds
-                </button>
-                <button class="batch-btn batch-download-btn" id="batchDownloadBtn">
-                    <i class="fas fa-file-zipper"></i> Download All as ZIP
-                </button>
-                <button class="batch-btn batch-new-btn" id="batchNewBtn">
-                    <i class="fas fa-rotate"></i> Start Over
-                </button>
+        </section>
+        <section class="related-tools" style="margin:40px auto 20px;padding:0 20px;max-width:900px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">Related Image Tools</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+                <a href="/tools/image-compress.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Compress Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Reduce image file size</p></a>
+                <a href="/tools/image-resize.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Resize Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Change image dimensions</p></a>
+                <a href="/tools/image-crop.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Crop Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Crop and trim images</p></a>
             </div>
-        </div>
-    </section>
+        </section>
+        <section class="faq-section" style="margin:40px auto;max-width:900px;padding:0 20px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">Frequently Asked Questions</h2>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Is this really free?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! No signup, no watermarks, no limits. Download full HD results for free.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Are my images safe?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes. Everything is processed in your browser using AI. No images are uploaded to any server.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Why is the first use slow?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">The AI model (~45MB) downloads on first use. It gets cached in your browser for instant use afterwards.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Works on mobile?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! Works on all devices. May be slower on low-end phones.</p></div>
+        </section>
+    </main>
 
-    <!-- HOW TO USE -->
-    <section class="how-section" id="howToUse">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Upload Image</h3>
-                    <p>Drag & drop, paste, or browse to upload your image. Supports JPG, PNG, WEBP formats.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>AI Removes Background</h3>
-                    <p>Our AI model processes the image entirely in your browser. No data is sent to any server.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Download Result</h3>
-                    <p>Choose a new background color or keep it transparent. Download as PNG or JPG for free.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script src="js/app.js?v=8"></script>
 
-    <!-- FEATURES -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Why Choose Our Tool?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-shield-halved"></i>
-                    <h4>100% Private</h4>
-                    <p>Images never leave your device. Everything processed in your browser.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-bolt"></i>
-                    <h4>AI Powered</h4>
-                    <p>Advanced machine learning model detects subjects with high accuracy.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-indian-rupee-sign"></i>
-                    <h4>Completely Free</h4>
-                    <p>No signup, no watermark, no hidden charges. Free HD downloads.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-layer-group"></i>
-                    <h4>Batch Processing</h4>
-                    <p>Process up to 10 images at once and download all as a ZIP file.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-palette"></i>
-                    <h4>Custom Backgrounds</h4>
-                    <p>Replace with any color, custom image, or keep transparent.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-mobile-screen"></i>
-                    <h4>Works Everywhere</h4>
-                    <p>Works on mobile, tablet, and desktop. No app installation needed.</p>
+    <footer style="background:var(--surface-1);border-top:1px solid var(--border);padding:40px 20px;margin-top:60px;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-bottom:30px;">
+                <div><h4 style="color:#60a5fa;margin:0 0 15px;font-size:18px;">Online PDF Pro</h4><p style="color:var(--text-secondary);font-size:14px;line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide.</p></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">Popular Tools</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li><li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li><li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li><li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li></ul></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">More Tools</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li><li style="margin:8px 0;"><a href="tools/image-compress.html">Image Compress</a></li><li style="margin:8px 0;"><a href="tools/image-resize.html">Image Resize</a></li></ul></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">Company</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="about.html">About Us</a></li><li style="margin:8px 0;"><a href="contact.html">Contact</a></li><li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li><li style="margin:8px 0;"><a href="terms.html">Terms</a></li><li style="margin:8px 0;"><a href="blog.html">Blog</a></li></ul></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:20px 0;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
+                <p style="color:var(--text-muted);font-size:13px;margin:0;">&copy; 2026 Online PDF Pro. All rights reserved. Made with &#10084;&#65039; in India.</p>
+                <div style="display:flex;gap:15px;">
+                    <span style="padding:6px 14px;background:rgba(37,99,235,.15);border-radius:20px;font-size:12px;color:#60a5fa;font-weight:bold;">&#128274; Your files are safe</span>
+                    <span style="padding:6px 14px;background:rgba(16,185,129,.15);border-radius:20px;font-size:12px;color:#4ade80;font-weight:bold;">&#10003; 100% Client-Side</span>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq-section" id="faq">
-        <div class="container">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Is this tool really free? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes! 100% free with no hidden charges. No signup required, no watermarks, and you get full HD downloads.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Are my images safe and private? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Absolutely. Your images are processed entirely in your browser using AI. They are never uploaded to any server. Your data stays on your device.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Why is the first processing slow? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>The first time you use the tool, it downloads the AI model (~40MB). This is cached by your browser, so subsequent uses will be much faster.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        What image formats are supported? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>We support JPG, JPEG, PNG, WEBP, and BMP formats. Maximum file size is 10MB per image.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        How many images can I process at once? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>In batch mode, you can process up to 10 images at once. They are processed one by one to ensure your browser remains responsive.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Does it work on mobile phones? <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes! It works on all modern mobile browsers. However, processing may be slower on low-end devices due to limited memory and CPU.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 <a href="https://onlinepdfpro.com">OnlinePDFPro.com</a> — All tools are free to use. Built with ❤️</p>
         </div>
     </footer>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
-
-    <!-- ============================================ -->
-    <!-- JAVASCRIPT - COMPLETELY REWRITTEN & FIXED    -->
-    <!-- ============================================ -->
     <script>
-    // ============================================
-    // WAIT FOR DOM TO FULLY LOAD (KEY FIX #1)
-    // ============================================
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('[BG] Init...');
+        var removeBgFn = null, libReady = false;
+        var origFile = null, resultBlob = null, curBg = 'transparent';
 
-        console.log('🚀 DOM loaded, initializing...');
+        function $(id) { return document.getElementById(id); }
 
-        // ============================================
-        // SAFE ELEMENT GETTER (KEY FIX #2)
-        // ============================================
-        function getEl(id) {
-            var el = document.getElementById(id);
-            if (!el) {
-                console.warn('⚠️ Element not found: #' + id);
-            }
-            return el;
+        // --- SECTIONS ---
+        function showOnly(id) {
+            ['uploadZone','processingSection','errorSection','editorSection'].forEach(function(s) {
+                var el = $(s); if(el) el.style.display = 'none';
+            });
+            // Also show/hide paste+sample buttons
+            var btns = document.querySelector('.upload-zone + input + div');
+            if(btns) btns.style.display = id === 'uploadZone' ? '' : 'none';
+            var el = $(id); if(el) el.style.display = id === 'uploadZone' ? '' : 'block';
+            window.scrollTo({top:0,behavior:'smooth'});
         }
 
-        // ============================================
-        // STATE
-        // ============================================
-        var removeBackgroundFn = null;
-        var libraryReady = false;
-        var currentOriginalFile = null;
-        var currentResultBlob = null;
-        var currentBackground = 'transparent';
-        var batchFiles = [];
-        var batchResults = [];
-        var isBatchMode = false;
-
-        // ============================================
-        // TOAST
-        // ============================================
-        function showToast(msg, type) {
-            var t = getEl('toast');
-            if (!t) return;
-            t.textContent = msg;
-            t.className = 'toast ' + (type || 'info') + ' show';
-            setTimeout(function() { t.classList.remove('show'); }, 4000);
-        }
-
-        // ============================================
-        // SECTION MANAGEMENT (KEY FIX #3)
-        // ============================================
-        function showSection(name) {
-            console.log('📌 Section:', name);
-
-            var sections = {
-                'uploadSection': 'upload',
-                'processingSection': 'processing',
-                'editorSection': 'editor',
-                'batchSection': 'batch',
-                'errorSection': 'error'
-            };
-
-            // Hide all sections safely
-            for (var id in sections) {
-                var el = getEl(id);
-                if (el) {
-                    if (id === 'uploadSection') {
-                        el.style.display = 'none';
-                    } else {
-                        el.classList.remove('active');
+        // --- LOAD AI ---
+        async function loadAI() {
+            if(libReady && removeBgFn) return true;
+            var urls = [
+                'https://esm.sh/@imgly/background-removal@1.5.5',
+                'https://esm.sh/@imgly/background-removal',
+                'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'
+            ];
+            for(var i=0;i<urls.length;i++){
+                try{
+                    console.log('[BG] Try: '+urls[i]);
+                    var mod = await import(urls[i]);
+                    var fn = mod.removeBackground || mod.default;
+                    if(typeof fn !== 'function'){
+                        for(var k in mod){ if(typeof mod[k]==='function'){fn=mod[k];break;} }
                     }
-                }
-            }
-
-            // Show requested section
-            if (name === 'upload') {
-                var u = getEl('uploadSection');
-                if (u) u.style.display = 'block';
-            } else if (name === 'processing') {
-                var p = getEl('processingSection');
-                if (p) p.classList.add('active');
-                var pb = getEl('progressBar');
-                if (pb) pb.style.width = '0%';
-                var pt = getEl('progressText');
-                if (pt) pt.textContent = 'Loading AI model...';
-                var pti = getEl('processingTitle');
-                if (pti) pti.textContent = 'Loading AI Model...';
-                var mn = getEl('modelNotice');
-                if (mn) mn.style.display = 'block';
-            } else if (name === 'editor') {
-                var ed = getEl('editorSection');
-                if (ed) ed.classList.add('active');
-            } else if (name === 'batch') {
-                var ba = getEl('batchSection');
-                if (ba) ba.classList.add('active');
-            } else if (name === 'error') {
-                var er = getEl('errorSection');
-                if (er) er.classList.add('active');
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ============================================
-        // THEME TOGGLE
-        // ============================================
-        function updateThemeIcon() {
-            var btn = getEl('themeToggle');
-            if (!btn) return;
-            var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-            btn.innerHTML = dark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        }
-
-        var savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateThemeIcon();
-
-        var themeBtn = getEl('themeToggle');
-        if (themeBtn) {
-            themeBtn.addEventListener('click', function() {
-                var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', next);
-                localStorage.setItem('theme', next);
-                updateThemeIcon();
-            });
-        }
-
-        // ============================================
-        // FAQ
-        // ============================================
-        document.querySelectorAll('.faq-question').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var item = btn.parentElement;
-                document.querySelectorAll('.faq-item').forEach(function(i) {
-                    if (i !== item) i.classList.remove('open');
-                });
-                item.classList.toggle('open');
-            });
-        });
-
-        // ============================================
-        // LOAD AI LIBRARY (KEY FIX #4 - CORRECT URL)
-        // ============================================
-        async function loadAILibrary() {
-            if (libraryReady && removeBackgroundFn) {
-                console.log('✅ Already loaded');
-                return true;
-            }
-
-            // ATTEMPT 1: esm.sh (BEST for complex packages)
-            try {
-                console.log('⏳ Try 1: esm.sh...');
-                var mod = await import('https://esm.sh/@imgly/background-removal@1.5.5');
-                removeBackgroundFn = mod.removeBackground || mod.default;
-                if (typeof removeBackgroundFn === 'function') {
-                    libraryReady = true;
-                    console.log('✅ Loaded via esm.sh!');
-                    return true;
-                }
-                for (var key in mod) {
-                    if (typeof mod[key] === 'function') {
-                        removeBackgroundFn = mod[key];
-                        libraryReady = true;
-                        console.log('✅ Loaded via esm.sh (key: ' + key + ')');
+                    if(typeof fn === 'function'){
+                        removeBgFn=fn; libReady=true;
+                        console.log('[BG] Loaded from: '+urls[i]);
                         return true;
                     }
-                }
-            } catch(e) {
-                console.warn('❌ Try 1 failed:', e.message);
+                }catch(e){console.warn('[BG] Failed: '+urls[i],e.message);}
             }
-
-            // ATTEMPT 2: esm.sh without version pin
-            try {
-                console.log('⏳ Try 2: esm.sh latest...');
-                var mod2 = await import('https://esm.sh/@imgly/background-removal');
-                removeBackgroundFn = mod2.removeBackground || mod2.default;
-                if (typeof removeBackgroundFn === 'function') {
-                    libraryReady = true;
-                    console.log('✅ Loaded via esm.sh latest!');
-                    return true;
-                }
-            } catch(e) {
-                console.warn('❌ Try 2 failed:', e.message);
-            }
-
-            // ATTEMPT 3: skypack
-            try {
-                console.log('⏳ Try 3: skypack...');
-                var mod3 = await import('https://cdn.skypack.dev/@imgly/background-removal@1.5.5');
-                removeBackgroundFn = mod3.removeBackground || mod3.default;
-                if (typeof removeBackgroundFn === 'function') {
-                    libraryReady = true;
-                    console.log('✅ Loaded via skypack!');
-                    return true;
-                }
-            } catch(e) {
-                console.warn('❌ Try 3 failed:', e.message);
-            }
-
-            // ATTEMPT 4: jsdelivr ESM for older version
-            try {
-                console.log('⏳ Try 4: jsdelivr v1.3.0...');
-                var mod4 = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.3.0/+esm');
-                removeBackgroundFn = mod4.removeBackground || mod4.default;
-                if (typeof removeBackgroundFn === 'function') {
-                    libraryReady = true;
-                    console.log('✅ Loaded via jsdelivr v1.3.0!');
-                    return true;
-                }
-            } catch(e) {
-                console.warn('❌ Try 4 failed:', e.message);
-            }
-
-            console.error('❌ ALL attempts failed to load AI library');
             return false;
         }
 
-        // ============================================
-        // UPLOAD HANDLERS
-        // ============================================
-        var uploadBtn = getEl('uploadBtn');
-        var uploadZone = getEl('uploadZone');
-        var fileInput = getEl('fileInput');
-        var pasteBtn = getEl('pasteBtn');
-        var sampleBtn = getEl('sampleBtn');
-        var batchToggleEl = getEl('batchToggle');
+        // --- FILE UPLOAD ---
+        var uploadZone = $('uploadZone'), fileInput = $('fileInput');
 
-        if (uploadBtn) {
-            uploadBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (fileInput) fileInput.click();
+        // Use OnlinePDFPro.FileUploader if available, else manual
+        if(window.OnlinePDFPro && OnlinePDFPro.FileUploader){
+            OnlinePDFPro.FileUploader.init('uploadZone',{
+                accept:'image/jpeg,image/png,image/webp,image/bmp',
+                multiple:false, maxFiles:1, maxSize:10*1024*1024,
+                onFilesSelected:function(files){if(files.length>0) processFile(files[0]);}
             });
+        } else {
+            if(uploadZone){
+                uploadZone.addEventListener('click',function(){fileInput.click();});
+                uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.classList.add('dragover');});
+                uploadZone.addEventListener('dragleave',function(e){e.preventDefault();uploadZone.classList.remove('dragover');});
+                uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)processFile(e.dataTransfer.files[0]);});
+            }
+            if(fileInput) fileInput.addEventListener('change',function(e){if(e.target.files.length)processFile(e.target.files[0]);});
         }
 
-        if (uploadZone) {
-            uploadZone.addEventListener('click', function(e) {
-                if (e.target === uploadBtn || uploadBtn.contains(e.target)) return;
-                if (fileInput) fileInput.click();
-            });
-
-            uploadZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                uploadZone.classList.add('dragover');
-            });
-
-            uploadZone.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                uploadZone.classList.remove('dragover');
-            });
-
-            uploadZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                uploadZone.classList.remove('dragover');
-                if (e.dataTransfer && e.dataTransfer.files.length > 0) {
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-        }
-
-        if (fileInput) {
-            fileInput.addEventListener('change', function(e) {
-                if (e.target.files && e.target.files.length > 0) {
-                    handleFiles(e.target.files);
-                }
-            });
-        }
-
-        if (pasteBtn) {
-            pasteBtn.addEventListener('click', async function() {
-                try {
-                    var items = await navigator.clipboard.read();
-                    for (var ci = 0; ci < items.length; ci++) {
-                        var types = items[ci].types;
-                        for (var ti = 0; ti < types.length; ti++) {
-                            if (types[ti].startsWith('image/')) {
-                                var blob = await items[ci].getType(types[ti]);
-                                handleFiles([new File([blob], 'pasted.png', { type: types[ti] })]);
-                                return;
-                            }
+        // Paste
+        var pasteBtn=$('pasteBtn');
+        if(pasteBtn) pasteBtn.addEventListener('click',async function(){
+            try{
+                var items=await navigator.clipboard.read();
+                for(var i=0;i<items.length;i++){
+                    var types=items[i].types;
+                    for(var j=0;j<types.length;j++){
+                        if(types[j].startsWith('image/')){
+                            var blob=await items[i].getType(types[j]);
+                            processFile(new File([blob],'pasted.png',{type:types[j]}));
+                            return;
                         }
                     }
-                    showToast('No image in clipboard', 'error');
-                } catch(e) {
-                    showToast('Paste failed. Try Ctrl+V instead', 'error');
                 }
-            });
-        }
-
-        document.addEventListener('paste', function(e) {
-            var items = e.clipboardData ? e.clipboardData.items : null;
-            if (!items) return;
-            for (var pi = 0; pi < items.length; pi++) {
-                if (items[pi].type.startsWith('image/')) {
-                    var file = items[pi].getAsFile();
-                    if (file) handleFiles([file]);
+                alert('No image found in clipboard');
+            }catch(e){alert('Paste failed: '+e.message);}
+        });
+        document.addEventListener('paste',function(e){
+            var items=e.clipboardData?e.clipboardData.items:null;
+            if(!items) return;
+            for(var i=0;i<items.length;i++){
+                if(items[i].type.startsWith('image/')){
+                    var f=items[i].getAsFile();
+                    if(f) processFile(f);
                     return;
                 }
             }
         });
 
-        if (sampleBtn) {
-            sampleBtn.addEventListener('click', function() {
-                showToast('Creating sample image...', 'info');
-                var c = document.createElement('canvas');
-                c.width = 500; c.height = 600;
-                var ctx = c.getContext('2d');
-                var g = ctx.createLinearGradient(0, 0, 500, 600);
-                g.addColorStop(0, '#667eea');
-                g.addColorStop(1, '#764ba2');
-                ctx.fillStyle = g;
-                ctx.fillRect(0, 0, 500, 600);
-                ctx.fillStyle = '#FFE0BD';
-                ctx.beginPath();
-                ctx.arc(250, 200, 80, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = '#3498DB';
-                ctx.beginPath();
-                ctx.moveTo(140, 300);
-                ctx.lineTo(360, 300);
-                ctx.lineTo(380, 580);
-                ctx.lineTo(120, 580);
-                ctx.closePath();
-                ctx.fill();
-                c.toBlob(function(blob) {
-                    if (blob) handleFiles([new File([blob], 'sample.png', { type: 'image/png' })]);
-                });
-            });
-        }
+        // Sample
+        var sampleBtn=$('sampleBtn');
+        if(sampleBtn) sampleBtn.addEventListener('click',function(){
+            var c=document.createElement('canvas');c.width=500;c.height=600;
+            var ctx=c.getContext('2d');
+            var g=ctx.createLinearGradient(0,0,500,600);g.addColorStop(0,'#667eea');g.addColorStop(1,'#764ba2');ctx.fillStyle=g;ctx.fillRect(0,0,500,600);
+            ctx.fillStyle='#FFE0BD';ctx.beginPath();ctx.arc(250,200,80,0,Math.PI*2);ctx.fill();
+            ctx.fillStyle='#3498DB';ctx.beginPath();ctx.moveTo(140,300);ctx.lineTo(360,300);ctx.lineTo(380,580);ctx.lineTo(120,580);ctx.closePath();ctx.fill();
+            c.toBlob(function(b){if(b) processFile(new File([b],'sample.png',{type:'image/png'}));});
+        });
 
-        if (batchToggleEl) {
-            batchToggleEl.addEventListener('change', function() {
-                isBatchMode = batchToggleEl.checked;
-                if (fileInput) fileInput.multiple = isBatchMode;
-            });
-        }
-
-        // ============================================
-        // HANDLE FILES
-        // ============================================
-        function handleFiles(files) {
-            console.log('📁 Files:', files.length);
-            var valid = [];
-            for (var fi = 0; fi < files.length; fi++) {
-                var f = files[fi];
-                if (!f.type.startsWith('image/')) { showToast(f.name + ' is not an image', 'error'); continue; }
-                if (f.size > 10 * 1024 * 1024) { showToast(f.name + ' exceeds 10MB', 'error'); continue; }
-                valid.push(f);
-            }
-            if (valid.length === 0) { showToast('No valid images', 'error'); return; }
-            if (isBatchMode || valid.length > 1) {
-                if (valid.length > 10) valid = valid.slice(0, 10);
-                startBatchMode(valid);
-            } else {
-                startSingleMode(valid[0]);
-            }
-        }
-
-        // ============================================
-        // SINGLE MODE
-        // ============================================
-        async function startSingleMode(file) {
-            console.log('🖼️ Processing:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
-            currentOriginalFile = file;
-            showSection('processing');
-            var pb = getEl('progressBar');
-            var pt = getEl('progressText');
-            var pti = getEl('processingTitle');
-            var mn = getEl('modelNotice');
-
-            try {
-                if (pb) pb.style.width = '5%';
-                if (pt) pt.textContent = 'Loading AI library...';
-                console.log('⏳ Loading AI...');
-                var loaded = await loadAILibrary();
-                if (!loaded || typeof removeBackgroundFn !== 'function') {
-                    throw new Error('Could not load AI model. Check internet and refresh page.');
-                }
-                console.log('✅ AI ready! Processing...');
-                if (pb) pb.style.width = '20%';
-                if (pt) pt.textContent = 'AI ready. Removing background...';
-                if (pti) pti.textContent = 'Removing Background...';
-
-                var config = {
-                    progress: function(key, current, total) {
-                        var pct = total > 0 ? Math.round((current / total) * 100) : 0;
-                        if (key.indexOf('fetch') > -1 || key.indexOf('download') > -1 || key.indexOf('load') > -1) {
-                            if (pb) pb.style.width = (20 + pct * 0.35) + '%';
-                            if (pt) pt.textContent = 'Downloading AI model... ' + pct + '%';
-                            if (pti) pti.textContent = 'Downloading AI Model...';
-                        } else {
-                            if (mn) mn.style.display = 'none';
-                            if (pb) pb.style.width = (55 + pct * 0.45) + '%';
-                            if (pt) pt.textContent = 'Removing background... ' + pct + '%';
-                            if (pti) pti.textContent = 'Removing Background...';
+        // --- PROCESS ---
+        async function processFile(file){
+            if(!file.type.startsWith('image/')){alert('Not an image');return;}
+            if(file.size>10*1024*1024){alert('File too large (max 10MB)');return;}
+            origFile=file;
+            showOnly('processingSection');
+            var pb=$('progressBar'),pt=$('progressText'),pti=$('processingTitle'),mn=$('modelNotice');
+            try{
+                if(pb) pb.style.width='5%';
+                if(pt) pt.textContent='Loading AI library...';
+                var ok=await loadAI();
+                if(!ok) throw new Error('Failed to load AI model. Check your internet connection and try again.');
+                if(pb) pb.style.width='20%';
+                if(pt) pt.textContent='AI ready. Processing image...';
+                if(pti) pti.textContent='Removing Background...';
+                var blob=await removeBgFn(file,{
+                    progress:function(key,cur,tot){
+                        var pct=tot>0?Math.round(cur/tot*100):0;
+                        if(key.indexOf('fetch')>-1||key.indexOf('download')>-1||key.indexOf('load')>-1){
+                            if(pb) pb.style.width=(20+pct*.35)+'%';
+                            if(pt) pt.textContent='Downloading AI model... '+pct+'%';
+                            if(pti) pti.textContent='Downloading AI Model...';
+                        }else{
+                            if(mn) mn.style.display='none';
+                            if(pb) pb.style.width=(55+pct*.45)+'%';
+                            if(pt) pt.textContent='Removing background... '+pct+'%';
+                            if(pti) pti.textContent='Removing Background...';
                         }
                     }
-                };
-
-                console.log('🚀 removeBackground() called...');
-                var resultBlob = await removeBackgroundFn(file, config);
-                console.log('✅ Done! Blob:', resultBlob.size, 'bytes');
-                currentResultBlob = resultBlob;
-                if (pb) pb.style.width = '100%';
-                if (pt) pt.textContent = 'Done! 🎉';
-
-                var origURL = URL.createObjectURL(file);
-                var resURL = URL.createObjectURL(resultBlob);
-                var ri = getEl('resultImage');
-                var oi = getEl('originalImage');
-                var ca = getEl('compareAfter');
-                var cb = getEl('compareBefore');
-                var rv = getEl('resultView');
-                if (ri) ri.src = resURL;
-                if (oi) oi.src = origURL;
-                if (ca) ca.src = resURL;
-                if (cb) cb.src = origURL;
-                if (rv) rv.classList.add('checkerboard');
-                currentBackground = 'transparent';
-                resetBgButtons();
-                var transBtn = document.querySelector('.bg-opt-btn[data-bg="transparent"]');
-                if (transBtn) transBtn.classList.add('active');
-
-                setTimeout(function() {
-                    showSection('editor');
-                    showToast('Background removed!', 'success');
-                }, 700);
-
-            } catch(err) {
-                console.error('❌ Error:', err);
-                var em = getEl('errorMessage');
-                var ed = getEl('errorDetails');
-                if (em) em.textContent = err.message || 'Processing failed';
-                if (ed) ed.textContent = String(err.stack || err).substring(0, 500);
-                showSection('error');
-                showToast('Error occurred', 'error');
+                });
+                resultBlob=blob;
+                if(pb) pb.style.width='100%';
+                if(pt) pt.textContent='Done!';
+                var origURL=URL.createObjectURL(file), resURL=URL.createObjectURL(blob);
+                var ri=$('resultImage'),oi=$('originalImage'),ca=$('compareAfter'),cb=$('compareBefore_img'),rv=$('resultView');
+                if(ri) ri.src=resURL; if(oi) oi.src=origURL;
+                if(ca) ca.src=resURL; if(cb) cb.src=origURL;
+                if(rv) rv.classList.add('checker-bg');
+                curBg='transparent'; resetBgBtns();
+                var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');
+                if(tb) tb.classList.add('active');
+                setTimeout(function(){showOnly('editorSection');},500);
+                if(window.OnlinePDFPro && OnlinePDFPro.RecentlyUsed) OnlinePDFPro.RecentlyUsed.add('remove-background','Remove Background');
+            }catch(err){
+                console.error('[BG] Error:',err);
+                var em=$('errorMessage'),ed=$('errorDetails');
+                if(em) em.textContent=err.message||'Processing failed';
+                if(ed) ed.textContent=String(err.stack||err).substring(0,500);
+                showOnly('errorSection');
             }
         }
 
-        // ============================================
-        // BATCH MODE
-        // ============================================
-        function startBatchMode(files) {
-            batchFiles = [];
-            for (var bi = 0; bi < files.length; bi++) batchFiles.push(files[bi]);
-            batchResults = new Array(batchFiles.length).fill(null);
-            showSection('batch');
-            var bc = getEl('batchCount');
-            var bg = getEl('batchGrid');
-            var bdb = getEl('batchDownloadBtn');
-            var bpb = getEl('batchProcessBtn');
-            if (bc) bc.textContent = batchFiles.length + ' images loaded';
-            if (bg) bg.innerHTML = '';
-            if (bdb) bdb.style.display = 'none';
-            if (bpb) { bpb.disabled = false; bpb.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove All Backgrounds'; }
-            batchFiles.forEach(function(file, i) {
-                var url = URL.createObjectURL(file);
-                var item = document.createElement('div');
-                item.className = 'batch-item';
-                item.id = 'batch-item-' + i;
-                item.innerHTML = '<img src="' + url + '" class="batch-item-img" alt="' + file.name + '"><div class="batch-item-progress"><div class="batch-item-progress-bar" id="batch-progress-' + i + '"></div></div><div class="batch-item-status pending" id="batch-status-' + i + '"><i class="fas fa-clock"></i> Pending</div>';
-                if (bg) bg.appendChild(item);
-            });
-        }
+        // --- RETRY/BACK ---
+        var retryBtn=$('retryBtn'),backBtn=$('backBtn'),newBtn=$('newImageBtn');
+        if(retryBtn) retryBtn.addEventListener('click',function(){if(origFile) processFile(origFile);else resetAll();});
+        if(backBtn) backBtn.addEventListener('click',resetAll);
+        if(newBtn) newBtn.addEventListener('click',resetAll);
+        function resetAll(){origFile=null;resultBlob=null;curBg='transparent';if(fileInput)fileInput.value='';resetBgBtns();
+            var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');if(tb)tb.classList.add('active');showOnly('uploadZone');}
 
-        var batchProcessBtn = getEl('batchProcessBtn');
-        if (batchProcessBtn) {
-            batchProcessBtn.addEventListener('click', async function() {
-                var loaded = await loadAILibrary();
-                if (!loaded) { showToast('AI model failed. Refresh page.', 'error'); return; }
-                batchProcessBtn.disabled = true;
-                batchProcessBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                for (var i = 0; i < batchFiles.length; i++) {
-                    var statusEl = getEl('batch-status-' + i);
-                    var progressEl = getEl('batch-progress-' + i);
-                    if (statusEl) { statusEl.className = 'batch-item-status processing'; statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'; }
-                    try {
-                        var blob = await removeBackgroundFn(batchFiles[i], {
-                            progress: (function(pEl) {
-                                return function(key, current, total) {
-                                    if (key.indexOf('fetch') > -1) return;
-                                    var pct = total > 0 ? Math.round((current / total) * 100) : 0;
-                                    if (pEl) pEl.style.width = pct + '%';
-                                };
-                            })(progressEl)
-                        });
-                        batchResults[i] = blob;
-                        var img = document.querySelector('#batch-item-' + i + ' .batch-item-img');
-                        if (img) img.src = URL.createObjectURL(blob);
-                        if (progressEl) progressEl.style.width = '100%';
-                        if (statusEl) { statusEl.className = 'batch-item-status done'; statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Done!'; }
-                    } catch(err) {
-                        console.error('Batch error ' + i + ':', err);
-                        if (statusEl) { statusEl.className = 'batch-item-status error'; statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Error'; }
-                    }
-                }
-                batchProcessBtn.innerHTML = '<i class="fas fa-check"></i> All Done!';
-                var bdb = getEl('batchDownloadBtn');
-                if (bdb) bdb.style.display = 'inline-flex';
-                showToast('Batch complete!', 'success');
-            });
-        }
-
-        var batchDlBtn = getEl('batchDownloadBtn');
-        if (batchDlBtn) {
-            batchDlBtn.addEventListener('click', async function() {
-                batchDlBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating ZIP...';
-                var zip = new JSZip();
-                var folder = zip.folder('removed-backgrounds');
-                for (var i = 0; i < batchResults.length; i++) {
-                    if (batchResults[i]) {
-                        var name = batchFiles[i].name.replace(/\.[^.]+$/, '') + '_no_bg.png';
-                        folder.file(name, batchResults[i]);
-                    }
-                }
-                var content = await zip.generateAsync({ type: 'blob' });
-                saveAs(content, 'background-removed.zip');
-                batchDlBtn.innerHTML = '<i class="fas fa-file-zipper"></i> Download All as ZIP';
-                showToast('ZIP downloaded!', 'success');
-            });
-        }
-
-        var batchNewBtn = getEl('batchNewBtn');
-        if (batchNewBtn) batchNewBtn.addEventListener('click', resetAll);
-
-        // ============================================
-        // VIEW TABS
-        // ============================================
-        document.querySelectorAll('.view-tab').forEach(function(tab) {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.view-tab').forEach(function(t) { t.classList.remove('active'); });
+        // --- VIEW TABS ---
+        document.querySelectorAll('.view-tab').forEach(function(tab){
+            tab.addEventListener('click',function(){
+                document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('active');});
                 tab.classList.add('active');
-                var view = tab.getAttribute('data-view');
-                var rv = getEl('resultView');
-                var ov = getEl('originalView');
-                var cv = getEl('compareView');
-                if (rv) rv.classList.add('hidden');
-                if (ov) ov.classList.add('hidden');
-                if (cv) cv.classList.remove('active');
-                if (view === 'result' && rv) rv.classList.remove('hidden');
-                else if (view === 'original' && ov) ov.classList.remove('hidden');
-                else if (view === 'compare' && cv) cv.classList.add('active');
+                var v=tab.getAttribute('data-view'),rv=$('resultView'),ov=$('originalView'),cv=$('compareView');
+                if(rv) rv.style.display='none'; if(ov) ov.style.display='none'; if(cv) cv.style.display='none';
+                if(v==='result'&&rv) rv.style.display='';
+                else if(v==='original'&&ov) ov.style.display='';
+                else if(v==='compare'&&cv) cv.style.display='';
             });
         });
 
-        // ============================================
-        // COMPARISON SLIDER
-        // ============================================
-        var isDragging = false;
-        var slider = getEl('comparisonSlider');
-        var cWrapper = getEl('comparisonWrapper');
-        var cBefore = getEl('comparisonBefore');
-        if (slider) {
-            slider.addEventListener('mousedown', function() { isDragging = true; });
-            slider.addEventListener('touchstart', function() { isDragging = true; });
+        // --- COMPARE SLIDER ---
+        var dragging=false,slider=$('compareSlider'),cWrap=$('compareWrap'),cBefore=$('compareBefore');
+        if(slider){
+            slider.addEventListener('mousedown',function(){dragging=true;});
+            slider.addEventListener('touchstart',function(){dragging=true;});
         }
-        document.addEventListener('mouseup', function() { isDragging = false; });
-        document.addEventListener('touchend', function() { isDragging = false; });
-        document.addEventListener('mousemove', moveSlider);
-        document.addEventListener('touchmove', moveSlider);
-        function moveSlider(e) {
-            if (!isDragging || !cWrapper || !cBefore || !slider) return;
+        document.addEventListener('mouseup',function(){dragging=false;});
+        document.addEventListener('touchend',function(){dragging=false;});
+        document.addEventListener('mousemove',mvSlider);
+        document.addEventListener('touchmove',mvSlider);
+        function mvSlider(e){
+            if(!dragging||!cWrap||!cBefore||!slider) return;
             e.preventDefault();
-            var rect = cWrapper.getBoundingClientRect();
-            var cx = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-            var x = Math.max(0, Math.min(cx - rect.left, rect.width));
-            var pct = (x / rect.width) * 100;
-            cBefore.style.width = pct + '%';
-            slider.style.left = pct + '%';
+            var r=cWrap.getBoundingClientRect();
+            var cx=e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:0);
+            var x=Math.max(0,Math.min(cx-r.left,r.width));
+            var pct=(x/r.width)*100;
+            cBefore.style.width=pct+'%';slider.style.left=pct+'%';
         }
 
-        // ============================================
-        // BACKGROUND OPTIONS
-        // ============================================
-        document.querySelectorAll('.bg-opt-btn[data-bg]').forEach(function(btn) {
-            if (btn.id === 'customColorBtn') return;
-            btn.addEventListener('click', function() {
-                var bg = btn.getAttribute('data-bg');
-                applyBackground(bg);
-                resetBgButtons();
-                btn.classList.add('active');
-            });
+        // --- BACKGROUND ---
+        document.querySelectorAll('.bg-color-btn[data-bg]').forEach(function(btn){
+            if(btn.id==='applyColorBtn') return;
+            btn.addEventListener('click',function(){applyBg(btn.getAttribute('data-bg'));resetBgBtns();btn.classList.add('active');});
         });
-
-        var customBtn = getEl('customColorBtn');
-        var cpicker = getEl('colorPicker');
-        var hinput = getEl('hexInput');
-        if (customBtn) {
-            customBtn.addEventListener('click', function() {
-                if (cpicker) { applyBackground(cpicker.value); resetBgButtons(); customBtn.classList.add('active'); }
-            });
-        }
-        if (cpicker) {
-            cpicker.addEventListener('input', function(e) {
-                if (hinput) hinput.value = e.target.value;
-                if (customBtn) customBtn.style.background = e.target.value;
-            });
-        }
-        if (hinput) {
-            hinput.addEventListener('input', function(e) {
-                var v = e.target.value;
-                if (!v.startsWith('#')) v = '#' + v;
-                if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
-                    if (cpicker) cpicker.value = v;
-                    if (customBtn) customBtn.style.background = v;
-                }
-            });
+        var applyBtn=$('applyColorBtn'),cpick=$('colorPicker'),hinp=$('hexInput');
+        if(applyBtn) applyBtn.addEventListener('click',function(){if(cpick){applyBg(cpick.value);resetBgBtns();applyBtn.classList.add('active');}});
+        if(cpick) cpick.addEventListener('input',function(e){if(hinp)hinp.value=e.target.value;if(applyBtn)applyBtn.style.background=e.target.value;});
+        if(hinp) hinp.addEventListener('input',function(e){var v=e.target.value;if(!v.startsWith('#'))v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){if(cpick)cpick.value=v;if(applyBtn)applyBtn.style.background=v;}});
+        function resetBgBtns(){document.querySelectorAll('.bg-color-btn').forEach(function(b){b.classList.remove('active');});}
+        async function applyBg(bg){
+            curBg=bg;if(!resultBlob)return;
+            var rv=$('resultView'),ri=$('resultImage'),ca=$('compareAfter');
+            if(bg==='transparent'){if(rv)rv.classList.add('checker-bg');var u=URL.createObjectURL(resultBlob);if(ri)ri.src=u;if(ca)ca.src=u;return;}
+            if(rv) rv.classList.remove('checker-bg');
+            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image();
+            img.src=URL.createObjectURL(resultBlob);
+            await new Promise(function(r){img.onload=r;});
+            canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+            ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(img,0,0);
+            canvas.toBlob(function(b){var u=URL.createObjectURL(b);if(ri)ri.src=u;if(ca)ca.src=u;});
         }
 
-        var uploadBgBtn = getEl('uploadBgBtn');
-        var bgImgInput = getEl('bgImageInput');
-        if (uploadBgBtn && bgImgInput) {
-            uploadBgBtn.addEventListener('click', function() { bgImgInput.click(); });
-            bgImgInput.addEventListener('change', function(e) {
-                var file = e.target.files[0];
-                if (!file) return;
-                applyBackground(URL.createObjectURL(file), true);
-                resetBgButtons();
-                showToast('Background applied!', 'success');
-            });
+        // --- DOWNLOAD ---
+        var dlPng=$('downloadPng'),dlJpg=$('downloadJpg');
+        if(dlPng) dlPng.addEventListener('click',function(){dl('png');});
+        if(dlJpg) dlJpg.addEventListener('click',function(){dl('jpg');});
+        async function dl(fmt){
+            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),ri=$('resultImage');
+            if(!ri||!ri.src) return;
+            var img=new Image();img.src=ri.src;
+            await new Promise(function(r){img.onload=r;});
+            canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+            if(fmt==='jpg'){ctx.fillStyle=curBg==='transparent'?'#FFFFFF':curBg;ctx.fillRect(0,0,canvas.width,canvas.height);}
+            ctx.drawImage(img,0,0);
+            var mime=fmt==='png'?'image/png':'image/jpeg';
+            canvas.toBlob(function(b){
+                var name=origFile?origFile.name.replace(/\.[^.]+$/,'')+'_no_bg.'+fmt:'result.'+fmt;
+                if(window.saveAs) saveAs(b,name);
+                else if(window.OnlinePDFPro&&OnlinePDFPro.Downloader) OnlinePDFPro.Downloader.saveBlob(b,name);
+                else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+            },mime,fmt==='jpg'?0.92:undefined);
         }
 
-        function resetBgButtons() {
-            document.querySelectorAll('.bg-opt-btn').forEach(function(b) { b.classList.remove('active'); });
-        }
-
-        async function applyBackground(bg, isImage) {
-            currentBackground = bg;
-            if (!currentResultBlob) return;
-            var rv = getEl('resultView');
-            var ri = getEl('resultImage');
-            var ca = getEl('compareAfter');
-            if (bg === 'transparent') {
-                if (rv) rv.classList.add('checkerboard');
-                var url = URL.createObjectURL(currentResultBlob);
-                if (ri) ri.src = url;
-                if (ca) ca.src = url;
-                return;
-            }
-            if (rv) rv.classList.remove('checkerboard');
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var img = new Image();
-            img.src = URL.createObjectURL(currentResultBlob);
-            await new Promise(function(r) { img.onload = r; });
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            if (isImage) {
-                var bgImg = new Image();
-                bgImg.src = bg;
-                await new Promise(function(r) { bgImg.onload = r; });
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-            } else {
-                ctx.fillStyle = bg;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            ctx.drawImage(img, 0, 0);
-            canvas.toBlob(function(blob) {
-                var u = URL.createObjectURL(blob);
-                if (ri) ri.src = u;
-                if (ca) ca.src = u;
-            });
-        }
-
-        // ============================================
-        // DOWNLOAD
-        // ============================================
-        var dlPng = getEl('downloadPng');
-        var dlJpg = getEl('downloadJpg');
-        if (dlPng) dlPng.addEventListener('click', function() { downloadResult('png'); });
-        if (dlJpg) dlJpg.addEventListener('click', function() { downloadResult('jpg'); });
-
-        async function downloadResult(format) {
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var ri = getEl('resultImage');
-            if (!ri || !ri.src) return;
-            var img = new Image();
-            img.src = ri.src;
-            await new Promise(function(r) { img.onload = r; });
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            if (format === 'jpg') {
-                ctx.fillStyle = currentBackground === 'transparent' ? '#FFFFFF' : currentBackground;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            ctx.drawImage(img, 0, 0);
-            var mime = format === 'png' ? 'image/png' : 'image/jpeg';
-            canvas.toBlob(function(blob) {
-                var name = currentOriginalFile
-                    ? currentOriginalFile.name.replace(/\.[^.]+$/, '') + '_no_bg.' + format
-                    : 'result.' + format;
-                saveAs(blob, name);
-                showToast('Downloaded ' + format.toUpperCase() + '!', 'success');
-            }, mime, format === 'jpg' ? 0.92 : undefined);
-        }
-
-        // ============================================
-        // NEW IMAGE / RETRY / RESET
-        // ============================================
-        var newBtn = getEl('newImageBtn');
-        var retryBtn = getEl('retryBtn');
-        var backBtn = getEl('backBtn');
-        if (newBtn) newBtn.addEventListener('click', resetAll);
-        if (backBtn) backBtn.addEventListener('click', resetAll);
-        if (retryBtn) {
-            retryBtn.addEventListener('click', function() {
-                if (currentOriginalFile) startSingleMode(currentOriginalFile);
-                else resetAll();
-            });
-        }
-
-        function resetAll() {
-            currentOriginalFile = null;
-            currentResultBlob = null;
-            currentBackground = 'transparent';
-            batchFiles = [];
-            batchResults = [];
-            var fi = getEl('fileInput');
-            var bi = getEl('bgImageInput');
-            if (fi) fi.value = '';
-            if (bi) bi.value = '';
-            resetBgButtons();
-            var tb = document.querySelector('.bg-opt-btn[data-bg="transparent"]');
-            if (tb) tb.classList.add('active');
-            showSection('upload');
-        }
-
-        // ============================================
-        // INIT
-        // ============================================
-        showSection('upload');
-        console.log('✅ Tool ready!');
-
-        // Pre-load library
-        setTimeout(function() {
-            loadAILibrary().then(function(ok) {
-                console.log(ok ? '✅ AI pre-loaded!' : '⚠️ AI pre-load failed (will retry on use)');
-            });
-        }, 3000);
-
-    }); // END DOMContentLoaded
+        // --- INIT ---
+        showOnly('uploadZone');
+        console.log('[BG] Ready!');
+        setTimeout(function(){loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});},2000);
+    });
     </script>
 
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Remove Background","description":"Remove background from any image for free using AI. 100% private.","url":"https://onlinepdfpro.com/remove-background.html","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com"}}</script>
 
+    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(e){});});}</script>
 </body>
 </html>
