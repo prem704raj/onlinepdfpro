@@ -1029,6 +1029,9 @@
                     editor.classList.add('active');
                     fitToView();
                     clearOverlay();
+                    if (window.OnlinePDFPro && window.OnlinePDFPro.RecentlyUsed) {
+                        window.OnlinePDFPro.RecentlyUsed.add('remove-watermark', 'Remove Watermark');
+                    }
                     showToast('Image loaded! Paint over the watermark or try Auto Remove.', 'success');
                 };
                 img.src = ev.target.result;
