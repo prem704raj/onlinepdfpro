@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Watermark from Image Free Online — AI Watermark Remover | OnlinePDFPro</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="Remove watermarks from images free online. AI-powered auto detection, brush painting, clone stamp, smart inpainting. 100% private, works in your browser. No upload needed.">
+    <meta name="keywords" content="remove watermark, watermark remover, remove watermark from image, ai watermark remover, watermark removal online, free watermark remover">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/remove-watermark.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/remove-watermark.html">
+    <meta property="og:title" content="Remove Watermark from Image Free Online — AI Watermark Remover | OnlinePDFPro">
+    <meta property="og:description" content="Remove watermarks from images free online. AI auto-detection, brush, clone stamp, smart inpainting. 100% private & free.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/remove-watermark.html">
+    <meta name="twitter:title" content="Remove Watermark from Image Free Online | OnlinePDFPro">
+    <meta name="twitter:description" content="AI-powered watermark removal. 100% free, private, browser-based.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/remove-watermark.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/remove-watermark.html">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix.css?v=9">
+    <link rel="stylesheet" href="../css/tools.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VMPCXTN3ES');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},
+        {"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools.html"},
+        {"@type":"ListItem","position":3,"name":"Remove Watermark","item":"https://onlinepdfpro.com/tools/remove-watermark.html"}
+      ]
+    }
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","vu83gydexm");
+    </script>
+
+    <style>
+        /* ===== WATERMARK REMOVER TOOL STYLES ===== */
+        .wm-tool-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px 48px;
+        }
+
+        /* Upload Zone */
+        .wm-upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: var(--surface-1);
+            margin-bottom: 24px;
+        }
+        .wm-upload-zone:hover,
+        .wm-upload-zone.drag-over {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .wm-upload-icon { font-size: 3rem; margin-bottom: 12px; }
+        .wm-upload-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+        .wm-upload-sub { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 16px; }
+        .wm-upload-btn {
+            display: inline-block;
+            padding: 10px 28px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .wm-upload-btn:hover { opacity: 0.85; }
+
+        /* Editor Layout */
+        .wm-editor {
+            display: none;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            align-items: start;
+        }
+        .wm-editor.active { display: grid; }
+
+        /* Canvas Panel */
+        .wm-canvas-panel {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .wm-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            background: var(--surface-1);
+        }
+        .wm-tool-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface-2);
+            color: var(--text-primary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .wm-tool-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .wm-tool-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .wm-tool-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .wm-divider { width: 1px; height: 28px; background: var(--border); margin: 0 3px; }
+
+        /* Canvas Viewport */
+        .wm-canvas-viewport {
+            flex: 1;
+            overflow: auto;
+            background: repeating-conic-gradient(#888 0% 25%, transparent 0% 50%) 0 0 / 20px 20px;
+            min-height: 480px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        [data-theme="dark"] .wm-canvas-viewport {
+            background: repeating-conic-gradient(#333 0% 25%, #222 0% 50%) 0 0 / 20px 20px;
+        }
+        .wm-canvas-container {
+            position: relative;
+            display: inline-block;
+            cursor: crosshair;
+            transform-origin: top left;
+        }
+        #wm-main-canvas {
+            display: block;
+            max-width: none;
+        }
+        #wm-overlay-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            pointer-events: none;
+        }
+        #wm-brush-cursor {
+            position: fixed;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.5);
+        }
+
+        /* Clone stamp source indicator */
+        #wm-clone-source {
+            position: absolute;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            pointer-events: none;
+            display: none;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        /* Status bar */
+        .wm-statusbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 7px 14px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--surface-1);
+        }
+        .wm-statusbar span { display: flex; align-items: center; gap: 4px; }
+
+        /* Sidebar */
+        .wm-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .wm-panel {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .wm-panel-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .wm-panel-title span { font-size: 1rem; }
+
+        /* Tool group */
+        .wm-tool-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+        .wm-sidebar-tool {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 6px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface-2);
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .wm-sidebar-tool .tool-icon { font-size: 1.3rem; }
+        .wm-sidebar-tool:hover { border-color: var(--accent); color: var(--text-primary); }
+        .wm-sidebar-tool.active { background: rgba(99,102,241,0.12); border-color: var(--accent); color: var(--accent); }
+
+        /* Form controls */
+        .wm-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .wm-label span { color: var(--accent); font-weight: 700; }
+        .wm-slider {
+            width: 100%;
+            height: 5px;
+            border-radius: 3px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--val, 50%), var(--surface-2) var(--val, 50%));
+            outline: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .wm-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Color presets */
+        .wm-color-presets {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .wm-color-preset {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .wm-color-preset:hover, .wm-color-preset.active {
+            border-color: var(--accent);
+            transform: scale(1.12);
+        }
+        .wm-color-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .wm-color-row input[type="color"] {
+            width: 40px;
+            height: 36px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 2px;
+            background: var(--surface-2);
+        }
+        .wm-hex-field {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.82rem;
+            background: var(--surface-2);
+            color: var(--text-primary);
+            font-family: monospace;
+            outline: none;
+        }
+        .wm-hex-field:focus { border-color: var(--accent); }
+
+        /* Action buttons */
+        .wm-action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+            margin-bottom: 8px;
+        }
+        .wm-action-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .wm-action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .wm-action-primary { background: var(--accent); color: #fff; }
+        .wm-action-secondary { background: var(--surface-2); border: 1.5px solid var(--border); color: var(--text-primary); }
+        .wm-action-success { background: #10b981; color: #fff; }
+        .wm-action-warning { background: #f59e0b; color: #fff; }
+
+        /* Before/After toggle */
+        .wm-compare-tabs {
+            display: flex;
+            background: var(--surface-2);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+        .wm-compare-tab {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+        }
+        .wm-compare-tab.active { background: var(--accent); color: #fff; }
+
+        /* Zoom display */
+        .wm-zoom-val {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 42px;
+            text-align: center;
+        }
+
+        /* Toast notifications */
+        .wm-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            z-index: 9999;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .wm-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .wm-toast.success { border-color: #10b981; }
+        .wm-toast.error { border-color: #ef4444; }
+
+        /* Info box */
+        .wm-info {
+            background: rgba(99,102,241,0.08);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Processing overlay */
+        .wm-processing {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            z-index: 100;
+        }
+        .wm-processing.active { display: flex; }
+        .wm-processing-inner { text-align: center; color: #fff; }
+        .wm-spinner {
+            width: 48px; height: 48px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: wm-spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes wm-spin { to { transform: rotate(360deg); } }
+
+        /* Mobile responsive */
+        @media (max-width: 900px) {
+            .wm-editor.active {
+                grid-template-columns: 1fr;
+            }
+            .wm-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .wm-panel { flex: 1 1 280px; }
+            .wm-canvas-viewport { min-height: 320px; }
+        }
+        @media (max-width: 600px) {
+            .wm-toolbar { gap: 4px; padding: 8px 10px; }
+            .wm-tool-btn { padding: 6px 8px; font-size: 0.72rem; }
+            .wm-sidebar { flex-direction: column; }
+            .wm-panel { flex: none; }
+        }
+    </style>
+</head>
+
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px;height:28px;border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+                <a href="../history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242; Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position:relative;margin-right:8px;">
+                    <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.9rem;opacity:0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..." style="padding:8px 12px 8px 32px;border-radius:20px;border:1px solid var(--border,#e2e8f0);background:var(--bg-primary,#fff);color:var(--text-primary,#1a1a2e);font-size:0.85rem;width:180px;transition:width 0.2s,border-color 0.2s;outline:none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown"></div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Search -->
+    <div class="mobile-search-bar" id="mobileSearchBar" style="display:none;">
+        <div style="position:relative;max-width:500px;margin:0 auto;">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
+            <input type="text" id="mobileToolSearch" placeholder="Search tools..." style="width:100%;padding:10px 12px 10px 36px;border-radius:20px;border:1px solid var(--border);background:var(--surface-1);color:var(--text-primary);font-size:0.9rem;outline:none;box-sizing:border-box;">
+        </div>
+    </div>
+
+    <main id="main">
+        <!-- Hero -->
+        <section class="tool-hero" style="padding:32px 0 20px;">
+            <div class="container">
+                <div class="tool-hero-content">
+                    <div class="tool-hero-icon" style="font-size:2.5rem;margin-bottom:12px;">🪄</div>
+                    <h1 class="tool-hero-title" style="font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:8px;">
+                        AI Watermark Remover
+                    </h1>
+                    <p class="tool-hero-subtitle" style="font-size:0.95rem;color:var(--text-secondary);max-width:560px;margin:0 auto 12px;">
+                        Remove watermarks from any image — auto-detection, smart inpainting, clone stamp &amp; more.
+                        100% free &amp; private. All processing happens in your browser.
+                    </p>
+                    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                        <span class="badge" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:600;">✅ 100% Free</span>
+                        <span class="badge" style="background:rgba(99,102,241,0.1);color:var(--accent);border:1px solid rgba(99,102,241,0.3);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:600;">🔒 100% Private</span>
+                        <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:600;">⚡ Browser-Based</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb" style="padding:0 0 8px;">
+            <div class="container">
+                <ol style="display:flex;gap:6px;list-style:none;margin:0;padding:0;font-size:0.8rem;color:var(--text-secondary);">
+                    <li><a href="../index.html" style="color:var(--text-secondary);text-decoration:none;">Home</a></li>
+                    <li style="opacity:0.5;">›</li>
+                    <li><a href="../tools.html" style="color:var(--text-secondary);text-decoration:none;">Tools</a></li>
+                    <li style="opacity:0.5;">›</li>
+                    <li style="color:var(--text-primary);">Remove Watermark</li>
+                </ol>
+            </div>
+        </nav>
+
+        <!-- Tool Section -->
+        <section style="padding:0 0 24px;">
+            <div class="container">
+                <div class="wm-tool-wrap">
+
+                    <!-- Upload Zone -->
+                    <div class="wm-upload-zone" id="wmUploadZone">
+                        <div class="wm-upload-icon">🖼️</div>
+                        <div class="wm-upload-title">Drop your image here</div>
+                        <div class="wm-upload-sub">Supports JPG, PNG, WEBP, BMP, GIF · or paste from clipboard (Ctrl+V)</div>
+                        <label class="wm-upload-btn" for="wmFileInput">Choose Image</label>
+                        <input type="file" id="wmFileInput" accept="image/*" style="display:none;">
+                    </div>
+
+                    <!-- Editor (hidden until image loaded) -->
+                    <div class="wm-editor" id="wmEditor">
+
+                        <!-- Canvas Panel -->
+                        <div class="wm-canvas-panel">
+                            <!-- Toolbar -->
+                            <div class="wm-toolbar" id="wmToolbar">
+                                <!-- Tool buttons (active tool highlighted) -->
+                                <button class="wm-tool-btn active" id="btnBrush" title="Brush Tool — paint mask (B)" data-tool="brush">✏️ Brush</button>
+                                <button class="wm-tool-btn" id="btnRect" title="Rectangle Selection (R)" data-tool="rect">⬜ Rect</button>
+                                <button class="wm-tool-btn" id="btnClone" title="Clone Stamp — copy clean area (C)" data-tool="clone">🖨️ Clone</button>
+                                <button class="wm-tool-btn" id="btnBlur" title="Blur / Smooth tool (L)" data-tool="blur">〰️ Blur</button>
+                                <button class="wm-tool-btn" id="btnEraser" title="Eraser — remove mask (E)" data-tool="eraser">🧹 Eraser</button>
+                                <div class="wm-divider"></div>
+                                <button class="wm-tool-btn" id="btnInpaint" title="Smart Inpaint selected mask area">🧠 Inpaint</button>
+                                <button class="wm-tool-btn" id="btnApplyBlur" title="Apply Gaussian Blur to mask area">🌀 Apply Blur</button>
+                                <button class="wm-tool-btn" id="btnClearMask" title="Clear entire mask">🗑️ Clear</button>
+                                <div class="wm-divider"></div>
+                                <button class="wm-tool-btn" id="btnUndo" title="Undo (Ctrl+Z)" disabled>↩️ Undo</button>
+                                <button class="wm-tool-btn" id="btnRedo" title="Redo (Ctrl+Y)" disabled>↪️ Redo</button>
+                                <div class="wm-divider"></div>
+                                <button class="wm-tool-btn" id="btnZoomOut" title="Zoom Out (-)">🔍−</button>
+                                <span class="wm-zoom-val" id="zoomLabel">100%</span>
+                                <button class="wm-tool-btn" id="btnZoomIn" title="Zoom In (+)">🔍+</button>
+                                <button class="wm-tool-btn" id="btnZoomFit" title="Fit to view">⊡ Fit</button>
+                                <div class="wm-divider"></div>
+                                <button class="wm-tool-btn" id="btnCompare" title="Toggle before/after comparison">👁️ Compare</button>
+                                <button class="wm-tool-btn" id="btnReset" title="Reset to original image" style="color:#ef4444;border-color:#ef4444;">↺ Reset</button>
+                            </div>
+
+                            <!-- Canvas Viewport -->
+                            <div class="wm-canvas-viewport" id="wmViewport">
+                                <div class="wm-canvas-container" id="wmCanvasContainer">
+                                    <canvas id="wm-main-canvas"></canvas>
+                                    <canvas id="wm-overlay-canvas"></canvas>
+                                    <div id="wm-clone-source" style="width:20px;height:20px;"></div>
+                                    <div class="wm-processing" id="wmProcessing">
+                                        <div class="wm-processing-inner">
+                                            <div class="wm-spinner"></div>
+                                            <div id="wmProcessingMsg" style="font-size:0.9rem;font-weight:600;">Processing…</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Bar -->
+                            <div class="wm-statusbar">
+                                <span>🖱️ <span id="statusCoords">0, 0</span></span>
+                                <span>📐 <span id="statusSize">—</span></span>
+                                <span>🎨 <span id="statusTool">Brush</span></span>
+                                <span style="margin-left:auto;">💡 <span id="statusHint">Paint over watermark area, then click Inpaint</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="wm-sidebar">
+
+                            <!-- Tools Panel -->
+                            <div class="wm-panel">
+                                <div class="wm-panel-title"><span>🛠️</span> Tools</div>
+                                <div class="wm-tool-group">
+                                    <button class="wm-sidebar-tool active" data-tool="brush" onclick="setTool('brush')">
+                                        <span class="tool-icon">✏️</span>Brush
+                                    </button>
+                                    <button class="wm-sidebar-tool" data-tool="rect" onclick="setTool('rect')">
+                                        <span class="tool-icon">⬜</span>Rectangle
+                                    </button>
+                                    <button class="wm-sidebar-tool" data-tool="clone" onclick="setTool('clone')">
+                                        <span class="tool-icon">🖨️</span>Clone Stamp
+                                    </button>
+                                    <button class="wm-sidebar-tool" data-tool="blur" onclick="setTool('blur')">
+                                        <span class="tool-icon">〰️</span>Blur Tool
+                                    </button>
+                                    <button class="wm-sidebar-tool" data-tool="eraser" onclick="setTool('eraser')">
+                                        <span class="tool-icon">🧹</span>Eraser
+                                    </button>
+                                    <button class="wm-sidebar-tool" data-tool="picker" onclick="setTool('picker')">
+                                        <span class="tool-icon">🔬</span>Color Pick
+                                    </button>
+                                </div>
+                                <div class="wm-info" id="toolHintBox">
+                                    <strong>Brush:</strong> Paint over watermark areas to create a removal mask.
+                                </div>
+                            </div>
+
+                            <!-- Auto Detection Panel -->
+                            <div class="wm-panel">
+                                <div class="wm-panel-title"><span>🤖</span> Auto Detection &amp; Removal</div>
+
+                                <div class="wm-label">Watermark Color <span id="autoColorHex">#ffffff</span></div>
+                                <div class="wm-color-presets">
+                                    <button class="wm-color-preset active" style="background:#ffffff;" title="White" data-color="#ffffff" onclick="setAutoColor('#ffffff')"></button>
+                                    <button class="wm-color-preset" style="background:#9ca3af;" title="Gray" data-color="#9ca3af" onclick="setAutoColor('#9ca3af')"></button>
+                                    <button class="wm-color-preset" style="background:#000000;" title="Black" data-color="#000000" onclick="setAutoColor('#000000')"></button>
+                                    <button class="wm-color-preset" style="background:#ef4444;" title="Red" data-color="#ef4444" onclick="setAutoColor('#ef4444')"></button>
+                                    <button class="wm-color-preset" style="background:#3b82f6;" title="Blue" data-color="#3b82f6" onclick="setAutoColor('#3b82f6')"></button>
+                                    <button class="wm-color-preset" style="background:#fbbf24;" title="Yellow" data-color="#fbbf24" onclick="setAutoColor('#fbbf24')"></button>
+                                </div>
+                                <div class="wm-color-row">
+                                    <input type="color" id="autoColorPicker" value="#ffffff" title="Pick watermark color" oninput="setAutoColor(this.value)">
+                                    <input type="text" class="wm-hex-field" id="autoColorHexInput" value="#ffffff" maxlength="7" placeholder="#rrggbb" oninput="onHexInput(this)">
+                                </div>
+
+                                <div class="wm-label">Opacity <span id="opacityVal">50%</span></div>
+                                <input type="range" class="wm-slider" id="opacitySlider" min="5" max="100" value="50" oninput="updateSliders()">
+
+                                <div class="wm-label">Tolerance <span id="toleranceVal">30</span></div>
+                                <input type="range" class="wm-slider" id="toleranceSlider" min="1" max="100" value="30" oninput="updateSliders()">
+
+                                <button class="wm-action-btn wm-action-primary" onclick="autoDetectWatermark()">
+                                    🔍 Auto Detect Mask
+                                </button>
+                                <button class="wm-action-btn wm-action-success" onclick="autoRemoveWatermark()">
+                                    ✨ Auto Remove
+                                </button>
+                            </div>
+
+                            <!-- Brush Settings -->
+                            <div class="wm-panel">
+                                <div class="wm-panel-title"><span>⚙️</span> Brush Settings</div>
+
+                                <div class="wm-label">Brush Size <span id="brushSizeVal">20px</span></div>
+                                <input type="range" class="wm-slider" id="brushSizeSlider" min="3" max="80" value="20" oninput="updateSliders()">
+                                <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:10px;">Keyboard: <kbd style="background:var(--surface-2);padding:1px 5px;border-radius:4px;border:1px solid var(--border);">[</kbd> smaller &nbsp; <kbd style="background:var(--surface-2);padding:1px 5px;border-radius:4px;border:1px solid var(--border);">]</kbd> larger</div>
+
+                                <div class="wm-label">Brush Hardness <span id="hardnessVal">80%</span></div>
+                                <input type="range" class="wm-slider" id="hardnessSlider" min="10" max="100" value="80" oninput="updateSliders()">
+                            </div>
+
+                            <!-- Compare & Download -->
+                            <div class="wm-panel">
+                                <div class="wm-panel-title"><span>👁️</span> Compare &amp; Download</div>
+                                <div class="wm-compare-tabs">
+                                    <button class="wm-compare-tab active" id="tabEdited" onclick="showView('edited')">Edited</button>
+                                    <button class="wm-compare-tab" id="tabOriginal" onclick="showView('original')">Original</button>
+                                </div>
+                                <button class="wm-action-btn wm-action-primary" onclick="downloadPNG()">
+                                    ⬇️ Download PNG
+                                </button>
+                                <button class="wm-action-btn wm-action-secondary" onclick="downloadJPG()">
+                                    ⬇️ Download JPG
+                                </button>
+                                <button class="wm-action-btn wm-action-secondary" onclick="document.getElementById('wmFileInput').click()">
+                                    📂 Open New Image
+                                </button>
+                            </div>
+
+                            <!-- Clone Stamp Help -->
+                            <div class="wm-panel" id="cloneHelpPanel" style="display:none;">
+                                <div class="wm-panel-title"><span>🖨️</span> Clone Stamp Usage</div>
+                                <div class="wm-info" style="font-size:0.75rem;line-height:1.6;">
+                                    1. <strong>Alt+Click</strong> (or long-press on mobile) to set the source point.<br>
+                                    2. <strong>Paint</strong> over the watermark area.<br>
+                                    Pixels are copied from the source offset to paint clean texture.
+                                </div>
+                            </div>
+
+                        </div><!-- /sidebar -->
+                    </div><!-- /editor -->
+
+                    <!-- Feature badges below editor -->
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;justify-content:center;">
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Auto Detection</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Smart Inpainting</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Clone Stamp</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Undo / Redo</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Zoom &amp; Compare</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ PNG &amp; JPG Export</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ 100% Client-Side</span>
+                    </div>
+
+                    <!-- SEO / Guide -->
+                    <div style="margin-top:40px;max-width:800px;">
+                        <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:14px;">How to Remove a Watermark</h2>
+                        <div style="display:grid;gap:14px;">
+                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                                <div style="font-weight:700;margin-bottom:6px;">🤖 Option 1 — Auto Remove (Best for semi-transparent watermarks)</div>
+                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
+                                    <li>Select the watermark color using the preset or color picker</li>
+                                    <li>Adjust Opacity to match the watermark transparency</li>
+                                    <li>Use Tolerance to fine-tune detection sensitivity</li>
+                                    <li>Click <strong>Auto Remove</strong> — done!</li>
+                                </ol>
+                            </div>
+                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                                <div style="font-weight:700;margin-bottom:6px;">✏️ Option 2 — Brush + Inpaint (Best for solid watermarks)</div>
+                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
+                                    <li>Select the <strong>Brush</strong> tool and paint over the watermark</li>
+                                    <li>Click <strong>Inpaint</strong> to fill the area from surrounding pixels</li>
+                                    <li>Use <strong>Clone Stamp</strong> for fine-tuning</li>
+                                </ol>
+                            </div>
+                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                                <div style="font-weight:700;margin-bottom:6px;">🖨️ Option 3 — Clone Stamp (Best for logos &amp; corner watermarks)</div>
+                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
+                                    <li>Select the <strong>Clone Stamp</strong> tool</li>
+                                    <li>Alt+Click (or long-press) on a clean area to set source</li>
+                                    <li>Paint over the watermark to copy clean pixels</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <h2 style="font-size:1.3rem;font-weight:700;margin:28px 0 14px;">Best Results Guide</h2>
+                        <div style="overflow-x:auto;">
+                            <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                                <thead>
+                                    <tr style="background:var(--surface-1);">
+                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Watermark Type</th>
+                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Best Method</th>
+                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Accuracy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Semi-transparent white</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Auto Remove (opacity 30–50%)</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">90–95%</td></tr>
+                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Semi-transparent gray</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Auto Remove (adjust color)</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">85–90%</td></tr>
+                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Solid text watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Brush + Inpaint</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#f59e0b;">75–85%</td></tr>
+                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Logo watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Clone Stamp</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">80–90%</td></tr>
+                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Small corner watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Clone Stamp</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">90–95%</td></tr>
+                                    <tr><td style="padding:9px 12px;">Large covering watermark</td><td style="padding:9px 12px;">Brush + Inpaint + Clone</td><td style="padding:9px 12px;color:#f59e0b;">60–75%</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div><!-- /wm-tool-wrap -->
+            </div><!-- /container -->
+        </section>
+    </main>
+
+    <!-- Brush cursor -->
+    <div id="wm-brush-cursor"></div>
+
+    <!-- Toast -->
+    <div class="wm-toast" id="wmToast"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo" style="margin-bottom:12px;">
+                    <img src="/logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:24px;height:24px;border-radius:5px;">
+                    <span class="logo-text">OnlinePDFPro</span>
+                </a>
+                <p class="footer-desc">Free online PDF &amp; image tools. 100% private, works in your browser.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Tools</h4>
+                    <a href="../tools.html">All Tools</a>
+                    <a href="remove-watermark.html">Remove Watermark</a>
+                    <a href="../remove-background.html">Remove Background</a>
+                    <a href="image-compress.html">Compress Image</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="../about.html">About</a>
+                    <a href="../help.html">Help</a>
+                    <a href="../blog.html">Blog</a>
+                    <a href="../contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="../privacy.html">Privacy Policy</a>
+                    <a href="../terms.html">Terms of Service</a>
+                    <a href="../disclaimer.html">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 OnlinePDFPro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Main App JS -->
+    <script src="../js/app.js"></script>
+
+    <!-- Watermark Remover Logic -->
+    <script>
+    // ===================================================================
+    // WATERMARK REMOVER — Core Engine
+    // ===================================================================
+    (function() {
+        'use strict';
+
+        // ── State ──────────────────────────────────────────────────────
+        const state = {
+            originalImageData: null,   // ImageData of the loaded image
+            currentImageData: null,    // Working copy (edited)
+            maskData: null,            // Uint8Array mask (255 = selected, 0 = not)
+            undoStack: [],
+            redoStack: [],
+            tool: 'brush',
+            brushSize: 20,
+            hardness: 0.8,
+            autoColor: { r: 255, g: 255, b: 255 },
+            autoOpacity: 0.5,
+            tolerance: 30,
+            zoom: 1,
+            showingOriginal: false,
+            // Drawing state
+            isDrawing: false,
+            lastX: 0,
+            lastY: 0,
+            // Rectangle selection
+            rectStart: null,
+            // Clone stamp
+            cloneSourceSet: false,
+            cloneSourceX: 0,
+            cloneSourceY: 0,
+            cloneOffsetX: 0,
+            cloneOffsetY: 0,
+            cloneFirstStroke: true,
+        };
+
+        // ── DOM refs ───────────────────────────────────────────────────
+        const uploadZone  = document.getElementById('wmUploadZone');
+        const fileInput   = document.getElementById('wmFileInput');
+        const editor      = document.getElementById('wmEditor');
+        const mainCanvas  = document.getElementById('wm-main-canvas');
+        const overlayCanvas = document.getElementById('wm-overlay-canvas');
+        const brushCursor = document.getElementById('wm-brush-cursor');
+        const cloneSrcEl  = document.getElementById('wm-clone-source');
+        const viewport    = document.getElementById('wmViewport');
+        const container   = document.getElementById('wmCanvasContainer');
+        const processing  = document.getElementById('wmProcessing');
+        const processingMsg = document.getElementById('wmProcessingMsg');
+        const zoomLabel   = document.getElementById('zoomLabel');
+        const statusCoords = document.getElementById('statusCoords');
+        const statusSize  = document.getElementById('statusSize');
+        const statusTool  = document.getElementById('statusTool');
+        const statusHint  = document.getElementById('statusHint');
+        const toolHintBox = document.getElementById('toolHintBox');
+        const cloneHelpPanel = document.getElementById('cloneHelpPanel');
+
+        const ctx     = mainCanvas.getContext('2d', { willReadFrequently: true });
+        const overlayCtx = overlayCanvas.getContext('2d');
+
+        // ── Sliders / inputs ───────────────────────────────────────────
+        const brushSizeSlider = document.getElementById('brushSizeSlider');
+        const hardnessSlider  = document.getElementById('hardnessSlider');
+        const opacitySlider   = document.getElementById('opacitySlider');
+        const toleranceSlider = document.getElementById('toleranceSlider');
+
+        // ── Toast helper ───────────────────────────────────────────────
+        const toast = document.getElementById('wmToast');
+        let toastTimer = null;
+        function showToast(msg, type = 'info', duration = 2800) {
+            toast.textContent = msg;
+            toast.className = `wm-toast show ${type}`;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { toast.className = 'wm-toast'; }, duration);
+        }
+
+        // ── updateSliders (called from inline oninput) ─────────────────
+        window.updateSliders = function() {
+            state.brushSize = parseInt(brushSizeSlider.value);
+            state.hardness  = parseInt(hardnessSlider.value) / 100;
+            state.autoOpacity = parseInt(opacitySlider.value) / 100;
+            state.tolerance = parseInt(toleranceSlider.value);
+
+            document.getElementById('brushSizeVal').textContent = state.brushSize + 'px';
+            document.getElementById('hardnessVal').textContent  = parseInt(hardnessSlider.value) + '%';
+            document.getElementById('opacityVal').textContent   = parseInt(opacitySlider.value) + '%';
+            document.getElementById('toleranceVal').textContent = state.tolerance;
+
+            // Update slider gradient fill
+            [brushSizeSlider, hardnessSlider, opacitySlider, toleranceSlider].forEach(sl => {
+                const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
+                sl.style.setProperty('--val', pct + '%');
+            });
+            updateBrushCursorSize();
+        };
+
+        // ── Image Upload ───────────────────────────────────────────────
+        fileInput.addEventListener('change', e => {
+            if (e.target.files[0]) loadImage(e.target.files[0]);
+        });
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+        uploadZone.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) loadImage(file);
+            else showToast('Please drop an image file', 'error');
+        });
+
+        // Paste from clipboard
+        document.addEventListener('paste', e => {
+            const items = e.clipboardData && e.clipboardData.items;
+            if (!items) return;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.startsWith('image/')) {
+                    loadImage(items[i].getAsFile());
+                    break;
+                }
+            }
+        });
+
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    mainCanvas.width = img.width;
+                    mainCanvas.height = img.height;
+                    overlayCanvas.width = img.width;
+                    overlayCanvas.height = img.height;
+
+                    ctx.drawImage(img, 0, 0);
+                    state.originalImageData = ctx.getImageData(0, 0, img.width, img.height);
+                    state.currentImageData  = cloneImageData(state.originalImageData);
+                    state.maskData = new Uint8Array(img.width * img.height);
+
+                    statusSize.textContent = `${img.width} × ${img.height}`;
+
+                    // Clear stacks
+                    state.undoStack = [];
+                    state.redoStack = [];
+                    updateUndoRedoBtns();
+
+                    // Show editor
+                    uploadZone.style.display = 'none';
+                    editor.classList.add('active');
+                    fitToView();
+                    clearOverlay();
+                    showToast('Image loaded! Paint over the watermark or try Auto Remove.', 'success');
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ── Clone image data ───────────────────────────────────────────
+        function cloneImageData(src) {
+            const dst = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
+            return dst;
+        }
+
+        // ── Tool switching ─────────────────────────────────────────────
+        const TOOL_HINTS = {
+            brush:  '<strong>Brush:</strong> Paint over watermark areas to create a removal mask.',
+            rect:   '<strong>Rectangle:</strong> Drag to select a rectangular watermark area.',
+            clone:  '<strong>Clone Stamp:</strong> Alt+Click (or long-press) to set source point, then paint.',
+            blur:   '<strong>Blur:</strong> Paint to blur/smooth areas directly.',
+            eraser: '<strong>Eraser:</strong> Remove parts of the painted mask.',
+            picker: '<strong>Color Picker:</strong> Click on watermark to auto-set its color.',
+        };
+
+        window.setTool = function(tool) {
+            state.tool = tool;
+            // Update sidebar buttons
+            document.querySelectorAll('.wm-sidebar-tool').forEach(b => {
+                b.classList.toggle('active', b.dataset.tool === tool);
+            });
+            // Update toolbar buttons
+            ['btnBrush','btnRect','btnClone','btnBlur','btnEraser'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.toggle('active', btn.dataset.tool === tool);
+            });
+            statusTool.textContent = tool.charAt(0).toUpperCase() + tool.slice(1);
+            toolHintBox.innerHTML = TOOL_HINTS[tool] || '';
+
+            // Clone stamp help panel
+            cloneHelpPanel.style.display = (tool === 'clone') ? '' : 'none';
+
+            // Cursor style
+            mainCanvas.style.cursor = (tool === 'picker') ? 'crosshair' : 'none';
+            overlayCanvas.style.cursor = mainCanvas.style.cursor;
+
+            if (tool !== 'clone') {
+                state.cloneFirstStroke = true;
+                cloneSrcEl.style.display = 'none';
+            }
+
+            updateBrushCursorSize();
+        };
+
+        // Wire toolbar tool buttons
+        ['btnBrush','btnRect','btnClone','btnBlur','btnEraser'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.addEventListener('click', () => setTool(btn.dataset.tool));
+        });
+
+        // ── Color helpers ──────────────────────────────────────────────
+        window.setAutoColor = function(hex) {
+            state.autoColor = hexToRgb(hex);
+            document.getElementById('autoColorHex').textContent = hex;
+            document.getElementById('autoColorPicker').value = hex;
+            document.getElementById('autoColorHexInput').value = hex;
+            document.querySelectorAll('.wm-color-preset').forEach(b => {
+                b.classList.toggle('active', b.dataset.color === hex);
+            });
+        };
+
+        window.onHexInput = function(input) {
+            const hex = input.value.trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+                setAutoColor(hex);
+            }
+        };
+
+        function hexToRgb(hex) {
+            const r = parseInt(hex.slice(1,3), 16);
+            const g = parseInt(hex.slice(3,5), 16);
+            const b = parseInt(hex.slice(5,7), 16);
+            return { r, g, b };
+        }
+
+        function colorDist(r1,g1,b1,r2,g2,b2) {
+            return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
+        }
+
+        // ── Zoom ───────────────────────────────────────────────────────
+        window.fitToView = function() {
+            if (!state.originalImageData) return;
+            const vw = viewport.clientWidth  - 40;
+            const vh = viewport.clientHeight - 40;
+            const iw = mainCanvas.width;
+            const ih = mainCanvas.height;
+            state.zoom = Math.min(1, Math.min(vw / iw, vh / ih));
+            applyZoom();
+        };
+
+        function applyZoom() {
+            container.style.transform = `scale(${state.zoom})`;
+            zoomLabel.textContent = Math.round(state.zoom * 100) + '%';
+            updateBrushCursorSize();
+        }
+
+        document.getElementById('btnZoomIn').addEventListener('click', () => {
+            state.zoom = Math.min(8, state.zoom * 1.25);
+            applyZoom();
+        });
+        document.getElementById('btnZoomOut').addEventListener('click', () => {
+            state.zoom = Math.max(0.1, state.zoom / 1.25);
+            applyZoom();
+        });
+        document.getElementById('btnZoomFit').addEventListener('click', fitToView);
+
+        // ── Brush cursor ───────────────────────────────────────────────
+        function updateBrushCursorSize() {
+            const sz = state.brushSize * state.zoom;
+            brushCursor.style.width  = sz + 'px';
+            brushCursor.style.height = sz + 'px';
+        }
+
+        document.addEventListener('mousemove', e => {
+            brushCursor.style.left = e.clientX + 'px';
+            brushCursor.style.top  = e.clientY + 'px';
+        });
+
+        // ── Canvas mouse / touch events ────────────────────────────────
+        function getCanvasPos(e) {
+            const rect = mainCanvas.getBoundingClientRect();
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            // Account for zoom
+            const x = (clientX - rect.left) / state.zoom;
+            const y = (clientY - rect.top)  / state.zoom;
+            return { x: Math.floor(x), y: Math.floor(y) };
+        }
+
+        // Show/hide brush cursor over canvas
+        container.addEventListener('mouseenter', () => {
+            if (state.tool !== 'picker') brushCursor.style.display = 'block';
+        });
+        container.addEventListener('mouseleave', () => {
+            brushCursor.style.display = 'none';
+        });
+
+        // ── Mouse down ─────────────────────────────────────────────────
+        mainCanvas.addEventListener('mousedown', onPointerDown);
+        overlayCanvas.addEventListener('mousedown', onPointerDown);
+        mainCanvas.addEventListener('touchstart', onPointerDown, { passive: false });
+        overlayCanvas.addEventListener('touchstart', onPointerDown, { passive: false });
+
+        let longPressTimer = null;
+
+        function onPointerDown(e) {
+            e.preventDefault();
+            if (!state.currentImageData) return;
+
+            const pos = getCanvasPos(e);
+            statusCoords.textContent = `${pos.x}, ${pos.y}`;
+
+            // Alt+Click for clone stamp source
+            if (e.altKey || (e.type === 'touchstart' && e.touches.length === 2)) {
+                if (state.tool === 'clone') {
+                    setCloneSource(pos.x, pos.y);
+                    return;
+                }
+            }
+
+            // Long press for clone source on mobile
+            if (e.type === 'touchstart' && state.tool === 'clone') {
+                longPressTimer = setTimeout(() => {
+                    setCloneSource(pos.x, pos.y);
+                }, 600);
+            }
+
+            // Color picker
+            if (state.tool === 'picker') {
+                pickColor(pos.x, pos.y);
+                return;
+            }
+
+            state.isDrawing = true;
+            state.lastX = pos.x;
+            state.lastY = pos.y;
+
+            if (state.tool === 'rect') {
+                state.rectStart = { x: pos.x, y: pos.y };
+            } else {
+                paintAt(pos.x, pos.y);
+            }
+
+            // Save undo snapshot before stroke begins
+            pushUndo();
+        }
+
+        // ── Mouse move ─────────────────────────────────────────────────
+        document.addEventListener('mousemove', onPointerMove);
+        mainCanvas.addEventListener('touchmove', onPointerMove, { passive: false });
+        overlayCanvas.addEventListener('touchmove', onPointerMove, { passive: false });
+
+        function onPointerMove(e) {
+            if (e.type !== 'mousemove') e.preventDefault();
+            if (!state.currentImageData) return;
+
+            const pos = getCanvasPos(e);
+            statusCoords.textContent = `${pos.x}, ${pos.y}`;
+
+            if (!state.isDrawing) return;
+            clearTimeout(longPressTimer);
+
+            if (state.tool === 'rect') {
+                drawRectPreview(state.rectStart, pos);
+            } else {
+                // Interpolate between last and current position for smooth stroke
+                const dx = pos.x - state.lastX;
+                const dy = pos.y - state.lastY;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const step = Math.max(1, state.brushSize / 4);
+                const steps = Math.ceil(dist / step);
+                for (let i = 1; i <= steps; i++) {
+                    const ix = state.lastX + dx * (i / steps);
+                    const iy = state.lastY + dy * (i / steps);
+                    paintAt(ix, iy);
+                }
+                state.lastX = pos.x;
+                state.lastY = pos.y;
+            }
+        }
+
+        // ── Mouse up ───────────────────────────────────────────────────
+        document.addEventListener('mouseup', onPointerUp);
+        document.addEventListener('touchend', onPointerUp);
+
+        function onPointerUp(e) {
+            clearTimeout(longPressTimer);
+            if (!state.isDrawing) return;
+            state.isDrawing = false;
+
+            if (state.tool === 'rect' && state.rectStart) {
+                const pos = getCanvasPos(e.changedTouches ? { clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY } : e);
+                fillRectMask(state.rectStart, pos);
+                state.rectStart = null;
+                clearOverlay();
+            }
+
+            state.cloneFirstStroke = false;
+            renderCanvas();
+        }
+
+        // ── Paint ──────────────────────────────────────────────────────
+        function paintAt(cx, cy) {
+            if (state.tool === 'blur') {
+                applyBlurBrush(cx, cy);
+                renderCanvas();
+                return;
+            }
+
+            if (state.tool === 'clone') {
+                applyCloneStamp(cx, cy);
+                renderCanvas();
+                return;
+            }
+
+            // Paint mask
+            const r = state.brushSize / 2;
+            const r2 = r * r;
+            const x0 = Math.max(0, Math.floor(cx - r));
+            const x1 = Math.min(mainCanvas.width  - 1, Math.ceil(cx + r));
+            const y0 = Math.max(0, Math.floor(cy - r));
+            const y1 = Math.min(mainCanvas.height - 1, Math.ceil(cy + r));
+
+            for (let y = y0; y <= y1; y++) {
+                for (let x = x0; x <= x1; x++) {
+                    const dx = x - cx;
+                    const dy = y - cy;
+                    const d2 = dx*dx + dy*dy;
+                    if (d2 > r2) continue;
+
+                    // Hardness falloff
+                    const falloff = Math.max(0, 1 - (Math.sqrt(d2) / r) * (1 - state.hardness));
+                    const alpha = Math.floor(255 * falloff);
+                    const idx = y * mainCanvas.width + x;
+
+                    if (state.tool === 'eraser') {
+                        state.maskData[idx] = Math.max(0, state.maskData[idx] - alpha);
+                    } else {
+                        state.maskData[idx] = Math.min(255, Math.max(state.maskData[idx], alpha));
+                    }
+                }
+            }
+            renderMaskOverlay();
+        }
+
+        // ── Rectangle mask fill ────────────────────────────────────────
+        function fillRectMask(a, b) {
+            const x0 = Math.max(0, Math.min(a.x, b.x));
+            const x1 = Math.min(mainCanvas.width  - 1, Math.max(a.x, b.x));
+            const y0 = Math.max(0, Math.min(a.y, b.y));
+            const y1 = Math.min(mainCanvas.height - 1, Math.max(a.y, b.y));
+            for (let y = y0; y <= y1; y++) {
+                for (let x = x0; x <= x1; x++) {
+                    state.maskData[y * mainCanvas.width + x] = 255;
+                }
+            }
+            renderMaskOverlay();
+        }
+
+        // ── Rect selection preview ─────────────────────────────────────
+        function drawRectPreview(a, b) {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            const x = Math.min(a.x, b.x);
+            const y = Math.min(a.y, b.y);
+            const w = Math.abs(a.x - b.x);
+            const h = Math.abs(a.y - b.y);
+            overlayCtx.strokeStyle = 'rgba(99,102,241,0.9)';
+            overlayCtx.lineWidth = 2 / state.zoom;
+            overlayCtx.setLineDash([6 / state.zoom, 4 / state.zoom]);
+            overlayCtx.strokeRect(x, y, w, h);
+            overlayCtx.fillStyle = 'rgba(99,102,241,0.12)';
+            overlayCtx.fillRect(x, y, w, h);
+        }
+
+        // ── Blur brush ─────────────────────────────────────────────────
+        function applyBlurBrush(cx, cy) {
+            const r = Math.floor(state.brushSize / 2);
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const x0 = Math.max(r, Math.floor(cx - r));
+            const x1 = Math.min(w - 1 - r, Math.ceil(cx + r));
+            const y0 = Math.max(r, Math.floor(cy - r));
+            const y1 = Math.min(h - 1 - r, Math.ceil(cy + r));
+
+            const data = state.currentImageData.data;
+            const kr = Math.max(2, Math.floor(r / 3));
+
+            for (let y = y0; y <= y1; y++) {
+                for (let x = x0; x <= x1; x++) {
+                    const dx = x - cx; const dy = y - cy;
+                    if (dx*dx + dy*dy > r*r) continue;
+
+                    // Simple box blur at this pixel
+                    let sumR = 0, sumG = 0, sumB = 0, cnt = 0;
+                    for (let ky = -kr; ky <= kr; ky++) {
+                        for (let kx = -kr; kx <= kr; kx++) {
+                            const neighborX = Math.max(0, Math.min(w-1, x+kx));
+                            const neighborY = Math.max(0, Math.min(h-1, y+ky));
+                            const neighborIndex = (neighborY * w + neighborX) * 4;
+                            sumR += data[neighborIndex]; sumG += data[neighborIndex+1]; sumB += data[neighborIndex+2];
+                            cnt++;
+                        }
+                    }
+                    const i = (y * w + x) * 4;
+                    data[i]   = sumR / cnt;
+                    data[i+1] = sumG / cnt;
+                    data[i+2] = sumB / cnt;
+                }
+            }
+        }
+
+        // ── Clone Stamp ────────────────────────────────────────────────
+        function setCloneSource(x, y) {
+            state.cloneSourceX = x;
+            state.cloneSourceY = y;
+            state.cloneSourceSet = true;
+            state.cloneFirstStroke = true;
+            const sz = state.brushSize * state.zoom;
+            cloneSrcEl.style.display = 'block';
+            cloneSrcEl.style.left = x + 'px';
+            cloneSrcEl.style.top  = y + 'px';
+            cloneSrcEl.style.width  = sz + 'px';
+            cloneSrcEl.style.height = sz + 'px';
+            showToast('Clone source set. Now paint over the watermark.', 'success');
+        }
+
+        function applyCloneStamp(cx, cy) {
+            if (!state.cloneSourceSet) {
+                showToast('Alt+Click to set clone source first!', 'error');
+                return;
+            }
+            if (state.cloneFirstStroke) {
+                state.cloneOffsetX = state.cloneSourceX - cx;
+                state.cloneOffsetY = state.cloneSourceY - cy;
+                state.cloneFirstStroke = false;
+            }
+
+            const r = state.brushSize / 2;
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const data = state.currentImageData.data;
+            const srcData = state.currentImageData.data;
+
+            for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
+                for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
+                    const dx = x - cx; const dy = y - cy;
+                    const d2 = dx*dx + dy*dy;
+                    if (d2 > r*r) continue;
+                    if (x < 0 || x >= w || y < 0 || y >= h) continue;
+
+                    const sx = Math.round(x + state.cloneOffsetX);
+                    const sy = Math.round(y + state.cloneOffsetY);
+                    if (sx < 0 || sx >= w || sy < 0 || sy >= h) continue;
+
+                    // Hardness-based alpha blend
+                    const falloff = Math.max(0, 1 - (Math.sqrt(d2) / r) * (1 - state.hardness));
+                    const dstI = (y * w + x) * 4;
+                    const srcI = (sy * w + sx) * 4;
+
+                    data[dstI]   = data[dstI]   * (1 - falloff) + srcData[srcI]   * falloff;
+                    data[dstI+1] = data[dstI+1] * (1 - falloff) + srcData[srcI+1] * falloff;
+                    data[dstI+2] = data[dstI+2] * (1 - falloff) + srcData[srcI+2] * falloff;
+                }
+            }
+        }
+
+        // ── Color picker tool ──────────────────────────────────────────
+        function pickColor(x, y) {
+            if (!state.currentImageData) return;
+            const i = (Math.floor(y) * mainCanvas.width + Math.floor(x)) * 4;
+            const d = state.currentImageData.data;
+            const r = d[i], g = d[i+1], b = d[i+2];
+            const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+            setAutoColor(hex);
+            showToast(`Color picked: ${hex}`, 'success');
+        }
+
+        // ── Auto Detect Watermark ──────────────────────────────────────
+        window.autoDetectWatermark = function() {
+            if (!state.currentImageData) return;
+            showProcessing('Detecting watermark…');
+            setTimeout(() => {
+                pushUndo();
+                const { r: wr, g: wg, b: wb } = state.autoColor;
+                const tol = state.tolerance * 2.55; // scale 1-100 → 0-255
+                const w = mainCanvas.width;
+                const h = mainCanvas.height;
+                const data = state.currentImageData.data;
+
+                for (let i = 0; i < w * h; i++) {
+                    const pi = i * 4;
+                    const dist = colorDist(data[pi], data[pi+1], data[pi+2], wr, wg, wb);
+                    state.maskData[i] = dist <= tol ? 255 : 0;
+                }
+                renderMaskOverlay();
+                hideProcessing();
+                showToast(`Watermark detected! Click Inpaint or Auto Remove.`, 'success');
+            }, 30);
+        };
+
+        // ── Auto Remove Watermark (reverse alpha blending) ─────────────
+        window.autoRemoveWatermark = function() {
+            if (!state.currentImageData) return;
+            showProcessing('Removing watermark…');
+            setTimeout(() => {
+                pushUndo();
+                autoDetectWatermark_inner();
+                applyAutoRemoval();
+                renderCanvas();
+                clearMask();
+                hideProcessing();
+                showToast('Auto removal complete! Fine-tune with Clone Stamp if needed.', 'success');
+            }, 30);
+        };
+
+        function autoDetectWatermark_inner() {
+            const { r: wr, g: wg, b: wb } = state.autoColor;
+            const tol = state.tolerance * 2.55;
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const data = state.currentImageData.data;
+            for (let i = 0; i < w * h; i++) {
+                const pi = i * 4;
+                const dist = colorDist(data[pi], data[pi+1], data[pi+2], wr, wg, wb);
+                state.maskData[i] = dist <= tol ? 255 : 0;
+            }
+        }
+
+        function applyAutoRemoval() {
+            // For each masked pixel, reverse the alpha-blending formula:
+            // composited = original * (1 - α) + watermark_color * α
+            // original   = (composited - α * watermark_color) / (1 - α)
+            const alpha = state.autoOpacity;
+            const { r: wr, g: wg, b: wb } = state.autoColor;
+            const w = mainCanvas.width;
+            const data = state.currentImageData.data;
+            const orig = state.originalImageData.data;
+
+            for (let i = 0; i < state.maskData.length; i++) {
+                if (state.maskData[i] === 0) continue;
+                const pi = i * 4;
+                const maskAlpha = state.maskData[i] / 255;
+                const a = alpha * maskAlpha;
+                const oneMinusA = 1 - a;
+
+                if (oneMinusA < 0.01) {
+                    // Nearly opaque watermark – use inpainting fallback
+                    continue;
+                }
+
+                // Reverse blending
+                let nr = (orig[pi]   - a * wr) / oneMinusA;
+                let ng = (orig[pi+1] - a * wg) / oneMinusA;
+                let nb = (orig[pi+2] - a * wb) / oneMinusA;
+
+                data[pi]   = Math.max(0, Math.min(255, Math.round(nr)));
+                data[pi+1] = Math.max(0, Math.min(255, Math.round(ng)));
+                data[pi+2] = Math.max(0, Math.min(255, Math.round(nb)));
+            }
+        }
+
+        // ── Smart Inpainting ───────────────────────────────────────────
+        document.getElementById('btnInpaint').addEventListener('click', applyInpainting);
+
+        function applyInpainting() {
+            if (!state.currentImageData) return;
+            if (!state.maskData.some(v => v > 0)) {
+                showToast('Paint a mask first!', 'error');
+                return;
+            }
+            showProcessing('Inpainting…');
+            setTimeout(() => {
+                pushUndo();
+                inpaintMaskedRegion();
+                renderCanvas();
+                clearMask();
+                hideProcessing();
+                showToast('Inpainting complete!', 'success');
+            }, 30);
+        }
+
+        function inpaintMaskedRegion() {
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const data = state.currentImageData.data;
+            // Multi-pass: fill masked pixels from average of surrounding non-masked neighbors
+            // We do several passes for better fill quality
+            const maxPasses = 12;
+            for (let pass = 0; pass < maxPasses; pass++) {
+                let changed = false;
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const idx = y * w + x;
+                        if (state.maskData[idx] === 0) continue;
+
+                        // Collect boundary pixels with expanding radius
+                        let sumR=0, sumG=0, sumB=0, cnt=0;
+                        const sr = Math.min(8, pass + 1);
+                        for (let dy = -sr; dy <= sr; dy++) {
+                            for (let dx = -sr; dx <= sr; dx++) {
+                                const nx = x + dx, ny = y + dy;
+                                if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                                if (state.maskData[ny * w + nx] > 0) continue;
+                                const ni = (ny * w + nx) * 4;
+                                const weight = 1 / (Math.abs(dx) + Math.abs(dy) + 1);
+                                sumR += data[ni]   * weight;
+                                sumG += data[ni+1] * weight;
+                                sumB += data[ni+2] * weight;
+                                cnt += weight;
+                            }
+                        }
+                        if (cnt > 0) {
+                            const pi = idx * 4;
+                            data[pi]   = Math.round(sumR / cnt);
+                            data[pi+1] = Math.round(sumG / cnt);
+                            data[pi+2] = Math.round(sumB / cnt);
+                            state.maskData[idx] = 0; // Mark as filled
+                            changed = true;
+                        }
+                    }
+                }
+                if (!changed) break;
+            }
+        }
+
+        // ── Apply Gaussian Blur to mask region ─────────────────────────
+        document.getElementById('btnApplyBlur').addEventListener('click', () => {
+            if (!state.currentImageData) return;
+            if (!state.maskData.some(v => v > 0)) {
+                showToast('Paint or select a mask area first!', 'error');
+                return;
+            }
+            showProcessing('Applying blur…');
+            setTimeout(() => {
+                pushUndo();
+                const w = mainCanvas.width;
+                const h = mainCanvas.height;
+                const data = state.currentImageData.data;
+                const kr = 3;
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const idx = y * w + x;
+                        if (state.maskData[idx] === 0) continue;
+                        let sumR=0, sumG=0, sumB=0, cnt=0;
+                        for (let dy=-kr; dy<=kr; dy++) {
+                            for (let dx=-kr; dx<=kr; dx++) {
+                                const nx=Math.max(0,Math.min(w-1,x+dx));
+                                const ny=Math.max(0,Math.min(h-1,y+dy));
+                                const ni=(ny*w+nx)*4;
+                                const gaussianWeight = Math.exp(-(dx*dx+dy*dy)/(2*kr));
+                                sumR+=data[ni]*gaussianWeight; sumG+=data[ni+1]*gaussianWeight; sumB+=data[ni+2]*gaussianWeight; cnt+=gaussianWeight;
+                            }
+                        }
+                        const pi=idx*4;
+                        data[pi]=Math.round(sumR/cnt); data[pi+1]=Math.round(sumG/cnt); data[pi+2]=Math.round(sumB/cnt);
+                    }
+                }
+                renderCanvas();
+                clearMask();
+                hideProcessing();
+                showToast('Blur applied!', 'success');
+            }, 30);
+        });
+
+        // ── Clear mask ─────────────────────────────────────────────────
+        document.getElementById('btnClearMask').addEventListener('click', () => {
+            clearMask();
+            showToast('Mask cleared.', 'info');
+        });
+
+        function clearMask() {
+            if (state.maskData) state.maskData.fill(0);
+            clearOverlay();
+        }
+
+        function clearOverlay() {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        }
+
+        // ── Render ─────────────────────────────────────────────────────
+        function renderCanvas() {
+            if (!state.currentImageData) return;
+            const imgData = state.showingOriginal ? state.originalImageData : state.currentImageData;
+            ctx.putImageData(imgData, 0, 0);
+            renderMaskOverlay();
+        }
+
+        function renderMaskOverlay() {
+            if (!state.maskData) return;
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const overlayData = overlayCtx.createImageData(w, h);
+            const od = overlayData.data;
+            for (let i = 0; i < state.maskData.length; i++) {
+                if (state.maskData[i] === 0) continue;
+                const pi = i * 4;
+                od[pi]   = 99;
+                od[pi+1] = 102;
+                od[pi+2] = 241;
+                od[pi+3] = Math.floor(state.maskData[i] * 0.5);
+            }
+            overlayCtx.putImageData(overlayData, 0, 0);
+        }
+
+        // ── Compare view ───────────────────────────────────────────────
+        window.showView = function(which) {
+            state.showingOriginal = (which === 'original');
+            document.getElementById('tabEdited').classList.toggle('active', which === 'edited');
+            document.getElementById('tabOriginal').classList.toggle('active', which === 'original');
+            renderCanvas();
+        };
+
+        document.getElementById('btnCompare').addEventListener('click', () => {
+            const next = state.showingOriginal ? 'edited' : 'original';
+            showView(next);
+            showToast(next === 'original' ? 'Showing original' : 'Showing edited', 'info', 1500);
+        });
+
+        // ── Undo / Redo ────────────────────────────────────────────────
+        function pushUndo() {
+            if (!state.currentImageData) return;
+            state.undoStack.push({
+                image: cloneImageData(state.currentImageData),
+                mask:  new Uint8Array(state.maskData),
+            });
+            state.redoStack = [];
+            if (state.undoStack.length > 25) state.undoStack.shift();
+            updateUndoRedoBtns();
+        }
+
+        function updateUndoRedoBtns() {
+            document.getElementById('btnUndo').disabled = state.undoStack.length === 0;
+            document.getElementById('btnRedo').disabled = state.redoStack.length === 0;
+        }
+
+        document.getElementById('btnUndo').addEventListener('click', undo);
+        document.getElementById('btnRedo').addEventListener('click', redo);
+
+        function undo() {
+            if (state.undoStack.length === 0) return;
+            state.redoStack.push({
+                image: cloneImageData(state.currentImageData),
+                mask:  new Uint8Array(state.maskData),
+            });
+            const snap = state.undoStack.pop();
+            state.currentImageData = snap.image;
+            state.maskData = snap.mask;
+            updateUndoRedoBtns();
+            renderCanvas();
+        }
+
+        function redo() {
+            if (state.redoStack.length === 0) return;
+            state.undoStack.push({
+                image: cloneImageData(state.currentImageData),
+                mask:  new Uint8Array(state.maskData),
+            });
+            const snap = state.redoStack.pop();
+            state.currentImageData = snap.image;
+            state.maskData = snap.mask;
+            updateUndoRedoBtns();
+            renderCanvas();
+        }
+
+        // ── Reset ──────────────────────────────────────────────────────
+        document.getElementById('btnReset').addEventListener('click', () => {
+            if (!state.originalImageData) return;
+            if (!confirm('Reset to original image? All edits will be lost.')) return;
+            pushUndo();
+            state.currentImageData = cloneImageData(state.originalImageData);
+            clearMask();
+            renderCanvas();
+            showToast('Reset to original.', 'info');
+        });
+
+        // ── Download ───────────────────────────────────────────────────
+        window.downloadPNG = function() {
+            if (!state.currentImageData) return;
+            ctx.putImageData(state.currentImageData, 0, 0);
+            const link = document.createElement('a');
+            link.download = 'watermark-removed.png';
+            link.href = mainCanvas.toDataURL('image/png');
+            link.click();
+            showToast('PNG downloaded!', 'success');
+        };
+
+        window.downloadJPG = function() {
+            if (!state.currentImageData) return;
+            // Composite on white background for JPG
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width  = mainCanvas.width;
+            tmpCanvas.height = mainCanvas.height;
+            const tmpCtx = tmpCanvas.getContext('2d');
+            tmpCtx.fillStyle = '#ffffff';
+            tmpCtx.fillRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+            tmpCtx.putImageData(state.currentImageData, 0, 0);
+            const link = document.createElement('a');
+            link.download = 'watermark-removed.jpg';
+            link.href = tmpCanvas.toDataURL('image/jpeg', 0.92);
+            link.click();
+            showToast('JPG downloaded!', 'success');
+        };
+
+        // ── Processing overlay ─────────────────────────────────────────
+        function showProcessing(msg) {
+            processingMsg.textContent = msg || 'Processing…';
+            processing.classList.add('active');
+        }
+        function hideProcessing() {
+            processing.classList.remove('active');
+        }
+
+        // ── Keyboard shortcuts ─────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+            if (!state.currentImageData) return;
+            // Don't fire if typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            switch (e.key) {
+                case 'b': case 'B': setTool('brush'); break;
+                case 'r': case 'R': setTool('rect');  break;
+                case 'c': case 'C': setTool('clone'); break;
+                case 'l': case 'L': setTool('blur');  break;
+                case 'e': case 'E': setTool('eraser');break;
+                case 'p': case 'P': setTool('picker');break;
+                case '[': {
+                    const newSz = Math.max(3, state.brushSize - 3);
+                    brushSizeSlider.value = newSz;
+                    updateSliders();
+                    break;
+                }
+                case ']': {
+                    const newSz = Math.min(80, state.brushSize + 3);
+                    brushSizeSlider.value = newSz;
+                    updateSliders();
+                    break;
+                }
+                case 'z': case 'Z':
+                    if (e.ctrlKey || e.metaKey) { e.preventDefault(); undo(); }
+                    break;
+                case 'y': case 'Y':
+                    if (e.ctrlKey || e.metaKey) { e.preventDefault(); redo(); }
+                    break;
+                case '+': case '=':
+                    state.zoom = Math.min(8, state.zoom * 1.25);
+                    applyZoom();
+                    break;
+                case '-':
+                    state.zoom = Math.max(0.1, state.zoom / 1.25);
+                    applyZoom();
+                    break;
+                case '0':
+                    fitToView();
+                    break;
+            }
+        });
+
+        // ── Mouse wheel zoom ───────────────────────────────────────────
+        viewport.addEventListener('wheel', e => {
+            if (!e.ctrlKey && !e.metaKey) return;
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                state.zoom = Math.min(8, state.zoom * 1.1);
+            } else {
+                state.zoom = Math.max(0.1, state.zoom / 1.1);
+            }
+            applyZoom();
+        }, { passive: false });
+
+        // ── Init slider values ─────────────────────────────────────────
+        updateSliders();
+        setTool('brush');
+
+    })();
+    </script>
+</body>
+</html>
