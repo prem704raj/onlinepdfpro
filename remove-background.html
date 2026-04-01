@@ -77,7 +77,11 @@
     .compare-label-before{left:10px}
     .compare-label-after{right:10px}
     @media(max-width:768px){.bg-tool-editor{grid-template-columns:1fr}.bg-tool-preview{min-height:280px}}
-    </style>
+    
+    .dl-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #resultView{cursor:crosshair;touch-action:none;}
+    #brushCursor{position:absolute;border:1px solid #fff;border-radius:50%;box-shadow:0 0 2px rgba(0,0,0,0.5);pointer-events:none;display:none;transform:translate(-50%,-50%);z-index:50;background:rgba(255,255,255,0.2);}
+</style>
 </head>
 <body class="fade-in">
     <a href="#main" class="skip-link">Skip to main content</a>
@@ -182,7 +186,7 @@
                             <button class="view-tab" data-view="original">Original</button>
                             <button class="view-tab" data-view="compare">Compare</button>
                         </div>
-                        <div class="preview-area checker-bg" id="resultView"><img id="resultImage" alt="Result"></div>
+                        <div class="preview-area checker-bg" id="resultView" style="position:relative;"><canvas id="resultCanvas" style="max-width:100%;max-height:450px;display:block;margin:0 auto;"></canvas><div id="brushCursor"></div></div>
                         <div class="preview-area" id="originalView" style="display:none;"><img id="originalImage" alt="Original"></div>
                         <div class="preview-area" id="compareView" style="display:none;">
                             <div class="compare-wrap" id="compareWrap">
@@ -195,6 +199,15 @@
                         </div>
                     </div>
                     <div class="bg-tool-sidebar">
+                        <div class="panel">
+                            <h3>&#128396;&#65039; Touch Up</h3>
+                            <div style="display:flex;gap:8px;margin-bottom:12px;">
+                                <button class="dl-btn dl-btn-secondary active" id="modeRestore" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Restore</button>
+                                <button class="dl-btn dl-btn-secondary" id="modeErase" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Erase</button>
+                            </div>
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Brush Size:</span> <span id="brushSizeVal">20px</span></div>
+                            <input type="range" id="brushSize" min="5" max="150" value="20" style="width:100%;cursor:pointer;">
+                        </div>
                         <div class="panel">
                             <h3>&#127912; Background</h3>
                             <div class="bg-colors">
@@ -279,7 +292,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('[BG] Init...');
         var removeBgFn = null, libReady = false;
+        
         var origFile = null, resultBlob = null, curBg = 'transparent';
+        var origImgObj = null, maskImgObj = null; // Stored HTMLImageElements
+        var brushMode = 'restore', brushSize = 20, isDrawing = false;
+        var rCanvas = $('resultCanvas'), rCtx = rCanvas ? rCanvas.getContext('2d') : null;
+        var lastPt = null;
 
         function $(id) { return document.getElementById(id); }
 
@@ -288,7 +306,6 @@
             ['uploadZone','processingSection','errorSection','editorSection'].forEach(function(s) {
                 var el = $(s); if(el) el.style.display = 'none';
             });
-            // Also show/hide paste+sample buttons
             var btns = document.querySelector('.upload-zone + input + div');
             if(btns) btns.style.display = id === 'uploadZone' ? '' : 'none';
             var el = $(id); if(el) el.style.display = id === 'uploadZone' ? '' : 'block';
@@ -298,24 +315,13 @@
         // --- LOAD AI ---
         async function loadAI() {
             if(libReady && removeBgFn) return true;
-            var urls = [
-                'https://esm.sh/@imgly/background-removal@1.5.5',
-                'https://esm.sh/@imgly/background-removal',
-                'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'
-            ];
+            var urls = ['https://esm.sh/@imgly/background-removal@1.5.5', 'https://esm.sh/@imgly/background-removal', 'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'];
             for(var i=0;i<urls.length;i++){
                 try{
-                    console.log('[BG] Try: '+urls[i]);
                     var mod = await import(urls[i]);
                     var fn = mod.removeBackground || mod.default;
-                    if(typeof fn !== 'function'){
-                        for(var k in mod){ if(typeof mod[k]==='function'){fn=mod[k];break;} }
-                    }
-                    if(typeof fn === 'function'){
-                        removeBgFn=fn; libReady=true;
-                        console.log('[BG] Loaded from: '+urls[i]);
-                        return true;
-                    }
+                    if(typeof fn !== 'function'){ for(var k in mod){ if(typeof mod[k]==='function'){fn=mod[k];break;} } }
+                    if(typeof fn === 'function'){ removeBgFn=fn; libReady=true; return true; }
                 }catch(e){console.warn('[BG] Failed: '+urls[i],e.message);}
             }
             return false;
@@ -323,163 +329,160 @@
 
         // --- FILE UPLOAD ---
         var uploadZone = $('uploadZone'), fileInput = $('fileInput');
-
-        // Use OnlinePDFPro.FileUploader if available, else manual
         if(window.OnlinePDFPro && OnlinePDFPro.FileUploader){
-            OnlinePDFPro.FileUploader.init('uploadZone',{
-                accept:'image/jpeg,image/png,image/webp,image/bmp',
-                multiple:false, maxFiles:1, maxSize:10*1024*1024,
-                onFilesSelected:function(files){if(files.length>0) processFile(files[0]);}
-            });
+            OnlinePDFPro.FileUploader.init('uploadZone',{ accept:'image/jpeg,image/png,image/webp,image/bmp', multiple:false, maxFiles:1, maxSize:10*1024*1024, onFilesSelected:function(files){if(files.length>0) processFile(files[0]);} });
         } else {
-            if(uploadZone){
-                uploadZone.addEventListener('click',function(){fileInput.click();});
-                uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.classList.add('dragover');});
-                uploadZone.addEventListener('dragleave',function(e){e.preventDefault();uploadZone.classList.remove('dragover');});
-                uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)processFile(e.dataTransfer.files[0]);});
-            }
+            if(uploadZone){ uploadZone.addEventListener('click',function(){fileInput.click();}); uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.classList.add('dragover');}); uploadZone.addEventListener('dragleave',function(e){e.preventDefault();uploadZone.classList.remove('dragover');}); uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)processFile(e.dataTransfer.files[0]);}); }
             if(fileInput) fileInput.addEventListener('change',function(e){if(e.target.files.length)processFile(e.target.files[0]);});
         }
-
-        // Paste
         var pasteBtn=$('pasteBtn');
         if(pasteBtn) pasteBtn.addEventListener('click',async function(){
-            try{
-                var items=await navigator.clipboard.read();
-                for(var i=0;i<items.length;i++){
-                    var types=items[i].types;
-                    for(var j=0;j<types.length;j++){
-                        if(types[j].startsWith('image/')){
-                            var blob=await items[i].getType(types[j]);
-                            processFile(new File([blob],'pasted.png',{type:types[j]}));
-                            return;
-                        }
-                    }
-                }
-                alert('No image found in clipboard');
-            }catch(e){alert('Paste failed: '+e.message);}
+            try{ var items=await navigator.clipboard.read(); for(var i=0;i<items.length;i++){ var types=items[i].types; for(var j=0;j<types.length;j++){ if(types[j].startsWith('image/')){ var blob=await items[i].getType(types[j]); processFile(new File([blob],'pasted.png',{type:types[j]})); return; } } } alert('No clipboard image'); }catch(e){alert('Paste failed');}
         });
         document.addEventListener('paste',function(e){
-            var items=e.clipboardData?e.clipboardData.items:null;
-            if(!items) return;
-            for(var i=0;i<items.length;i++){
-                if(items[i].type.startsWith('image/')){
-                    var f=items[i].getAsFile();
-                    if(f) processFile(f);
-                    return;
-                }
-            }
+            var items=e.clipboardData?e.clipboardData.items:null; if(!items) return;
+            for(var i=0;i<items.length;i++){ if(items[i].type.startsWith('image/')){ var f=items[i].getAsFile(); if(f) processFile(f); return; } }
         });
-
-        // Sample
         var sampleBtn=$('sampleBtn');
         if(sampleBtn) sampleBtn.addEventListener('click',function(){
-            var c=document.createElement('canvas');c.width=500;c.height=600;
-            var ctx=c.getContext('2d');
+            var c=document.createElement('canvas');c.width=500;c.height=600;var ctx=c.getContext('2d');
             var g=ctx.createLinearGradient(0,0,500,600);g.addColorStop(0,'#667eea');g.addColorStop(1,'#764ba2');ctx.fillStyle=g;ctx.fillRect(0,0,500,600);
             ctx.fillStyle='#FFE0BD';ctx.beginPath();ctx.arc(250,200,80,0,Math.PI*2);ctx.fill();
             ctx.fillStyle='#3498DB';ctx.beginPath();ctx.moveTo(140,300);ctx.lineTo(360,300);ctx.lineTo(380,580);ctx.lineTo(120,580);ctx.closePath();ctx.fill();
             c.toBlob(function(b){if(b) processFile(new File([b],'sample.png',{type:'image/png'}));});
         });
 
-        // --- PROCESS ---
+        function imgFromBlob(blob){ return new Promise(function(res,rej){var img=new Image();img.onload=function(){res(img);};img.onerror=rej;img.src=URL.createObjectURL(blob);}); }
+
         async function processFile(file){
             if(!file.type.startsWith('image/')){alert('Not an image');return;}
-            if(file.size>10*1024*1024){alert('File too large (max 10MB)');return;}
-            origFile=file;
+            if(file.size>10*1024*1024){alert('Too large');return;}
+            origFile=file; origImgObj = await imgFromBlob(file);
             showOnly('processingSection');
             var pb=$('progressBar'),pt=$('progressText'),pti=$('processingTitle'),mn=$('modelNotice');
             try{
-                if(pb) pb.style.width='5%';
-                if(pt) pt.textContent='Loading AI library...';
-                var ok=await loadAI();
-                if(!ok) throw new Error('Failed to load AI model. Check your internet connection and try again.');
-                if(pb) pb.style.width='20%';
-                if(pt) pt.textContent='AI ready. Processing image...';
-                if(pti) pti.textContent='Removing Background...';
-                
-                var selModel = document.getElementById('aiQuality') ? document.getElementById('aiQuality').value : 'isnet';
-                var selQual = (selModel === 'isnet') ? 'High Accuracy' : 'Standard';
-                if(pti) pti.textContent='Removing Background... (' + selQual + ')';
+                if(pb) pb.style.width='5%'; if(pt) pt.textContent='Loading AI library...';
+                var ok=await loadAI(); if(!ok) throw new Error('Failed to load AI');
+                var selModel = $('aiQuality') ? $('aiQuality').value : 'isnet';
+                if(pb) pb.style.width='20%'; if(pt) pt.textContent='AI ready...'; if(pti) pti.textContent='Removing Background... ('+(selModel==='isnet'?'High Accuracy':'Standard')+')';
                 var blob=await removeBgFn(file,{
-                    model: selModel,
-                    output: { format: 'image/png', quality: 1.0 },
+                    model: selModel, output: { format: 'image/png', quality: 1.0 },
                     progress:function(key,cur,tot){
                         var pct=tot>0?Math.round(cur/tot*100):0;
-                        if(key.indexOf('fetch')>-1||key.indexOf('download')>-1||key.indexOf('load')>-1){
-                            if(pb) pb.style.width=(20+pct*.35)+'%';
-                            if(pt) pt.textContent='Downloading AI model... '+pct+'%';
-                            if(pti) pti.textContent='Downloading AI Model...';
+                        if(key.indexOf('fetch')>-1||key.indexOf('download')>-1){
+                            if(pb) pb.style.width=(20+pct*.35)+'%'; if(pt) pt.textContent='Downloading AI model... '+pct+'%';
                         }else{
                             if(mn) mn.style.display='none';
-                            if(pb) pb.style.width=(55+pct*.45)+'%';
-                            if(pt) pt.textContent='Removing background... '+pct+'%';
-                            if(pti) pti.textContent='Removing Background...';
+                            if(pb) pb.style.width=(55+pct*.45)+'%'; if(pt) pt.textContent='Matting edges... '+pct+'%';
                         }
                     }
                 });
-                resultBlob=blob;
-                if(pb) pb.style.width='100%';
-                if(pt) pt.textContent='Done!';
+                resultBlob=blob; maskImgObj = await imgFromBlob(blob);
+                if(rCanvas && origImgObj) { rCanvas.width=origImgObj.naturalWidth; rCanvas.height=origImgObj.naturalHeight; rCtx.clearRect(0,0,rCanvas.width,rCanvas.height); rCtx.drawImage(maskImgObj, 0, 0); }
                 var origURL=URL.createObjectURL(file), resURL=URL.createObjectURL(blob);
-                var ri=$('resultImage'),oi=$('originalImage'),ca=$('compareAfter'),cb=$('compareBefore_img'),rv=$('resultView');
-                if(ri) ri.src=resURL; if(oi) oi.src=origURL;
-                if(ca) ca.src=resURL; if(cb) cb.src=origURL;
-                if(rv) rv.classList.add('checker-bg');
-                curBg='transparent'; resetBgBtns();
-                var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');
-                if(tb) tb.classList.add('active');
+                var oi=$('originalImage'),ca=$('compareAfter'),cb=$('compareBefore_img'),rv=$('resultView');
+                if(oi) oi.src=origURL; if(ca) { ca.src=resURL; ca.style.display='none'; } if(cb) cb.src=origURL;
+                curBg='transparent'; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]'); if(tb) tb.classList.add('active');
+                if(rv){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }
+                if(pb) pb.style.width='100%'; if(pt) pt.textContent='Done!';
                 setTimeout(function(){showOnly('editorSection');},500);
-                if(window.OnlinePDFPro && OnlinePDFPro.RecentlyUsed) OnlinePDFPro.RecentlyUsed.add('remove-background','Remove Background');
             }catch(err){
-                console.error('[BG] Error:',err);
-                var em=$('errorMessage'),ed=$('errorDetails');
-                if(em) em.textContent=err.message||'Processing failed';
-                if(ed) ed.textContent=String(err.stack||err).substring(0,500);
-                showOnly('errorSection');
+                console.error(err); var em=$('errorMessage'),ed=$('errorDetails');
+                if(em) em.textContent=err.message||'Failed'; if(ed) ed.textContent=String(err.stack||err).substring(0,500); showOnly('errorSection');
             }
         }
 
-        // --- RETRY/BACK ---
         var retryBtn=$('retryBtn'),backBtn=$('backBtn'),newBtn=$('newImageBtn');
         if(retryBtn) retryBtn.addEventListener('click',function(){if(origFile) processFile(origFile);else resetAll();});
-        if(backBtn) backBtn.addEventListener('click',resetAll);
-        if(newBtn) newBtn.addEventListener('click',resetAll);
-        function resetAll(){origFile=null;resultBlob=null;curBg='transparent';if(fileInput)fileInput.value='';resetBgBtns();
-            var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');if(tb)tb.classList.add('active');showOnly('uploadZone');}
+        if(backBtn||newBtn) [backBtn,newBtn].forEach(b=>b&&b.addEventListener('click',resetAll));
+        function resetAll(){origFile=null;resultBlob=null;curBg='transparent';origImgObj=null;maskImgObj=null;if(fileInput)fileInput.value=''; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');if(tb)tb.classList.add('active');showOnly('uploadZone');}
+
+        // --- TOUCH UP (BRUSH) ---
+        var mRestore=$('modeRestore'), mErase=$('modeErase'), bSlider=$('brushSize'), bVal=$('brushSizeVal'), cursor=$('brushCursor'), rv=$('resultView');
+        if(mRestore){ mRestore.onclick=function(){brushMode='restore';mRestore.classList.add('active');mErase.classList.remove('active');}; }
+        if(mErase){ mErase.onclick=function(){brushMode='erase';mErase.classList.add('active');mRestore.classList.remove('active');}; }
+        if(bSlider){ bSlider.oninput=function(){brushSize=parseInt(this.value); bVal.textContent=brushSize+'px'; syncCursorSize();}; }
+        
+        function syncCursorSize() { 
+            if(!rCanvas || !cursor) return;
+            var rect=rCanvas.getBoundingClientRect(); var scale = rect.width / rCanvas.width;
+            var visualSize = brushSize * scale; cursor.style.width = cursor.style.height = visualSize+'px';
+        }
+        
+        function getPt(e) {
+            var rect = rCanvas.getBoundingClientRect();
+            var cx = e.clientX||(e.touches?e.touches[0].clientX:0); var cy = e.clientY||(e.touches?e.touches[0].clientY:0);
+            return { x: (cx - rect.left) * (rCanvas.width / rect.width), y: (cy - rect.top) * (rCanvas.height / rect.height) };
+        }
+        
+        function drawLine(p1, p2) {
+            if(!rCtx) return;
+            rCtx.save();
+            rCtx.lineCap = 'round'; rCtx.lineJoin = 'round'; rCtx.lineWidth = brushSize;
+            if(brushMode === 'restore') {
+                rCtx.globalCompositeOperation = 'source-over';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke();
+                // Magic part to copy from original image:
+                rCtx.globalCompositeOperation = 'source-in'; // keep only new strokes
+                rCtx.drawImage(origImgObj, 0, 0); // draw orig img strictly into the stroke
+                
+                // Now we need to blend this newly restored part back into the main image.
+                // Wait! If we use source-in, we erase everything else. We need an offscreen canvas.
+            } else {
+                rCtx.globalCompositeOperation = 'destination-out';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke();
+            }
+            rCtx.restore();
+        }
+        
+        // Simpler brush logic:
+        var pathCanvas = document.createElement('canvas');
+        var pathCtx = pathCanvas.getContext('2d');
+        
+        function strokePt(p1, p2) {
+            if(!rCtx) return;
+            if (brushMode === 'erase') {
+                rCtx.save(); rCtx.lineCap='round'; rCtx.lineJoin='round'; rCtx.lineWidth=brushSize; rCtx.globalCompositeOperation='destination-out';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke(); rCtx.restore();
+            } else { // restore
+                pathCanvas.width = rCanvas.width; pathCanvas.height = rCanvas.height;
+                pathCtx.clearRect(0,0,pathCanvas.width,pathCanvas.height);
+                pathCtx.lineCap='round'; pathCtx.lineJoin='round'; pathCtx.lineWidth=brushSize;
+                pathCtx.beginPath(); pathCtx.moveTo(p1.x, p1.y); pathCtx.lineTo(p2.x, p2.y); pathCtx.stroke();
+                pathCtx.globalCompositeOperation='source-in'; pathCtx.drawImage(origImgObj,0,0);
+                rCtx.save(); rCtx.globalCompositeOperation='source-over'; rCtx.drawImage(pathCanvas,0,0); rCtx.restore();
+            }
+            // Update compareAfter trick
+            rCanvas.toBlob(function(b){ if($('compareAfter')) $('compareAfter').src=URL.createObjectURL(b); });
+        }
+
+        if(rv){
+            rv.addEventListener('pointerenter', function(){ cursor.style.display='block'; syncCursorSize(); });
+            rv.addEventListener('pointerleave', function(){ cursor.style.display='none'; isDrawing=false; });
+            rv.addEventListener('pointerdown', function(e){ isDrawing=true; lastPt=getPt(e); strokePt(lastPt, lastPt); cursor.style.left=e.offsetX+'px'; cursor.style.top=e.offsetY+'px'; });
+            rv.addEventListener('pointermove', function(e){
+                cursor.style.left=e.offsetX+'px'; cursor.style.top=e.offsetY+'px';
+                if(!isDrawing) return;
+                var pt=getPt(e); strokePt(lastPt, pt); lastPt=pt;
+            });
+            window.addEventListener('pointerup', function(){ isDrawing=false; });
+        }
 
         // --- VIEW TABS ---
         document.querySelectorAll('.view-tab').forEach(function(tab){
             tab.addEventListener('click',function(){
-                document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('active');});
-                tab.classList.add('active');
-                var v=tab.getAttribute('data-view'),rv=$('resultView'),ov=$('originalView'),cv=$('compareView');
+                document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('active');}); tab.classList.add('active');
+                var v=tab.getAttribute('data-view'),ov=$('originalView'),cv=$('compareView');
                 if(rv) rv.style.display='none'; if(ov) ov.style.display='none'; if(cv) cv.style.display='none';
-                if(v==='result'&&rv) rv.style.display='';
-                else if(v==='original'&&ov) ov.style.display='';
-                else if(v==='compare'&&cv) cv.style.display='';
+                if(v==='result'&&rv) rv.style.display=''; else if(v==='original'&&ov) ov.style.display=''; else if(v==='compare'&&cv) cv.style.display='';
             });
         });
 
-        // --- COMPARE SLIDER ---
         var dragging=false,slider=$('compareSlider'),cWrap=$('compareWrap'),cBefore=$('compareBefore');
-        if(slider){
-            slider.addEventListener('mousedown',function(){dragging=true;});
-            slider.addEventListener('touchstart',function(){dragging=true;});
-        }
-        document.addEventListener('mouseup',function(){dragging=false;});
-        document.addEventListener('touchend',function(){dragging=false;});
-        document.addEventListener('mousemove',mvSlider);
-        document.addEventListener('touchmove',mvSlider);
-        function mvSlider(e){
-            if(!dragging||!cWrap||!cBefore||!slider) return;
-            e.preventDefault();
-            var r=cWrap.getBoundingClientRect();
-            var cx=e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:0);
-            var x=Math.max(0,Math.min(cx-r.left,r.width));
-            var pct=(x/r.width)*100;
-            cBefore.style.width=pct+'%';slider.style.left=pct+'%';
-        }
+        if(slider){ slider.addEventListener('mousedown',function(){dragging=true;}); slider.addEventListener('touchstart',function(){dragging=true;},{passive:true}); }
+        document.addEventListener('mouseup',function(){dragging=false;}); document.addEventListener('touchend',function(){dragging=false;});
+        document.addEventListener('mousemove',mvSlider); document.addEventListener('touchmove',mvSlider,{passive:false});
+        function mvSlider(e){ if(!dragging||!cWrap||!cBefore||!slider) return; e.preventDefault(); var r=cWrap.getBoundingClientRect(); var cx=e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:0); var x=Math.max(0,Math.min(cx-r.left,r.width)); var pct=(x/r.width)*100; cBefore.style.width=pct+'%';slider.style.left=pct+'%'; }
 
         // --- BACKGROUND ---
         document.querySelectorAll('.bg-color-btn[data-bg]').forEach(function(btn){
@@ -491,18 +494,8 @@
         if(cpick) cpick.addEventListener('input',function(e){if(hinp)hinp.value=e.target.value;if(applyBtn)applyBtn.style.background=e.target.value;});
         if(hinp) hinp.addEventListener('input',function(e){var v=e.target.value;if(!v.startsWith('#'))v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){if(cpick)cpick.value=v;if(applyBtn)applyBtn.style.background=v;}});
         function resetBgBtns(){document.querySelectorAll('.bg-color-btn').forEach(function(b){b.classList.remove('active');});}
-        async function applyBg(bg){
-            curBg=bg;if(!resultBlob)return;
-            var rv=$('resultView'),ri=$('resultImage'),ca=$('compareAfter');
-            if(bg==='transparent'){if(rv)rv.classList.add('checker-bg');var u=URL.createObjectURL(resultBlob);if(ri)ri.src=u;if(ca)ca.src=u;return;}
-            if(rv) rv.classList.remove('checker-bg');
-            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),img=new Image();
-            img.src=URL.createObjectURL(resultBlob);
-            await new Promise(function(r){img.onload=r;});
-            canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
-            ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(img,0,0);
-            canvas.toBlob(function(b){var u=URL.createObjectURL(b);if(ri)ri.src=u;if(ca)ca.src=u;});
+        function applyBg(bg){
+            curBg=bg; if(bg==='transparent'){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }else{ rv.classList.remove('checker-bg'); rv.style.backgroundColor=bg; }
         }
 
         // --- DOWNLOAD ---
@@ -510,23 +503,17 @@
         if(dlPng) dlPng.addEventListener('click',function(){dl('png');});
         if(dlJpg) dlJpg.addEventListener('click',function(){dl('jpg');});
         async function dl(fmt){
-            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d'),ri=$('resultImage');
-            if(!ri||!ri.src) return;
-            var img=new Image();img.src=ri.src;
-            await new Promise(function(r){img.onload=r;});
-            canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
-            if(fmt==='jpg'){ctx.fillStyle=curBg==='transparent'?'#FFFFFF':curBg;ctx.fillRect(0,0,canvas.width,canvas.height);}
-            ctx.drawImage(img,0,0);
+            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+            canvas.width=rCanvas.width; canvas.height=rCanvas.height;
+            if(fmt==='jpg'||(fmt==='png'&&curBg!=='transparent')){ ctx.fillStyle=curBg==='transparent'?'#FFFFFF':curBg; ctx.fillRect(0,0,canvas.width,canvas.height); }
+            ctx.drawImage(rCanvas,0,0);
             var mime=fmt==='png'?'image/png':'image/jpeg';
             canvas.toBlob(function(b){
                 var name=origFile?origFile.name.replace(/\.[^.]+$/,'')+'_no_bg.'+fmt:'result.'+fmt;
-                if(window.saveAs) saveAs(b,name);
-                else if(window.OnlinePDFPro&&OnlinePDFPro.Downloader) OnlinePDFPro.Downloader.saveBlob(b,name);
-                else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+                if(window.saveAs) saveAs(b,name); else if(window.OnlinePDFPro&&OnlinePDFPro.Downloader) OnlinePDFPro.Downloader.saveBlob(b,name); else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
             },mime,fmt==='jpg'?0.92:undefined);
         }
-
-        // --- INIT ---
+// --- INIT ---
         showOnly('uploadZone');
         console.log('[BG] Ready!');
         setTimeout(function(){loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});},2000);
