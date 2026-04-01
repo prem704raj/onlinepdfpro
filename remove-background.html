@@ -133,6 +133,15 @@
                 <button class="btn btn-primary upload-btn">Choose Image</button>
             </div>
             <input type="file" id="fileInput" accept="image/*" style="display:none">
+            <div style="text-align:center; margin-bottom: 24px; padding: 15px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border);">
+                <label for="aiQuality" style="font-weight:600; font-size: 0.95rem; color: var(--text-secondary);">AI Quality: </label>
+                <select id="aiQuality" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-primary); cursor:pointer; font-family:inherit; font-weight:500; font-size:0.9rem; margin-left: 6px;">
+                    <option value="isnet_fp16">Standard Quality (Fast)</option>
+                    <option value="isnet" selected>High Accuracy (Best, Slower)</option>
+                </select>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Higher accuracy dramatically improves complex edges like hair and feathers.</div>
+            </div>
+
             <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
                 <button class="btn btn-secondary" id="pasteBtn" style="padding:8px 18px;font-size:.85rem;">&#128203; Paste from Clipboard</button>
                 <button class="btn btn-secondary" id="sampleBtn" style="padding:8px 18px;font-size:.85rem;">&#128248; Try Sample</button>
@@ -387,7 +396,13 @@
                 if(pb) pb.style.width='20%';
                 if(pt) pt.textContent='AI ready. Processing image...';
                 if(pti) pti.textContent='Removing Background...';
+                
+                var selModel = document.getElementById('aiQuality') ? document.getElementById('aiQuality').value : 'isnet';
+                var selQual = (selModel === 'isnet') ? 'High Accuracy' : 'Standard';
+                if(pti) pti.textContent='Removing Background... (' + selQual + ')';
                 var blob=await removeBgFn(file,{
+                    model: selModel,
+                    output: { format: 'image/png', quality: 1.0 },
                     progress:function(key,cur,tot){
                         var pct=tot>0?Math.round(cur/tot*100):0;
                         if(key.indexOf('fetch')>-1||key.indexOf('download')>-1||key.indexOf('load')>-1){
