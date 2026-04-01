@@ -1465,25 +1465,7 @@ const RecentlyUsedUI = {
 
 const SocialShare = {
     init() {
-        const toolPage = document.querySelector('.tool-page');
-        if (!toolPage) return;
-
-        const title = document.title.split('|')[0].trim();
-        const url = window.location.href;
-
-        const shareDiv = document.createElement('div');
-        shareDiv.style.cssText = 'max-width:900px;margin:20px auto;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;';
-        shareDiv.innerHTML = `
-            <span style="font-weight:700;font-size:14px;color:var(--text-secondary);">📤 Share this tool:</span>
-            <a href="https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}" target="_blank" rel="noopener" style="padding:8px 16px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">WhatsApp</a>
-            <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener" style="padding:8px 16px;background:#1DA1F2;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Twitter</a>
-            <button onclick="navigator.clipboard.writeText('${url}');this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000)" style="padding:8px 16px;background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">📋 Copy Link</button>
-        `;
-
-        const main = document.querySelector('main');
-        if (main && main.nextSibling) {
-            main.parentNode.insertBefore(shareDiv, main.nextSibling);
-        }
+        // Disabled per user request
     }
 };
 

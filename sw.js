@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v30'; // Force refresh for remaining tool fixes
+const CACHE_NAME = 'onlinepdfpro-v31'; // Force refresh to remove social share
 const STATIC_ASSETS = [
     '/index.html',
     '/css/style.css',
