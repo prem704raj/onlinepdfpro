@@ -558,7 +558,7 @@
                         AI Watermark Remover
                     </h1>
                     <p class="tool-hero-subtitle" style="font-size:0.95rem;color:var(--text-secondary);max-width:560px;margin:0 auto 12px;">
-                        Remove watermarks from any image — auto-detection, smart inpainting, clone stamp &amp; more.
+                        Simple 2-mode watermark remover: one-click Auto Remove or Manual Brush + Remove.
                         100% free &amp; private. All processing happens in your browser.
                     </p>
                     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
@@ -604,16 +604,10 @@
                         <div class="wm-canvas-panel">
                             <!-- Toolbar -->
                             <div class="wm-toolbar" id="wmToolbar">
-                                <!-- Tool buttons (active tool highlighted) -->
-                                <button class="wm-tool-btn active" id="btnBrush" title="Brush Tool — paint mask (B)" data-tool="brush">✏️ Brush</button>
-                                <button class="wm-tool-btn" id="btnRect" title="Rectangle Selection (R)" data-tool="rect">⬜ Rect</button>
-                                <button class="wm-tool-btn" id="btnClone" title="Clone Stamp — copy clean area (C)" data-tool="clone">🖨️ Clone</button>
-                                <button class="wm-tool-btn" id="btnBlur" title="Blur / Smooth tool (L)" data-tool="blur">〰️ Blur</button>
-                                <button class="wm-tool-btn" id="btnEraser" title="Eraser — remove mask (E)" data-tool="eraser">🧹 Eraser</button>
-                                <div class="wm-divider"></div>
-                                <button class="wm-tool-btn" id="btnInpaint" title="Smart Inpaint selected mask area">🧠 Inpaint</button>
-                                <button class="wm-tool-btn" id="btnApplyBlur" title="Apply Gaussian Blur to mask area">🌀 Apply Blur</button>
-                                <button class="wm-tool-btn" id="btnClearMask" title="Clear entire mask">🗑️ Clear</button>
+                                <button class="wm-tool-btn active" id="btnBrush" title="Manual brush">✏️ Manual Brush</button>
+                                <button class="wm-tool-btn" id="btnManualRemove" title="Remove painted area">🧼 Manual Remove</button>
+                                <button class="wm-tool-btn" id="btnAutoRemove" title="Automatically detect and remove watermark">🤖 Auto Remove</button>
+                                <button class="wm-tool-btn" id="btnClearMask" title="Clear brush mask">🗑️ Clear</button>
                                 <div class="wm-divider"></div>
                                 <button class="wm-tool-btn" id="btnUndo" title="Undo (Ctrl+Z)" disabled>↩️ Undo</button>
                                 <button class="wm-tool-btn" id="btnRedo" title="Redo (Ctrl+Y)" disabled>↪️ Redo</button>
@@ -623,7 +617,6 @@
                                 <button class="wm-tool-btn" id="btnZoomIn" title="Zoom In (+)">🔍+</button>
                                 <button class="wm-tool-btn" id="btnZoomFit" title="Fit to view">⊡ Fit</button>
                                 <div class="wm-divider"></div>
-                                <button class="wm-tool-btn" id="btnCompare" title="Toggle before/after comparison">👁️ Compare</button>
                                 <button class="wm-tool-btn" id="btnReset" title="Reset to original image" style="color:#ef4444;border-color:#ef4444;">↺ Reset</button>
                             </div>
 
@@ -646,84 +639,30 @@
                             <div class="wm-statusbar">
                                 <span>🖱️ <span id="statusCoords">0, 0</span></span>
                                 <span>📐 <span id="statusSize">—</span></span>
-                                <span>🎨 <span id="statusTool">Brush</span></span>
-                                <span style="margin-left:auto;">💡 <span id="statusHint">Paint over watermark area, then click Inpaint</span></span>
+                                <span>🎨 <span id="statusTool">Manual Brush</span></span>
+                                <span style="margin-left:auto;">💡 <span id="statusHint">Manual: paint then click Manual Remove · Auto: click Auto Remove</span></span>
                             </div>
                         </div>
 
                         <!-- Sidebar -->
                         <div class="wm-sidebar">
 
-                            <!-- Tools Panel -->
                             <div class="wm-panel">
-                                <div class="wm-panel-title"><span>🛠️</span> Tools</div>
-                                <div class="wm-tool-group">
-                                    <button class="wm-sidebar-tool active" data-tool="brush" onclick="setTool('brush')">
-                                        <span class="tool-icon">✏️</span>Brush
-                                    </button>
-                                    <button class="wm-sidebar-tool" data-tool="rect" onclick="setTool('rect')">
-                                        <span class="tool-icon">⬜</span>Rectangle
-                                    </button>
-                                    <button class="wm-sidebar-tool" data-tool="clone" onclick="setTool('clone')">
-                                        <span class="tool-icon">🖨️</span>Clone Stamp
-                                    </button>
-                                    <button class="wm-sidebar-tool" data-tool="blur" onclick="setTool('blur')">
-                                        <span class="tool-icon">〰️</span>Blur Tool
-                                    </button>
-                                    <button class="wm-sidebar-tool" data-tool="eraser" onclick="setTool('eraser')">
-                                        <span class="tool-icon">🧹</span>Eraser
-                                    </button>
-                                    <button class="wm-sidebar-tool" data-tool="picker" onclick="setTool('picker')">
-                                        <span class="tool-icon">🔬</span>Color Pick
-                                    </button>
-                                </div>
-                                <div class="wm-info" id="toolHintBox">
-                                    <strong>Brush:</strong> Paint over watermark areas to create a removal mask.
-                                </div>
-                            </div>
-
-                            <!-- Auto Detection Panel -->
-                            <div class="wm-panel">
-                                <div class="wm-panel-title"><span>🤖</span> Auto Detection &amp; Removal</div>
-
-                                <div class="wm-label">Watermark Color <span id="autoColorHex">#ffffff</span></div>
-                                <div class="wm-color-presets">
-                                    <button class="wm-color-preset active" style="background:#ffffff;" title="White" data-color="#ffffff" onclick="setAutoColor('#ffffff')"></button>
-                                    <button class="wm-color-preset" style="background:#9ca3af;" title="Gray" data-color="#9ca3af" onclick="setAutoColor('#9ca3af')"></button>
-                                    <button class="wm-color-preset" style="background:#000000;" title="Black" data-color="#000000" onclick="setAutoColor('#000000')"></button>
-                                    <button class="wm-color-preset" style="background:#ef4444;" title="Red" data-color="#ef4444" onclick="setAutoColor('#ef4444')"></button>
-                                    <button class="wm-color-preset" style="background:#3b82f6;" title="Blue" data-color="#3b82f6" onclick="setAutoColor('#3b82f6')"></button>
-                                    <button class="wm-color-preset" style="background:#fbbf24;" title="Yellow" data-color="#fbbf24" onclick="setAutoColor('#fbbf24')"></button>
-                                </div>
-                                <div class="wm-color-row">
-                                    <input type="color" id="autoColorPicker" value="#ffffff" title="Pick watermark color" oninput="setAutoColor(this.value)">
-                                    <input type="text" class="wm-hex-field" id="autoColorHexInput" value="#ffffff" maxlength="7" placeholder="#rrggbb" oninput="onHexInput(this)">
-                                </div>
-
-                                <div class="wm-label">Opacity <span id="opacityVal">50%</span></div>
-                                <input type="range" class="wm-slider" id="opacitySlider" min="5" max="100" value="50" oninput="updateSliders()">
-
-                                <div class="wm-label">Tolerance <span id="toleranceVal">30</span></div>
-                                <input type="range" class="wm-slider" id="toleranceSlider" min="1" max="100" value="30" oninput="updateSliders()">
-
-                                <button class="wm-action-btn wm-action-primary" onclick="autoDetectWatermark()">
-                                    🔍 Auto Detect Mask
-                                </button>
-                                <button class="wm-action-btn wm-action-success" onclick="autoRemoveWatermark()">
+                                <div class="wm-panel-title"><span>🤖</span> Auto Remove</div>
+                                <div class="wm-info">One-click automatic detection and removal for text, logo, light, dark, and semi-transparent watermarks.</div>
+                                <button class="wm-action-btn wm-action-primary" onclick="autoRemoveWatermark()" style="margin-top:10px;">
                                     ✨ Auto Remove
                                 </button>
                             </div>
 
-                            <!-- Brush Settings -->
                             <div class="wm-panel">
-                                <div class="wm-panel-title"><span>⚙️</span> Brush Settings</div>
-
-                                <div class="wm-label">Brush Size <span id="brushSizeVal">20px</span></div>
-                                <input type="range" class="wm-slider" id="brushSizeSlider" min="3" max="80" value="20" oninput="updateSliders()">
-                                <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:10px;">Keyboard: <kbd style="background:var(--surface-2);padding:1px 5px;border-radius:4px;border:1px solid var(--border);">[</kbd> smaller &nbsp; <kbd style="background:var(--surface-2);padding:1px 5px;border-radius:4px;border:1px solid var(--border);">]</kbd> larger</div>
-
-                                <div class="wm-label">Brush Hardness <span id="hardnessVal">80%</span></div>
-                                <input type="range" class="wm-slider" id="hardnessSlider" min="10" max="100" value="80" oninput="updateSliders()">
+                                <div class="wm-panel-title"><span>✏️</span> Manual Remove</div>
+                                <div class="wm-label">Brush Size <span id="brushSizeVal">24px</span></div>
+                                <input type="range" class="wm-slider" id="brushSizeSlider" min="6" max="120" value="24" oninput="updateSliders()">
+                                <button class="wm-action-btn wm-action-success" onclick="applyInpainting()" style="margin-top:8px;">
+                                    🧼 Remove Painted Area
+                                </button>
+                                <div class="wm-info">Paint watermark area with the brush, then click Remove Painted Area.</div>
                             </div>
 
                             <!-- Compare & Download -->
@@ -744,80 +683,28 @@
                                 </button>
                             </div>
 
-                            <!-- Clone Stamp Help -->
-                            <div class="wm-panel" id="cloneHelpPanel" style="display:none;">
-                                <div class="wm-panel-title"><span>🖨️</span> Clone Stamp Usage</div>
-                                <div class="wm-info" style="font-size:0.75rem;line-height:1.6;">
-                                    1. <strong>Alt+Click</strong> (or long-press on mobile) to set the source point.<br>
-                                    2. <strong>Paint</strong> over the watermark area.<br>
-                                    Pixels are copied from the source offset to paint clean texture.
-                                </div>
-                            </div>
-
                         </div><!-- /sidebar -->
                     </div><!-- /editor -->
 
-                    <!-- Feature badges below editor -->
                     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;justify-content:center;">
-                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Auto Detection</span>
-                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Smart Inpainting</span>
-                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Clone Stamp</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Auto Remove</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Manual Brush Remove</span>
                         <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Undo / Redo</span>
-                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Zoom &amp; Compare</span>
+                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ Better Zoom</span>
                         <span style="font-size:0.8rem;color:var(--text-secondary);">✅ PNG &amp; JPG Export</span>
-                        <span style="font-size:0.8rem;color:var(--text-secondary);">✅ 100% Client-Side</span>
                     </div>
 
-                    <!-- SEO / Guide -->
-                    <div style="margin-top:40px;max-width:800px;">
-                        <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:14px;">How to Remove a Watermark</h2>
-                        <div style="display:grid;gap:14px;">
-                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
-                                <div style="font-weight:700;margin-bottom:6px;">🤖 Option 1 — Auto Remove (Best for semi-transparent watermarks)</div>
-                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
-                                    <li>Select the watermark color using the preset or color picker</li>
-                                    <li>Adjust Opacity to match the watermark transparency</li>
-                                    <li>Use Tolerance to fine-tune detection sensitivity</li>
-                                    <li>Click <strong>Auto Remove</strong> — done!</li>
-                                </ol>
+                    <div style="margin-top:28px;max-width:800px;">
+                        <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:10px;">Simple 2-Mode Workflow</h2>
+                        <div style="display:grid;gap:12px;">
+                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:14px;">
+                                <div style="font-weight:700;margin-bottom:6px;">🤖 Auto Remove</div>
+                                <p style="color:var(--text-secondary);font-size:0.9rem;margin:0;">Click once to auto-detect and remove common text/logo/semi-transparent watermarks.</p>
                             </div>
-                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
-                                <div style="font-weight:700;margin-bottom:6px;">✏️ Option 2 — Brush + Inpaint (Best for solid watermarks)</div>
-                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
-                                    <li>Select the <strong>Brush</strong> tool and paint over the watermark</li>
-                                    <li>Click <strong>Inpaint</strong> to fill the area from surrounding pixels</li>
-                                    <li>Use <strong>Clone Stamp</strong> for fine-tuning</li>
-                                </ol>
+                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:14px;">
+                                <div style="font-weight:700;margin-bottom:6px;">✏️ Manual Remove</div>
+                                <p style="color:var(--text-secondary);font-size:0.9rem;margin:0;">Use one brush to paint watermark area, then click Manual Remove.</p>
                             </div>
-                            <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:16px;">
-                                <div style="font-weight:700;margin-bottom:6px;">🖨️ Option 3 — Clone Stamp (Best for logos &amp; corner watermarks)</div>
-                                <ol style="color:var(--text-secondary);font-size:0.85rem;padding-left:18px;line-height:1.8;">
-                                    <li>Select the <strong>Clone Stamp</strong> tool</li>
-                                    <li>Alt+Click (or long-press) on a clean area to set source</li>
-                                    <li>Paint over the watermark to copy clean pixels</li>
-                                </ol>
-                            </div>
-                        </div>
-
-                        <h2 style="font-size:1.3rem;font-weight:700;margin:28px 0 14px;">Best Results Guide</h2>
-                        <div style="overflow-x:auto;">
-                            <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
-                                <thead>
-                                    <tr style="background:var(--surface-1);">
-                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Watermark Type</th>
-                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Best Method</th>
-                                        <th style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);">Accuracy</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Semi-transparent white</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Auto Remove (opacity 30–50%)</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">90–95%</td></tr>
-                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Semi-transparent gray</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Auto Remove (adjust color)</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">85–90%</td></tr>
-                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Solid text watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Brush + Inpaint</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#f59e0b;">75–85%</td></tr>
-                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Logo watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Clone Stamp</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">80–90%</td></tr>
-                                    <tr><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Small corner watermark</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Clone Stamp</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:#10b981;">90–95%</td></tr>
-                                    <tr><td style="padding:9px 12px;">Large covering watermark</td><td style="padding:9px 12px;">Brush + Inpaint + Clone</td><td style="padding:9px 12px;color:#f59e0b;">60–75%</td></tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
 
@@ -829,8 +716,8 @@
             <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">How It Works</h2>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">
                 <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 1: Upload Image</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Add your image using drag &amp; drop, file picker, or clipboard paste.</p></div>
-                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 2: Mark Watermark</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Use Auto Detect or paint over watermark areas with Brush / Rect tools.</p></div>
-                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 3: Remove &amp; Refine</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Run Inpaint, then refine details using Clone Stamp, Blur, Undo/Redo, and Compare.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 2: Choose Mode</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Click <strong>Auto Remove</strong> or choose <strong>Manual Brush</strong>.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 3: Remove</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Manual mode: paint area and click <strong>Manual Remove</strong>.</p></div>
                 <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 4: Download</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Export clean results in PNG or JPG format.</p></div>
             </div>
         </section>
@@ -849,7 +736,7 @@
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Is this tool free?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes, it is completely free to use with no signup required.</p></div>
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Are my images uploaded to a server?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">No. Processing happens locally in your browser for better privacy.</p></div>
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Which format should I download?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Use PNG for maximum quality, or JPG for smaller file size.</p></div>
-            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> What if auto remove is not perfect?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Use Brush + Inpaint and Clone Stamp tools to refine difficult areas manually.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> What if auto remove is not perfect?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Use Manual Brush, paint the watermark area, and click Manual Remove.</p></div>
         </section>
     </main>
 
@@ -955,21 +842,25 @@
         const statusSize  = document.getElementById('statusSize');
         const statusTool  = document.getElementById('statusTool');
         const statusHint  = document.getElementById('statusHint');
-        const toolHintBox = document.getElementById('toolHintBox');
-        const cloneHelpPanel = document.getElementById('cloneHelpPanel');
 
         const ctx     = mainCanvas.getContext('2d', { willReadFrequently: true });
         const overlayCtx = overlayCanvas.getContext('2d');
 
         // ── Sliders / inputs ───────────────────────────────────────────
         const brushSizeSlider = document.getElementById('brushSizeSlider');
-        const hardnessSlider  = document.getElementById('hardnessSlider');
-        const opacitySlider   = document.getElementById('opacitySlider');
-        const toleranceSlider = document.getElementById('toleranceSlider');
 
         // ── Toast helper ───────────────────────────────────────────────
         const toast = document.getElementById('wmToast');
         let toastTimer = null;
+        const autoDetectConfig = {
+            alphaLowPercentile: 0.08,
+            alphaHighPercentile: 0.92,
+            brightnessLowPercentile: 0.10,
+            brightnessHighPercentile: 0.90,
+            minWatermarkCoverageRatio: 0.003,
+            minWatermarkPixels: 200,
+            dilatedMaskSemiAlpha: 180
+        };
         function showToast(msg, type = 'info', duration = 2800) {
             toast.textContent = msg;
             toast.className = `wm-toast show ${type}`;
@@ -980,17 +871,10 @@
         // ── updateSliders (called from inline oninput) ─────────────────
         window.updateSliders = function() {
             state.brushSize = parseInt(brushSizeSlider.value);
-            state.hardness  = parseInt(hardnessSlider.value) / 100;
-            state.autoOpacity = parseInt(opacitySlider.value) / 100;
-            state.tolerance = parseInt(toleranceSlider.value);
-
             document.getElementById('brushSizeVal').textContent = state.brushSize + 'px';
-            document.getElementById('hardnessVal').textContent  = parseInt(hardnessSlider.value) + '%';
-            document.getElementById('opacityVal').textContent   = parseInt(opacitySlider.value) + '%';
-            document.getElementById('toleranceVal').textContent = state.tolerance;
 
             // Update slider gradient fill
-            [brushSizeSlider, hardnessSlider, opacitySlider, toleranceSlider].forEach(sl => {
+            [brushSizeSlider].forEach(sl => {
                 const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
                 sl.style.setProperty('--val', pct + '%');
             });
@@ -1072,85 +956,38 @@
             return dst;
         }
 
-        // ── Tool switching ─────────────────────────────────────────────
-        const TOOL_HINTS = {
-            brush:  '<strong>Brush:</strong> Paint over watermark areas to create a removal mask.',
-            rect:   '<strong>Rectangle:</strong> Drag to select a rectangular watermark area.',
-            clone:  '<strong>Clone Stamp:</strong> Alt+Click (or long-press) to set source point, then paint.',
-            blur:   '<strong>Blur:</strong> Paint to blur/smooth areas directly.',
-            eraser: '<strong>Eraser:</strong> Remove parts of the painted mask.',
-            picker: '<strong>Color Picker:</strong> Click on watermark to auto-set its color.',
-        };
+        function getPercentileIndex(arr, percentile) {
+            return Math.min(Math.floor(arr.length * percentile), arr.length - 1);
+        }
 
+        // ── Tool switching ─────────────────────────────────────────────
         window.setTool = function(tool) {
             state.tool = tool;
-            // Update sidebar buttons
-            document.querySelectorAll('.wm-sidebar-tool').forEach(b => {
-                b.classList.toggle('active', b.dataset.tool === tool);
-            });
-            // Update toolbar buttons
-            ['btnBrush','btnRect','btnClone','btnBlur','btnEraser'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.classList.toggle('active', btn.dataset.tool === tool);
-            });
-            statusTool.textContent = tool.charAt(0).toUpperCase() + tool.slice(1);
-            toolHintBox.innerHTML = TOOL_HINTS[tool] || '';
-
-            // Clone stamp help panel
-            cloneHelpPanel.style.display = (tool === 'clone') ? '' : 'none';
+            const btnBrush = document.getElementById('btnBrush');
+            if (btnBrush) btnBrush.classList.toggle('active', tool === 'brush');
+            statusTool.textContent = 'Manual Brush';
 
             // Cursor style
-            mainCanvas.style.cursor = (tool === 'picker') ? 'crosshair' : 'none';
+            mainCanvas.style.cursor = 'none';
             overlayCanvas.style.cursor = mainCanvas.style.cursor;
-
-            if (tool !== 'clone') {
-                state.cloneFirstStroke = true;
-                cloneSrcEl.style.display = 'none';
-            }
+            state.cloneFirstStroke = true;
+            cloneSrcEl.style.display = 'none';
 
             updateBrushCursorSize();
         };
 
-        // Wire toolbar tool buttons
-        ['btnBrush','btnRect','btnClone','btnBlur','btnEraser'].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.addEventListener('click', () => setTool(btn.dataset.tool));
-        });
-
-        // ── Color helpers ──────────────────────────────────────────────
-        window.setAutoColor = function(hex) {
-            state.autoColor = hexToRgb(hex);
-            document.getElementById('autoColorHex').textContent = hex;
-            document.getElementById('autoColorPicker').value = hex;
-            document.getElementById('autoColorHexInput').value = hex;
-            document.querySelectorAll('.wm-color-preset').forEach(b => {
-                b.classList.toggle('active', b.dataset.color === hex);
-            });
-        };
-
-        window.onHexInput = function(input) {
-            const hex = input.value.trim();
-            if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-                setAutoColor(hex);
-            }
-        };
-
-        function hexToRgb(hex) {
-            const r = parseInt(hex.slice(1,3), 16);
-            const g = parseInt(hex.slice(3,5), 16);
-            const b = parseInt(hex.slice(5,7), 16);
-            return { r, g, b };
-        }
-
-        function colorDist(r1,g1,b1,r2,g2,b2) {
-            return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
-        }
+        const btnBrush = document.getElementById('btnBrush');
+        if (btnBrush) btnBrush.addEventListener('click', () => setTool('brush'));
+        const btnManualRemove = document.getElementById('btnManualRemove');
+        if (btnManualRemove) btnManualRemove.addEventListener('click', applyInpainting);
+        const btnAutoRemove = document.getElementById('btnAutoRemove');
+        if (btnAutoRemove) btnAutoRemove.addEventListener('click', autoRemoveWatermark);
 
         // ── Zoom ───────────────────────────────────────────────────────
         window.fitToView = function() {
             if (!state.originalImageData) return;
-            const vw = viewport.clientWidth  - 40;
-            const vh = viewport.clientHeight - 40;
+            const vw = Math.max(240, viewport.clientWidth  - 24);
+            const vh = Math.max(240, viewport.clientHeight - 24);
             const iw = mainCanvas.width;
             const ih = mainCanvas.height;
             state.zoom = Math.min(1, Math.min(vw / iw, vh / ih));
@@ -1161,14 +998,26 @@
             container.style.transform = `scale(${state.zoom})`;
             zoomLabel.textContent = Math.round(state.zoom * 100) + '%';
             updateBrushCursorSize();
+            if (!state.originalImageData) return;
+            const scaledW = Math.max(1, Math.round(mainCanvas.width * state.zoom));
+            const scaledH = Math.max(1, Math.round(mainCanvas.height * state.zoom));
+            if (scaledW < viewport.clientWidth || scaledH < viewport.clientHeight) {
+                viewport.scrollLeft = 0;
+                viewport.scrollTop = 0;
+            } else {
+                const maxLeft = Math.max(0, scaledW - viewport.clientWidth);
+                const maxTop = Math.max(0, scaledH - viewport.clientHeight);
+                viewport.scrollLeft = Math.min(viewport.scrollLeft, maxLeft);
+                viewport.scrollTop = Math.min(viewport.scrollTop, maxTop);
+            }
         }
 
         document.getElementById('btnZoomIn').addEventListener('click', () => {
-            state.zoom = Math.min(8, state.zoom * 1.25);
+            state.zoom = Math.min(4, state.zoom * 1.2);
             applyZoom();
         });
         document.getElementById('btnZoomOut').addEventListener('click', () => {
-            state.zoom = Math.max(0.1, state.zoom / 1.25);
+            state.zoom = Math.max(0.35, state.zoom / 1.2);
             applyZoom();
         });
         document.getElementById('btnZoomFit').addEventListener('click', fitToView);
@@ -1225,36 +1074,10 @@
             const pos = getCanvasPos(e);
             statusCoords.textContent = `${pos.x}, ${pos.y}`;
 
-            // Alt+Click for clone stamp source
-            if (e.altKey || (e.type === 'touchstart' && e.touches.length === 2)) {
-                if (state.tool === 'clone') {
-                    setCloneSource(pos.x, pos.y);
-                    return;
-                }
-            }
-
-            // Long press for clone source on mobile
-            if (e.type === 'touchstart' && state.tool === 'clone') {
-                longPressTimer = setTimeout(() => {
-                    setCloneSource(pos.x, pos.y);
-                }, 600);
-            }
-
-            // Color picker
-            if (state.tool === 'picker') {
-                pickColor(pos.x, pos.y);
-                return;
-            }
-
             state.isDrawing = true;
             state.lastX = pos.x;
             state.lastY = pos.y;
-
-            if (state.tool === 'rect') {
-                state.rectStart = { x: pos.x, y: pos.y };
-            } else {
-                paintAt(pos.x, pos.y);
-            }
+            paintAt(pos.x, pos.y);
 
             // Save undo snapshot before stroke begins
             pushUndo();
@@ -1275,23 +1098,19 @@
             if (!state.isDrawing) return;
             clearTimeout(longPressTimer);
 
-            if (state.tool === 'rect') {
-                drawRectPreview(state.rectStart, pos);
-            } else {
-                // Interpolate between last and current position for smooth stroke
-                const dx = pos.x - state.lastX;
-                const dy = pos.y - state.lastY;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                const step = Math.max(1, state.brushSize / 4);
-                const steps = Math.ceil(dist / step);
-                for (let i = 1; i <= steps; i++) {
-                    const ix = state.lastX + dx * (i / steps);
-                    const iy = state.lastY + dy * (i / steps);
-                    paintAt(ix, iy);
-                }
-                state.lastX = pos.x;
-                state.lastY = pos.y;
+            // Interpolate between last and current position for smooth stroke
+            const dx = pos.x - state.lastX;
+            const dy = pos.y - state.lastY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const step = Math.max(1, state.brushSize / 4);
+            const steps = Math.ceil(dist / step);
+            for (let i = 1; i <= steps; i++) {
+                const ix = state.lastX + dx * (i / steps);
+                const iy = state.lastY + dy * (i / steps);
+                paintAt(ix, iy);
             }
+            state.lastX = pos.x;
+            state.lastY = pos.y;
         }
 
         // ── Mouse up ───────────────────────────────────────────────────
@@ -1303,31 +1122,11 @@
             if (!state.isDrawing) return;
             state.isDrawing = false;
 
-            if (state.tool === 'rect' && state.rectStart) {
-                const pos = getCanvasPos(e.changedTouches ? { clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY } : e);
-                fillRectMask(state.rectStart, pos);
-                state.rectStart = null;
-                clearOverlay();
-            }
-
-            state.cloneFirstStroke = false;
             renderCanvas();
         }
 
         // ── Paint ──────────────────────────────────────────────────────
         function paintAt(cx, cy) {
-            if (state.tool === 'blur') {
-                applyBlurBrush(cx, cy);
-                renderCanvas();
-                return;
-            }
-
-            if (state.tool === 'clone') {
-                applyCloneStamp(cx, cy);
-                renderCanvas();
-                return;
-            }
-
             // Paint mask
             const r = state.brushSize / 2;
             const r2 = r * r;
@@ -1348,249 +1147,116 @@
                     const alpha = Math.floor(255 * falloff);
                     const idx = y * mainCanvas.width + x;
 
-                    if (state.tool === 'eraser') {
-                        state.maskData[idx] = Math.max(0, state.maskData[idx] - alpha);
-                    } else {
-                        state.maskData[idx] = Math.min(255, Math.max(state.maskData[idx], alpha));
-                    }
+                    state.maskData[idx] = Math.min(255, Math.max(state.maskData[idx], alpha));
                 }
             }
             renderMaskOverlay();
         }
-
-        // ── Rectangle mask fill ────────────────────────────────────────
-        function fillRectMask(a, b) {
-            const x0 = Math.max(0, Math.min(a.x, b.x));
-            const x1 = Math.min(mainCanvas.width  - 1, Math.max(a.x, b.x));
-            const y0 = Math.max(0, Math.min(a.y, b.y));
-            const y1 = Math.min(mainCanvas.height - 1, Math.max(a.y, b.y));
-            for (let y = y0; y <= y1; y++) {
-                for (let x = x0; x <= x1; x++) {
-                    state.maskData[y * mainCanvas.width + x] = 255;
-                }
-            }
-            renderMaskOverlay();
-        }
-
-        // ── Rect selection preview ─────────────────────────────────────
-        function drawRectPreview(a, b) {
-            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-            const x = Math.min(a.x, b.x);
-            const y = Math.min(a.y, b.y);
-            const w = Math.abs(a.x - b.x);
-            const h = Math.abs(a.y - b.y);
-            overlayCtx.strokeStyle = 'rgba(99,102,241,0.9)';
-            overlayCtx.lineWidth = 2 / state.zoom;
-            overlayCtx.setLineDash([6 / state.zoom, 4 / state.zoom]);
-            overlayCtx.strokeRect(x, y, w, h);
-            overlayCtx.fillStyle = 'rgba(99,102,241,0.12)';
-            overlayCtx.fillRect(x, y, w, h);
-        }
-
-        // ── Blur brush ─────────────────────────────────────────────────
-        function applyBlurBrush(cx, cy) {
-            const r = Math.floor(state.brushSize / 2);
-            const w = mainCanvas.width;
-            const h = mainCanvas.height;
-            const x0 = Math.max(r, Math.floor(cx - r));
-            const x1 = Math.min(w - 1 - r, Math.ceil(cx + r));
-            const y0 = Math.max(r, Math.floor(cy - r));
-            const y1 = Math.min(h - 1 - r, Math.ceil(cy + r));
-
-            const data = state.currentImageData.data;
-            const kr = Math.max(2, Math.floor(r / 3));
-
-            for (let y = y0; y <= y1; y++) {
-                for (let x = x0; x <= x1; x++) {
-                    const dx = x - cx; const dy = y - cy;
-                    if (dx*dx + dy*dy > r*r) continue;
-
-                    // Simple box blur at this pixel
-                    let sumR = 0, sumG = 0, sumB = 0, cnt = 0;
-                    for (let ky = -kr; ky <= kr; ky++) {
-                        for (let kx = -kr; kx <= kr; kx++) {
-                            const neighborX = Math.max(0, Math.min(w-1, x+kx));
-                            const neighborY = Math.max(0, Math.min(h-1, y+ky));
-                            const neighborIndex = (neighborY * w + neighborX) * 4;
-                            sumR += data[neighborIndex]; sumG += data[neighborIndex+1]; sumB += data[neighborIndex+2];
-                            cnt++;
-                        }
-                    }
-                    const i = (y * w + x) * 4;
-                    data[i]   = sumR / cnt;
-                    data[i+1] = sumG / cnt;
-                    data[i+2] = sumB / cnt;
-                }
-            }
-        }
-
-        // ── Clone Stamp ────────────────────────────────────────────────
-        function setCloneSource(x, y) {
-            state.cloneSourceX = x;
-            state.cloneSourceY = y;
-            state.cloneSourceSet = true;
-            state.cloneFirstStroke = true;
-            const sz = state.brushSize * state.zoom;
-            cloneSrcEl.style.display = 'block';
-            cloneSrcEl.style.left = x + 'px';
-            cloneSrcEl.style.top  = y + 'px';
-            cloneSrcEl.style.width  = sz + 'px';
-            cloneSrcEl.style.height = sz + 'px';
-            showToast('Clone source set. Now paint over the watermark.', 'success');
-        }
-
-        function applyCloneStamp(cx, cy) {
-            if (!state.cloneSourceSet) {
-                showToast('Alt+Click to set clone source first!', 'error');
-                return;
-            }
-            if (state.cloneFirstStroke) {
-                state.cloneOffsetX = state.cloneSourceX - cx;
-                state.cloneOffsetY = state.cloneSourceY - cy;
-                state.cloneFirstStroke = false;
-            }
-
-            const r = state.brushSize / 2;
-            const w = mainCanvas.width;
-            const h = mainCanvas.height;
-            const data = state.currentImageData.data;
-            const srcData = state.currentImageData.data;
-
-            for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
-                for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
-                    const dx = x - cx; const dy = y - cy;
-                    const d2 = dx*dx + dy*dy;
-                    if (d2 > r*r) continue;
-                    if (x < 0 || x >= w || y < 0 || y >= h) continue;
-
-                    const sx = Math.round(x + state.cloneOffsetX);
-                    const sy = Math.round(y + state.cloneOffsetY);
-                    if (sx < 0 || sx >= w || sy < 0 || sy >= h) continue;
-
-                    // Hardness-based alpha blend
-                    const falloff = Math.max(0, 1 - (Math.sqrt(d2) / r) * (1 - state.hardness));
-                    const dstI = (y * w + x) * 4;
-                    const srcI = (sy * w + sx) * 4;
-
-                    data[dstI]   = data[dstI]   * (1 - falloff) + srcData[srcI]   * falloff;
-                    data[dstI+1] = data[dstI+1] * (1 - falloff) + srcData[srcI+1] * falloff;
-                    data[dstI+2] = data[dstI+2] * (1 - falloff) + srcData[srcI+2] * falloff;
-                }
-            }
-        }
-
-        // ── Color picker tool ──────────────────────────────────────────
-        function pickColor(x, y) {
-            if (!state.currentImageData) return;
-            const i = (Math.floor(y) * mainCanvas.width + Math.floor(x)) * 4;
-            const d = state.currentImageData.data;
-            const r = d[i], g = d[i+1], b = d[i+2];
-            const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
-            setAutoColor(hex);
-            showToast(`Color picked: ${hex}`, 'success');
-        }
-
-        // ── Auto Detect Watermark ──────────────────────────────────────
-        window.autoDetectWatermark = function() {
-            if (!state.currentImageData) return;
-            showProcessing('Detecting watermark…');
-            setTimeout(() => {
-                pushUndo();
-                const { r: wr, g: wg, b: wb } = state.autoColor;
-                const tol = state.tolerance * 2.55; // scale 1-100 → 0-255
-                const w = mainCanvas.width;
-                const h = mainCanvas.height;
-                const data = state.currentImageData.data;
-
-                for (let i = 0; i < w * h; i++) {
-                    const pi = i * 4;
-                    const dist = colorDist(data[pi], data[pi+1], data[pi+2], wr, wg, wb);
-                    state.maskData[i] = dist <= tol ? 255 : 0;
-                }
-                renderMaskOverlay();
-                hideProcessing();
-                showToast(`Watermark detected! Click Inpaint or Auto Remove.`, 'success');
-            }, 30);
-        };
 
         // ── Auto Remove Watermark (reverse alpha blending) ─────────────
         window.autoRemoveWatermark = function() {
             if (!state.currentImageData) return;
-            showProcessing('Removing watermark…');
+            showProcessing('Auto removing watermark…');
             setTimeout(() => {
                 pushUndo();
-                autoDetectWatermark_inner();
-                applyAutoRemoval();
+                const detected = autoDetectWatermark_inner();
+                if (!detected) {
+                    hideProcessing();
+                    showToast('No clear watermark detected. Try Manual Remove.', 'error');
+                    return;
+                }
+                inpaintMaskedRegion();
                 renderCanvas();
                 clearMask();
                 hideProcessing();
-                showToast('Auto removal complete! Fine-tune with Clone Stamp if needed.', 'success');
+                showToast('Auto removal complete.', 'success');
             }, 30);
         };
 
         function autoDetectWatermark_inner() {
-            const { r: wr, g: wg, b: wb } = state.autoColor;
-            const tol = state.tolerance * 2.55;
             const w = mainCanvas.width;
             const h = mainCanvas.height;
             const data = state.currentImageData.data;
+            const alphaCandidates = [];
+            const brightnessCandidates = [];
+            for (let i = 3; i < data.length; i += 4) alphaCandidates.push(data[i]);
+            for (let i = 0; i < data.length; i += 4) {
+                brightnessCandidates.push((data[i] + data[i + 1] + data[i + 2]) / 3);
+            }
+
+            alphaCandidates.sort((a, b) => a - b);
+            brightnessCandidates.sort((a, b) => a - b);
+            const aLowIdx = getPercentileIndex(alphaCandidates, autoDetectConfig.alphaLowPercentile);
+            const aHighIdx = getPercentileIndex(alphaCandidates, autoDetectConfig.alphaHighPercentile);
+            const bLowIdx = getPercentileIndex(brightnessCandidates, autoDetectConfig.brightnessLowPercentile);
+            const bHighIdx = getPercentileIndex(brightnessCandidates, autoDetectConfig.brightnessHighPercentile);
+            const aLow = alphaCandidates[aLowIdx];
+            const aHigh = alphaCandidates[aHighIdx];
+            const bLow = brightnessCandidates[bLowIdx];
+            const bHigh = brightnessCandidates[bHighIdx];
+
+            state.maskData.fill(0);
+            let hits = 0;
             for (let i = 0; i < w * h; i++) {
                 const pi = i * 4;
-                const dist = colorDist(data[pi], data[pi+1], data[pi+2], wr, wg, wb);
-                state.maskData[i] = dist <= tol ? 255 : 0;
+                const r = data[pi], g = data[pi + 1], b = data[pi + 2], a = data[pi + 3];
+                const maxC = Math.max(r, g, b);
+                const minC = Math.min(r, g, b);
+                const sat = maxC === 0 ? 0 : ((maxC - minC) / maxC);
+                const bright = (r + g + b) / 3;
+                const isAlphaOutlier = a <= aLow || a >= aHigh;
+                const isBrightnessOutlier = bright <= bLow || bright >= bHigh;
+                const isWatermarkCandidate = sat < 0.35 && (isBrightnessOutlier || isAlphaOutlier);
+                if (isWatermarkCandidate) {
+                    state.maskData[i] = 255;
+                    hits++;
+                }
             }
+            const minRequiredPixels = Math.max(
+                autoDetectConfig.minWatermarkPixels,
+                w * h * autoDetectConfig.minWatermarkCoverageRatio
+            );
+            if (hits < minRequiredPixels) return false;
+            dilateMask(1);
+            return true;
         }
 
-        function applyAutoRemoval() {
-            // For each masked pixel, reverse the alpha-blending formula:
-            // composited = original * (1 - α) + watermark_color * α
-            // original   = (composited - α * watermark_color) / (1 - α)
-            const alpha = state.autoOpacity;
-            const { r: wr, g: wg, b: wb } = state.autoColor;
+        function dilateMask(radius) {
             const w = mainCanvas.width;
-            const data = state.currentImageData.data;
-            const orig = state.originalImageData.data;
-
-            for (let i = 0; i < state.maskData.length; i++) {
-                if (state.maskData[i] === 0) continue;
-                const pi = i * 4;
-                const maskAlpha = state.maskData[i] / 255;
-                const a = alpha * maskAlpha;
-                const oneMinusA = 1 - a;
-
-                if (oneMinusA < 0.01) {
-                    // Nearly opaque watermark – use inpainting fallback
-                    continue;
+            const h = mainCanvas.height;
+            const src = new Uint8Array(state.maskData);
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const idx = y * w + x;
+                    if (src[idx] > 0) continue;
+                    let mark = false;
+                    for (let dy = -radius; dy <= radius && !mark; dy++) {
+                        for (let dx = -radius; dx <= radius; dx++) {
+                            const nx = x + dx, ny = y + dy;
+                            if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+                            if (src[ny * w + nx] > 0) { mark = true; break; }
+                        }
+                    }
+                    if (mark) state.maskData[idx] = autoDetectConfig.dilatedMaskSemiAlpha;
                 }
-
-                // Reverse blending
-                let nr = (orig[pi]   - a * wr) / oneMinusA;
-                let ng = (orig[pi+1] - a * wg) / oneMinusA;
-                let nb = (orig[pi+2] - a * wb) / oneMinusA;
-
-                data[pi]   = Math.max(0, Math.min(255, Math.round(nr)));
-                data[pi+1] = Math.max(0, Math.min(255, Math.round(ng)));
-                data[pi+2] = Math.max(0, Math.min(255, Math.round(nb)));
             }
         }
 
         // ── Smart Inpainting ───────────────────────────────────────────
-        document.getElementById('btnInpaint').addEventListener('click', applyInpainting);
-
         function applyInpainting() {
             if (!state.currentImageData) return;
             if (!state.maskData.some(v => v > 0)) {
-                showToast('Paint a mask first!', 'error');
+                showToast('Paint watermark area first, then click Manual Remove.', 'error');
                 return;
             }
-            showProcessing('Inpainting…');
+            showProcessing('Removing painted area…');
             setTimeout(() => {
                 pushUndo();
                 inpaintMaskedRegion();
                 renderCanvas();
                 clearMask();
                 hideProcessing();
-                showToast('Inpainting complete!', 'success');
+                showToast('Manual removal complete.', 'success');
             }, 30);
         }
 
@@ -1638,45 +1304,6 @@
             }
         }
 
-        // ── Apply Gaussian Blur to mask region ─────────────────────────
-        document.getElementById('btnApplyBlur').addEventListener('click', () => {
-            if (!state.currentImageData) return;
-            if (!state.maskData.some(v => v > 0)) {
-                showToast('Paint or select a mask area first!', 'error');
-                return;
-            }
-            showProcessing('Applying blur…');
-            setTimeout(() => {
-                pushUndo();
-                const w = mainCanvas.width;
-                const h = mainCanvas.height;
-                const data = state.currentImageData.data;
-                const kr = 3;
-                for (let y = 0; y < h; y++) {
-                    for (let x = 0; x < w; x++) {
-                        const idx = y * w + x;
-                        if (state.maskData[idx] === 0) continue;
-                        let sumR=0, sumG=0, sumB=0, cnt=0;
-                        for (let dy=-kr; dy<=kr; dy++) {
-                            for (let dx=-kr; dx<=kr; dx++) {
-                                const nx=Math.max(0,Math.min(w-1,x+dx));
-                                const ny=Math.max(0,Math.min(h-1,y+dy));
-                                const ni=(ny*w+nx)*4;
-                                const gaussianWeight = Math.exp(-(dx*dx+dy*dy)/(2*kr));
-                                sumR+=data[ni]*gaussianWeight; sumG+=data[ni+1]*gaussianWeight; sumB+=data[ni+2]*gaussianWeight; cnt+=gaussianWeight;
-                            }
-                        }
-                        const pi=idx*4;
-                        data[pi]=Math.round(sumR/cnt); data[pi+1]=Math.round(sumG/cnt); data[pi+2]=Math.round(sumB/cnt);
-                    }
-                }
-                renderCanvas();
-                clearMask();
-                hideProcessing();
-                showToast('Blur applied!', 'success');
-            }, 30);
-        });
-
         // ── Clear mask ─────────────────────────────────────────────────
         document.getElementById('btnClearMask').addEventListener('click', () => {
             clearMask();
@@ -1720,16 +1347,12 @@
         // ── Compare view ───────────────────────────────────────────────
         window.showView = function(which) {
             state.showingOriginal = (which === 'original');
-            document.getElementById('tabEdited').classList.toggle('active', which === 'edited');
-            document.getElementById('tabOriginal').classList.toggle('active', which === 'original');
+            const tabEdited = document.getElementById('tabEdited');
+            const tabOriginal = document.getElementById('tabOriginal');
+            if (tabEdited) tabEdited.classList.toggle('active', which === 'edited');
+            if (tabOriginal) tabOriginal.classList.toggle('active', which === 'original');
             renderCanvas();
         };
-
-        document.getElementById('btnCompare').addEventListener('click', () => {
-            const next = state.showingOriginal ? 'edited' : 'original';
-            showView(next);
-            showToast(next === 'original' ? 'Showing original' : 'Showing edited', 'info', 1500);
-        });
 
         // ── Undo / Redo ────────────────────────────────────────────────
         function pushUndo() {
@@ -1833,19 +1456,14 @@
 
             switch (e.key) {
                 case 'b': case 'B': setTool('brush'); break;
-                case 'r': case 'R': setTool('rect');  break;
-                case 'c': case 'C': setTool('clone'); break;
-                case 'l': case 'L': setTool('blur');  break;
-                case 'e': case 'E': setTool('eraser');break;
-                case 'p': case 'P': setTool('picker');break;
                 case '[': {
-                    const newSz = Math.max(3, state.brushSize - 3);
+                    const newSz = Math.max(6, state.brushSize - 3);
                     brushSizeSlider.value = newSz;
                     updateSliders();
                     break;
                 }
                 case ']': {
-                    const newSz = Math.min(80, state.brushSize + 3);
+                    const newSz = Math.min(120, state.brushSize + 3);
                     brushSizeSlider.value = newSz;
                     updateSliders();
                     break;
@@ -1857,11 +1475,11 @@
                     if (e.ctrlKey || e.metaKey) { e.preventDefault(); redo(); }
                     break;
                 case '+': case '=':
-                    state.zoom = Math.min(8, state.zoom * 1.25);
+                    state.zoom = Math.min(4, state.zoom * 1.2);
                     applyZoom();
                     break;
                 case '-':
-                    state.zoom = Math.max(0.1, state.zoom / 1.25);
+                    state.zoom = Math.max(0.35, state.zoom / 1.2);
                     applyZoom();
                     break;
                 case '0':
@@ -1875,9 +1493,9 @@
             if (!e.ctrlKey && !e.metaKey) return;
             e.preventDefault();
             if (e.deltaY < 0) {
-                state.zoom = Math.min(8, state.zoom * 1.1);
+                state.zoom = Math.min(4, state.zoom * 1.08);
             } else {
-                state.zoom = Math.max(0.1, state.zoom / 1.1);
+                state.zoom = Math.max(0.35, state.zoom / 1.08);
             }
             applyZoom();
         }, { passive: false });
