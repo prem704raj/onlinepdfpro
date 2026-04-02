@@ -852,6 +852,15 @@
         // ── Toast helper ───────────────────────────────────────────────
         const toast = document.getElementById('wmToast');
         let toastTimer = null;
+        const autoDetectConfig = {
+            alphaLowPercentile: 0.08,
+            alphaHighPercentile: 0.92,
+            brightnessLowPercentile: 0.10,
+            brightnessHighPercentile: 0.90,
+            minWatermarkCoverageRatio: 0.003,
+            minWatermarkPixels: 200,
+            dilatedMaskSemiAlpha: 180
+        };
         function showToast(msg, type = 'info', duration = 2800) {
             toast.textContent = msg;
             toast.className = `wm-toast show ${type}`;
@@ -945,6 +954,10 @@
         function cloneImageData(src) {
             const dst = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height);
             return dst;
+        }
+
+        function getPercentileIndex(arr, percentile) {
+            return Math.min(Math.floor(arr.length * percentile), arr.length - 1);
         }
 
         // ── Tool switching ─────────────────────────────────────────────
@@ -1173,10 +1186,14 @@
 
             alphaCandidates.sort((a, b) => a - b);
             brightnessCandidates.sort((a, b) => a - b);
-            const aLow = alphaCandidates[Math.floor(alphaCandidates.length * 0.08)];
-            const aHigh = alphaCandidates[Math.floor(alphaCandidates.length * 0.92)];
-            const bLow = brightnessCandidates[Math.floor(brightnessCandidates.length * 0.10)];
-            const bHigh = brightnessCandidates[Math.floor(brightnessCandidates.length * 0.90)];
+            const aLowIdx = getPercentileIndex(alphaCandidates, autoDetectConfig.alphaLowPercentile);
+            const aHighIdx = getPercentileIndex(alphaCandidates, autoDetectConfig.alphaHighPercentile);
+            const bLowIdx = getPercentileIndex(brightnessCandidates, autoDetectConfig.brightnessLowPercentile);
+            const bHighIdx = getPercentileIndex(brightnessCandidates, autoDetectConfig.brightnessHighPercentile);
+            const aLow = alphaCandidates[aLowIdx];
+            const aHigh = alphaCandidates[aHighIdx];
+            const bLow = brightnessCandidates[bLowIdx];
+            const bHigh = brightnessCandidates[bHighIdx];
 
             state.maskData.fill(0);
             let hits = 0;
@@ -1189,13 +1206,17 @@
                 const bright = (r + g + b) / 3;
                 const isAlphaOutlier = a <= aLow || a >= aHigh;
                 const isBrightnessOutlier = bright <= bLow || bright >= bHigh;
-                const looksTextLike = sat < 0.35 && (isBrightnessOutlier || isAlphaOutlier);
-                if (looksTextLike) {
+                const isWatermarkCandidate = sat < 0.35 && (isBrightnessOutlier || isAlphaOutlier);
+                if (isWatermarkCandidate) {
                     state.maskData[i] = 255;
                     hits++;
                 }
             }
-            if (hits < (w * h * 0.002)) return false;
+            const minRequiredPixels = Math.max(
+                autoDetectConfig.minWatermarkPixels,
+                w * h * autoDetectConfig.minWatermarkCoverageRatio
+            );
+            if (hits < minRequiredPixels) return false;
             dilateMask(1);
             return true;
         }
@@ -1216,7 +1237,7 @@
                             if (src[ny * w + nx] > 0) { mark = true; break; }
                         }
                     }
-                    if (mark) state.maskData[idx] = 180;
+                    if (mark) state.maskData[idx] = autoDetectConfig.dilatedMaskSemiAlpha;
                 }
             }
         }
