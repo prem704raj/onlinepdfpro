@@ -1435,6 +1435,7 @@ const RecentlyUsedUI = {
             'image-compress': 'tools/image-compress.html',
             'image-resize': 'tools/image-resize.html',
             'image-crop': 'tools/image-crop.html',
+            'remove-watermark': 'tools/remove-watermark.html',
             'pdf-to-images': 'tools/pdf-to-images.html',
             'images-to-pdf': 'tools/images-to-pdf.html',
             'crop-pdf': 'tools/crop-pdf.html',
@@ -1773,4 +1774,3 @@ const _exports = {
 
 window.OnlinePDFPro = _exports;
 window.DocTools = _exports;
-
