@@ -961,25 +961,215 @@
             </div>
         </section>
 
-        <!-- NEWSLETTER SIGNUP (Point 10: Retention) -->
-        <section style="max-width:700px; margin:60px auto 0; padding:0 20px; text-align:center;">
-            <div class="newsletter-box">
-                <h2 style="font-size:24px; font-weight:800; margin:0 0 8px; color:white;">📬 Get New Tools &amp; Tips
-                </h2>
-                <p style="font-size:15px; opacity:0.85; margin:0 0 24px; color:white;">Get notified when we launch new
-                    tools. No
-                    spam, just updates.</p>
-                <form action="https://formsubmit.co/support@onlinepdfpro.com" method="POST"
-                    style="display:flex; gap:10px; max-width:450px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
-                    <input type="email" name="email" placeholder="Your email address" required
-                        style="flex:1; min-width:200px; padding:14px 18px; border-radius:12px; border:none; font-size:15px; outline:none; color:#1a1a2e; background:white;">
-                    <button type="submit"
-                        style="padding:14px 28px; background:white; color:#2563eb; font-weight:700; border:none; border-radius:12px; cursor:pointer; font-size:15px; transition:transform 0.2s;">Subscribe
-                        Free</button>
-                </form>
-                <p style="font-size:12px; opacity:0.6; margin:16px 0 0; color:white;">No spam. Unsubscribe anytime. We
-                    respect your
-                    inbox.</p>
+        <!-- FLOATING REVIEWS SECTION -->
+        <style>
+            .hp-reviews-container {
+                max-width: 1000px;
+                margin: 60px auto 0;
+                overflow: hidden;
+                position: relative;
+                padding: 20px 0;
+            }
+            .hp-reviews-container::before, .hp-reviews-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100px;
+                z-index: 2;
+                pointer-events: none;
+            }
+            .hp-reviews-container::before {
+                left: 0;
+                background: linear-gradient(to right, var(--bg-primary, #fff) 0%, transparent 100%);
+            }
+            .hp-reviews-container::after {
+                right: 0;
+                background: linear-gradient(to left, var(--bg-primary, #fff) 0%, transparent 100%);
+            }
+            .hp-reviews-track {
+                display: flex;
+                width: max-content;
+                gap: 24px;
+                animation: scrollMarquee 40s linear infinite;
+            }
+            .hp-reviews-track:hover {
+                animation-play-state: paused;
+            }
+            @keyframes scrollMarquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(calc(-50% - 12px)); }
+            }
+            .hp-review-card {
+                width: 320px;
+                padding: 24px;
+                background: var(--surface-1);
+                border-radius: 16px;
+                border: 1px solid var(--border);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                text-align: left;
+                flex-shrink: 0;
+            }
+            .hp-review-stars {
+                color: #fbbf24;
+                font-size: 14px;
+                margin-bottom: 12px;
+                letter-spacing: 2px;
+            }
+            .hp-review-text {
+                font-size: 14px;
+                color: var(--text-secondary);
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+            .hp-review-author {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .hp-review-avatar {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: rgba(37,99,235,0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                color: #2563eb;
+                font-size: 15px;
+            }
+            .hp-review-name {
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--text-primary);
+                display: block;
+            }
+            .hp-review-role {
+                font-size: 12px;
+                color: var(--text-muted);
+            }
+        </style>
+
+        <section class="hp-reviews-container">
+            <div style="text-align:center; margin-bottom: 30px;">
+                <h2 style="font-size:24px; font-weight:800; color:var(--text-primary); margin:0 0 8px;">Loved by People Worldwide</h2>
+                <p style="font-size:15px; color:var(--text-secondary);">Here's what our daily users are saying.</p>
+            </div>
+            <div class="hp-reviews-track">
+                <!-- Group 1 -->
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"Finally, a PDF editor that doesn't ask me to upload my sensitive tax documents to some random server. Phenomenal privacy approach."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">S</div>
+                        <div>
+                            <span class="hp-review-name">Sarah T.</span>
+                            <span class="hp-review-role">Accountant</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"I use this every day at work. The merge and compress tools are visibly faster than Adobe because there's no uploading delay. Outstanding tool."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">M</div>
+                        <div>
+                            <span class="hp-review-name">Michael R.</span>
+                            <span class="hp-review-role">Project Manager</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"I was on a flight with zero Wi-Fi and still completely finished merging and editing my presentation because it runs offline. Magic!"</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">E</div>
+                        <div>
+                            <span class="hp-review-name">Elena G.</span>
+                            <span class="hp-review-role">Sales Consultant</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"No forced sign-ups, no hidden paywalls after processing 2 files. Just simple, honest, and insanely fast PDF utilities."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">D</div>
+                        <div>
+                            <span class="hp-review-name">David K.</span>
+                            <span class="hp-review-role">Student</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"The UI is gorgeous and incredibly intuitive. Without a doubt the best free browser-based PDF suite I've found on the internet."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">P</div>
+                        <div>
+                            <span class="hp-review-name">Priya M.</span>
+                            <span class="hp-review-role">Freelance Designer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 2 (Duplicate for continuous loop) -->
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"Finally, a PDF editor that doesn't ask me to upload my sensitive tax documents to some random server. Phenomenal privacy approach."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">S</div>
+                        <div>
+                            <span class="hp-review-name">Sarah T.</span>
+                            <span class="hp-review-role">Accountant</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"I use this every day at work. The merge and compress tools are visibly faster than Adobe because there's no uploading delay. Outstanding tool."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">M</div>
+                        <div>
+                            <span class="hp-review-name">Michael R.</span>
+                            <span class="hp-review-role">Project Manager</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"I was on a flight with zero Wi-Fi and still completely finished merging and editing my presentation because it runs offline. Magic!"</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">E</div>
+                        <div>
+                            <span class="hp-review-name">Elena G.</span>
+                            <span class="hp-review-role">Sales Consultant</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"No forced sign-ups, no hidden paywalls after processing 2 files. Just simple, honest, and insanely fast PDF utilities."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">D</div>
+                        <div>
+                            <span class="hp-review-name">David K.</span>
+                            <span class="hp-review-role">Student</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hp-review-card">
+                    <div class="hp-review-stars">★★★★★</div>
+                    <p class="hp-review-text">"The UI is gorgeous and incredibly intuitive. Without a doubt the best free browser-based PDF suite I've found on the internet."</p>
+                    <div class="hp-review-author">
+                        <div class="hp-review-avatar">P</div>
+                        <div>
+                            <span class="hp-review-name">Priya M.</span>
+                            <span class="hp-review-role">Freelance Designer</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
