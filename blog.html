@@ -70,7 +70,7 @@
             margin: 0 auto 80px;
             padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 24px;
         }
 
@@ -116,61 +116,35 @@
         }
 
         .blog-card-body {
-            padding: 20px;
+            padding: 20px 16px;
             flex: 1;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             background: var(--surface-1);
             position: relative;
             z-index: 1;
         }
 
         .category {
-            display: inline-flex;
-            padding: 4px 10px;
-            background: var(--surface-2);
-            color: var(--accent);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            align-self: flex-start;
+            display: none;
         }
 
         .blog-card-body h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.05rem;
+            margin: 0;
             color: var(--text-primary);
-            line-height: 1.4;
+            line-height: 1.5;
             letter-spacing: -0.2px;
+            text-align: center;
         }
 
         .blog-card-body p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 16px;
-            flex: 1;
-            /* Line clamping for cleaner appearance */
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            display: none;
         }
 
         .meta {
-            font-size: 0.85rem;
-            color: var(--text-muted, #94a3b8);
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid var(--border);
-            margin-top: auto;
+            display: none;
         }
 
         .blog-footer {
