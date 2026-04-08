@@ -146,34 +146,22 @@
     <style>
         /* Hero Section */
         .help-hero {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
-            color: white;
             padding: 70px 20px 60px;
             text-align: center;
             border-bottom: 1px solid var(--border);
             position: relative;
-            overflow: hidden;
-        }
-        .help-hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, transparent 60%);
         }
         .help-hero h1 {
             font-size: clamp(2.2rem, 5vw, 3.2rem);
             font-weight: 800;
             margin: 0 0 16px;
-            position: relative;
-            z-index: 1;
+            color: var(--text-primary);
         }
         .help-hero p {
             font-size: 1.15rem;
-            color: rgba(255,255,255,0.9);
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
             line-height: 1.6;
         }
 
