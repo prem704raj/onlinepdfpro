@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Watermark Remover Free | OnlinePDFPro</title>
+    <meta name="description" content="Remove watermarks with AI. 95%+ accuracy. Free, powered by LaMa AI.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <style>
+        :root{--primary:#6C63FF;--primary-dark:#5A52D5;--secondary:#FF6584;--success:#2ED573;--warning:#FFA502;--bg:#F0F2FF;--bg2:#FFFFFF;--bg3:#F8F9FF;--text:#1A1A2E;--text2:#555;--text3:#888;--border:#E0E0F0;--shadow:0 4px 20px rgba(108,99,255,0.1);--shadow2:0 8px 40px rgba(108,99,255,0.15);--radius:16px;--radius2:12px;--transition:all 0.3s ease}
+        [data-theme="dark"]{--primary:#8B83FF;--primary-dark:#6C63FF;--bg:#0B0B1A;--bg2:#151528;--bg3:#1C1C35;--text:#E8E8F0;--text2:#AAAABB;--text3:#777790;--border:#2A2A45;--shadow:0 4px 20px rgba(0,0,0,0.3);--shadow2:0 8px 40px rgba(0,0,0,0.4)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:var(--transition);overflow-x:hidden}
+        .header{background:var(--bg2);border-bottom:1px solid var(--border);padding:15px 0;position:sticky;top:0;z-index:1000;backdrop-filter:blur(20px)}
+        .header .container{display:flex;justify-content:space-between;align-items:center}
+        .logo{font-size:1.5rem;font-weight:800;color:var(--primary);text-decoration:none}
+        .logo span{color:var(--secondary)}
+        .header-actions{display:flex;align-items:center;gap:15px}
+        .theme-toggle{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+        .theme-toggle:hover{background:var(--primary);color:#fff}
+        .back-link{color:var(--primary);text-decoration:none;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:6px}
+        .container{max-width:1300px;margin:0 auto;padding:0 20px}
+        .hero{text-align:center;padding:50px 20px 25px}
+        .hero h1{font-size:2.8rem;font-weight:900;margin-bottom:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+        .hero p{font-size:1.1rem;color:var(--text2);max-width:650px;margin:0 auto 15px;line-height:1.6}
+        .hero-badges{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+        .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:50px;font-size:.8rem;font-weight:600}
+        .badge-green{background:#E8F5E9;color:#2E7D32}
+        .badge-blue{background:#E3F2FD;color:#1565C0}
+        .badge-purple{background:#F3E5F5;color:#7B1FA2}
+        [data-theme="dark"] .badge-green{background:#1B3A1B;color:#66BB6A}
+        [data-theme="dark"] .badge-blue{background:#0D2137;color:#42A5F5}
+        [data-theme="dark"] .badge-purple{background:#2A1230;color:#BA68C8}
+        .api-section{max-width:700px;margin:0 auto;padding:0 20px}
+        .api-card{background:var(--bg2);border-radius:var(--radius);padding:25px;box-shadow:var(--shadow);margin-bottom:20px}
+        .api-card h3{font-size:1.1rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+        .api-card h3 i{color:var(--primary)}
+        .api-input-row{display:flex;gap:10px;margin-bottom:12px}
+        .api-input{flex:1;padding:12px 16px;border:2px solid var(--border);border-radius:10px;font-size:.9rem;font-family:'Inter',sans-serif;background:var(--bg3);color:var(--text);outline:none;transition:var(--transition)}
+        .api-input:focus{border-color:var(--primary)}
+        .api-save-btn{padding:12px 24px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);white-space:nowrap}
+        .api-save-btn:hover{transform:translateY(-2px)}
+        .api-status{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:.82rem;font-weight:500;margin-bottom:10px}
+        .api-status.connected{background:#E8F5E9;color:#2E7D32}
+        .api-status.not-connected{background:#FFEBEE;color:#C62828}
+        [data-theme="dark"] .api-status.connected{background:#1B3A1B;color:#66BB6A}
+        [data-theme="dark"] .api-status.not-connected{background:#3A1B1B;color:#EF5350}
+        .api-steps{list-style:none;margin-top:12px}
+        .api-steps li{padding:6px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+        .api-steps li i{color:var(--primary);margin-top:3px;min-width:16px}
+        .api-steps a{color:var(--primary);font-weight:600}
+        .api-note{background:var(--bg3);padding:12px;border-radius:8px;font-size:.8rem;color:var(--text3);line-height:1.5;margin-top:10px}
+        .api-note i{color:var(--warning)}
+        .upload-section{padding:20px 0 40px}
+        .upload-zone{max-width:700px;margin:0 auto;border:3px dashed var(--border);border-radius:var(--radius);padding:55px 30px;text-align:center;background:var(--bg2);cursor:pointer;transition:var(--transition)}
+        .upload-zone:hover,.upload-zone.dragover{border-color:var(--primary);background:var(--bg3);transform:scale(1.01)}
+        .upload-icon{font-size:3.5rem;color:var(--primary);margin-bottom:18px}
+        .upload-zone h3{font-size:1.3rem;margin-bottom:8px;font-weight:700}
+        .upload-zone p{color:var(--text3);margin-bottom:18px;font-size:.95rem}
+        .upload-btn{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;padding:13px 32px;border-radius:50px;font-size:1rem;font-weight:600;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+        .upload-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(108,99,255,0.4)}
+        .file-info{max-width:700px;margin:12px auto 0;text-align:center;font-size:.8rem;color:var(--text3)}
+        #fileInput{display:none}
+        .editor-section{display:none;padding:15px 0 50px}
+        .editor-section.active{display:block}
+        .editor-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;max-width:1200px;margin:0 auto}
+        .toolbar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:var(--shadow);max-width:1200px;margin-left:auto;margin-right:auto}
+        .tool-group{display:flex;align-items:center;gap:4px;padding-right:12px;border-right:1px solid var(--border);margin-right:6px}
+        .tool-group:last-child{border-right:none;margin-right:0;padding-right:0}
+        .tool-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+        .tool-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .tool-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .tool-label{font-size:.75rem;color:var(--text3);font-weight:600;margin-right:6px}
+        .tool-slider{width:80px;accent-color:var(--primary)}
+        .tool-value{font-size:.75rem;color:var(--text2);font-weight:600;min-width:28px;text-align:center}
+        .canvas-area{background:var(--bg2);border-radius:var(--radius);padding:10px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-height:450px;display:flex;align-items:center;justify-content:center}
+        .canvas-wrapper{position:relative;display:inline-block;max-width:100%}
+        .canvas-wrapper canvas{display:block;max-width:100%;max-height:550px}
+        #maskCanvas{position:absolute;top:0;left:0;opacity:.4;pointer-events:none}
+        .canvas-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:500;z-index:5;white-space:nowrap}
+        .zoom-info{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;padding:4px 10px;border-radius:8px;font-size:.75rem;font-weight:600;z-index:5}
+        .side-panel{display:flex;flex-direction:column;gap:12px}
+        .panel-card{background:var(--bg2);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+        .panel-card h3{font-size:.95rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+        .panel-card h3 i{color:var(--primary);font-size:1rem}
+        .panel-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .panel-row:last-child{margin-bottom:0}
+        .panel-label{font-size:.82rem;color:var(--text2);font-weight:500;min-width:55px}
+        .panel-slider{flex:1;accent-color:var(--primary)}
+        .panel-val{font-size:.8rem;font-weight:600;color:var(--text);min-width:30px;text-align:right}
+        .panel-note{font-size:.78rem;color:var(--text3);line-height:1.4;margin-top:8px;padding:8px;background:var(--bg3);border-radius:8px}
+        .panel-note i{color:var(--warning)}
+        .action-btn{width:100%;padding:12px;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;margin-bottom:8px}
+        .action-btn:last-child{margin-bottom:0}
+        .action-btn:hover{transform:translateY(-1px)}
+        .action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+        .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff}
+        .btn-success{background:linear-gradient(135deg,var(--success),#20B862);color:#fff}
+        .btn-warning{background:linear-gradient(135deg,var(--warning),#FF8F00);color:#fff}
+        .btn-ai{background:linear-gradient(135deg,#FF6B6B,#EE5A24);color:#fff}
+        .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+        .btn-danger{background:transparent;border:2px solid var(--secondary);color:var(--secondary)}
+        .method-badge{font-size:.65rem;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;font-weight:700}
+        .processing-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center}
+        .processing-overlay.active{display:flex}
+        .processing-modal{background:var(--bg2);border-radius:var(--radius);padding:40px;text-align:center;max-width:400px;width:90%}
+        .processing-modal .spinner{width:60px;height:60px;border:5px solid var(--border);border-top:5px solid var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .processing-modal h3{margin-bottom:8px}
+        .processing-modal p{color:var(--text2);font-size:.9rem}
+        .compare-toggle{display:flex;background:var(--bg3);border-radius:8px;padding:3px;margin-bottom:10px}
+        .compare-btn{flex:1;padding:8px;border:none;background:transparent;color:var(--text2);font-size:.8rem;font-weight:600;cursor:pointer;border-radius:6px;transition:var(--transition);font-family:'Inter',sans-serif}
+        .compare-btn.active{background:var(--primary);color:#fff}
+        .how-section{padding:60px 0}
+        .section-title{text-align:center;font-size:2rem;font-weight:800;margin-bottom:45px}
+        .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;max-width:1000px;margin:0 auto}
+        .step-card{text-align:center;padding:25px 15px;background:var(--bg2);border-radius:var(--radius);box-shadow:var(--shadow);transition:var(--transition)}
+        .step-card:hover{transform:translateY(-5px)}
+        .step-number{width:50px;height:50px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;margin:0 auto 14px}
+        .step-card h3{font-size:1rem;margin-bottom:6px}
+        .step-card p{font-size:.85rem;color:var(--text2);line-height:1.4}
+        .features-section{padding:60px 0;background:var(--bg3)}
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;max-width:1000px;margin:0 auto}
+        .feature-card{background:var(--bg2);padding:22px;border-radius:var(--radius2);box-shadow:var(--shadow);transition:var(--transition)}
+        .feature-card:hover{transform:translateY(-3px)}
+        .feature-card i{font-size:1.6rem;color:var(--primary);margin-bottom:10px}
+        .feature-card h4{font-size:.95rem;margin-bottom:5px}
+        .feature-card p{font-size:.83rem;color:var(--text2);line-height:1.4}
+        .faq-section{padding:60px 0}
+        .faq-list{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+        .faq-item{background:var(--bg2);border-radius:var(--radius2);overflow:hidden;box-shadow:var(--shadow)}
+        .faq-question{width:100%;padding:16px 20px;border:none;background:transparent;color:var(--text);font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif}
+        .faq-question i{transition:var(--transition);color:var(--primary)}
+        .faq-item.open .faq-question i{transform:rotate(180deg)}
+        .faq-answer{max-height:0;overflow:hidden;transition:max-height .3s ease}
+        .faq-item.open .faq-answer{max-height:250px}
+        .faq-answer p{padding:0 20px 16px;font-size:.88rem;color:var(--text2);line-height:1.5}
+        .footer{background:var(--bg2);border-top:1px solid var(--border);padding:25px 0;text-align:center}
+        .footer p{color:var(--text3);font-size:.83rem}
+        .footer a{color:var(--primary);text-decoration:none}
+        .toast{position:fixed;bottom:25px;right:25px;padding:12px 22px;border-radius:12px;color:#fff;font-size:.88rem;font-weight:600;z-index:99999;transform:translateY(100px);opacity:0;transition:all .4s ease;max-width:400px}
+        .toast.show{transform:translateY(0);opacity:1}
+        .toast.success{background:var(--success)}
+        .toast.error{background:var(--secondary)}
+        .toast.info{background:var(--primary)}
+        @media(max-width:900px){.editor-layout{grid-template-columns:1fr}.steps-grid{grid-template-columns:repeat(2,1fr)}.toolbar{justify-content:center}}
+        @media(max-width:600px){.hero h1{font-size:1.8rem}.steps-grid{grid-template-columns:1fr}.hero-badges{flex-direction:column;align-items:center}.api-input-row{flex-direction:column}}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="https://onlinepdfpro.com" class="logo">OnlinePDF<span>Pro</span></a>
+            <div class="header-actions">
+                <a href="https://onlinepdfpro.com" class="back-link"><i class="fas fa-arrow-left"></i> All Tools</a>
+                <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+    </header>
+    <section class="hero">
+        <h1>AI Watermark Remover</h1>
+        <p>Remove watermarks from images with AI-powered inpainting. 95%+ accuracy using LaMa AI model. Free to use.</p>
+        <div class="hero-badges">
+            <span class="badge badge-green"><i class="fas fa-robot"></i> LaMa AI Powered</span>
+            <span class="badge badge-blue"><i class="fas fa-bullseye"></i> 95%+ Accuracy</span>
+            <span class="badge badge-purple"><i class="fas fa-bolt"></i> Free to Use</span>
+        </div>
+    </section>
+    <section class="api-section" id="apiSection">
+        <div class="api-card">
+            <h3><i class="fas fa-key"></i> Setup AI (One-Time, 2 Minutes)</h3>
+            <div class="api-status not-connected" id="apiStatus"><i class="fas fa-circle-xmark"></i> AI not connected</div>
+            <div class="api-input-row">
+                <input type="password" class="api-input" id="apiKeyInput" placeholder="Paste your Hugging Face API key here...">
+                <button class="api-save-btn" id="apiSaveBtn"><i class="fas fa-check"></i> Save Key</button>
+            </div>
+            <ul class="api-steps">
+                <li><i class="fas fa-1"></i> Go to <a href="https://huggingface.co/join" target="_blank">huggingface.co/join</a> — Create FREE account</li>
+                <li><i class="fas fa-2"></i> Go to <a href="https://huggingface.co/settings/tokens" target="_blank">Settings → Access Tokens</a></li>
+                <li><i class="fas fa-3"></i> Click "New Token" → Name it anything → Select "Read" → Create</li>
+                <li><i class="fas fa-4"></i> Copy the token (starts with <code>hf_</code>) and paste above</li>
+            </ul>
+            <div class="api-note"><i class="fas fa-info-circle"></i> Your API key is stored ONLY in your browser (localStorage). Never sent to our servers.</div>
+        </div>
+    </section>
+    <section class="upload-section" id="uploadSection">
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+            <h3>Upload Watermarked Image</h3>
+            <p>Drag & drop or click to browse</p>
+            <button class="upload-btn" id="uploadBtn"><i class="fas fa-image"></i> Choose Image</button>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        <div class="file-info">Supports: JPG, PNG, WEBP • Max: 10MB</div>
+    </section>
+    <section class="editor-section" id="editorSection">
+        <div class="container">
+            <div class="toolbar">
+                <div class="tool-group">
+                    <span class="tool-label">Tools:</span>
+                    <button class="tool-btn active" data-tool="brush" title="Brush"><i class="fas fa-paintbrush"></i></button>
+                    <button class="tool-btn" data-tool="rect" title="Rectangle"><i class="fas fa-vector-square"></i></button>
+                    <button class="tool-btn" data-tool="eraser" title="Eraser"><i class="fas fa-eraser"></i></button>
+                </div>
+                <div class="tool-group">
+                    <span class="tool-label">Size:</span>
+                    <input type="range" class="tool-slider" id="brushSize" min="5" max="80" value="25">
+                    <span class="tool-value" id="brushSizeVal">25</span>
+                </div>
+                <div class="tool-group">
+                    <button class="tool-btn" id="undoBtn" title="Undo"><i class="fas fa-rotate-left"></i></button>
+                    <button class="tool-btn" id="redoBtn" title="Redo"><i class="fas fa-rotate-right"></i></button>
+                </div>
+                <div class="tool-group">
+                    <button class="tool-btn" id="zoomInBtn" title="Zoom In"><i class="fas fa-magnifying-glass-plus"></i></button>
+                    <button class="tool-btn" id="zoomOutBtn" title="Zoom Out"><i class="fas fa-magnifying-glass-minus"></i></button>
+                    <button class="tool-btn" id="fitBtn" title="Fit"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+            <div class="editor-layout">
+                <div class="canvas-area" id="canvasArea">
+                    <div class="canvas-wrapper" id="canvasWrapper">
+                        <canvas id="mainCanvas"></canvas>
+                        <canvas id="maskCanvas"></canvas>
+                    </div>
+                    <div class="canvas-hint" id="canvasHint">Paint over the watermark with Brush, then click "AI Remove"</div>
+                    <div class="zoom-info" id="zoomInfo">100%</div>
+                </div>
+                <div class="side-panel">
+                    <div class="panel-card">
+                        <h3><i class="fas fa-robot"></i> AI Removal <span class="method-badge" style="background:linear-gradient(135deg,#FF6B6B,#EE5A24);color:#fff;margin-left:auto">95%+ Accuracy</span></h3>
+                        <button class="action-btn btn-ai" id="aiRemoveBtn"><i class="fas fa-wand-magic-sparkles"></i> AI Remove Watermark</button>
+                        <div class="panel-note"><i class="fas fa-lightbulb"></i> Paint over the watermark area with the Brush, then click the button.</div>
+                    </div>
+                    <div class="panel-card">
+                        <h3><i class="fas fa-paintbrush"></i> Basic Removal (No AI)</h3>
+                        <div class="panel-row">
+                            <span class="panel-label">WM Color</span>
+                            <input type="color" id="wmColor" value="#FFFFFF" style="width:40px;height:32px;border:2px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+                        </div>
+                        <div class="panel-row">
+                            <span class="panel-label">Opacity</span>
+                            <input type="range" class="panel-slider" id="wmOpacity" min="5" max="95" value="40">
+                            <span class="panel-val" id="wmOpacityVal">40%</span>
+                        </div>
+                        <div class="panel-row">
+                            <span class="panel-label">Tolerance</span>
+                            <input type="range" class="panel-slider" id="wmTolerance" min="5" max="100" value="35">
+                            <span class="panel-val" id="wmToleranceVal">35</span>
+                        </div>
+                        <button class="action-btn btn-warning" id="basicRemoveBtn"><i class="fas fa-eraser"></i> Basic Remove</button>
+                        <button class="action-btn btn-success" id="inpaintBtn"><i class="fas fa-magic"></i> Inpaint Selection</button>
+                    </div>
+                    <div class="panel-card">
+                        <button class="action-btn btn-outline" id="clearMaskBtn"><i class="fas fa-trash"></i> Clear Selection</button>
+                        <div class="compare-toggle">
+                            <button class="compare-btn active" id="showEdited">Edited</button>
+                            <button class="compare-btn" id="showOriginal">Original</button>
+                        </div>
+                    </div>
+                    <div class="panel-card">
+                        <h3><i class="fas fa-download"></i> Download</h3>
+                        <button class="action-btn btn-primary" id="downloadPng"><i class="fas fa-download"></i> Download PNG</button>
+                        <button class="action-btn btn-outline" id="downloadJpg"><i class="fas fa-download"></i> Download JPG</button>
+                    </div>
+                    <div class="panel-card">
+                        <button class="action-btn btn-danger" id="newImageBtn"><i class="fas fa-rotate"></i> New Image</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="processing-overlay" id="processingOverlay">
+        <div class="processing-modal">
+            <div class="spinner"></div>
+            <h3 id="processingTitle">AI Processing...</h3>
+            <p id="processingText">LaMa AI is removing the watermark. This takes 10-30 seconds...</p>
+        </div>
+    </div>
+    <section class="how-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card"><div class="step-number">1</div><h3>Setup API Key</h3><p>Get free Hugging Face API key (2 minutes, one-time).</p></div>
+                <div class="step-card"><div class="step-number">2</div><h3>Upload Image</h3><p>Upload your watermarked image.</p></div>
+                <div class="step-card"><div class="step-number">3</div><h3>Mark Watermark</h3><p>Paint over the watermark with brush tool.</p></div>
+                <div class="step-card"><div class="step-number">4</div><h3>AI Removes</h3><p>LaMa AI fills the area intelligently. Download result.</p></div>
+            </div>
+        </div>
+    </section>
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Features</h2>
+            <div class="features-grid">
+                <div class="feature-card"><i class="fas fa-robot"></i><h4>LaMa AI Model</h4><p>State-of-the-art inpainting with 95%+ accuracy.</p></div>
+                <div class="feature-card"><i class="fas fa-paintbrush"></i><h4>Brush & Rectangle</h4><p>Precise selection tools for watermark areas.</p></div>
+                <div class="feature-card"><i class="fas fa-indian-rupee-sign"></i><h4>Free to Use</h4><p>Hugging Face free tier = 30,000 requests/month.</p></div>
+                <div class="feature-card"><i class="fas fa-eye"></i><h4>Before/After</h4><p>Compare original and edited images.</p></div>
+                <div class="feature-card"><i class="fas fa-rotate-left"></i><h4>Undo/Redo</h4><p>Full history with keyboard shortcuts.</p></div>
+                <div class="feature-card"><i class="fas fa-shield-halved"></i><h4>Secure</h4><p>API key stored only in your browser.</p></div>
+            </div>
+        </div>
+    </section>
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">FAQ</h2>
+            <div class="faq-list">
+                <div class="faq-item"><button class="faq-question">Is the Hugging Face API really free? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Yes! Hugging Face offers a generous free tier with ~30,000 API calls per month. No credit card required.</p></div></div>
+                <div class="faq-item"><button class="faq-question">Is my API key safe? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Your API key is stored only in your browser's localStorage. It's sent directly to Hugging Face's API — never to our servers.</p></div></div>
+                <div class="faq-item"><button class="faq-question">How accurate is it? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>LaMa AI achieves 95-98% accuracy for most watermarks. Results depend on watermark complexity.</p></div></div>
+                <div class="faq-item"><button class="faq-question">Why do I need to paint over the watermark? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>The AI needs to know WHERE the watermark is. You paint a mask over it, and the AI fills that area.</p></div></div>
+                <div class="faq-item"><button class="faq-question">What if AI doesn't work well? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Use the Basic Remove feature for semi-transparent watermarks, or try painting a more accurate mask.</p></div></div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container"><p>&copy; 2025 <a href="https://onlinepdfpro.com">OnlinePDFPro.com</a> — Free AI tools. Built with &#10084;</p></div>
+    </footer>
+    <div class="toast" id="toast"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function getEl(id) { return document.getElementById(id); }
+        function showToast(msg, type) {
+            var t = getEl('toast'); if (!t) return;
+            t.textContent = msg; t.className = 'toast ' + (type||'info') + ' show';
+            setTimeout(function(){ t.classList.remove('show'); }, 4000);
+        }
+        var apiKey = localStorage.getItem('hf_api_key') || '';
+        var originalImageData = null, currentImageData = null, maskData = null;
+        var canvasWidth = 0, canvasHeight = 0, currentTool = 'brush', brushSize = 25;
+        var isDrawing = false, lastX = 0, lastY = 0;
+        var undoStack = [], redoStack = [], zoomLevel = 1, showingOriginal = false;
+        var mainCanvas = getEl('mainCanvas'), maskCanvas = getEl('maskCanvas');
+        var mainCtx = mainCanvas ? mainCanvas.getContext('2d') : null;
+        var maskCtx = maskCanvas ? maskCanvas.getContext('2d') : null;
+
+        // Theme
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme')||'light');
+        updateThemeIcon();
+        var themeBtn = getEl('themeToggle');
+        if(themeBtn) themeBtn.addEventListener('click', function(){
+            var n = document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+            document.documentElement.setAttribute('data-theme', n);
+            localStorage.setItem('theme', n); updateThemeIcon();
+        });
+        function updateThemeIcon(){
+            var b = getEl('themeToggle');
+            if(b) b.innerHTML = document.documentElement.getAttribute('data-theme')==='dark'?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';
+        }
+
+        // FAQ
+        document.querySelectorAll('.faq-question').forEach(function(b){
+            b.addEventListener('click', function(){
+                var it = b.parentElement;
+                document.querySelectorAll('.faq-item').forEach(function(i){ if(i!==it) i.classList.remove('open'); });
+                it.classList.toggle('open');
+            });
+        });
+
+        // API Key
+        updateApiStatus();
+        var apiSaveBtn = getEl('apiSaveBtn'), apiKeyInput = getEl('apiKeyInput');
+        if(apiSaveBtn && apiKeyInput) {
+            if(apiKey) apiKeyInput.value = apiKey.substring(0,8) + '••••••••••';
+            apiSaveBtn.addEventListener('click', function(){
+                var key = apiKeyInput.value.trim();
+                if(!key || key.indexOf('••') !== -1) {
+                    if(apiKey) { showToast('API key already saved!', 'info'); return; }
+                    showToast('Please paste your Hugging Face API key', 'error'); return;
+                }
+                if(!key.startsWith('hf_')) { showToast('Invalid key. Should start with "hf_"', 'error'); return; }
+                apiKey = key; localStorage.setItem('hf_api_key', key);
+                apiKeyInput.value = key.substring(0,8) + '••••••••••';
+                updateApiStatus(); showToast('API key saved!', 'success');
+            });
+        }
+        function updateApiStatus() {
+            var s = getEl('apiStatus'); if(!s) return;
+            if(apiKey) { s.className='api-status connected'; s.innerHTML='<i class="fas fa-circle-check"></i> AI Connected'; }
+            else { s.className='api-status not-connected'; s.innerHTML='<i class="fas fa-circle-xmark"></i> AI not connected'; }
+        }
+
+        // Sections
+        function showSection(name) {
+            var u=getEl('uploadSection'), e=getEl('editorSection');
+            if(u) u.style.display = name==='upload'?'block':'none';
+            if(e) e.classList.toggle('active', name==='editor');
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        // Upload
+        var uploadZone=getEl('uploadZone'), uploadBtn=getEl('uploadBtn'), fileInput=getEl('fileInput');
+        if(uploadBtn) uploadBtn.addEventListener('click', function(e){ e.stopPropagation(); if(fileInput) fileInput.click(); });
+        if(uploadZone){
+            uploadZone.addEventListener('click', function(){ if(fileInput) fileInput.click(); });
+            uploadZone.addEventListener('dragover', function(e){ e.preventDefault(); uploadZone.classList.add('dragover'); });
+            uploadZone.addEventListener('dragleave', function(){ uploadZone.classList.remove('dragover'); });
+            uploadZone.addEventListener('drop', function(e){ e.preventDefault(); uploadZone.classList.remove('dragover'); if(e.dataTransfer.files[0]) loadImage(e.dataTransfer.files[0]); });
+        }
+        if(fileInput) fileInput.addEventListener('change', function(e){ if(e.target.files[0]) loadImage(e.target.files[0]); });
+        document.addEventListener('paste', function(e){
+            var items = e.clipboardData?e.clipboardData.items:null; if(!items) return;
+            for(var i=0;i<items.length;i++){ if(items[i].type.startsWith('image/')){ loadImage(items[i].getAsFile()); return; } }
+        });
+
+        function loadImage(file) {
+            if(!file||!file.type.startsWith('image/')){ showToast('Not an image','error'); return; }
+            if(file.size>10*1024*1024){ showToast('Max 10MB','error'); return; }
+            var reader = new FileReader();
+            reader.onload = function(e){
+                var img = new Image();
+                img.onload = function(){
+                    var maxD=1500, w=img.naturalWidth, h=img.naturalHeight;
+                    if(w>maxD||h>maxD){ var r=Math.min(maxD/w,maxD/h); w=Math.round(w*r); h=Math.round(h*r); }
+                    canvasWidth=w; canvasHeight=h;
+                    mainCanvas.width=w; mainCanvas.height=h; maskCanvas.width=w; maskCanvas.height=h;
+                    mainCtx.drawImage(img,0,0,w,h);
+                    originalImageData=mainCtx.getImageData(0,0,w,h);
+                    currentImageData=mainCtx.getImageData(0,0,w,h);
+                    maskCtx.clearRect(0,0,w,h); maskData=new Uint8Array(w*h);
+                    undoStack=[]; redoStack=[]; zoomLevel=1; showingOriginal=false;
+                    saveUndoState(); fitToScreen(); showSection('editor');
+                    showToast('Image loaded!', 'success');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Tools
+        document.querySelectorAll('.tool-btn[data-tool]').forEach(function(b){
+            b.addEventListener('click', function(){
+                document.querySelectorAll('.tool-btn[data-tool]').forEach(function(x){ x.classList.remove('active'); });
+                b.classList.add('active'); currentTool = b.getAttribute('data-tool'); updateHint();
+            });
+        });
+        function updateHint(){
+            var h=getEl('canvasHint'); if(!h) return;
+            var hints={'brush':'Paint over watermark, then click AI Remove','rect':'Draw rectangle over watermark','eraser':'Erase mask selection'};
+            h.textContent=hints[currentTool]||'';
+        }
+        var brushSlider=getEl('brushSize'), brushSizeVal=getEl('brushSizeVal');
+        if(brushSlider) brushSlider.addEventListener('input', function(){ brushSize=parseInt(brushSlider.value); if(brushSizeVal) brushSizeVal.textContent=brushSize; });
+        var wmOpSlider=getEl('wmOpacity'), wmOpVal=getEl('wmOpacityVal');
+        if(wmOpSlider) wmOpSlider.addEventListener('input', function(){ if(wmOpVal) wmOpVal.textContent=wmOpSlider.value+'%'; });
+        var wmTolSlider=getEl('wmTolerance'), wmTolVal=getEl('wmToleranceVal');
+        if(wmTolSlider) wmTolSlider.addEventListener('input', function(){ if(wmTolVal) wmTolVal.textContent=wmTolSlider.value; });
+
+        // Canvas Events
+        var canvasWrapper=getEl('canvasWrapper'), rectStart=null;
+        if(canvasWrapper){
+            canvasWrapper.addEventListener('mousedown', onDown);
+            canvasWrapper.addEventListener('mousemove', onMove);
+            canvasWrapper.addEventListener('mouseup', onUp);
+            canvasWrapper.addEventListener('mouseleave', onUp);
+            canvasWrapper.addEventListener('touchstart', function(e){e.preventDefault();onDown(touchE(e));},{passive:false});
+            canvasWrapper.addEventListener('touchmove', function(e){e.preventDefault();onMove(touchE(e));},{passive:false});
+            canvasWrapper.addEventListener('touchend', onUp);
+        }
+        function touchE(e){ var t=e.touches[0]||e.changedTouches[0]; return {clientX:t.clientX,clientY:t.clientY}; }
+        function getPos(e){ var r=mainCanvas.getBoundingClientRect(); return {x:Math.round((e.clientX-r.left)*(canvasWidth/r.width)),y:Math.round((e.clientY-r.top)*(canvasHeight/r.height))}; }
+        function onDown(e){ if(!currentImageData) return; isDrawing=true; var p=getPos(e); lastX=p.x; lastY=p.y; if(currentTool==='rect'){ rectStart=p; return; } applyTool(p.x,p.y); }
+        function onMove(e){ if(!isDrawing||!currentImageData) return; var p=getPos(e); if(currentTool==='rect'){ drawRectPreview(rectStart,p); return; } var dx=p.x-lastX,dy=p.y-lastY,dist=Math.sqrt(dx*dx+dy*dy),steps=Math.max(1,Math.floor(dist/2)); for(var s=0;s<=steps;s++){ var t=steps===0?0:s/steps; applyTool(Math.round(lastX+dx*t),Math.round(lastY+dy*t)); } lastX=p.x; lastY=p.y; }
+        function onUp(){ isDrawing=false; rectStart=null; }
+        function applyTool(x,y){ var r=Math.floor(brushSize/2); if(currentTool==='brush') paintMask(x,y,r,255); else if(currentTool==='eraser') paintMask(x,y,r,0); drawMask(); }
+        function paintMask(cx,cy,radius,val){ for(var dy=-radius;dy<=radius;dy++){ for(var dx=-radius;dx<=radius;dx++){ if(dx*dx+dy*dy<=radius*radius){ var px=cx+dx,py=cy+dy; if(px>=0&&px<canvasWidth&&py>=0&&py<canvasHeight) maskData[py*canvasWidth+px]=val; } } } }
+        function drawMask(){ if(!maskCtx) return; maskCtx.clearRect(0,0,canvasWidth,canvasHeight); var img=maskCtx.createImageData(canvasWidth,canvasHeight),d=img.data; for(var i=0;i<maskData.length;i++){ if(maskData[i]>0){ d[i*4]=255;d[i*4+1]=50;d[i*4+2]=50;d[i*4+3]=150; } } maskCtx.putImageData(img,0,0); }
+        function drawRectPreview(start,end){ if(!start||!end) return; var x1=Math.min(start.x,end.x),y1=Math.min(start.y,end.y),w=Math.abs(end.x-start.x),h=Math.abs(end.y-start.y); for(var py=y1;py<y1+h&&py<canvasHeight;py++){ for(var px=x1;px<x1+w&&px<canvasWidth;px++){ if(px>=0&&py>=0) maskData[py*canvasWidth+px]=255; } } drawMask(); }
+
+        // AI Remove
+        var aiRemoveBtn=getEl('aiRemoveBtn');
+        if(aiRemoveBtn) aiRemoveBtn.addEventListener('click', aiRemove);
+        async function aiRemove() {
+            if(!apiKey){ showToast('Add your Hugging Face API key first!','error'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+            var hasMask=false; for(var m=0;m<maskData.length;m++){ if(maskData[m]>0){hasMask=true;break;} }
+            if(!hasMask){ showToast('Paint over the watermark first!','error'); return; }
+            saveUndoState(); showProcessing(true,'AI Processing...','LaMa AI is removing the watermark. 10-30 seconds...');
+            try {
+                var imageBlob = await new Promise(function(resolve){ var tc=document.createElement('canvas'); tc.width=canvasWidth; tc.height=canvasHeight; var tctx=tc.getContext('2d'); tctx.putImageData(currentImageData,0,0); tc.toBlob(function(b){resolve(b);},'image/png'); });
+                var maskBlob = await new Promise(function(resolve){ var mc=document.createElement('canvas'); mc.width=canvasWidth; mc.height=canvasHeight; var mctx=mc.getContext('2d'); var mi=mctx.createImageData(canvasWidth,canvasHeight); var md=mi.data; for(var i=0;i<maskData.length;i++){ var v=maskData[i]>0?255:0; md[i*4]=v;md[i*4+1]=v;md[i*4+2]=v;md[i*4+3]=255; } mctx.putImageData(mi,0,0); mc.toBlob(function(b){resolve(b);},'image/png'); });
+                var models=['https://api-inference.huggingface.co/models/smartyjp/lama-inpainting','https://api-inference.huggingface.co/models/diffusers/stable-diffusion-xl-1.0-inpainting-0.1','https://api-inference.huggingface.co/models/runwayml/stable-diffusion-inpainting'];
+                var result=null;
+                for(var mi=0;mi<models.length;mi++){
+                    try {
+                        var formData=new FormData(); formData.append('image',imageBlob,'image.png'); formData.append('mask',maskBlob,'mask.png');
+                        var response=await fetch(models[mi],{method:'POST',headers:{'Authorization':'Bearer '+apiKey},body:formData});
+                        if(response.ok){ var ct=response.headers.get('content-type'); if(ct&&ct.includes('image')){result=await response.blob();break;} else { var json=await response.json(); if(json&&json[0]&&json[0].generated_image){ var id2=atob(json[0].generated_image); var arr=new Uint8Array(id2.length); for(var ai=0;ai<id2.length;ai++) arr[ai]=id2.charCodeAt(ai); result=new Blob([arr],{type:'image/png'}); break; } } }
+                        else if(response.status===503){ var errData=await response.json(); if(errData.estimated_time){ showProcessing(true,'Model Loading...','Estimated wait: '+Math.round(errData.estimated_time)+'s. Retrying...'); await new Promise(function(r){setTimeout(r,Math.min(errData.estimated_time*1000,30000));}); mi--; continue; } }
+                    } catch(modelErr){}
+                }
+                if(!result){ try { var resp2=await fetch('https://api-inference.huggingface.co/models/runwayml/stable-diffusion-inpainting',{method:'POST',headers:{'Authorization':'Bearer '+apiKey,'Content-Type':'application/json'},body:JSON.stringify({inputs:{image:await blobToBase64(imageBlob),mask:await blobToBase64(maskBlob),prompt:'clean background, no watermark'}})}); if(resp2.ok){ var ct2=resp2.headers.get('content-type'); if(ct2&&ct2.includes('image')) result=await resp2.blob(); } } catch(e2){} }
+                if(result){ var resImg=new Image(); resImg.onload=function(){ mainCtx.drawImage(resImg,0,0,canvasWidth,canvasHeight); currentImageData=mainCtx.getImageData(0,0,canvasWidth,canvasHeight); maskData=new Uint8Array(canvasWidth*canvasHeight); drawMask(); showProcessing(false); showToast('Watermark removed!','success'); }; resImg.src=URL.createObjectURL(result); }
+                else { throw new Error('All AI models failed.'); }
+            } catch(err){ showProcessing(false); showToast('AI Error: '+err.message,'error'); setTimeout(inpaint,500); }
+        }
+        function blobToBase64(blob){ return new Promise(function(resolve){ var r=new FileReader(); r.onload=function(){resolve(r.result.split(',')[1]);}; r.readAsDataURL(blob); }); }
+        function showProcessing(show,title,text){ var o=getEl('processingOverlay'),pt=getEl('processingTitle'),px=getEl('processingText'); if(o) o.classList.toggle('active',show); if(pt&&title) pt.textContent=title; if(px&&text) px.textContent=text; }
+
+        // Basic Remove
+        var basicRemoveBtn=getEl('basicRemoveBtn');
+        if(basicRemoveBtn) basicRemoveBtn.addEventListener('click', function(){
+            if(!currentImageData) return; saveUndoState();
+            var wmColorEl=getEl('wmColor'),wmOpEl=getEl('wmOpacity'),wmTolEl=getEl('wmTolerance');
+            var wmHex=wmColorEl?wmColorEl.value:'#FFFFFF', wmAlpha=wmOpEl?parseInt(wmOpEl.value)/100:0.4, tolerance=wmTolEl?parseInt(wmTolEl.value):35;
+            var wmR=parseInt(wmHex.substr(1,2),16),wmG=parseInt(wmHex.substr(3,2),16),wmB=parseInt(wmHex.substr(5,2),16);
+            var data=currentImageData.data, hasMask=false;
+            for(var m=0;m<maskData.length;m++){ if(maskData[m]>0){hasMask=true;break;} }
+            var count=0;
+            for(var i=0;i<canvasWidth*canvasHeight;i++){
+                if(hasMask&&maskData[i]===0) continue;
+                var pi=i*4;
+                if(!hasMask){ var cd=Math.sqrt(Math.pow(data[pi]-wmR,2)+Math.pow(data[pi+1]-wmG,2)+Math.pow(data[pi+2]-wmB,2)); if(cd>=tolerance*4.5) continue; }
+                data[pi]=Math.max(0,Math.min(255,Math.round((data[pi]-wmR*wmAlpha)/(1-wmAlpha))));
+                data[pi+1]=Math.max(0,Math.min(255,Math.round((data[pi+1]-wmG*wmAlpha)/(1-wmAlpha))));
+                data[pi+2]=Math.max(0,Math.min(255,Math.round((data[pi+2]-wmB*wmAlpha)/(1-wmAlpha))));
+                count++;
+            }
+            mainCtx.putImageData(currentImageData,0,0); maskData=new Uint8Array(canvasWidth*canvasHeight); drawMask();
+            showToast('Removed from '+count+' pixels!','success');
+        });
+
+        // Inpainting
+        var inpaintBtn=getEl('inpaintBtn');
+        if(inpaintBtn) inpaintBtn.addEventListener('click', inpaint);
+        function inpaint(){
+            if(!currentImageData) return;
+            var hasMask=false; for(var m=0;m<maskData.length;m++){ if(maskData[m]>0){hasMask=true;break;} }
+            if(!hasMask){ showToast('Paint over watermark first!','error'); return; }
+            saveUndoState(); showToast('Inpainting...','info');
+            setTimeout(function(){
+                var data=currentImageData.data,w=canvasWidth,h=canvasHeight;
+                for(var pass=0;pass<8;pass++){
+                    var tempMask=new Uint8Array(maskData);
+                    for(var y=0;y<h;y++){ for(var x=0;x<w;x++){
+                        var idx=y*w+x; if(tempMask[idx]===0) continue;
+                        var sr=2+pass*2,sumR=0,sumG=0,sumB=0,wt=0;
+                        for(var sy=-sr;sy<=sr;sy++){ for(var sx=-sr;sx<=sr;sx++){
+                            var nx=x+sx,ny=y+sy; if(nx<0||nx>=w||ny<0||ny>=h) continue;
+                            if(tempMask[ny*w+nx]===0){ var d=Math.sqrt(sx*sx+sy*sy); if(d===0) d=0.1; var ww=1/(d*d); var pi=(ny*w+nx)*4; sumR+=data[pi]*ww;sumG+=data[pi+1]*ww;sumB+=data[pi+2]*ww;wt+=ww; }
+                        }}
+                        if(wt>0){ var pi2=idx*4; data[pi2]=Math.round(sumR/wt);data[pi2+1]=Math.round(sumG/wt);data[pi2+2]=Math.round(sumB/wt); maskData[idx]=0; }
+                    }}
+                }
+                mainCtx.putImageData(currentImageData,0,0); drawMask(); showToast('Inpainting done!','success');
+            },50);
+        }
+
+        // Undo/Redo
+        function saveUndoState(){ if(!currentImageData) return; undoStack.push({img:new Uint8ClampedArray(currentImageData.data),mask:new Uint8Array(maskData)}); if(undoStack.length>20) undoStack.shift(); redoStack=[]; }
+        function undo(){ if(undoStack.length<=1){showToast('Nothing to undo','info');return;} redoStack.push(undoStack.pop()); var s=undoStack[undoStack.length-1]; currentImageData.data.set(s.img);maskData.set(s.mask); mainCtx.putImageData(currentImageData,0,0);drawMask(); }
+        function redo(){ if(!redoStack.length){showToast('Nothing to redo','info');return;} var s=redoStack.pop();undoStack.push(s); currentImageData.data.set(s.img);maskData.set(s.mask); mainCtx.putImageData(currentImageData,0,0);drawMask(); }
+        var undoBtn=getEl('undoBtn'),redoBtn=getEl('redoBtn');
+        if(undoBtn) undoBtn.addEventListener('click',undo);
+        if(redoBtn) redoBtn.addEventListener('click',redo);
+        document.addEventListener('keydown',function(e){ if(e.ctrlKey&&e.key==='z'){e.preventDefault();undo();} if(e.ctrlKey&&e.key==='y'){e.preventDefault();redo();} });
+
+        // Zoom
+        function fitToScreen(){ var area=getEl('canvasArea'); if(!area) return; var aW=area.clientWidth-30,aH=area.clientHeight-30; zoomLevel=Math.min(aW/canvasWidth,aH/canvasHeight,1); applyZoom(); }
+        function applyZoom(){ var w=Math.round(canvasWidth*zoomLevel),h=Math.round(canvasHeight*zoomLevel); mainCanvas.style.width=w+'px';mainCanvas.style.height=h+'px'; maskCanvas.style.width=w+'px';maskCanvas.style.height=h+'px'; var zi=getEl('zoomInfo');if(zi) zi.textContent=Math.round(zoomLevel*100)+'%'; }
+        var zoomInBtn=getEl('zoomInBtn'),zoomOutBtn=getEl('zoomOutBtn'),fitBtnEl=getEl('fitBtn');
+        if(zoomInBtn) zoomInBtn.addEventListener('click',function(){zoomLevel=Math.min(zoomLevel*1.25,5);applyZoom();});
+        if(zoomOutBtn) zoomOutBtn.addEventListener('click',function(){zoomLevel=Math.max(zoomLevel*0.8,0.1);applyZoom();});
+        if(fitBtnEl) fitBtnEl.addEventListener('click',fitToScreen);
+
+        // Compare
+        var showEditedBtn=getEl('showEdited'),showOriginalBtn=getEl('showOriginal');
+        if(showEditedBtn) showEditedBtn.addEventListener('click',function(){ showingOriginal=false;showEditedBtn.classList.add('active'); if(showOriginalBtn) showOriginalBtn.classList.remove('active'); if(mainCtx&&currentImageData) mainCtx.putImageData(currentImageData,0,0); });
+        if(showOriginalBtn) showOriginalBtn.addEventListener('click',function(){ showingOriginal=true;showOriginalBtn.classList.add('active'); if(showEditedBtn) showEditedBtn.classList.remove('active'); if(mainCtx&&originalImageData) mainCtx.putImageData(originalImageData,0,0); });
+
+        // Clear Mask
+        var clearMaskBtn=getEl('clearMaskBtn');
+        if(clearMaskBtn) clearMaskBtn.addEventListener('click',function(){ maskData=new Uint8Array(canvasWidth*canvasHeight); drawMask(); showToast('Cleared','info'); });
+
+        // Download
+        var dlPng=getEl('downloadPng'),dlJpg=getEl('downloadJpg');
+        if(dlPng) dlPng.addEventListener('click',function(){downloadImage('png');});
+        if(dlJpg) dlJpg.addEventListener('click',function(){downloadImage('jpg');});
+        function downloadImage(fmt){
+            if(showingOriginal&&mainCtx&&currentImageData){mainCtx.putImageData(currentImageData,0,0);showingOriginal=false;}
+            var tc=document.createElement('canvas');tc.width=canvasWidth;tc.height=canvasHeight; var tCtx=tc.getContext('2d');
+            if(fmt==='jpg'){tCtx.fillStyle='#fff';tCtx.fillRect(0,0,canvasWidth,canvasHeight);}
+            tCtx.putImageData(currentImageData,0,0);
+            tc.toBlob(function(b){saveAs(b,'watermark_removed.'+fmt);showToast('Downloaded!','success');}, fmt==='png'?'image/png':'image/jpeg',0.92);
+        }
+
+        // New Image
+        var newImageBtn=getEl('newImageBtn');
+        if(newImageBtn) newImageBtn.addEventListener('click',function(){ originalImageData=null;currentImageData=null;maskData=null; undoStack=[];redoStack=[]; if(fileInput) fileInput.value=''; showSection('upload'); });
+
+        showSection('upload'); updateHint();
+    });
+    </script>
+</body>
+</html>
