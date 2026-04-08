@@ -143,184 +143,358 @@
     </header>
     
 
+    <style>
+        /* Hero Section */
+        .help-hero {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
+            color: white;
+            padding: 70px 20px 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .help-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+        .help-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            margin: 0 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .help-hero p {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        /* Content Container */
+        .help-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        /* Quick Tips Grid */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        .tip-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+        .tip-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            border-color: #3b82f6;
+        }
+        .tip-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            background: rgba(37,99,235,0.1);
+        }
+        .tip-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 10px;
+            color: var(--text-primary);
+        }
+        .tip-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Section Headings */
+        .help-section-header {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0 0 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* FAQ Accordion */
+        .faq-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 70px;
+        }
+        .faq-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-card:hover {
+            border-color: rgba(37,99,235,0.4);
+        }
+        .faq-question {
+            padding: 22px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            user-select: none;
+            background: transparent;
+        }
+        .faq-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(37,99,235,0.08);
+            color: #2563eb;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+        }
+        .faq-card.open .faq-icon {
+            transform: rotate(45deg);
+            background: #2563eb;
+            color: white;
+        }
+        .faq-card.open {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 24px rgba(37,99,235,0.1);
+        }
+        .faq-answer {
+            max-height: 0;
+            padding: 0 24px;
+            opacity: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .faq-card.open .faq-answer {
+            max-height: 300px;
+            padding: 0 24px 22px;
+            opacity: 1;
+        }
+
+        /* Comprehensive Guide */
+        .guide-section {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .guide-section > p:first-child {
+            font-size: 1.05rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .guide-section h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 40px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .guide-section h3:nth-of-type(1) {
+            margin-top: 0;
+        }
+        .guide-section p, .guide-section li {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .guide-section ul {
+            padding-left: 20px;
+            margin-bottom: 24px;
+        }
+        .guide-section li strong {
+            color: var(--text-primary);
+        }
+
+        /* Alert Box */
+        .alert-box {
+            background: rgba(37,99,235,0.06);
+            border-left: 4px solid #2563eb;
+            padding: 20px 24px;
+            border-radius: 0 12px 12px 0;
+            margin: 28px 0;
+        }
+        .alert-box p {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+    </style>
+
     <main id="main">
-        <section class="container" style="padding: var(--space-2xl) 0 var(--space-xl);">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div style="text-align: center; margin-bottom: var(--space-2xl);">
-                    <h1 style="font-size: 2.5rem; margin-bottom: var(--space-sm);">Help & FAQ</h1>
-                    <p style="font-size: 1.1rem; color: var(--text-secondary);">
-                        Find answers to common questions about OnlinePDFPro.
-                    </p>
+        <!-- HERO SECTION -->
+        <section class="help-hero fade-in">
+            <h1>Help & FAQ</h1>
+            <p>Find answers to common questions, troubleshooting guides, and tips for using OnlinePDFPro efficiently.</p>
+        </section>
+
+        <section class="help-content fade-in">
+            
+            <!-- QUICK TIPS SECTION -->
+            <h2 class="help-section-header">⚡ Quick Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🖱️</div>
+                    <h3>Drag & Drop</h3>
+                    <p>You can drag files directly onto any upload zone instead of clicking to browse your folders. Saves precious time!</p>
                 </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Every tool works perfectly on smartphones and tablets. Just use your device's native file picker to select documents.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">⏱️</div>
+                    <h3>Recently Used</h3>
+                    <p>The "All Tools" page automatically highlights your recently used tools at the top for faster access during your next visit.</p>
+                </div>
+            </div>
 
-                <h2 style="margin-bottom: var(--space-lg);">Frequently Asked Questions</h2>
-
-                <div class="faq-item">
+            <!-- FAQ SECTION -->
+            <h2 class="help-section-header">❓ Frequently Asked Questions</h2>
+            <div class="faq-wrapper">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>Is OnlinePDFPro really free?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Yes! OnlinePDFPro is 100% free with no hidden costs, premium plans, or usage limits. All tools
-                        are
-                        available to everyone without registration.
+                        Yes! OnlinePDFPro is 100% free with no hidden costs, premium plans, or usage limits. All tools are available to everyone without requiring an account or registration.
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>Are my files uploaded to a server?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        No. Your files never leave your device. All processing happens directly in your web browser
-                        using JavaScript. We don't have access to any of your files.
+                        No. Your files never leave your device. All processing happens entirely within your web browser. We do not have access to any of your files, ensuring absolute privacy for your sensitive documents.
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>What happens to my files after processing?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Your files are stored temporarily in your browser's memory. They are automatically cleared after
-                        5 minutes or when you close the tab. We recommend downloading your processed files right away.
+                        Your files are processed in your browser's local memory. When you close the tab or window, that memory is instantly erased. We highly recommend downloading your finished files immediately, as we cannot recover them once you leave the page.
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>Is there a file size limit?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        The default limit is 100MB per file. However, since processing happens in your browser, very
-                        large files may be slower or cause issues on devices with limited memory.
+                        Technically, there is no hard limit imposed by our website. However, because processing occurs directly in your browser, extremely large files (over 200MB) may slow down or crash your browser if your device has limited RAM.
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
-                        <span>Which browsers are supported?</span>
+                        <span>Which web browsers are supported?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        OnlinePDFPro works best on modern browsers including Chrome, Firefox, Safari, and Edge. We
-                        recommend
-                        keeping your browser updated for the best experience.
+                        OnlinePDFPro relies on modern web technologies and performs best on desktop and mobile versions of Google Chrome, Firefox, Safari, and Edge. Please ensure your browser is up to date.
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>Can I use OnlinePDFPro offline?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Yes! OnlinePDFPro can be installed as a Progressive Web App (PWA). Once installed, many features
-                        work offline. You will need internet to load the page initially.
+                        Yes! If you install OnlinePDFPro as a Progressive Web App (PWA) on your desktop or mobile device, nearly all tools can be accessed and utilized without an active internet connection.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Why does PDF compression show small savings?</span>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        Our PDF compression focuses on structure optimization. PDFs with already-compressed images may
-                        not shrink significantly. The tool works best on PDFs with uncompressed content or those
-                        exported from applications without optimization.
-                    </div>
-                </div>
-
-                <div class="faq-item">
+                <div class="faq-card">
                     <div class="faq-question">
                         <span>Can I process password-protected PDFs?</span>
                         <span class="faq-icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        Currently, OnlinePDFPro cannot process password-protected PDFs. You'll need to remove the
-                        password
-                        protection first using other software.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How do I report a bug or request a feature?</span>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        We appreciate your feedback! You can contact us through our GitHub repository to report issues
-                        or suggest new features.
+                        Currently, our tools cannot modify PDFs that are strictly encrypted with a password. You must remove the password protection first before utilizing tools like Merge, Split, or Compress.
                     </div>
                 </div>
             </div>
-            </div>
 
-            <div
-                style="max-width: 1100px; margin: var(--space-4xl) auto 0; padding-top: var(--space-2xl); border-top: 1px solid var(--border);">
-                <h2 style="text-align: center; margin-bottom: var(--space-xl);">Quick Tips</h2>
+            <!-- COMPREHENSIVE GUIDE SECTION -->
+            <h2 class="help-section-header">📖 Comprehensive User Guide</h2>
+            <div class="guide-section">
+                <p>Welcome to the detailed documentation for OnlinePDFPro. Here, we provide in-depth details regarding document processing, optimization algorithms, and technical troubleshooting to ensure a seamless experience.</p>
 
-                <div
-                    style="display: grid; gap: var(--space-xl); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                    <div class="glass-card"
-                        style="padding: var(--space-xl); text-align: left; transform: translateY(0); box-shadow: var(--shadow-sm);">
-                        <h3
-                            style="font-size: 1.1rem; margin-bottom: var(--space-sm); display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 1.3rem;">💡</span> Drag & Drop
-                        </h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
-                            You can drag files directly onto any upload zone instead of clicking to browse.
-                        </p>
-                    </div>
-                    <div class="glass-card"
-                        style="padding: var(--space-xl); text-align: left; transform: translateY(0); box-shadow: var(--shadow-sm);">
-                        <h3
-                            style="font-size: 1.1rem; margin-bottom: var(--space-sm); display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 1.3rem;">📱</span> Mobile Friendly
-                        </h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
-                            All tools work on mobile devices. Use your phone's file picker to select files.
-                        </p>
-                    </div>
-                    <div class="glass-card"
-                        style="padding: var(--space-xl); text-align: left; transform: translateY(0); box-shadow: var(--shadow-sm);">
-                        <h3
-                            style="font-size: 1.1rem; margin-bottom: var(--space-sm); display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 1.3rem;">🔄</span> Recently Used
-                        </h3>
-                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
-                            The All Tools page shows your recently used tools for quick access.
-                        </p>
-                    </div>
+                <h3>⚠️ Troubleshooting File Processing Errors</h3>
+                <p>Because our platform utilizes your browser's internal JavaScript engine to process files locally, you might occasionally encounter performance limitations if you are working with exceptionally large documents or utilizing devices with limited RAM (such as older smartphones).</p>
+
+                <ul>
+                    <li><strong>Browser Crashes / Out of Memory:</strong> If your browser tab crashes during a heavy task, it simply means your device ran out of available memory to map the document. To resolve this, close background tabs/apps and try again, or use a desktop computer.</li>
+                    <li><strong>Processing Gets Stuck:</strong> If the progress bar halts and doesn't advance for several minutes, the file may be corrupted or contain highly complex vector graphics that the browser engine is struggling to parse. Try re-saving the PDF using a different program.</li>
+                    <li><strong>"Invalid PDF" Error:</strong> This typically occurs when the file uploaded is not a genuine standard PDF format (even if the extension is .pdf), or if the file header is severely corrupted.</li>
+                </ul>
+
+                <h3>🗜️ Optimization Best Practices</h3>
+                <p>When using our compression tool, you might notice varying results depending on your document's contents. Our compression focuses heavily on image downsampling and structural optimization.</p>
+                
+                <div class="alert-box">
+                    <p><strong>Note:</strong> If your PDF consists of text only, or if the embedded images have already been heavily optimized by the generating software, the size reduction will be minimal. Our robust algorithm prioritizes maintaining visual fidelity over destructive, aggressive compression.</p>
                 </div>
+
+                <h3>🔒 Security and Encryption Mechanisms</h3>
+                <p>A common inquiry is how we guarantee absolute privacy. The technical answer lies in modern HTML5 web APIs, specifically the File API and Web Workers.</p>
+                <p>When you select a file via our interface, your browser reads the file directly into a sandboxed memory array. Our scripts then execute operations directly upon that memory block to process the data.</p>
+                <p>At no point is an HTTP request dispatched to transmit your document payload across the internet. You can easily verify this strict client-side behavior yourself by opening your browser's Developer Tools (F12) and observing the 'Network' tab while processing a file.</p>
             </div>
+            
         </section>
-    
-        <section class="container" style="padding: var(--space-xl) 0; max-width: 800px; margin: 0 auto; color: var(--text-secondary); line-height: 1.8;">
-            <h2 style="font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px;">Comprehensive User Guide</h2>
-            <p style="margin-bottom: 20px;">Welcome to the detailed help section for OnlinePDFPro. Here, we aim to provide comprehensive answers to the most complex questions regarding document processing, browser compatibility, and troubleshooting. Our goal is to ensure that your experience with our platform is completely frictionless.</p>
-
-            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Troubleshooting File Processing Errors</h3>
-            <p style="margin-bottom: 15px;">Because OnlinePDFPro relies on your browser's internal engine to process files locally, you might occasionally encounter performance limitations if you are working with exceptionally large documents (e.g., PDFs over 200MB) or devices with limited RAM (such as older smartphones).</p>
-            <ul style="margin-bottom: 15px; padding-left: 20px;">
-                <li style="margin-bottom: 10px;"><strong>Browser Crashes / Out of Memory:</strong> If your browser tab crashes during processing, it means your device ran out of available memory. To fix this, close other background tabs and applications to free up RAM, then try again. Alternatively, try using a desktop computer instead of a mobile device for very large files.</li>
-                <li style="margin-bottom: 10px;"><strong>Processing Gets Stuck:</strong> If the progress bar halts and doesn't advance for several minutes, the file may be corrupted or contain highly complex vector graphics that the browser engine is struggling to parse. Try re-saving the PDF using a different program before processing it here.</li>
-                <li style="margin-bottom: 10px;"><strong>"Invalid PDF" Error:</strong> This occurs when the file you uploaded is not a genuine standard PDF format (even if the extension is .pdf), or if the file header is corrupted.</li>
-            </ul>
-
-            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Optimization Best Practices</h3>
-            <p style="margin-bottom: 15px;">When using our compression tool, you might notice varying results. The effectiveness of PDF compression depends heavily on the internal structure of the document.</p>
-            <p style="margin-bottom: 15px;">If your PDF consists entirely of uncompressed high-resolution photographs, our tool can significantly reduce the file size by re-encoding and downsampling the images. However, if your PDF is mostly text, or if the images contained within it have already been heavily optimized by the software that originally generated the PDF, the size reduction will be minimal. Our algorithm prioritizes maintaining reading quality over destructive compression.</p>
-
-            <h3 style="font-size: 1.3rem; color: var(--text-primary); margin: 25px 0 10px;">Security and Encryption Mechanisms</h3>
-            <p style="margin-bottom: 15px;">Many users ask how we can guarantee privacy. The answer lies in modern web APIs (like JavaScript FileReader and Web Worker APIs). When you select a file via our interface, your browser reads the file directly into its local memory. The WebAssembly scripts we provide then execute directly upon that memory block to merge, split, or compress the data.</p>
-            <p>At no point is an HTTP POST request made to transmit your document data across the internet. You can easily verify this yourself by opening your browser's Developer Tools (F12), navigating to the 'Network' tab, and observing that no file data is ever dispatched when you click a processing button.</p>
-        </section>
-    
     </main>
 
 
@@ -335,7 +509,7 @@
                 const wasOpen = item.classList.contains('open');
 
                 // Close all items
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                document.querySelectorAll('.faq-card').forEach(i => i.classList.remove('open'));
 
                 // Open clicked item if it wasn't open
                 if (!wasOpen) {
