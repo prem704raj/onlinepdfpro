@@ -191,11 +191,21 @@
 
             <div id="fileSection" style="display: none;">
                 <div class="options-panel glass-card fade-in">
-                    <h3 class="option-label">Compression Strategy</h3>
-                    <div class="option-buttons" id="compressionLevel">
-                        <button class="option-btn" data-level="low">Maximum Quality</button>
-                        <button class="option-btn active" data-level="medium">Balanced (Recommended)</button>
-                        <button class="option-btn" data-level="high">Minimal Size</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="option-label" style="margin: 0;">Compression Level</h3>
+                        <span id="compressionPercentDisplay" style="font-weight: 600; color: var(--accent); background: var(--surface-2); padding: 6px 14px; border-radius: 20px; font-size: 0.95rem;">60% Quality</span>
+                    </div>
+                    
+                    <input type="range" id="compressionSlider" min="10" max="100" value="60" style="width: 100%; cursor: pointer; accent-color: var(--accent); height: 6px;">
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-top: 12px; font-weight: 500;">
+                        <span>Max Compression</span>
+                        <span>High Quality</span>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 14px; background: rgba(245, 158, 11, 0.1); border-radius: 12px; color: #d97706; font-size: 0.9rem; display: flex; gap: 10px; align-items: flex-start;">
+                        <span style="font-size: 1.2rem;">⚠️</span>
+                        <span style="line-height: 1.5;">To achieve deep compression, this tool rasterizes pages into optimized images. Searchable text may lose selectability.</span>
                     </div>
                 </div>
 
@@ -348,6 +358,10 @@
     </main>
 
         <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <script>
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        </script>
 <script src="../js/app.js?v=8"></script>
     <script>
         (function () {
@@ -355,7 +369,8 @@
 
             let files = [];
             let results = [];
-            let compressionLevel = 'medium';
+            let compressionQuality = 0.6;
+            let renderingScale = 1.6;
             let isCancelled = false;
 
             const uploadZone = document.getElementById('uploadZone');
@@ -365,7 +380,20 @@
             const fileList = document.getElementById('fileList');
             const processingList = document.getElementById('processingList');
             const resultsList = document.getElementById('resultsList');
-            const levelBtns = document.querySelectorAll('#compressionLevel .option-btn');
+            
+            const compressionSlider = document.getElementById('compressionSlider');
+            const compressionPercentDisplay = document.getElementById('compressionPercentDisplay');
+
+            compressionSlider.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                compressionPercentDisplay.textContent = val + '% Quality';
+                
+                // Map 10-100 to quality 0.1 - 0.95
+                compressionQuality = Math.max(0.1, val / 100);
+                
+                // Scale map: high quality = 2.0 scale, low quality = 1.1 scale
+                renderingScale = 1.0 + (val / 100); 
+            });
 
             // Add more files input
             const addMoreInput = document.createElement('input');
@@ -413,13 +441,7 @@
                 });
             }
 
-            levelBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    levelBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    compressionLevel = btn.dataset.level;
-                });
-            });
+            // level buttons removed in favor of slider
 
             document.getElementById('addMoreBtn').addEventListener('click', () => addMoreInput.click());
             addMoreInput.addEventListener('change', (e) => {
@@ -476,22 +498,62 @@
 
                     try {
                         statusText.textContent = 'Reading...';
-                        progressFill.style.width = '20%';
+                        progressFill.style.width = '10%';
 
                         const arrayBuffer = await readFileAsArrayBuffer(file);
 
                         if (isCancelled) break;
 
-                        statusText.textContent = 'Compressing...';
-                        progressFill.style.width = '50%';
+                        const newPdfDoc = await PDFDocument.create();
+                        
+                        // Parse PDF via PDF.js for rendering
+                        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+                        const pdfDocJs = await loadingTask.promise;
+                        const numPages = pdfDocJs.numPages;
 
-                        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+                        for (let p = 1; p <= numPages; p++) {
+                            if (isCancelled) break;
+
+                            statusText.textContent = `Compressing (Page ${p}/${numPages})...`;
+                            progressFill.style.width = `${10 + ((p / numPages) * 80)}%`;
+
+                            const page = await pdfDocJs.getPage(p);
+                            const unscaledViewport = page.getViewport({ scale: 1.0 });
+                            const viewport = page.getViewport({ scale: renderingScale });
+
+                            const canvas = document.createElement('canvas');
+                            const context = canvas.getContext('2d');
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+
+                            await page.render({
+                                canvasContext: context,
+                                viewport: viewport
+                            }).promise;
+
+                            const imgDataUrl = canvas.toDataURL('image/jpeg', compressionQuality);
+                            
+                            // Convert back to buffer directly without fetch overhead
+                            const base64Data = imgDataUrl.split(',')[1];
+                            const jpgImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+                            
+                            const jpgImage = await newPdfDoc.embedJpg(jpgImageBytes);
+                            const newPage = newPdfDoc.addPage([unscaledViewport.width, unscaledViewport.height]);
+                            
+                            newPage.drawImage(jpgImage, {
+                                x: 0,
+                                y: 0,
+                                width: unscaledViewport.width,
+                                height: unscaledViewport.height
+                            });
+                        }
 
                         if (isCancelled) break;
 
-                        progressFill.style.width = '80%';
+                        statusText.textContent = 'Finalizing...';
+                        progressFill.style.width = '95%';
 
-                        const compressedBytes = await pdfDoc.save({ useObjectStreams: true });
+                        const compressedBytes = await newPdfDoc.save({ useObjectStreams: true });
 
                         progressFill.style.width = '100%';
 
