@@ -76,43 +76,40 @@
 
         /* Modern card design */
         .blog-card {
+            padding: 32px 24px;
             background: var(--surface-1);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            transition: all 0.25s ease;
             border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             text-decoration: none;
-            color: inherit;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
         }
 
         .blog-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-            border-color: var(--accent);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-color: var(--border-hover);
         }
 
         /* Refined image header */
         .blog-card-img {
-            height: 110px;
+            font-size: 2.25rem;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 44px;
-            flex-shrink: 0;
-            opacity: 0.95;
-            position: relative;
+            width: 64px;
+            height: 64px;
+            background: var(--surface-2) !important;
+            border-radius: var(--radius-md);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        .blog-card-img::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 40%;
-            background: linear-gradient(to top, var(--surface-1), transparent);
-            pointer-events: none;
+        .blog-card:hover .blog-card-img {
+            transform: scale(1.05);
         }
 
         .blog-card-body {
@@ -245,305 +242,215 @@
 
     <div class="blog-grid">
         <a href="blog/pdf-vs-docx-which-format-should-you-use.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">💡</div>
+            <div class="blog-card-img">💡</div>
             <div class="blog-card-body">
-                <span class="category">Compression</span>
                 <h3>PDF vs DOCX: Which Format Should You Use?</h3>
-                <p>Learn pdf vs docx: which format should you use? with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/ocr-technology-how-to-extract-text-from-images.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">📝</div>
+            <div class="blog-card-img">🔍</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>OCR Technology: How to Extract Text from Images</h3>
-                <p>Learn ocr technology: how to extract text from images with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-split-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🔒</div>
+            <div class="blog-card-img">✂️</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Split PDF into Multiple Files Online (2025)</h3>
-                <p>Split PDF into separate pages or extract specific pages online for free. No signup, instant processing in your browser.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 7 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-split-pdf-into-multiple-files.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#10b981,#059669);">📝</div>
+            <div class="blog-card-img">📑</div>
             <div class="blog-card-body">
-                <span class="category">Conversion</span>
                 <h3>How to Split PDF into Multiple Files</h3>
-                <p>Learn how to split pdf into multiple files with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-sign-pdf-documents-online-for-free.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">📦</div>
+            <div class="blog-card-img">✍️</div>
             <div class="blog-card-body">
-                <span class="category">Tips</span>
                 <h3>How to Sign PDF Documents Online for Free</h3>
-                <p>Learn how to sign pdf documents online for free with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-remove-password-from-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">✂️</div>
+            <div class="blog-card-img">🔓</div>
             <div class="blog-card-body">
-                <span class="category">Tips</span>
                 <h3>How to Remove Password from PDF Online</h3>
-                <p>Learn how to remove password from pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-reduce-pdf-size-for-email.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">✂️</div>
+            <div class="blog-card-img">📧</div>
             <div class="blog-card-body">
-                <span class="category">Tips</span>
                 <h3>How to Reduce PDF Size for Email (Under 5MB, 1MB, 100KB)</h3>
-                <p>Compress PDFs to specific sizes for email attachments. Works for Gmail (25MB), Outlook (20MB), and government portals (1...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 7 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-reduce-pdf-file-size-for-email.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🔒</div>
+            <div class="blog-card-img">📉</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Reduce PDF File Size for Email</h3>
-                <p>Learn how to reduce pdf file size for email with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-merge-pdf-online-free.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">✂️</div>
+            <div class="blog-card-img">📎</div>
             <div class="blog-card-body">
-                <span class="category">PDF Guide</span>
                 <h3>How to Merge PDF Files Online for Free in 2025</h3>
-                <p>Learn how to merge PDF files online for free in 3 easy steps. No signup, no watermark, no software download. Complete gu...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 10 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-merge-pdf-on-iphone-without-app.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">✂️</div>
+            <div class="blog-card-img">📱</div>
             <div class="blog-card-body">
-                <span class="category">Tips</span>
                 <h3>How to Merge PDF on iPhone Without App</h3>
-                <p>Learn how to merge pdf on iphone without app with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-merge-pdf-files-online-for-free-2025-guide.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#10b981,#059669);">🔒</div>
+            <div class="blog-card-img">🗂️</div>
             <div class="blog-card-body">
-                <span class="category">Conversion</span>
                 <h3>How to Merge PDF Files Online for Free (2025 Guide)</h3>
-                <p>Learn how to merge pdf files online for free (2025 guide) with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-edit-pdf-online-free.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">💡</div>
+            <div class="blog-card-img">📝</div>
             <div class="blog-card-body">
-                <span class="category">Compression</span>
                 <h3>How to Edit PDF Files Online Free (Without PDF 3) in 2025</h3>
-                <p>Edit PDF text, add images, annotate, highlight, and modify PDF files online without expensive software. Free complete gu...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 7 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-edit-pdf-files-online-without-adobe-acrobat.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🖼️</div>
+            <div class="blog-card-img">✏️</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Edit PDF Files Online Without PDF 3</h3>
-                <p>Learn how to edit pdf files online without PDF 3 with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-whatsapp-chat-to-pdf.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">📄</div>
+            <div class="blog-card-img">💬</div>
             <div class="blog-card-body">
-                <span class="category">PDF Guide</span>
                 <h3>How to Convert WhatsApp Chat to PDF</h3>
-                <p>Learn how to convert whatsapp chat to pdf with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-scanned-pdf-to-word.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">📄</div>
+            <div class="blog-card-img">📷</div>
             <div class="blog-card-body">
-                <span class="category">Compression</span>
                 <h3>How to Convert Scanned PDF to Word</h3>
-                <p>Learn how to convert scanned pdf to word with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-ppt-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">📝</div>
+            <div class="blog-card-img">🎯</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Convert PPT to PDF Online</h3>
-                <p>Learn how to convert ppt to pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-pdf-to-word-online-free.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">📄</div>
+            <div class="blog-card-img">📊</div>
             <div class="blog-card-body">
-                <span class="category">PDF Guide</span>
                 <h3>How to Convert PDF to Word Online Free</h3>
-                <p>Learn how to convert pdf to word online free with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-pdf-to-word-free.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">✂️</div>
+            <div class="blog-card-img">🖼️</div>
             <div class="blog-card-body">
-                <span class="category">PDF Guide</span>
                 <h3>How to Convert PDF to Word Online Free (2025)</h3>
-                <p>Convert PDF to editable Word documents online for free. No signup, preserves formatting. Complete guide.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 7 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-images-to-pdf.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">📝</div>
+            <div class="blog-card-img">🪪</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>How to Convert Images to PDF Online Free (JPG, PNG to PDF)</h3>
-                <p>Convert multiple images (JPG, PNG, HEIC) to a single PDF document online for free. Perfect for scanned documents and pho...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 7 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-images-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">🔒</div>
+            <div class="blog-card-img">📐</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>How to Convert Images to PDF Online</h3>
-                <p>Learn how to convert images to pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-aadhaar-pdf-to-jpg.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🔒</div>
+            <div class="blog-card-img">🗜️</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Convert Aadhaar PDF to JPG</h3>
-                <p>Learn how to convert aadhaar pdf to jpg with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-convert-excel-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">✂️</div>
+            <div class="blog-card-img">📄</div>
             <div class="blog-card-body">
-                <span class="category">PDF Guide</span>
                 <h3>How to Convert Excel to PDF Online</h3>
-                <p>Learn how to convert excel to pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-compress-pdf-without-losing-quality.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">📝</div>
+            <div class="blog-card-img">🔢</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>How to Compress PDF Without Losing Quality (2025 Guide)</h3>
-                <p>Reduce PDF file size by up to 90% without losing quality. Free online compression guide with tips for email, WhatsApp, a...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 8 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-compress-pdf-files-without-losing-quality.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">📝</div>
+            <div class="blog-card-img">🎓</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>How to Compress PDF Files Without Losing Quality</h3>
-                <p>Learn how to compress pdf files without losing quality with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-compress-pdf-below-100kb.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#ef4444,#dc2626);">📦</div>
+            <div class="blog-card-img">💾</div>
             <div class="blog-card-body">
-                <span class="category">Tips</span>
                 <h3>How to Compress PDF Below 100KB</h3>
-                <p>Learn how to compress pdf below 100kb with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-add-watermark-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🔒</div>
+            <div class="blog-card-img">🏆</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>How to Add Watermark to PDF Online</h3>
-                <p>Learn how to add watermark to pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/how-to-add-page-numbers-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">🔒</div>
+            <div class="blog-card-img">⚡</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>How to Add Page Numbers to PDF Online</h3>
-                <p>Learn how to add page numbers to pdf online with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/best-pdf-tools-for-students-in-india.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">🖼️</div>
+            <div class="blog-card-img">📰</div>
             <div class="blog-card-body">
-                <span class="category">Comparison</span>
                 <h3>Best PDF Tools for Students in India</h3>
-                <p>Learn best pdf tools for students in india with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
 
         <a href="blog/best-free-pdf-tools-2025.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#10b981,#059669);">🔒</div>
+            <div class="blog-card-img">🛡️</div>
             <div class="blog-card-body">
-                <span class="category">Conversion</span>
                 <h3>Best Free Online PDF Tools in 2025 — Complete Comparison</h3>
-                <p>Comparing OnlinePDFPro vs PDF 1 vs PDF 2 vs PDF 3. Which free PDF tool is truly the best? Privacy, features, and limits ...</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 8 min</span></div>
             </div>
         </a>
 
         <a href="blog/best-free-online-pdf-tools-in-2025-comparison.html" class="blog-card">
-            <div class="blog-card-img" style="background:linear-gradient(135deg,#f59e0b,#d97706);">📝</div>
+            <div class="blog-card-img">⭐</div>
             <div class="blog-card-body">
-                <span class="category">Security</span>
                 <h3>Best Free Online PDF Tools in 2025 (Comparison)</h3>
-                <p>Learn best free online pdf tools in 2025 (comparison) with our complete step-by-step guide. Free, fast, and secure.</p>
-                <div class="meta"><span>📅 Mar 09, 2026</span><span>⏱️ 4 min</span></div>
             </div>
         </a>
-</div>
+    </div>
 
     <div class="blog-footer">
         <p>© 2026 <a href="index.html">OnlinePDFPro.com</a> — Privacy-First PDF Tools</p>
