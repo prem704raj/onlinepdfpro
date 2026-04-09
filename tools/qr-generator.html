@@ -350,7 +350,7 @@
                 <div id="tab-image" class="tab-pane">
                     <div class="input-area">
                         <input type="file" id="imageInput" class="premium-input" accept="image/*" multiple>
-                        <p class="upload-hint">Images are optionally compressed or uploaded to ImgBB for permanent QR links.</p>
+                        <p class="upload-hint">Images are uploaded to tmpfiles.org (60min link) or ImgBB for permanent hosting.</p>
                         
                         <div id="imgbbSection" class="api-key-box" style="display:block;">
                             <input type="text" id="imgbbKey" class="premium-input" placeholder="ImgBB API Key (Optional for permanent hosting)">
@@ -363,7 +363,7 @@
                 <div id="tab-file" class="tab-pane">
                     <div class="input-area">
                         <input type="file" id="fileInput" class="premium-input" multiple>
-                        <p class="upload-hint">Files are uploaded to file.io (auto-deletes after 1st download). Perfect for quick sharing.</p>
+                        <p class="upload-hint">Files are uploaded to tmpfiles.org (link expires after 60 minutes, max 100MB). Perfect for quick sharing.</p>
                     </div>
                 </div>
 
@@ -371,7 +371,7 @@
                 <div id="tab-folder" class="tab-pane">
                     <div class="input-area">
                         <input type="file" id="folderInput" class="premium-input" webkitdirectory directory multiple>
-                        <p class="upload-hint">Your folder will be zipped in-browser, then uploaded to file.io.</p>
+                        <p class="upload-hint">Your folder will be zipped in-browser, then uploaded to tmpfiles.org (60min link).</p>
                     </div>
                 </div>
 
@@ -379,7 +379,7 @@
                 <div id="tab-video" class="tab-pane">
                     <div class="input-area">
                         <input type="file" id="videoInput" class="premium-input" accept="video/*" multiple>
-                        <p class="upload-hint">Videos are uploaded to file.io, creating a scan-to-watch QR link.</p>
+                        <p class="upload-hint">Videos are uploaded to tmpfiles.org (60min link, max 100MB), creating a scan-to-watch QR link.</p>
                     </div>
                 </div>
 
@@ -436,10 +436,10 @@
 
     <script>
         const CONFIG = {
-            fileio_url : 'https://file.io',
-            imgbb_url  : 'https://api.imgbb.com/1/upload',
-            max_direct : 2800,
-            max_img_px : 150,
+            tmpfiles_url: 'https://tmpfiles.org/api/v1/upload',
+            imgbb_url   : 'https://api.imgbb.com/1/upload',
+            max_direct  : 2800,
+            max_img_px  : 150,
             default_size: 300
         };
 
@@ -493,20 +493,24 @@
                 }
             } catch(err) {
                 setStatus('❌ Error: ' + err.message, 'var(--error)');
+                console.error('QR Generation Error:', err);
             }
         }
 
         async function doText() {
             const text = document.getElementById('textInput').value.trim();
             if (!text) return setStatus('⚠️ Please enter text or URL', 'var(--warning)');
-            await makeQR(text, 'qr_code', 'qrOutput');
-            setStatus('✅ QR Code generated!', 'var(--success)');
+            const id = 'qr-text-0';
+            addQRWrapper(id, text.length > 60 ? text.substring(0, 57) + '...' : text, 'qrOutput');
+            await makeQR(text, 'qr_code', id);
+            setStatus('✅ QR Code generated! Scan it with any QR reader.', 'var(--success)');
         }
 
         async function doImages() {
             const files = State.imageFiles;
             if (!files.length) return setStatus('⚠️ Select image(s)', 'var(--warning)');
             showProgress(true);
+            let successCount = 0;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 setProgress((i / files.length) * 100, `Processing: ${file.name}`);
@@ -516,36 +520,44 @@
                     if (imgbbKey) {
                         qrContent = await uploadToImgBB(file, imgbbKey);
                     } else {
-                        qrContent = await uploadToFileIO(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading image to cloud: ${Math.round(pct)}%`));
+                        qrContent = await uploadToTmpFiles(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading image: ${Math.round(pct)}%`));
                     }
                     const id = 'qr-img-' + i;
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(qrContent, noExt(file.name), id);
+                    successCount++;
                 } catch(err) {
+                    console.error(`Image upload error for ${file.name}:`, err);
                     setStatus(`⚠️ Skipped ${file.name}: ${err.message}`, 'var(--warning)');
                 }
             }
             showProgress(false);
-            finalizeResults();
+            if (successCount > 0) finalizeResults();
+            else setStatus('❌ All image uploads failed. Check your connection.', 'var(--error)');
         }
 
         async function doFiles() {
             const files = State.files;
             if (!files.length) return setStatus('⚠️ Select file(s)', 'var(--warning)');
             showProgress(true);
+            let successCount = 0;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 try {
-                    const url = await uploadToFileIO(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading ${file.name}: ${Math.round(pct)}%`));
+                    setProgress((i / files.length) * 100, `Uploading ${file.name}...`);
+                    const url = await uploadToTmpFiles(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading ${file.name}: ${Math.round(pct)}%`));
                     const id = 'qr-file-' + i;
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(url, noExt(file.name), id);
+                    successCount++;
                 } catch(err) {
-                    setStatus(`❌ ${file.name} upload failed`, 'var(--error)');
+                    console.error(`File upload error for ${file.name}:`, err);
+                    setStatus(`❌ ${file.name} upload failed: ${err.message}`, 'var(--error)');
                 }
             }
             showProgress(false);
-            finalizeResults();
+            if (successCount > 0) finalizeResults();
+            else setStatus('❌ All file uploads failed. Check your connection.', 'var(--error)');
         }
 
         async function doFolder() {
@@ -553,68 +565,110 @@
             if (!files.length) return setStatus('⚠️ Select folder', 'var(--warning)');
             showProgress(true);
             try {
+                setProgress(10, 'Zipping folder...');
                 const zip = new JSZip();
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     zip.file(file.webkitRelativePath || file.name, await file.arrayBuffer());
+                    setProgress(10 + (i / files.length) * 40, `Adding: ${file.name}`);
                 }
                 const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' }, metadata => setProgress(50 + metadata.percent * 0.2, `Compressing: ${Math.round(metadata.percent)}%`));
                 const folderName = files[0].webkitRelativePath.split('/')[0] || 'folder';
-                const url = await uploadToFileIO(new File([zipBlob], `${folderName}.zip`), pct => setProgress(70 + pct * 0.28, `Uploading ZIP: ${Math.round(pct)}%`));
+                setProgress(70, 'Uploading ZIP...');
+                const url = await uploadToTmpFiles(new File([zipBlob], `${folderName}.zip`), pct => setProgress(70 + pct * 0.28, `Uploading ZIP: ${Math.round(pct)}%`));
                 addQRWrapper('qr-folder-0', `📁 ${folderName}`, 'qrOutput');
                 await makeQR(url, folderName, 'qr-folder-0');
-            } catch(err) { setStatus('❌ Folder upload failed', 'var(--error)'); }
+                finalizeResults();
+            } catch(err) {
+                console.error('Folder upload error:', err);
+                setStatus('❌ Folder upload failed: ' + err.message, 'var(--error)');
+            }
             showProgress(false);
-            finalizeResults();
         }
 
         async function doVideos() {
             const files = State.videoFiles;
             if (!files.length) return setStatus('⚠️ Select video(s)', 'var(--warning)');
             showProgress(true);
+            let successCount = 0;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 try {
-                    const url = await uploadToFileIO(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading video: ${Math.round(pct)}%`));
+                    if (file.size > 100 * 1024 * 1024) {
+                        setStatus(`⚠️ ${file.name} is too large (max 100MB). Skipped.`, 'var(--warning)');
+                        continue;
+                    }
+                    setProgress((i / files.length) * 100, `Uploading video: ${file.name}...`);
+                    const url = await uploadToTmpFiles(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading ${file.name}: ${Math.round(pct)}%`));
                     const id = 'qr-video-' + i;
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(url, noExt(file.name), id);
-                } catch(err) { setStatus(`❌ ${file.name} failed`, 'var(--error)'); }
+                    successCount++;
+                } catch(err) {
+                    console.error(`Video upload error for ${file.name}:`, err);
+                    setStatus(`❌ ${file.name} failed: ${err.message}`, 'var(--error)');
+                }
             }
             showProgress(false);
-            finalizeResults();
+            if (successCount > 0) finalizeResults();
+            else setStatus('❌ All video uploads failed. Videos must be under 100MB.', 'var(--error)');
         }
 
         async function makeQR(content, filename, containerId) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 const container = document.getElementById(containerId);
+                if (!container) { reject(new Error('Container not found')); return; }
                 container.innerHTML = '';
                 const size = parseInt(document.getElementById('qrSize').value) || 300;
-                const qr = new QRCode(container, {
-                    text: content,
-                    width: size,
-                    height: size,
-                    colorDark: document.getElementById('qrColor').value,
-                    colorLight: document.getElementById('qrBgColor').value,
-                    correctLevel: QRCode.CorrectLevel[document.getElementById('errorLevel').value]
-                });
-                State.qrList.push({ content, filename, containerId, size });
-                setTimeout(resolve, 100);
+                try {
+                    const qr = new QRCode(container, {
+                        text: content,
+                        width: size,
+                        height: size,
+                        colorDark: document.getElementById('qrColor').value,
+                        colorLight: document.getElementById('qrBgColor').value,
+                        correctLevel: QRCode.CorrectLevel[document.getElementById('errorLevel').value]
+                    });
+                    State.qrList.push({ content, filename, containerId, size });
+                    setTimeout(resolve, 200);
+                } catch(err) {
+                    container.innerHTML = '<p style="color:var(--error);">Failed to generate QR. Content may be too long.</p>';
+                    reject(err);
+                }
             });
         }
 
-        function uploadToFileIO(file, onProgress) {
+        /**
+         * Upload file to tmpfiles.org (free, CORS-enabled, 60min auto-delete, 100MB limit)
+         * Returns a direct download URL by inserting /dl/ into the returned URL path.
+         */
+        function uploadToTmpFiles(file, onProgress) {
             return new Promise((resolve, reject) => {
                 const form = new FormData();
                 form.append('file', file);
                 const xhr = new XMLHttpRequest();
-                xhr.upload.onprogress = e => e.lengthComputable && onProgress(e.loaded / e.total * 100);
-                xhr.onload = () => {
-                    const r = JSON.parse(xhr.responseText);
-                    r.success ? resolve(r.link) : reject(new Error(r.message));
+                xhr.upload.onprogress = e => {
+                    if (e.lengthComputable) onProgress(e.loaded / e.total * 100);
                 };
-                xhr.onerror = reject;
-                xhr.open('POST', CONFIG.fileio_url);
+                xhr.onload = () => {
+                    try {
+                        const r = JSON.parse(xhr.responseText);
+                        if (r.status === 'success' && r.data && r.data.url) {
+                            // Transform https://tmpfiles.org/12345/file.txt
+                            //       to https://tmpfiles.org/dl/12345/file.txt
+                            const directUrl = r.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+                            resolve(directUrl);
+                        } else {
+                            reject(new Error(r.message || r.error || 'Upload failed'));
+                        }
+                    } catch(e) {
+                        reject(new Error('Invalid response from server'));
+                    }
+                };
+                xhr.onerror = () => reject(new Error('Network error. Check your internet connection.'));
+                xhr.ontimeout = () => reject(new Error('Upload timed out. Try a smaller file.'));
+                xhr.timeout = 120000; // 2 minutes
+                xhr.open('POST', CONFIG.tmpfiles_url);
                 xhr.send(form);
             });
         }
@@ -624,24 +678,8 @@
             form.append('key', apiKey);
             form.append('image', await fileToBase64(file));
             const r = await fetch(CONFIG.imgbb_url, { method: 'POST', body: form }).then(res => res.json());
-            if (!r.success) throw new Error(r.error?.message);
+            if (!r.success) throw new Error(r.error?.message || 'ImgBB upload failed');
             return r.data.url;
-        }
-
-        async function compressImageToQR(file) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const max = 100;
-                    let w = img.width, h = img.height;
-                    w > h ? (h = h/w*max, w = max) : (w = w/h*max, h = max);
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    resolve(canvas.toDataURL('image/jpeg', 0.2));
-                };
-                img.src = URL.createObjectURL(file);
-            });
         }
 
         function addQRWrapper(id, label, outputId) {
@@ -657,7 +695,8 @@
         }
 
         function downloadSinglePNG(id) {
-            const canvas = document.getElementById(id).querySelector('canvas');
+            const canvas = document.getElementById(id)?.querySelector('canvas');
+            if (!canvas) { alert('QR code not found. Try generating again.'); return; }
             const link = document.createElement('a');
             link.download = `QR_${id}_${Date.now()}.png`;
             link.href = canvas.toDataURL('image/png');
@@ -665,7 +704,8 @@
         }
 
         function downloadSingleSVG(id) {
-            const canvas = document.getElementById(id).querySelector('canvas');
+            const canvas = document.getElementById(id)?.querySelector('canvas');
+            if (!canvas) { alert('QR code not found. Try generating again.'); return; }
             const size = canvas.width;
             const svg = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><image width="${size}" height="${size}" xlink:href="${canvas.toDataURL('image/png')}"/></svg>`;
             const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -675,8 +715,10 @@
         async function downloadAllAsZip() {
             const zip = new JSZip();
             State.qrList.forEach((item, i) => {
-                const canvas = document.getElementById(item.containerId).querySelector('canvas');
-                zip.file(`${item.filename || 'qr_'+i}.png`, canvas.toDataURL('image/png').split(',')[1], { base64: true });
+                const canvas = document.getElementById(item.containerId)?.querySelector('canvas');
+                if (canvas) {
+                    zip.file(`${item.filename || 'qr_'+i}.png`, canvas.toDataURL('image/png').split(',')[1], { base64: true });
+                }
             });
             const b = await zip.generateAsync({ type: 'blob' });
             saveAs(b, 'all_qrcodes.zip');
@@ -689,22 +731,26 @@
         }
 
         function clearAll() {
-            document.querySelectorAll('.premium-input').forEach(i => i.value = '');
+            document.querySelectorAll('.premium-input').forEach(i => { if (i.type !== 'color' && i.type !== 'range') i.value = ''; });
             document.getElementById('qrOutput').innerHTML = '';
             document.getElementById('fileListShow').style.display = 'none';
             document.getElementById('downloadAllBtn').style.display = 'none';
             State.qrList = [];
+            State.files = [];
+            State.imageFiles = [];
+            State.videoFiles = [];
+            State.folderFiles = [];
             setStatus('', '#333');
         }
 
         function finalizeResults() {
             if (State.qrList.length > 1) document.getElementById('downloadAllBtn').style.display = 'inline-block';
-            setStatus(`✅ ${State.qrList.length} QR Code(s) Ready!`, 'var(--success)');
+            setStatus(`✅ ${State.qrList.length} QR Code(s) Ready! Scan with any phone camera.`, 'var(--success)');
         }
 
         function setStatus(m, c) { const s = document.getElementById('statusMsg'); s.textContent = m; s.style.color = c; }
         function showProgress(s) { document.getElementById('progressWrap').style.display = s ? 'block' : 'none'; }
-        function setProgress(p, t) { document.getElementById('progressFill').style.width = p+'%'; document.getElementById('progressText').textContent = t; }
+        function setProgress(p, t) { document.getElementById('progressFill').style.width = Math.min(p, 100)+'%'; document.getElementById('progressText').textContent = t; }
         function fileToBase64(f) { return new Promise(r => { const rd = new FileReader(); rd.onload = e => r(e.target.result.split(',')[1]); rd.readAsDataURL(f); }); }
         function noExt(f) { return f.replace(/\.[^/.]+$/, ''); }
         function clearOutput() { document.getElementById('qrOutput').innerHTML = ''; }
