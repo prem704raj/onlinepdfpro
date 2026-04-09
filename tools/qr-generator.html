@@ -516,7 +516,7 @@
                     if (imgbbKey) {
                         qrContent = await uploadToImgBB(file, imgbbKey);
                     } else {
-                        qrContent = await compressImageToQR(file);
+                        qrContent = await uploadToFileIO(file, pct => setProgress((i / files.length) * 100 + pct / files.length, `Uploading image to cloud: ${Math.round(pct)}%`));
                     }
                     const id = 'qr-img-' + i;
                     addQRWrapper(id, file.name, 'qrOutput');
