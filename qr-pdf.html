@@ -103,44 +103,38 @@
             border-color: var(--accent);
         }
 
-        .qr-preview {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .qr-preview canvas {
-            border: 2px solid var(--border);
+        .visual-workspace {
+            position: relative;
+            margin: 20px auto;
+            border: 2px dashed var(--border);
             border-radius: 12px;
-        }
-
-        .position-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .pos-btn {
-            padding: 14px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--surface-1);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .pos-btn:hover {
-            border-color: var(--accent);
             background: var(--surface-2);
+            text-align: center;
+            overflow: auto;
+            padding: 10px;
         }
 
-        .pos-btn.active {
-            border-color: var(--accent);
-            background: #2563eb;
-            color: white;
+        #pdfContainer {
+            position: relative;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        #pdfCanvas {
+            max-width: 100%;
+            height: auto;
+            vertical-align: top;
+        }
+
+        #dragQR {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: move;
+            border: 2px dashed #2563eb;
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            touch-action: none;
         }
 
         .apply-btn {
@@ -353,11 +347,9 @@
                     oninput="generateQRPreview()"></textarea>
             </div>
 
-            <div class="qr-preview" id="qrPreview"></div>
-
             <div class="input-group">
                 <label>QR Code Size</label>
-                <select id="qrSize">
+                <select id="qrSize" onchange="generateQRPreview()">
                     <option value="80">Small (80px)</option>
                     <option value="120" selected>Medium (120px)</option>
                     <option value="160">Large (160px)</option>
@@ -366,23 +358,21 @@
             </div>
 
             <div class="input-group">
-                <label>Position on Page</label>
-                <div class="position-grid">
-                    <div class="pos-btn" data-pos="top-left" onclick="setPos(this)">Top Left</div>
-                    <div class="pos-btn" data-pos="top-center" onclick="setPos(this)">Top Center</div>
-                    <div class="pos-btn" data-pos="top-right" onclick="setPos(this)">Top Right</div>
-                    <div class="pos-btn" data-pos="center-left" onclick="setPos(this)">Center Left</div>
-                    <div class="pos-btn" data-pos="center" onclick="setPos(this)">Center</div>
-                    <div class="pos-btn" data-pos="center-right" onclick="setPos(this)">Center Right</div>
-                    <div class="pos-btn active" data-pos="bottom-right" onclick="setPos(this)">Bottom Right</div>
-                    <div class="pos-btn" data-pos="bottom-center" onclick="setPos(this)">Bottom Center</div>
-                    <div class="pos-btn" data-pos="bottom-left" onclick="setPos(this)">Bottom Left</div>
-                </div>
+                <label>Add to Page</label>
+                <select id="pageSelect" onchange="renderPdfPage()"></select>
             </div>
 
             <div class="input-group">
-                <label>Add to Page</label>
-                <select id="pageSelect"></select>
+                <label>Position QR Code</label>
+                <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px;">Drag the QR code over the document below to set its exact position.</p>
+                <div class="visual-workspace" id="visualWorkspace">
+                    <div id="pdfContainer">
+                        <canvas id="pdfCanvas"></canvas>
+                        <div id="dragQR">
+                             <canvas id="draggableQRCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="checkbox-row">
@@ -466,6 +456,8 @@
 </main>
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
     <script defer src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
 
@@ -490,8 +482,23 @@
             _originalFileName = file.name;
             pdfBytes = await file.arrayBuffer();
 
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-            totalPages = pdfDoc.getPageCount();
+        let pdfDocLib = null;
+        let pdfjsDoc = null;
+        let originalPageWidth = 0;
+        let originalPageHeight = 0;
+        let canvasScale = 1;
+
+        async function loadFile(file) {
+            if (!file) return;
+            _originalFileName = file.name;
+            pdfBytes = await file.arrayBuffer();
+
+            // Load with PDF-Lib
+            pdfDocLib = await PDFLib.PDFDocument.load(pdfBytes);
+            totalPages = pdfDocLib.getPageCount();
+
+            // Load with PDF.js for preview
+            pdfjsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
 
             document.getElementById('fileInfo').style.display = 'block';
             document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
@@ -506,30 +513,114 @@
             }
 
             document.getElementById('settingsBox').style.display = 'block';
-            generateQRPreview();
+            
+            await generateQRPreview();
+            await renderPdfPage();
+            setupDragging();
         }
 
-        function setPos(btn) {
-            document.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedPos = btn.dataset.pos;
+        async function renderPdfPage() {
+            if (!pdfjsDoc) return;
+            const pageNum = parseInt(document.getElementById('pageSelect').value);
+            const page = await pdfjsDoc.getPage(pageNum);
+            
+            const canvas = document.getElementById('pdfCanvas');
+            const context = canvas.getContext('2d');
+            
+            // Adjust scale to fit workspace gracefully
+            let viewport = page.getViewport({ scale: 1.0 });
+            originalPageWidth = viewport.width;
+            originalPageHeight = viewport.height;
+
+            const maxWidth = document.getElementById('visualWorkspace').clientWidth - 20;
+            canvasScale = maxWidth / originalPageWidth;
+            if (canvasScale > 1.5) canvasScale = 1.5; // Avoid making it too huge
+            
+            viewport = page.getViewport({ scale: canvasScale });
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+            // Resize dragQR element to match scaled QR size
+            const qrSize = parseInt(document.getElementById('qrSize').value);
+            const scaledQrSize = qrSize * canvasScale;
+            
+            const dragQR = document.getElementById('dragQR');
+            dragQR.style.width = scaledQrSize + 'px';
+            dragQR.style.height = scaledQrSize + 'px';
+            
+            // Ensure QR isn't out of bounds when page switches
+            let left = parseFloat(dragQR.style.left || 0);
+            let top = parseFloat(dragQR.style.top || 0);
+            left = Math.max(0, Math.min(left, canvas.width - scaledQrSize));
+            top = Math.max(0, Math.min(top, canvas.height - scaledQrSize));
+            dragQR.style.left = left + 'px';
+            dragQR.style.top = top + 'px';
+        }
+
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function setupDragging() {
+            const dragItem = document.getElementById('dragQR');
+            const container = document.getElementById('pdfContainer');
+
+            dragItem.addEventListener('pointerdown', function(e) {
+                isDragging = true;
+                const rect = dragItem.getBoundingClientRect();
+                dragOffsetX = e.clientX - rect.left;
+                dragOffsetY = e.clientY - rect.top;
+                dragItem.setPointerCapture(e.pointerId);
+            });
+
+            dragItem.addEventListener('pointermove', function(e) {
+                if (!isDragging) return;
+                const containerRect = container.getBoundingClientRect();
+                
+                let newX = e.clientX - containerRect.left - dragOffsetX;
+                let newY = e.clientY - containerRect.top - dragOffsetY;
+
+                // Restrict to canvas bounds
+                const canvasW = document.getElementById('pdfCanvas').width;
+                const canvasH = document.getElementById('pdfCanvas').height;
+                const dragW = dragItem.offsetWidth;
+                const dragH = dragItem.offsetHeight;
+
+                newX = Math.max(0, Math.min(newX, canvasW - dragW));
+                newY = Math.max(0, Math.min(newY, canvasH - dragH));
+
+                dragItem.style.left = newX + 'px';
+                dragItem.style.top = newY + 'px';
+            });
+
+            dragItem.addEventListener('pointerup', function(e) {
+                isDragging = false;
+                dragItem.releasePointerCapture(e.pointerId);
+            });
         }
 
         async function generateQRPreview() {
             const content = document.getElementById('qrContent').value || 'https://onlinepdfpro.com';
-            const previewDiv = document.getElementById('qrPreview');
-            previewDiv.innerHTML = '';
+            const canvas = document.getElementById('draggableQRCanvas');
+            const qrSize = parseInt(document.getElementById('qrSize').value);
 
             try {
-                const canvas = document.createElement('canvas');
                 await QRCode.toCanvas(canvas, content, {
-                    width: 150,
+                    width: qrSize * 2, // high res for export/looks
                     margin: 2,
                     color: { dark: '#000000', light: '#ffffff' }
                 });
-                previewDiv.appendChild(canvas);
+                // Ensure canvas renders to fit its container
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+
+                // Trigger re-render to update drag size
+                if (pdfjsDoc) await renderPdfPage();
             } catch (err) {
-                previewDiv.innerHTML = '<p style="color:red;">Invalid content</p>';
+                console.error("Invalid QR Content", err);
             }
         }
 
@@ -550,6 +641,7 @@
                 color: { dark: '#000000', light: '#ffffff' }
             });
 
+            // Reload bytes to avoid mutating same doc multiple times
             const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
             const qrImageBytes = Uint8Array.from(atob(qrDataURL.split(',')[1]), c => c.charCodeAt(0));
             const qrImage = await pdfDoc.embedPng(qrImageBytes);
@@ -557,25 +649,19 @@
             const pages = pdfDoc.getPages();
             const pagesToAdd = addToAll ? pages : [pages[selectedPage - 1]];
 
+            // Calculate PDF coordinates mapped from the visual dragQR position
+            const dragItem = document.getElementById('dragQR');
+            const visualX = parseFloat(dragItem.style.left || 0);
+            const visualY = parseFloat(dragItem.style.top || 0);
+            
             pagesToAdd.forEach(page => {
                 const { width, height } = page.getSize();
-                const margin = 30;
-                let x, y;
+                
+                // Map visual positions back to PDF space (PDF coordinates grow upwards from bottom-left)
+                const pdfX = (visualX / canvasScale);
+                const pdfY = height - ((visualY / canvasScale) + qrSize);
 
-                switch (selectedPos) {
-                    case 'top-left': x = margin; y = height - qrSize - margin; break;
-                    case 'top-center': x = (width - qrSize) / 2; y = height - qrSize - margin; break;
-                    case 'top-right': x = width - qrSize - margin; y = height - qrSize - margin; break;
-                    case 'center-left': x = margin; y = (height - qrSize) / 2; break;
-                    case 'center': x = (width - qrSize) / 2; y = (height - qrSize) / 2; break;
-                    case 'center-right': x = width - qrSize - margin; y = (height - qrSize) / 2; break;
-                    case 'bottom-left': x = margin; y = margin; break;
-                    case 'bottom-center': x = (width - qrSize) / 2; y = margin; break;
-                    case 'bottom-right': x = width - qrSize - margin; y = margin; break;
-                    default: x = width - qrSize - margin; y = margin;
-                }
-
-                page.drawImage(qrImage, { x, y, width: qrSize, height: qrSize });
+                page.drawImage(qrImage, { x: pdfX, y: pdfY, width: qrSize, height: qrSize });
             });
 
             resultBytes = await pdfDoc.save();
@@ -586,10 +672,27 @@
 
         function downloadResult() {
             if (!resultBytes) return;
-               incrementCounter('qrPDF');
-incrementTodayCount();
-            const blob = new Blob([resultBytes], { type: 'application/pdf' });
-            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+            incrementCounter('qrPDF');
+            incrementTodayCount();
+            
+            try {
+                const blob = new Blob([resultBytes], { type: 'application/pdf' });
+                if (window.OnlinePDFPro && window.OnlinePDFPro.Downloader) {
+                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                } else {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = _originalFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            } catch (err) {
+                console.error("Download Error: ", err);
+                alert("There was an issue downloading the file.");
+            }
         }
     </script>
 
