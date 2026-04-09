@@ -54,6 +54,56 @@
     <link rel="stylesheet" href="../css/mobile-fix.css?v=9">
     <link rel="stylesheet" href="../css/tools.css">
 
+    <style>
+        /* Excel Table Styles */
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-family: var(--font-family, inherit);
+            color: var(--text-primary, #1a1a2e);
+        }
+        .excel-table th, .excel-table td {
+            border: 1px solid var(--border, #cbd5e1);
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .excel-table th {
+            background-color: var(--surface-2, #f8fafc);
+            font-weight: 600;
+        }
+        
+        /* Sheet Tabs */
+        .sheet-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .sheet-tab {
+            padding: 8px 18px;
+            border: 1px solid var(--border, #e2e8f0);
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--surface-1, #fff);
+            color: var(--text-secondary, #64748b);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .sheet-tab:hover {
+            border-color: var(--accent, #2563eb);
+            color: var(--accent, #2563eb);
+        }
+        .sheet-tab.active {
+            background: var(--accent, #2563eb);
+            color: white;
+            border-color: var(--accent, #2563eb);
+        }
+    </style>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
     <script>
@@ -402,14 +452,41 @@ document.getElementById('resultBox').style.display = 'block';
             const container = document.createElement('div');
             container.style.padding = '20px';
             container.style.fontFamily = 'Calibri, Arial, sans-serif';
+            container.style.backgroundColor = '#ffffff'; 
+            container.style.color = '#000000';
 
             const title = document.createElement('h2');
             title.textContent = 'Sheet: ' + currentSheet;
-            title.style.color = '#333';
+            title.style.color = '#000000';
+            title.style.paddingBottom = '15px';
             title.style.marginBottom = '20px';
+            title.style.borderBottom = '2px solid #e2e8f0';
 
             container.appendChild(title);
-            container.appendChild(table.cloneNode(true));
+            
+            // Clone table and enforce solid rendering styles for pdf
+            const clonedTable = table.cloneNode(true);
+            clonedTable.style.width = '100%';
+            clonedTable.style.borderCollapse = 'collapse';
+            clonedTable.style.color = '#000000';
+            clonedTable.style.backgroundColor = '#ffffff';
+            
+            // Apply explicit inline styles to every cell for html2canvas
+            const cells = clonedTable.querySelectorAll('th, td');
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].style.border = '1px solid #cbd5e1';
+                cells[i].style.padding = '8px 12px';
+                cells[i].style.color = '#000000';
+                cells[i].style.textAlign = 'left';
+            }
+            
+            const ths = clonedTable.querySelectorAll('th');
+            for (let i = 0; i < ths.length; i++) {
+                ths[i].style.backgroundColor = '#f1f5f9';
+                ths[i].style.fontWeight = 'bold';
+            }
+
+            container.appendChild(clonedTable);
 
             const options = {
                 margin: [10, 10, 10, 10],
