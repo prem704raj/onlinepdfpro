@@ -319,16 +319,15 @@
         </div>
     </header>
     
-    <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Utility</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">QR Code Generator Free — Create QR Codes Online</h1>
-        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">
-            Generate custom QR codes for URLs, text, images, files, and folders. Customize colors and size. High-quality PNG/SVG downloads.
-        </p>
-    </div>
-
     <!-- Main Tool Interface -->
     <main id="main">
+        <div class="tool-header" style="text-align:center; margin-bottom:48px;">
+            <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Utility</span>
+            <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">QR Code Generator Free — Create QR Codes Online</h1>
+            <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">
+                Generate custom QR codes for URLs, text, images, files, and folders. Customize colors and size. High-quality PNG/SVG downloads.
+            </p>
+        </div>
         <div class="container container-max">
             <div class="glass-card tool-card-main fade-in">
                 <nav class="tab-nav" id="tabNav">
@@ -712,65 +711,7 @@
         function clearOutput() { document.getElementById('qrOutput').innerHTML = ''; }
     </script>
 
-    <!-- FAQ -->
-    <div class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
-        <h2>❓ Frequently Asked Questions</h2>
 
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">Is this QR code generator really free?<span class="arrow">▼</span></div>
-            <div class="faq-a">Yes! 100% free with no limits. No signup required. No watermarks. Generate as many QR
-                codes as you want.</div>
-        </div>
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">Do QR codes expire?<span class="arrow">▼</span></div>
-            <div class="faq-a">No! QR codes generated here are static and never expire. They work forever as long as
-                the content they point to exists.</div>
-        </div>
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">Can I add my logo to the QR code?<span class="arrow">▼</span></div>
-            <div class="faq-a">Yes! Upload any logo (PNG/JPG) and it will be placed in the center. Use "High" error
-                correction for best results with logos.</div>
-        </div>
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">What is UPI QR code?<span class="arrow">▼</span></div>
-            <div class="faq-a">UPI QR code allows customers to scan and pay directly via Google Pay, PhonePe, Paytm
-                etc. Perfect for shops and freelancers in India.</div>
-        </div>
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">Is my data safe?<span class="arrow">▼</span></div>
-            <div class="faq-a">Absolutely! Everything runs in your browser. No data is sent to any server. Your WiFi
-                passwords, contacts, and all information stays 100% private.</div>
-        </div>
-        <div class="faq-item" onclick="toggleFAQ(this)">
-            <div class="faq-q">Which format should I download?<span class="arrow">▼</span></div>
-            <div class="faq-a">PNG for web/social media, SVG for printing (scalable), JPG for general use, PDF for
-                documents.</div>
-        </div>
-    </div>
-
-    <div class="footer-note">
-        Made with ❤️ by <a href="https://onlinepdfpro.com" style="color:var(--primary)">OnlinePDFPro.com</a> — India's
-        Best Free PDF Tools
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-        function toggleFAQ(el) {
-            el.classList.toggle('open');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        window.addEventListener('load', () => {
-        });
-    </script>
 
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
