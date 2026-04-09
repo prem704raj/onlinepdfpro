@@ -350,7 +350,8 @@
     <script src="../js/app.js?v=8"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
         let workbook = null;
         let currentSheet = '';
@@ -447,58 +448,98 @@ document.getElementById('resultBox').style.display = 'block';
         }
 
         function downloadPDF() {
-            const table = document.getElementById('excelTable');
+            try {
+                const { jsPDF } = window.jspdf;
+                const sheet = workbook.Sheets[currentSheet];
+                const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-            const container = document.createElement('div');
-            container.style.padding = '20px';
-            container.style.fontFamily = 'Calibri, Arial, sans-serif';
-            container.style.backgroundColor = '#ffffff'; 
-            container.style.color = '#000000';
+                if (!data || data.length === 0) {
+                    alert('No data found in this sheet.');
+                    return;
+                }
 
-            const title = document.createElement('h2');
-            title.textContent = 'Sheet: ' + currentSheet;
-            title.style.color = '#000000';
-            title.style.paddingBottom = '15px';
-            title.style.marginBottom = '20px';
-            title.style.borderBottom = '2px solid #e2e8f0';
+                // Determine orientation based on column count
+                const maxCols = Math.max(...data.map(row => row ? row.length : 0));
+                const orientation = maxCols > 5 ? 'landscape' : 'portrait';
 
-            container.appendChild(title);
-            
-            // Clone table and enforce solid rendering styles for pdf
-            const clonedTable = table.cloneNode(true);
-            clonedTable.style.width = '100%';
-            clonedTable.style.borderCollapse = 'collapse';
-            clonedTable.style.color = '#000000';
-            clonedTable.style.backgroundColor = '#ffffff';
-            
-            // Apply explicit inline styles to every cell for html2canvas
-            const cells = clonedTable.querySelectorAll('th, td');
-            for (let i = 0; i < cells.length; i++) {
-                cells[i].style.border = '1px solid #cbd5e1';
-                cells[i].style.padding = '8px 12px';
-                cells[i].style.color = '#000000';
-                cells[i].style.textAlign = 'left';
+                const doc = new jsPDF({ orientation: orientation, unit: 'mm', format: 'a4' });
+
+                // Title
+                doc.setFontSize(16);
+                doc.setTextColor(30, 30, 30);
+                doc.text('Sheet: ' + currentSheet, 14, 18);
+                doc.setDrawColor(200, 200, 200);
+                doc.line(14, 22, orientation === 'landscape' ? 283 : 196, 22);
+
+                // Build header and body arrays from sheet data
+                const headers = [];
+                for (let i = 0; i < maxCols; i++) {
+                    headers.push(data[0] && data[0][i] !== undefined ? String(data[0][i]) : String.fromCharCode(65 + i));
+                }
+
+                const body = [];
+                for (let i = 1; i < data.length; i++) {
+                    const row = [];
+                    for (let j = 0; j < maxCols; j++) {
+                        row.push(data[i] && data[i][j] !== undefined ? String(data[i][j]) : '');
+                    }
+                    body.push(row);
+                }
+
+                // Generate the table in the PDF
+                doc.autoTable({
+                    head: [headers],
+                    body: body,
+                    startY: 26,
+                    theme: 'grid',
+                    styles: {
+                        fontSize: 9,
+                        cellPadding: 3,
+                        textColor: [20, 20, 20],
+                        lineColor: [200, 210, 220],
+                        lineWidth: 0.3
+                    },
+                    headStyles: {
+                        fillColor: [37, 99, 235],
+                        textColor: [255, 255, 255],
+                        fontStyle: 'bold',
+                        fontSize: 10
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 247, 250]
+                    },
+                    margin: { top: 26, left: 10, right: 10 },
+                    didDrawPage: function (hookData) {
+                        // Footer on every page
+                        const pageCount = doc.internal.getNumberOfPages();
+                        doc.setFontSize(8);
+                        doc.setTextColor(150, 150, 150);
+                        const pageWidth = doc.internal.pageSize.getWidth();
+                        const pageHeight = doc.internal.pageSize.getHeight();
+                        doc.text('Generated by OnlinePDFPro.com', pageWidth / 2, pageHeight - 8, { align: 'center' });
+                        doc.text('Page ' + hookData.pageNumber + ' of ' + pageCount, pageWidth - 14, pageHeight - 8, { align: 'right' });
+                    }
+                });
+
+                // Save as blob and use the site's downloader
+                const blob = doc.output('blob');
+                if (window.OnlinePDFPro && OnlinePDFPro.Downloader && OnlinePDFPro.Downloader.saveBlob) {
+                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                } else {
+                    // Fallback: trigger download directly
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = _originalFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                alert('Error generating PDF. Please try again.');
             }
-            
-            const ths = clonedTable.querySelectorAll('th');
-            for (let i = 0; i < ths.length; i++) {
-                ths[i].style.backgroundColor = '#f1f5f9';
-                ths[i].style.fontWeight = 'bold';
-            }
-
-            container.appendChild(clonedTable);
-
-            const options = {
-                margin: [10, 10, 10, 10],
-                filename: _originalFileName,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-
-            html2pdf().set(options).from(container).outputPdf('blob').then(function(blob) {
-                OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
-            });
         }
     </script>
 
