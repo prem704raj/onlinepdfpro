@@ -446,12 +446,49 @@
         }
 
         async function doText() {
-            const text = document.getElementById('textInput').value.trim();
+            let text = document.getElementById('textInput').value.trim();
             if (!text) return setStatus('⚠️ Please enter text or URL', 'var(--warning)');
+            
+            // Smart URL detection: auto-prepend https:// if it looks like a URL
+            text = smartURL(text);
+            
             const id = 'qr-text-0';
             addQRWrapper(id, text.length > 60 ? text.substring(0,57)+'...' : text, 'qrOutput');
             await makeQR(text, 'qr_code', id);
             setStatus('✅ QR Code generated! Scan with any phone camera.', 'var(--success)');
+        }
+
+        /**
+         * Detects if input looks like a URL and adds https:// if missing.
+         * This ensures phones treat QR content as a clickable link, not just text.
+         * Examples:
+         *   "google.com"        → "https://google.com"
+         *   "www.example.com"   → "https://www.example.com"
+         *   "example.com/path"  → "https://example.com/path"
+         *   "https://site.com"  → "https://site.com" (unchanged)
+         *   "hello world"       → "hello world" (unchanged, it's text)
+         */
+        function smartURL(input) {
+            // Already has protocol
+            if (/^https?:\/\//i.test(input)) return input;
+            if (/^ftp:\/\//i.test(input)) return input;
+            if (/^mailto:/i.test(input)) return input;
+            if (/^tel:/i.test(input)) return input;
+            
+            // Has spaces → it's regular text, not a URL
+            if (/\s/.test(input)) return input;
+            
+            // Looks like a domain: has a dot and valid TLD pattern (e.g. google.com, site.co.in)
+            if (/^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+/.test(input)) {
+                return 'https://' + input;
+            }
+            
+            // Starts with www.
+            if (/^www\./i.test(input)) {
+                return 'https://' + input;
+            }
+            
+            return input;
         }
 
         async function doImages() {
