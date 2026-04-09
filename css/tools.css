@@ -193,6 +193,7 @@
     font-size: 2rem;
     margin-bottom: 16px;
     display: block;
+    font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
 }
 
 .tool-card-title {
