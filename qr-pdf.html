@@ -477,11 +477,6 @@
             loadFile(e.dataTransfer.files[0]);
         };
 
-        async function loadFile(file) {
-            if (!file) return;
-            _originalFileName = file.name;
-            pdfBytes = await file.arrayBuffer();
-
         let pdfDocLib = null;
         let pdfjsDoc = null;
         let originalPageWidth = 0;
