@@ -597,7 +597,7 @@
                 height: size,
                 type: 'canvas',
                 data: content,
-                margin: 10,
+                margin: 30,
                 dotsOptions: {
                     type: p.dot,
                     ...(p.grad && p.fg2 ? {
@@ -614,7 +614,8 @@
                 },
                 backgroundOptions: { color: p.bg },
                 qrOptions: {
-                    errorCorrectionLevel: effectiveErrLevel
+                    errorCorrectionLevel: effectiveErrLevel,
+                    ...((!isURL && content.length < 50) ? { typeNumber: 4 } : {})
                 }
             };
 
