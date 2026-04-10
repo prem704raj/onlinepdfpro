@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="../css/style.css?v=21">
     <link rel="stylesheet" href="../css/mobile-fix.css?v=21">
     <link rel="stylesheet" href="../css/tools.css?v=21">
-    <script src="https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
@@ -584,15 +584,20 @@
             container.innerHTML = '';
 
             const size = parseInt(document.getElementById('qrSize').value) || 300;
-            const errMap = { L: 0, M: 1, Q: 2, H: 3 };
             const errVal = document.getElementById('errorLevel').value;
             const p = PRESETS[State.selectedPreset];
+
+            // For plain text (non-URL) content, force higher error correction
+            // so scanners can reliably decode the simpler QR patterns
+            const isURL = /^https?:\/\//i.test(content) || /^ftp:\/\//i.test(content);
+            const effectiveErrLevel = (!isURL && content.length < 100) ? 'H' : errVal;
 
             const opts = {
                 width: size,
                 height: size,
                 type: 'canvas',
                 data: content,
+                margin: 10,
                 dotsOptions: {
                     type: p.dot,
                     ...(p.grad && p.fg2 ? {
@@ -608,7 +613,11 @@
                     color: p.grad && p.fg2 ? p.fg2 : p.fg
                 },
                 backgroundOptions: { color: p.bg },
-                qrOptions: { errorCorrectionLevel: errVal }
+                qrOptions: {
+                    errorCorrectionLevel: effectiveErrLevel,
+                    mode: 4,
+                    typeNumber: 0
+                }
             };
 
             const qrCode = new QRCodeStyling(opts);
