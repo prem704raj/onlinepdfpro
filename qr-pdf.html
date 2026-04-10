@@ -348,13 +348,9 @@
             </div>
 
             <div class="input-group">
-                <label>QR Code Size</label>
-                <select id="qrSize" onchange="generateQRPreview()">
-                    <option value="80">Small (80px)</option>
-                    <option value="120" selected>Medium (120px)</option>
-                    <option value="160">Large (160px)</option>
-                    <option value="200">Extra Large (200px)</option>
-                </select>
+                <label>QR Code Size: <span id="qrSizeVal" style="color:var(--accent);font-weight:700;">100px</span></label>
+                <input type="range" id="qrSize" min="40" max="300" value="100" style="width:100%;cursor:pointer;accent-color:var(--accent,#2563eb);" oninput="document.getElementById('qrSizeVal').textContent=this.value+'px'; generateQRPreview();">
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-top:4px;"><span>40px</span><span>300px</span></div>
             </div>
 
             <div class="input-group">
@@ -458,8 +454,8 @@
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
-    <script defer src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
 
     <script>
         let pdfBytes = null;
@@ -620,7 +616,7 @@
         }
 
         async function addQRtoPDF() {
-            if (!pdfBytes) return;
+            if (!pdfBytes) return alert('Please upload a PDF first.');
 
             const content = document.getElementById('qrContent').value;
             if (!content.trim()) return alert('Enter QR content first!');
@@ -629,64 +625,66 @@
             const addToAll = document.getElementById('allPages').checked;
             const selectedPage = parseInt(document.getElementById('pageSelect').value);
 
-            // Generate QR as PNG
-            const qrDataURL = await QRCode.toDataURL(content, {
-                width: qrSize * 3,
-                margin: 1,
-                color: { dark: '#000000', light: '#ffffff' }
-            });
+            try {
+                // Generate QR as PNG data URL
+                const qrDataURL = await QRCode.toDataURL(content, {
+                    width: qrSize * 3,
+                    margin: 1,
+                    color: { dark: '#000000', light: '#ffffff' }
+                });
 
-            // Reload bytes to avoid mutating same doc multiple times
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-            const qrImageBytes = Uint8Array.from(atob(qrDataURL.split(',')[1]), c => c.charCodeAt(0));
-            const qrImage = await pdfDoc.embedPng(qrImageBytes);
+                // Reload bytes fresh to avoid mutating same doc multiple times
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const qrImageBytes = Uint8Array.from(atob(qrDataURL.split(',')[1]), c => c.charCodeAt(0));
+                const qrImage = await pdfDoc.embedPng(qrImageBytes);
 
-            const pages = pdfDoc.getPages();
-            const pagesToAdd = addToAll ? pages : [pages[selectedPage - 1]];
+                const pages = pdfDoc.getPages();
+                const pagesToAdd = addToAll ? pages : [pages[selectedPage - 1]];
 
-            // Calculate PDF coordinates mapped from the visual dragQR position
-            const dragItem = document.getElementById('dragQR');
-            const visualX = parseFloat(dragItem.style.left || 0);
-            const visualY = parseFloat(dragItem.style.top || 0);
-            
-            pagesToAdd.forEach(page => {
-                const { width, height } = page.getSize();
-                
-                // Map visual positions back to PDF space (PDF coordinates grow upwards from bottom-left)
-                const pdfX = (visualX / canvasScale);
-                const pdfY = height - ((visualY / canvasScale) + qrSize);
+                // Get drag position from the visual preview
+                const dragItem = document.getElementById('dragQR');
+                const visualX = parseFloat(dragItem.style.left || 20);
+                const visualY = parseFloat(dragItem.style.top || 20);
 
-                page.drawImage(qrImage, { x: pdfX, y: pdfY, width: qrSize, height: qrSize });
-            });
+                pagesToAdd.forEach(page => {
+                    const { width, height } = page.getSize();
+                    // Map visual coordinates to PDF coordinates (PDF Y grows upward from bottom)
+                    const pdfX = visualX / canvasScale;
+                    const pdfY = height - ((visualY / canvasScale) + qrSize);
+                    page.drawImage(qrImage, { x: pdfX, y: pdfY, width: qrSize, height: qrSize });
+                });
 
-            resultBytes = await pdfDoc.save();
+                resultBytes = await pdfDoc.save();
 
-            document.getElementById('settingsBox').style.display = 'none';
-            document.getElementById('successBox').style.display = 'block';
+                document.getElementById('settingsBox').style.display = 'none';
+                document.getElementById('successBox').style.display = 'block';
+            } catch (err) {
+                console.error('QR PDF Error:', err);
+                alert('Error adding QR code: ' + (err.message || err));
+            }
         }
 
         function downloadResult() {
-            if (!resultBytes) return;
-            incrementCounter('qrPDF');
-            incrementTodayCount();
-            
+            if (!resultBytes) return alert('No processed PDF available.');
             try {
+                if (typeof incrementCounter === 'function') incrementCounter('qrPDF');
+                if (typeof incrementTodayCount === 'function') incrementTodayCount();
+            } catch(e) {}
+
+            try {
+                const outName = _originalFileName.replace(/\.pdf$/i, '') + '_qr.pdf';
                 const blob = new Blob([resultBytes], { type: 'application/pdf' });
-                if (window.OnlinePDFPro && window.OnlinePDFPro.Downloader) {
-                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
-                } else {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = _originalFileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = outName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
             } catch (err) {
-                console.error("Download Error: ", err);
-                alert("There was an issue downloading the file.");
+                console.error('Download Error:', err);
+                alert('Download failed: ' + (err.message || err));
             }
         }
     </script>
