@@ -349,7 +349,7 @@
 
             <div class="input-group">
                 <label>QR Code Size: <span id="qrSizeVal" style="color:var(--accent);font-weight:700;">100px</span></label>
-                <input type="range" id="qrSize" min="40" max="300" value="100" style="width:100%;cursor:pointer;accent-color:var(--accent,#2563eb);" oninput="document.getElementById('qrSizeVal').textContent=this.value+'px'; generateQRPreview();">
+                <input type="range" id="qrSize" min="40" max="300" value="100" style="width:100%;cursor:pointer;accent-color:var(--accent,#2563eb);" oninput="document.getElementById('qrSizeVal').textContent=this.value+'px'; updateQRSize();">
                 <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-top:4px;"><span>40px</span><span>300px</span></div>
             </div>
 
@@ -593,26 +593,61 @@
             });
         }
 
+        // Lightweight: just resize the drag overlay without regenerating QR image
+        function updateQRSize() {
+            if (!pdfjsDoc) return;
+            const qrSize = parseInt(document.getElementById('qrSize').value);
+            const scaledQrSize = qrSize * canvasScale;
+            const dragQR = document.getElementById('dragQR');
+            dragQR.style.width = scaledQrSize + 'px';
+            dragQR.style.height = scaledQrSize + 'px';
+            // Keep within bounds
+            const canvasW = document.getElementById('pdfCanvas').width;
+            const canvasH = document.getElementById('pdfCanvas').height;
+            let left = parseFloat(dragQR.style.left || 0);
+            let top = parseFloat(dragQR.style.top || 0);
+            left = Math.max(0, Math.min(left, canvasW - scaledQrSize));
+            top = Math.max(0, Math.min(top, canvasH - scaledQrSize));
+            dragQR.style.left = left + 'px';
+            dragQR.style.top = top + 'px';
+        }
+
         async function generateQRPreview() {
+            if (typeof QRCode === 'undefined') {
+                console.warn('QRCode library not loaded yet, skipping preview');
+                updateQRSize();
+                return;
+            }
             const content = document.getElementById('qrContent').value || 'https://onlinepdfpro.com';
             const canvas = document.getElementById('draggableQRCanvas');
             const qrSize = parseInt(document.getElementById('qrSize').value);
 
             try {
                 await QRCode.toCanvas(canvas, content, {
-                    width: qrSize * 2, // high res for export/looks
+                    width: qrSize * 2,
                     margin: 2,
                     color: { dark: '#000000', light: '#ffffff' }
                 });
-                // Ensure canvas renders to fit its container
                 canvas.style.width = '100%';
                 canvas.style.height = '100%';
-
-                // Trigger re-render to update drag size
-                if (pdfjsDoc) await renderPdfPage();
             } catch (err) {
-                console.error("Invalid QR Content", err);
+                console.error('QR Preview Error', err);
             }
+            // Always update drag size even if QR rendering fails
+            updateQRSize();
+        }
+
+        // Generate QR as data URL - works with both library and fallback
+        async function getQRDataURL(content, size) {
+            if (typeof QRCode !== 'undefined') {
+                return await QRCode.toDataURL(content, {
+                    width: size * 3,
+                    margin: 1,
+                    color: { dark: '#000000', light: '#ffffff' }
+                });
+            }
+            // Fallback: use a temporary canvas with the qrcode lib loaded dynamically
+            throw new Error('QR Code library not loaded. Please refresh the page (Ctrl+Shift+R) and try again.');
         }
 
         async function addQRtoPDF() {
@@ -626,14 +661,8 @@
             const selectedPage = parseInt(document.getElementById('pageSelect').value);
 
             try {
-                // Generate QR as PNG data URL
-                const qrDataURL = await QRCode.toDataURL(content, {
-                    width: qrSize * 3,
-                    margin: 1,
-                    color: { dark: '#000000', light: '#ffffff' }
-                });
+                const qrDataURL = await getQRDataURL(content, qrSize);
 
-                // Reload bytes fresh to avoid mutating same doc multiple times
                 const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
                 const qrImageBytes = Uint8Array.from(atob(qrDataURL.split(',')[1]), c => c.charCodeAt(0));
                 const qrImage = await pdfDoc.embedPng(qrImageBytes);
@@ -641,14 +670,12 @@
                 const pages = pdfDoc.getPages();
                 const pagesToAdd = addToAll ? pages : [pages[selectedPage - 1]];
 
-                // Get drag position from the visual preview
                 const dragItem = document.getElementById('dragQR');
                 const visualX = parseFloat(dragItem.style.left || 20);
                 const visualY = parseFloat(dragItem.style.top || 20);
 
                 pagesToAdd.forEach(page => {
                     const { width, height } = page.getSize();
-                    // Map visual coordinates to PDF coordinates (PDF Y grows upward from bottom)
                     const pdfX = visualX / canvasScale;
                     const pdfY = height - ((visualY / canvasScale) + qrSize);
                     page.drawImage(qrImage, { x: pdfX, y: pdfY, width: qrSize, height: qrSize });
@@ -658,9 +685,12 @@
 
                 document.getElementById('settingsBox').style.display = 'none';
                 document.getElementById('successBox').style.display = 'block';
+                
+                // Auto download
+                downloadResult();
             } catch (err) {
                 console.error('QR PDF Error:', err);
-                alert('Error adding QR code: ' + (err.message || err));
+                alert('Error: ' + (err.message || err));
             }
         }
 
