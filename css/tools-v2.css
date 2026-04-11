@@ -14,9 +14,13 @@
 
 @media (min-width: 900px) {
     .tool-header {
-        max-width: 1100px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+        width: 1100px !important;
+        max-width: calc(100vw - 40px) !important;
+        position: relative !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }
 
