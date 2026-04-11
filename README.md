@@ -7,7 +7,7 @@ OnlinePDFPro is a privacy-first PDF tools website where processing happens direc
 - 100% browser-based PDF processing
 - No file uploads to external servers for core tools
 - Free tools for editing, converting, compressing, and organizing PDFs
-- Includes PWA support and offline-friendly behavior
+- Includes PWA support and fast processing
 
 ## Main Features
 

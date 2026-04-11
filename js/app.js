@@ -908,7 +908,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
             box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
             animation: slideUp 0.4s ease;
         ">
-            <span>📱 Install OnlinePDFPro for quick access & offline use</span>
+            <span>📱 Install OnlinePDFPro for quick access</span>
             <button id="installBtn" style="
                 background: white; color: #1E3A5F; border: none;
                 padding: 8px 20px; border-radius: 8px; font-weight: 600;
@@ -950,7 +950,7 @@ window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
 });
 
-// "Works Offline" trust pill → trigger PWA install
+// "Install App" trust pill → trigger PWA install
 const pwaInstallPill = document.getElementById('pwaInstallPill');
 if (pwaInstallPill) {
     pwaInstallPill.addEventListener('click', async () => {
