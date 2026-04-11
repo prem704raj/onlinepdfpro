@@ -945,7 +945,60 @@
 /* =========================================
    Reduce Vertical Space Between Sections
    ========================================= */
-.how-it-works, .faq-section {
+.how-it-works, .faq-section, .related-tools {
     margin-top: 24px !important;
     margin-bottom: 24px !important;
+}
+
+/* =========================================
+   Related Tools Override
+   ========================================= */
+.related-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.related-tool-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.related-tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: var(--accent);
+}
+.related-tool-card h3 {
+    margin: 0 0 6px;
+    color: var(--accent);
+    font-size: 16px;
+}
+.related-tool-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+    .related-tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+    }
+    .related-tool-card {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    .related-tool-card h3 {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    .related-tool-card p {
+        font-size: 11px;
+    }
 }
