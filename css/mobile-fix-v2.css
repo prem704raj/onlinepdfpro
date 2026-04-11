@@ -851,6 +851,20 @@
     main {
         padding-top: 0 !important;
     }
+
+    /* ══════════════════════════════════════════
+       WHY I BUILT THIS — Compact on mobile
+       ══════════════════════════════════════════ */
+    .why-story p:not(:first-of-type) {
+        display: none !important;
+    }
+    .why-story p:first-of-type {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        margin-bottom: 0 !important;
+    }
 }
 
 
