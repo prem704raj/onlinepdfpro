@@ -951,6 +951,11 @@
     text-align: left !important;
 }
 
+/* Ensure banner ad space after uploading section */
+.privacy-reminder {
+    margin-top: 120px !important;
+}
+
 @media (min-width: 768px) {
     .how-it-works, .faq-section, .related-tools {
         width: 1000px !important;
