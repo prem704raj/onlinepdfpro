@@ -917,3 +917,27 @@
     cursor: not-allowed;
     transform: none;
 }
+
+/* =========================================
+   HOW-IT-WORKS Horizontal Override
+   ========================================= */
+.how-it-works .steps {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px !important;
+    align-items: start !important;
+}
+
+@media (max-width: 600px) {
+    .how-it-works .steps {
+        gap: 8px !important;
+    }
+    .how-it-works .step h3 {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+    }
+    .how-it-works .step p {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+}
