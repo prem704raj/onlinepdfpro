@@ -427,6 +427,10 @@
         font-size: 1.75rem;
     }
 
+    .tool-description {
+        display: none !important;
+    }
+
     .upload-zone {
         padding: 40px 20px;
     }
