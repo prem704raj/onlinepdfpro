@@ -9,7 +9,7 @@
 
 .tool-header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
 }
 
 .tool-title {
@@ -36,7 +36,7 @@
     text-align: center;
     transition: var(--transition);
     cursor: pointer;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     background: var(--surface-1);
 }
 
@@ -940,4 +940,12 @@
         font-size: 10px !important;
         line-height: 1.4 !important;
     }
+}
+
+/* =========================================
+   Reduce Vertical Space Between Sections
+   ========================================= */
+.how-it-works, .faq-section {
+    margin-top: 24px !important;
+    margin-bottom: 24px !important;
 }
