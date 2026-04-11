@@ -943,11 +943,22 @@
 }
 
 /* =========================================
-   Reduce Vertical Space Between Sections
+   Reduce Vertical Space & Increase Width for Content Sections
    ========================================= */
 .how-it-works, .faq-section, .related-tools {
     margin-top: 24px !important;
     margin-bottom: 24px !important;
+    text-align: left !important;
+}
+
+@media (min-width: 768px) {
+    .how-it-works, .faq-section, .related-tools {
+        width: 1000px !important;
+        max-width: calc(100vw - 40px) !important;
+        position: relative !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
 }
 
 /* =========================================
