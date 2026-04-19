@@ -367,33 +367,68 @@ async function processPDF(file) {
 
   document.getElementById('progressFill').style.width = '50%';
 
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    
-    const items = textContent.items;
-    
-    const lines = {};
-    items.forEach(item => {
-      const y = Math.round(item.transform[5]);
-      if (!lines[y]) lines[y] = [];
-      lines[y].push({
-        text: item.str.trim(),
-        x: Math.round(item.transform[4])
-      });
-    });
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const items = textContent.items.filter(item => item.str && item.str.trim().length > 0);
 
-    const sortedYs = Object.keys(lines).sort((a, b) => b - a);
-    
-    sortedYs.forEach(y => {
-      const lineItems = lines[y].sort((a, b) => a.x - b.x);
-      const rowTexts = lineItems.map(item => item.text).filter(t => t.length > 0);
-      if (rowTexts.length > 0) {
-        extractedData.push(rowTexts);
-        allText.push(rowTexts.join('\t'));
-      }
-    });
-  }
+        const rowBuckets = [];
+        const rowMergeTolerance = 4;
+        items.forEach(item => {
+            const y = item.transform[5];
+            let bucket = rowBuckets.find(r => Math.abs(r.y - y) <= rowMergeTolerance);
+            if (!bucket) {
+                bucket = { y, items: [] };
+                rowBuckets.push(bucket);
+            }
+            bucket.items.push({
+                text: item.str.trim(),
+                x: item.transform[4],
+                width: item.width || 0
+            });
+        });
+
+        rowBuckets.sort((a, b) => b.y - a.y);
+
+        const allXStarts = [];
+        rowBuckets.forEach(row => {
+            row.items.forEach(it => allXStarts.push(it.x));
+        });
+
+        const sortedX = allXStarts.sort((a, b) => a - b);
+        const columns = [];
+        const colTolerance = 18;
+        sortedX.forEach(x => {
+            const existing = columns.find(c => Math.abs(c - x) <= colTolerance);
+            if (!existing) {
+                columns.push(x);
+            }
+        });
+
+        rowBuckets.forEach(row => {
+            const rowCells = new Array(Math.max(columns.length, 1)).fill('');
+            const sortedItems = row.items.sort((a, b) => a.x - b.x);
+            sortedItems.forEach(item => {
+                let colIndex = 0;
+                if (columns.length > 0) {
+                    let minDist = Number.POSITIVE_INFINITY;
+                    columns.forEach((cx, idx) => {
+                        const dist = Math.abs(item.x - cx);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            colIndex = idx;
+                        }
+                    });
+                }
+                rowCells[colIndex] = rowCells[colIndex] ? (rowCells[colIndex] + ' ' + item.text) : item.text;
+            });
+
+            if (rowCells.some(cell => cell.trim().length > 0)) {
+                extractedData.push(rowCells.map(cell => cell.trim()));
+                allText.push(rowCells.join('\t'));
+            }
+        });
+    }
 
   document.getElementById('progressFill').style.width = '100%';
 
@@ -457,7 +492,9 @@ function downloadExcel() {
 
 function downloadCSV() {
   if (extractedData.length === 0) return;
-  const csv = extractedData.map(row => row.map(cell => `"${cell}"`).join(',')).join('');
+    const csv = extractedData
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
   const blob = new Blob([csv], {type: 'text/csv'});
   OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.csv');
 }

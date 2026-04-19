@@ -369,7 +369,9 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
+        const PX_TO_TWIP = 15;
         let extractedPages = [];
+        let renderedPageImages = [];
         let _originalFileName = '';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -380,6 +382,30 @@
             e.preventDefault();
             processPDF(e.dataTransfer.files[0]);
         };
+
+        async function pageToPngData(page, scale) {
+            const viewport = page.getViewport({ scale });
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.floor(viewport.width);
+            canvas.height = Math.floor(viewport.height);
+            const ctx = canvas.getContext('2d', { alpha: false });
+            await page.render({ canvasContext: ctx, viewport }).promise;
+            return {
+                dataUrl: canvas.toDataURL('image/png'),
+                width: canvas.width,
+                height: canvas.height
+            };
+        }
+
+        function dataUrlToBytes(dataUrl) {
+            const base64 = dataUrl.split(',')[1] || '';
+            const raw = atob(base64);
+            const arr = new Uint8Array(raw.length);
+            for (let i = 0; i < raw.length; i++) {
+                arr[i] = raw.charCodeAt(i);
+            }
+            return arr;
+        }
 
         async function processPDF(file) {
             if (!file) return;
@@ -394,6 +420,7 @@
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
             extractedPages = [];
+            renderedPageImages = [];
             let fullText = '';
 
             for (let i = 1; i <= pdf.numPages; i++) {
@@ -402,67 +429,38 @@
 
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
-                const styles = textContent.styles;
 
+                // Collect text only for stats/preview while DOCX export keeps visual fidelity.
                 const lines = {};
-                // Margin to group characters into the same vertical line
                 const marginY = 4;
 
                 textContent.items.forEach(item => {
-                    // Y coordinate
                     let y = item.transform[5];
-                    // Find an existing line within marginY
                     let matchedY = Object.keys(lines).find(existingY => Math.abs(existingY - y) <= marginY);
-
                     if (matchedY) {
                         y = matchedY;
                     } else {
                         lines[y] = [];
                     }
-
-                    // Extract font specs
-                    const fontName = item.fontName;
-                    const fontObj = styles[fontName] || {};
-                    const fontFamily = (fontObj.fontFamily || '').toLowerCase();
-                    const isBold = /bold|black|heavy/i.test(fontName) || /bold/i.test(fontFamily);
-                    const isItalic = /italic|oblique/i.test(fontName) || /italic/i.test(fontFamily);
-
-                    // font size = hypotenuse of transform matrix scaling
-                    const fontSize = Math.sqrt(item.transform[0] * item.transform[0] + item.transform[1] * item.transform[1]);
-
-                    lines[y].push({
-                        text: item.str,
-                        x: item.transform[4],
-                        width: item.width,
-                        size: fontSize || 12,
-                        bold: isBold,
-                        italic: isItalic
-                    });
+                    lines[y].push({ text: item.str, x: item.transform[4] });
                 });
 
-                // pdf y is bottom-to-top initially, so sort descending
                 const sortedYs = Object.keys(lines).sort((a, b) => b - a);
-                let pageLines = [];
                 let pageText = '';
-
                 sortedYs.forEach(y => {
-                    const lineItems = lines[y].sort((a, b) => a.x - b.x);
-                    pageLines.push(lineItems);
-
-                    const lineText = lineItems.map(item => item.text).join(' ').trim();
-                    if (lineText.length > 0) {
+                    const lineText = lines[y].sort((a, b) => a.x - b.x).map(item => item.text).join(' ').trim();
+                    if (lineText) {
                         pageText += lineText + '\n';
                     }
                 });
 
-                extractedPages.push({
-                    text: pageText,
-                    formattedLines: pageLines
-                });
+                extractedPages.push({ text: pageText.trim() });
                 fullText += pageText + '\n\n';
+
+                const rendered = await pageToPngData(page, 2.2);
+                renderedPageImages.push(rendered);
             }
 
-            // Show results
             document.getElementById('previewText').value = fullText.trim();
             document.getElementById('pageCount').textContent = pdf.numPages;
             document.getElementById('wordCount').textContent = fullText.split(/\s+/).filter(w => w.length > 0).length;
@@ -475,78 +473,54 @@
         }
 
         async function downloadWord() {
-            if (extractedPages.length === 0) return;
+            if (renderedPageImages.length === 0) return;
 
-            const children = [];
+            const sections = renderedPageImages.map((pageImg, index) => {
+                const contentWidthTwip = Math.round(pageImg.width * PX_TO_TWIP);
+                const contentHeightTwip = Math.round(pageImg.height * PX_TO_TWIP);
+                const marginTwip = 360;
 
-            extractedPages.forEach((page, index) => {
-                // Determine layout bounds for relative spacing
-                const allX = [];
-                page.formattedLines.forEach(line => line.forEach(item => allX.push(item.x)));
-                const minX = allX.length > 0 ? Math.min(...allX) : 0;
-
-                page.formattedLines.forEach(lineItems => {
-                    if (lineItems.length === 0) return;
-
-                    const textRuns = [];
-                    let prevX = -1;
-
-                    // Try to construct words/phrases with proper spacing
-                    lineItems.forEach((item, idx) => {
-                        // Prevent identical overlapping strings (often used for pseudo-bolding in PDFs)
-                        if (idx > 0 && Math.abs(item.x - lineItems[idx - 1].x) < 2 && item.text === lineItems[idx - 1].text) {
-                            return;
-                        }
-
-                        // Add spaces if there's a horizontal gap
-                        if (prevX !== -1 && (item.x - prevX) > (item.size * 0.5)) {
-                            textRuns.push(new docx.TextRun({ text: " " }));
-                        }
-
-                        // Size is represented in half-points in DOCX (12pt = 24)
-                        const sizeHalfPoints = Math.max(16, Math.round(item.size * 2));
-
-                        textRuns.push(new docx.TextRun({
-                            text: item.text,
-                            bold: item.bold,
-                            italics: item.italic,
-                            size: sizeHalfPoints
-                        }));
-
-                        prevX = item.x + item.width;
-                    });
-
-                    // Indent relative to minimum X. 1 point = 20 twips
-                    const indentPx = lineItems[0].x - minX;
-                    const indentTwips = Math.max(0, Math.round(indentPx * 20));
-
-                    children.push(new docx.Paragraph({
-                        children: textRuns,
-                        indent: { left: indentTwips },
-                        spacing: { after: 120 }
-                    }));
-                });
-
-                // Page break (except last page)
-                if (index < extractedPages.length - 1) {
-                    children.push(new docx.Paragraph({
-                        children: [],
-                        pageBreakBefore: true
-                    }));
-                }
-            });
-
-            const doc = new docx.Document({
-                sections: [{
+                return {
                     properties: {
                         page: {
-                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                            margin: {
+                                top: marginTwip,
+                                right: marginTwip,
+                                bottom: marginTwip,
+                                left: marginTwip
+                            },
+                            size: {
+                                width: contentWidthTwip + (marginTwip * 2),
+                                height: contentHeightTwip + (marginTwip * 2)
+                            }
                         }
                     },
-                    children: children
-                }]
+                    children: [
+                        new docx.Paragraph({
+                            children: [
+                                new docx.ImageRun({
+                                    data: dataUrlToBytes(pageImg.dataUrl),
+                                    transformation: {
+                                        width: pageImg.width,
+                                        height: pageImg.height
+                                    }
+                                })
+                            ]
+                        }),
+                        ...(extractedPages[index] && extractedPages[index].text
+                            ? [new docx.Paragraph({
+                                children: [new docx.TextRun({
+                                    text: extractedPages[index].text,
+                                    color: 'FFFFFF',
+                                    size: 2
+                                })]
+                            })]
+                            : [])
+                    ]
+                };
             });
 
+            const doc = new docx.Document({ sections });
             const blob = await docx.Packer.toBlob(doc);
             OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.docx');
         }

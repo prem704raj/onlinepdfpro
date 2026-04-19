@@ -302,10 +302,10 @@
 
     <script src="../js/app.js?v=8"></script>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <script>
-        let htmlContent = '';
+        let renderedDocContainer = null;
         let _originalFileName = 'document.pdf';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -329,18 +329,36 @@
 
             const arrayBuffer = await file.arrayBuffer();
 
-            document.getElementById('progressFill').style.width = '60%';
+            document.getElementById('progressFill').style.width = '55%';
 
-            const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
-            htmlContent = result.value;
+            const previewArea = document.getElementById('previewArea');
+            previewArea.innerHTML = '';
+            previewArea.style.background = '#ffffff';
+            previewArea.style.color = '#111827';
+
+            renderedDocContainer = document.createElement('div');
+            renderedDocContainer.className = 'docx-render-wrap';
+            renderedDocContainer.style.padding = '20px';
+            renderedDocContainer.style.background = '#ffffff';
+            previewArea.appendChild(renderedDocContainer);
+
+            await docx.renderAsync(arrayBuffer, renderedDocContainer, null, {
+                className: 'docx',
+                inWrapper: true,
+                breakPages: true,
+                ignoreWidth: false,
+                ignoreHeight: false,
+                renderHeaders: true,
+                renderFooters: true,
+                renderFootnotes: true,
+                renderEndnotes: true
+            });
 
             document.getElementById('progressFill').style.width = '100%';
 
-            // Show preview
-            document.getElementById('previewArea').innerHTML = htmlContent;
-
-            const wordCount = htmlContent.replace(/<[^>]*>/g, '').split(/\s+/).filter(w => w.length > 0).length;
-            document.getElementById('resultInfo').textContent = wordCount + ' words extracted from your document';
+            const extractedText = (renderedDocContainer.textContent || '').trim();
+            const wordCount = extractedText.length > 0 ? extractedText.split(/\s+/).filter(w => w.length > 0).length : 0;
+            document.getElementById('resultInfo').textContent = wordCount + ' words rendered from your document';
 
             document.getElementById('progressSection').style.display = 'none';
                 incrementCounter('wordToPDF');
@@ -349,23 +367,22 @@ document.getElementById('resultBox').style.display = 'block';
         }
 
         function downloadPDF() {
-            if (!htmlContent) return;
+            if (!renderedDocContainer) return;
 
             const container = document.createElement('div');
-            container.innerHTML = htmlContent;
+            container.style.background = '#ffffff';
+            container.style.padding = '12mm';
+            container.style.color = '#111827';
             container.style.fontFamily = 'Calibri, Arial, sans-serif';
-            container.style.fontSize = '14px';
-            container.style.lineHeight = '1.8';
-            container.style.color = '#333';
-            container.style.padding = '20px';
+            container.appendChild(renderedDocContainer.cloneNode(true));
 
             const options = {
-                margin: [15, 15, 15, 15],
+                margin: [10, 10, 10, 10],
                 filename: _originalFileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak: { mode: ['css', 'legacy'] }
             };
 
             html2pdf().set(options).from(container).outputPdf('blob').then(function(blob) {

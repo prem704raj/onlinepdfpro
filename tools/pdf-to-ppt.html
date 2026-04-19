@@ -408,7 +408,7 @@
                 <div class="slides-preview" id="slidesPreview"></div>
 
                 <div style="margin-top:30px;">
-                    <button onclick="downloadPPT()" class="download-btn">📥 Download PowerPoint (.pptx)</button>
+                    <button id="downloadBtn" onclick="downloadPPT()" class="download-btn">📥 Download PowerPoint (.pptx)</button>
                 <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#x1f504; Process Another File</button>
                 </div>
             </div>
@@ -426,6 +426,7 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let slideImages = [];
+        let pageRatios = [];
         let _originalFileName = 'presentation.pptx';
 
         document.getElementById('dropArea').onclick = (e) => {
@@ -454,6 +455,7 @@
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
             slideImages = [];
+            pageRatios = [];
             const previewDiv = document.getElementById('slidesPreview');
             previewDiv.innerHTML = '';
 
@@ -469,8 +471,9 @@
                 canvas.style.height = viewport.height + 'px';
                 await page.render({ canvasContext: canvas.getContext('2d'), viewport: hiResViewport }).promise;
 
-                const imageData = canvas.toDataURL('image/jpeg', 0.92);
+                const imageData = canvas.toDataURL('image/png');
                 slideImages.push(imageData);
+                pageRatios.push(viewport.width / viewport.height);
 
                 const card = document.createElement('div');
                 card.className = 'slide-card';
@@ -511,15 +514,29 @@
             setTimeout(() => {
                 try {
                     const pptx = new PptxGenJS();
+                    pptx.layout = 'LAYOUT_WIDE';
 
                     for (let i = 0; i < slideImages.length; i++) {
                         const slide = pptx.addSlide();
+                        const ratio = pageRatios[i] || (16 / 9);
+                        const slideW = 13.333;
+                        const slideH = 7.5;
+
+                        let imgW = slideW;
+                        let imgH = imgW / ratio;
+                        if (imgH > slideH) {
+                            imgH = slideH;
+                            imgW = imgH * ratio;
+                        }
+                        const x = (slideW - imgW) / 2;
+                        const y = (slideH - imgH) / 2;
+
                         slide.addImage({
                             data: slideImages[i],
-                            x: 0,
-                            y: 0,
-                            w: '100%',
-                            h: '100%'
+                            x,
+                            y,
+                            w: imgW,
+                            h: imgH
                         });
                     }
 
