@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v58'; 
+const CACHE_NAME = 'onlinepdfpro-v59'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
@@ -15,6 +15,7 @@ const STATIC_ASSETS = [
     'history.html',
     'index.html',
     'invoice-generator.html',
+    'pdf-page-extractor.html',
     'pdf-page-reorder.html',
     'pdf-to-text-extractor.html',
     'pdf-bookmark.html',
@@ -96,6 +97,7 @@ const STATIC_ASSETS = [
     'css/tools-v2.css',
     'js/app.js',
     'js/vendor/html2canvas/html2canvas.min.js',
+    'js/vendor/jszip/jszip.min.js',
     'js/vendor/pdflib/pdf-lib.min.js',
     'js/vendor/jspdf/jspdf.umd.min.js',
     'site.webmanifest',
