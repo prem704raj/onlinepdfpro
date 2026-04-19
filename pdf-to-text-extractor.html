@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Text Extractor Free Online | OnlinePDFPro</title>
+    <meta name="description"
+        content="Extract editable text from PDF files page by page or as a combined document. Search, find-replace, and export to TXT or Markdown entirely in browser.">
+    <meta name="keywords"
+        content="pdf to text extractor, extract text from pdf, pdf text converter, pdf to txt, pdf to markdown">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/pdf-to-text-extractor.html">
+    <meta property="og:title" content="PDF to Text Extractor Free Online | OnlinePDFPro">
+    <meta property="og:description"
+        content="Extract all text from PDF pages with preserved paragraph breaks, live search highlighting, and TXT/MD export in your browser.">
+    <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-to-text-extractor.html">
+    <meta name="twitter:title" content="PDF to Text Extractor Free Online | OnlinePDFPro">
+    <meta name="twitter:description"
+        content="Drag a PDF, extract all text, edit it, search inside it, and export as TXT or Markdown locally.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+
+    <style>
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: var(--text-primary) !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .file-info {
+            display: none;
+            max-width: 760px;
+            margin: 18px auto;
+            padding: 14px 18px;
+            background: var(--surface-2);
+            border-radius: 14px;
+            border: 2px solid var(--accent);
+            text-align: center;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .progress-section {
+            display: none;
+            max-width: 760px;
+            margin: 24px auto;
+            padding: 20px;
+            background: var(--surface-1);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-section h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .progress-section p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 13px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            margin-top: 13px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #0ea5e9);
+            transition: width 0.2s ease;
+        }
+
+        .workspace {
+            display: none;
+            max-width: 1080px;
+            margin: 28px auto;
+            padding: 24px;
+            background: var(--surface-1);
+            border-radius: 20px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        .workspace-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .workspace-head h2 {
+            margin: 0;
+            font-size: 25px;
+            color: var(--text-primary);
+        }
+
+        .privacy-pill {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .control-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 10px;
+            display: grid;
+            gap: 7px;
+        }
+
+        .control-card label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+        }
+
+        .select,
+        .input,
+        .textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-size: 14px;
+            padding: 9px 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .select:focus,
+        .input:focus,
+        .textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            display: block;
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 28px;
+            line-height: 1.1;
+        }
+
+        .stat-card .lbl {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .text-wrap {
+            display: grid;
+            gap: 10px;
+        }
+
+        .textarea {
+            min-height: 320px;
+            resize: vertical;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .match-view {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            min-height: 140px;
+            max-height: 220px;
+            overflow: auto;
+            padding: 10px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .match-view mark {
+            background: #fde047;
+            color: #1f2937;
+            padding: 1px 0;
+            border-radius: 2px;
+        }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 14px;
+            transition: transform 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: 0 10px 22px rgba(71, 85, 105, 0.25);
+        }
+
+        .status-note {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+            min-height: 18px;
+        }
+
+        .upload-zone.drag-active {
+            border-color: var(--accent) !important;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        @media (max-width: 900px) {
+            .workspace {
+                padding: 16px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                    Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-bottom:42px;">
+                <span class="section-tag"
+                    style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF
+                    Text Tools</span>
+                <h1 class="tool-title"
+                    style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF
+                    to Text Extractor</h1>
+                <p class="tool-description"
+                    style="color:var(--text-secondary); font-size:1rem; max-width:740px; margin:0 auto; line-height:1.6;">Upload
+                    a password-free PDF to extract clean editable text from every page. Switch between page-labeled or
+                    combined output, then search, replace, copy, and export.</p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
+                <span class="upload-icon">📝</span>
+                <p class="upload-text">Drop your PDF here or click to upload</p>
+                <p class="upload-hint">Everything happens on your device. No file upload to any server.</p>
+                <button class="btn btn-primary upload-btn" id="chooseBtn">Choose PDF File</button>
+                <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
+            </div>
+
+            <div class="file-info" id="fileInfo"></div>
+
+            <div class="progress-section" id="progressSection">
+                <h3>Extracting Text</h3>
+                <p id="progressText">Preparing document...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <section class="workspace" id="workspace">
+                <div class="workspace-head">
+                    <h2>Extracted Text</h2>
+                    <span class="privacy-pill">100% Browser Processing</span>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <label for="extractMode">Extraction Mode</label>
+                        <select class="select" id="extractMode">
+                            <option value="combined">All pages as one combined text</option>
+                            <option value="paged">Page by page with labels</option>
+                        </select>
+                    </div>
+                    <div class="control-card">
+                        <label for="searchInput">Search and Highlight</label>
+                        <input class="input" id="searchInput" placeholder="Find text inside output...">
+                    </div>
+                    <div class="control-card">
+                        <label for="replaceInput">Replace With</label>
+                        <input class="input" id="replaceInput" placeholder="Replacement text...">
+                    </div>
+                </div>
+
+                <div class="actions-row" style="margin-bottom:8px;">
+                    <button class="action-btn btn-copy" id="findNextBtn">Find Next</button>
+                    <button class="action-btn btn-copy" id="replaceOneBtn">Replace One</button>
+                    <button class="action-btn btn-copy" id="replaceAllBtn">Replace All</button>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="num" id="wordCount">0</span>
+                        <span class="lbl">Words</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="num" id="charCount">0</span>
+                        <span class="lbl">Characters</span>
+                    </div>
+                </div>
+
+                <div class="text-wrap">
+                    <textarea class="textarea" id="outputText"
+                        placeholder="Extracted text appears here and stays editable..."></textarea>
+                    <div class="match-view" id="matchView"></div>
+                </div>
+
+                <p class="status-note" id="statusNote"></p>
+
+                <div class="actions-row">
+                    <button class="action-btn btn-copy" id="copyBtn">Copy All Text</button>
+                    <button class="action-btn btn-export" id="downloadTxtBtn">Download TXT</button>
+                    <button class="action-btn btn-export" id="downloadMdBtn">Download MD</button>
+                    <button class="action-btn btn-reset" id="resetBtn">Process Another File</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer
+        style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+                <div>
+                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
+                        by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li>
+                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF Editor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li>
+                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to JPG</a></li>
+                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare PDFs</a></li>
+                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="about.html">About Us</a></li>
+                        <li style="margin:8px 0;"><a href="contact.html">Contact Us</a></li>
+                        <li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li>
+                        <li style="margin:8px 0;"><a href="terms.html">Terms of Service</a></li>
+                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
+                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
+                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">&#169; 2026 Online PDF Pro. All rights
+                    reserved. Made with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span
+                        style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
+                        Your files are safe</span>
+                    <span
+                        style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
+                        100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/vendor/pdfjs/pdf.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdfjs/pdf.worker.min.js';
+
+        const state = {
+            fileName: '',
+            pageTexts: [],
+            searchIndex: -1
+        };
+
+        const elements = {
+            dropArea: document.getElementById('dropArea'),
+            fileInput: document.getElementById('fileInput'),
+            chooseBtn: document.getElementById('chooseBtn'),
+            fileInfo: document.getElementById('fileInfo'),
+            progressSection: document.getElementById('progressSection'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            workspace: document.getElementById('workspace'),
+            extractMode: document.getElementById('extractMode'),
+            searchInput: document.getElementById('searchInput'),
+            replaceInput: document.getElementById('replaceInput'),
+            outputText: document.getElementById('outputText'),
+            matchView: document.getElementById('matchView'),
+            wordCount: document.getElementById('wordCount'),
+            charCount: document.getElementById('charCount'),
+            statusNote: document.getElementById('statusNote'),
+            copyBtn: document.getElementById('copyBtn'),
+            downloadTxtBtn: document.getElementById('downloadTxtBtn'),
+            downloadMdBtn: document.getElementById('downloadMdBtn'),
+            findNextBtn: document.getElementById('findNextBtn'),
+            replaceOneBtn: document.getElementById('replaceOneBtn'),
+            replaceAllBtn: document.getElementById('replaceAllBtn'),
+            resetBtn: document.getElementById('resetBtn')
+        };
+
+        function setProgress(percent, text) {
+            elements.progressSection.style.display = 'block';
+            elements.progressFill.style.width = Math.max(0, Math.min(100, percent)) + '%';
+            elements.progressText.textContent = text;
+        }
+
+        function hideProgress() {
+            elements.progressSection.style.display = 'none';
+            elements.progressFill.style.width = '0%';
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function updateFileInfo(file) {
+            elements.fileInfo.style.display = 'block';
+            elements.fileInfo.textContent = 'Selected file: ' + file.name + ' (' + formatBytes(file.size) + ')';
+        }
+
+        function resetOutputOnly() {
+            elements.outputText.value = '';
+            elements.matchView.textContent = '';
+            elements.wordCount.textContent = '0';
+            elements.charCount.textContent = '0';
+            elements.statusNote.textContent = '';
+            state.searchIndex = -1;
+        }
+
+        function resetAll() {
+            state.fileName = '';
+            state.pageTexts = [];
+            resetOutputOnly();
+            elements.workspace.style.display = 'none';
+            elements.fileInfo.style.display = 'none';
+            elements.fileInfo.textContent = '';
+            elements.searchInput.value = '';
+            elements.replaceInput.value = '';
+            hideProgress();
+        }
+
+        function tokenizeWords(text) {
+            const matches = (text || '').match(/[a-z0-9]+(?:['-][a-z0-9]+)*/gi);
+            return matches || [];
+        }
+
+        function updateCounts() {
+            const text = elements.outputText.value || '';
+            elements.wordCount.textContent = String(tokenizeWords(text).length);
+            elements.charCount.textContent = String(text.length);
+        }
+
+        function escapeHtml(text) {
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeRegExp(text) {
+            return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function highlightSearchView() {
+            const text = elements.outputText.value || '';
+            const query = elements.searchInput.value || '';
+            if (!query.trim()) {
+                elements.matchView.textContent = text;
+                elements.statusNote.textContent = '';
+                return;
+            }
+
+            const regex = new RegExp(escapeRegExp(query), 'gi');
+            const matches = text.match(regex);
+            const count = matches ? matches.length : 0;
+
+            if (!count) {
+                elements.matchView.textContent = text;
+                elements.statusNote.textContent = 'No matches found for "' + query + '".';
+                return;
+            }
+
+            const html = escapeHtml(text).replace(regex, function (m) {
+                return '<mark>' + escapeHtml(m) + '</mark>';
+            });
+            elements.matchView.innerHTML = html;
+            elements.statusNote.textContent = 'Highlighted ' + count + ' match(es) for "' + query + '".';
+        }
+
+        function selectMatchAt(start, end) {
+            elements.outputText.focus();
+            elements.outputText.setSelectionRange(start, end);
+            const textBefore = elements.outputText.value.slice(0, start);
+            const lines = textBefore.split('\n').length;
+            elements.statusNote.textContent = 'Found match at line ' + lines + '.';
+        }
+
+        function findNext() {
+            const text = elements.outputText.value || '';
+            const query = elements.searchInput.value || '';
+            if (!query) {
+                elements.statusNote.textContent = 'Enter text in Search and Highlight to find matches.';
+                return;
+            }
+
+            const lowerText = text.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const from = Math.max(0, elements.outputText.selectionEnd || 0);
+            let pos = lowerText.indexOf(lowerQuery, from);
+            if (pos < 0) {
+                pos = lowerText.indexOf(lowerQuery, 0);
+            }
+
+            if (pos < 0) {
+                elements.statusNote.textContent = 'No matches found for "' + query + '".';
+                return;
+            }
+
+            state.searchIndex = pos;
+            selectMatchAt(pos, pos + query.length);
+        }
+
+        function replaceOne() {
+            const query = elements.searchInput.value || '';
+            if (!query) {
+                elements.statusNote.textContent = 'Enter text in Search and Highlight first.';
+                return;
+            }
+
+            const replacement = elements.replaceInput.value || '';
+            const text = elements.outputText.value || '';
+            const start = elements.outputText.selectionStart;
+            const end = elements.outputText.selectionEnd;
+            const selected = text.slice(start, end);
+
+            if (selected.toLowerCase() !== query.toLowerCase()) {
+                findNext();
+                return;
+            }
+
+            const nextText = text.slice(0, start) + replacement + text.slice(end);
+            elements.outputText.value = nextText;
+            const newPos = start + replacement.length;
+            elements.outputText.setSelectionRange(newPos, newPos);
+            updateCounts();
+            highlightSearchView();
+            elements.statusNote.textContent = 'Replaced one match.';
+        }
+
+        function replaceAll() {
+            const query = elements.searchInput.value || '';
+            if (!query) {
+                elements.statusNote.textContent = 'Enter text in Search and Highlight first.';
+                return;
+            }
+
+            const replacement = elements.replaceInput.value || '';
+            const regex = new RegExp(escapeRegExp(query), 'gi');
+            const text = elements.outputText.value || '';
+            const matches = text.match(regex);
+            const count = matches ? matches.length : 0;
+            if (!count) {
+                elements.statusNote.textContent = 'No matches found for "' + query + '".';
+                return;
+            }
+
+            elements.outputText.value = text.replace(regex, replacement);
+            updateCounts();
+            highlightSearchView();
+            elements.statusNote.textContent = 'Replaced ' + count + ' match(es).';
+        }
+
+        function median(values) {
+            if (!values.length) return 0;
+            const sorted = values.slice().sort(function (a, b) { return a - b; });
+            const mid = Math.floor(sorted.length / 2);
+            if (sorted.length % 2 === 0) {
+                return (sorted[mid - 1] + sorted[mid]) / 2;
+            }
+            return sorted[mid];
+        }
+
+        function nextFrame() {
+            return new Promise(function (resolve) {
+                requestAnimationFrame(resolve);
+            });
+        }
+
+        async function extractPageText(page) {
+            const textContent = await page.getTextContent();
+            if (!textContent.items || !textContent.items.length) {
+                return '';
+            }
+
+            const lines = [];
+            for (const item of textContent.items) {
+                if (!item.str || !item.str.trim()) {
+                    continue;
+                }
+                const x = item.transform[4];
+                const y = item.transform[5];
+
+                let line = null;
+                for (const candidate of lines) {
+                    if (Math.abs(candidate.y - y) <= 2) {
+                        line = candidate;
+                        break;
+                    }
+                }
+
+                if (!line) {
+                    line = { y: y, parts: [] };
+                    lines.push(line);
+                }
+
+                line.parts.push({ x: x, text: item.str });
+            }
+
+            lines.sort(function (a, b) { return b.y - a.y; });
+            const gaps = [];
+            for (let i = 0; i < lines.length - 1; i++) {
+                const gap = lines[i].y - lines[i + 1].y;
+                if (gap > 0 && gap < 90) {
+                    gaps.push(gap);
+                }
+            }
+            const typicalGap = median(gaps) || 12;
+
+            let output = '';
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                line.parts.sort(function (a, b) { return a.x - b.x; });
+                const lineText = line.parts.map(function (part) { return part.text; }).join(' ').replace(/\s+/g, ' ').trim();
+                if (!lineText) {
+                    continue;
+                }
+
+                output += lineText + '\n';
+                const next = lines[i + 1];
+                if (next) {
+                    const gap = line.y - next.y;
+                    if (gap > typicalGap * 1.75) {
+                        output += '\n';
+                    }
+                }
+            }
+
+            return output.trim();
+        }
+
+        function buildCombinedText() {
+            return state.pageTexts.join('\n\n').trim();
+        }
+
+        function buildPagedText() {
+            const chunks = [];
+            for (let i = 0; i < state.pageTexts.length; i++) {
+                chunks.push('Page ' + (i + 1));
+                chunks.push('---------');
+                chunks.push(state.pageTexts[i]);
+                if (i < state.pageTexts.length - 1) {
+                    chunks.push('');
+                }
+            }
+            return chunks.join('\n').trim();
+        }
+
+        function renderFromMode() {
+            if (!state.pageTexts.length) {
+                return;
+            }
+            const mode = elements.extractMode.value;
+            if (mode === 'paged') {
+                elements.outputText.value = buildPagedText();
+            } else {
+                elements.outputText.value = buildCombinedText();
+            }
+            updateCounts();
+            highlightSearchView();
+        }
+
+        function safeBaseName() {
+            return (state.fileName || 'pdf-text')
+                .replace(/\.pdf$/i, '')
+                .replace(/[^a-z0-9-_]+/gi, '-')
+                .replace(/-+/g, '-')
+                .replace(/(^-|-$)/g, '') || 'pdf-text';
+        }
+
+        function downloadBlob(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function buildMarkdownText() {
+            if (elements.extractMode.value === 'paged') {
+                const parts = [];
+                for (let i = 0; i < state.pageTexts.length; i++) {
+                    parts.push('## Page ' + (i + 1));
+                    parts.push('');
+                    parts.push(state.pageTexts[i] || '');
+                    parts.push('');
+                }
+                return parts.join('\n').trim();
+            }
+            return elements.outputText.value || '';
+        }
+
+        async function processPdf(file) {
+            if (!file) {
+                return;
+            }
+            if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+                alert('Please choose a valid PDF file.');
+                return;
+            }
+
+            resetOutputOnly();
+            state.pageTexts = [];
+            state.fileName = file.name;
+            updateFileInfo(file);
+            setProgress(2, 'Loading PDF file...');
+
+            try {
+                const bytes = new Uint8Array(await file.arrayBuffer());
+                const loadingTask = pdfjsLib.getDocument({ data: bytes });
+
+                loadingTask.onProgress = function (data) {
+                    if (data && data.total) {
+                        const pct = 2 + Math.round((data.loaded / data.total) * 18);
+                        setProgress(pct, 'Reading PDF structure...');
+                    }
+                };
+
+                const pdf = await loadingTask.promise;
+                const totalPages = pdf.numPages;
+
+                setProgress(20, 'Extracting text page by page...');
+
+                for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+                    const text = await extractPageText(page);
+                    state.pageTexts.push(text);
+
+                    const pct = 20 + Math.round((pageNum / totalPages) * 78);
+                    setProgress(pct, 'Processed page ' + pageNum + ' of ' + totalPages + '...');
+                    await nextFrame();
+                }
+
+                renderFromMode();
+                elements.workspace.style.display = 'block';
+                hideProgress();
+                elements.statusNote.textContent = 'Extraction complete. You can edit text before exporting.';
+            } catch (err) {
+                hideProgress();
+                const name = String((err && err.name) || '');
+                const code = Number((err && err.code) || 0);
+                const isLocked = name === 'PasswordException' || code === 1 || code === 2;
+                if (isLocked) {
+                    alert('This PDF appears to be password-protected. Please use a password-free PDF for extraction.');
+                    elements.statusNote.textContent = 'Locked PDF detected. Please upload a password-free PDF.';
+                } else {
+                    alert('Unable to extract text from this PDF. Please try another file.');
+                    elements.statusNote.textContent = 'Could not extract text from this file.';
+                }
+                console.error(err);
+            }
+        }
+
+        elements.dropArea.addEventListener('click', function () {
+            elements.fileInput.click();
+        });
+
+        elements.chooseBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            elements.fileInput.click();
+        });
+
+        elements.fileInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            processPdf(file);
+        });
+
+        elements.dropArea.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            elements.dropArea.classList.add('drag-active');
+        });
+
+        elements.dropArea.addEventListener('dragleave', function () {
+            elements.dropArea.classList.remove('drag-active');
+        });
+
+        elements.dropArea.addEventListener('drop', function (event) {
+            event.preventDefault();
+            elements.dropArea.classList.remove('drag-active');
+            const file = event.dataTransfer.files && event.dataTransfer.files[0];
+            processPdf(file);
+        });
+
+        elements.extractMode.addEventListener('change', function () {
+            if (!state.pageTexts.length) {
+                return;
+            }
+            renderFromMode();
+            elements.statusNote.textContent = 'Text rebuilt from extracted pages using selected mode.';
+        });
+
+        elements.outputText.addEventListener('input', function () {
+            updateCounts();
+            highlightSearchView();
+        });
+
+        elements.searchInput.addEventListener('input', function () {
+            highlightSearchView();
+        });
+
+        elements.findNextBtn.addEventListener('click', findNext);
+        elements.replaceOneBtn.addEventListener('click', replaceOne);
+        elements.replaceAllBtn.addEventListener('click', replaceAll);
+
+        elements.copyBtn.addEventListener('click', async function () {
+            const text = elements.outputText.value || '';
+            if (!text.trim()) {
+                elements.statusNote.textContent = 'No text available to copy.';
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(text);
+                const old = elements.copyBtn.textContent;
+                elements.copyBtn.textContent = 'Copied';
+                setTimeout(function () {
+                    elements.copyBtn.textContent = old;
+                }, 1200);
+            } catch (err) {
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                document.body.removeChild(area);
+            }
+        });
+
+        elements.downloadTxtBtn.addEventListener('click', function () {
+            const text = elements.outputText.value || '';
+            if (!text.trim()) {
+                elements.statusNote.textContent = 'No text available to download.';
+                return;
+            }
+            downloadBlob(new Blob([text], { type: 'text/plain;charset=utf-8' }), safeBaseName() + '.txt');
+        });
+
+        elements.downloadMdBtn.addEventListener('click', function () {
+            const md = buildMarkdownText();
+            if (!md.trim()) {
+                elements.statusNote.textContent = 'No text available to download.';
+                return;
+            }
+            downloadBlob(new Blob([md], { type: 'text/markdown;charset=utf-8' }), safeBaseName() + '.md');
+        });
+
+        elements.resetBtn.addEventListener('click', function () {
+            resetAll();
+        });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function (err) { console.log('SW Reg Failed', err); });
+            });
+        }
+    </script>
+    <script defer src="/js/app.js?v=8"></script>
+</body>
+
+</html>
