@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Word Counter Free Online | OnlinePDFPro</title>
+    <meta name="description"
+        content="Count words, characters, sentences, paragraphs, and page-wise stats from PDF files instantly. 100% browser-based processing with no uploads.">
+    <meta name="keywords"
+        content="pdf word counter, pdf character counter, count words in pdf, pdf sentence counter, pdf page analysis">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-word-counter.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/pdf-word-counter.html">
+    <meta property="og:title" content="PDF Word Counter Free Online | OnlinePDFPro">
+    <meta property="og:description"
+        content="Analyze any PDF with total words, characters, sentences, paragraphs, reading time, speaking time, top words, and page-wise breakdown.">
+    <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-word-counter.html">
+    <meta name="twitter:title" content="PDF Word Counter Free Online | OnlinePDFPro">
+    <meta name="twitter:description"
+        content="Count PDF words, characters, sentences, paragraphs, top words, and per-page word breakdown instantly in your browser.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-word-counter.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-word-counter.html">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+
+    <style>
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: var(--text-primary) !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .file-info {
+            display: none;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 16px 20px;
+            background: var(--surface-2);
+            border-radius: 14px;
+            border: 2px solid var(--accent);
+            text-align: center;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .progress-section {
+            display: none;
+            max-width: 720px;
+            margin: 30px auto;
+            padding: 24px;
+            background: var(--surface-1);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-section h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .progress-section p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            margin-top: 14px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #0ea5e9);
+            border-radius: 999px;
+            transition: width 0.2s ease;
+        }
+
+        .results-box {
+            display: none;
+            max-width: 980px;
+            margin: 35px auto;
+            padding: 30px;
+            background: var(--surface-1);
+            border-radius: 22px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .results-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .results-head h2 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 26px;
+        }
+
+        .privacy-pill {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin: 10px 0 24px;
+        }
+
+        .stat-card {
+            padding: 16px;
+            border-radius: 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-card .num {
+            display: block;
+            font-size: 28px;
+            line-height: 1.1;
+            font-weight: 800;
+            color: var(--accent);
+            word-break: break-word;
+        }
+
+        .stat-card .lbl {
+            display: block;
+            margin-top: 7px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .section-card {
+            padding: 18px;
+            border-radius: 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+        }
+
+        .section-card h3 {
+            margin: 0 0 12px;
+            color: var(--text-primary);
+            font-size: 18px;
+        }
+
+        .word-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .word-item {
+            display: grid;
+            grid-template-columns: minmax(80px, 110px) 1fr auto;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .word-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .word-bar-wrap {
+            background: #dbeafe;
+            border-radius: 999px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .word-bar {
+            background: linear-gradient(90deg, #2563eb, #0ea5e9);
+            height: 100%;
+            width: 0;
+        }
+
+        .word-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .empty-text {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+        }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 360px;
+        }
+
+        .breakdown-table th,
+        .breakdown-table td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .breakdown-table th {
+            background: var(--surface-2);
+            font-size: 13px;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .breakdown-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .action-btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: 0 8px 20px rgba(71, 85, 105, 0.25);
+        }
+
+        .upload-zone.drag-active {
+            border-color: var(--accent) !important;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        @media (max-width: 900px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .results-box {
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                    Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-bottom:48px;">
+                <span class="section-tag"
+                    style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF
+                    Analysis</span>
+                <h1 class="tool-title"
+                    style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF
+                    Word Counter</h1>
+                <p class="tool-description"
+                    style="color:var(--text-secondary); font-size:1rem; max-width:620px; margin:0 auto; line-height:1.6;">Upload
+                    a PDF to get full text statistics including word count, character count, sentence and paragraph
+                    totals, top words, page-by-page breakdown, and estimated reading/speaking time.</p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
+                <span class="upload-icon">📊</span>
+                <p class="upload-text">Drop your PDF here or click to upload</p>
+                <p class="upload-hint">All analysis runs directly in your browser. No upload to any server.</p>
+                <button class="btn btn-primary upload-btn" id="chooseBtn">Choose PDF File</button>
+                <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
+            </div>
+
+            <div class="file-info" id="fileInfo"></div>
+
+            <div class="progress-section" id="progressSection">
+                <h3>Analyzing PDF</h3>
+                <p id="progressText">Preparing document...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="results-box" id="resultsBox">
+                <div class="results-head">
+                    <h2>Document Statistics</h2>
+                    <span class="privacy-pill">100% Browser Processing</span>
+                </div>
+
+                <div class="stats-grid" id="statsGrid"></div>
+
+                <div class="split-layout">
+                    <div class="section-card">
+                        <h3>Top 10 Frequent Words</h3>
+                        <div class="word-list" id="topWordsList"></div>
+                    </div>
+                    <div class="section-card">
+                        <h3>Page Breakdown</h3>
+                        <div class="table-wrap">
+                            <table class="breakdown-table" id="breakdownTable">
+                                <thead>
+                                    <tr>
+                                        <th>Page</th>
+                                        <th>Word Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="breakdownBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <button class="action-btn btn-copy" id="copyBtn">Copy Stats</button>
+                    <button class="action-btn btn-export" id="exportBtn">Export TXT</button>
+                    <button class="action-btn btn-reset" id="resetBtn">Process Another File</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer
+        style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+                <div>
+                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
+                        by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li>
+                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF Editor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li>
+                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to JPG</a></li>
+                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare PDFs</a></li>
+                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="about.html">About Us</a></li>
+                        <li style="margin:8px 0;"><a href="contact.html">Contact Us</a></li>
+                        <li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li>
+                        <li style="margin:8px 0;"><a href="terms.html">Terms of Service</a></li>
+                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
+                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
+                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">&#169; 2026 Online PDF Pro. All rights
+                    reserved. Made with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span
+                        style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
+                        Your files are safe</span>
+                    <span
+                        style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
+                        100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/vendor/pdfjs/pdf.min.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdfjs/pdf.worker.min.js';
+
+        const STOP_WORDS = new Set([
+            'a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'but', 'by', 'can', 'did', 'do', 'does', 'for', 'from',
+            'had', 'has', 'have', 'he', 'her', 'here', 'hers', 'him', 'his', 'how', 'i', 'if', 'in', 'into', 'is', 'it',
+            'its', 'itself', 'just', 'me', 'more', 'most', 'my', 'no', 'not', 'of', 'on', 'or', 'our', 'ours', 'out',
+            'she', 'so', 'than', 'that', 'the', 'their', 'theirs', 'them', 'then', 'there', 'these', 'they', 'this',
+            'those', 'to', 'too', 'up', 'us', 'very', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'who',
+            'why', 'will', 'with', 'would', 'you', 'your', 'yours'
+        ]);
+
+        const state = {
+            fileName: '',
+            stats: null,
+            topWords: [],
+            pageBreakdown: []
+        };
+
+        const elements = {
+            dropArea: document.getElementById('dropArea'),
+            fileInput: document.getElementById('fileInput'),
+            chooseBtn: document.getElementById('chooseBtn'),
+            fileInfo: document.getElementById('fileInfo'),
+            progressSection: document.getElementById('progressSection'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            resultsBox: document.getElementById('resultsBox'),
+            statsGrid: document.getElementById('statsGrid'),
+            topWordsList: document.getElementById('topWordsList'),
+            breakdownBody: document.getElementById('breakdownBody'),
+            copyBtn: document.getElementById('copyBtn'),
+            exportBtn: document.getElementById('exportBtn'),
+            resetBtn: document.getElementById('resetBtn')
+        };
+
+        function setProgress(percent, text) {
+            elements.progressSection.style.display = 'block';
+            elements.progressFill.style.width = Math.max(0, Math.min(100, percent)) + '%';
+            elements.progressText.textContent = text;
+        }
+
+        function hideProgress() {
+            elements.progressSection.style.display = 'none';
+            elements.progressFill.style.width = '0%';
+        }
+
+        function resetResults() {
+            elements.resultsBox.style.display = 'none';
+            elements.statsGrid.innerHTML = '';
+            elements.topWordsList.innerHTML = '';
+            elements.breakdownBody.innerHTML = '';
+            elements.fileInfo.style.display = 'none';
+            elements.fileInfo.textContent = '';
+            state.fileName = '';
+            state.stats = null;
+            state.topWords = [];
+            state.pageBreakdown = [];
+        }
+
+        function updateFileInfo(file) {
+            elements.fileInfo.style.display = 'block';
+            elements.fileInfo.textContent = 'Selected file: ' + file.name + ' (' + formatBytes(file.size) + ')';
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function formatNumber(value) {
+            return Number(value || 0).toLocaleString();
+        }
+
+        function formatTimeFromWords(words, wpm) {
+            if (!words || words <= 0) return '0 min';
+            const mins = words / wpm;
+            if (mins < 1) return '<1 min';
+            return Math.ceil(mins) + ' min';
+        }
+
+        function tokenizeWords(text) {
+            const matches = text.toLowerCase().match(/[a-z0-9]+(?:['-][a-z0-9]+)*/g);
+            return matches || [];
+        }
+
+        function median(values) {
+            if (!values.length) return 0;
+            const sorted = values.slice().sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            if (sorted.length % 2 === 0) {
+                return (sorted[mid - 1] + sorted[mid]) / 2;
+            }
+            return sorted[mid];
+        }
+
+        async function nextFrame() {
+            await new Promise(resolve => requestAnimationFrame(resolve));
+        }
+
+        async function extractPageText(page) {
+            const textContent = await page.getTextContent();
+            if (!textContent.items || !textContent.items.length) {
+                return '';
+            }
+
+            const lines = [];
+            for (const item of textContent.items) {
+                if (!item.str || !item.str.trim()) {
+                    continue;
+                }
+                const x = item.transform[4];
+                const y = item.transform[5];
+
+                let line = null;
+                for (const candidate of lines) {
+                    if (Math.abs(candidate.y - y) <= 2) {
+                        line = candidate;
+                        break;
+                    }
+                }
+
+                if (!line) {
+                    line = { y: y, parts: [] };
+                    lines.push(line);
+                }
+
+                line.parts.push({ x: x, text: item.str });
+            }
+
+            lines.sort((a, b) => b.y - a.y);
+            const gaps = [];
+            for (let i = 0; i < lines.length - 1; i++) {
+                const gap = lines[i].y - lines[i + 1].y;
+                if (gap > 0 && gap < 90) {
+                    gaps.push(gap);
+                }
+            }
+            const typicalGap = median(gaps) || 12;
+
+            let output = '';
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                line.parts.sort((a, b) => a.x - b.x);
+                const lineText = line.parts.map(part => part.text).join(' ').replace(/\s+/g, ' ').trim();
+                if (!lineText) {
+                    continue;
+                }
+                output += lineText + '\n';
+
+                const next = lines[i + 1];
+                if (next) {
+                    const gap = line.y - next.y;
+                    if (gap > typicalGap * 1.75) {
+                        output += '\n';
+                    }
+                }
+            }
+
+            return output.trim();
+        }
+
+        function analyzeText(allText, pageCount) {
+            const words = tokenizeWords(allText);
+            const totalWords = words.length;
+            const charactersWithSpaces = allText.length;
+            const charactersWithoutSpaces = allText.replace(/\s/g, '').length;
+
+            const sentences = allText
+                .replace(/\n+/g, ' ')
+                .split(/[.!?]+/)
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+
+            const paragraphs = allText
+                .split(/\n\s*\n+/)
+                .map(p => p.trim())
+                .filter(p => p.length > 0);
+
+            const avgWordsPerPage = pageCount ? (totalWords / pageCount) : 0;
+            const readingTime = formatTimeFromWords(totalWords, 200);
+            const speakingTime = formatTimeFromWords(totalWords, 130);
+
+            const frequencies = new Map();
+            for (const word of words) {
+                if (word.length < 2 || STOP_WORDS.has(word)) {
+                    continue;
+                }
+                frequencies.set(word, (frequencies.get(word) || 0) + 1);
+            }
+
+            const topWords = Array.from(frequencies.entries())
+                .sort((a, b) => {
+                    if (b[1] !== a[1]) return b[1] - a[1];
+                    return a[0].localeCompare(b[0]);
+                })
+                .slice(0, 10)
+                .map(([word, count]) => ({ word: word, count: count }));
+
+            return {
+                totalWords: totalWords,
+                charactersWithSpaces: charactersWithSpaces,
+                charactersWithoutSpaces: charactersWithoutSpaces,
+                sentenceCount: sentences.length,
+                paragraphCount: paragraphs.length,
+                pageCount: pageCount,
+                avgWordsPerPage: avgWordsPerPage,
+                readingTime: readingTime,
+                speakingTime: speakingTime,
+                topWords: topWords
+            };
+        }
+
+        function renderStats(stats) {
+            const cards = [
+                { label: 'Total Words', value: formatNumber(stats.totalWords) },
+                { label: 'Characters (with spaces)', value: formatNumber(stats.charactersWithSpaces) },
+                { label: 'Characters (no spaces)', value: formatNumber(stats.charactersWithoutSpaces) },
+                { label: 'Sentences', value: formatNumber(stats.sentenceCount) },
+                { label: 'Paragraphs', value: formatNumber(stats.paragraphCount) },
+                { label: 'Pages', value: formatNumber(stats.pageCount) },
+                { label: 'Avg Words/Page', value: stats.avgWordsPerPage.toFixed(2) },
+                { label: 'Reading Time (200 WPM)', value: stats.readingTime },
+                { label: 'Speaking Time (130 WPM)', value: stats.speakingTime }
+            ];
+
+            elements.statsGrid.innerHTML = cards.map(card => {
+                return '<div class="stat-card">' +
+                    '<span class="num">' + card.value + '</span>' +
+                    '<span class="lbl">' + card.label + '</span>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function renderTopWords(topWords) {
+            if (!topWords.length) {
+                elements.topWordsList.innerHTML = '<p class="empty-text">No repeated words found for frequency analysis.</p>';
+                return;
+            }
+
+            const maxCount = topWords[0].count;
+            elements.topWordsList.innerHTML = topWords.map(item => {
+                const width = Math.max(4, Math.round((item.count / maxCount) * 100));
+                return '<div class="word-item">' +
+                    '<span class="word-label" title="' + escapeHtml(item.word) + '">' + escapeHtml(item.word) + '</span>' +
+                    '<div class="word-bar-wrap"><div class="word-bar" style="width:' + width + '%;"></div></div>' +
+                    '<span class="word-count">' + formatNumber(item.count) + '</span>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function renderBreakdown(pageBreakdown) {
+            elements.breakdownBody.innerHTML = pageBreakdown.map(row => {
+                return '<tr><td>' + row.page + '</td><td>' + formatNumber(row.words) + '</td></tr>';
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function buildReportText() {
+            if (!state.stats) {
+                return '';
+            }
+
+            const lines = [];
+            lines.push('PDF WORD COUNTER REPORT');
+            lines.push('=======================');
+            lines.push('File: ' + state.fileName);
+            lines.push('');
+            lines.push('Total words: ' + state.stats.totalWords);
+            lines.push('Characters (with spaces): ' + state.stats.charactersWithSpaces);
+            lines.push('Characters (without spaces): ' + state.stats.charactersWithoutSpaces);
+            lines.push('Sentences: ' + state.stats.sentenceCount);
+            lines.push('Paragraphs: ' + state.stats.paragraphCount);
+            lines.push('Pages: ' + state.stats.pageCount);
+            lines.push('Average words per page: ' + state.stats.avgWordsPerPage.toFixed(2));
+            lines.push('Estimated reading time (200 WPM): ' + state.stats.readingTime);
+            lines.push('Estimated speaking time (130 WPM): ' + state.stats.speakingTime);
+            lines.push('');
+            lines.push('Top 10 frequent words:');
+            if (state.topWords.length) {
+                for (const item of state.topWords) {
+                    lines.push('- ' + item.word + ': ' + item.count);
+                }
+            } else {
+                lines.push('- No frequent words available');
+            }
+            lines.push('');
+            lines.push('Per-page word breakdown:');
+            for (const row of state.pageBreakdown) {
+                lines.push('- Page ' + row.page + ': ' + row.words + ' words');
+            }
+            return lines.join('\n');
+        }
+
+        async function copyStatsToClipboard() {
+            if (!state.stats) return;
+            const text = buildReportText();
+
+            try {
+                await navigator.clipboard.writeText(text);
+                elements.copyBtn.textContent = 'Copied';
+                setTimeout(() => {
+                    elements.copyBtn.textContent = 'Copy Stats';
+                }, 1400);
+            } catch (err) {
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                document.body.removeChild(area);
+                elements.copyBtn.textContent = 'Copied';
+                setTimeout(() => {
+                    elements.copyBtn.textContent = 'Copy Stats';
+                }, 1400);
+            }
+        }
+
+        function exportStatsAsTxt() {
+            if (!state.stats) return;
+            const text = buildReportText();
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            const safeName = (state.fileName || 'pdf-word-counter').replace(/\.pdf$/i, '').replace(/[^a-z0-9-_]+/gi, '-');
+            anchor.href = url;
+            anchor.download = safeName + '-stats.txt';
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            URL.revokeObjectURL(url);
+        }
+
+        async function processPdf(file) {
+            if (!file) return;
+            if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+                alert('Please select a valid PDF file.');
+                return;
+            }
+
+            resetResults();
+            updateFileInfo(file);
+            state.fileName = file.name;
+            setProgress(2, 'Loading PDF file...');
+
+            try {
+                const fileData = new Uint8Array(await file.arrayBuffer());
+                const loadingTask = pdfjsLib.getDocument({ data: fileData });
+
+                loadingTask.onProgress = function (progressData) {
+                    if (progressData && progressData.total) {
+                        const loadPct = Math.round((progressData.loaded / progressData.total) * 20);
+                        setProgress(Math.max(2, loadPct), 'Loading PDF structure...');
+                    }
+                };
+
+                const pdf = await loadingTask.promise;
+                const pages = pdf.numPages;
+                const allTextPages = [];
+                const pageBreakdown = [];
+
+                setProgress(20, 'Extracting text from pages...');
+
+                for (let pageNum = 1; pageNum <= pages; pageNum++) {
+                    const page = await pdf.getPage(pageNum);
+                    const pageText = await extractPageText(page);
+                    const pageWords = tokenizeWords(pageText).length;
+
+                    allTextPages.push(pageText);
+                    pageBreakdown.push({ page: pageNum, words: pageWords });
+
+                    const progress = 20 + Math.round((pageNum / pages) * 75);
+                    setProgress(progress, 'Processed page ' + pageNum + ' of ' + pages + '...');
+
+                    await nextFrame();
+                }
+
+                const allText = allTextPages.join('\n\n').trim();
+                const stats = analyzeText(allText, pages);
+
+                state.stats = stats;
+                state.topWords = stats.topWords;
+                state.pageBreakdown = pageBreakdown;
+
+                setProgress(100, 'Preparing results...');
+                renderStats(stats);
+                renderTopWords(state.topWords);
+                renderBreakdown(pageBreakdown);
+                elements.resultsBox.style.display = 'block';
+                hideProgress();
+            } catch (err) {
+                hideProgress();
+                alert('Unable to process this PDF. Please try another file.');
+                console.error(err);
+            }
+        }
+
+        elements.dropArea.addEventListener('click', function () {
+            elements.fileInput.click();
+        });
+
+        elements.chooseBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            elements.fileInput.click();
+        });
+
+        elements.fileInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            processPdf(file);
+        });
+
+        elements.dropArea.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            elements.dropArea.classList.add('drag-active');
+        });
+
+        elements.dropArea.addEventListener('dragleave', function () {
+            elements.dropArea.classList.remove('drag-active');
+        });
+
+        elements.dropArea.addEventListener('drop', function (event) {
+            event.preventDefault();
+            elements.dropArea.classList.remove('drag-active');
+            const file = event.dataTransfer.files && event.dataTransfer.files[0];
+            processPdf(file);
+        });
+
+        elements.copyBtn.addEventListener('click', copyStatsToClipboard);
+        elements.exportBtn.addEventListener('click', exportStatsAsTxt);
+        elements.resetBtn.addEventListener('click', function () {
+            window.location.reload();
+        });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+            });
+        }
+    </script>
+    <script defer src="/js/app.js?v=8"></script>
+</body>
+
+</html>
