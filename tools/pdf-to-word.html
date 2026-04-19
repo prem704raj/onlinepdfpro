@@ -369,9 +369,7 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
-        const PX_TO_TWIP = 15;
         let extractedPages = [];
-        let renderedPageImages = [];
         let _originalFileName = '';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -382,30 +380,6 @@
             e.preventDefault();
             processPDF(e.dataTransfer.files[0]);
         };
-
-        async function pageToPngData(page, scale) {
-            const viewport = page.getViewport({ scale });
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.floor(viewport.width);
-            canvas.height = Math.floor(viewport.height);
-            const ctx = canvas.getContext('2d', { alpha: false });
-            await page.render({ canvasContext: ctx, viewport }).promise;
-            return {
-                dataUrl: canvas.toDataURL('image/png'),
-                width: canvas.width,
-                height: canvas.height
-            };
-        }
-
-        function dataUrlToBytes(dataUrl) {
-            const base64 = dataUrl.split(',')[1] || '';
-            const raw = atob(base64);
-            const arr = new Uint8Array(raw.length);
-            for (let i = 0; i < raw.length; i++) {
-                arr[i] = raw.charCodeAt(i);
-            }
-            return arr;
-        }
 
         async function processPDF(file) {
             if (!file) return;
@@ -420,7 +394,6 @@
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
             extractedPages = [];
-            renderedPageImages = [];
             let fullText = '';
 
             for (let i = 1; i <= pdf.numPages; i++) {
@@ -456,9 +429,6 @@
 
                 extractedPages.push({ text: pageText.trim() });
                 fullText += pageText + '\n\n';
-
-                const rendered = await pageToPngData(page, 2.2);
-                renderedPageImages.push(rendered);
             }
 
             document.getElementById('previewText').value = fullText.trim();
@@ -473,54 +443,48 @@
         }
 
         async function downloadWord() {
-            if (renderedPageImages.length === 0) return;
+            if (extractedPages.length === 0) return;
 
-            const sections = renderedPageImages.map((pageImg, index) => {
-                const contentWidthTwip = Math.round(pageImg.width * PX_TO_TWIP);
-                const contentHeightTwip = Math.round(pageImg.height * PX_TO_TWIP);
-                const marginTwip = 360;
+            const children = [];
 
-                return {
-                    properties: {
-                        page: {
-                            margin: {
-                                top: marginTwip,
-                                right: marginTwip,
-                                bottom: marginTwip,
-                                left: marginTwip
-                            },
-                            size: {
-                                width: contentWidthTwip + (marginTwip * 2),
-                                height: contentHeightTwip + (marginTwip * 2)
-                            }
-                        }
-                    },
-                    children: [
-                        new docx.Paragraph({
-                            children: [
-                                new docx.ImageRun({
-                                    data: dataUrlToBytes(pageImg.dataUrl),
-                                    transformation: {
-                                        width: pageImg.width,
-                                        height: pageImg.height
-                                    }
-                                })
-                            ]
-                        }),
-                        ...(extractedPages[index] && extractedPages[index].text
-                            ? [new docx.Paragraph({
-                                children: [new docx.TextRun({
-                                    text: extractedPages[index].text,
-                                    color: 'FFFFFF',
-                                    size: 2
-                                })]
-                            })]
-                            : [])
-                    ]
-                };
+            extractedPages.forEach((page, pageIndex) => {
+                if (pageIndex > 0) {
+                    children.push(new docx.Paragraph({
+                        pageBreakBefore: true,
+                        children: [new docx.TextRun({ text: '' })]
+                    }));
+                }
+
+                const lines = (page.text || '')
+                    .split(/\n+/)
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
+
+                if (lines.length === 0) {
+                    children.push(new docx.Paragraph({
+                        children: [new docx.TextRun({ text: '' })]
+                    }));
+                    return;
+                }
+
+                lines.forEach(line => {
+                    children.push(new docx.Paragraph({
+                        children: [new docx.TextRun({ text: line, size: 24 })],
+                        spacing: { after: 120 }
+                    }));
+                });
             });
 
-            const doc = new docx.Document({ sections });
+            const doc = new docx.Document({
+                sections: [{
+                    properties: {
+                        page: {
+                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                        }
+                    },
+                    children
+                }]
+            });
             const blob = await docx.Packer.toBlob(doc);
             OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.docx');
         }
