@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Presentation Mode Viewer Free Online | OnlinePDFPro</title>
+    <meta name="description"
+        content="Present PDF files like slides in fullscreen with keyboard navigation, touch swipe, thumbnails, timer, drawing, and laser pointer. 100% browser-based.">
+    <meta name="keywords"
+        content="pdf presentation mode, pdf slideshow viewer, fullscreen pdf presenter, pdf slides viewer, pdf ppt mode">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-presentation-mode.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/pdf-presentation-mode.html">
+    <meta property="og:title" content="PDF Presentation Mode Viewer Free Online | OnlinePDFPro">
+    <meta property="og:description"
+        content="Upload a PDF and present it fullscreen with swipe navigation, overview thumbnails, timer, laser pointer, and annotation tools.">
+    <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-presentation-mode.html">
+    <meta name="twitter:title" content="PDF Presentation Mode Viewer Free Online | OnlinePDFPro">
+    <meta name="twitter:description"
+        content="Use PowerPoint-style PDF presentation mode with fullscreen controls and presenter tools directly in your browser.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-presentation-mode.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-presentation-mode.html">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+
+    <style>
+        .container {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: var(--text-primary) !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .status-box {
+            max-width: 860px;
+            margin: 20px auto;
+            padding: 13px 16px;
+            border-radius: 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-box.error {
+            color: #dc2626;
+            border-color: rgba(220, 38, 38, 0.35);
+            background: rgba(248, 113, 113, 0.09);
+            font-weight: 700;
+        }
+
+        .status-box.success {
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.35);
+            background: rgba(16, 185, 129, 0.09);
+            font-weight: 700;
+        }
+
+        .workspace {
+            display: none;
+            max-width: 1120px;
+            margin: 24px auto;
+            padding: 22px;
+            background: var(--surface-1);
+            border-radius: 20px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        .workspace-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .workspace-head h2 {
+            margin: 0;
+            font-size: 25px;
+            color: var(--text-primary);
+        }
+
+        .privacy-pill {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .control-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 11px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .control-card label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+        }
+
+        .select,
+        .input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-size: 14px;
+            padding: 9px 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .select:focus,
+        .input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            display: block;
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 24px;
+            line-height: 1.1;
+        }
+
+        .stat-card .lbl {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 14px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            box-shadow: 0 10px 22px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-warn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 10px 22px rgba(217, 119, 6, 0.25);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 10px 22px rgba(220, 38, 38, 0.25);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: 0 10px 22px rgba(71, 85, 105, 0.25);
+        }
+
+        .progress-section {
+            display: none;
+            max-width: 760px;
+            margin: 24px auto;
+            padding: 20px;
+            background: var(--surface-1);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-section h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .progress-section p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 13px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            margin-top: 13px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #0ea5e9);
+            transition: width 0.2s ease;
+        }
+
+        .presentation-stage {
+            position: fixed;
+            inset: 0;
+            display: none;
+            z-index: 5000;
+            overflow: hidden;
+        }
+
+        .presentation-stage.theme-dark {
+            background: #020617;
+        }
+
+        .presentation-stage.theme-light {
+            background: #f8fafc;
+        }
+
+        .topbar {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            top: 12px;
+            z-index: 30;
+            border-radius: 14px;
+            padding: 10px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .presentation-stage.theme-dark .topbar {
+            background: rgba(15, 23, 42, 0.74);
+        }
+
+        .presentation-stage.theme-light .topbar {
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .toolbar-left,
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .toolbar-btn {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 8px 11px;
+            transition: all 0.2s ease;
+        }
+
+        .presentation-stage.theme-dark .toolbar-btn {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #334155;
+        }
+
+        .presentation-stage.theme-light .toolbar-btn {
+            background: #e2e8f0;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .toolbar-btn.active {
+            background: #2563eb !important;
+            color: white !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .slide-indicator {
+            min-width: 90px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .presentation-stage.theme-dark .slide-indicator,
+        .presentation-stage.theme-dark .timer-display {
+            color: #e2e8f0;
+        }
+
+        .presentation-stage.theme-light .slide-indicator,
+        .presentation-stage.theme-light .timer-display {
+            color: #0f172a;
+        }
+
+        .timer-display {
+            min-width: 72px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .timer-display.hidden {
+            display: none;
+        }
+
+        .viewer-wrap {
+            position: absolute;
+            inset: 70px 14px 68px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        .slide-canvas-wrap {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.42);
+            background: white;
+        }
+
+        .slide-canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .draw-layer {
+            position: absolute;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+        }
+
+        .laser-dot {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fee2e2 0%, #ef4444 60%, #b91c1c 100%);
+            box-shadow: 0 0 18px rgba(239, 68, 68, 0.9);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 25;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 14px;
+            z-index: 35;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+        }
+
+        .presentation-stage.theme-dark .bottom-nav {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .presentation-stage.theme-light .bottom-nav {
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .nav-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 13px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .presentation-stage.theme-dark .nav-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .presentation-stage.theme-light .nav-btn {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .overview-panel {
+            position: absolute;
+            left: 14px;
+            top: 72px;
+            bottom: 68px;
+            width: 170px;
+            border-radius: 12px;
+            z-index: 28;
+            overflow-y: auto;
+            padding: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            display: none;
+            backdrop-filter: blur(7px);
+        }
+
+        .presentation-stage.theme-dark .overview-panel {
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .presentation-stage.theme-light .overview-panel {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .overview-panel.show {
+            display: block;
+        }
+
+        .thumb-item {
+            margin-bottom: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .thumb-item.active {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.22);
+        }
+
+        .thumb-item img {
+            width: 100%;
+            display: block;
+            background: #f8fafc;
+        }
+
+        .thumb-label {
+            font-size: 11px;
+            text-align: center;
+            font-weight: 700;
+            padding: 5px 4px;
+        }
+
+        .presentation-stage.theme-dark .thumb-label {
+            color: #cbd5e1;
+        }
+
+        .presentation-stage.theme-light .thumb-label {
+            color: #334155;
+        }
+
+        .exit-btn {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            z-index: 40;
+            border: none;
+            border-radius: 999px;
+            padding: 11px 15px;
+            font-size: 13px;
+            font-weight: 800;
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 10px 24px rgba(220, 38, 38, 0.35);
+            cursor: pointer;
+        }
+
+        .shortcuts-modal {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 20px;
+        }
+
+        .shortcuts-modal.show {
+            display: flex;
+        }
+
+        .shortcuts-card {
+            width: min(520px, 100%);
+            border-radius: 16px;
+            background: white;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 20px 48px rgba(2, 6, 23, 0.35);
+            padding: 16px;
+        }
+
+        .shortcuts-card h3 {
+            margin: 0 0 12px;
+            font-size: 20px;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .shortcut-row {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px;
+            background: #f8fafc;
+        }
+
+        .shortcut-key {
+            display: inline-block;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .upload-zone.drag-active {
+            border-color: var(--accent) !important;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        @media (max-width: 980px) {
+            .workspace {
+                padding: 16px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                left: 8px;
+                right: 8px;
+                top: 8px;
+                max-height: 120px;
+                overflow: auto;
+            }
+
+            .viewer-wrap {
+                inset: 128px 8px 70px;
+            }
+
+            .overview-panel {
+                left: 8px;
+                top: 128px;
+                bottom: 70px;
+                width: 140px;
+            }
+
+            .shortcut-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                    Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-bottom:40px;">
+                <span class="section-tag"
+                    style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Slide
+                    Viewer</span>
+                <h1 class="tool-title"
+                    style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF
+                    Presentation Mode Viewer</h1>
+                <p class="tool-description"
+                    style="color:var(--text-secondary); font-size:1rem; max-width:780px; margin:0 auto; line-height:1.6;">
+                    Present PDF slides in fullscreen with keyboard and touch navigation, overview thumbnails, zoom,
+                    laser pointer, drawing annotations, timer, and auto slideshow.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
+                <span class="upload-icon">🖥️</span>
+                <p class="upload-text">Drop your PDF here or click to upload</p>
+                <p class="upload-hint">Everything runs locally in your browser. Nothing is uploaded.</p>
+                <button class="btn btn-primary upload-btn" id="chooseBtn">Choose PDF File</button>
+                <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
+            </div>
+
+            <div class="status-box" id="statusBox">Upload a PDF to start presentation mode.</div>
+
+            <div class="progress-section" id="progressSection">
+                <h3>Preparing Presentation</h3>
+                <p id="progressText">Loading PDF...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <section class="workspace" id="workspace">
+                <div class="workspace-head">
+                    <h2>Presentation Controls</h2>
+                    <span class="privacy-pill">100% Browser Processing</span>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="num" id="fileNameStat">-</span>
+                        <span class="lbl">Loaded File</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="num" id="totalSlidesStat">0</span>
+                        <span class="lbl">Total Slides</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="num" id="currentSlideStat">0 / 0</span>
+                        <span class="lbl">Current Position</span>
+                    </div>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <label for="intervalSelect">Auto Slideshow Interval</label>
+                        <select class="select" id="intervalSelect">
+                            <option value="5000">5 seconds</option>
+                            <option value="10000" selected>10 seconds</option>
+                            <option value="30000">30 seconds</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <input class="input hidden" id="customIntervalInput" type="number" min="1" max="600"
+                            placeholder="Enter custom seconds">
+                    </div>
+                    <div class="control-card">
+                        <label for="themeSelect">Presentation Background Theme</label>
+                        <select class="select" id="themeSelect">
+                            <option value="dark" selected>Dark</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <button class="action-btn btn-primary" id="startPresentationBtn">Start Fullscreen Presentation</button>
+                    <button class="action-btn btn-secondary" id="startSlideshowBtn">Start Auto Slideshow</button>
+                    <button class="action-btn btn-success" id="showShortcutsBtn">Show Keyboard Shortcuts</button>
+                    <button class="action-btn btn-reset" id="resetBtn">Reset</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <section class="presentation-stage theme-dark" id="presentationStage" aria-hidden="true">
+        <div class="topbar">
+            <div class="toolbar-left">
+                <button class="toolbar-btn" id="prevBtn">◀ Prev</button>
+                <button class="toolbar-btn" id="nextBtn">Next ▶</button>
+                <button class="toolbar-btn" id="zoomOutBtn">−</button>
+                <span class="slide-indicator" id="slideIndicator">1 / 1</span>
+                <button class="toolbar-btn" id="zoomInBtn">+</button>
+                <span class="timer-display hidden" id="timerDisplay">00:00</span>
+            </div>
+            <div class="toolbar-right">
+                <button class="toolbar-btn" id="overviewToggleBtn">Overview</button>
+                <button class="toolbar-btn" id="pointerToggleBtn">Laser</button>
+                <button class="toolbar-btn" id="drawToggleBtn">Draw</button>
+                <button class="toolbar-btn" id="clearDrawBtn">Clear Ink</button>
+                <button class="toolbar-btn" id="timerToggleBtn">Timer</button>
+                <button class="toolbar-btn" id="themeToggleBtn">Light BG</button>
+                <button class="toolbar-btn" id="slideshowToggleBtn">Auto</button>
+                <button class="toolbar-btn" id="fullscreenToggleBtn">Fullscreen</button>
+                <button class="toolbar-btn" id="shortcutHelpBtn">?</button>
+            </div>
+        </div>
+
+        <aside class="overview-panel" id="overviewPanel"></aside>
+
+        <div class="viewer-wrap" id="viewerWrap">
+            <div class="slide-canvas-wrap" id="canvasWrap">
+                <canvas class="slide-canvas" id="slideCanvas"></canvas>
+                <canvas class="draw-layer" id="drawCanvas"></canvas>
+            </div>
+            <div class="laser-dot" id="laserDot"></div>
+        </div>
+
+        <div class="bottom-nav">
+            <button class="nav-btn" id="mobilePrevBtn">Previous</button>
+            <button class="nav-btn" id="mobileNextBtn">Next</button>
+        </div>
+
+        <button class="exit-btn" id="exitPresentationBtn">Exit Presentation</button>
+
+        <div class="shortcuts-modal" id="shortcutsModal" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+            <div class="shortcuts-card">
+                <h3 id="shortcutsTitle">Keyboard Shortcuts</h3>
+                <div class="shortcut-grid">
+                    <div class="shortcut-row"><span class="shortcut-key">→ / Space</span><br>Next slide</div>
+                    <div class="shortcut-row"><span class="shortcut-key">←</span><br>Previous slide</div>
+                    <div class="shortcut-row"><span class="shortcut-key">+</span><br>Zoom in</div>
+                    <div class="shortcut-row"><span class="shortcut-key">-</span><br>Zoom out</div>
+                    <div class="shortcut-row"><span class="shortcut-key">O</span><br>Toggle overview panel</div>
+                    <div class="shortcut-row"><span class="shortcut-key">L</span><br>Toggle laser pointer</div>
+                    <div class="shortcut-row"><span class="shortcut-key">D</span><br>Toggle drawing mode</div>
+                    <div class="shortcut-row"><span class="shortcut-key">T</span><br>Toggle timer</div>
+                    <div class="shortcut-row"><span class="shortcut-key">A</span><br>Toggle auto slideshow</div>
+                    <div class="shortcut-row"><span class="shortcut-key">F</span><br>Toggle fullscreen</div>
+                    <div class="shortcut-row"><span class="shortcut-key">?</span><br>Open this help</div>
+                    <div class="shortcut-row"><span class="shortcut-key">Esc</span><br>Close help / exit fullscreen</div>
+                </div>
+                <div class="actions-row" style="margin-top:12px;">
+                    <button class="action-btn btn-primary" id="closeShortcutsBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer
+        style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+                <div>
+                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
+                        by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li>
+                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF Editor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li>
+                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to JPG</a></li>
+                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare PDFs</a></li>
+                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="about.html">About Us</a></li>
+                        <li style="margin:8px 0;"><a href="contact.html">Contact Us</a></li>
+                        <li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li>
+                        <li style="margin:8px 0;"><a href="terms.html">Terms of Service</a></li>
+                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
+                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
+                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">&#169; 2026 Online PDF Pro. All rights
+                    reserved. Made with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span
+                        style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
+                        Your files are safe</span>
+                    <span
+                        style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
+                        100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/vendor/pdfjs/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdfjs/pdf.worker.min.js';
+
+        const state = {
+            pdfDoc: null,
+            pdfBytes: null,
+            fileName: '',
+            totalPages: 0,
+            currentPage: 1,
+            zoom: 1,
+            minZoom: 0.6,
+            maxZoom: 2.5,
+            isPresenting: false,
+            overviewOpen: false,
+            pointerOn: false,
+            drawOn: false,
+            timerOn: false,
+            timerStart: 0,
+            timerTickId: null,
+            slideshowOn: false,
+            slideshowId: null,
+            drawByPage: new Map(),
+            activeStroke: null,
+            swipeStartX: 0,
+            swipeStartY: 0,
+            lastRenderToken: 0
+        };
+
+        const el = {
+            dropArea: document.getElementById('dropArea'),
+            fileInput: document.getElementById('fileInput'),
+            chooseBtn: document.getElementById('chooseBtn'),
+            statusBox: document.getElementById('statusBox'),
+            progressSection: document.getElementById('progressSection'),
+            progressFill: document.getElementById('progressFill'),
+            progressText: document.getElementById('progressText'),
+            workspace: document.getElementById('workspace'),
+            fileNameStat: document.getElementById('fileNameStat'),
+            totalSlidesStat: document.getElementById('totalSlidesStat'),
+            currentSlideStat: document.getElementById('currentSlideStat'),
+            intervalSelect: document.getElementById('intervalSelect'),
+            customIntervalInput: document.getElementById('customIntervalInput'),
+            themeSelect: document.getElementById('themeSelect'),
+            startPresentationBtn: document.getElementById('startPresentationBtn'),
+            startSlideshowBtn: document.getElementById('startSlideshowBtn'),
+            showShortcutsBtn: document.getElementById('showShortcutsBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            presentationStage: document.getElementById('presentationStage'),
+            prevBtn: document.getElementById('prevBtn'),
+            nextBtn: document.getElementById('nextBtn'),
+            zoomOutBtn: document.getElementById('zoomOutBtn'),
+            zoomInBtn: document.getElementById('zoomInBtn'),
+            slideIndicator: document.getElementById('slideIndicator'),
+            timerDisplay: document.getElementById('timerDisplay'),
+            overviewToggleBtn: document.getElementById('overviewToggleBtn'),
+            pointerToggleBtn: document.getElementById('pointerToggleBtn'),
+            drawToggleBtn: document.getElementById('drawToggleBtn'),
+            clearDrawBtn: document.getElementById('clearDrawBtn'),
+            timerToggleBtn: document.getElementById('timerToggleBtn'),
+            themeToggleBtn: document.getElementById('themeToggleBtn'),
+            slideshowToggleBtn: document.getElementById('slideshowToggleBtn'),
+            fullscreenToggleBtn: document.getElementById('fullscreenToggleBtn'),
+            shortcutHelpBtn: document.getElementById('shortcutHelpBtn'),
+            overviewPanel: document.getElementById('overviewPanel'),
+            viewerWrap: document.getElementById('viewerWrap'),
+            canvasWrap: document.getElementById('canvasWrap'),
+            slideCanvas: document.getElementById('slideCanvas'),
+            drawCanvas: document.getElementById('drawCanvas'),
+            laserDot: document.getElementById('laserDot'),
+            mobilePrevBtn: document.getElementById('mobilePrevBtn'),
+            mobileNextBtn: document.getElementById('mobileNextBtn'),
+            exitPresentationBtn: document.getElementById('exitPresentationBtn'),
+            shortcutsModal: document.getElementById('shortcutsModal'),
+            closeShortcutsBtn: document.getElementById('closeShortcutsBtn')
+        };
+
+        function nextFrame() {
+            return new Promise(function (resolve) {
+                requestAnimationFrame(resolve);
+            });
+        }
+
+        function setStatus(message, type) {
+            el.statusBox.className = 'status-box';
+            if (type === 'error') {
+                el.statusBox.classList.add('error');
+            } else if (type === 'success') {
+                el.statusBox.classList.add('success');
+            }
+            el.statusBox.textContent = message;
+        }
+
+        function setProgress(percent, text) {
+            el.progressSection.style.display = 'block';
+            el.progressFill.style.width = Math.max(0, Math.min(100, percent)) + '%';
+            el.progressText.textContent = text;
+        }
+
+        function hideProgress() {
+            el.progressSection.style.display = 'none';
+            el.progressFill.style.width = '0%';
+            el.progressText.textContent = 'Loading PDF...';
+        }
+
+        function stopSlideshow() {
+            if (state.slideshowId) {
+                clearInterval(state.slideshowId);
+            }
+            state.slideshowId = null;
+            state.slideshowOn = false;
+            el.slideshowToggleBtn.classList.remove('active');
+            el.slideshowToggleBtn.textContent = 'Auto';
+            el.startSlideshowBtn.textContent = 'Start Auto Slideshow';
+        }
+
+        function getSlideshowIntervalMs() {
+            const selected = el.intervalSelect.value;
+            if (selected !== 'custom') {
+                return Number(selected);
+            }
+            const sec = Number(el.customIntervalInput.value);
+            if (!Number.isFinite(sec) || sec <= 0) {
+                return 10000;
+            }
+            return Math.max(1000, Math.min(600000, Math.floor(sec * 1000)));
+        }
+
+        function updateStats() {
+            el.fileNameStat.textContent = state.fileName || '-';
+            el.totalSlidesStat.textContent = String(state.totalPages || 0);
+            el.currentSlideStat.textContent = state.totalPages ? (state.currentPage + ' / ' + state.totalPages) : '0 / 0';
+        }
+
+        function updateSlideIndicator() {
+            el.slideIndicator.textContent = state.currentPage + ' / ' + state.totalPages;
+            updateStats();
+
+            const items = el.overviewPanel.querySelectorAll('.thumb-item');
+            items.forEach(function (item) {
+                const page = Number(item.dataset.page || 0);
+                item.classList.toggle('active', page === state.currentPage);
+            });
+        }
+
+        function setTheme(theme) {
+            const safeTheme = theme === 'light' ? 'light' : 'dark';
+            el.presentationStage.classList.remove('theme-dark', 'theme-light');
+            el.presentationStage.classList.add(safeTheme === 'dark' ? 'theme-dark' : 'theme-light');
+            el.themeSelect.value = safeTheme;
+            el.themeToggleBtn.textContent = safeTheme === 'dark' ? 'Light BG' : 'Dark BG';
+        }
+
+        function formatTime(ms) {
+            const totalSec = Math.max(0, Math.floor(ms / 1000));
+            const h = Math.floor(totalSec / 3600);
+            const m = Math.floor((totalSec % 3600) / 60);
+            const s = totalSec % 60;
+
+            const mm = String(m).padStart(2, '0');
+            const ss = String(s).padStart(2, '0');
+            if (h > 0) {
+                return String(h).padStart(2, '0') + ':' + mm + ':' + ss;
+            }
+            return mm + ':' + ss;
+        }
+
+        function stopTimer() {
+            if (state.timerTickId) {
+                clearInterval(state.timerTickId);
+                state.timerTickId = null;
+            }
+            state.timerOn = false;
+            state.timerStart = 0;
+            el.timerDisplay.classList.add('hidden');
+            el.timerDisplay.textContent = '00:00';
+            el.timerToggleBtn.classList.remove('active');
+            el.timerToggleBtn.textContent = 'Timer';
+        }
+
+        function startTimer() {
+            stopTimer();
+            state.timerOn = true;
+            state.timerStart = Date.now();
+            el.timerDisplay.classList.remove('hidden');
+            el.timerToggleBtn.classList.add('active');
+            el.timerToggleBtn.textContent = 'Timer On';
+            el.timerTickId = setInterval(function () {
+                el.timerDisplay.textContent = formatTime(Date.now() - state.timerStart);
+            }, 250);
+        }
+
+        function toggleTimer() {
+            if (state.timerOn) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function setPointerMode(enabled) {
+            state.pointerOn = !!enabled;
+            el.pointerToggleBtn.classList.toggle('active', state.pointerOn);
+            if (!state.pointerOn) {
+                el.laserDot.style.display = 'none';
+            }
+        }
+
+        function setDrawMode(enabled) {
+            state.drawOn = !!enabled;
+            el.drawToggleBtn.classList.toggle('active', state.drawOn);
+            el.drawCanvas.style.pointerEvents = state.drawOn ? 'auto' : 'none';
+            if (state.drawOn) {
+                setPointerMode(false);
+            }
+        }
+
+        function clampPage(pageNum) {
+            return Math.max(1, Math.min(state.totalPages, pageNum));
+        }
+
+        function getPageStrokes(pageNum) {
+            if (!state.drawByPage.has(pageNum)) {
+                state.drawByPage.set(pageNum, []);
+            }
+            return state.drawByPage.get(pageNum);
+        }
+
+        function redrawAnnotations() {
+            const canvas = el.drawCanvas;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const strokes = getPageStrokes(state.currentPage);
+            if (!strokes.length) {
+                return;
+            }
+
+            const lineWidth = Math.max(2, Math.round(Math.min(canvas.width, canvas.height) * 0.004));
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = lineWidth;
+
+            for (let s = 0; s < strokes.length; s++) {
+                const points = strokes[s];
+                if (!points || points.length < 2) continue;
+                ctx.beginPath();
+                ctx.moveTo(points[0].x * canvas.width, points[0].y * canvas.height);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x * canvas.width, points[i].y * canvas.height);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function clearCurrentPageDrawing() {
+            state.drawByPage.set(state.currentPage, []);
+            redrawAnnotations();
+            setStatus('Cleared annotations for slide ' + state.currentPage + '.', 'success');
+        }
+
+        async function renderPage(pageNum) {
+            if (!state.pdfDoc) return;
+
+            const renderToken = Date.now();
+            state.lastRenderToken = renderToken;
+
+            const page = await state.pdfDoc.getPage(pageNum);
+            const baseViewport = page.getViewport({ scale: 1 });
+
+            const availW = Math.max(200, el.viewerWrap.clientWidth - 24);
+            const availH = Math.max(200, el.viewerWrap.clientHeight - 24);
+            const fitScale = Math.min(availW / baseViewport.width, availH / baseViewport.height);
+            const scale = Math.max(0.1, fitScale * state.zoom);
+            const viewport = page.getViewport({ scale: scale });
+
+            const slideCanvas = el.slideCanvas;
+            slideCanvas.width = Math.floor(viewport.width);
+            slideCanvas.height = Math.floor(viewport.height);
+            slideCanvas.style.width = Math.floor(viewport.width) + 'px';
+            slideCanvas.style.height = Math.floor(viewport.height) + 'px';
+
+            const drawCanvas = el.drawCanvas;
+            drawCanvas.width = slideCanvas.width;
+            drawCanvas.height = slideCanvas.height;
+            drawCanvas.style.width = slideCanvas.style.width;
+            drawCanvas.style.height = slideCanvas.style.height;
+
+            el.canvasWrap.style.width = slideCanvas.style.width;
+            el.canvasWrap.style.height = slideCanvas.style.height;
+
+            const ctx = slideCanvas.getContext('2d');
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+            if (state.lastRenderToken !== renderToken) {
+                return;
+            }
+
+            redrawAnnotations();
+            updateSlideIndicator();
+        }
+
+        async function goToPage(pageNum) {
+            if (!state.pdfDoc) return;
+            state.currentPage = clampPage(pageNum);
+            await renderPage(state.currentPage);
+        }
+
+        function nextPage() {
+            if (!state.pdfDoc) return;
+            if (state.currentPage < state.totalPages) {
+                goToPage(state.currentPage + 1);
+            } else if (state.slideshowOn) {
+                goToPage(1);
+            }
+        }
+
+        function prevPage() {
+            if (!state.pdfDoc) return;
+            if (state.currentPage > 1) {
+                goToPage(state.currentPage - 1);
+            }
+        }
+
+        function setZoom(value) {
+            state.zoom = Math.max(state.minZoom, Math.min(state.maxZoom, value));
+            renderPage(state.currentPage);
+        }
+
+        function zoomIn() {
+            setZoom(state.zoom + 0.1);
+        }
+
+        function zoomOut() {
+            setZoom(state.zoom - 0.1);
+        }
+
+        function toggleOverview() {
+            state.overviewOpen = !state.overviewOpen;
+            el.overviewPanel.classList.toggle('show', state.overviewOpen);
+            el.overviewToggleBtn.classList.toggle('active', state.overviewOpen);
+        }
+
+        function showShortcuts() {
+            el.shortcutsModal.classList.add('show');
+        }
+
+        function hideShortcuts() {
+            el.shortcutsModal.classList.remove('show');
+        }
+
+        async function requestStageFullscreen() {
+            if (!document.fullscreenElement && el.presentationStage.requestFullscreen) {
+                try {
+                    await el.presentationStage.requestFullscreen();
+                } catch (err) {
+                    setStatus('Fullscreen was blocked by browser. Presentation still started.', 'error');
+                }
+            }
+        }
+
+        async function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                await requestStageFullscreen();
+            } else if (document.exitFullscreen) {
+                await document.exitFullscreen();
+            }
+        }
+
+        async function enterPresentation() {
+            if (!state.pdfDoc) {
+                setStatus('Upload a PDF first.', 'error');
+                return;
+            }
+            state.isPresenting = true;
+            el.presentationStage.style.display = 'block';
+            el.presentationStage.setAttribute('aria-hidden', 'false');
+            setTheme(el.themeSelect.value || 'dark');
+            await requestStageFullscreen();
+            await goToPage(state.currentPage || 1);
+            setStatus('Presentation mode started.', 'success');
+        }
+
+        function exitPresentation() {
+            hideShortcuts();
+            stopSlideshow();
+            setPointerMode(false);
+            setDrawMode(false);
+            stopTimer();
+            state.isPresenting = false;
+            el.overviewPanel.classList.remove('show');
+            el.overviewToggleBtn.classList.remove('active');
+            state.overviewOpen = false;
+            el.presentationStage.style.display = 'none';
+            el.presentationStage.setAttribute('aria-hidden', 'true');
+            if (document.fullscreenElement && document.exitFullscreen) {
+                document.exitFullscreen().catch(function () { });
+            }
+            setStatus('Exited presentation mode.', 'success');
+        }
+
+        function toggleSlideshow() {
+            if (state.slideshowOn) {
+                stopSlideshow();
+                return;
+            }
+
+            const intervalMs = getSlideshowIntervalMs();
+            state.slideshowOn = true;
+            el.slideshowToggleBtn.classList.add('active');
+            el.slideshowToggleBtn.textContent = 'Auto On';
+            el.startSlideshowBtn.textContent = 'Stop Auto Slideshow';
+            state.slideshowId = setInterval(nextPage, intervalMs);
+        }
+
+        async function buildOverviewThumbnails() {
+            el.overviewPanel.innerHTML = '';
+            const frag = document.createDocumentFragment();
+
+            for (let i = 1; i <= state.totalPages; i++) {
+                const page = await state.pdfDoc.getPage(i);
+                const baseVp = page.getViewport({ scale: 1 });
+                const thumbScale = 130 / baseVp.width;
+                const vp = page.getViewport({ scale: thumbScale });
+                const c = document.createElement('canvas');
+                c.width = Math.floor(vp.width);
+                c.height = Math.floor(vp.height);
+                const cctx = c.getContext('2d');
+                await page.render({ canvasContext: cctx, viewport: vp }).promise;
+
+                const card = document.createElement('div');
+                card.className = 'thumb-item' + (i === state.currentPage ? ' active' : '');
+                card.dataset.page = String(i);
+
+                const img = document.createElement('img');
+                img.src = c.toDataURL('image/jpeg', 0.85);
+                img.alt = 'Slide ' + i;
+
+                const label = document.createElement('div');
+                label.className = 'thumb-label';
+                label.textContent = 'Slide ' + i;
+
+                card.appendChild(img);
+                card.appendChild(label);
+                frag.appendChild(card);
+
+                if (i % 2 === 0 || i === state.totalPages) {
+                    const pct = 20 + Math.round((i / state.totalPages) * 80);
+                    setProgress(pct, 'Rendering thumbnail ' + i + ' / ' + state.totalPages + '...');
+                    await nextFrame();
+                }
+            }
+
+            el.overviewPanel.appendChild(frag);
+        }
+
+        async function handleFile(file) {
+            if (!file) return;
+            if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+                setStatus('Please choose a valid PDF file.', 'error');
+                return;
+            }
+
+            setProgress(2, 'Loading PDF...');
+            setStatus('Preparing your presentation...', '');
+
+            try {
+                const bytes = new Uint8Array(await file.arrayBuffer());
+                state.pdfBytes = bytes;
+                state.fileName = file.name;
+                state.drawByPage = new Map();
+                state.zoom = 1;
+                state.currentPage = 1;
+                stopSlideshow();
+                stopTimer();
+
+                const task = pdfjsLib.getDocument({ data: bytes });
+                task.onProgress = function (p) {
+                    if (p && p.total) {
+                        const pct = 2 + Math.round((p.loaded / p.total) * 15);
+                        setProgress(pct, 'Reading PDF structure...');
+                    }
+                };
+
+                state.pdfDoc = await task.promise;
+                state.totalPages = state.pdfDoc.numPages;
+
+                setProgress(20, 'Building slide overview...');
+                await buildOverviewThumbnails();
+
+                el.workspace.style.display = 'block';
+                updateStats();
+                hideProgress();
+                setTheme(el.themeSelect.value || 'dark');
+                await renderPage(1);
+                setStatus('PDF loaded. Click Start Fullscreen Presentation.', 'success');
+            } catch (err) {
+                hideProgress();
+                console.error(err);
+                setStatus('Unable to load this PDF. Try another file.', 'error');
+            }
+        }
+
+        function resetAll() {
+            exitPresentation();
+            state.pdfDoc = null;
+            state.pdfBytes = null;
+            state.fileName = '';
+            state.totalPages = 0;
+            state.currentPage = 1;
+            state.zoom = 1;
+            state.drawByPage = new Map();
+            el.fileInput.value = '';
+            el.workspace.style.display = 'none';
+            el.overviewPanel.innerHTML = '';
+            const ctx1 = el.slideCanvas.getContext('2d');
+            ctx1.clearRect(0, 0, el.slideCanvas.width, el.slideCanvas.height);
+            const ctx2 = el.drawCanvas.getContext('2d');
+            ctx2.clearRect(0, 0, el.drawCanvas.width, el.drawCanvas.height);
+            updateStats();
+            setStatus('Reset complete. Upload a PDF to begin again.', '');
+        }
+
+        function handleLaserMove(clientX, clientY) {
+            if (!state.pointerOn || !state.isPresenting) return;
+            const rect = el.viewerWrap.getBoundingClientRect();
+            if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+                el.laserDot.style.display = 'none';
+                return;
+            }
+            el.laserDot.style.display = 'block';
+            el.laserDot.style.left = (clientX - rect.left) + 'px';
+            el.laserDot.style.top = (clientY - rect.top) + 'px';
+        }
+
+        function getDrawRelativePoint(evt) {
+            const rect = el.drawCanvas.getBoundingClientRect();
+            let x = evt.clientX;
+            let y = evt.clientY;
+            if (evt.touches && evt.touches[0]) {
+                x = evt.touches[0].clientX;
+                y = evt.touches[0].clientY;
+            }
+            return {
+                x: Math.max(0, Math.min(1, (x - rect.left) / rect.width)),
+                y: Math.max(0, Math.min(1, (y - rect.top) / rect.height))
+            };
+        }
+
+        function beginDraw(evt) {
+            if (!state.drawOn) return;
+            evt.preventDefault();
+            const p = getDrawRelativePoint(evt);
+            state.activeStroke = [p];
+            getPageStrokes(state.currentPage).push(state.activeStroke);
+            redrawAnnotations();
+        }
+
+        function drawMove(evt) {
+            if (!state.drawOn || !state.activeStroke) return;
+            evt.preventDefault();
+            const p = getDrawRelativePoint(evt);
+            state.activeStroke.push(p);
+            redrawAnnotations();
+        }
+
+        function endDraw() {
+            state.activeStroke = null;
+        }
+
+        function onKeyDown(evt) {
+            if (!state.isPresenting) return;
+
+            const target = evt.target;
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT')) {
+                return;
+            }
+
+            if (evt.key === 'ArrowRight' || evt.key === 'PageDown' || evt.key === ' ') {
+                evt.preventDefault();
+                nextPage();
+                return;
+            }
+            if (evt.key === 'ArrowLeft' || evt.key === 'PageUp') {
+                evt.preventDefault();
+                prevPage();
+                return;
+            }
+            if (evt.key === '+' || evt.key === '=') {
+                evt.preventDefault();
+                zoomIn();
+                return;
+            }
+            if (evt.key === '-') {
+                evt.preventDefault();
+                zoomOut();
+                return;
+            }
+            if (evt.key === '?') {
+                evt.preventDefault();
+                showShortcuts();
+                return;
+            }
+            if (evt.key === 'o' || evt.key === 'O') {
+                evt.preventDefault();
+                toggleOverview();
+                return;
+            }
+            if (evt.key === 'l' || evt.key === 'L') {
+                evt.preventDefault();
+                setPointerMode(!state.pointerOn);
+                return;
+            }
+            if (evt.key === 'd' || evt.key === 'D') {
+                evt.preventDefault();
+                setDrawMode(!state.drawOn);
+                return;
+            }
+            if (evt.key === 't' || evt.key === 'T') {
+                evt.preventDefault();
+                toggleTimer();
+                return;
+            }
+            if (evt.key === 'a' || evt.key === 'A') {
+                evt.preventDefault();
+                toggleSlideshow();
+                return;
+            }
+            if (evt.key === 'f' || evt.key === 'F') {
+                evt.preventDefault();
+                toggleFullscreen();
+                return;
+            }
+            if (evt.key === 'Escape') {
+                if (el.shortcutsModal.classList.contains('show')) {
+                    hideShortcuts();
+                    evt.preventDefault();
+                }
+            }
+        }
+
+        function attachEvents() {
+            el.dropArea.addEventListener('click', function () {
+                el.fileInput.click();
+            });
+
+            el.chooseBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                el.fileInput.click();
+            });
+
+            el.fileInput.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0];
+                handleFile(file);
+            });
+
+            el.dropArea.addEventListener('dragover', function (event) {
+                event.preventDefault();
+                el.dropArea.classList.add('drag-active');
+            });
+
+            el.dropArea.addEventListener('dragleave', function () {
+                el.dropArea.classList.remove('drag-active');
+            });
+
+            el.dropArea.addEventListener('drop', function (event) {
+                event.preventDefault();
+                el.dropArea.classList.remove('drag-active');
+                const file = event.dataTransfer.files && event.dataTransfer.files[0];
+                handleFile(file);
+            });
+
+            el.startPresentationBtn.addEventListener('click', enterPresentation);
+            el.startSlideshowBtn.addEventListener('click', function () {
+                if (!state.isPresenting) {
+                    enterPresentation().then(toggleSlideshow);
+                } else {
+                    toggleSlideshow();
+                }
+            });
+            el.showShortcutsBtn.addEventListener('click', showShortcuts);
+            el.resetBtn.addEventListener('click', resetAll);
+
+            el.prevBtn.addEventListener('click', prevPage);
+            el.nextBtn.addEventListener('click', nextPage);
+            el.mobilePrevBtn.addEventListener('click', prevPage);
+            el.mobileNextBtn.addEventListener('click', nextPage);
+            el.zoomInBtn.addEventListener('click', zoomIn);
+            el.zoomOutBtn.addEventListener('click', zoomOut);
+
+            el.overviewToggleBtn.addEventListener('click', toggleOverview);
+            el.pointerToggleBtn.addEventListener('click', function () {
+                setPointerMode(!state.pointerOn);
+                if (state.pointerOn) {
+                    setDrawMode(false);
+                }
+            });
+            el.drawToggleBtn.addEventListener('click', function () {
+                setDrawMode(!state.drawOn);
+            });
+            el.clearDrawBtn.addEventListener('click', clearCurrentPageDrawing);
+            el.timerToggleBtn.addEventListener('click', toggleTimer);
+            el.themeToggleBtn.addEventListener('click', function () {
+                const nextTheme = el.presentationStage.classList.contains('theme-dark') ? 'light' : 'dark';
+                setTheme(nextTheme);
+            });
+            el.slideshowToggleBtn.addEventListener('click', toggleSlideshow);
+            el.fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
+            el.shortcutHelpBtn.addEventListener('click', showShortcuts);
+            el.exitPresentationBtn.addEventListener('click', exitPresentation);
+
+            el.closeShortcutsBtn.addEventListener('click', hideShortcuts);
+            el.shortcutsModal.addEventListener('click', function (event) {
+                if (event.target === el.shortcutsModal) {
+                    hideShortcuts();
+                }
+            });
+
+            el.intervalSelect.addEventListener('change', function () {
+                const isCustom = el.intervalSelect.value === 'custom';
+                el.customIntervalInput.classList.toggle('hidden', !isCustom);
+                if (state.slideshowOn) {
+                    stopSlideshow();
+                    toggleSlideshow();
+                }
+            });
+
+            el.customIntervalInput.addEventListener('change', function () {
+                if (state.slideshowOn) {
+                    stopSlideshow();
+                    toggleSlideshow();
+                }
+            });
+
+            el.themeSelect.addEventListener('change', function () {
+                setTheme(el.themeSelect.value);
+            });
+
+            el.overviewPanel.addEventListener('click', function (event) {
+                const card = event.target.closest('.thumb-item');
+                if (!card) return;
+                const page = Number(card.dataset.page || 1);
+                goToPage(page);
+            });
+
+            el.viewerWrap.addEventListener('mousemove', function (event) {
+                handleLaserMove(event.clientX, event.clientY);
+            });
+
+            el.viewerWrap.addEventListener('mouseleave', function () {
+                el.laserDot.style.display = 'none';
+            });
+
+            el.viewerWrap.addEventListener('touchstart', function (event) {
+                if (event.touches.length !== 1) return;
+                state.swipeStartX = event.touches[0].clientX;
+                state.swipeStartY = event.touches[0].clientY;
+            }, { passive: true });
+
+            el.viewerWrap.addEventListener('touchend', function (event) {
+                if (!event.changedTouches || !event.changedTouches.length) return;
+                const endX = event.changedTouches[0].clientX;
+                const endY = event.changedTouches[0].clientY;
+                const dx = endX - state.swipeStartX;
+                const dy = endY - state.swipeStartY;
+                if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+                    if (dx < 0) {
+                        nextPage();
+                    } else {
+                        prevPage();
+                    }
+                }
+            }, { passive: true });
+
+            el.drawCanvas.addEventListener('pointerdown', beginDraw);
+            el.drawCanvas.addEventListener('pointermove', drawMove);
+            window.addEventListener('pointerup', endDraw);
+            window.addEventListener('pointercancel', endDraw);
+
+            document.addEventListener('keydown', onKeyDown);
+            window.addEventListener('resize', function () {
+                if (state.isPresenting && state.pdfDoc) {
+                    renderPage(state.currentPage);
+                }
+            });
+
+            document.addEventListener('fullscreenchange', function () {
+                if (state.isPresenting) {
+                    setTimeout(function () {
+                        renderPage(state.currentPage);
+                    }, 30);
+                }
+            });
+        }
+
+        attachEvents();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function (err) {
+                    console.log('SW Reg Failed', err);
+                });
+            });
+        }
+    </script>
+    <script defer src="/js/app.js?v=8"></script>
+</body>
+
+</html>

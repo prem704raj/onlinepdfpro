@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 to PDF Converter Free Online | OnlinePDFPro</title>
+    <meta name="description"
+        content="Convert Base64 strings to PDF with live preview and download. Also convert PDF to Base64, copy output, and format as MIME chunks in your browser.">
+    <meta name="keywords"
+        content="base64 to pdf, pdf to base64, convert base64 to pdf, base64 pdf decoder, base64 image converter">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/base64-to-pdf.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/base64-to-pdf.html">
+    <meta property="og:title" content="Base64 to PDF Converter Free Online | OnlinePDFPro">
+    <meta property="og:description"
+        content="Paste Base64 and instantly preview/download as PDF. Supports PDF to Base64 reverse conversion and Base64 image preview.">
+    <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/base64-to-pdf.html">
+    <meta name="twitter:title" content="Base64 to PDF Converter Free Online | OnlinePDFPro">
+    <meta name="twitter:description"
+        content="Convert Base64 to PDF with validation, preview, file size details, and offline browser processing.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/base64-to-pdf.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/base64-to-pdf.html">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+
+    <style>
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: var(--text-primary) !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .workspace {
+            max-width: 1120px;
+            margin: 28px auto;
+            padding: 24px;
+            background: var(--surface-1);
+            border-radius: 20px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        .workspace-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .workspace-head h2 {
+            margin: 0;
+            font-size: 25px;
+            color: var(--text-primary);
+        }
+
+        .privacy-pill {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .control-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-2);
+            padding: 12px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .control-card h3 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .control-card p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+        }
+
+        .select,
+        .textarea,
+        .input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            font-size: 14px;
+            padding: 9px 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .select:focus,
+        .textarea:focus,
+        .input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .textarea {
+            min-height: 240px;
+            resize: vertical;
+            line-height: 1.45;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 14px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            box-shadow: 0 10px 22px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-warn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 10px 22px rgba(217, 119, 6, 0.25);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #64748b, #475569);
+            box-shadow: 0 10px 22px rgba(71, 85, 105, 0.25);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            display: block;
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 22px;
+            line-height: 1.1;
+            word-break: break-all;
+        }
+
+        .stat-card .lbl {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status-note {
+            margin: 0 0 12px;
+            min-height: 19px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .status-note.error {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .status-note.success {
+            color: #059669;
+            font-weight: 700;
+        }
+
+        .preview-wrap {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-2);
+            padding: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .preview-box {
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            border-radius: 12px;
+            min-height: 360px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-pdf {
+            width: 100%;
+            height: 560px;
+            border: 0;
+            display: none;
+            background: #fff;
+        }
+
+        .preview-image {
+            display: none;
+            max-width: 100%;
+            max-height: 560px;
+            object-fit: contain;
+        }
+
+        .preview-empty {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            padding: 28px;
+        }
+
+        .upload-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .output-area {
+            min-height: 180px;
+        }
+
+        @media (max-width: 980px) {
+            .workspace {
+                padding: 16px;
+            }
+
+            .panel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-pdf {
+                height: 420px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon"
+                    style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                    Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+                    style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-bottom:40px;">
+                <span class="section-tag"
+                    style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Encoding
+                    Tool</span>
+                <h1 class="tool-title"
+                    style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Base64
+                    to PDF Converter</h1>
+                <p class="tool-description"
+                    style="color:var(--text-secondary); font-size:1rem; max-width:780px; margin:0 auto; line-height:1.6;">
+                    Convert Base64 into PDF with live preview, validate the content, decode file size, and download.
+                    Also convert PDF to Base64 and copy output instantly. Bonus: decode Base64 JPG/PNG images.
+                </p>
+            </div>
+
+            <section class="workspace">
+                <div class="workspace-head">
+                    <h2>Converter Workspace</h2>
+                    <span class="privacy-pill">100% Offline Browser Processing</span>
+                </div>
+
+                <div class="panel-grid">
+                    <section class="control-card">
+                        <h3>Base64 to PDF / Image</h3>
+                        <p>Paste Base64 text below. Data URI prefixes are auto-detected and stripped.</p>
+
+                        <label class="label" for="decodeMode">Decode Mode</label>
+                        <select class="select" id="decodeMode">
+                            <option value="auto" selected>Auto Detect (PDF/JPG/PNG)</option>
+                            <option value="pdf">Force PDF</option>
+                            <option value="image">Force Image (JPG/PNG)</option>
+                        </select>
+
+                        <label class="label" for="base64Input">Base64 Input</label>
+                        <textarea class="textarea" id="base64Input"
+                            placeholder="Paste Base64 here... Example: data:application/pdf;base64,JVBERi0xLjQK..."></textarea>
+
+                        <div class="btn-row">
+                            <button class="action-btn btn-primary" id="convertBtn">Convert & Preview</button>
+                            <button class="action-btn btn-reset" id="clearBtn">Clear</button>
+                        </div>
+                    </section>
+
+                    <section class="control-card">
+                        <h3>PDF to Base64</h3>
+                        <p>Upload a PDF to generate Base64 text. You can format the output into 76-character MIME lines.</p>
+
+                        <label class="upload-label" for="pdfUpload">Choose PDF File</label>
+                        <input type="file" id="pdfUpload" accept=".pdf,application/pdf" hidden>
+                        <input class="input" id="selectedPdfName" value="No file selected" readonly>
+
+                        <label class="checkbox-row" for="chunkOutput">
+                            <input type="checkbox" id="chunkOutput">
+                            Show Base64 in 76-character chunks (MIME)
+                        </label>
+
+                        <div class="btn-row">
+                            <button class="action-btn btn-secondary" id="convertPdfToB64Btn">Convert PDF to Base64</button>
+                            <button class="action-btn btn-success" id="copyBase64Btn">Copy Base64</button>
+                        </div>
+
+                        <label class="label" for="base64Output">Generated Base64</label>
+                        <textarea class="textarea output-area" id="base64Output"
+                            placeholder="Generated Base64 output will appear here..."></textarea>
+                    </section>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="num" id="detectedType">-</span>
+                        <span class="lbl">Detected Type</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="num" id="decodedSize">0 KB</span>
+                        <span class="lbl">Decoded File Size</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="num" id="prefixState">No Prefix</span>
+                        <span class="lbl">Data URI Prefix</span>
+                    </div>
+                </div>
+
+                <p class="status-note" id="statusNote">Ready. Paste Base64 and click Convert & Preview.</p>
+
+                <section class="preview-wrap">
+                    <div class="btn-row">
+                        <button class="action-btn btn-success" id="downloadPdfBtn" disabled>Download Converted PDF</button>
+                        <button class="action-btn btn-warn" id="downloadImageBtn" disabled>Download Converted Image</button>
+                    </div>
+
+                    <div class="preview-box">
+                        <iframe class="preview-pdf" id="pdfPreview" title="PDF Preview"></iframe>
+                        <img class="preview-image" id="imagePreview" alt="Image Preview">
+                        <div class="preview-empty" id="previewEmpty">Preview will appear here after conversion.</div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </main>
+
+    <footer
+        style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div
+                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+                <div>
+                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
+                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
+                        by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li>
+                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF Editor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li>
+                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to PDF</a></li>
+                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to JPG</a></li>
+                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare PDFs</a></li>
+                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in PDF</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
+                    <ul style="list-style:none; padding:0; margin:0;">
+                        <li style="margin:8px 0;"><a href="about.html">About Us</a></li>
+                        <li style="margin:8px 0;"><a href="contact.html">Contact Us</a></li>
+                        <li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li>
+                        <li style="margin:8px 0;"><a href="terms.html">Terms of Service</a></li>
+                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
+                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
+                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">&#169; 2026 Online PDF Pro. All rights
+                    reserved. Made with ❤️ in India.</p>
+                <div style="display:flex; gap:15px;">
+                    <span
+                        style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
+                        Your files are safe</span>
+                    <span
+                        style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
+                        100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const elements = {
+            decodeMode: document.getElementById('decodeMode'),
+            base64Input: document.getElementById('base64Input'),
+            convertBtn: document.getElementById('convertBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            pdfUpload: document.getElementById('pdfUpload'),
+            selectedPdfName: document.getElementById('selectedPdfName'),
+            chunkOutput: document.getElementById('chunkOutput'),
+            convertPdfToB64Btn: document.getElementById('convertPdfToB64Btn'),
+            copyBase64Btn: document.getElementById('copyBase64Btn'),
+            base64Output: document.getElementById('base64Output'),
+            detectedType: document.getElementById('detectedType'),
+            decodedSize: document.getElementById('decodedSize'),
+            prefixState: document.getElementById('prefixState'),
+            statusNote: document.getElementById('statusNote'),
+            downloadPdfBtn: document.getElementById('downloadPdfBtn'),
+            downloadImageBtn: document.getElementById('downloadImageBtn'),
+            pdfPreview: document.getElementById('pdfPreview'),
+            imagePreview: document.getElementById('imagePreview'),
+            previewEmpty: document.getElementById('previewEmpty')
+        };
+
+        const state = {
+            outputBlob: null,
+            outputType: '',
+            outputUrl: '',
+            outputExt: '',
+            selectedPdfFile: null,
+            lastPdfBase64Raw: ''
+        };
+
+        let livePreviewTimer = null;
+
+        function setStatus(message, type) {
+            elements.statusNote.className = 'status-note';
+            if (type === 'error') {
+                elements.statusNote.classList.add('error');
+            }
+            if (type === 'success') {
+                elements.statusNote.classList.add('success');
+            }
+            elements.statusNote.textContent = message;
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) {
+                return bytes + ' B';
+            }
+            if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(2) + ' KB';
+            }
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        function stripDataUriPrefix(input) {
+            const value = String(input || '').trim();
+            const match = value.match(/^data:([^,]*);base64,/i);
+            if (!match) {
+                return {
+                    hadPrefix: false,
+                    mime: '',
+                    value: value
+                };
+            }
+            return {
+                hadPrefix: true,
+                mime: match[1] || '',
+                value: value.slice(match[0].length)
+            };
+        }
+
+        function normalizeBase64(value) {
+            return value.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+        }
+
+        function padBase64(value) {
+            const mod = value.length % 4;
+            if (mod === 0) {
+                return value;
+            }
+            return value + '='.repeat(4 - mod);
+        }
+
+        function isBase64Likely(value) {
+            return /^[A-Za-z0-9+/]*={0,2}$/.test(value);
+        }
+
+        function decodeBase64ToBytes(value) {
+            const padded = padBase64(value);
+            if (!isBase64Likely(padded)) {
+                throw new Error('Input is not valid Base64 format.');
+            }
+            let binary;
+            try {
+                binary = atob(padded);
+            } catch (err) {
+                throw new Error('Unable to decode Base64. Please check your input.');
+            }
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes;
+        }
+
+        function bytesToBase64(bytes) {
+            const chunkSize = 0x8000;
+            let binary = '';
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                const chunk = bytes.subarray(i, i + chunkSize);
+                for (let j = 0; j < chunk.length; j++) {
+                    binary += String.fromCharCode(chunk[j]);
+                }
+            }
+            return btoa(binary);
+        }
+
+        function chunk76(base64) {
+            return base64.replace(/.{1,76}/g, function (line) {
+                return line + '\n';
+            }).trim();
+        }
+
+        function isPdfBytes(bytes) {
+            if (!bytes || bytes.length < 5) {
+                return false;
+            }
+            return bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46 && bytes[4] === 0x2D;
+        }
+
+        function detectImageMime(bytes) {
+            if (bytes.length >= 8 &&
+                bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47 &&
+                bytes[4] === 0x0D && bytes[5] === 0x0A && bytes[6] === 0x1A && bytes[7] === 0x0A) {
+                return 'image/png';
+            }
+            if (bytes.length >= 3 && bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) {
+                return 'image/jpeg';
+            }
+            return '';
+        }
+
+        function clearOutputPreview() {
+            if (state.outputUrl) {
+                URL.revokeObjectURL(state.outputUrl);
+            }
+            state.outputBlob = null;
+            state.outputType = '';
+            state.outputUrl = '';
+            state.outputExt = '';
+
+            elements.pdfPreview.style.display = 'none';
+            elements.imagePreview.style.display = 'none';
+            elements.pdfPreview.removeAttribute('src');
+            elements.imagePreview.removeAttribute('src');
+            elements.previewEmpty.style.display = 'block';
+            elements.downloadPdfBtn.disabled = true;
+            elements.downloadImageBtn.disabled = true;
+
+            elements.detectedType.textContent = '-';
+            elements.decodedSize.textContent = '0 KB';
+            elements.prefixState.textContent = 'No Prefix';
+        }
+
+        function showPdfPreview(blobUrl) {
+            elements.previewEmpty.style.display = 'none';
+            elements.imagePreview.style.display = 'none';
+            elements.pdfPreview.style.display = 'block';
+            elements.pdfPreview.src = blobUrl;
+            elements.downloadPdfBtn.disabled = false;
+            elements.downloadImageBtn.disabled = true;
+        }
+
+        function showImagePreview(blobUrl) {
+            elements.previewEmpty.style.display = 'none';
+            elements.pdfPreview.style.display = 'none';
+            elements.imagePreview.style.display = 'block';
+            elements.imagePreview.src = blobUrl;
+            elements.downloadPdfBtn.disabled = true;
+            elements.downloadImageBtn.disabled = false;
+        }
+
+        function runBase64Conversion(silent) {
+            const raw = elements.base64Input.value;
+            if (!raw || !raw.trim()) {
+                if (!silent) {
+                    setStatus('Paste a Base64 string first.', 'error');
+                }
+                return;
+            }
+
+            clearOutputPreview();
+
+            try {
+                const stripped = stripDataUriPrefix(raw);
+                const normalized = normalizeBase64(stripped.value || '');
+
+                if (!normalized) {
+                    throw new Error('Base64 content is empty after removing spaces/prefix.');
+                }
+
+                const bytes = decodeBase64ToBytes(normalized);
+                const forceMode = elements.decodeMode.value;
+                const pdfValid = isPdfBytes(bytes);
+                const imageMime = detectImageMime(bytes);
+
+                let finalMime = '';
+                if (forceMode === 'pdf') {
+                    if (!pdfValid) {
+                        throw new Error('Input Base64 is valid but does not contain a valid PDF file.');
+                    }
+                    finalMime = 'application/pdf';
+                } else if (forceMode === 'image') {
+                    if (!imageMime) {
+                        throw new Error('Input Base64 is valid but not a JPG/PNG image.');
+                    }
+                    finalMime = imageMime;
+                } else {
+                    if (pdfValid) {
+                        finalMime = 'application/pdf';
+                    } else if (imageMime) {
+                        finalMime = imageMime;
+                    } else if (stripped.mime.toLowerCase() === 'application/pdf') {
+                        throw new Error('PDF prefix found, but decoded content is not a valid PDF.');
+                    } else {
+                        throw new Error('Decoded data is neither a valid PDF nor a JPG/PNG image.');
+                    }
+                }
+
+                const ext = finalMime === 'application/pdf' ? 'pdf' : (finalMime === 'image/png' ? 'png' : 'jpg');
+                const blob = new Blob([bytes], { type: finalMime });
+                const url = URL.createObjectURL(blob);
+
+                state.outputBlob = blob;
+                state.outputType = finalMime;
+                state.outputUrl = url;
+                state.outputExt = ext;
+
+                elements.detectedType.textContent = finalMime;
+                elements.decodedSize.textContent = formatBytes(bytes.length);
+                elements.prefixState.textContent = stripped.hadPrefix ? 'Stripped' : 'No Prefix';
+
+                if (finalMime === 'application/pdf') {
+                    showPdfPreview(url);
+                    if (!silent) {
+                        setStatus('Success. Base64 converted to valid PDF.', 'success');
+                    }
+                } else {
+                    showImagePreview(url);
+                    if (!silent) {
+                        setStatus('Success. Base64 converted to image (' + finalMime + ').', 'success');
+                    }
+                }
+            } catch (err) {
+                if (!silent) {
+                    setStatus(err.message || 'Conversion failed. Please check Base64 input.', 'error');
+                }
+            }
+        }
+
+        function downloadOutput(expectedType) {
+            if (!state.outputBlob || !state.outputUrl) {
+                return;
+            }
+            if (expectedType && state.outputType !== expectedType) {
+                return;
+            }
+            const stamp = Date.now();
+            const fileName = 'converted-' + stamp + '.' + state.outputExt;
+            const link = document.createElement('a');
+            link.href = state.outputUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        async function convertPdfToBase64() {
+            const file = state.selectedPdfFile;
+            if (!file) {
+                setStatus('Choose a PDF file first for reverse conversion.', 'error');
+                return;
+            }
+            if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+                setStatus('Selected file is not a PDF.', 'error');
+                return;
+            }
+
+            const oldText = elements.convertPdfToB64Btn.textContent;
+            elements.convertPdfToB64Btn.disabled = true;
+            elements.convertPdfToB64Btn.textContent = 'Converting...';
+
+            try {
+                const bytes = new Uint8Array(await file.arrayBuffer());
+                const encoded = bytesToBase64(bytes);
+                state.lastPdfBase64Raw = encoded;
+                const output = elements.chunkOutput.checked ? chunk76(state.lastPdfBase64Raw) : state.lastPdfBase64Raw;
+                elements.base64Output.value = output;
+                setStatus('PDF converted to Base64 successfully.', 'success');
+            } catch (err) {
+                console.error(err);
+                setStatus('Could not convert the selected PDF to Base64.', 'error');
+            } finally {
+                elements.convertPdfToB64Btn.disabled = false;
+                elements.convertPdfToB64Btn.textContent = oldText;
+            }
+        }
+
+        async function copyOutputBase64() {
+            const text = elements.base64Output.value;
+            if (!text.trim()) {
+                setStatus('Nothing to copy. Convert PDF to Base64 first.', 'error');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(text);
+                setStatus('Base64 copied to clipboard.', 'success');
+            } catch (err) {
+                const helper = document.createElement('textarea');
+                helper.value = text;
+                document.body.appendChild(helper);
+                helper.select();
+                document.execCommand('copy');
+                document.body.removeChild(helper);
+                setStatus('Base64 copied to clipboard.', 'success');
+            }
+        }
+
+        function clearAll() {
+            elements.base64Input.value = '';
+            elements.base64Output.value = '';
+            elements.decodeMode.value = 'auto';
+            elements.chunkOutput.checked = false;
+            elements.pdfUpload.value = '';
+            elements.selectedPdfName.value = 'No file selected';
+            state.selectedPdfFile = null;
+            state.lastPdfBase64Raw = '';
+            clearOutputPreview();
+            setStatus('Cleared. Ready for new conversion.', '');
+        }
+
+        elements.convertBtn.addEventListener('click', function () {
+            runBase64Conversion(false);
+        });
+        elements.clearBtn.addEventListener('click', clearAll);
+
+        elements.base64Input.addEventListener('input', function () {
+            if (livePreviewTimer) {
+                clearTimeout(livePreviewTimer);
+            }
+            livePreviewTimer = setTimeout(function () {
+                runBase64Conversion(true);
+            }, 450);
+        });
+
+        elements.pdfUpload.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            state.selectedPdfFile = file || null;
+            elements.selectedPdfName.value = file ? file.name : 'No file selected';
+        });
+
+        elements.convertPdfToB64Btn.addEventListener('click', convertPdfToBase64);
+        elements.copyBase64Btn.addEventListener('click', copyOutputBase64);
+        elements.chunkOutput.addEventListener('change', function () {
+            if (!state.lastPdfBase64Raw) {
+                return;
+            }
+            elements.base64Output.value = elements.chunkOutput.checked
+                ? chunk76(state.lastPdfBase64Raw)
+                : state.lastPdfBase64Raw;
+        });
+
+        elements.downloadPdfBtn.addEventListener('click', function () {
+            downloadOutput('application/pdf');
+        });
+
+        elements.downloadImageBtn.addEventListener('click', function () {
+            if (state.outputType === 'image/png' || state.outputType === 'image/jpeg') {
+                downloadOutput('');
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function (err) {
+                    console.log('SW Reg Failed', err);
+                });
+            });
+        }
+    </script>
+    <script defer src="/js/app.js?v=8"></script>
+</body>
+
+</html>
