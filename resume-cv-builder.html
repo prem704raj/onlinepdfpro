@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume and CV Builder Free Online | OnlinePDFPro</title>
     <meta name="description"
-        content="Create professional resumes and CVs with live preview, multiple templates, and export to PDF or TXT. 100% browser-based and private.">
+        content="Create professional resumes and CVs with live preview, multiple templates, and export to PDF, DOCX, or TXT. 100% browser-based and private.">
     <meta name="keywords"
         content="resume builder, cv builder, resume maker, cv maker, resume pdf export, online resume builder">
     <meta name="author" content="OnlinePDFPro">
@@ -19,7 +19,7 @@
     <meta property="og:url" content="https://onlinepdfpro.com/resume-cv-builder.html">
     <meta property="og:title" content="Resume and CV Builder Free Online | OnlinePDFPro">
     <meta property="og:description"
-        content="Build resumes with live preview, drag-and-drop section ordering, eight templates, and high-quality PDF export directly in browser.">
+        content="Build resumes with live preview, drag-and-drop section ordering, thirteen templates, and high-quality PDF/DOCX export directly in browser.">
     <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
     <meta property="og:site_name" content="OnlinePDFPro">
     <meta property="og:locale" content="en_US">
@@ -29,7 +29,7 @@
     <meta name="twitter:url" content="https://onlinepdfpro.com/resume-cv-builder.html">
     <meta name="twitter:title" content="Resume and CV Builder Free Online | OnlinePDFPro">
     <meta name="twitter:description"
-        content="Create and export polished resumes and CVs to PDF or TXT with full browser-only processing.">
+        content="Create and export polished resumes and CVs to PDF, DOCX, or TXT with full browser-only processing.">
     <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
 
     <!-- Favicons -->
@@ -365,6 +365,32 @@
             white-space: pre-wrap;
         }
 
+        .resume-contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 8px;
+            white-space: normal;
+        }
+
+        .resume-contact-sep {
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .resume-link {
+            color: #2563eb;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .resume-link:hover {
+            color: #1d4ed8;
+        }
+
         .resume-photo {
             width: 90px;
             height: 90px;
@@ -505,6 +531,10 @@
             color: #cbd5e1;
         }
 
+        .resume-sheet.template-executive .resume-link {
+            color: #93c5fd;
+        }
+
         .resume-sheet.template-executive .resume-body {
             padding-top: 12mm;
         }
@@ -566,6 +596,10 @@
             color: #dbeafe;
         }
 
+        .resume-sheet.template-creative .resume-link {
+            color: #bfdbfe;
+        }
+
         .resume-sheet.template-creative .resume-body {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -621,6 +655,118 @@
             letter-spacing: 0.8px;
         }
 
+        .resume-sheet.template-neo .resume-header {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 72%, #1e1b4b), #0f172a);
+            color: #f8fafc;
+            border-bottom: none;
+        }
+
+        .resume-sheet.template-neo .resume-name,
+        .resume-sheet.template-neo .item-title {
+            color: #f8fafc;
+        }
+
+        .resume-sheet.template-neo .resume-role,
+        .resume-sheet.template-neo .resume-contact {
+            color: #c7d2fe;
+        }
+
+        .resume-sheet.template-neo .resume-link {
+            color: #bfdbfe;
+        }
+
+        .resume-sheet.template-slate .resume-body {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 14px;
+            background: linear-gradient(90deg, #ffffff 0%, #ffffff 68%, #f8fafc 68%, #f8fafc 100%);
+        }
+
+        .resume-sheet.template-slate .resume-section h3 {
+            color: #0f172a;
+            border-bottom-color: #94a3b8;
+        }
+
+        .resume-sheet.template-atlas .resume-header {
+            border-bottom: 3px solid color-mix(in srgb, var(--accent-color) 38%, #cbd5e1);
+            background: #f8fafc;
+        }
+
+        .resume-sheet.template-atlas .resume-body {
+            columns: 2;
+            column-gap: 14mm;
+            padding-top: 14mm;
+        }
+
+        .resume-sheet.template-atlas .resume-section {
+            break-inside: avoid;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .resume-sheet.template-zenith .resume-header {
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffff;
+            padding-bottom: 8mm;
+        }
+
+        .resume-sheet.template-zenith .resume-name {
+            font-size: 29px;
+            letter-spacing: 0;
+            font-weight: 600;
+        }
+
+        .resume-sheet.template-zenith .resume-role {
+            font-weight: 500;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .resume-sheet.template-zenith .resume-section h3 {
+            border-bottom: none;
+            color: #0f172a;
+            letter-spacing: 0.4px;
+            text-transform: none;
+            font-size: 13px;
+            padding-bottom: 0;
+            margin-bottom: 6px;
+        }
+
+        .resume-sheet.template-horizon .resume-header {
+            border-bottom: none;
+            background: linear-gradient(180deg, color-mix(in srgb, var(--accent-color) 14%, #ffffff), #ffffff);
+            position: relative;
+        }
+
+        .resume-sheet.template-horizon .resume-header::after {
+            content: '';
+            position: absolute;
+            left: 16mm;
+            right: 16mm;
+            bottom: 0;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 45%, #0ea5e9));
+        }
+
+        .resume-sheet.template-horizon .resume-section h3 {
+            border-bottom: none;
+            color: #0f172a;
+            position: relative;
+            padding-left: 12px;
+        }
+
+        .resume-sheet.template-horizon .resume-section h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            bottom: 2px;
+            width: 4px;
+            border-radius: 999px;
+            background: var(--accent-color);
+        }
+
         .resume-sheet.font-serif {
             --resume-font: Georgia, "Times New Roman", serif;
         }
@@ -655,6 +801,15 @@
             .resume-sheet {
                 width: 100%;
                 min-height: auto;
+            }
+
+            .resume-sheet.template-slate .resume-body {
+                display: block;
+                background: #ffffff;
+            }
+
+            .resume-sheet.template-atlas .resume-body {
+                columns: 1;
             }
         }
 
@@ -757,8 +912,8 @@
                     &amp; CV Builder</h1>
                 <p class="tool-description"
                     style="color:var(--text-secondary); font-size:1rem; max-width:760px; margin:0 auto; line-height:1.6;">Build
-                    a polished resume with live preview, eight templates, custom colors/fonts, drag-and-drop section
-                    ordering, and instant PDF/TXT export. Everything is saved locally in your browser.</p>
+                    a polished resume with live preview, thirteen templates, custom colors/fonts, drag-and-drop section
+                    ordering, and instant PDF/TXT/DOCX export. Everything runs fully in your browser.</p>
             </div>
 
             <div class="builder-layout">
@@ -780,6 +935,11 @@
                                     <option value="creative">Creative Portfolio</option>
                                     <option value="corporate">Corporate Framed</option>
                                     <option value="elegant">Elegant Centered</option>
+                                    <option value="neo">Neo Gradient</option>
+                                    <option value="slate">Slate Sidebar</option>
+                                    <option value="atlas">Atlas Column</option>
+                                    <option value="zenith">Zenith Minimal</option>
+                                    <option value="horizon">Horizon Accent</option>
                                 </select>
                             </div>
                             <div class="control-group">
@@ -811,6 +971,7 @@
                                     <input class="input" id="location" placeholder="Location">
                                     <input class="input" id="website" placeholder="Website">
                                     <input class="input" id="linkedin" placeholder="LinkedIn">
+                                    <input class="input" id="github" placeholder="GitHub">
                                 </div>
                             </div>
                         </section>
@@ -876,6 +1037,7 @@
 
                         <div class="btn-row">
                             <button type="button" class="btn-action btn-pdf" id="exportPdfBtn">Export PDF</button>
+                            <button type="button" class="btn-action btn-pdf" id="exportDocxBtn">Export DOCX</button>
                             <button type="button" class="btn-action btn-txt" id="exportTxtBtn">Export TXT</button>
                             <button type="button" class="btn-action btn-save" id="saveBtn">Save Progress</button>
                             <button type="button" class="btn-action btn-reset" id="resetBtn">Clear / Reset</button>
@@ -915,7 +1077,7 @@
                 </div>
                 <div class="step">
                     <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Export Resume</h3>
-                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download professional output in PDF or TXT instantly.</p>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download professional output in PDF, DOCX, or TXT instantly.</p>
                 </div>
             </div>
         </section>
@@ -948,7 +1110,7 @@
 
             <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is my data auto-saved?</h3>
-                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. Progress is stored locally in your browser so you can continue later.</p>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">The form starts fresh on each reload to protect privacy. Use Save Progress when you explicitly want a local backup.</p>
             </div>
 
             <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
@@ -1031,9 +1193,11 @@
 
     <script src="js/vendor/html2canvas/html2canvas.min.js"></script>
     <script src="js/vendor/jspdf/jspdf.umd.min.js"></script>
+    <script src="js/vendor/jszip/jszip.min.js"></script>
 
     <script>
         const STORAGE_KEY = 'onlinepdfpro-resume-cv-builder-v1';
+        const RESUME_EXPORT_LONG_EDGE = 3840;
         const SECTION_LABELS = {
             summary: 'Summary',
             experience: 'Work Experience',
@@ -1096,6 +1260,7 @@
                 location: '',
                 website: '',
                 linkedin: '',
+                github: '',
                 summary: '',
                 skills: '',
                 languages: '',
@@ -1121,6 +1286,7 @@
             location: document.getElementById('location'),
             website: document.getElementById('website'),
             linkedin: document.getElementById('linkedin'),
+            github: document.getElementById('github'),
             summary: document.getElementById('summary'),
             skills: document.getElementById('skills'),
             languages: document.getElementById('languages'),
@@ -1135,6 +1301,7 @@
             sectionOrderList: document.getElementById('sectionOrderList'),
             resumePreview: document.getElementById('resumePreview'),
             exportPdfBtn: document.getElementById('exportPdfBtn'),
+            exportDocxBtn: document.getElementById('exportDocxBtn'),
             exportTxtBtn: document.getElementById('exportTxtBtn'),
             saveBtn: document.getElementById('saveBtn'),
             resetBtn: document.getElementById('resetBtn')
@@ -1155,6 +1322,44 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttr(text) {
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function normalizeUrl(value) {
+            const raw = String(value || '').trim();
+            if (!raw) {
+                return '';
+            }
+            if (/^(https?:|mailto:|tel:)/i.test(raw)) {
+                return raw;
+            }
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+                return 'mailto:' + raw;
+            }
+            if (/^[+\d\s().-]{7,}$/.test(raw)) {
+                return 'tel:' + raw.replace(/\s+/g, '');
+            }
+            return 'https://' + raw;
+        }
+
+        function plainUrlLabel(value) {
+            return String(value || '').trim().replace(/^https?:\/\//i, '').replace(/\/$/, '');
+        }
+
+        function buildResumeLink(rawValue, labelText) {
+            const href = normalizeUrl(rawValue);
+            if (!href) {
+                return '';
+            }
+            const label = labelText || plainUrlLabel(rawValue) || href;
+            return '<a class="resume-link" href="' + escapeAttr(href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(label) + '</a>';
         }
 
         function parseChips(text) {
@@ -1204,7 +1409,10 @@
             }
         }
 
-        function saveState() {
+        function saveState(manual) {
+            if (!manual) {
+                return;
+            }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
 
@@ -1219,6 +1427,7 @@
             elements.location.value = state.location;
             elements.website.value = state.website;
             elements.linkedin.value = state.linkedin;
+            elements.github.value = state.github;
             elements.summary.value = state.summary;
             elements.skills.value = state.skills;
             elements.languages.value = state.languages;
@@ -1297,10 +1506,53 @@
         }
 
         function joinContactParts() {
-            const parts = [state.email, state.phone, state.location, state.website, state.linkedin]
-                .map(value => String(value || '').trim())
-                .filter(Boolean);
+            const parts = [];
+            const email = String(state.email || '').trim();
+            const phone = String(state.phone || '').trim();
+            const location = String(state.location || '').trim();
+            const website = String(state.website || '').trim();
+            const linkedin = String(state.linkedin || '').trim();
+            const github = String(state.github || '').trim();
+
+            if (email) parts.push(email);
+            if (phone) parts.push(phone);
+            if (location) parts.push(location);
+            if (website) parts.push(plainUrlLabel(website));
+            if (linkedin) parts.push(plainUrlLabel(linkedin));
+            if (github) parts.push(plainUrlLabel(github));
+
             return parts.join(' • ');
+        }
+
+        function renderContactHtml() {
+            const chunks = [];
+            const email = String(state.email || '').trim();
+            const phone = String(state.phone || '').trim();
+            const location = String(state.location || '').trim();
+            const website = String(state.website || '').trim();
+            const linkedin = String(state.linkedin || '').trim();
+            const github = String(state.github || '').trim();
+
+            if (email) {
+                chunks.push(buildResumeLink(email, email));
+            }
+            if (phone) {
+                chunks.push(buildResumeLink(phone, phone));
+            }
+            if (location) {
+                chunks.push('<span>' + escapeHtml(location) + '</span>');
+            }
+            if (website) {
+                chunks.push(buildResumeLink(website, plainUrlLabel(website) || 'Website'));
+            }
+            if (linkedin) {
+                chunks.push(buildResumeLink(linkedin, plainUrlLabel(linkedin) || 'LinkedIn'));
+            }
+            if (github) {
+                chunks.push(buildResumeLink(github, plainUrlLabel(github) || 'GitHub'));
+            }
+
+            return chunks.filter(Boolean).join('<span class="resume-contact-sep">•</span>');
         }
 
         function renderSummarySection() {
@@ -1359,12 +1611,18 @@
             }
 
             const html = filled.map(item => {
-                const lineParts = [item.link, item.tech].filter(Boolean).join(' • ');
+                const lineParts = [];
+                if (item.link) {
+                    lineParts.push(buildResumeLink(item.link, plainUrlLabel(item.link) || 'Project Link'));
+                }
+                if (item.tech) {
+                    lineParts.push('<span>' + escapeHtml(item.tech) + '</span>');
+                }
                 return '<article class="timeline-item">' +
                     '<div class="item-title-row">' +
                     '<p class="item-title">' + escapeHtml(item.name || 'Project') + '</p>' +
                     '</div>' +
-                    (lineParts ? '<p class="item-sub">' + escapeHtml(lineParts) + '</p>' : '') +
+                    (lineParts.length ? '<p class="item-sub">' + lineParts.join(' <span class="resume-contact-sep">•</span> ') + '</p>' : '') +
                     (item.description ? '<p class="item-desc">' + escapeHtml(item.description) + '</p>' : '') +
                     '</article>';
             }).join('');
@@ -1439,7 +1697,7 @@
 
             const fullName = state.fullName.trim() || 'Your Name';
             const role = state.jobTitle.trim() || 'Professional Title';
-            const contactLine = joinContactParts();
+            const contactHtml = renderContactHtml();
 
             let bodyHtml = orderedSections.join('');
             if (state.template === 'modern') {
@@ -1447,14 +1705,16 @@
                     '<div class="resume-side-col">' + sideSections.join('') + '</div>';
             }
 
-            const photoHtml = state.photo ? '<img class="resume-photo" src="' + state.photo + '" alt="Profile photo">' : '';
+            const photoSrc = String(state.photo || '').trim();
+            const hasValidPhoto = /^data:image\//i.test(photoSrc) || /^blob:/i.test(photoSrc) || /^https?:\/\//i.test(photoSrc);
+            const photoHtml = hasValidPhoto ? '<img class="resume-photo" src="' + escapeAttr(photoSrc) + '" alt="Profile photo">' : '';
 
             elements.resumePreview.innerHTML = '<div id="resumeSheet" class="resume-sheet template-' + escapeHtml(state.template) + ' font-' + escapeHtml(state.font) + '" style="--accent-color:' + escapeHtml(state.accentColor) + ';">' +
                 '<header class="resume-header">' +
                 '<div>' +
                 '<h1 class="resume-name">' + escapeHtml(fullName) + '</h1>' +
                 '<p class="resume-role">' + escapeHtml(role) + '</p>' +
-                (contactLine ? '<div class="resume-contact">' + escapeHtml(contactLine) + '</div>' : '') +
+                (contactHtml ? '<div class="resume-contact resume-contact-links">' + contactHtml + '</div>' : '') +
                 '</div>' +
                 photoHtml +
                 '</header>' +
@@ -1480,6 +1740,7 @@
                 ['location', 'location'],
                 ['website', 'website'],
                 ['linkedin', 'linkedin'],
+                ['github', 'github'],
                 ['summary', 'summary'],
                 ['skills', 'skills'],
                 ['languages', 'languages']
@@ -1516,6 +1777,12 @@
             elements.photoInput.addEventListener('change', function (event) {
                 const file = event.target.files && event.target.files[0];
                 if (!file) {
+                    state.photo = '';
+                    renderPreview();
+                    return;
+                }
+                if (!/^image\//i.test(file.type)) {
+                    alert('Please select a valid image file for profile photo.');
                     return;
                 }
                 const reader = new FileReader();
@@ -1743,13 +2010,269 @@
         function exportTxt() {
             const text = makeTextExport();
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            downloadBlob(blob, sanitizeName(state.fullName) + '-resume.txt');
+        }
+
+        function downloadBlob(blob, fileName) {
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = sanitizeName(state.fullName) + '-resume.txt';
+            a.href = url;
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
+            URL.revokeObjectURL(url);
+        }
+
+        function xmlEscape(text) {
+            return String(text || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+
+        function createWordRun(text, options) {
+            const safeText = String(text || '');
+            if (!safeText) {
+                return '';
+            }
+            const opts = options || {};
+            let rPr = '';
+            if (opts.bold) {
+                rPr += '<w:b/>';
+            }
+            if (opts.size) {
+                rPr += '<w:sz w:val="' + String(opts.size) + '"/>';
+            }
+            if (opts.color) {
+                rPr += '<w:color w:val="' + xmlEscape(opts.color) + '"/>';
+            }
+            if (opts.underline) {
+                rPr += '<w:u w:val="single"/>';
+            }
+
+            return '<w:r>' + (rPr ? '<w:rPr>' + rPr + '</w:rPr>' : '') + '<w:t xml:space="preserve">' + xmlEscape(safeText) + '</w:t></w:r>';
+        }
+
+        function createWordHyperlink(url, label, rels) {
+            const href = normalizeUrl(url);
+            if (!href) {
+                return createWordRun(label || url || '', {});
+            }
+            const relId = 'rId' + String(rels.length + 1);
+            rels.push({ id: relId, target: href });
+            return '<w:hyperlink r:id="' + relId + '" w:history="1">' +
+                '<w:r><w:rPr><w:color w:val="0563C1"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">' + xmlEscape(label || plainUrlLabel(url) || href) + '</w:t></w:r>' +
+                '</w:hyperlink>';
+        }
+
+        function makeDocxDocumentXml(rels) {
+            const blocks = [];
+            const fullName = state.fullName.trim() || 'Your Name';
+            const role = state.jobTitle.trim() || 'Professional Title';
+
+            blocks.push('<w:p>' + createWordRun(fullName, { bold: true, size: 42 }) + '</w:p>');
+            blocks.push('<w:p>' + createWordRun(role, { color: '1E3A8A', size: 24 }) + '</w:p>');
+
+            const contactRuns = [];
+            if (state.email.trim()) {
+                contactRuns.push(createWordHyperlink(state.email.trim(), state.email.trim(), rels));
+            }
+            if (state.phone.trim()) {
+                contactRuns.push(createWordHyperlink(state.phone.trim(), state.phone.trim(), rels));
+            }
+            if (state.location.trim()) {
+                contactRuns.push(createWordRun(state.location.trim(), {}));
+            }
+            if (state.website.trim()) {
+                contactRuns.push(createWordHyperlink(state.website.trim(), plainUrlLabel(state.website.trim()) || 'Website', rels));
+            }
+            if (state.linkedin.trim()) {
+                contactRuns.push(createWordHyperlink(state.linkedin.trim(), plainUrlLabel(state.linkedin.trim()) || 'LinkedIn', rels));
+            }
+            if (state.github.trim()) {
+                contactRuns.push(createWordHyperlink(state.github.trim(), plainUrlLabel(state.github.trim()) || 'GitHub', rels));
+            }
+            if (contactRuns.length) {
+                const merged = [];
+                for (let i = 0; i < contactRuns.length; i++) {
+                    if (i > 0) {
+                        merged.push(createWordRun('  |  ', {}));
+                    }
+                    merged.push(contactRuns[i]);
+                }
+                blocks.push('<w:p>' + merged.join('') + '</w:p>');
+            }
+
+            for (const key of state.sectionOrder) {
+                const label = SECTION_LABELS[key];
+                if (!label) {
+                    continue;
+                }
+
+                if (key === 'summary' && state.summary.trim()) {
+                    blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                    blocks.push('<w:p>' + createWordRun(state.summary.trim(), {}) + '</w:p>');
+                }
+
+                if (key === 'experience') {
+                    const filled = state.experience.filter(item => item.role || item.company || item.description);
+                    if (filled.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        filled.forEach(item => {
+                            const headline = [item.role, item.company].filter(Boolean).join(' @ ');
+                            if (headline) blocks.push('<w:p>' + createWordRun('- ' + headline, { bold: true }) + '</w:p>');
+                            const meta = [item.start, item.end, item.location].filter(Boolean).join(' | ');
+                            if (meta) blocks.push('<w:p>' + createWordRun(meta, {}) + '</w:p>');
+                            if (item.description) blocks.push('<w:p>' + createWordRun(item.description, {}) + '</w:p>');
+                        });
+                    }
+                }
+
+                if (key === 'education') {
+                    const filled = state.education.filter(item => item.degree || item.institution || item.details);
+                    if (filled.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        filled.forEach(item => {
+                            const headline = [item.degree, item.institution].filter(Boolean).join(' @ ');
+                            if (headline) blocks.push('<w:p>' + createWordRun('- ' + headline, { bold: true }) + '</w:p>');
+                            const meta = [item.start, item.end, item.location].filter(Boolean).join(' | ');
+                            if (meta) blocks.push('<w:p>' + createWordRun(meta, {}) + '</w:p>');
+                            if (item.details) blocks.push('<w:p>' + createWordRun(item.details, {}) + '</w:p>');
+                        });
+                    }
+                }
+
+                if (key === 'projects') {
+                    const filled = state.projects.filter(item => item.name || item.description || item.tech || item.link);
+                    if (filled.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        filled.forEach(item => {
+                            if (item.name) {
+                                blocks.push('<w:p>' + createWordRun('- ' + item.name, { bold: true }) + '</w:p>');
+                            }
+                            const projectLine = [];
+                            if (item.link) {
+                                projectLine.push(createWordHyperlink(item.link, plainUrlLabel(item.link) || 'Project Link', rels));
+                            }
+                            if (item.tech) {
+                                if (projectLine.length) {
+                                    projectLine.push(createWordRun('  |  ', {}));
+                                }
+                                projectLine.push(createWordRun(item.tech, {}));
+                            }
+                            if (projectLine.length) {
+                                blocks.push('<w:p>' + projectLine.join('') + '</w:p>');
+                            }
+                            if (item.description) {
+                                blocks.push('<w:p>' + createWordRun(item.description, {}) + '</w:p>');
+                            }
+                        });
+                    }
+                }
+
+                if (key === 'skills') {
+                    const chips = parseChips(state.skills);
+                    if (chips.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        blocks.push('<w:p>' + createWordRun(chips.join(', '), {}) + '</w:p>');
+                    }
+                }
+
+                if (key === 'languages') {
+                    const chips = parseChips(state.languages);
+                    if (chips.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        blocks.push('<w:p>' + createWordRun(chips.join(', '), {}) + '</w:p>');
+                    }
+                }
+
+                if (key === 'certifications') {
+                    const filled = state.certifications.filter(item => item.name || item.issuer || item.year);
+                    if (filled.length) {
+                        blocks.push('<w:p>' + createWordRun(label.toUpperCase(), { bold: true, color: '1E3A8A' }) + '</w:p>');
+                        filled.forEach(item => {
+                            blocks.push('<w:p>' + createWordRun('- ' + [item.name, item.issuer, item.year].filter(Boolean).join(' | '), {}) + '</w:p>');
+                        });
+                    }
+                }
+            }
+
+            return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+                '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+                '<w:body>' + blocks.join('') +
+                '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr>' +
+                '</w:body></w:document>';
+        }
+
+        async function exportDocx() {
+            if (typeof JSZip === 'undefined') {
+                alert('DOCX export library is not available.');
+                return;
+            }
+
+            const oldText = elements.exportDocxBtn.textContent;
+            elements.exportDocxBtn.textContent = 'Building DOCX...';
+            elements.exportDocxBtn.disabled = true;
+
+            try {
+                const rels = [];
+                const documentXml = makeDocxDocumentXml(rels);
+                const relationshipsXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+                    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+                    rels.map(rel => '<Relationship Id="' + rel.id + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="' + xmlEscape(rel.target) + '" TargetMode="External"/>').join('') +
+                    '</Relationships>';
+
+                const zip = new JSZip();
+                zip.file('[Content_Types].xml',
+                    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+                    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+                    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+                    '<Default Extension="xml" ContentType="application/xml"/>' +
+                    '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+                    '</Types>'
+                );
+                zip.folder('_rels').file('.rels',
+                    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+                    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+                    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+                    '</Relationships>'
+                );
+                zip.folder('word').file('document.xml', documentXml);
+                zip.folder('word').folder('_rels').file('document.xml.rels', relationshipsXml);
+
+                const docxBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+                downloadBlob(docxBlob, sanitizeName(state.fullName) + '-resume.docx');
+            } catch (err) {
+                console.error(err);
+                alert('Unable to export DOCX right now. Please try again.');
+            } finally {
+                elements.exportDocxBtn.textContent = oldText;
+                elements.exportDocxBtn.disabled = false;
+            }
+        }
+
+        function waitForImages(node) {
+            const images = Array.from(node.querySelectorAll('img'));
+            if (!images.length) {
+                return Promise.resolve();
+            }
+            return Promise.all(images.map(function (img) {
+                if (img.complete && img.naturalWidth > 0) {
+                    return Promise.resolve();
+                }
+                return new Promise(function (resolve) {
+                    const done = function () {
+                        img.removeEventListener('load', done);
+                        img.removeEventListener('error', done);
+                        resolve();
+                    };
+                    img.addEventListener('load', done);
+                    img.addEventListener('error', done);
+                });
+            }));
         }
 
         async function exportPdf() {
@@ -1768,10 +2291,17 @@
             elements.exportPdfBtn.disabled = true;
 
             try {
+                await waitForImages(sheet);
+
+                const longestEdge = Math.max(sheet.scrollWidth, sheet.scrollHeight, 1);
+                const targetScale = RESUME_EXPORT_LONG_EDGE / longestEdge;
+                const scale = Math.min(6, Math.max(2.2, targetScale));
+
                 const canvas = await html2canvas(sheet, {
-                    scale: 2,
+                    scale: scale,
                     backgroundColor: '#ffffff',
                     useCORS: true,
+                    imageTimeout: 0,
                     logging: false
                 });
 
@@ -1787,13 +2317,13 @@
                 let heightLeft = imgHeight;
                 let position = 0;
 
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'SLOW');
                 heightLeft -= pageHeight;
 
                 while (heightLeft > 0) {
                     position = heightLeft - imgHeight;
                     pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'SLOW');
                     heightLeft -= pageHeight;
                 }
 
@@ -1820,12 +2350,16 @@
                 exportPdf();
             });
 
+            elements.exportDocxBtn.addEventListener('click', function () {
+                exportDocx();
+            });
+
             elements.exportTxtBtn.addEventListener('click', function () {
                 exportTxt();
             });
 
             elements.saveBtn.addEventListener('click', function () {
-                saveState();
+                saveState(true);
                 flashSavedStateButton();
             });
 
@@ -1843,7 +2377,7 @@
         }
 
         function init() {
-            loadState();
+            localStorage.removeItem(STORAGE_KEY);
             fillFormFromState();
 
             bindSimpleFields();
@@ -1856,7 +2390,6 @@
             bindActionButtons();
 
             rerenderAll();
-            saveState();
         }
 
         init();
