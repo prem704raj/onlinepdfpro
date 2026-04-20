@@ -199,9 +199,9 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             background: var(--surface-1);
-            padding: 10px;
+            padding: 8px;
             display: grid;
-            gap: 8px;
+            gap: 6px;
         }
 
         .line-item-head {
@@ -218,8 +218,14 @@
 
         .line-item-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 8px;
+        }
+
+        .quick-entry-hint {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         .line-item-total {
@@ -717,16 +723,8 @@
                             </div>
                             <div class="control-group">
                                 <label for="currencySelect">Currency</label>
-                                <select id="currencySelect" class="select">
-                                    <option value="USD">USD - US Dollar</option>
-                                    <option value="EUR">EUR - Euro</option>
-                                    <option value="GBP">GBP - British Pound</option>
-                                    <option value="INR">INR - Indian Rupee</option>
-                                    <option value="AUD">AUD - Australian Dollar</option>
-                                    <option value="CAD">CAD - Canadian Dollar</option>
-                                    <option value="JPY">JPY - Japanese Yen</option>
-                                    <option value="SGD">SGD - Singapore Dollar</option>
-                                </select>
+                                <input id="currencySearch" class="input" placeholder="Search currency code or name (e.g. INR, Yen)">
+                                <select id="currencySelect" class="select"></select>
                             </div>
                             <div class="control-group">
                                 <label for="invoiceNumber">Invoice Number</label>
@@ -779,6 +777,9 @@
                             <h3 class="section-title">Line Items
                                 <button type="button" class="btn-small" id="addItemBtn">+ Add Row</button>
                             </h3>
+                            <div class="section-content" style="padding-bottom:0;">
+                                <p class="quick-entry-hint">Quick entry: press Enter to jump to next field. Enter on Discount adds the next row automatically.</p>
+                            </div>
                             <div class="section-content" id="lineItemsList"></div>
                             <div class="section-content" style="padding-top:0;">
                                 <div class="totals-box">
@@ -960,6 +961,14 @@
 
     <script>
         const STORAGE_KEY = 'onlinepdfpro-invoice-generator-v1';
+        const CURRENCY_FALLBACK = [
+            'USD', 'EUR', 'GBP', 'INR', 'AUD', 'CAD', 'JPY', 'SGD', 'CHF', 'CNY', 'HKD', 'NZD', 'SEK', 'NOK', 'DKK',
+            'ZAR', 'AED', 'SAR', 'QAR', 'KWD', 'OMR', 'BHD', 'MYR', 'THB', 'IDR', 'PHP', 'VND', 'KRW', 'TWD', 'PKR',
+            'BDT', 'NPR', 'LKR', 'MMK', 'KHR', 'LAK', 'MNT', 'RUB', 'UAH', 'PLN', 'CZK', 'HUF', 'RON', 'BGN', 'HRK',
+            'RSD', 'TRY', 'ILS', 'EGP', 'MAD', 'TND', 'DZD', 'NGN', 'GHS', 'KES', 'UGX', 'TZS', 'ETB', 'XOF', 'XAF',
+            'BRL', 'ARS', 'CLP', 'COP', 'PEN', 'MXN', 'UYU', 'PYG', 'BOB', 'GTQ', 'CRC', 'DOP', 'JMD'
+        ];
+        let allCurrencyCodes = [];
 
         function defaultItem() {
             return {
@@ -1009,6 +1018,7 @@
 
         const elements = {
             templateSelect: document.getElementById('templateSelect'),
+            currencySearch: document.getElementById('currencySearch'),
             currencySelect: document.getElementById('currencySelect'),
             invoiceNumber: document.getElementById('invoiceNumber'),
             invoiceDate: document.getElementById('invoiceDate'),
@@ -1086,7 +1096,10 @@
 
         function fillFormFromState() {
             elements.templateSelect.value = state.template;
-            elements.currencySelect.value = state.currency;
+            populateCurrencyOptions('', state.currency);
+            if (elements.currencySearch) {
+                elements.currencySearch.value = '';
+            }
             elements.invoiceNumber.value = state.invoiceNumber;
             elements.invoiceDate.value = state.invoiceDate;
             elements.dueDate.value = state.dueDate;
@@ -1104,19 +1117,64 @@
             elements.terms.value = state.terms;
         }
 
+        function getCurrencyLabel(code) {
+            const safeCode = String(code || '').toUpperCase();
+            try {
+                if (typeof Intl !== 'undefined' && typeof Intl.DisplayNames === 'function') {
+                    const displayNames = new Intl.DisplayNames(['en'], { type: 'currency' });
+                    const name = displayNames.of(safeCode);
+                    if (name && name !== safeCode) {
+                        return safeCode + ' - ' + name;
+                    }
+                }
+            } catch (err) {
+                console.debug('Currency display-name fallback', err);
+            }
+            return safeCode;
+        }
+
+        function ensureCurrencyList() {
+            if (allCurrencyCodes.length) {
+                return;
+            }
+            try {
+                if (typeof Intl !== 'undefined' && typeof Intl.supportedValuesOf === 'function') {
+                    allCurrencyCodes = Intl.supportedValuesOf('currency').map(code => String(code || '').toUpperCase());
+                }
+            } catch (err) {
+                console.debug('Currency list fallback', err);
+            }
+
+            if (!allCurrencyCodes.length) {
+                allCurrencyCodes = CURRENCY_FALLBACK.slice();
+            }
+
+            allCurrencyCodes = Array.from(new Set(allCurrencyCodes)).sort();
+        }
+
+        function populateCurrencyOptions(filterText, preferredCode) {
+            ensureCurrencyList();
+            const query = String(filterText || '').trim().toLowerCase();
+            const targetCode = String(preferredCode || state.currency || 'USD').toUpperCase();
+            const filtered = allCurrencyCodes.filter(code => {
+                if (!query) return true;
+                const label = getCurrencyLabel(code).toLowerCase();
+                return code.toLowerCase().includes(query) || label.includes(query);
+            });
+            const finalCodes = filtered.length ? filtered : allCurrencyCodes;
+
+            elements.currencySelect.innerHTML = finalCodes.map(code => {
+                const selectedAttr = code === targetCode ? ' selected' : '';
+                return '<option value="' + escapeHtml(code) + '"' + selectedAttr + '>' + escapeHtml(getCurrencyLabel(code)) + '</option>';
+            }).join('');
+
+            const safeCode = finalCodes.includes(targetCode) ? targetCode : (finalCodes[0] || 'USD');
+            elements.currencySelect.value = safeCode;
+            state.currency = safeCode;
+        }
+
         function moneyFormatter() {
-            const localeMap = {
-                USD: 'en-US',
-                EUR: 'de-DE',
-                GBP: 'en-GB',
-                INR: 'en-IN',
-                AUD: 'en-AU',
-                CAD: 'en-CA',
-                JPY: 'ja-JP',
-                SGD: 'en-SG'
-            };
-            const locale = localeMap[state.currency] || 'en-US';
-            return new Intl.NumberFormat(locale, {
+            return new Intl.NumberFormat(undefined, {
                 style: 'currency',
                 currency: state.currency,
                 minimumFractionDigits: 2,
@@ -1180,16 +1238,45 @@
                     '<strong>Item #' + (index + 1) + '</strong>' +
                     '<button type="button" class="btn-small btn-remove" data-remove-index="' + index + '">- Remove</button>' +
                     '</div>' +
-                    '<input class="input" data-field="description" value="' + escapeHtml(item.description) + '" placeholder="Description (e.g. UI Design Services)">' +
+                    '<input class="input" data-field="description" value="' + escapeHtml(item.description) + '" placeholder="Description" autocomplete="off" enterkeyhint="next">' +
                     '<div class="line-item-grid">' +
-                    '<input class="input" data-field="quantity" type="number" min="0" step="0.01" value="' + escapeHtml(item.quantity) + '" placeholder="Quantity">' +
-                    '<input class="input" data-field="unitPrice" type="number" min="0" step="0.01" value="' + escapeHtml(item.unitPrice) + '" placeholder="Unit price">' +
-                    '<input class="input" data-field="tax" type="number" min="0" step="0.01" value="' + escapeHtml(item.tax) + '" placeholder="Tax %">' +
-                    '<input class="input" data-field="discount" type="number" min="0" step="0.01" value="' + escapeHtml(item.discount) + '" placeholder="Discount %">' +
+                    '<input class="input" data-field="quantity" type="number" min="0" step="0.01" value="' + escapeHtml(item.quantity) + '" placeholder="Qty" enterkeyhint="next">' +
+                    '<input class="input" data-field="unitPrice" type="number" min="0" step="0.01" value="' + escapeHtml(item.unitPrice) + '" placeholder="Unit" enterkeyhint="next">' +
+                    '<input class="input" data-field="tax" type="number" min="0" step="0.01" value="' + escapeHtml(item.tax) + '" placeholder="Tax %" enterkeyhint="next">' +
+                    '<input class="input" data-field="discount" type="number" min="0" step="0.01" value="' + escapeHtml(item.discount) + '" placeholder="Disc %" enterkeyhint="next">' +
                     '</div>' +
                     '<div class="line-item-total">Row Total: ' + formatMoney(c.total) + '</div>' +
                     '</div>';
             }).join('');
+        }
+
+        function updateLineItemTotalForIndex(index) {
+            const card = elements.lineItemsList.querySelector('.line-item-card[data-index="' + index + '"]');
+            if (!card || !state.items[index]) {
+                return;
+            }
+            const totalEl = card.querySelector('.line-item-total');
+            if (!totalEl) {
+                return;
+            }
+            totalEl.textContent = 'Row Total: ' + formatMoney(calcItem(state.items[index]).total);
+        }
+
+        function updateAllVisibleLineItemTotals() {
+            state.items.forEach(function (_, index) {
+                updateLineItemTotalForIndex(index);
+            });
+        }
+
+        function focusLineItemField(index, field) {
+            const selector = '.line-item-card[data-index="' + index + '"] [data-field="' + field + '"]';
+            const input = elements.lineItemsList.querySelector(selector);
+            if (input) {
+                input.focus();
+                if (typeof input.select === 'function' && input.type !== 'number') {
+                    input.select();
+                }
+            }
         }
 
         function renderTotalsBox() {
@@ -1317,9 +1404,23 @@
                         state[key] = this.value;
                     }
                     saveState();
-                    rerenderAll();
+                    updateAllVisibleLineItemTotals();
+                    renderTotalsBox();
+                    renderPreview();
                 });
             });
+
+            if (elements.currencySearch) {
+                elements.currencySearch.addEventListener('input', function () {
+                    populateCurrencyOptions(this.value, state.currency);
+                });
+                elements.currencySearch.addEventListener('keydown', function (event) {
+                    if (event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        elements.currencySelect.focus();
+                    }
+                });
+            }
 
             elements.senderLogo.addEventListener('change', function (event) {
                 const file = event.target.files && event.target.files[0];
@@ -1341,6 +1442,7 @@
                 state.items.push(defaultItem());
                 saveState();
                 rerenderAll();
+                focusLineItemField(state.items.length - 1, 'description');
             });
 
             elements.lineItemsList.addEventListener('input', function (event) {
@@ -1356,8 +1458,57 @@
 
                 state.items[index][field] = event.target.value;
                 saveState();
-                rerenderAll();
+                updateLineItemTotalForIndex(index);
+                renderTotalsBox();
+                renderPreview();
             });
+
+            elements.lineItemsList.addEventListener('keydown', function (event) {
+                if (event.key !== 'Enter') {
+                    return;
+                }
+                const input = event.target;
+                if (!input || !input.matches('[data-field]')) {
+                    return;
+                }
+                event.preventDefault();
+
+                const card = input.closest('.line-item-card');
+                if (!card) {
+                    return;
+                }
+                const index = Number(card.getAttribute('data-index'));
+                if (!Number.isInteger(index) || index < 0) {
+                    return;
+                }
+
+                const fieldOrder = ['description', 'quantity', 'unitPrice', 'tax', 'discount'];
+                const currentField = input.getAttribute('data-field') || '';
+                const currentPos = fieldOrder.indexOf(currentField);
+                if (currentPos < 0) {
+                    return;
+                }
+
+                const nextField = fieldOrder[currentPos + 1];
+                if (nextField) {
+                    focusLineItemField(index, nextField);
+                    return;
+                }
+
+                if (index === state.items.length - 1) {
+                    state.items.push(defaultItem());
+                    saveState();
+                    rerenderAll();
+                }
+                focusLineItemField(Math.min(index + 1, state.items.length - 1), 'description');
+            });
+
+            elements.lineItemsList.addEventListener('wheel', function (event) {
+                const target = event.target;
+                if (target && target.tagName === 'INPUT' && target.type === 'number' && document.activeElement === target) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
 
             elements.lineItemsList.addEventListener('click', function (event) {
                 const remove = event.target.getAttribute('data-remove-index');
@@ -1371,6 +1522,7 @@
                 state.items.splice(index, 1);
                 saveState();
                 rerenderAll();
+                focusLineItemField(Math.max(0, index - 1), 'description');
             });
         }
 

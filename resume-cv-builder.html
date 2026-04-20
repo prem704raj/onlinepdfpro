@@ -122,6 +122,50 @@
             gap: 10px;
         }
 
+        .template-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+
+        .template-card {
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            border-radius: 10px;
+            padding: 9px 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .template-card:hover {
+            border-color: color-mix(in srgb, var(--accent-color, #2563eb) 60%, #60a5fa);
+            transform: translateY(-1px);
+        }
+
+        .template-card.active {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+            background: color-mix(in srgb, #eff6ff 70%, var(--surface-1));
+        }
+
+        .template-card strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .template-card span {
+            display: block;
+            margin-top: 3px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
         .control-group {
             display: grid;
             gap: 6px;
@@ -960,6 +1004,14 @@
                             </div>
                         </div>
 
+                        <section class="section-box" style="margin-top: 8px;">
+                            <h3 class="section-title">Choose from 13 Resume Templates</h3>
+                            <div class="section-content" style="padding-top: 10px;">
+                                <p style="margin:0; font-size:12px; color:var(--text-secondary);">Preview style quickly: click any template below, then edit the same pre-filled resume data.</p>
+                                <div class="template-gallery" id="templateGallery"></div>
+                            </div>
+                        </section>
+
                         <section class="section-box">
                             <h3 class="section-title">Personal Info</h3>
                             <div class="section-content">
@@ -1208,6 +1260,33 @@
             certifications: 'Certifications'
         };
 
+        const TEMPLATE_CARDS = [
+            { key: 'classic', title: 'Classic Professional', hint: 'Balanced and ATS-friendly' },
+            { key: 'modern', title: 'Modern Split', hint: 'Two-column modern layout' },
+            { key: 'executive', title: 'Executive Dark Header', hint: 'Premium leadership style' },
+            { key: 'minimal', title: 'Minimal Clean', hint: 'Simple and clean lines' },
+            { key: 'compact', title: 'Compact Dense', hint: 'Fits more in less space' },
+            { key: 'creative', title: 'Creative Portfolio', hint: 'Visual profile emphasis' },
+            { key: 'corporate', title: 'Corporate Framed', hint: 'Business-ready framing' },
+            { key: 'elegant', title: 'Elegant Centered', hint: 'Formal and polished' },
+            { key: 'neo', title: 'Neo Gradient', hint: 'Gradient brand-first style' },
+            { key: 'slate', title: 'Slate Sidebar', hint: 'Strong sidebar identity' },
+            { key: 'atlas', title: 'Atlas Column', hint: 'Magazine-like rhythm' },
+            { key: 'zenith', title: 'Zenith Minimal', hint: 'Minimal with soft hierarchy' },
+            { key: 'horizon', title: 'Horizon Accent', hint: 'Accent rails and markers' }
+        ];
+
+        function makeDefaultAvatarDataUri() {
+            const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">' +
+                '<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>' +
+                '<rect width="320" height="320" fill="url(#g)"/>' +
+                '<circle cx="160" cy="124" r="58" fill="#dbeafe" opacity="0.95"/>' +
+                '<path d="M74 276c10-48 44-82 86-82s76 34 86 82" fill="#dbeafe" opacity="0.95"/>' +
+                '<text x="160" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#0f172a" font-weight="700">Aarav Mehta</text>' +
+                '</svg>';
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
         function defaultExperience() {
             return {
                 role: '',
@@ -1252,23 +1331,73 @@
                 template: 'classic',
                 font: 'sans',
                 accentColor: '#2563eb',
-                photo: '',
-                fullName: '',
-                jobTitle: '',
-                email: '',
-                phone: '',
-                location: '',
-                website: '',
-                linkedin: '',
-                github: '',
-                summary: '',
-                skills: '',
-                languages: '',
+                photo: makeDefaultAvatarDataUri(),
+                fullName: 'Aarav Mehta',
+                jobTitle: 'Senior Product Designer',
+                email: 'aarav.mehta@example.com',
+                phone: '+91 98765 43210',
+                location: 'Bengaluru, India',
+                website: 'aaravmehta.design',
+                linkedin: 'linkedin.com/in/aarav-mehta',
+                github: 'github.com/aaravmehta',
+                summary: 'Product designer with 8+ years of experience building B2B SaaS workflows, design systems, and conversion-focused onboarding. Partnered with product and engineering to improve activation by 31% and reduce support tickets by 24%.',
+                skills: 'Product Design, UX Research, Figma, Design Systems, Prototyping, Accessibility, UX Writing, Analytics, Stakeholder Management',
+                languages: 'English - Fluent, Hindi - Native, Kannada - Conversational',
                 sectionOrder: ['summary', 'experience', 'education', 'projects', 'skills', 'languages', 'certifications'],
-                experience: [defaultExperience()],
-                education: [defaultEducation()],
-                projects: [defaultProject()],
-                certifications: [defaultCertification()]
+                experience: [
+                    {
+                        role: 'Senior Product Designer',
+                        company: 'NimbusFlow Technologies',
+                        location: 'Bengaluru',
+                        start: 'Mar 2021',
+                        end: 'Present',
+                        description: 'Led redesign of procurement workflow used by 50k+ users. Introduced design tokens and reusable components, reducing UI implementation time by 38%.'
+                    },
+                    {
+                        role: 'Product Designer',
+                        company: 'PixelOrbit Labs',
+                        location: 'Remote',
+                        start: 'Jun 2018',
+                        end: 'Feb 2021',
+                        description: 'Owned end-to-end design for onboarding and dashboard modules. Improved trial-to-paid conversion by 19% through iterative UX experiments.'
+                    }
+                ],
+                education: [
+                    {
+                        degree: 'B.Des. in Interaction Design',
+                        institution: 'National Institute of Design',
+                        location: 'Ahmedabad',
+                        start: '2013',
+                        end: '2017',
+                        details: 'Graduated with distinction. Focused on human-centered design and interface systems.'
+                    }
+                ],
+                projects: [
+                    {
+                        name: 'TaskPilot Design System',
+                        link: 'taskpilot.designsystem.dev',
+                        tech: 'Figma, Tokens Studio, Storybook',
+                        description: 'Built a cross-platform component library with typography and spacing tokens used by 4 product squads.'
+                    },
+                    {
+                        name: 'Commerce Analytics Dashboard',
+                        link: 'github.com/aaravmehta/commerce-dashboard-case-study',
+                        tech: 'Figma, FigJam, React',
+                        description: 'Designed KPI-first reporting experience for SMB merchants with role-based views and actionable alerts.'
+                    }
+                ],
+                certifications: [
+                    {
+                        name: 'Google UX Design Professional Certificate',
+                        issuer: 'Google',
+                        year: '2022'
+                    },
+                    {
+                        name: 'Accessibility for Web Design',
+                        issuer: 'Interaction Design Foundation',
+                        year: '2023'
+                    }
+                ]
             };
         }
 
@@ -1294,6 +1423,7 @@
             educationList: document.getElementById('educationList'),
             projectList: document.getElementById('projectList'),
             certificationList: document.getElementById('certificationList'),
+            templateGallery: document.getElementById('templateGallery'),
             addExperienceBtn: document.getElementById('addExperienceBtn'),
             addEducationBtn: document.getElementById('addEducationBtn'),
             addProjectBtn: document.getElementById('addProjectBtn'),
@@ -1431,6 +1561,30 @@
             elements.summary.value = state.summary;
             elements.skills.value = state.skills;
             elements.languages.value = state.languages;
+            syncTemplateGallery();
+        }
+
+        function renderTemplateGallery() {
+            if (!elements.templateGallery) {
+                return;
+            }
+            elements.templateGallery.innerHTML = TEMPLATE_CARDS.map(function (tpl) {
+                return '<button type="button" class="template-card" data-template-card="' + escapeAttr(tpl.key) + '">' +
+                    '<strong>' + escapeHtml(tpl.title) + '</strong>' +
+                    '<span>' + escapeHtml(tpl.hint) + '</span>' +
+                    '</button>';
+            }).join('');
+            syncTemplateGallery();
+        }
+
+        function syncTemplateGallery() {
+            if (!elements.templateGallery) {
+                return;
+            }
+            const cards = elements.templateGallery.querySelectorAll('[data-template-card]');
+            cards.forEach(function (card) {
+                card.classList.toggle('active', card.getAttribute('data-template-card') === state.template);
+            });
         }
 
         function renderExperienceList() {
@@ -1760,6 +1914,7 @@
                 state.template = this.value;
                 saveState();
                 renderPreview();
+                syncTemplateGallery();
             });
 
             elements.fontSelect.addEventListener('change', function () {
@@ -1793,6 +1948,23 @@
                 };
                 reader.readAsDataURL(file);
             });
+
+            if (elements.templateGallery) {
+                elements.templateGallery.addEventListener('click', function (event) {
+                    const btn = event.target.closest('[data-template-card]');
+                    if (!btn) {
+                        return;
+                    }
+                    const selected = btn.getAttribute('data-template-card') || '';
+                    if (!selected || selected === state.template) {
+                        return;
+                    }
+                    state.template = selected;
+                    elements.templateSelect.value = selected;
+                    renderPreview();
+                    syncTemplateGallery();
+                });
+            }
         }
 
         function bindRepeater(listElement, stateKey) {
@@ -2378,6 +2550,7 @@
 
         function init() {
             localStorage.removeItem(STORAGE_KEY);
+            renderTemplateGallery();
             fillFormFromState();
 
             bindSimpleFields();
