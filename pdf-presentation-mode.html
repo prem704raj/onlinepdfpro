@@ -1318,18 +1318,24 @@
             const page = await state.pdfDoc.getPage(pageNum);
             const baseViewport = page.getViewport({ scale: 1 });
 
-            const availW = Math.max(200, el.viewerWrap.clientWidth - 24);
-            const availH = Math.max(200, el.viewerWrap.clientHeight - 24);
+            const isStageFullscreen = document.fullscreenElement === el.presentationStage;
+            const framePadding = isStageFullscreen ? 8 : 24;
+            const availW = Math.max(200, el.viewerWrap.clientWidth - framePadding);
+            const availH = Math.max(200, el.viewerWrap.clientHeight - framePadding);
             const fitScale = Math.min(availW / baseViewport.width, availH / baseViewport.height);
             const scale = Math.max(0.1, fitScale * state.zoom);
             const viewport = page.getViewport({ scale: scale });
-            const outputScale = Math.min(3, Math.max(1, window.devicePixelRatio || 1) * 1.25);
+            const baseDpr = Math.max(1, window.devicePixelRatio || 1);
+            const qualityBoost = isStageFullscreen ? 2.2 : 1.7;
+            const outputScale = Math.min(5, Math.max(1.5, baseDpr * qualityBoost));
+            const cssWidth = Math.max(1, viewport.width);
+            const cssHeight = Math.max(1, viewport.height);
 
             const slideCanvas = el.slideCanvas;
-            slideCanvas.width = Math.floor(viewport.width * outputScale);
-            slideCanvas.height = Math.floor(viewport.height * outputScale);
-            slideCanvas.style.width = Math.floor(viewport.width) + 'px';
-            slideCanvas.style.height = Math.floor(viewport.height) + 'px';
+            slideCanvas.width = Math.max(1, Math.round(cssWidth * outputScale));
+            slideCanvas.height = Math.max(1, Math.round(cssHeight * outputScale));
+            slideCanvas.style.width = cssWidth + 'px';
+            slideCanvas.style.height = cssHeight + 'px';
 
             const drawCanvas = el.drawCanvas;
             drawCanvas.width = slideCanvas.width;
@@ -1343,9 +1349,12 @@
             const ctx = slideCanvas.getContext('2d', { alpha: false });
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, slideCanvas.width, slideCanvas.height);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
             await page.render({
                 canvasContext: ctx,
                 viewport: viewport,
+                intent: 'print',
                 transform: outputScale === 1 ? null : [outputScale, 0, 0, outputScale, 0, 0]
             }).promise;
 

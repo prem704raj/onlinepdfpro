@@ -457,7 +457,7 @@
                 <p class="tool-description"
                     style="color:var(--text-secondary); font-size:1rem; max-width:780px; margin:0 auto; line-height:1.6;">Upload
                     a PDF, select pages from thumbnails or page ranges, preview selected pages, then extract as one PDF
-                    or separate per-page PDFs in a ZIP archive.</p>
+                    or export selected pages as high-quality 4K PNG images (direct download or ZIP).</p>
             </div>
 
             <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
@@ -505,7 +505,9 @@
                         <button class="action-btn btn-secondary" id="deselectAllBtn">Deselect All</button>
                         <button class="action-btn btn-warn" id="invertBtn">Invert Selection</button>
                         <button class="action-btn btn-success" id="extractSingleBtn">Extract as Single PDF</button>
-                        <button class="action-btn btn-success" id="extractZipBtn">Extract Each Page as ZIP</button>
+                        <button class="action-btn btn-primary" id="downloadImagesBtn" disabled>Download Selected Images (4K)</button>
+                        <button class="action-btn btn-secondary" id="downloadSingleImageBtn" disabled>Download Single Image (4K)</button>
+                        <button class="action-btn btn-success" id="extractZipBtn" disabled>Download Images as ZIP (4K)</button>
                         <button class="action-btn btn-primary" id="downloadExtractedBtn" disabled>Download Extracted PDF</button>
                         <button class="action-btn btn-reset" id="resetBtn">Reset</button>
                     </div>
@@ -547,7 +549,7 @@
                 </div>
                 <div class="step">
                     <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Export Result</h3>
-                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download extracted pages as one PDF or as separate ZIP files.</p>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download selected pages as one PDF, as separate 4K PNG images, or as a single ZIP.</p>
                 </div>
             </div>
         </section>
@@ -585,12 +587,12 @@
 
             <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> What is the ZIP export option?</h3>
-                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">ZIP mode creates one PDF file per selected page and packages them together.</p>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">ZIP mode creates one 4K PNG image per selected page and packages them together.</p>
             </div>
 
             <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
                 <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is extracted output same quality as source?</h3>
-                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. Original page content is preserved without quality loss.</p>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. PDF export preserves document quality, and image export renders each page as a high-resolution 4K PNG.</p>
             </div>
 
             <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
@@ -680,6 +682,8 @@
             extractedCount: 0
         };
 
+        const IMAGE_EXPORT_LONG_EDGE = 3840;
+
         const elements = {
             dropArea: document.getElementById('dropArea'),
             fileInput: document.getElementById('fileInput'),
@@ -702,6 +706,8 @@
             deselectAllBtn: document.getElementById('deselectAllBtn'),
             invertBtn: document.getElementById('invertBtn'),
             extractSingleBtn: document.getElementById('extractSingleBtn'),
+            downloadImagesBtn: document.getElementById('downloadImagesBtn'),
+            downloadSingleImageBtn: document.getElementById('downloadSingleImageBtn'),
             extractZipBtn: document.getElementById('extractZipBtn'),
             downloadExtractedBtn: document.getElementById('downloadExtractedBtn'),
             resetBtn: document.getElementById('resetBtn')
@@ -738,6 +744,12 @@
             elements.originalCount.textContent = String(state.originalPageCount || 0);
             elements.selectedCount.textContent = String(state.selected.size || 0);
             elements.extractedCount.textContent = String(state.extractedCount || 0);
+            const selectedSize = state.selected.size || 0;
+            const hasPdf = !!state.pdfJsDoc;
+            elements.extractSingleBtn.disabled = !hasPdf || selectedSize === 0;
+            elements.downloadImagesBtn.disabled = !hasPdf || selectedSize === 0;
+            elements.downloadSingleImageBtn.disabled = !hasPdf || selectedSize !== 1;
+            elements.extractZipBtn.disabled = !hasPdf || selectedSize === 0;
             elements.downloadExtractedBtn.disabled = !state.extractedBlob;
         }
 
@@ -763,6 +775,54 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        function pageToken(pageNum) {
+            return String(pageNum).padStart(3, '0');
+        }
+
+        async function renderPageAs4kPngBlob(pageIndex) {
+            if (!state.pdfJsDoc) {
+                throw new Error('PDF not loaded.');
+            }
+
+            const page = await state.pdfJsDoc.getPage(pageIndex + 1);
+            const baseViewport = page.getViewport({ scale: 1 });
+            const longEdge = Math.max(baseViewport.width, baseViewport.height);
+            const renderScale = Math.max(1, IMAGE_EXPORT_LONG_EDGE / Math.max(1, longEdge));
+            const viewport = page.getViewport({ scale: renderScale });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.floor(viewport.width));
+            canvas.height = Math.max(1, Math.floor(viewport.height));
+
+            const ctx = canvas.getContext('2d', { alpha: false });
+            if (!ctx) {
+                throw new Error('Canvas context unavailable.');
+            }
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            await page.render({
+                canvasContext: ctx,
+                viewport: viewport,
+                intent: 'print'
+            }).promise;
+
+            const blob = await new Promise(function (resolve, reject) {
+                canvas.toBlob(function (pngBlob) {
+                    if (pngBlob) {
+                        resolve(pngBlob);
+                    } else {
+                        reject(new Error('Could not render PNG blob.'));
+                    }
+                }, 'image/png');
+            });
+
+            canvas.width = 0;
+            canvas.height = 0;
+            return blob;
         }
 
         function resetAll() {
@@ -996,6 +1056,73 @@
             }
         }
 
+        async function downloadSelectedImages() {
+            const selectedIndices = getSelectedSourceIndices();
+            if (!selectedIndices.length) {
+                setStatus('Select at least one page to download as image.');
+                return;
+            }
+
+            const oldText = elements.downloadImagesBtn.textContent;
+            elements.downloadImagesBtn.disabled = true;
+            elements.downloadImagesBtn.textContent = 'Rendering 4K...';
+
+            try {
+                for (let i = 0; i < selectedIndices.length; i++) {
+                    const pageIndex = selectedIndices[i];
+                    const pageNum = pageIndex + 1;
+                    setStatus('Preparing 4K image ' + (i + 1) + ' / ' + selectedIndices.length + '...');
+
+                    const pngBlob = await renderPageAs4kPngBlob(pageIndex);
+                    downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+                    await nextFrame();
+                }
+
+                state.extractedCount = selectedIndices.length;
+                updateStats();
+                setStatus('Downloaded ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
+            } catch (err) {
+                console.error(err);
+                alert('Could not download selected pages as 4K images.');
+            } finally {
+                elements.downloadImagesBtn.disabled = false;
+                elements.downloadImagesBtn.textContent = oldText;
+                updateStats();
+            }
+        }
+
+        async function downloadSingleImage() {
+            const selectedIndices = getSelectedSourceIndices();
+            if (selectedIndices.length !== 1) {
+                setStatus('Select exactly one page to download a single image.');
+                return;
+            }
+
+            const oldText = elements.downloadSingleImageBtn.textContent;
+            elements.downloadSingleImageBtn.disabled = true;
+            elements.downloadSingleImageBtn.textContent = 'Rendering 4K...';
+
+            try {
+                const pageIndex = selectedIndices[0];
+                const pageNum = pageIndex + 1;
+                setStatus('Preparing single 4K image...');
+
+                const pngBlob = await renderPageAs4kPngBlob(pageIndex);
+                downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+
+                state.extractedCount = 1;
+                updateStats();
+                setStatus('Downloaded page ' + pageNum + ' as a 4K PNG image.');
+            } catch (err) {
+                console.error(err);
+                alert('Could not download the selected page as a 4K image.');
+            } finally {
+                elements.downloadSingleImageBtn.disabled = false;
+                elements.downloadSingleImageBtn.textContent = oldText;
+                updateStats();
+            }
+        }
+
         async function extractAsZip() {
             const selectedIndices = getSelectedSourceIndices();
             if (!selectedIndices.length) {
@@ -1013,16 +1140,13 @@
             elements.extractZipBtn.textContent = 'Building ZIP...';
 
             try {
-                const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes.slice(0));
                 const zip = new JSZip();
 
                 for (let i = 0; i < selectedIndices.length; i++) {
-                    const singleDoc = await PDFLib.PDFDocument.create();
-                    const copied = await singleDoc.copyPages(srcDoc, [selectedIndices[i]]);
-                    singleDoc.addPage(copied[0]);
-                    const bytes = await singleDoc.save();
-                    const pageNum = selectedIndices[i] + 1;
-                    zip.file('page-' + String(pageNum).padStart(3, '0') + '.pdf', bytes);
+                    const pageIndex = selectedIndices[i];
+                    const pageNum = pageIndex + 1;
+                    const pngBlob = await renderPageAs4kPngBlob(pageIndex);
+                    zip.file('page-' + pageToken(pageNum) + '-4k.png', pngBlob);
 
                     if (i % 3 === 0) {
                         setStatus('Preparing ZIP: ' + (i + 1) + ' / ' + selectedIndices.length + ' pages...');
@@ -1030,17 +1154,22 @@
                     }
                 }
 
-                const zipBlob = await zip.generateAsync({ type: 'blob' });
-                downloadBlob(zipBlob, baseFileName() + '-pages.zip');
+                const zipBlob = await zip.generateAsync({
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                });
+                downloadBlob(zipBlob, baseFileName() + '-images-4k.zip');
                 state.extractedCount = selectedIndices.length;
                 updateStats();
-                setStatus('Created ZIP with ' + selectedIndices.length + ' separate page PDF files.');
+                setStatus('Created ZIP with ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
             } catch (err) {
                 console.error(err);
-                alert('Could not build ZIP from selected pages.');
+                alert('Could not build image ZIP from selected pages.');
             } finally {
                 elements.extractZipBtn.disabled = false;
                 elements.extractZipBtn.textContent = oldText;
+                updateStats();
             }
         }
 
@@ -1170,6 +1299,8 @@
         });
 
         elements.extractSingleBtn.addEventListener('click', extractSinglePdf);
+        elements.downloadImagesBtn.addEventListener('click', downloadSelectedImages);
+        elements.downloadSingleImageBtn.addEventListener('click', downloadSingleImage);
         elements.extractZipBtn.addEventListener('click', extractAsZip);
 
         elements.downloadExtractedBtn.addEventListener('click', function () {
