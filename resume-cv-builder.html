@@ -19,7 +19,7 @@
     <meta property="og:url" content="https://onlinepdfpro.com/resume-cv-builder.html">
     <meta property="og:title" content="Resume and CV Builder Free Online | OnlinePDFPro">
     <meta property="og:description"
-        content="Build resumes with live preview, drag-and-drop section ordering, five templates, and high-quality PDF export directly in browser.">
+        content="Build resumes with live preview, drag-and-drop section ordering, eight templates, and high-quality PDF export directly in browser.">
     <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
     <meta property="og:site_name" content="OnlinePDFPro">
     <meta property="og:locale" content="en_US">
@@ -549,6 +549,78 @@
             margin-top: 12px;
         }
 
+        .resume-sheet.template-creative .resume-header {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 72%, #0f172a), #1e293b);
+            color: #f8fafc;
+            border-bottom: none;
+            border-radius: 10px;
+        }
+
+        .resume-sheet.template-creative .resume-name,
+        .resume-sheet.template-creative .item-title {
+            color: #ffffff;
+        }
+
+        .resume-sheet.template-creative .resume-role,
+        .resume-sheet.template-creative .resume-contact {
+            color: #dbeafe;
+        }
+
+        .resume-sheet.template-creative .resume-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .resume-sheet.template-creative .resume-section:first-child {
+            grid-column: 1 / -1;
+        }
+
+        .resume-sheet.template-corporate .resume-header {
+            border-left: 7px solid color-mix(in srgb, var(--accent-color) 75%, #1d4ed8);
+            border-bottom: 2px solid color-mix(in srgb, var(--accent-color) 30%, #cbd5e1);
+            padding-left: 10mm;
+        }
+
+        .resume-sheet.template-corporate .resume-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 9px;
+            background: #f8fafc;
+        }
+
+        .resume-sheet.template-corporate .resume-section h3 {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .resume-sheet.template-elegant .resume-header {
+            text-align: center;
+            border-bottom: 1px solid #d1d5db;
+            background: #ffffff;
+        }
+
+        .resume-sheet.template-elegant .resume-role {
+            font-style: italic;
+            color: #475569;
+            letter-spacing: 0.3px;
+        }
+
+        .resume-sheet.template-elegant .resume-contact {
+            justify-content: center;
+        }
+
+        .resume-sheet.template-elegant .resume-section h3 {
+            border-bottom: none;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 6px;
+            margin-top: 0;
+            font-size: 11.6px;
+            letter-spacing: 0.8px;
+        }
+
         .resume-sheet.font-serif {
             --resume-font: Georgia, "Times New Roman", serif;
         }
@@ -685,7 +757,7 @@
                     &amp; CV Builder</h1>
                 <p class="tool-description"
                     style="color:var(--text-secondary); font-size:1rem; max-width:760px; margin:0 auto; line-height:1.6;">Build
-                    a polished resume with live preview, five templates, custom colors/fonts, drag-and-drop section
+                    a polished resume with live preview, eight templates, custom colors/fonts, drag-and-drop section
                     ordering, and instant PDF/TXT export. Everything is saved locally in your browser.</p>
             </div>
 
@@ -705,6 +777,9 @@
                                     <option value="executive">Executive Dark Header</option>
                                     <option value="minimal">Minimal Clean</option>
                                     <option value="compact">Compact Dense</option>
+                                    <option value="creative">Creative Portfolio</option>
+                                    <option value="corporate">Corporate Framed</option>
+                                    <option value="elegant">Elegant Centered</option>
                                 </select>
                             </div>
                             <div class="control-group">
@@ -825,6 +900,72 @@
                 </section>
             </div>
         </div>
+
+        <section class="how-it-works"
+            style="margin: clamp(80px, 10vw, 190px) auto 24px; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Build a Resume Online</h2>
+            <div class="steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Fill Details</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Add profile, experience, education, skills, and projects.</p>
+                </div>
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Choose Layout</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Switch templates and reorder sections with drag-and-drop.</p>
+                </div>
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Export Resume</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download professional output in PDF or TXT instantly.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-tools" style="margin: 24px auto; padding: 0 20px; max-width: 900px;">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Related Tools</h2>
+            <div class="related-tools-grid">
+                <a href="invoice-generator.html" class="related-tool-card">
+                    <h3>Invoice Generator</h3>
+                    <p>Create branded invoices with live preview</p>
+                </a>
+                <a href="tools/pdf-to-word.html" class="related-tool-card">
+                    <h3>PDF to Word</h3>
+                    <p>Convert resume PDFs into editable documents</p>
+                </a>
+                <a href="pdf-editor.html" class="related-tool-card">
+                    <h3>PDF Editor</h3>
+                    <p>Make quick edits to final PDF resumes</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Frequently Asked Questions</h2>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Can I use this for both resume and CV formats?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. You can create short resumes or detailed CVs using the same builder.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is my data auto-saved?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. Progress is stored locally in your browser so you can continue later.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Can I reorder sections before export?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Absolutely. Drag section names to control the final layout order.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Does this tool add watermark to my resume?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">No watermark is added to exported resume files.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is my information sent to any server?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">No. The builder runs client-side and keeps all data on your device.</p>
+            </div>
+        </section>
     </main>
 
     <footer

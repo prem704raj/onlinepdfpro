@@ -513,6 +513,72 @@
                 </section>
             </section>
         </div>
+
+        <section class="how-it-works"
+            style="margin: clamp(80px, 10vw, 190px) auto 24px; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Convert Base64 to PDF Online</h2>
+            <div class="steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Paste Base64</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Paste raw Base64 or a full data URI with prefix.</p>
+                </div>
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Validate and Preview</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">The tool verifies decoded content and opens live PDF/image preview.</p>
+                </div>
+                <div class="step">
+                    <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Download or Reverse</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Download output file or upload a PDF to generate Base64 text.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-tools" style="margin: 24px auto; padding: 0 20px; max-width: 900px;">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Related Tools</h2>
+            <div class="related-tools-grid">
+                <a href="pdf-reader.html" class="related-tool-card">
+                    <h3>PDF Reader</h3>
+                    <p>Open and inspect converted PDFs quickly</p>
+                </a>
+                <a href="pdf-page-extractor.html" class="related-tool-card">
+                    <h3>PDF Page Extractor</h3>
+                    <p>Extract selected pages from decoded PDF files</p>
+                </a>
+                <a href="tools/compress-pdf.html" class="related-tool-card">
+                    <h3>Compress PDF</h3>
+                    <p>Reduce output PDF size before sharing</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
+            <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Frequently Asked Questions</h2>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Do I need to remove data URI prefix manually?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">No. The converter automatically strips prefixes like data:application/pdf;base64,.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Why does conversion fail for some strings?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Invalid Base64 or non-PDF/non-image binary payload will trigger validation errors.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Can I output MIME chunked Base64?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. Enable the 76-character chunk option in the PDF-to-Base64 panel.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Are JPG and PNG Base64 values supported?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. Auto mode detects and previews both PNG and JPEG image payloads.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is this converter private?</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes. All decoding and encoding happens locally in your browser only.</p>
+            </div>
+        </section>
     </main>
 
     <footer
