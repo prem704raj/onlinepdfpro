@@ -314,6 +314,24 @@
             overflow: hidden;
         }
 
+        .presentation-stage.is-fullscreen-clean .topbar,
+        .presentation-stage.is-fullscreen-clean .bottom-nav,
+        .presentation-stage.is-fullscreen-clean .exit-btn,
+        .presentation-stage.is-fullscreen-clean .overview-panel,
+        .presentation-stage.is-fullscreen-clean .shortcuts-modal {
+            display: none !important;
+        }
+
+        .presentation-stage.is-fullscreen-clean .viewer-wrap {
+            inset: 0;
+            touch-action: pan-y;
+        }
+
+        .presentation-stage.is-fullscreen-clean .slide-canvas-wrap {
+            box-shadow: none;
+            border-radius: 0;
+        }
+
         .presentation-stage.theme-dark {
             background: #020617;
         }
@@ -822,7 +840,7 @@
         </div>
 
         <section class="how-it-works"
-            style="margin: clamp(80px, 10vw, 190px) auto 24px; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            style="margin: clamp(140px, 16vw, 320px) auto 24px !important; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Present PDF Slides Online</h2>
             <div class="steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                 <div class="step">
@@ -1166,6 +1184,17 @@
             el.themeToggleBtn.textContent = safeTheme === 'dark' ? 'Light BG' : 'Dark BG';
         }
 
+        function syncFullscreenUiState() {
+            const isStageFullscreen = document.fullscreenElement === el.presentationStage;
+            el.presentationStage.classList.toggle('is-fullscreen-clean', isStageFullscreen);
+            if (isStageFullscreen) {
+                hideShortcuts();
+                state.overviewOpen = false;
+                el.overviewPanel.classList.remove('show');
+                el.overviewToggleBtn.classList.remove('active');
+            }
+        }
+
         function formatTime(ms) {
             const totalSec = Math.max(0, Math.floor(ms / 1000));
             const h = Math.floor(totalSec / 3600);
@@ -1253,7 +1282,10 @@
                 return;
             }
 
-            const lineWidth = Math.max(2, Math.round(Math.min(canvas.width, canvas.height) * 0.004));
+            const cssW = canvas.clientWidth || canvas.width;
+            const cssH = canvas.clientHeight || canvas.height;
+            const pixelRatio = canvas.width / Math.max(1, cssW);
+            const lineWidth = Math.max(2 * pixelRatio, Math.round(Math.min(cssW, cssH) * 0.004 * pixelRatio));
             ctx.strokeStyle = '#ef4444';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
@@ -1291,10 +1323,11 @@
             const fitScale = Math.min(availW / baseViewport.width, availH / baseViewport.height);
             const scale = Math.max(0.1, fitScale * state.zoom);
             const viewport = page.getViewport({ scale: scale });
+            const outputScale = Math.min(3, Math.max(1, window.devicePixelRatio || 1) * 1.25);
 
             const slideCanvas = el.slideCanvas;
-            slideCanvas.width = Math.floor(viewport.width);
-            slideCanvas.height = Math.floor(viewport.height);
+            slideCanvas.width = Math.floor(viewport.width * outputScale);
+            slideCanvas.height = Math.floor(viewport.height * outputScale);
             slideCanvas.style.width = Math.floor(viewport.width) + 'px';
             slideCanvas.style.height = Math.floor(viewport.height) + 'px';
 
@@ -1307,8 +1340,14 @@
             el.canvasWrap.style.width = slideCanvas.style.width;
             el.canvasWrap.style.height = slideCanvas.style.height;
 
-            const ctx = slideCanvas.getContext('2d');
-            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            const ctx = slideCanvas.getContext('2d', { alpha: false });
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, slideCanvas.width, slideCanvas.height);
+            await page.render({
+                canvasContext: ctx,
+                viewport: viewport,
+                transform: outputScale === 1 ? null : [outputScale, 0, 0, outputScale, 0, 0]
+            }).promise;
 
             if (state.lastRenderToken !== renderToken) {
                 return;
@@ -1371,6 +1410,7 @@
             if (!document.fullscreenElement && el.presentationStage.requestFullscreen) {
                 try {
                     await el.presentationStage.requestFullscreen();
+                    syncFullscreenUiState();
                 } catch (err) {
                     setStatus('Fullscreen was blocked by browser. Presentation still started.', 'error');
                 }
@@ -1406,6 +1446,7 @@
             setDrawMode(false);
             stopTimer();
             state.isPresenting = false;
+            el.presentationStage.classList.remove('is-fullscreen-clean');
             el.overviewPanel.classList.remove('show');
             el.overviewToggleBtn.classList.remove('active');
             state.overviewOpen = false;
@@ -1615,8 +1656,10 @@
                 return;
             }
             if (evt.key === '?') {
-                evt.preventDefault();
-                showShortcuts();
+                if (!el.presentationStage.classList.contains('is-fullscreen-clean')) {
+                    evt.preventDefault();
+                    showShortcuts();
+                }
                 return;
             }
             if (evt.key === 'o' || evt.key === 'O') {
@@ -1653,6 +1696,9 @@
                 if (el.shortcutsModal.classList.contains('show')) {
                     hideShortcuts();
                     evt.preventDefault();
+                } else if (document.fullscreenElement === el.presentationStage && document.exitFullscreen) {
+                    evt.preventDefault();
+                    document.exitFullscreen().catch(function () { });
                 }
             }
         }
@@ -1803,6 +1849,7 @@
             });
 
             document.addEventListener('fullscreenchange', function () {
+                syncFullscreenUiState();
                 if (state.isPresenting) {
                     setTimeout(function () {
                         renderPage(state.currentPage);
