@@ -122,6 +122,64 @@
             gap: 10px;
         }
 
+        .preset-box {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface-2);
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .preset-btn {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 10px;
+            background: var(--surface-1);
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.16);
+        }
+
+        .preset-btn span {
+            display: block;
+            margin-top: 3px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .preset-note {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .preset-status {
+            margin: 0;
+            color: #0ea5e9;
+            font-size: 12px;
+            font-weight: 700;
+            min-height: 16px;
+        }
+
         .control-group {
             display: grid;
             gap: 6px;
@@ -744,6 +802,25 @@
                             </div>
                         </div>
 
+                        <div class="preset-box" aria-label="Quick invoice presets">
+                            <p class="preset-note">Quick presets: auto-fill complete invoice data for common billing scenarios.</p>
+                            <div class="preset-grid" id="quickPresets">
+                                <button type="button" class="preset-btn" data-preset="freelance" data-label="Freelance Project">Freelance Project
+                                    <span>Design/dev milestone billing</span>
+                                </button>
+                                <button type="button" class="preset-btn" data-preset="agency" data-label="Agency Retainer">Agency Retainer
+                                    <span>Monthly marketing services</span>
+                                </button>
+                                <button type="button" class="preset-btn" data-preset="gst-india" data-label="India GST Invoice">India GST Invoice
+                                    <span>INR + GST service invoice</span>
+                                </button>
+                                <button type="button" class="preset-btn" data-preset="saas" data-label="SaaS Subscription">SaaS Subscription
+                                    <span>Recurring annual license</span>
+                                </button>
+                            </div>
+                            <p class="preset-status" id="presetStatus"></p>
+                        </div>
+
                         <section class="section-box">
                             <h3 class="section-title">Sender Details</h3>
                             <div class="section-content">
@@ -990,6 +1067,115 @@
             return d.toISOString().slice(0, 10);
         }
 
+        function buildPresetInvoiceNumber(prefix) {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return prefix + '-' + y + m + d;
+        }
+
+        function buildPresetData(presetKey) {
+            const base = getDefaultState();
+            const presets = {
+                'freelance': {
+                    template: 'modern',
+                    currency: 'USD',
+                    accentColor: '#0ea5e9',
+                    invoiceNumber: buildPresetInvoiceNumber('FRL'),
+                    invoiceDate: todayIso(),
+                    dueDate: addDaysIso(7),
+                    senderName: 'Alex Carter',
+                    senderCompany: 'Alex Carter Studio',
+                    senderAddress: '221 Creative Ave\nSan Diego, CA 92101',
+                    senderEmail: 'hello@alexcarterstudio.com',
+                    senderPhone: '+1 619 555 0121',
+                    clientName: 'Nina Brooks',
+                    clientCompany: 'Launchpad Labs',
+                    clientAddress: '480 Mission St\nSan Francisco, CA 94105',
+                    clientEmail: 'nina@launchpadlabs.io',
+                    notes: 'Thanks for your trust. Please reference invoice number in payment note.',
+                    terms: '50% upfront, 50% on delivery. Late fee 1.5% per month after due date.',
+                    items: [
+                        { description: 'Landing page UX/UI design', quantity: 1, unitPrice: 950, tax: 0, discount: 0 },
+                        { description: 'Responsive development handoff', quantity: 1, unitPrice: 550, tax: 0, discount: 0 }
+                    ]
+                },
+                'agency': {
+                    template: 'classic',
+                    currency: 'EUR',
+                    accentColor: '#2563eb',
+                    invoiceNumber: buildPresetInvoiceNumber('AGY'),
+                    invoiceDate: todayIso(),
+                    dueDate: addDaysIso(15),
+                    senderName: 'Marta Klein',
+                    senderCompany: 'NorthPeak Growth Agency',
+                    senderAddress: '12 Hafenstrasse\nHamburg 20457, Germany',
+                    senderEmail: 'billing@northpeak.agency',
+                    senderPhone: '+49 40 555 1020',
+                    clientName: 'Leo Martin',
+                    clientCompany: 'Aster Commerce GmbH',
+                    clientAddress: '88 Alte Strasse\nBerlin 10115, Germany',
+                    clientEmail: 'finance@astercommerce.de',
+                    notes: 'Monthly retainer for campaign management and analytics reporting.',
+                    terms: 'Net 15. Bank transfer preferred.',
+                    items: [
+                        { description: 'Paid ads management (Meta + Google)', quantity: 1, unitPrice: 1800, tax: 19, discount: 0 },
+                        { description: 'Creative production and optimization', quantity: 1, unitPrice: 900, tax: 19, discount: 0 },
+                        { description: 'Weekly analytics reporting', quantity: 1, unitPrice: 450, tax: 19, discount: 0 }
+                    ]
+                },
+                'gst-india': {
+                    template: 'minimal',
+                    currency: 'INR',
+                    accentColor: '#14b8a6',
+                    invoiceNumber: buildPresetInvoiceNumber('GST'),
+                    invoiceDate: todayIso(),
+                    dueDate: addDaysIso(10),
+                    senderName: 'Priya Sharma',
+                    senderCompany: 'PixelMint Technologies',
+                    senderAddress: '204, MG Road\nBengaluru, Karnataka 560001\nGSTIN: 29ABCDE1234F1Z5',
+                    senderEmail: 'accounts@pixelmint.in',
+                    senderPhone: '+91 98765 00012',
+                    clientName: 'Rahul Verma',
+                    clientCompany: 'KiteKart Retail Pvt Ltd',
+                    clientAddress: '5th Floor, Sector 18\nGurugram, Haryana 122015',
+                    clientEmail: 'finance@kitekart.in',
+                    notes: 'GST invoice generated for domestic software services.',
+                    terms: 'Payment due within 10 days via UPI or bank transfer.',
+                    items: [
+                        { description: 'Website maintenance - April', quantity: 1, unitPrice: 18000, tax: 18, discount: 0 },
+                        { description: 'Feature enhancement sprint', quantity: 1, unitPrice: 24000, tax: 18, discount: 5 }
+                    ]
+                },
+                'saas': {
+                    template: 'modern',
+                    currency: 'USD',
+                    accentColor: '#8b5cf6',
+                    invoiceNumber: buildPresetInvoiceNumber('SAS'),
+                    invoiceDate: todayIso(),
+                    dueDate: addDaysIso(30),
+                    senderName: 'Billing Team',
+                    senderCompany: 'CloudOrbit SaaS',
+                    senderAddress: '900 Howard St\nSan Francisco, CA 94103',
+                    senderEmail: 'billing@cloudorbit.com',
+                    senderPhone: '+1 415 555 0198',
+                    clientName: 'Operations Team',
+                    clientCompany: 'Nova Logistics Inc.',
+                    clientAddress: '1200 Market St\nAustin, TX 78701',
+                    clientEmail: 'ops-finance@novalogistics.com',
+                    notes: 'Annual subscription renewal invoice.',
+                    terms: 'Net 30. License activates immediately after payment confirmation.',
+                    items: [
+                        { description: 'CloudOrbit Pro (Annual - 25 seats)', quantity: 25, unitPrice: 199, tax: 0, discount: 10 },
+                        { description: 'Priority support add-on (Annual)', quantity: 1, unitPrice: 1200, tax: 0, discount: 0 }
+                    ]
+                }
+            };
+
+            return Object.assign(base, presets[presetKey] || presets.freelance);
+        }
+
         function getDefaultState() {
             return {
                 template: 'classic',
@@ -1042,6 +1228,8 @@
             discountText: document.getElementById('discountText'),
             grandText: document.getElementById('grandText'),
             addItemBtn: document.getElementById('addItemBtn'),
+            quickPresets: document.getElementById('quickPresets'),
+            presetStatus: document.getElementById('presetStatus'),
             exportPdfBtn: document.getElementById('exportPdfBtn'),
             exportPngBtn: document.getElementById('exportPngBtn'),
             saveBtn: document.getElementById('saveBtn'),
@@ -1621,6 +1809,25 @@
         }
 
         function bindActions() {
+            if (elements.quickPresets) {
+                elements.quickPresets.addEventListener('click', function (event) {
+                    const btn = event.target.closest('[data-preset]');
+                    if (!btn) {
+                        return;
+                    }
+                    const presetKey = btn.getAttribute('data-preset') || 'freelance';
+                    state = buildPresetData(presetKey);
+                    fillFormFromState();
+                    rerenderAll();
+                    saveState();
+                    if (elements.presetStatus) {
+                        const label = btn.getAttribute('data-label') || 'Quick preset';
+                        elements.presetStatus.textContent = 'Preset applied: ' + label;
+                    }
+                    focusLineItemField(0, 'description');
+                });
+            }
+
             elements.exportPdfBtn.addEventListener('click', function () {
                 exportPdf();
             });
