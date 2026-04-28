@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ===== MUST HAVE SEO META TAGS ===== -->
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Presentation Maker Free – Create PowerPoint Without Uploading | OnlinePDFPro</title>
+    <meta name="description" content="Create professional presentations online free. Design slides with text, images, and templates. Export as PPTX or PDF. No upload, no login, 100% private.">
+    <meta name="keywords" content="presentation maker, online presentation creator, make slides free, pptx creator, powerpoint maker, presentation tool">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/presentation-maker.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/presentation-maker.html">
+    <meta property="og:title" content="Online Presentation Maker Free – Create PowerPoint Without Uploading | OnlinePDFPro">
+    <meta property="og:description" content="Create professional presentations online free. Design slides with text, images, and templates. Export as PPTX or PDF. No upload, no login, 100% private.">
+    <meta property="og:image" content="https://onlinepdfpro.com/images/og-presentation.png">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/presentation-maker.html">
+    <meta name="twitter:title" content="Online Presentation Maker Free – Create PowerPoint Without Uploading | OnlinePDFPro">
+    <meta name="twitter:description" content="Create professional presentations online free. Design slides with text, images, and templates. Export as PPTX or PDF. No upload, no login, 100% private.">
+    <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-presentation.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/presentation-maker.html">
+    <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/presentation-maker.html">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Online Presentation Maker",
+      "url": "https://onlinepdfpro.com/presentation-maker.html",
+      "description": "Free online presentation maker to create and edit slides. Export as PPTX or PDF.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+    <script>
+        // Sync theme with main site instantly to prevent FOUC
+        const savedTheme = localStorage.getItem('doctools-theme');
+        if (savedTheme === 'light' || (!savedTheme && !window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Poppins&family=Raleway&family=Nunito&family=Inter&family=Playfair+Display&family=Merriweather&family=Source+Sans+3&family=PT+Sans&family=Noto+Sans&family=Ubuntu&family=Rubik&family=Work+Sans&family=Quicksand&family=Mulish&family=Barlow&family=Josefin+Sans&family=Dancing+Script&family=Pacifico&family=Caveat&family=Satisfy&family=Great+Vibes&family=Libre+Baskerville&family=Crimson+Text&family=EB+Garamond&family=Bitter&family=Tinos&family=Noto+Serif&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =================== PRESENTATION MAKER STYLES =================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Main Editor Layout */
+        .presentation-editor {
+            display: flex;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+            background: var(--bg);
+            gap: 1px;
+        }
+
+        /* LEFT PANEL - THUMBNAILS */
+        .slides-panel {
+            width: 240px;
+            background: var(--surface-1);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .slides-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .slides-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .slides-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .slide-action-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .slide-action-btn:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .slide-action-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Slides Container */
+        .slides-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slide-thumbnail {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--surface-2);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .slide-thumbnail:hover {
+            border-color: var(--border-hover);
+        }
+
+        .slide-thumbnail.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-subtle);
+        }
+
+        .slide-thumbnail-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .slide-number-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* CENTER PANEL - EDITOR */
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+        }
+
+        .editor-toolbar {
+            background: var(--surface-1);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .toolbar-section {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border-right: 1px solid var(--border);
+            padding-right: 16px;
+        }
+
+        .toolbar-section:last-child {
+            border-right: none;
+        }
+
+        .toolbar-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .toolbar-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 24px;
+            background: var(--bg);
+        }
+
+        #slideCanvas {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            cursor: crosshair;
+        }
+
+        /* Canvas Elements */
+        .slide-element {
+            position: absolute;
+            border: 1px dashed rgba(129, 140, 248, 0.3);
+            border-radius: 4px;
+            padding: 8px;
+            resize: none;
+            font-family: inherit;
+            cursor: move;
+            user-select: text;
+        }
+
+        .slide-element:focus,
+        .slide-element.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-subtle);
+            outline: none;
+        }
+
+        .slide-element-text {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            overflow: visible;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .slide-element-image {
+            object-fit: contain;
+            background: transparent;
+            border: 1px solid var(--border);
+        }
+
+        /* RIGHT PANEL - PROPERTIES */
+        .properties-panel {
+            width: 280px;
+            background: var(--surface-1);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .properties-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .properties-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .properties-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .property-group {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .property-group:last-child {
+            border-bottom: none;
+        }
+
+        .property-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .property-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        #textContent {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .property-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-subtle);
+        }
+
+        .property-select {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .property-color {
+            width: 100%;
+            height: 40px;
+            padding: 2px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        .property-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .property-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .property-checkbox label {
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        /* Template Grid */
+        .template-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .template-item {
+            padding: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .template-item:hover {
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+            color: var(--text-primary);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--surface-2);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-3);
+            border-color: var(--border-hover);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #f05252;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .slides-panel {
+                width: 200px;
+            }
+
+            .properties-panel {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .presentation-editor {
+                flex-direction: column;
+            }
+
+            .slides-panel,
+            .properties-panel {
+                width: 100%;
+                max-height: 150px;
+            }
+
+            .editor-panel {
+                flex: 1;
+            }
+
+            .slides-container,
+            .properties-content {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .slide-thumbnail {
+                aspect-ratio: auto;
+                min-width: 120px;
+                width: 120px;
+            }
+
+            #slideCanvas {
+                max-width: 95%;
+                max-height: 80vh;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .presentation-editor {
+                height: calc(100vh - 80px);
+            }
+
+            .editor-toolbar {
+                padding: 8px 12px;
+                gap: 8px;
+                overflow-x: auto;
+            }
+
+            .toolbar-section {
+                padding-right: 12px;
+            }
+
+            .toolbar-label {
+                display: none;
+            }
+
+            .toolbar-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .canvas-container {
+                padding: 12px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .slides-container::-webkit-scrollbar,
+        .properties-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .slides-container::-webkit-scrollbar-track,
+        .properties-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .slides-container::-webkit-scrollbar-thumb,
+        .properties-content::-webkit-scrollbar-thumb {
+            background: var(--surface-2);
+            border-radius: 3px;
+        }
+
+        .slides-container::-webkit-scrollbar-thumb:hover,
+        .properties-content::-webkit-scrollbar-thumb:hover {
+            background: var(--surface-3);
+        }
+
+        /* Add Text Icon */
+        .icon {
+            font-size: 14px;
+            line-height: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
+                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📱 Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- Slide Counter -->
+        <div class="slide-counter" id="slideCounter">Slide 1 of 1</div>
+
+        <!-- Editor -->
+        <div class="presentation-editor">
+            <!-- LEFT PANEL: SLIDE THUMBNAILS -->
+            <div class="slides-panel">
+                <div class="slides-header">
+                    <h3>Slides</h3>
+                    <div class="slides-actions">
+                        <button class="slide-action-btn" id="addSlideBtn" title="Add new slide">➕</button>
+                        <button class="slide-action-btn" id="duplicateSlideBtn" title="Duplicate current slide">📋</button>
+                        <button class="slide-action-btn" id="deleteSlideBtn" title="Delete current slide">🗑️</button>
+                    </div>
+                </div>
+                <div class="slides-container" id="slidesContainer"></div>
+            </div>
+
+            <!-- CENTER PANEL: EDITOR -->
+            <div class="editor-panel">
+                <div class="editor-toolbar">
+                    <div class="toolbar-section">
+                        <span class="toolbar-label">Edit</span>
+                        <button class="toolbar-btn" id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button>
+                        <button class="toolbar-btn" id="redoBtn" title="Redo (Ctrl+Y)">↷ Redo</button>
+                    </div>
+
+                    <div class="toolbar-section">
+                        <span class="toolbar-label">Add</span>
+                        <button class="toolbar-btn" id="addTextBtn" title="Add text box">📝 Text</button>
+                        <button class="toolbar-btn" id="addImageBtn" title="Add image">🖼️ Image</button>
+                        <button class="toolbar-btn" id="templateBtn" title="Use template">🎨 Templates</button>
+                    </div>
+
+                    <div class="toolbar-section">
+                        <span class="toolbar-label">Element</span>
+                        <button class="toolbar-btn" id="deleteElementBtn" title="Delete selected element">🗑️</button>
+                        <button class="toolbar-btn" id="bringForwardBtn" title="Bring forward">⬆️</button>
+                        <button class="toolbar-btn" id="sendBackwardBtn" title="Send backward">⬇️</button>
+                    </div>
+
+                    <div class="toolbar-section">
+                        <span class="toolbar-label">Export</span>
+                        <button class="toolbar-btn" id="exportPptxBtn" title="Export as PPTX">💾 PPTX</button>
+                        <button class="toolbar-btn" id="exportPdfBtn" title="Export as PDF">📄 PDF</button>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="slideCanvas" width="960" height="540"></canvas>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: PROPERTIES -->
+            <div class="properties-panel">
+                <div class="properties-header">
+                    <h3>Slide Properties</h3>
+                </div>
+                <div class="properties-content">
+                    <div class="property-group">
+                        <label class="property-label">Background Color</label>
+                        <input type="color" id="bgColor" class="property-color" value="#ffffff">
+                    </div>
+
+                    <div class="property-group">
+                        <label class="property-label">Background Gradient</label>
+                        <select id="gradientType" class="property-select">
+                            <option value="none">None</option>
+                            <option value="linear">Linear</option>
+                            <option value="radial">Radial</option>
+                        </select>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <div style="flex: 1;">
+                                <label class="property-label" style="margin-bottom: 4px;">Color 1</label>
+                                <input type="color" id="gradientColor1" class="property-color" value="#3b82f6">
+                            </div>
+                            <div style="flex: 1;">
+                                <label class="property-label" style="margin-bottom: 4px;">Color 2</label>
+                                <input type="color" id="gradientColor2" class="property-color" value="#8b5cf6">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="elementProperties" style="display: none;">
+                        <div class="property-group">
+                            <label class="property-label">Text Properties</label>
+                            <div style="margin-bottom: 8px;">
+                                <label class="property-label" style="margin-bottom: 4px;">Text</label>
+                                <textarea id="textContent" class="property-input" rows="4" placeholder="Type your text..."></textarea>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <label class="property-label" style="margin-bottom: 4px;">Font Family</label>
+                                <select id="fontFamily" class="property-select">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Courier New">Courier New</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Comic Sans MS">Comic Sans MS</option>
+                                    <option value="Inter">Inter</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Merriweather">Merriweather</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <div style="flex: 1;">
+                                    <label class="property-label" style="margin-bottom: 4px;">Size</label>
+                                    <input type="number" id="fontSize" class="property-input" min="8" max="120" value="16">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label class="property-label" style="margin-bottom: 4px;">Color</label>
+                                    <input type="color" id="textColor" class="property-color" value="#000000">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <div class="property-checkbox">
+                                    <input type="checkbox" id="boldCheckbox">
+                                    <label for="boldCheckbox">Bold</label>
+                                </div>
+                                <div class="property-checkbox">
+                                    <input type="checkbox" id="italicCheckbox">
+                                    <label for="italicCheckbox">Italic</label>
+                                </div>
+                                <div class="property-checkbox">
+                                    <input type="checkbox" id="underlineCheckbox">
+                                    <label for="underlineCheckbox">Underline</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Template Modal -->
+    <div class="modal-overlay" id="templateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Choose Template</h2>
+                <button class="modal-close" onclick="closeModal('templateModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="template-grid" id="templateGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Export Presentation</h2>
+                <button class="modal-close" onclick="closeModal('exportModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="property-group">
+                    <label class="property-label">Presentation Name</label>
+                    <input type="text" id="exportName" class="property-input" placeholder="My Presentation" value="My Presentation">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('exportModal')">Cancel</button>
+                <button class="btn btn-primary" id="confirmExportBtn">Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Upload Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Add Image</h2>
+                <button class="modal-close" onclick="closeModal('imageModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="imageInput" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-md);">
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="imageFile" accept="image/*" style="display: none;">
+
+    <!-- Load External Libraries -->
+    <script src="js/vendor/html2canvas/html2canvas.min.js"></script>
+    <script src="js/vendor/jspdf/jspdf.umd.min.js"></script>
+    <script src="js/vendor/pptxgenjs/pptxgen.bundle.js"></script>
+
+    <script defer src="js/third-party-loader.js"></script>
+    <script defer src="js/presentation-maker.js"></script>
+</body>
+
+</html>
