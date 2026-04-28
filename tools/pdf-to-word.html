@@ -54,15 +54,6 @@
     <link rel="stylesheet" href="../css/mobile-fix-v2.css">
     <link rel="stylesheet" href="../css/tools-v2.css">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-VMPCXTN3ES');
-    </script>
-
     <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -110,17 +101,7 @@
 }
     </script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="../js/third-party-loader.js"></script>
 </head>
 
 <body class="fade-in">
@@ -362,6 +343,7 @@
     </main>
 
     <script src="../js/app.js?v=8"></script>
+    <script src="../js/cloud-convert.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/docx@8.2.3/build/index.umd.min.js"></script>
@@ -370,6 +352,7 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
         let extractedPages = [];
+        let _pdfDoc = null;
         let _originalFileName = '';
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -380,6 +363,33 @@
             e.preventDefault();
             processPDF(e.dataTransfer.files[0]);
         };
+
+        // Inject conversion mode toggle after the upload zone
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.CloudConvert) CloudConvert.injectToggleUI('dropArea');
+        });
+
+        /**
+         * Detect if a font name indicates bold or italic.
+         */
+        function parseFontStyle(fontName) {
+            const fn = (fontName || '').toLowerCase();
+            return {
+                bold: /bold|black|heavy|demi/i.test(fn),
+                italic: /italic|oblique/i.test(fn)
+            };
+        }
+
+        /**
+         * Determine heading level from font size (in PDF units).
+         * Typical body text is ~10-12pt. We map larger sizes to headings.
+         */
+        function getHeadingLevel(fontSize) {
+            if (fontSize >= 24) return 'Heading1';
+            if (fontSize >= 18) return 'Heading2';
+            if (fontSize >= 14) return 'Heading3';
+            return null;
+        }
 
         async function processPDF(file) {
             if (!file) return;
@@ -392,6 +402,7 @@
 
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            _pdfDoc = pdf;
 
             extractedPages = [];
             let fullText = '';
@@ -402,32 +413,107 @@
 
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
+                const viewport = page.getViewport({ scale: 1.0 });
 
-                // Collect text only for stats/preview while DOCX export keeps visual fidelity.
-                const lines = {};
+                // ── Enhanced: collect items with font info ──
+                const lineMap = {};
                 const marginY = 4;
 
                 textContent.items.forEach(item => {
-                    let y = item.transform[5];
-                    let matchedY = Object.keys(lines).find(existingY => Math.abs(existingY - y) <= marginY);
+                    if (!item.str || item.str.trim().length === 0) return;
+
+                    let y = Math.round(item.transform[5]);
+                    // Bucket into lines by Y position
+                    let matchedY = Object.keys(lineMap).find(ey => Math.abs(Number(ey) - y) <= marginY);
                     if (matchedY) {
-                        y = matchedY;
+                        y = Number(matchedY);
                     } else {
-                        lines[y] = [];
+                        lineMap[y] = [];
                     }
-                    lines[y].push({ text: item.str, x: item.transform[4] });
+
+                    const fontStyle = parseFontStyle(item.fontName);
+                    const fontSize = Math.abs(item.transform[0]) || 12;
+
+                    lineMap[y].push({
+                        text: item.str,
+                        x: item.transform[4],
+                        fontSize: fontSize,
+                        fontName: item.fontName || '',
+                        bold: fontStyle.bold,
+                        italic: fontStyle.italic,
+                        width: item.width || 0
+                    });
                 });
 
-                const sortedYs = Object.keys(lines).sort((a, b) => b - a);
+                // Sort lines top to bottom (higher Y = higher on page in PDF coords)
+                const sortedYs = Object.keys(lineMap).sort((a, b) => Number(b) - Number(a));
+
+                const pageLines = [];
                 let pageText = '';
+
                 sortedYs.forEach(y => {
-                    const lineText = lines[y].sort((a, b) => a.x - b.x).map(item => item.text).join(' ').trim();
+                    const items = lineMap[y].sort((a, b) => a.x - b.x);
+
+                    // Build text runs for this line
+                    const runs = items.map(item => ({
+                        text: item.text,
+                        bold: item.bold,
+                        italic: item.italic,
+                        fontSize: item.fontSize
+                    }));
+
+                    // Merge adjacent runs with same style
+                    const mergedRuns = [];
+                    runs.forEach(run => {
+                        const last = mergedRuns[mergedRuns.length - 1];
+                        if (last && last.bold === run.bold && last.italic === run.italic &&
+                            Math.abs(last.fontSize - run.fontSize) < 1) {
+                            last.text += ' ' + run.text;
+                        } else {
+                            mergedRuns.push({ ...run });
+                        }
+                    });
+
+                    // Determine dominant font size for heading detection
+                    const avgSize = items.reduce((sum, it) => sum + it.fontSize, 0) / items.length;
+                    const heading = getHeadingLevel(avgSize);
+
+                    const lineText = items.map(it => it.text).join(' ').trim();
                     if (lineText) {
+                        pageLines.push({
+                            text: lineText,
+                            runs: mergedRuns,
+                            heading: heading,
+                            avgFontSize: avgSize
+                        });
                         pageText += lineText + '\n';
                     }
                 });
 
-                extractedPages.push({ text: pageText.trim() });
+                // Render page as image for embedding in DOCX
+                let pageImageBase64 = null;
+                try {
+                    const scale = 1.5;
+                    const imgViewport = page.getViewport({ scale });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = imgViewport.width;
+                    canvas.height = imgViewport.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    await page.render({ canvasContext: ctx, viewport: imgViewport }).promise;
+                    pageImageBase64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+                } catch (imgErr) {
+                    console.warn('Could not render page image:', imgErr);
+                }
+
+                extractedPages.push({
+                    text: pageText.trim(),
+                    lines: pageLines,
+                    image: pageImageBase64,
+                    width: viewport.width,
+                    height: viewport.height
+                });
                 fullText += pageText + '\n\n';
             }
 
@@ -445,9 +531,32 @@
         async function downloadWord() {
             if (extractedPages.length === 0) return;
 
+            // Cloud mode: send the original PDF for server-side conversion
+            if (window.CloudConvert && CloudConvert.isCloudMode()) {
+                try {
+                    const fileInput = document.getElementById('fileInput');
+                    const file = fileInput.files[0];
+                    if (!file) { alert('Please re-upload the file for cloud conversion.'); return; }
+                    const blob = await CloudConvert.cloudConvert(file, 'pdf', 'docx', (pct, msg) => {
+                        document.getElementById('progressSection').style.display = 'block';
+                        document.getElementById('progressFill').style.width = pct + '%';
+                        document.getElementById('progressText').textContent = msg;
+                    });
+                    document.getElementById('progressSection').style.display = 'none';
+                    OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.docx');
+                    return;
+                } catch (cloudErr) {
+                    console.warn('Cloud conversion failed, falling back to browser:', cloudErr);
+                }
+            }
+
+            // ── Enhanced Browser-Side DOCX Generation ──
             const children = [];
 
-            extractedPages.forEach((page, pageIndex) => {
+            for (let pageIndex = 0; pageIndex < extractedPages.length; pageIndex++) {
+                const page = extractedPages[pageIndex];
+
+                // Page break (except first page)
                 if (pageIndex > 0) {
                     children.push(new docx.Paragraph({
                         pageBreakBefore: true,
@@ -455,27 +564,97 @@
                     }));
                 }
 
-                const lines = (page.text || '')
-                    .split(/\n+/)
-                    .map(line => line.trim())
-                    .filter(line => line.length > 0);
+                // Embed page image as a visual reference
+                if (page.image) {
+                    try {
+                        const aspectRatio = page.width / page.height;
+                        const imgWidthEmu = 6 * 914400; // 6 inches in EMUs
+                        const imgHeightEmu = Math.round(imgWidthEmu / aspectRatio);
 
-                if (lines.length === 0) {
-                    children.push(new docx.Paragraph({
-                        children: [new docx.TextRun({ text: '' })]
-                    }));
-                    return;
+                        children.push(new docx.Paragraph({
+                            children: [
+                                new docx.ImageRun({
+                                    data: Uint8Array.from(atob(page.image), c => c.charCodeAt(0)),
+                                    transformation: {
+                                        width: Math.round(imgWidthEmu / 914400 * 72), // approx px
+                                        height: Math.round(imgHeightEmu / 914400 * 72)
+                                    },
+                                    type: 'jpg'
+                                })
+                            ],
+                            spacing: { after: 200 }
+                        }));
+
+                        // Add separator between image and text
+                        children.push(new docx.Paragraph({
+                            children: [new docx.TextRun({
+                                text: '── Extracted Text (Page ' + (pageIndex + 1) + ') ──',
+                                color: '888888',
+                                size: 18,
+                                italic: true
+                            })],
+                            spacing: { before: 200, after: 100 },
+                            alignment: docx.AlignmentType.CENTER
+                        }));
+                    } catch (imgErr) {
+                        console.warn('Could not embed page image:', imgErr);
+                    }
                 }
 
-                lines.forEach(line => {
-                    children.push(new docx.Paragraph({
-                        children: [new docx.TextRun({ text: line, size: 24 })],
-                        spacing: { after: 120 }
-                    }));
-                });
-            });
+                // Add text with formatting
+                const lines = page.lines || [];
+                if (lines.length === 0) {
+                    // Fallback to plain text
+                    const plainLines = (page.text || '').split(/\n+/).map(l => l.trim()).filter(l => l.length > 0);
+                    plainLines.forEach(line => {
+                        children.push(new docx.Paragraph({
+                            children: [new docx.TextRun({ text: line, size: 24 })],
+                            spacing: { after: 120 }
+                        }));
+                    });
+                } else {
+                    lines.forEach(line => {
+                        const textRuns = line.runs.map(run => {
+                            // Map PDF font size to Word half-points (Word uses half-points)
+                            let wordSize = Math.round(run.fontSize * 2);
+                            if (wordSize < 16) wordSize = 22; // minimum 11pt
+                            if (wordSize > 72) wordSize = 72; // cap at 36pt
+
+                            return new docx.TextRun({
+                                text: run.text,
+                                bold: run.bold,
+                                italics: run.italic,
+                                size: wordSize,
+                                font: 'Calibri'
+                            });
+                        });
+
+                        const paragraphOptions = {
+                            children: textRuns,
+                            spacing: { after: 100 }
+                        };
+
+                        // Apply heading style
+                        if (line.heading) {
+                            paragraphOptions.heading = docx.HeadingLevel[line.heading.toUpperCase()];
+                        }
+
+                        children.push(new docx.Paragraph(paragraphOptions));
+                    });
+                }
+            }
 
             const doc = new docx.Document({
+                styles: {
+                    default: {
+                        document: {
+                            run: {
+                                font: 'Calibri',
+                                size: 22
+                            }
+                        }
+                    }
+                },
                 sections: [{
                     properties: {
                         page: {

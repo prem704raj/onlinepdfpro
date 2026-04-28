@@ -54,18 +54,6 @@
     <link rel="stylesheet" href="../css/mobile-fix-v2.css">
     <link rel="stylesheet" href="../css/tools-v2.css">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-VMPCXTN3ES');
-    </script>
-
-    <!-- Google AdSense Head -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
     <!-- PDF.js for client-side rendering -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
@@ -216,14 +204,7 @@
 }
     </script>
 
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="../js/third-party-loader.js"></script>
 </head></head>
 
 <body class="fade-in">
@@ -328,6 +309,7 @@
         </div>
 
     </main>
+<script src="../js/cloud-convert.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
@@ -336,6 +318,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/
 let extractedData = [];
 let allText = [];
 let _originalFileName = '';
+let _uploadedFile = null;
 
 document.getElementById('dropArea').onclick = (e) => {
     if (e.target.id !== 'fileInput' && !e.target.classList.contains('upload-btn')) {
@@ -350,14 +333,34 @@ document.getElementById('dropArea').ondrop = e => {
   processPDF(e.dataTransfer.files[0]);
 };
 
+// Inject conversion mode toggle
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.CloudConvert) CloudConvert.injectToggleUI('dropArea');
+});
+
 async function processPDF(file) {
   if (!file) return;
+  _uploadedFile = file;
   _originalFileName = file.name.replace(/\.pdf$/i, '');
 
   document.getElementById('dropArea').style.display = 'none';
   document.getElementById('progress').style.display = 'block';
   document.getElementById('result').style.display = 'none';
   document.getElementById('progressFill').style.width = '20%';
+
+  // Cloud mode
+  if (window.CloudConvert && CloudConvert.isCloudMode()) {
+      try {
+          const blob = await CloudConvert.cloudConvert(file, 'pdf', 'xlsx', (pct, msg) => {
+              document.getElementById('progressFill').style.width = pct + '%';
+          });
+          document.getElementById('progress').style.display = 'none';
+          OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'document') + '.xlsx');
+          return;
+      } catch (cloudErr) {
+          console.warn('Cloud conversion failed, falling back to browser:', cloudErr);
+      }
+  }
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
@@ -372,10 +375,12 @@ async function processPDF(file) {
         const textContent = await page.getTextContent();
         const items = textContent.items.filter(item => item.str && item.str.trim().length > 0);
 
+        // ── Enhanced table detection: use tighter Y tolerance + gap-based column splitting ──
         const rowBuckets = [];
-        const rowMergeTolerance = 4;
+        const rowMergeTolerance = 3; // tighter Y tolerance for better row accuracy
+
         items.forEach(item => {
-            const y = item.transform[5];
+            const y = Math.round(item.transform[5]);
             let bucket = rowBuckets.find(r => Math.abs(r.y - y) <= rowMergeTolerance);
             if (!bucket) {
                 bucket = { y, items: [] };
@@ -383,27 +388,33 @@ async function processPDF(file) {
             }
             bucket.items.push({
                 text: item.str.trim(),
-                x: item.transform[4],
-                width: item.width || 0
+                x: Math.round(item.transform[4]),
+                width: item.width || 0,
+                right: Math.round(item.transform[4] + (item.width || 0))
             });
         });
 
         rowBuckets.sort((a, b) => b.y - a.y);
 
-        const allXStarts = [];
+        // Column detection: find gaps between items across all rows
+        const allItems = [];
         rowBuckets.forEach(row => {
-            row.items.forEach(it => allXStarts.push(it.x));
+            row.items.forEach(it => allItems.push(it));
         });
+        allItems.sort((a, b) => a.x - b.x);
 
-        const sortedX = allXStarts.sort((a, b) => a - b);
+        // Find column boundaries by detecting significant X gaps
         const columns = [];
-        const colTolerance = 18;
-        sortedX.forEach(x => {
+        const colTolerance = 12; // tighter column tolerance
+        const xPositions = allItems.map(it => it.x).sort((a, b) => a - b);
+        
+        xPositions.forEach(x => {
             const existing = columns.find(c => Math.abs(c - x) <= colTolerance);
             if (!existing) {
                 columns.push(x);
             }
         });
+        columns.sort((a, b) => a - b);
 
         rowBuckets.forEach(row => {
             const rowCells = new Array(Math.max(columns.length, 1)).fill('');
@@ -458,7 +469,7 @@ function showPreview(maxCols) {
 
   let headerHtml = '<thead><tr>';
   for (let i = 0; i < maxCols; i++) {
-    headerHtml += `<th>Column ${String.fromCharCode(65 + i)}</th>`;
+    headerHtml += `<th>Column ${String.fromCharCode(65 + (i % 26))}${i >= 26 ? Math.floor(i/26) : ''}</th>`;
   }
   headerHtml += '</tr></thead>';
 
@@ -484,6 +495,17 @@ function downloadExcel() {
   if (extractedData.length === 0) return;
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(extractedData);
+  
+  // Auto-size columns for better readability
+  const colWidths = [];
+  extractedData.forEach(row => {
+      row.forEach((cell, i) => {
+          const len = String(cell).length;
+          colWidths[i] = Math.max(colWidths[i] || 8, Math.min(len + 2, 40));
+      });
+  });
+  ws['!cols'] = colWidths.map(w => ({ wch: w }));
+  
   XLSX.utils.book_append_sheet(wb, ws, "PDF Data");
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
   const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

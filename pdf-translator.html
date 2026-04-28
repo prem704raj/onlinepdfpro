@@ -1,376 +1,616 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
-<!-- ===== MUST HAVE SEO META TAGS ===== -->
-<!-- Primary Meta Tags -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF Translator Free — Translate PDF Documents Online | OnlinePDFPro</title>
-    <!-- Preconnect to CDNs for Speed -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-<meta name="description" content="Translate PDF documents free online. Convert PDF text to 100+ languages. No file upload, private processing in your browser. Instant translations.">
-<meta name="keywords" content="">
+<title>PDF Translator Free - Translate PDF Documents Online | OnlinePDFPro</title>
+<meta name="description" content="Translate PDF documents online. Extract text from PDF in your browser and translate it to many languages instantly.">
+<meta name="keywords" content="pdf translator, translate pdf online, pdf to translated text, translate document">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/pdf-translator.html">
 
-<!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/pdf-translator.html">
-<meta property="og:title" content="PDF Translator Free — Translate PDF Documents Online | OnlinePDFPro">
-<meta property="og:description" content="Translate PDF documents free online. Convert PDF text to 100+ languages. No file upload, private processing in your browser. Instant translations.">
+<meta property="og:title" content="PDF Translator Free - Translate PDF Documents Online | OnlinePDFPro">
+<meta property="og:description" content="Translate text from PDF files online in seconds.">
 <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-translator.png">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-translator.html">
-<meta name="twitter:title" content="PDF Translator Free — Translate PDF Documents Online | OnlinePDFPro">
-<meta name="twitter:description" content="Translate PDF documents free online. Convert PDF text to 100+ languages. No file upload, private processing in your browser. Instant translations.">
+<meta name="twitter:title" content="PDF Translator Free - Translate PDF Documents Online | OnlinePDFPro">
+<meta name="twitter:description" content="Translate text from PDF files online in seconds.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-translator.png">
 
-<!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
-<!-- Hreflang (if you plan multilingual) -->
 <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-translator.html">
 <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-translator.html">
 
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <link rel="stylesheet" href="css/style.css?v=7">
-    <link rel="stylesheet" href="css/mobile-fix-v2.css">
-    <link rel="stylesheet" href="css/tools-v2.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <style>
-        body {
-            color: var(--text-primary) !important;
-            background: var(--surface-2);
-            margin: 0
-        }
+<link rel="stylesheet" href="css/mobile-fix-v2.css">
+<link rel="stylesheet" href="css/tools-v2.css">
+<script defer src="js/third-party-loader.js"></script>
 
-        header {
-            background: #1e293b !important;
-            padding: 20px
-        }
+<style>
+  body {
+    margin: 0;
+    background: var(--surface-2);
+    color: var(--text-primary);
+  }
 
-        header h1,
-        header h1 a {
-            color: #fff !important;
-            text-decoration: none;
-            margin: 0;
-            font-size: 24px
-        }
+  .translator-wrap {
+    max-width: 980px;
+    margin: 30px auto 60px;
+    padding: 0 20px;
+  }
 
-        .container {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 20px
-        }
+  .translator-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  }
 
-        .coming-soon-box {
-            max-width: 600px;
-            margin: 100px auto;
-            padding: 60px 40px;
-            background: var(--surface-1);
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
-            text-align: center
-        }
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+    background: var(--surface-2);
+  }
 
-        .coming-soon-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite
-        }
+  .upload-zone:hover,
+  .upload-zone.drag {
+    border-color: var(--accent);
+    background: rgba(37, 99, 235, 0.08);
+  }
 
-        @keyframes float {
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
 
-            0%,
-            100% {
-                transform: translateY(0)
-            }
+  .field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
 
-            50% {
-                transform: translateY(-15px)
-            }
-        }
+  .field select,
+  .field textarea,
+  .field input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-1);
+    color: var(--text-primary);
+    padding: 10px 12px;
+    font: inherit;
+    box-sizing: border-box;
+  }
 
-        .coming-soon-title {
-            font-size: 36px;
-            color: var(--text-primary);
-            margin: 0 0 15px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent
-        }
+  .field textarea {
+    min-height: 220px;
+    resize: vertical;
+    line-height: 1.55;
+  }
 
-        .coming-soon-text {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin: 0 0 30px;
-            line-height: 1.6
-        }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
 
-        .back-btn {
-            display: inline-block;
-            padding: 16px 32px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: #fff;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            transition: .3s;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, .3)
-        }
+  .btn-small {
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-primary);
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+  }
 
-        .back-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(37, 99, 235, .4)
-        }
-    </style>
+  .btn-primary-local {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
 
-    
+  .status-box {
+    margin-top: 14px;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    display: none;
+    border: 1px solid transparent;
+  }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- MOBILE FIX -->
+  .status-info {
+    display: block;
+    color: #0c4a6e;
+    background: #e0f2fe;
+    border-color: #bae6fd;
+  }
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
+  .status-error {
+    display: block;
+    color: #7f1d1d;
+    background: #fee2e2;
+    border-color: #fecaca;
+  }
 
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+  .status-success {
+    display: block;
+    color: #14532d;
+    background: #dcfce7;
+    border-color: #bbf7d0;
+  }
+
+  .progress {
+    margin-top: 10px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+    display: none;
+  }
+
+  .progress > div {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    transition: width 0.25s ease;
+  }
+
+  .note {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 860px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 </head>
 
 <body>
-    <a href="#main" class="skip-link">Skip to main content</a>
+<a href="#main" class="skip-link">Skip to main content</a>
 
-    <header class="header">
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
-                <span class="logo-text">OnlinePDFPro</span>
-            </a>
-            <nav class="nav" id="nav">
-                <a href="tools.html" class="nav-link">All Tools</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="help.html" class="nav-link">Help</a>
-                <a href="history.html" class="nav-link">History</a>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
-            
-                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲 Install App</a>
-            </nav>
-            <div class="header-actions">
-                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
-                <div class="header-search" style="position: relative; margin-right: 8px;">
-                    <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
-                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
-                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
-                </div>
-                <div class="lang-selector">
-                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
-                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                            <path d="M2 12h20"></path>
-                        </svg></button>
-                    <div class="lang-dropdown">
-                        <div class="lang-search-wrap">
-                            <input type="text" class="lang-search" placeholder="Search language...">
-                        </div>
-                        <ul class="lang-list"></ul>
-                    </div>
-                </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-            </div>
+<header class="header">
+  <div class="header-content">
+    <a href="index.html" class="logo">
+      <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+      <span class="logo-text">OnlinePDFPro</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="tools.html" class="nav-link">All Tools</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="help.html" class="nav-link">Help</a>
+      <a href="history.html" class="nav-link">History</a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback" class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+      <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">Install App</a>
+    </nav>
+    <div class="header-actions">
+      <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+      <div class="header-search" style="position: relative; margin-right: 8px;">
+        <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+        <input type="text" id="globalToolSearch" placeholder="Search tools..." style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+      </div>
+      <div class="lang-selector">
+        <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg></button>
+        <div class="lang-dropdown">
+          <div class="lang-search-wrap"><input type="text" class="lang-search" placeholder="Search language..."></div>
+          <ul class="lang-list"></ul>
         </div>
-    </header>
-    
-
-
-        
-
-    <main id="main" class="tool-page">
-<div class="container">
-        
-    
-    <div class="tool-header" style="text-align:center; margin-bottom:48px;">
-        <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">AI Tools</span>
-        <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF Translator</h1>
-        <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Translate PDF documents to any language instantly. Your files never leave your device.</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;"><span class="theme-icon-light">🌙</span><span class="theme-icon-dark">☀️</span></button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </div>
-<div class="coming-soon-box">
-            <div class="coming-soon-icon">🚀</div>
-            <h2 class="coming-soon-title">Coming Soon!</h2>
-            <p class="coming-soon-text">We are building the ultimate PDF translation experience for you.<br>Check back
-                soon for an unlimited, highly accurate translator.</p>
-            <a href="index.html" class="back-btn">Explore Other Tools</a>
-        </div>
+  </div>
+</header>
 
-    <!-- Added SEO Sections -->
-    <section class="how-it-works" style="margin: 20px auto; padding: 30px; background: var(--surface-1); border-radius: 16px; border: 1px solid var(--border); max-width: 900px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">How to Translator PDF Files Online</h2>
-        <div class="steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-            <div class="step">
-                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 1: Upload Files</h3>
-                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the upload button or drag and drop your files into the tool.</p>
-            </div>
-            <div class="step">
-                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 2: Adjust Settings</h3>
-                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Configure your options or arrange files if needed.</p>
-            </div>
-            <div class="step">
-                <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">Step 3: Click Translator & Download</h3>
-                <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click the process button and download your processed file instantly.</p>
-            </div>
+<main id="main" class="tool-page">
+  <div class="translator-wrap">
+    <div class="tool-header" style="text-align:center; margin-bottom:24px;">
+      <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Language Tools</span>
+      <h1 class="tool-title" style="font-size:2.3rem; margin:0 0 10px;">PDF Translator</h1>
+      <p class="tool-description" style="max-width:700px; margin:0 auto; color:var(--text-secondary);">Upload a PDF, extract text in-browser, then translate into your target language. Translation requests use a public translation endpoint.</p>
+    </div>
+
+    <div class="translator-card">
+      <div id="uploadZone" class="upload-zone">
+        <div style="font-size:38px; margin-bottom:6px;">🌐</div>
+        <h2 style="margin:0 0 8px; font-size:20px;">Drop PDF Here Or Click To Upload</h2>
+        <p style="margin:0; color:var(--text-secondary); font-size:14px;">Only text-based PDFs are supported in this first version.</p>
+        <input id="pdfInput" type="file" accept="application/pdf" style="display:none;">
+      </div>
+
+      <div style="margin-top:14px; font-size:14px; color:var(--text-secondary);">
+        <strong id="fileName"></strong>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="sourceLang">Source Language</label>
+          <select id="sourceLang"></select>
         </div>
+        <div class="field">
+          <label for="targetLang">Target Language</label>
+          <select id="targetLang"></select>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label for="extractedText">Extracted Text</label>
+          <textarea id="extractedText" placeholder="Extracted text will appear here..."></textarea>
+        </div>
+        <div class="field">
+          <label for="translatedText">Translated Text</label>
+          <textarea id="translatedText" placeholder="Translated text will appear here..."></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary-local" id="extractBtn">Extract Text</button>
+        <button class="btn-primary-local" id="translateBtn">Translate</button>
+        <button class="btn-small" id="copyBtn">Copy Result</button>
+        <button class="btn-small" id="downloadBtn">Download TXT</button>
+        <button class="btn-small" id="clearBtn">Clear</button>
+      </div>
+
+      <div id="statusBox" class="status-box"></div>
+      <div class="progress" id="progress"><div id="progressFill"></div></div>
+
+      <p class="note">Privacy note: PDF parsing happens in your browser. Text translation uses an external translation API endpoint.</p>
+    </div>
+
+    <section class="faq-section" style="margin-top:22px; background:var(--surface-1); border:1px solid var(--border); border-radius:16px; padding:20px;">
+      <h2 style="margin:0 0 10px;">FAQ</h2>
+      <p style="margin:0 0 12px; color:var(--text-secondary);"><strong>Is this free?</strong> Yes, this MVP translator is free.</p>
+      <p style="margin:0 0 12px; color:var(--text-secondary);"><strong>Does it support scanned PDFs?</strong> Not yet. OCR support can be added in the next update.</p>
+      <p style="margin:0; color:var(--text-secondary);"><strong>Can I export as DOCX/PDF?</strong> This version exports translated text as TXT for now.</p>
     </section>
-    <section class="related-tools" style="margin: 40px auto 20px; padding: 0 20px; max-width: 900px;">
-        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Related PDF Tools</h2>
-        <div class="tools-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <a href="tools/split-pdf.html" style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">Split PDF</h3>
-                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Extract pages from PDF files</p>
-            </a>
-            <a href="tools/compress-pdf.html" style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">Compress PDF</h3>
-                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Reduce PDF file size</p>
-            </a>
-            <a href="tools/pdf-to-word.html" style="display: block; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;">
-                <h3 style="margin: 0 0 8px; color: var(--accent); font-size: 18px;">PDF to Word</h3>
-                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Convert PDF to DOCX</p>
-            </a>
-        </div>
-    </section>
-    <section class="faq-section" style="margin: 40px auto; max-width: 900px; padding: 0 20px;">
-        <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Frequently Asked Questions</h2>
-        
-        <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> How to translator files online for free?</h3>
-            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Simply upload your files to OnlinePDFPro's translator tool, adjust any settings, and click "Translator." Your processed document will be ready to download in seconds. No signup required, completely free.</p>
-        </div>
-        
-        <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is OnlinePDFPro safe to use?</h3>
-            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro processes all files directly in your browser. Your documents never leave your device and are never uploaded to any server. This makes it the most secure PDF tool available.</p>
-        </div>
-        
-        <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Can I process multiple files at once?</h3>
-            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes, our tools support processing multiple files at once. There is no limit on the number of files or total file size.</p>
-        </div>
-        
-        <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Does it work on mobile phones?</h3>
-            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Yes! OnlinePDFPro works perfectly on all devices - Android phones, iPhones, tablets, laptops and desktops. No app download needed.</p>
-        </div>
-        
-        <div class="faq-item" style="margin-bottom: 16px; padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="font-size: 17px; color: var(--text-primary); margin: 0 0 10px; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span style="color: var(--accent);">Q.</span> Is there a file size limit?</h3>
-            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin: 0;">Since processing happens in your browser, there's no server-side file size limit. You can process files as large as your device can handle.</p>
-        </div>
-    </section>
-</div>
+  </div>
 </main>
-    <script defer src="counter.js"></script>
-<!-- Schema.org Structured Data -->
+
+<script defer src="counter.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+  const LANGUAGES = [
+    ['auto', 'Auto Detect'],
+    ['en', 'English'],
+    ['es', 'Spanish'],
+    ['fr', 'French'],
+    ['de', 'German'],
+    ['it', 'Italian'],
+    ['pt', 'Portuguese'],
+    ['ru', 'Russian'],
+    ['hi', 'Hindi'],
+    ['bn', 'Bengali'],
+    ['ta', 'Tamil'],
+    ['te', 'Telugu'],
+    ['ja', 'Japanese'],
+    ['ko', 'Korean'],
+    ['zh-CN', 'Chinese (Simplified)'],
+    ['ar', 'Arabic'],
+    ['tr', 'Turkish'],
+    ['id', 'Indonesian'],
+    ['vi', 'Vietnamese'],
+    ['th', 'Thai']
+  ];
+
+  const uploadZone = document.getElementById('uploadZone');
+  const pdfInput = document.getElementById('pdfInput');
+  const fileName = document.getElementById('fileName');
+  const sourceLang = document.getElementById('sourceLang');
+  const targetLang = document.getElementById('targetLang');
+  const extractedText = document.getElementById('extractedText');
+  const translatedText = document.getElementById('translatedText');
+  const extractBtn = document.getElementById('extractBtn');
+  const translateBtn = document.getElementById('translateBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const statusBox = document.getElementById('statusBox');
+  const progress = document.getElementById('progress');
+  const progressFill = document.getElementById('progressFill');
+
+  let currentFile = null;
+
+  function showStatus(message, type) {
+    statusBox.className = 'status-box';
+    if (type === 'error') statusBox.classList.add('status-error');
+    else if (type === 'success') statusBox.classList.add('status-success');
+    else statusBox.classList.add('status-info');
+    statusBox.textContent = message;
+  }
+
+  function setProgress(value) {
+    progress.style.display = 'block';
+    progressFill.style.width = Math.max(0, Math.min(100, value)) + '%';
+  }
+
+  function hideProgress() {
+    progress.style.display = 'none';
+    progressFill.style.width = '0%';
+  }
+
+  function populateLanguageSelectors() {
+    LANGUAGES.forEach(([code, label]) => {
+      const option1 = document.createElement('option');
+      option1.value = code;
+      option1.textContent = label;
+      sourceLang.appendChild(option1);
+
+      if (code !== 'auto') {
+        const option2 = document.createElement('option');
+        option2.value = code;
+        option2.textContent = label;
+        targetLang.appendChild(option2);
+      }
+    });
+
+    sourceLang.value = 'auto';
+    targetLang.value = 'es';
+  }
+
+  async function extractTextFromPdf(file) {
+    const bytes = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+
+    const parts = [];
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      setProgress(10 + Math.round((pageNum / pdf.numPages) * 50));
+      const page = await pdf.getPage(pageNum);
+      const content = await page.getTextContent();
+      const pageText = content.items.map(item => item.str).join(' ').replace(/\s+/g, ' ').trim();
+      if (pageText) {
+        parts.push(pageText);
+      }
+    }
+
+    return parts.join('\n\n');
+  }
+
+  function chunkText(text, maxLen) {
+    const clean = text.replace(/\s+/g, ' ').trim();
+    if (!clean) return [];
+
+    const chunks = [];
+    let start = 0;
+
+    while (start < clean.length) {
+      let end = Math.min(start + maxLen, clean.length);
+      if (end < clean.length) {
+        const breakAt = clean.lastIndexOf(' ', end);
+        if (breakAt > start + 120) {
+          end = breakAt;
+        }
+      }
+      chunks.push(clean.slice(start, end));
+      start = end;
+      while (clean[start] === ' ') start++;
+    }
+
+    return chunks;
+  }
+
+  async function translateChunkGoogle(text, source, target) {
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=' + encodeURIComponent(source) + '&tl=' + encodeURIComponent(target) + '&q=' + encodeURIComponent(text);
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error('Translation service unavailable');
+    }
+    const data = await res.json();
+    if (!Array.isArray(data) || !Array.isArray(data[0])) {
+      throw new Error('Unexpected translation response');
+    }
+    return data[0].map(part => part[0] || '').join('');
+  }
+
+  async function translateText(text, source, target) {
+    const chunks = chunkText(text, 800);
+    if (!chunks.length) return '';
+
+    let output = '';
+    for (let i = 0; i < chunks.length; i++) {
+      setProgress(60 + Math.round(((i + 1) / chunks.length) * 38));
+      const translated = await translateChunkGoogle(chunks[i], source, target);
+      output += translated + ' ';
+    }
+    return output.trim();
+  }
+
+  uploadZone.addEventListener('click', () => pdfInput.click());
+  uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('drag');
+  });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+  uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf') {
+      showStatus('Please upload a valid PDF file.', 'error');
+      return;
+    }
+    currentFile = file;
+    fileName.textContent = 'Selected: ' + file.name;
+    showStatus('PDF selected. Click Extract Text to parse.', 'info');
+  });
+
+  pdfInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf') {
+      showStatus('Please upload a valid PDF file.', 'error');
+      return;
+    }
+    currentFile = file;
+    fileName.textContent = 'Selected: ' + file.name;
+    showStatus('PDF selected. Click Extract Text to parse.', 'info');
+  });
+
+  extractBtn.addEventListener('click', async () => {
+    if (!currentFile) {
+      showStatus('Please upload a PDF first.', 'error');
+      return;
+    }
+
+    try {
+      setProgress(5);
+      showStatus('Extracting text from PDF...', 'info');
+      extractBtn.disabled = true;
+
+      const text = await extractTextFromPdf(currentFile);
+      extractedText.value = text;
+
+      if (!text.trim()) {
+        showStatus('No readable text found. This may be a scanned PDF.', 'error');
+      } else {
+        showStatus('Text extracted successfully.', 'success');
+      }
+    } catch (err) {
+      showStatus('Could not extract text from this PDF. Try another file.', 'error');
+    } finally {
+      extractBtn.disabled = false;
+      hideProgress();
+    }
+  });
+
+  translateBtn.addEventListener('click', async () => {
+    const source = sourceLang.value;
+    const target = targetLang.value;
+    const inputText = extractedText.value.trim();
+
+    if (!inputText) {
+      showStatus('Extract or paste text before translating.', 'error');
+      return;
+    }
+
+    if (source === target) {
+      showStatus('Source and target languages cannot be the same.', 'error');
+      return;
+    }
+
+    try {
+      translateBtn.disabled = true;
+      setProgress(60);
+      showStatus('Translating text... Please wait.', 'info');
+
+      const translated = await translateText(inputText, source, target);
+      translatedText.value = translated;
+      showStatus('Translation completed successfully.', 'success');
+      incrementCounter('pdfTranslator');
+      incrementTodayCount();
+    } catch (err) {
+      showStatus('Translation failed. Please try again in a moment.', 'error');
+    } finally {
+      translateBtn.disabled = false;
+      hideProgress();
+    }
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const text = translatedText.value.trim();
+    if (!text) {
+      showStatus('No translated text to copy.', 'error');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      showStatus('Translated text copied to clipboard.', 'success');
+    } catch {
+      showStatus('Could not copy automatically. Please copy manually.', 'error');
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const text = translatedText.value.trim();
+    if (!text) {
+      showStatus('No translated text to download.', 'error');
+      return;
+    }
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'translated-text.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    showStatus('Downloaded translated-text.txt', 'success');
+  });
+
+  clearBtn.addEventListener('click', () => {
+    extractedText.value = '';
+    translatedText.value = '';
+    fileName.textContent = '';
+    currentFile = null;
+    showStatus('Cleared.', 'info');
+  });
+
+  populateLanguageSelectors();
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Translate PDF",
-  "description": "Translate PDF to any language online for free. This tool is currently under construction and will be available soon.",
+  "name": "PDF Translator",
+  "description": "Extract text from PDF and translate it online.",
   "url": "https://onlinepdfpro.com/pdf-translator.html",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "Any",
-  "browserRequirements": "Requires HTML5 support",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "ratingCount": "15420",
-    "bestRating": "5",
-    "worstRating": "1"
-  },
-  "author": {
-    "@type": "Organization",
-    "name": "OnlinePDFPro",
-    "url": "https://onlinepdfpro.com"
   }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is this Translate PDF free?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, OnlinePDFPro's Translate PDF is 100% free with no limits, no signup, and no watermarks."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my data safe?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, all processing happens in your browser. Files are never uploaded to any server."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How many files can I process?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can process unlimited files at once, completely free."
-      }
-    }
-  ]
 }
 </script>
 
 <script>
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
-    });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+  });
 }
 </script>
 
-    <script defer src="/js/app.js?v=8"></script>
+<script defer src="/js/app.js?v=8"></script>
 </body>
-
 </html>

@@ -54,15 +54,6 @@
     <link rel="stylesheet" href="../css/mobile-fix-v2.css">
     <link rel="stylesheet" href="../css/tools-v2.css">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-VMPCXTN3ES');
-    </script>
-
     <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -110,17 +101,7 @@
 }
     </script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="../js/third-party-loader.js"></script>
 </head>
 
 <body class="fade-in">
@@ -299,6 +280,7 @@
     </main>
 
     <script src="../js/app.js?v=8"></script>
+    <script src="../js/cloud-convert.js"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
@@ -324,8 +306,16 @@
             processPPT(e.dataTransfer.files[0]);
         };
 
+        // Inject conversion mode toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.CloudConvert) CloudConvert.injectToggleUI('dropArea');
+        });
+
+        let _uploadedFile = null;
+
         async function processPPT(file) {
             if (!file) return;
+            _uploadedFile = file;
             _originalFileName = file.name.replace(/\.(pptx?|ppt)$/i, '.pdf');
 
             document.getElementById('fileInfo').style.display = 'block';
@@ -381,21 +371,28 @@
                     if (relFile) {
                         const relXml = await relFile.async('text');
                         const mediaTargets = [];
-                        const relRegex = /<Relationship[^>]*Target="([^"]+)"[^>]*Type="[^"]*\/image"[^>]*>/g;
+                        // Match both orderings of Type and Target attributes
+                        const relRegex1 = /<Relationship[^>]*Target="([^"]+)"[^>]*Type="[^"]*\/image"[^>]*>/g;
+                        const relRegex2 = /<Relationship[^>]*Type="[^"]*\/image"[^>]*Target="([^"]+)"[^>]*>/g;
                         let match;
-                        while ((match = relRegex.exec(relXml)) !== null) {
+                        while ((match = relRegex1.exec(relXml)) !== null) {
                             mediaTargets.push(match[1]);
                         }
+                        while ((match = relRegex2.exec(relXml)) !== null) {
+                            if (!mediaTargets.includes(match[1])) mediaTargets.push(match[1]);
+                        }
 
-                        if (mediaTargets.length > 0) {
-                            const firstTarget = mediaTargets[0].replace(/^\.\.\//, '');
-                            const mediaPath = firstTarget.startsWith('media/') ? ('ppt/' + firstTarget) : ('ppt/slides/' + firstTarget);
+                        // Extract ALL images (not just first)
+                        const allImageUrls = [];
+                        for (const target of mediaTargets) {
+                            const cleanTarget = target.replace(/^\.\.\//, '');
+                            const mediaPath = cleanTarget.startsWith('media/') ? ('ppt/' + cleanTarget) : ('ppt/slides/' + cleanTarget);
                             const mediaFile = zip.file(mediaPath);
                             if (mediaFile) {
                                 const ext = (mediaPath.split('.').pop() || 'png').toLowerCase();
                                 const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : ext === 'gif' ? 'image/gif' : 'image/png';
                                 const base64 = await mediaFile.async('base64');
-                                imageDataUrl = 'data:' + mime + ';base64,' + base64;
+                                allImageUrls.push('data:' + mime + ';base64,' + base64);
                             }
                         }
                     }
@@ -406,7 +403,8 @@
                 slidesData.push({
                     number: slideNum,
                     text: slideText || ('Slide ' + slideNum + ' (image/chart-heavy content)'),
-                    imageDataUrl: imageDataUrl
+                    imageDataUrl: allImageUrls && allImageUrls.length > 0 ? allImageUrls[0] : '',
+                    allImages: allImageUrls || []
                 });
             }
 
@@ -441,6 +439,21 @@ document.getElementById('resultBox').style.display = 'block';
 
         function downloadPDF() {
             if (slidesData.length === 0) return;
+
+            // Cloud mode
+            if (window.CloudConvert && CloudConvert.isCloudMode() && _uploadedFile) {
+                CloudConvert.cloudConvert(_uploadedFile, 'pptx', 'pdf').then(function(blob) {
+                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                }).catch(function(err) {
+                    console.warn('Cloud failed, using browser:', err);
+                    browserDownloadPDF();
+                });
+                return;
+            }
+            browserDownloadPDF();
+        }
+
+        function browserDownloadPDF() {
 
             const container = document.createElement('div');
             container.style.fontFamily = 'Calibri, Arial, sans-serif';

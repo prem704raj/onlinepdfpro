@@ -7,7 +7,7 @@ let isPaused = false;
 let currentSpeed = 1.0;
 let progressInterval = null;
 let startTime = 0;
-let history = JSON.parse(localStorage.getItem('ttsHistory') || '[]');
+let ttsHistory = JSON.parse(localStorage.getItem('ttsHistory') || '[]');
 
 // Load voices
 function loadVoices() {
@@ -450,22 +450,22 @@ function addToHistory(text) {
     const preview = text.substring(0, 80) + (text.length > 80 ? '...' : '');
     const time = new Date().toLocaleTimeString();
 
-    history.unshift({ text: text, preview: preview, time: time });
-    if (history.length > 10) history.pop();
+    ttsHistory.unshift({ text: text, preview: preview, time: time });
+    if (ttsHistory.length > 10) ttsHistory.pop();
 
-    localStorage.setItem('ttsHistory', JSON.stringify(history));
+    localStorage.setItem('ttsHistory', JSON.stringify(ttsHistory));
     renderHistory();
 }
 
 function renderHistory() {
     const list = document.getElementById('historyList');
 
-    if (history.length === 0) {
+    if (ttsHistory.length === 0) {
         list.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:20px">No history yet.</p>';
         return;
     }
 
-    list.innerHTML = history.map((item, i) => `
+    list.innerHTML = ttsHistory.map((item, i) => `
         <div class="history-item">
             <span class="history-text">${item.preview}</span>
             <button class="history-play" onclick="playFromHistory(${i})">▶️ Play</button>
@@ -474,7 +474,7 @@ function renderHistory() {
 }
 
 function playFromHistory(index) {
-    const item = history[index];
+    const item = ttsHistory[index];
     document.getElementById('textInput').value = item.text;
     updateStats();
     switchTab('text');

@@ -54,15 +54,6 @@
     <link rel="stylesheet" href="../css/mobile-fix-v2.css">
     <link rel="stylesheet" href="../css/tools-v2.css">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-VMPCXTN3ES');
-    </script>
-
     <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -110,17 +101,7 @@
 }
     </script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="../js/third-party-loader.js"></script>
 </head>
 
 <body class="fade-in">
@@ -301,12 +282,14 @@
     </main>
 
     <script src="../js/app.js?v=8"></script>
+    <script src="../js/cloud-convert.js"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <script>
         let renderedDocContainer = null;
         let _originalFileName = 'document.pdf';
+        let _uploadedFile = null;
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => processWord(e.target.files[0]);
@@ -317,8 +300,14 @@
             processWord(e.dataTransfer.files[0]);
         };
 
+        // Inject conversion mode toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.CloudConvert) CloudConvert.injectToggleUI('dropArea');
+        });
+
         async function processWord(file) {
             if (!file) return;
+            _uploadedFile = file;
             _originalFileName = file.name.replace(/\.(docx?|doc)$/i, '.pdf');
 
             document.getElementById('fileInfo').style.display = 'block';
@@ -366,7 +355,24 @@ incrementTodayCount();
 document.getElementById('resultBox').style.display = 'block';
         }
 
-        function downloadPDF() {
+        async function downloadPDF() {
+            // Cloud mode
+            if (window.CloudConvert && CloudConvert.isCloudMode() && _uploadedFile) {
+                try {
+                    const blob = await CloudConvert.cloudConvert(_uploadedFile, 'docx', 'pdf', (pct, msg) => {
+                        document.getElementById('progressSection').style.display = 'block';
+                        document.getElementById('progressFill').style.width = pct + '%';
+                        document.getElementById('progressText').textContent = msg;
+                    });
+                    document.getElementById('progressSection').style.display = 'none';
+                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                    return;
+                } catch (cloudErr) {
+                    console.warn('Cloud conversion failed, falling back to browser:', cloudErr);
+                }
+            }
+
+            // Browser mode (enhanced)
             if (!renderedDocContainer) return;
 
             const container = document.createElement('div');
@@ -380,7 +386,7 @@ document.getElementById('resultBox').style.display = 'block';
                 margin: [10, 10, 10, 10],
                 filename: _originalFileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['css', 'legacy'] }
             };

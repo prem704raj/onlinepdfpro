@@ -1,0 +1,10 @@
+name = "onlinepdfpro-proxy"
+main = "pdf-api-proxy.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ADOBE_CLIENT_ID = "7bc5164a08c9442eb1f4463dbed3e7eb"
+
+# ADOBE_CLIENT_SECRET must be set via:
+#   npx wrangler secret put ADOBE_CLIENT_SECRET
+# (Never put secrets in this file!)

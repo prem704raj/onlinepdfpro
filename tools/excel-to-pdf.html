@@ -104,15 +104,6 @@
         }
     </style>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VMPCXTN3ES"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-VMPCXTN3ES');
-    </script>
-
     <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -160,17 +151,7 @@
 }
     </script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="../js/third-party-loader.js"></script>
 </head>
 
 <body class="fade-in">
@@ -353,6 +334,7 @@
     </main>
 
     <script src="../js/app.js?v=8"></script>
+    <script src="../js/cloud-convert.js"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
@@ -371,8 +353,16 @@
             processExcel(e.dataTransfer.files[0]);
         };
 
+        // Inject conversion mode toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.CloudConvert) CloudConvert.injectToggleUI('dropArea');
+        });
+
+        let _uploadedFile = null;
+
         async function processExcel(file) {
             if (!file) return;
+            _uploadedFile = file;
             _originalFileName = file.name.replace(/\.(xlsx?|xls|csv)$/i, '.pdf');
 
             document.getElementById('fileInfo').style.display = 'block';
@@ -452,7 +442,18 @@ document.getElementById('resultBox').style.display = 'block';
             table.innerHTML = headerHtml + bodyHtml;
         }
 
-        function downloadPDF() {
+        async function downloadPDF() {
+            // Cloud mode
+            if (window.CloudConvert && CloudConvert.isCloudMode() && _uploadedFile) {
+                try {
+                    const blob = await CloudConvert.cloudConvert(_uploadedFile, 'xlsx', 'pdf');
+                    OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
+                    return;
+                } catch (cloudErr) {
+                    console.warn('Cloud failed, using browser:', cloudErr);
+                }
+            }
+
             try {
                 const { jsPDF } = window.jspdf;
                 if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {

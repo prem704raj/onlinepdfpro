@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
     <!-- Primary Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Editor Free Online — Edit PDF Without Uploading Files | OnlinePDFPro</title>
+    <title>PDF Editor Free Online â€” Edit PDF Without Uploading Files | OnlinePDFPro</title>
     <meta name="description" content="Edit PDF free online without uploading files. Add text, images, drawings, highlights, and signatures. No server upload, 100% private browser processing.">
     <meta name="keywords"
         content="pdf editor online free, edit pdf, add text to pdf, highlight pdf, draw on pdf, pdf editor no watermark">
@@ -17,7 +17,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://onlinepdfpro.com/pdf-editor.html">
-    <meta property="og:title" content="PDF Editor Free Online — Edit PDF Without Uploading Files | OnlinePDFPro">
+    <meta property="og:title" content="PDF Editor Free Online â€” Edit PDF Without Uploading Files | OnlinePDFPro">
     <meta property="og:description" content="Edit PDF free online without uploading files. Add text, images, drawings, highlights, and signatures. No server upload, 100% private browser processing.">
     <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-editor.png">
     <meta property="og:site_name" content="OnlinePDFPro">
@@ -26,7 +26,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-editor.html">
-    <meta name="twitter:title" content="PDF Editor Free Online — Edit PDF Without Uploading Files | OnlinePDFPro">
+    <meta name="twitter:title" content="PDF Editor Free Online â€” Edit PDF Without Uploading Files | OnlinePDFPro">
     <meta name="twitter:description" content="Edit PDF free online without uploading files. Add text, images, drawings, highlights, and signatures. No server upload, 100% private browser processing.">
     <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-editor.png">
 
@@ -69,737 +69,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Poppins&family=Raleway&family=Nunito&family=Inter&family=Playfair+Display&family=Merriweather&family=Source+Sans+3&family=PT+Sans&family=Noto+Sans&family=Ubuntu&family=Rubik&family=Work+Sans&family=Quicksand&family=Mulish&family=Barlow&family=Josefin+Sans&family=Dancing+Script&family=Pacifico&family=Caveat&family=Satisfy&family=Great+Vibes&family=Libre+Baskerville&family=Crimson+Text&family=EB+Garamond&family=Bitter&family=Tinos&family=Noto+Serif&display=swap" rel="stylesheet">
-    <style>
-        #fontSelect option {
-            padding: 8px;
-            font-size: 16px;
-        }
-        
-        /* Show font preview in dropdown */
-        #fontSelect optgroup {
-            font-weight: 700;
-            font-size: 12px;
-            color: #64748b;
-            font-style: normal;
-            padding: 8px 0 4px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .editor-layout {
-            display: flex;
-            height: calc(100vh - 60px);
-            overflow: hidden;
-        }
-
-        /* LEFT TOOLBAR */
-        .left-toolbar {
-            width: 80px;
-            background: var(--surface-1);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px 0;
-            gap: 8px;
-            overflow-y: auto;
-        }
-
-        .tool-btn {
-            width: 60px;
-            height: 60px;
-            background: transparent;
-            border: none;
-            border-radius: 14px;
-            color: var(--text-secondary);
-            font-size: 22px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .tool-btn span {
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-        }
-
-        .tool-btn.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        /* TOP OPTIONS BAR */
-        .top-options {
-            position: absolute;
-            top: 70px;
-            left: 80px;
-            right: 320px;
-            background: var(--surface-1);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            z-index: 100;
-            min-height: 60px;
-        }
-
-        .top-options label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .top-options select,
-        .top-options input[type="number"] {
-            padding: 8px 12px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .top-options select:focus,
-        .top-options input:focus {
-            border-color: var(--accent);
-        }
-
-        .color-picker {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            padding: 0;
-            background: transparent;
-        }
-
-        .opt-btn {
-            padding: 8px 16px;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            color: #60a5fa;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .opt-btn:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .opt-btn.danger {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #f87171;
-        }
-
-        .opt-btn.danger:hover {
-            background: #ef4444;
-            color: white;
-            border-color: #ef4444;
-        }
-
-        /* CANVAS AREA */
-        .canvas-area {
-            flex: 1;
-            background: #e8ecf1;
-            overflow: auto;
-            padding: 24px;
-            padding-top: 85px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        [data-theme="dark"] .canvas-area {
-            background: #1a1f2e;
-        }
-
-        .page-wrapper {
-            position: relative;
-            display: block;
-            margin: 30px auto 60px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            background: white;
-            border-radius: 2px;
-        }
-
-        .page-wrapper canvas {
-            display: block;
-        }
-
-        .overlay-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: crosshair;
-            z-index: 40;
-        }
-
-        /* RIGHT PANEL */
-        .right-panel {
-            width: 320px;
-            background: var(--surface-1);
-            border-left: 1px solid var(--border);
-            overflow-y: auto;
-            padding: 24px;
-        }
-
-        .right-panel h3 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            margin: 0 0 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .page-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .page-nav button {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .page-nav button:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .page-nav span {
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .layers-list {
-            margin: 15px 0 30px;
-        }
-
-        .layer-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin: 8px 0;
-            font-size: 13px;
-            color: var(--text-primary);
-            transition: all 0.2s;
-        }
-
-        .layer-item:hover {
-            border-color: var(--accent);
-        }
-
-        .layer-delete {
-            width: 26px;
-            height: 26px;
-            background: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .layer-delete:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .save-section {
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
-
-        .save-btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent), var(--accent));
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-            transition: all 0.3s;
-        }
-
-        .save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
-        }
-
-        /* TEXT ELEMENTS ON CANVAS */
-        .text-element {
-            position: absolute;
-            cursor: move;
-            padding: 5px 10px;
-            min-width: 50px;
-            outline: none;
-            z-index: 50;
-            border: 2px dashed transparent;
-        }
-
-        .text-element:hover {
-            border-color: var(--accent);
-        }
-
-        .text-element:focus {
-            border-color: var(--accent);
-        }
-
-        .text-delete {
-            position: absolute;
-            top: -14px;
-            right: -14px;
-            width: 28px;
-            height: 28px;
-            background: #ef4444;
-            color: white;
-            border: 2px solid white;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 60;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .text-element:hover .text-delete {
-            display: flex;
-        }
-
-        /* EXTRACTED IMAGES (from original PDF) */
-        .extracted-image {
-            position: absolute;
-            z-index: 44;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 4px;
-        }
-
-        .extracted-image:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-
-        .extracted-image .img-replace-btn {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 14px;
-            background: rgba(59, 130, 246, 0.9);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            z-index: 45;
-        }
-
-        .extracted-image:hover .img-replace-btn {
-            display: block;
-        }
-
-        /* EXTRACTED TEXT (from original PDF) */
-        .extracted-text {
-            position: absolute;
-            cursor: pointer;
-            padding: 1px 2px;
-            outline: none;
-            z-index: 45;
-            border: 1px solid transparent;
-            background: transparent;
-            color: transparent;
-            line-height: 1.15;
-            white-space: pre;
-            transition: background 0.15s, border-color 0.15s;
-            border-radius: 2px;
-            user-select: none;
-        }
-
-        .extracted-text:hover {
-            background: rgba(99, 102, 241, 0.08);
-            border-color: rgba(99, 102, 241, 0.3);
-            cursor: pointer;
-        }
-
-        .extracted-text.modified {
-            border-bottom: 2px solid #22c55e;
-            background: rgba(34, 197, 94, 0.06);
-        }
-
-        .extracted-text.editing {
-            background: rgba(99, 102, 241, 0.12);
-            border: 2px solid var(--accent, #6366f1);
-        }
-
-        /* FLOATING EDIT POPUP - fixed to viewport */
-        .edit-popup {
-            position: fixed;
-            z-index: 10000;
-            background: var(--surface-1, #fff);
-            border: 2px solid var(--accent, #6366f1);
-            border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            padding: 14px;
-            display: none;
-            width: 400px;
-            max-width: 90vw;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .edit-popup.active {
-            display: block;
-            animation: popupIn 0.15s ease-out;
-        }
-
-        @keyframes popupIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
-
-        .edit-popup-label {
-            font-size: 12px;
-            color: var(--text-muted, #71717a);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .edit-popup input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
-            border-radius: 8px;
-            font-size: 15px;
-            background: var(--bg, #fafafa);
-            color: var(--text-primary, #09090b);
-            outline: none;
-            font-family: inherit;
-        }
-
-        .edit-popup input:focus {
-            border-color: var(--accent, #6366f1);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-        }
-
-        .edit-popup-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            justify-content: flex-end;
-        }
-
-        .edit-popup-actions button {
-            padding: 7px 16px;
-            border-radius: 8px;
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .edit-popup-save {
-            background: var(--accent, #6366f1);
-            color: white;
-        }
-
-        .edit-popup-save:hover {
-            opacity: 0.9;
-        }
-
-        .edit-popup-cancel {
-            background: var(--surface-3, #e4e4e7);
-            color: var(--text-primary, #09090b);
-        }
-
-        .edit-popup-cancel:hover {
-            opacity: 0.8;
-        }
-
-        .edit-popup-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 9999;
-            display: none;
-        }
-
-        .edit-popup-backdrop.active {
-            display: block;
-        }
-
-        /* IMAGE ELEMENTS */
-        .image-element {
-            position: absolute;
-            cursor: move;
-            z-index: 50;
-            border: 2px dashed transparent;
-        }
-
-        .image-element:hover {
-            border-color: var(--accent);
-        }
-
-        .image-element img {
-            max-width: 100%;
-            display: block;
-        }
-
-        .img-resize {
-            width: 14px;
-            height: 14px;
-            background: #2563eb;
-            position: absolute;
-            bottom: -7px;
-            right: -7px;
-            cursor: se-resize;
-            border-radius: 50%;
-        }
-
-        .img-delete {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            width: 28px;
-            height: 28px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .image-element:hover .img-delete {
-            display: flex;
-        }
-
-        /* STICKY NOTES */
-        .sticky-note {
-            position: absolute;
-            width: 200px;
-            min-height: 100px;
-            background: #fef3c7;
-            border-radius: 8px;
-            padding: 10px;
-            cursor: move;
-            z-index: 60;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            font-size: 14px;
-            border: 2px solid #fde68a;
-        }
-
-        .sticky-note textarea {
-            width: 100%;
-            min-height: 60px;
-            border: none;
-            background: transparent;
-            font-size: 14px;
-            resize: none;
-            outline: none;
-            font-family: inherit;
-        }
-
-        .sticky-delete {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 22px;
-            height: 22px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* SHAPES */
-        .shape-element {
-            position: absolute;
-            cursor: move;
-            z-index: 45;
-            border: 2px dashed transparent;
-        }
-
-        .shape-element:hover {
-            border-color: var(--accent);
-        }
-
-        /* MOBILE */
-        @media (max-width: 768px) {
-            .editor-layout {
-                flex-direction: column;
-                height: auto;
-            }
-
-            .left-toolbar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 5px;
-            }
-
-            .tool-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 18px;
-            }
-
-            .tool-btn span {
-                display: none;
-            }
-
-            .right-panel {
-                width: 100%;
-                border-left: none;
-                border-top: 2px solid #e2e8f0;
-            }
-
-            .top-options {
-                left: 0;
-                right: 0;
-                top: auto;
-                position: relative;
-            }
-
-            .canvas-area {
-                padding-top: 20px;
-            }
-        }
-    </style>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-    <style>
-        .upload-area {
-            border: 3px dashed var(--border);
-            border-radius: 24px;
-            padding: 60px 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--surface-1);
-            color: var(--text-primary);
-        }
-
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: var(--surface-2);
-        }
-
-        .container {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        body {
-            color: var(--text-primary) !important;
-        }
-
-        header {
-            background: #1e293b !important;
-        }
-
-        header h1,
-        header h1 a {
-            color: white !important;
-        }
-    </style>
-
-
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/pdf-editor-page.css?v=1">
     <!-- MOBILE FIX -->
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="js/third-party-loader.js"></script>
 </head>
 
 <body>
@@ -820,14 +93,14 @@
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
                     class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
 
-                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">ðŸ“²
                     Install App</a>
             </nav>
             <div class="header-actions">
-                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">ðŸ”</button>
                 <div class="header-search" style="position: relative; margin-right: 8px;">
                     <span
-                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">ðŸ”</span>
                     <input type="text" id="globalToolSearch" placeholder="Search tools..."
                         style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
                 </div>
@@ -850,16 +123,16 @@
                 </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
                     style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
+                    <span class="theme-icon-light">ðŸŒ™</span>
+                    <span class="theme-icon-dark">â˜€ï¸</span>
                 </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">â˜°</button>
             </div>
         </div>
     </header>
 
 
-    <main class="tool-page">
+    <main id="main" class="tool-page">
 
 
         <div class="tool-header" id="toolHeader" style="text-align:center; margin-bottom:48px;">
@@ -876,11 +149,11 @@
         <!-- EDIT POPUP (fixed to viewport center) -->
         <div class="edit-popup-backdrop" id="editBackdrop" onclick="closeEditPopup()"></div>
         <div class="edit-popup" id="editPopup">
-            <div class="edit-popup-label">✍️ Edit text (Enter to save, Esc to cancel)</div>
+            <div class="edit-popup-label">âœï¸ Edit text (Enter to save, Esc to cancel)</div>
             <input type="text" id="editPopupInput" autocomplete="off" spellcheck="false">
             <div class="edit-popup-actions">
                 <button class="edit-popup-cancel" onclick="closeEditPopup()">Cancel</button>
-                <button class="edit-popup-save" onclick="saveEditPopup()">✓ Save</button>
+                <button class="edit-popup-save" onclick="saveEditPopup()">âœ“ Save</button>
             </div>
         </div>
 
@@ -893,58 +166,58 @@
             <!-- LEFT TOOLBAR -->
             <div class="left-toolbar">
                 <button class="tool-btn" onclick="setTool('cursor', event)" title="Select & Move">
-                    🖱️<span>Select</span>
+                    ðŸ–±ï¸<span>Select</span>
                 </button>
                 <button class="tool-btn active" onclick="setTool('edit', event)" title="Edit Existing Text">
-                    ✍️<span>Edit</span>
+                    âœï¸<span>Edit</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('text', event)" title="Add New Text">
-                    🔤<span>Text</span>
+                    ðŸ”¤<span>Text</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('draw', event)" title="Free Draw">
-                    ✏️<span>Draw</span>
+                    âœï¸<span>Draw</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('highlight', event)" title="Highlight">
-                    🟡<span>Highlight</span>
+                    ðŸŸ¡<span>Highlight</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('eraser', event)" title="Eraser">
-                    🧹<span>Eraser</span>
+                    ðŸ§¹<span>Eraser</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('image', event)" title="Add Image">
-                    🖼️<span>Image</span>
+                    ðŸ–¼ï¸<span>Image</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('shape', event)" title="Add Shape">
-                    ⬜<span>Shape</span>
+                    â¬œ<span>Shape</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('sticky', event)" title="Sticky Note">
-                    📝<span>Note</span>
+                    ðŸ“<span>Note</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('line', event)" title="Draw Line">
-                    📏<span>Line</span>
+                    ðŸ“<span>Line</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('arrow', event)" title="Draw Arrow">
-                    ➡️<span>Arrow</span>
+                    âž¡ï¸<span>Arrow</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('strikethrough', event)" title="Strikethrough">
-                    📕<span>Strike</span>
+                    ðŸ“•<span>Strike</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('underline', event)" title="Underline">
-                    📘<span>Under</span>
+                    ðŸ“˜<span>Under</span>
                 </button>
                 <button class="tool-btn" onclick="openSignatureModal()" title="E-Signature">
-                    ✍️<span>Sign</span>
+                    âœï¸<span>Sign</span>
                 </button>
-                <button class="tool-btn" onclick="activateWhiteout()" title="Whiteout">
-                    ⬜<span>Whiteout</span>
+                <button class="tool-btn" onclick="activateWhiteout(event)" title="Whiteout">
+                    â¬œ<span>Whiteout</span>
                 </button>
                 <button class="tool-btn" onclick="openStampMenu()" title="Stamps">
-                    📌<span>Stamp</span>
+                    ðŸ“Œ<span>Stamp</span>
                 </button>
                 <button class="tool-btn" onclick="undoAction()" title="Undo">
-                    ↩️<span>Undo</span>
+                    â†©ï¸<span>Undo</span>
                 </button>
                 <button class="tool-btn" onclick="redoAction()" title="Redo">
-                    ↪️<span>Redo</span>
+                    â†ªï¸<span>Redo</span>
                 </button>
             </div>
 
@@ -956,7 +229,7 @@
                     border-radius:8px;font-size:13px;min-width:140px;
                     cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
                     
-                    <optgroup label="━━ Sans Serif (Modern) ━━">
+                    <optgroup label="â”â” Sans Serif (Modern) â”â”">
                         <option value="Inter" style="font-family:Inter">Inter</option>
                         <option value="Roboto" style="font-family:Roboto">Roboto</option>
                         <option value="Open Sans" style="font-family:'Open Sans'">Open Sans</option>
@@ -977,7 +250,7 @@
                         <option value="Josefin Sans" style="font-family:'Josefin Sans'">Josefin Sans</option>
                     </optgroup>
 
-                    <optgroup label="━━ Serif (Classic) ━━">
+                    <optgroup label="â”â” Serif (Classic) â”â”">
                         <option value="Playfair Display" style="font-family:'Playfair Display'">Playfair Display</option>
                         <option value="Merriweather" style="font-family:Merriweather">Merriweather</option>
                         <option value="Libre Baskerville" style="font-family:'Libre Baskerville'">Libre Baskerville</option>
@@ -988,7 +261,7 @@
                         <option value="Noto Serif" style="font-family:'Noto Serif'">Noto Serif</option>
                     </optgroup>
 
-                    <optgroup label="━━ Handwriting / Script ━━">
+                    <optgroup label="â”â” Handwriting / Script â”â”">
                         <option value="Dancing Script" style="font-family:'Dancing Script'">Dancing Script</option>
                         <option value="Pacifico" style="font-family:Pacifico">Pacifico</option>
                         <option value="Caveat" style="font-family:Caveat">Caveat</option>
@@ -996,7 +269,7 @@
                         <option value="Great Vibes" style="font-family:'Great Vibes'">Great Vibes</option>
                     </optgroup>
 
-                    <optgroup label="━━ System Fonts ━━">
+                    <optgroup label="â”â” System Fonts â”â”">
                         <option value="Arial" selected>Arial</option>
                         <option value="Helvetica">Helvetica</option>
                         <option value="Times New Roman">Times New Roman</option>
@@ -1116,63 +389,63 @@
                 background:#fff;border-radius:16px;padding:20px;
                 box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:1000;
                 width:300px;top:130px;left:80px;">
-                <h4 style="margin:0 0 15px;color:#333;">📌 Add Stamp</h4>
+                <h4 style="margin:0 0 15px;color:#333;">ðŸ“Œ Add Stamp</h4>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                     <button onclick="addStamp('APPROVED')" 
                         style="padding:16px;background:#dcfce7;color:#16a34a;
                         border:2px solid #16a34a;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        ✅ APPROVED
+                        âœ… APPROVED
                     </button>
                     <button onclick="addStamp('REJECTED')"
                         style="padding:16px;background:#fef2f2;color:#dc2626;
                         border:2px solid #dc2626;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        ❌ REJECTED
+                        âŒ REJECTED
                     </button>
                     <button onclick="addStamp('DRAFT')"
                         style="padding:16px;background:#fef3c7;color:#d97706;
                         border:2px solid #d97706;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        📝 DRAFT
+                        ðŸ“ DRAFT
                     </button>
                     <button onclick="addStamp('CONFIDENTIAL')"
                         style="padding:16px;background:#fef2f2;color:#dc2626;
                         border:2px solid #dc2626;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        🔒 CONFIDENTIAL
+                        ðŸ”’ CONFIDENTIAL
                     </button>
                     <button onclick="addStamp('PAID')"
                         style="padding:16px;background:#dcfce7;color:#16a34a;
                         border:2px solid #16a34a;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        💰 PAID
+                        ðŸ’° PAID
                     </button>
                     <button onclick="addStamp('FINAL')"
                         style="padding:16px;background:#dbeafe;color:#2563eb;
                         border:2px solid #2563eb;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        ✅ FINAL
+                        âœ… FINAL
                     </button>
                     <button onclick="addStamp('COPY')"
                         style="padding:16px;background:#f3e8ff;color:#7c3aed;
                         border:2px solid #7c3aed;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        📋 COPY
+                        ðŸ“‹ COPY
                     </button>
                     <button onclick="addStamp('VOID')"
                         style="padding:16px;background:#fef2f2;color:#dc2626;
                         border:2px solid #dc2626;border-radius:10px;
                         font-weight:900;font-size:14px;cursor:pointer;
                         letter-spacing:2px">
-                        🚫 VOID
+                        ðŸš« VOID
                     </button>
                 </div>
                 <button onclick="document.getElementById('stampMenu').style.display='none'"
@@ -1192,13 +465,13 @@
                 
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">
                     <h4 style="margin:0;font-size:16px;color:var(--text-primary)">
-                        🔍 Find in PDF
+                        ðŸ” Find in PDF
                     </h4>
                     <button onclick="closeSearch()" 
                         style="margin-left:auto;background:none;
                         border:none;font-size:20px;cursor:pointer;
                         color:var(--text-secondary)">
-                        ✕
+                        âœ•
                     </button>
                 </div>
                 
@@ -1237,12 +510,12 @@
                             <button onclick="prevResult()" 
                                 style="padding:8px 14px;background:var(--surface-3);color:var(--text-primary);
                                 border:none;border-radius:8px;cursor:pointer;font-weight:700">
-                                ▲
+                                â–²
                             </button>
                             <button onclick="nextResult()" 
                                 style="padding:8px 14px;background:var(--surface-3);color:var(--text-primary);
                                 border:none;border-radius:8px;cursor:pointer;font-weight:700">
-                                ▼
+                                â–¼
                             </button>
                         </div>
                     </div>
@@ -1259,29 +532,29 @@
                 justify-content:center;flex-wrap:wrap">
                 
                 <div style="display:flex;gap:6px">
-                    <button onclick="rotatePage(-90)" title="Rotate Left 90°"
+                    <button onclick="rotatePage(-90)" title="Rotate Left 90Â°"
                         style="padding:6px 12px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
-                        ↺ Left
+                        â†º Left
                     </button>
-                    <button onclick="rotatePage(90)" title="Rotate Right 90°"
+                    <button onclick="rotatePage(90)" title="Rotate Right 90Â°"
                         style="padding:6px 12px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
-                        ↻ Right
+                        â†» Right
                     </button>
                     <button onclick="deleteCurrentPage()" title="Delete Current Page"
                         style="padding:6px 12px;background:var(--surface-3);color:#ef4444;
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
-                        🗑️ Delete
+                        ðŸ—‘ï¸ Delete
                     </button>
                     <button onclick="insertBlankPage()" title="Add Blank Page After Current"
                         style="padding:6px 12px;background:var(--surface-3);color:#10b981;
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
-                        ➕ Blank
+                        âž• Blank
                     </button>
                 </div>
                 
@@ -1292,13 +565,13 @@
                         style="padding:6px 10px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600">
-                        ⬆️ Move Up
+                        â¬†ï¸ Move Up
                     </button>
                     <button onclick="movePage('down')" title="Move Page Down Tracker"
                         style="padding:6px 10px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;
                         cursor:pointer;font-size:13px;font-weight:600">
-                        ⬇️ Move Down
+                        â¬‡ï¸ Move Down
                     </button>
                 </div>
             </div>
@@ -1313,29 +586,29 @@
 
             <!-- RIGHT PANEL -->
             <div class="right-panel">
-                <h3>📄 Pages</h3>
+                <h3>ðŸ“„ Pages</h3>
                 <div class="page-nav">
-                    <button onclick="prevPage()">←</button>
+                    <button onclick="prevPage()">â†</button>
                     <span id="pageInfo">1 / 1</span>
-                    <button onclick="nextPage()">→</button>
+                    <button onclick="nextPage()">â†’</button>
                 </div>
 
-                <h3>🔍 Search</h3>
+                <h3>ðŸ” Search</h3>
                 <button onclick="toggleSearch()" title="Find in PDF (Ctrl+F)"
                     style="width:100%;padding:10px 14px;background:var(--surface-3);color:var(--text-primary);
                     border:1px solid var(--border);border-radius:8px;cursor:pointer;
                     font-size:14px;font-weight:600;display:flex;justify-content:center;
                     align-items:center;gap:8px;margin-bottom:20px;">
-                    🔍 Find text (Ctrl+F)
+                    ðŸ” Find text (Ctrl+F)
                 </button>
 
-                <h3>🔍 Zoom</h3>
+                <h3>ðŸ” Zoom</h3>
                 <div style="display:flex;align-items:center;gap:6px; margin-bottom: 20px;">
                     <button onclick="zoomOut()" title="Zoom Out"
                         style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;cursor:pointer;
                         font-size:18px">
-                        ➖
+                        âž–
                     </button>
                     <select id="zoomSelect" onchange="setZoom(this.value)"
                         style="padding:8px 12px;border:1px solid var(--border);background:var(--surface-3);color:var(--text-primary);
@@ -1354,36 +627,25 @@
                         style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;cursor:pointer;
                         font-size:18px">
-                        ➕
+                        âž•
                     </button>
                     <button onclick="fitToWidth()" title="Fit to Width"
                         style="padding:8px 12px;background:var(--surface-3);color:var(--text-primary);
                         border:1px solid var(--border);border-radius:8px;cursor:pointer;
                         font-size:14px">
-                        ↔️
+                        â†”ï¸
                     </button>
                 </div>
 
-                <h3>📋 Layers</h3>
+                <h3>ðŸ“‹ Layers</h3>
                 <div class="layers-list" id="layersList"></div>
 
                 <div class="save-section">
-                    <button onclick="savePDF()" class="save-btn">💾 Save & Download PDF</button>
+                    <button onclick="savePDF()" class="save-btn">ðŸ’¾ Save & Download PDF</button>
                 </div>
             </div>
 
         </div>
-
-        <!-- FLOATING EDIT POPUP -->
-        <div class="edit-popup" id="editPopup">
-            <div class="edit-popup-label">✍️ Edit text (Enter to save)</div>
-            <input type="text" id="editPopupInput" autocomplete="off" spellcheck="false">
-            <div class="edit-popup-actions">
-                <button class="edit-popup-cancel" onclick="closeEditPopup()">Cancel</button>
-                <button class="edit-popup-save" onclick="saveEditPopup()">✓ Save</button>
-            </div>
-        </div>
-
         <div id="thumbnailPanel" style="position:fixed;left:0;top:60px;
             bottom:0;width:120px;background:#1e293b;overflow-y:auto;
             padding:10px;z-index:100;display:none">
@@ -1404,7 +666,7 @@
             padding:8px 12px;background:#1e293b;color:#fff;
             border:none;border-radius:8px;cursor:pointer;
             font-size:14px;display:none;">
-            📄 Pages
+            ðŸ“„ Pages
         </button>
 
         <!-- Signature Modal -->
@@ -1415,7 +677,7 @@
                 padding:30px;max-width:500px;width:90%">
                 
                 <h3 style="margin:0 0 20px;color:#333">
-                    ✍️ Add Your Signature
+                    âœï¸ Add Your Signature
                 </h3>
                 
                 <!-- Tabs: Draw / Type / Upload -->
@@ -1425,21 +687,21 @@
                         style="flex:1;padding:12px;border:2px solid #2563eb;
                         background:#2563eb;color:#fff;border-radius:10px;
                         font-weight:700;cursor:pointer">
-                        ✏️ Draw
+                        âœï¸ Draw
                     </button>
                     <button onclick="showSignTab('type')" 
                         id="tab-type" class="sig-tab"
                         style="flex:1;padding:12px;border:2px solid #e2e8f0;
                         background:#fff;color:#333;border-radius:10px;
                         font-weight:700;cursor:pointer">
-                        ⌨️ Type
+                        âŒ¨ï¸ Type
                     </button>
                     <button onclick="showSignTab('upload')" 
                         id="tab-upload" class="sig-tab"
                         style="flex:1;padding:12px;border:2px solid #e2e8f0;
                         background:#fff;color:#333;border-radius:10px;
                         font-weight:700;cursor:pointer">
-                        📤 Upload
+                        ðŸ“¤ Upload
                     </button>
                 </div>
                 
@@ -1460,7 +722,7 @@
                         <button onclick="clearSignature()"
                             style="padding:10px 20px;background:#f1f5f9;color:#333;
                             border:none;border-radius:8px;cursor:pointer">
-                            🗑️ Clear
+                            ðŸ—‘ï¸ Clear
                         </button>
                     </div>
                 </div>
@@ -1501,7 +763,7 @@
                         border-radius:12px;padding:40px;
                         text-align:center;cursor:pointer"
                         onclick="document.getElementById('sigFileInput').click()">
-                        <p style="font-size:40px;margin:0">📤</p>
+                        <p style="font-size:40px;margin:0">ðŸ“¤</p>
                         <p style="color:#333;">Click to upload signature image</p>
                         <p style="font-size:13px;color:#94a3b8">
                             PNG with transparent background works best
@@ -1517,7 +779,7 @@
                         style="flex:1;padding:16px;background:#2563eb;
                         color:#fff;border:none;border-radius:12px;
                         font-size:16px;font-weight:700;cursor:pointer">
-                        ✅ Add Signature
+                        âœ… Add Signature
                     </button>
                     <button onclick="closeSignatureModal()"
                         style="padding:16px 24px;background:#f1f5f9;color:#333;
@@ -1528,8 +790,6 @@
                 </div>
             </div>
         </div>
-        <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Pacifico&display=swap" rel="stylesheet">
-
         <!-- UPLOAD SCREEN -->
         <div id="uploadScreen" class="container"
             style="margin-top: 0; display: flex; align-items: center; justify-content: center; height: calc(100vh - 70px);">
@@ -1549,26 +809,26 @@
                     Drop your PDF here or Click to Upload</p>
                 <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 40px;">Edit text, add images,
                     draw,
-                    highlight, shapes — all for FREE</p>
+                    highlight, shapes â€” all for FREE</p>
 
                 <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
                     <span
-                        style="padding: 8px 16px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 20px; font-size: 13px; color: #60a5fa; font-weight: 600;">✏️
+                        style="padding: 8px 16px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 20px; font-size: 13px; color: #60a5fa; font-weight: 600;">âœï¸
                         Add Text</span>
                     <span
-                        style="padding: 8px 16px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 20px; font-size: 13px; color: #fbbf24; font-weight: 600;">🟡
+                        style="padding: 8px 16px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 20px; font-size: 13px; color: #fbbf24; font-weight: 600;">ðŸŸ¡
                         Highlight</span>
                     <span
-                        style="padding: 8px 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; font-size: 13px; color: #34d399; font-weight: 600;">🖼️
+                        style="padding: 8px 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; font-size: 13px; color: #34d399; font-weight: 600;">ðŸ–¼ï¸
                         Add Images</span>
                     <span
-                        style="padding: 8px 16px; background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.2); border-radius: 20px; font-size: 13px; color: #f472b6; font-weight: 600;">🎨
+                        style="padding: 8px 16px; background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.2); border-radius: 20px; font-size: 13px; color: #f472b6; font-weight: 600;">ðŸŽ¨
                         Free Draw</span>
                     <span
-                        style="padding: 8px 16px; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; font-size: 13px; color: #a78bfa; font-weight: 600;">📝
+                        style="padding: 8px 16px; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; font-size: 13px; color: #a78bfa; font-weight: 600;">ðŸ“
                         Sticky Notes</span>
                     <span
-                        style="padding: 8px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 20px; font-size: 13px; color: #f87171; font-weight: 600;">⬜
+                        style="padding: 8px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 20px; font-size: 13px; color: #f87171; font-weight: 600;">â¬œ
                         Shapes</span>
                 </div>
                 
@@ -1577,7 +837,7 @@
                     border:1px solid #10b981;border-radius:50px;
                     font-size:13px;font-weight:600;color:#10b981;
                     margin:20px auto 0 auto;">
-                    🔒 Your file never leaves your device — 100% private
+                    ðŸ”’ Your file never leaves your device â€” 100% private
                 </div>
             </div>
         </div>
@@ -1586,1509 +846,7 @@
         <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
 
-        <script>
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-
-            let pdfDoc = null;
-            let pdfBytes = null;
-            let currentPage = 1;
-            let totalPages = 0;
-            let currentScale = 1.5;
-            let currentTool = 'edit';
-            let isDrawing = false;
-            let layers = {};
-            let undoStack = [];
-            let redoStack = [];
-            let extractedTexts = {};  // page -> [{originalText, element, ...}]
-            let selectedTextElement = null; // Track currently selected text element for toolbar
-
-            // Elements
-            const pdfCanvas = document.getElementById('pdfCanvas');
-            const overlayCanvas = document.getElementById('overlayCanvas');
-            const ctx = overlayCanvas.getContext('2d');
-            const pageWrapper = document.getElementById('pageWrapper');
-
-            // File upload
-            const uploadBtn = document.getElementById('uploadBtn');
-            if (uploadBtn) uploadBtn.onclick = () => document.getElementById('fileInput').click();
-            document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
-            document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
-
-            document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
-            document.getElementById('dropArea').ondrop = e => {
-                e.preventDefault();
-                loadPDF(e.dataTransfer.files[0]);
-            };
-
-            let _originalFileName = 'edited.pdf';
-            async function loadPDF(file) {
-                if (!file) return;
-                _originalFileName = file.name;
-                pdfBytes = await file.arrayBuffer();
-                // Pass a copy to pdfjsLib — it detaches the ArrayBuffer
-                pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
-                totalPages = pdfDoc.numPages;
-                currentPage = 1;
-
-                // Initialize layers for each page
-                for (let i = 1; i <= totalPages; i++) {
-                    if (!layers[i]) layers[i] = { drawings: [], elements: [] };
-                }
-
-                document.getElementById('uploadScreen').style.display = 'none';
-                // Show compact editing banner instead of hiding title entirely
-                const toolHeader = document.getElementById('toolHeader');
-                toolHeader.style.marginBottom = '0';
-                toolHeader.style.padding = '12px 20px';
-                toolHeader.innerHTML = '<h1 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0; display:flex; align-items:center; gap:8px; justify-content:center;">✍️ PDF Editor <span style="font-size:0.85rem; font-weight:500; color:var(--text-secondary);">— ' + file.name + '</span></h1>';
-                document.getElementById('editorLayout').style.display = 'flex';
-
-                await renderPage();
-                
-                generateThumbnails();
-                document.getElementById('thumbnailsToggleBtn').style.display = 'block';
-                
-                // Extract text for search functionality
-                extractPDFText(pdfDoc);
-                initPageManagement(pdfDoc);
-            }
-
-            async function renderPage() {
-                const page = await pdfDoc.getPage(currentPage);
-                const viewport = page.getViewport({ scale: currentScale });
-                const dpr = Math.max(window.devicePixelRatio || 1, 2);
-                const hiResViewport = page.getViewport({ scale: currentScale * dpr });
-
-                pdfCanvas.width = hiResViewport.width;
-                pdfCanvas.height = hiResViewport.height;
-                pdfCanvas.style.width = viewport.width + 'px';
-                pdfCanvas.style.height = viewport.height + 'px';
-                overlayCanvas.width = hiResViewport.width;
-                overlayCanvas.height = hiResViewport.height;
-                overlayCanvas.style.width = viewport.width + 'px';
-                overlayCanvas.style.height = viewport.height + 'px';
-
-                await page.render({ canvasContext: pdfCanvas.getContext('2d'), viewport: hiResViewport }).promise;
-
-                // Restore drawings for this page
-                restoreDrawings();
-
-                // Extract existing text from PDF for editing
-                await extractPageContent(page, viewport);
-
-                // Extract images from PDF for replacement
-                await extractPageImages(page, viewport);
-
-                document.getElementById('pageInfo').textContent = currentPage + ' / ' + totalPages;
-                document.getElementById('zoomLevel').textContent = Math.round(currentScale * 100) + '%';
-                updateLayers();
-            }
-
-            // =============================================
-            // EXTRACT EXISTING TEXT FROM PDF
-            // =============================================
-            async function extractPageContent(page, viewport) {
-                // Remove any previously extracted text for this page
-                pageWrapper.querySelectorAll('.extracted-text').forEach(el => el.remove());
-
-                const textContent = await page.getTextContent();
-                const textItems = textContent.items;
-                const textStyles = textContent.styles || {};
-                if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
-
-                // Group text items into lines (items with same Y position)
-                const lines = [];
-                let currentLine = null;
-
-                textItems.forEach(item => {
-                    if (!item.str || !item.str.trim()) return;
-
-                    const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
-                    const fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]);
-                    const x = tx[4];
-                    const y = tx[5];
-
-                    // Group items with similar Y position into one line
-                    if (currentLine && Math.abs(y - currentLine.y) < fontSize * 0.5) {
-                        currentLine.text += item.str;
-                        currentLine.width = (x + item.width * fontSize / (item.transform ? Math.abs(item.transform[0]) : 1)) - currentLine.x;
-                        currentLine.items.push(item);
-                    } else {
-                        currentLine = {
-                            text: item.str,
-                            x: x,
-                            y: y,
-                            fontSize: fontSize,
-                            width: item.width * fontSize / (item.transform ? Math.abs(item.transform[0]) : 1),
-                            height: fontSize * 1.2,
-                            fontName: item.fontName || '',
-                            items: [item]
-                        };
-                        lines.push(currentLine);
-                    }
-                });
-
-                // Check for previously modified texts
-                const savedMods = extractedTexts[currentPage] || [];
-
-                lines.forEach((line, idx) => {
-                    const div = document.createElement('div');
-                    div.className = 'extracted-text';
-                    div.style.left = line.x + 'px';
-                    div.style.top = (line.y - line.fontSize) + 'px';
-                    div.style.fontSize = line.fontSize + 'px';
-                    div.style.minWidth = Math.max(line.width, 30) + 'px';
-                    div.style.height = line.height + 'px';
-
-                    // Store data
-                    div.dataset.lineIndex = idx;
-                    div.dataset.originalText = line.text;
-                    div.dataset.currentText = line.text;
-                    div.dataset.origX = line.x;
-                    div.dataset.origY = line.y;
-                    div.dataset.origFontSize = line.fontSize;
-                    div.dataset.origWidth = line.width;
-                    div.dataset.origHeight = line.height;
-                    div.textContent = line.text;
-
-                    // Restore modified text if it was previously edited
-                    const savedMod = savedMods.find(m => m.lineIndex === idx);
-                    if (savedMod && savedMod.newText !== line.text) {
-                        div.dataset.currentText = savedMod.newText;
-                        div.classList.add('modified');
-                    }
-
-                    // Click to open edit popup
-                    div.addEventListener('click', (e) => {
-                        if (currentTool !== 'edit' && currentTool !== 'cursor') return;
-                        e.stopPropagation();
-                        openEditPopup(div);
-                    });
-
-                    pageWrapper.appendChild(div);
-                });
-            }
-
-            // =============================================
-            // EXTRACT IMAGES FROM PDF
-            // =============================================
-            let imageReplacements = {}; // page -> [{imgIndex, dataUrl, x, y, w, h}]
-            let activeReplaceTarget = null;
-
-            async function extractPageImages(page, viewport) {
-                // Remove any previously extracted image overlays
-                pageWrapper.querySelectorAll('.extracted-image').forEach(el => el.remove());
-
-                try {
-                    const opList = await page.getOperatorList();
-                    const OPS = pdfjsLib.OPS;
-                    let imgIndex = 0;
-
-                    // Track current transform matrix
-                    let ctmStack = [];
-                    let ctm = [1, 0, 0, 1, 0, 0];
-
-                    for (let i = 0; i < opList.fnArray.length; i++) {
-                        const fn = opList.fnArray[i];
-                        const args = opList.argsArray[i];
-
-                        if (fn === OPS.save) {
-                            ctmStack.push([...ctm]);
-                        } else if (fn === OPS.restore) {
-                            ctm = ctmStack.pop() || [1, 0, 0, 1, 0, 0];
-                        } else if (fn === OPS.transform) {
-                            // Multiply current transform matrix with new one
-                            const [a, b, c, d, e, f] = args;
-                            const [A, B, C, D, E, F] = ctm;
-                            ctm = [
-                                A * a + B * c,
-                                A * b + B * d,
-                                C * a + D * c,
-                                C * b + D * d,
-                                E * a + F * c + e,
-                                E * b + F * d + f
-                            ];
-                        } else if (fn === OPS.paintImageXObject || fn === OPS.paintJpegXObject) {
-                            // Image found! Calculate its position
-                            const imgW = Math.abs(ctm[0]);
-                            const imgH = Math.abs(ctm[3]);
-
-                            // Skip tiny images (icons, bullets etc)
-                            if (imgW < 20 || imgH < 20) {
-                                imgIndex++;
-                                continue;
-                            }
-
-                            // Convert PDF coordinates to viewport
-                            const x = ctm[4] * viewport.scale;
-                            const y = viewport.height - (ctm[5] * viewport.scale) - (imgH * viewport.scale);
-                            const w = imgW * viewport.scale;
-                            const h = imgH * viewport.scale;
-
-                            createImageOverlay(imgIndex, x, y, w, h);
-                            imgIndex++;
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Could not extract images:', err);
-                }
-            }
-
-            function createImageOverlay(imgIdx, x, y, w, h) {
-                const div = document.createElement('div');
-                div.className = 'extracted-image';
-                div.style.left = x + 'px';
-                div.style.top = y + 'px';
-                div.style.width = w + 'px';
-                div.style.height = h + 'px';
-                div.dataset.imgIndex = imgIdx;
-
-                // Check if there's already a replacement
-                const replacements = imageReplacements[currentPage] || [];
-                const existing = replacements.find(r => r.imgIndex === imgIdx);
-                if (existing) {
-                    // Show replacement image preview
-                    div.style.backgroundImage = 'url(' + existing.dataUrl + ')';
-                    div.style.backgroundSize = 'cover';
-                    div.style.backgroundPosition = 'center';
-                    div.style.borderColor = '#22c55e';
-                }
-
-                // Replace button
-                const btn = document.createElement('button');
-                btn.className = 'img-replace-btn';
-                btn.textContent = existing ? '✅ Change Again' : '🖼️ Replace Image';
-                btn.onclick = function (e) {
-                    e.stopPropagation();
-                    activeReplaceTarget = {
-                        page: currentPage,
-                        imgIndex: imgIdx,
-                        div: div,
-                        x: x, y: y, w: w, h: h
-                    };
-                    document.getElementById('replaceImageInput').click();
-                };
-                div.appendChild(btn);
-
-                pageWrapper.appendChild(div);
-            }
-
-            // Handle replacement image selection
-            document.getElementById('replaceImageInput').onchange = function (e) {
-                const file = e.target.files[0];
-                if (!file || !activeReplaceTarget) return;
-
-                const reader = new FileReader();
-                reader.onload = function (ev) {
-                    const dataUrl = ev.target.result;
-                    const target = activeReplaceTarget;
-
-                    // Store replacement
-                    if (!imageReplacements[target.page]) imageReplacements[target.page] = [];
-                    const existingIdx = imageReplacements[target.page].findIndex(r => r.imgIndex === target.imgIndex);
-                    const replacement = {
-                        imgIndex: target.imgIndex,
-                        dataUrl: dataUrl,
-                        x: target.x, y: target.y, w: target.w, h: target.h
-                    };
-                    if (existingIdx >= 0) {
-                        imageReplacements[target.page][existingIdx] = replacement;
-                    } else {
-                        imageReplacements[target.page].push(replacement);
-                    }
-
-                    // Show preview on the overlay
-                    target.div.style.backgroundImage = 'url(' + dataUrl + ')';
-                    target.div.style.backgroundSize = 'cover';
-                    target.div.style.backgroundPosition = 'center';
-                    target.div.style.borderColor = '#22c55e';
-                    target.div.querySelector('.img-replace-btn').textContent = '✅ Change Again';
-
-                    activeReplaceTarget = null;
-                    updateLayers();
-                };
-                reader.readAsDataURL(file);
-                e.target.value = '';
-            };
-
-            // =============================================
-            // EDIT POPUP LOGIC
-            // =============================================
-            let activeEditTarget = null;
-
-            function openEditPopup(el) {
-                activeEditTarget = el;
-                const popup = document.getElementById('editPopup');
-                const backdrop = document.getElementById('editBackdrop');
-                const input = document.getElementById('editPopupInput');
-
-                // Pre-fill with current text
-                input.value = el.dataset.currentText || el.dataset.originalText;
-
-                // Show backdrop + popup (centered via CSS)
-                backdrop.classList.add('active');
-                popup.classList.add('active');
-
-                // Highlight the text being edited
-                el.classList.add('editing');
-
-                // Focus and select all
-                setTimeout(() => { input.focus(); input.select(); }, 50);
-            }
-
-            function closeEditPopup() {
-                const popup = document.getElementById('editPopup');
-                const backdrop = document.getElementById('editBackdrop');
-                popup.classList.remove('active');
-                backdrop.classList.remove('active');
-
-                if (activeEditTarget) {
-                    activeEditTarget.classList.remove('editing');
-                    activeEditTarget = null;
-                }
-            }
-
-            function saveEditPopup() {
-                if (!activeEditTarget) return;
-                const input = document.getElementById('editPopupInput');
-                const newText = input.value.trim();
-                const el = activeEditTarget;
-                const idx = parseInt(el.dataset.lineIndex);
-                const origText = el.dataset.originalText;
-
-                if (newText && newText !== origText) {
-                    el.dataset.currentText = newText;
-                    el.classList.add('modified');
-
-                    // Save modification
-                    if (!extractedTexts[currentPage]) extractedTexts[currentPage] = [];
-                    const existingIdx = extractedTexts[currentPage].findIndex(m => m.lineIndex === idx);
-                    const mod = {
-                        lineIndex: idx,
-                        originalText: origText,
-                        newText: newText,
-                        x: parseFloat(el.dataset.origX),
-                        y: parseFloat(el.dataset.origY),
-                        fontSize: parseFloat(el.dataset.origFontSize),
-                        width: parseFloat(el.dataset.origWidth),
-                        height: parseFloat(el.dataset.origHeight)
-                    };
-                    if (existingIdx >= 0) {
-                        extractedTexts[currentPage][existingIdx] = mod;
-                    } else {
-                        extractedTexts[currentPage].push(mod);
-                    }
-                } else if (newText === origText) {
-                    el.dataset.currentText = origText;
-                    el.classList.remove('modified');
-                    extractedTexts[currentPage] = (extractedTexts[currentPage] || []).filter(m => m.lineIndex !== idx);
-                }
-
-                closeEditPopup();
-                updateLayers();
-            }
-
-            // Enter key in popup saves
-            document.getElementById('editPopupInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') { e.preventDefault(); saveEditPopup(); }
-                if (e.key === 'Escape') { e.preventDefault(); closeEditPopup(); }
-            });
-
-            function restoreDrawings() {
-                const pageLayer = layers[currentPage];
-                if (!pageLayer) return;
-
-                ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-                pageLayer.drawings.forEach(drawing => {
-                    if (drawing.type === 'path') {
-                        ctx.beginPath();
-                        ctx.strokeStyle = drawing.color;
-                        ctx.lineWidth = drawing.width;
-                        ctx.lineCap = 'round';
-                        ctx.globalAlpha = drawing.opacity;
-                        drawing.points.forEach((point, i) => {
-                            if (i === 0) ctx.moveTo(point.x, point.y);
-                            else ctx.lineTo(point.x, point.y);
-                        });
-                        ctx.stroke();
-                        ctx.globalAlpha = 1;
-                    } else if (drawing.type === 'line') {
-                        ctx.beginPath();
-                        ctx.strokeStyle = drawing.color;
-                        ctx.lineWidth = drawing.width;
-                        ctx.moveTo(drawing.x1, drawing.y1);
-                        ctx.lineTo(drawing.x2, drawing.y2);
-                        ctx.stroke();
-                    } else if (drawing.type === 'arrow') {
-                        drawArrow(ctx, drawing.x1, drawing.y1, drawing.x2, drawing.y2, drawing.color, drawing.width);
-                    } else if (drawing.type === 'rect') {
-                        if (drawing.isFilled) {
-                            ctx.fillStyle = drawing.color;
-                            ctx.fillRect(drawing.x, drawing.y, drawing.w, drawing.h);
-                        } else {
-                            ctx.strokeStyle = drawing.color;
-                            ctx.lineWidth = drawing.width;
-                            ctx.strokeRect(drawing.x, drawing.y, drawing.w, drawing.h);
-                        }
-                    } else if (drawing.type === 'highlight') {
-                        ctx.fillStyle = drawing.color;
-                        ctx.globalAlpha = 0.3;
-                        ctx.fillRect(drawing.x, drawing.y, drawing.w, drawing.h);
-                        ctx.globalAlpha = 1;
-                    }
-                });
-            }
-
-            function drawArrow(ctx, x1, y1, x2, y2, color, width) {
-                const headLength = 15;
-                const angle = Math.atan2(y2 - y1, x2 - x1);
-                ctx.beginPath();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = width;
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.fillStyle = color;
-                ctx.moveTo(x2, y2);
-                ctx.lineTo(x2 - headLength * Math.cos(angle - Math.PI / 6), y2 - headLength * Math.sin(angle - Math.PI / 6));
-                ctx.lineTo(x2 - headLength * Math.cos(angle + Math.PI / 6), y2 - headLength * Math.sin(angle + Math.PI / 6));
-                ctx.closePath();
-                ctx.fill();
-            }
-
-            // Tool selection
-            function setTool(tool, e) {
-                currentTool = tool;
-                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-                if (e && e.target) {
-                    const btn = e.target.closest('.tool-btn');
-                    if (btn) btn.classList.add('active');
-                }
-
-                // Key fix: disable overlay canvas pointer-events for cursor/text tools
-                // so users can click on existing text elements to edit them
-                const needsCanvasEvents = ['draw', 'highlight', 'eraser', 'line', 'arrow', 'shape', 'strikethrough', 'underline', 'whiteout'];
-                if (needsCanvasEvents.includes(tool)) {
-                    overlayCanvas.style.pointerEvents = 'auto';
-                    overlayCanvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
-                } else if (tool === 'text') {
-                    // Text tool: overlay canvas captures clicks to create NEW text,
-                    // but existing text elements (z-index:50) sit above it (z-index:40)
-                    overlayCanvas.style.pointerEvents = 'auto';
-                    overlayCanvas.style.cursor = 'text';
-                } else {
-                    // cursor, sticky, image, edit — let clicks pass through to DOM elements
-                    overlayCanvas.style.pointerEvents = 'none';
-                    overlayCanvas.style.cursor = 'default';
-                }
-
-                // Toggle extracted text visibility when edit/select tool is active
-                const extractedEls = pageWrapper.querySelectorAll('.extracted-text');
-                if (tool === 'edit' || tool === 'cursor') {
-                    extractedEls.forEach(el => {
-                        el.style.pointerEvents = 'auto';
-                        el.style.borderColor = tool === 'edit' ? 'rgba(99, 102, 241, 0.15)' : 'transparent';
-                    });
-                } else {
-                    extractedEls.forEach(el => {
-                        if (!el.classList.contains('modified')) {
-                            el.style.pointerEvents = 'none';
-                            el.style.borderColor = 'transparent';
-                        }
-                    });
-                }
-
-                if (tool === 'image') {
-                    document.getElementById('imageInput').click();
-                }
-            }
-
-            // Image upload
-            document.getElementById('imageInput').onchange = e => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    addImageElement(ev.target.result, 100, 100, 200);
-                };
-                reader.readAsDataURL(file);
-            };
-
-            function addImageElement(src, x, y, width) {
-                const div = document.createElement('div');
-                div.className = 'image-element';
-                div.style.left = x + 'px';
-                div.style.top = y + 'px';
-                div.style.width = width + 'px';
-                div.innerHTML = '<img loading="lazy" src="' + src + '"><div class="img-resize"></div><button class="img-delete" onclick="this.parentElement.remove(); updateLayers();">×</button>';
-                pageWrapper.appendChild(div);
-                makeDraggable(div);
-                makeImgResizable(div);
-                updateLayers();
-                saveState();
-            }
-
-            // Canvas mouse events
-            let startX, startY, currentPath = [];
-
-            overlayCanvas.onmousedown = e => {
-                const rect = overlayCanvas.getBoundingClientRect();
-                startX = e.clientX - rect.left;
-                startY = e.clientY - rect.top;
-                isDrawing = true;
-                currentPath = [{ x: startX, y: startY }];
-
-                if (currentTool === 'text') {
-                    isDrawing = false;
-                    addTextElement(startX, startY);
-                } else if (currentTool === 'sticky') {
-                    isDrawing = false;
-                    addStickyNote(startX, startY);
-                } else if (currentTool === 'shape') {
-                    // Will draw on mouseup
-                }
-            };
-
-            overlayCanvas.onmousemove = e => {
-                if (!isDrawing) return;
-                const rect = overlayCanvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                if (currentTool === 'draw') {
-                    ctx.beginPath();
-                    ctx.strokeStyle = document.getElementById('strokeColor').value;
-                    ctx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
-                    ctx.lineCap = 'round';
-                    ctx.globalAlpha = parseInt(document.getElementById('opacity').value) / 100;
-                    ctx.moveTo(currentPath[currentPath.length - 1].x, currentPath[currentPath.length - 1].y);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                    ctx.globalAlpha = 1;
-                    currentPath.push({ x, y });
-                } else if (currentTool === 'highlight') {
-                    restoreDrawings();
-                    ctx.fillStyle = '#ffff00';
-                    ctx.globalAlpha = 0.3;
-                    ctx.fillRect(startX, startY, x - startX, y - startY);
-                    ctx.globalAlpha = 1;
-                } else if (currentTool === 'eraser') {
-                    ctx.clearRect(x - 15, y - 15, 30, 30);
-                } else if (currentTool === 'line' || currentTool === 'arrow') {
-                    restoreDrawings();
-                    if (currentTool === 'line') {
-                        ctx.beginPath();
-                        ctx.strokeStyle = document.getElementById('strokeColor').value;
-                        ctx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
-                        ctx.moveTo(startX, startY);
-                        ctx.lineTo(x, y);
-                        ctx.stroke();
-                    } else {
-                        drawArrow(ctx, startX, startY, x, y, document.getElementById('strokeColor').value, parseInt(document.getElementById('strokeWidth').value));
-                    }
-                } else if (currentTool === 'shape' || currentTool === 'whiteout') {
-                    restoreDrawings();
-                    if(currentTool === 'whiteout') {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(startX, startY, x - startX, y - startY);
-                    } else {
-                        ctx.strokeStyle = document.getElementById('strokeColor').value;
-                        ctx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
-                        ctx.strokeRect(startX, startY, x - startX, y - startY);
-                    }
-                }
-            };
-
-            overlayCanvas.onmouseup = e => {
-                if (!isDrawing) return;
-                isDrawing = false;
-                const rect = overlayCanvas.getBoundingClientRect();
-                const endX = e.clientX - rect.left;
-                const endY = e.clientY - rect.top;
-
-                if (!layers[currentPage]) layers[currentPage] = { drawings: [], elements: [] };
-
-                if (currentTool === 'draw' && currentPath.length > 1) {
-                    layers[currentPage].drawings.push({
-                        type: 'path',
-                        points: [...currentPath],
-                        color: document.getElementById('strokeColor').value,
-                        width: parseInt(document.getElementById('strokeWidth').value),
-                        opacity: parseInt(document.getElementById('opacity').value) / 100
-                    });
-                } else if (currentTool === 'highlight') {
-                    layers[currentPage].drawings.push({
-                        type: 'highlight',
-                        x: startX, y: startY,
-                        w: endX - startX, h: endY - startY,
-                        color: '#ffff00'
-                    });
-                } else if (currentTool === 'line') {
-                    layers[currentPage].drawings.push({
-                        type: 'line',
-                        x1: startX, y1: startY, x2: endX, y2: endY,
-                        color: document.getElementById('strokeColor').value,
-                        width: parseInt(document.getElementById('strokeWidth').value)
-                    });
-                } else if (currentTool === 'arrow') {
-                    layers[currentPage].drawings.push({
-                        type: 'arrow',
-                        x1: startX, y1: startY, x2: endX, y2: endY,
-                        color: document.getElementById('strokeColor').value,
-                        width: parseInt(document.getElementById('strokeWidth').value)
-                    });
-                } else if (currentTool === 'shape' || currentTool === 'whiteout') {
-                    layers[currentPage].drawings.push({
-                        type: 'rect',
-                        x: startX, y: startY,
-                        w: endX - startX, h: endY - startY,
-                        color: currentTool === 'whiteout' ? '#ffffff' : document.getElementById('strokeColor').value,
-                        width: currentTool === 'whiteout' ? 0 : parseInt(document.getElementById('strokeWidth').value),
-                        isFilled: currentTool === 'whiteout'
-                    });
-                }
-
-                updateLayers();
-                saveState();
-            };
-
-            // Touch support
-            overlayCanvas.ontouchstart = e => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                overlayCanvas.onmousedown({ clientX: touch.clientX, clientY: touch.clientY });
-            };
-            overlayCanvas.ontouchmove = e => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                overlayCanvas.onmousemove({ clientX: touch.clientX, clientY: touch.clientY });
-            };
-            overlayCanvas.ontouchend = e => {
-                e.preventDefault();
-                overlayCanvas.onmouseup({ clientX: startX, clientY: startY });
-            };
-
-            // Add text element
-            function addTextElement(x, y) {
-                const div = document.createElement('div');
-                div.className = 'text-element';
-                div.contentEditable = true;
-                div.style.left = x + 'px';
-                div.style.top = y + 'px';
-                div.style.fontFamily = document.getElementById('fontFamily').value;
-                div.style.fontSize = document.getElementById('fontSize').value + 'px';
-                div.style.color = document.getElementById('fontColor').value;
-                div.style.zIndex = '50';
-                div.textContent = 'Type here...';
-
-                // Add delete button
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'text-delete';
-                deleteBtn.textContent = '×';
-                deleteBtn.onclick = function (e) {
-                    e.stopPropagation();
-                    div.remove();
-                    if (selectedTextElement === div) selectedTextElement = null;
-                    updateLayers();
-                };
-                div.appendChild(deleteBtn);
-
-                // Track selection for toolbar
-                div.addEventListener('focus', () => {
-                    selectedTextElement = div;
-                    // Sync toolbar to element's current style
-                    document.getElementById('fontFamily').value = div.style.fontFamily.replace(/["']/g, '') || 'Arial';
-                    document.getElementById('fontSize').value = parseInt(div.style.fontSize) || 18;
-                    document.getElementById('fontColor').value = rgbToHex(div.style.color) || '#000000';
-                });
-                div.addEventListener('click', (e) => {
-                    selectedTextElement = div;
-                });
-
-                pageWrapper.appendChild(div);
-                div.focus();
-                document.execCommand('selectAll');
-                makeDraggable(div);
-
-                // Double-click to edit text, single click in cursor mode to drag
-                div.ondblclick = (e) => {
-                    e.stopPropagation();
-                    div.focus();
-                    document.execCommand('selectAll');
-                };
-
-                updateLayers();
-                saveState();
-            }
-
-            // Helper to convert rgb() to hex
-            function rgbToHex(rgb) {
-                if (!rgb || rgb.startsWith('#')) return rgb || '#000000';
-                const match = rgb.match(/\d+/g);
-                if (!match || match.length < 3) return '#000000';
-                return '#' + match.slice(0, 3).map(n => parseInt(n).toString(16).padStart(2, '0')).join('');
-            }
-
-            function updateTextStyle() {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.fontFamily = document.getElementById('fontSelect') ? document.getElementById('fontSelect').value : 'Arial';
-                    let sizeVal = document.getElementById('fontSizeSelect') ? document.getElementById('fontSizeSelect').value : 18;
-                    el.style.fontSize = sizeVal + 'px';
-                    el.style.color = document.getElementById('fontColor').value;
-                }
-            }
-
-            function changeFont(val) {
-                // Update dropdown visually if needed, though native select already shows it
-                document.getElementById('fontSelect').style.fontFamily = val;
-                updateTextStyle();
-            }
-
-            function changeFontSize(val) {
-                updateTextStyle();
-            }
-
-            function setTextAlign(alignment) {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.textAlign = alignment;
-                }
-                
-                // Update active state of buttons
-                ['Left', 'Center', 'Right', 'Justify'].forEach(align => {
-                    const btn = document.getElementById('btnAlign' + align);
-                    if (btn) {
-                        btn.style.background = (alignment === align.toLowerCase()) ? 'var(--accent)' : 'transparent';
-                        btn.style.color = (alignment === align.toLowerCase()) ? '#fff' : 'var(--text-primary)';
-                    }
-                });
-            }
-
-            function setLineHeight(val) {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.lineHeight = val;
-                }
-            }
-
-            function setLetterSpacing(val) {
-                document.getElementById('spacingValue').textContent = val + 'px';
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.letterSpacing = val + 'px';
-                }
-            }
-
-            function makeBold() {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.fontWeight = el.style.fontWeight === 'bold' ? 'normal' : 'bold';
-                }
-            }
-            function makeItalic() {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.fontStyle = el.style.fontStyle === 'italic' ? 'normal' : 'italic';
-                }
-            }
-            function makeUnderlineText() {
-                const el = selectedTextElement || document.querySelector('.text-element:focus');
-                if (el) {
-                    el.style.textDecoration = el.style.textDecoration === 'underline' ? 'none' : 'underline';
-                }
-            }
-
-            // Add sticky note
-            function addStickyNote(x, y) {
-                const note = document.createElement('div');
-                note.className = 'sticky-note';
-                note.style.left = x + 'px';
-                note.style.top = y + 'px';
-                note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note..."></textarea>';
-                pageWrapper.appendChild(note);
-                makeDraggable(note);
-                note.querySelector('textarea').focus();
-                updateLayers();
-                saveState();
-            }
-
-            // Make elements draggable
-            function makeDraggable(el) {
-                let px = 0, py = 0;
-                el.onmousedown = e => {
-                    // Don't drag if clicking on interactive child elements
-                    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.classList.contains('img-resize') || e.target.classList.contains('img-delete')) return;
-
-                    // If this is a text element and we're NOT in cursor mode, allow normal text editing
-                    if (el.contentEditable === 'true' && currentTool !== 'cursor') {
-                        return; // Let the browser handle text selection/editing naturally
-                    }
-
-                    // In cursor mode, drag the element
-                    e.preventDefault();
-                    px = e.clientX;
-                    py = e.clientY;
-                    document.onmousemove = ev => {
-                        el.style.left = (el.offsetLeft + ev.clientX - px) + 'px';
-                        el.style.top = (el.offsetTop + ev.clientY - py) + 'px';
-                        px = ev.clientX;
-                        py = ev.clientY;
-                    };
-                    document.onmouseup = () => { document.onmousemove = null; document.onmouseup = null; };
-                };
-            }
-
-            function makeImgResizable(el) {
-                const handle = el.querySelector('.img-resize');
-                if (!handle) return;
-                handle.onmousedown = e => {
-                    e.stopPropagation();
-                    const startX = e.clientX;
-                    const startW = el.offsetWidth;
-                    document.onmousemove = ev => {
-                        const newW = startW + (ev.clientX - startX);
-                        if (newW > 50) el.style.width = newW + 'px';
-                    };
-                    document.onmouseup = () => { document.onmousemove = null; };
-                };
-            }
-
-            // Page navigation
-            function prevPage() { if (currentPage > 1) { currentPage--; clearDomElements(); renderPage(); } }
-            function nextPage() { if (currentPage < totalPages) { currentPage++; clearDomElements(); renderPage(); } }
-            function zoomIn() { currentScale += 0.25; renderPage(); }
-            function zoomOut() { if (currentScale > 0.5) { currentScale -= 0.25; renderPage(); } }
-
-            // Re-render on browser zoom (Ctrl+scroll / pinch) so text stays crisp
-            (function watchBrowserZoom() {
-                let lastDpr = window.devicePixelRatio || 1;
-                let debounceTimer = null;
-                function onDprChange() {
-                    const newDpr = window.devicePixelRatio || 1;
-                    if (newDpr !== lastDpr) {
-                        lastDpr = newDpr;
-                        if (pdfDoc) {
-                            clearTimeout(debounceTimer);
-                            debounceTimer = setTimeout(() => renderPage(), 200);
-                        }
-                    }
-                    matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
-                        .addEventListener('change', onDprChange, { once: true });
-                }
-                matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
-                    .addEventListener('change', onDprChange, { once: true });
-            })();
-
-            function clearDomElements() {
-                pageWrapper.querySelectorAll('.text-element, .image-element, .sticky-note, .shape-element').forEach(el => el.remove());
-            }
-
-            function clearPage() {
-                const confirmed = confirm(
-                    "⚠️ Are you sure?\n\n" +
-                    "This will erase ALL your edits on this page.\n" +
-                    "This action cannot be undone."
-                );
-                
-                if (confirmed) {
-                    ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-                    clearDomElements();
-                    if (layers[currentPage]) layers[currentPage] = { drawings: [], elements: [] };
-                    updateLayers();
-                }
-            }
-
-            // Layers panel
-            function updateLayers() {
-                const list = document.getElementById('layersList');
-                const textEls = pageWrapper.querySelectorAll('.text-element');
-                const imgEls = pageWrapper.querySelectorAll('.image-element');
-                const noteEls = pageWrapper.querySelectorAll('.sticky-note');
-                const modifiedCount = pageWrapper.querySelectorAll('.extracted-text.modified').length;
-                const drawCount = layers[currentPage] ? layers[currentPage].drawings.length : 0;
-
-                let html = '';
-                if (modifiedCount > 0) {
-                    html += '<div class="layer-item"><span>✍️ ' + modifiedCount + ' Text Edit(s)</span></div>';
-                }
-                textEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>🔤 Text ' + (i + 1) + '</span><button class="layer-delete" onclick="this.closest(\'.layer-item\').remove(); document.querySelectorAll(\'.text-element\')[' + i + '].remove();">×</button></div>';
-                });
-                imgEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>🖼️ Image ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.image-element\')[' + i + '].remove(); updateLayers();">×</button></div>';
-                });
-                noteEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>📝 Note ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.sticky-note\')[' + i + '].remove(); updateLayers();">×</button></div>';
-                });
-                if (drawCount > 0) {
-                    html += '<div class="layer-item"><span>✏️ ' + drawCount + ' Drawing(s)</span></div>';
-                }
-
-                if (html === '') html = '<p style="color:#94a3b8; font-size:13px; text-align:center;">No edits yet</p>';
-                list.innerHTML = html;
-            }
-
-            // Undo/Redo — now saves both canvas drawings AND DOM elements
-            function serializeDomElements() {
-                const elements = [];
-                pageWrapper.querySelectorAll('.text-element').forEach(el => {
-                    elements.push({
-                        type: 'text',
-                        left: el.style.left,
-                        top: el.style.top,
-                        fontFamily: el.style.fontFamily,
-                        fontSize: el.style.fontSize,
-                        color: el.style.color,
-                        html: el.innerHTML,
-                        fontWeight: el.style.fontWeight,
-                        fontStyle: el.style.fontStyle,
-                        textDecoration: el.style.textDecoration,
-                        textAlign: el.style.textAlign,
-                        lineHeight: el.style.lineHeight,
-                        letterSpacing: el.style.letterSpacing
-                    });
-                });
-                pageWrapper.querySelectorAll('.image-element').forEach(el => {
-                    const img = el.querySelector('img');
-                    elements.push({
-                        type: 'image',
-                        left: el.style.left,
-                        top: el.style.top,
-                        width: el.style.width,
-                        src: img ? img.src : ''
-                    });
-                });
-                pageWrapper.querySelectorAll('.sticky-note').forEach(el => {
-                    const textarea = el.querySelector('textarea');
-                    elements.push({
-                        type: 'sticky',
-                        left: el.style.left,
-                        top: el.style.top,
-                        text: textarea ? textarea.value : ''
-                    });
-                });
-                return elements;
-            }
-
-            function restoreDomElements(elements) {
-                clearDomElements();
-                if (!elements) return;
-                elements.forEach(el => {
-                    if (el.type === 'text') {
-                        const div = document.createElement('div');
-                        div.className = 'text-element';
-                        div.contentEditable = true;
-                        div.style.left = el.left;
-                        div.style.top = el.top;
-                        div.style.fontFamily = el.fontFamily;
-                        div.style.fontSize = el.fontSize;
-                        div.style.color = el.color;
-                        div.style.zIndex = '50';
-                        if (el.fontWeight) div.style.fontWeight = el.fontWeight;
-                        if (el.fontStyle) div.style.fontStyle = el.fontStyle;
-                        if (el.textDecoration) div.style.textDecoration = el.textDecoration;
-                        if (el.textAlign) div.style.textAlign = el.textAlign;
-                        if (el.lineHeight) div.style.lineHeight = el.lineHeight;
-                        if (el.letterSpacing) div.style.letterSpacing = el.letterSpacing;
-                        div.innerHTML = el.html;
-                        pageWrapper.appendChild(div);
-                        makeDraggable(div);
-                        div.ondblclick = (e) => { e.stopPropagation(); div.focus(); document.execCommand('selectAll'); };
-                    } else if (el.type === 'image') {
-                        addImageElement(el.src, parseInt(el.left), parseInt(el.top), parseInt(el.width));
-                    } else if (el.type === 'sticky') {
-                        const note = document.createElement('div');
-                        note.className = 'sticky-note';
-                        note.style.left = el.left;
-                        note.style.top = el.top;
-                        note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note...">' + (el.text || '') + '</textarea>';
-                        pageWrapper.appendChild(note);
-                        makeDraggable(note);
-                    }
-                });
-            }
-
-            function saveState() {
-                const state = {
-                    layers: JSON.parse(JSON.stringify(layers)),
-                    domElements: serializeDomElements(),
-                    page: currentPage
-                };
-                undoStack.push(JSON.stringify(state));
-                if (undoStack.length > 30) undoStack.shift();
-                redoStack = [];
-            }
-
-            function undoAction() {
-                if (undoStack.length > 0) {
-                    // Save current state to redo stack
-                    const currentState = {
-                        layers: JSON.parse(JSON.stringify(layers)),
-                        domElements: serializeDomElements(),
-                        page: currentPage
-                    };
-                    redoStack.push(JSON.stringify(currentState));
-
-                    const prevState = JSON.parse(undoStack.pop());
-                    layers = prevState.layers;
-                    restoreDrawings();
-                    restoreDomElements(prevState.domElements);
-                    updateLayers();
-                }
-            }
-
-            function redoAction() {
-                if (redoStack.length > 0) {
-                    const currentState = {
-                        layers: JSON.parse(JSON.stringify(layers)),
-                        domElements: serializeDomElements(),
-                        page: currentPage
-                    };
-                    undoStack.push(JSON.stringify(currentState));
-
-                    const nextState = JSON.parse(redoStack.pop());
-                    layers = nextState.layers;
-                    restoreDrawings();
-                    restoreDomElements(nextState.domElements);
-                    updateLayers();
-                }
-            }
-
-            // Save PDF
-            async function savePDF() {
-                if (!pdfBytes) return;
-
-                const pdfLibDoc = await PDFLib.PDFDocument.load(pdfBytes);
-                const pages = pdfLibDoc.getPages();
-
-                for (let i = 0; i < pages.length; i++) {
-                    const pageNum = i + 1;
-                    const page = pages[i];
-                    const { width, height } = page.getSize();
-
-                    // ============================================
-                    // Handle MODIFIED EXTRACTED TEXT for every page
-                    // ============================================
-                    const pageMods = extractedTexts[pageNum] || [];
-                    if (pageMods.length > 0) {
-                        const scaleX = width / pdfCanvas.width;
-                        const scaleY = height / pdfCanvas.height;
-
-                        for (const mod of pageMods) {
-                            // White-out the original text area
-                            const rectX = mod.x * scaleX;
-                            const rectY = height - (mod.y * scaleY);
-                            const rectW = Math.max(mod.width * scaleX, 50);
-                            const rectH = mod.fontSize * scaleY * 1.3;
-
-                            page.drawRectangle({
-                                x: rectX - 2,
-                                y: rectY - 2,
-                                width: rectW + 4,
-                                height: rectH + 4,
-                                color: PDFLib.rgb(1, 1, 1),
-                            });
-
-                            // Draw the new text
-                            const textSize = mod.fontSize * scaleX * 0.72;
-                            page.drawText(mod.newText, {
-                                x: rectX,
-                                y: rectY + 2,
-                                size: textSize > 0 ? textSize : 10,
-                                color: PDFLib.rgb(0, 0, 0),
-                            });
-                        }
-                    }
-
-                    // ============================================
-                    // Handle REPLACED IMAGES for every page
-                    // ============================================
-                    const pageImgReplacements = imageReplacements[pageNum] || [];
-                    if (pageImgReplacements.length > 0) {
-                        const canvasW = parseFloat(pdfCanvas.style.width);
-                        const canvasH = parseFloat(pdfCanvas.style.height);
-                        const imgScaleX = width / canvasW;
-                        const imgScaleY = height / canvasH;
-
-                        for (const rep of pageImgReplacements) {
-                            try {
-                                const repBytes = Uint8Array.from(atob(rep.dataUrl.split(',')[1]), c => c.charCodeAt(0));
-                                const isJpeg = rep.dataUrl.startsWith('data:image/jpeg');
-                                const embeddedImg = isJpeg
-                                    ? await pdfLibDoc.embedJpg(repBytes)
-                                    : await pdfLibDoc.embedPng(repBytes);
-
-                                const rx = rep.x * imgScaleX;
-                                const ry = height - (rep.y * imgScaleY) - (rep.h * imgScaleY);
-                                const rw = rep.w * imgScaleX;
-                                const rh = rep.h * imgScaleY;
-
-                                // White-out original image area
-                                page.drawRectangle({
-                                    x: rx, y: ry, width: rw, height: rh,
-                                    color: PDFLib.rgb(1, 1, 1),
-                                });
-
-                                // Draw replacement image
-                                page.drawImage(embeddedImg, {
-                                    x: rx, y: ry, width: rw, height: rh
-                                });
-                            } catch (imgErr) {
-                                console.warn('Failed to embed replacement image:', imgErr);
-                            }
-                        }
-                    }
-
-                    // Handle current page's additional elements (added text, drawings, images)
-                    if (pageNum === currentPage) {
-                        // Merge overlay canvas onto PDF canvas
-                        const mergedCanvas = document.createElement('canvas');
-                        mergedCanvas.width = pdfCanvas.width;
-                        mergedCanvas.height = pdfCanvas.height;
-                        const mergedCtx = mergedCanvas.getContext('2d');
-                        mergedCtx.drawImage(overlayCanvas, 0, 0);
-
-                        // Get NEW text elements (added by user, not extracted)
-                        const textEls = pageWrapper.querySelectorAll('.text-element');
-                        textEls.forEach(el => {
-                            const font = el.style.fontFamily || 'Arial';
-                            const size = parseInt(el.style.fontSize) || 18;
-                            const color = el.style.color || '#000000';
-                            const text = el.textContent || '';
-                            const x = parseInt(el.style.left) || 0;
-                            const y = parseInt(el.style.top) || 0;
-
-                            const scale = width / pdfCanvas.width;
-                            const pdfX = x * scale;
-                            const pdfY = height - (y * scale) - (size * scale);
-
-                            const rgb = hexToRgb(color);
-                            page.drawText(text, {
-                                x: pdfX,
-                                y: pdfY,
-                                size: size * scale * 0.75,
-                                color: PDFLib.rgb(rgb.r / 255, rgb.g / 255, rgb.b / 255)
-                            });
-                        });
-
-                        // Embed overlay as image
-                        if (layers[pageNum] && layers[pageNum].drawings.length > 0) {
-                            const overlayDataURL = overlayCanvas.toDataURL('image/png');
-                            const overlayBytes = Uint8Array.from(atob(overlayDataURL.split(',')[1]), c => c.charCodeAt(0));
-                            const overlayImage = await pdfLibDoc.embedPng(overlayBytes);
-                            page.drawImage(overlayImage, { x: 0, y: 0, width, height });
-                        }
-
-                        // Embed added images
-                        const imgEls = pageWrapper.querySelectorAll('.image-element');
-                        for (const imgEl of imgEls) {
-                            const img = imgEl.querySelector('img');
-                            if (!img) continue;
-                            const imgCanvas = document.createElement('canvas');
-                            imgCanvas.width = img.naturalWidth;
-                            imgCanvas.height = img.naturalHeight;
-                            imgCanvas.getContext('2d').drawImage(img, 0, 0);
-                            const imgDataURL = imgCanvas.toDataURL('image/png');
-                            const imgBytes = Uint8Array.from(atob(imgDataURL.split(',')[1]), c => c.charCodeAt(0));
-                            const embeddedImg = await pdfLibDoc.embedPng(imgBytes);
-
-                            const scale = width / pdfCanvas.width;
-                            const ix = parseInt(imgEl.style.left) * scale;
-                            const iy = height - (parseInt(imgEl.style.top) * scale) - (imgEl.offsetHeight * scale);
-
-                            page.drawImage(embeddedImg, {
-                                x: ix, y: iy,
-                                width: imgEl.offsetWidth * scale,
-                                height: imgEl.offsetHeight * scale
-                            });
-                        }
-                    }
-                }
-
-                const savedBytes = await pdfLibDoc.save();
-                incrementCounter('pdfEditor');
-                incrementTodayCount();
-                const blob = new Blob([savedBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, (typeof _originalFileName !== 'undefined' && _originalFileName) || 'edited.pdf');
-            }
-
-            function hexToRgb(hex) {
-                hex = hex.replace('#', '');
-                return {
-                    r: parseInt(hex.substring(0, 2), 16),
-                    g: parseInt(hex.substring(2, 4), 16),
-                    b: parseInt(hex.substring(4, 6), 16)
-                };
-            }
-
-            // ===== E-SIGNATURE TOOL =====
-            let sigCanvas, sigCtx, isDrawingSig = false;
-
-            function openSignatureModal() {
-                document.getElementById('signatureModal').style.display = 'flex';
-                initSignatureCanvas();
-            }
-
-            function closeSignatureModal() {
-                document.getElementById('signatureModal').style.display = 'none';
-            }
-
-            function initSignatureCanvas() {
-                sigCanvas = document.getElementById('signatureCanvas');
-                if(!sigCanvas) return;
-                sigCtx = sigCanvas.getContext('2d');
-                sigCtx.lineWidth = 3;
-                sigCtx.lineCap = 'round';
-                sigCtx.strokeStyle = '#000000';
-
-                sigCanvas.onmousedown = (e) => {
-                    isDrawingSig = true;
-                    sigCtx.strokeStyle = document.getElementById('sigColor').value;
-                    sigCtx.beginPath();
-                    sigCtx.moveTo(e.offsetX, e.offsetY);
-                };
-                sigCanvas.onmousemove = (e) => {
-                    if (!isDrawingSig) return;
-                    sigCtx.lineTo(e.offsetX, e.offsetY);
-                    sigCtx.stroke();
-                };
-                sigCanvas.onmouseup = () => isDrawingSig = false;
-                sigCanvas.onmouseout = () => isDrawingSig = false;
-
-                // Touch events (mobile)
-                sigCanvas.ontouchstart = (e) => {
-                    e.preventDefault();
-                    const touch = e.touches[0];
-                    const rect = sigCanvas.getBoundingClientRect();
-                    isDrawingSig = true;
-                    sigCtx.strokeStyle = document.getElementById('sigColor').value;
-                    sigCtx.beginPath();
-                    sigCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-                };
-
-                sigCanvas.ontouchmove = (e) => {
-                    e.preventDefault();
-                    if (!isDrawingSig) return;
-                    const touch = e.touches[0];
-                    const rect = sigCanvas.getBoundingClientRect();
-                    sigCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-                    sigCtx.stroke();
-                };
-
-                sigCanvas.ontouchend = () => isDrawingSig = false;
-            }
-
-            function clearSignature() {
-                if(sigCtx && sigCanvas) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-            }
-
-            function showSignTab(tab) {
-                document.querySelectorAll('.sig-tab').forEach(b => {
-                    b.classList.remove('active');
-                    b.style.background = '#fff';
-                    b.style.color = '#333';
-                    b.style.borderColor = '#e2e8f0';
-                });
-                const activeBtn = document.getElementById('tab-' + tab);
-                if(activeBtn) {
-                    activeBtn.classList.add('active');
-                    activeBtn.style.background = '#2563eb';
-                    activeBtn.style.color = '#fff';
-                    activeBtn.style.borderColor = '#2563eb';
-                }
-
-                document.getElementById('sigDraw').style.display = tab === 'draw' ? 'block' : 'none';
-                document.getElementById('sigType').style.display = tab === 'type' ? 'block' : 'none';
-                document.getElementById('sigUpload').style.display = tab === 'upload' ? 'block' : 'none';
-            }
-
-            function setSigFont(font) {
-                document.getElementById('sigTextInput').style.fontFamily = font;
-            }
-
-            function addSignatureToPDF() {
-                let sigData;
-                const activeTab = document.getElementById('sigDraw').style.display !== 'none' ? 'draw' :
-                    document.getElementById('sigType').style.display !== 'none' ? 'type' : 'upload';
-
-                if (activeTab === 'draw') {
-                    sigData = sigCanvas.toDataURL('image/png');
-                } else if (activeTab === 'type') {
-                    const text = document.getElementById('sigTextInput').value;
-                    if(!text) return;
-                    const font = document.getElementById('sigTextInput').style.fontFamily || 'Dancing Script';
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = 400;
-                    tempCanvas.height = 150;
-                    const tempCtx = tempCanvas.getContext('2d');
-                    tempCtx.font = `60px "${font}", cursive`;
-                    tempCtx.fillStyle = '#000';
-                    tempCtx.fillText(text, 20, 100);
-                    sigData = tempCanvas.toDataURL('image/png');
-                }
-
-                if (sigData) {
-                    addImageElement(sigData, 100, 100, 300);
-                    closeSignatureModal();
-                }
-            }
-
-            const sigFileInput = document.getElementById('sigFileInput');
-            if(sigFileInput) {
-                sigFileInput.onchange = function(e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        addImageElement(ev.target.result, 100, 100, 300);
-                        closeSignatureModal();
-                    };
-                    reader.readAsDataURL(file);
-                    e.target.value = '';
-                };
-            }
-
-            // ===== WHITEOUT TOOL =====
-            function activateWhiteout() {
-                setTool('whiteout', event);
-            }
-
-            // ===== STAMP TOOL =====
-            function openStampMenu() {
-                const menu = document.getElementById('stampMenu');
-                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-            }
-
-            function addStamp(text) {
-                const stampCanvas = document.createElement('canvas');
-                stampCanvas.width = 300;
-                stampCanvas.height = 100;
-                const stampCtx = stampCanvas.getContext('2d');
-
-                const colors = {
-                    'APPROVED': '#16a34a', 'REJECTED': '#dc2626', 'DRAFT': '#d97706',
-                    'CONFIDENTIAL': '#dc2626', 'PAID': '#16a34a', 'FINAL': '#2563eb',
-                    'COPY': '#7c3aed', 'VOID': '#dc2626'
-                };
-                const color = colors[text] || '#dc2626';
-
-                stampCtx.strokeStyle = color;
-                stampCtx.lineWidth = 4;
-                stampCtx.roundRect(10, 10, 280, 80, 10);
-                stampCtx.stroke();
-
-                stampCtx.fillStyle = color;
-                stampCtx.font = 'bold 36px Arial';
-                stampCtx.textAlign = 'center';
-                stampCtx.textBaseline = 'middle';
-                stampCtx.fillText(text, 150, 50);
-
-                const dataUrl = stampCanvas.toDataURL('image/png');
-                addImageElement(dataUrl, 100, 100, 250);
-                document.getElementById('stampMenu').style.display = 'none';
-            }
-
-            // ===== ZOOM LOGIC ======
-            let currentZoom = 150;
-
-            function setZoom(percent) {
-                currentZoom = parseInt(percent);
-                currentScale = currentZoom / 100;
-                const select = document.getElementById('zoomSelect');
-                if(select) select.value = currentZoom;
-                renderPage();
-            }
-
-            function zoomIn() {
-                const levels = [50, 75, 100, 125, 150, 175, 200, 300];
-                const nextLevel = levels.find(l => l > currentZoom);
-                if (nextLevel) setZoom(nextLevel);
-            }
-
-            function zoomOut() {
-                const levels = [50, 75, 100, 125, 150, 175, 200, 300];
-                const prevLevel = [...levels].reverse().find(l => l < currentZoom);
-                if (prevLevel) setZoom(prevLevel);
-            }
-
-            function fitToWidth() {
-                const container = document.getElementById('canvasArea');
-                const pdfW = pdfCanvas.width / (window.devicePixelRatio || 1);
-                const unscaledPdfW = pdfW / currentScale;
-                const ratio = (container.clientWidth - 48) / unscaledPdfW;
-                setZoom(Math.round(ratio * 100));
-            }
-
-            // ===== THUMBNAILS =====
-            function toggleThumbnails() {
-                const panel = document.getElementById('thumbnailPanel');
-                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            }
-
-            function generateThumbnails() {
-                if(!pdfDoc) return;
-                const list = document.getElementById('thumbnailList');
-                list.innerHTML = '';
-
-                for (let i = 1; i <= pdfDoc.numPages; i++) {
-                    pdfDoc.getPage(i).then(page => {
-                        const viewport = page.getViewport({ scale: 0.2 });
-                        const canvas = document.createElement('canvas');
-                        canvas.width = viewport.width;
-                        canvas.height = viewport.height;
-                        canvas.style.width = '100%';
-                        canvas.style.borderRadius = '6px';
-                        canvas.style.cursor = 'pointer';
-                        canvas.style.marginBottom = '8px';
-                        canvas.style.border = currentPage === i ? '2px solid #2563eb' : '2px solid transparent';
-                        canvas.style.display = 'block';
-
-                        const tnCtx = canvas.getContext('2d');
-                        page.render({ canvasContext: tnCtx, viewport: viewport });
-
-                        canvas.onclick = () => {
-                            currentPage = i;
-                            clearDomElements();
-                            renderPage();
-                            document.querySelectorAll('#thumbnailList canvas').forEach(c => c.style.border = '2px solid transparent');
-                            canvas.style.border = '2px solid #2563eb';
-                        };
-
-                        const label = document.createElement('div');
-                        label.textContent = `Page ${i}`;
-                        label.style.cssText = 'color:#94a3b8;font-size:11px;text-align:center;margin-bottom:12px';
-
-                        const wrapper = document.createElement('div');
-                        wrapper.id = `thumb-${i}`;
-                        wrapper.style.order = i;
-                        wrapper.style.display = 'flex';
-                        wrapper.style.flexDirection = 'column';
-                        wrapper.appendChild(canvas);
-                        wrapper.appendChild(label);
-                        
-                        list.appendChild(wrapper);
-                        
-                        // force order just in case they load async unordered
-                        requestAnimationFrame(() => {
-                            Array.from(list.children)
-                                 .sort((a,b) => parseInt(a.style.order) - parseInt(b.style.order))
-                                 .forEach(node => list.appendChild(node));
-                        });
-                    });
-                }
-            }
-
-
-            // Keyboard shortcuts
-            document.onkeydown = e => {
-                if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
-                if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redoAction(); }
-                if (e.ctrlKey && e.key === 's') { e.preventDefault(); savePDF(); }
-            };
-        </script>
+                <script src="js/pdf-editor.js?v=1"></script>
         <script src="js/app.js?v=8"></script>
 
         
@@ -3107,7 +865,7 @@
                         <div class="step-number" style="font-size:24px; font-weight:bold; color:var(--accent); margin-bottom:10px;">1</div>
                         <h3 style="font-size: 16px; color: var(--text-primary); margin: 0 0 8px;">Upload Your PDF</h3>
                         <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Click "Choose File" or drag & drop your PDF. 
-                        Your file stays in your browser — never uploaded 
+                        Your file stays in your browser â€” never uploaded 
                         to any server.</p>
                     </div>
                     
@@ -3307,15 +1065,15 @@
 
                 <!-- Bottom Footer -->
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-                    <p style="color:var(--text-muted); font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights
+                    <p style="color:var(--text-muted); font-size:13px; margin:0;">Â© 2026 Online PDF Pro. All rights
                         reserved. Made
-                        with ❤️ in India.</p>
+                        with â¤ï¸ in India.</p>
                     <div style="display:flex; gap:15px;">
                         <span
-                            style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
+                            style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">ðŸ”’
                             Your files are safe</span>
                         <span
-                            style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
+                            style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">âš¡
                             100% Client-Side</span>
                     </div>
                 </div>
@@ -3335,3 +1093,4 @@
 </body>
 
 </html>
+

@@ -480,17 +480,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- MOBILE FIX -->
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449"
-        crossorigin="anonymous"></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "vu83gydexm");
-    </script>
+        <script defer src="js/third-party-loader.js"></script>
 </head>
 
 <body>
@@ -1109,111 +1099,25 @@ incrementTodayCount();
             const text = document.getElementById('textArea').value;
             if (!text.trim()) return alert('No text to convert!');
 
-            // Simple HTML to Word method
             const title = document.getElementById('docTitle').value || 'My Document';
-            const html = `<html><head><meta charset="UTF-8">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-</head><body>
-    <h1>${title}</h1>
-    <p style="color:gray;">${new Date().toLocaleDateString()}</p><hr>
-    ${text.split('\n').map(p => '<p>' + p + '</p>').join('')}
-    <footer
-        style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
-        <div style="max-width:1200px; margin:0 auto;">
+            const escapeHtml = (value) => String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
 
-            <!-- Top Footer -->
-            <div
-                style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
+            const safeTitle = escapeHtml(title);
+            const body = text
+                .split('\n')
+                .map((line) => '<p>' + escapeHtml(line) + '</p>')
+                .join('');
 
-                <!-- About -->
-                <div>
-                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
-                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
-                        by 100,000+
-                        people worldwide. No registration, no watermark, no limits.</p>
-                </div>
-
-                <!-- Popular Tools -->
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a>
-                        </li>
-                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress
-                                PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a>
-                        </li>
-                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to
-                                Word</a></li>
-                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF
-                                Editor</a></li>
-                    </ul>
-                </div>
-
-                <!-- More Tools -->
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract
-                                Text</a></li>
-                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to
-                                PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to
-                                JPG</a></li>
-                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare
-                                PDFs</a></li>
-                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in
-                                PDF</a></li>
-                    </ul>
-                </div>
-
-                <!-- Company -->
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="about.html">About Us</a>
-                        </li>
-                        <li style="margin:8px 0;"><a href="contact.html">Contact
-                                Us</a></li>
-                        <li style="margin:8px 0;"><a href="privacy.html">Privacy
-                                Policy</a></li>
-                        <li style="margin:8px 0;"><a href="terms.html">Terms of
-                                Service</a></li>
-                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
-                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
-                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- Divider -->
-            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
-
-            <!-- Bottom Footer -->
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-                <p style="color:var(--text-muted); font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights
-                    reserved. Made
-                    with ❤️ in India.</p>
-                <div style="display:flex; gap:15px;">
-                    <span
-                        style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
-                        Your files are safe</span>
-                    <span
-                        style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡
-                        100% Client-Side</span>
-                </div>
-            </div>
-
-        </div>
-    </footer>
-    <script defer src="counter.js"></script>
-
-    <script defer src="/js/app.js?v=8"></script>
-
-</body></html>`;
+            const html = '<html><head><meta charset="UTF-8"></head><body>' +
+                '<h1>' + safeTitle + '</h1>' +
+                '<p style="color:gray;">' + new Date().toLocaleDateString() + '</p><hr>' +
+                body +
+                '</body></html>';
 
             const blob = new Blob([html], { type: 'application/msword' });
             OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '.doc');
