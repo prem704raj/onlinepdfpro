@@ -17,7 +17,9 @@ const app = {
     history: [],
     historyIndex: -1,
     lastSnapshot: '',
-    imageCache: {}
+    imageCache: {},
+    inlineEditor: null,
+    inlineEditIndex: null
 };
 
 const HISTORY_LIMIT = 100;
@@ -183,6 +185,9 @@ function savePresentation() {
 }
 
 function commitChange() {
+    if (app.inlineEditor) {
+        return;
+    }
     saveHistory();
     savePresentation();
 }
@@ -247,7 +252,7 @@ function addSlide() {
 
 function deleteSlide() {
     if (app.presentation.slides.length <= 1) {
-    commitChange();
+        alert('Cannot delete the last slide');
         return;
     }
     app.presentation.slides.splice(app.currentSlideIndex, 1);
@@ -541,6 +546,76 @@ function getCanvasPoint(e) {
     };
 }
 
+function openInlineEditor(elem) {
+    closeInlineEditor();
+
+    const canvas = document.getElementById('slideCanvas');
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = rect.width / canvas.width;
+    const scaleY = rect.height / canvas.height;
+
+    const editor = document.createElement('textarea');
+    editor.value = elem.text;
+    editor.style.position = 'fixed';
+    editor.style.left = `${rect.left + elem.x * scaleX}px`;
+    editor.style.top = `${rect.top + elem.y * scaleY}px`;
+    editor.style.width = `${elem.width * scaleX}px`;
+    editor.style.height = `${elem.height * scaleY}px`;
+    editor.style.fontFamily = elem.font;
+    editor.style.fontSize = `${Math.max(12, elem.size * scaleY)}px`;
+    editor.style.color = elem.color;
+    editor.style.fontWeight = elem.bold ? '700' : '400';
+    editor.style.fontStyle = elem.italic ? 'italic' : 'normal';
+    editor.style.textDecoration = elem.underline ? 'underline' : 'none';
+    editor.style.lineHeight = '1.2';
+    editor.style.padding = '6px 8px';
+    editor.style.border = '2px solid #3b82f6';
+    editor.style.borderRadius = '6px';
+    editor.style.background = 'rgba(255,255,255,0.98)';
+    editor.style.boxShadow = '0 8px 20px rgba(0,0,0,0.25)';
+    editor.style.zIndex = '2000';
+    editor.style.resize = 'none';
+    editor.style.outline = 'none';
+
+    editor.addEventListener('input', () => {
+        elem.text = editor.value;
+        renderCurrentSlide();
+        updateElementProperties();
+    });
+
+    editor.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeInlineEditor();
+        }
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            closeInlineEditor(true);
+        }
+    });
+
+    editor.addEventListener('blur', () => closeInlineEditor(true));
+
+    document.body.appendChild(editor);
+    editor.focus();
+    editor.select();
+
+    app.inlineEditor = editor;
+}
+
+function closeInlineEditor(save = false) {
+    if (!app.inlineEditor) {
+        return;
+    }
+
+    if (save) {
+        commitChange();
+    }
+
+    app.inlineEditor.remove();
+    app.inlineEditor = null;
+    updateElementProperties();
+}
+
 // ======================== ELEMENT EDITING ========================
 function addTextBox() {
     const slide = app.presentation.slides[app.currentSlideIndex];
@@ -613,6 +688,7 @@ function setupCanvasListeners() {
     const canvas = document.getElementById('slideCanvas');
 
     canvas.addEventListener('click', (e) => handleCanvasClick(e));
+    canvas.addEventListener('dblclick', (e) => handleCanvasDoubleClick(e));
     canvas.addEventListener('mousedown', (e) => handleCanvasMouseDown(e));
     canvas.addEventListener('mousemove', (e) => handleCanvasMouseMove(e));
     canvas.addEventListener('mouseup', (e) => handleCanvasMouseUp(e));
@@ -636,6 +712,26 @@ function handleCanvasClick(e) {
     app.selectedElement = selectedIndex;
     updateElementProperties();
     renderCurrentSlide();
+}
+
+function handleCanvasDoubleClick(e) {
+    const { x, y } = getCanvasPoint(e);
+    const slide = app.presentation.slides[app.currentSlideIndex];
+
+    for (let i = slide.elements.length - 1; i >= 0; i--) {
+        const elem = slide.elements[i];
+        if (elem.type !== 'text') {
+            continue;
+        }
+        if (x >= elem.x && x <= elem.x + elem.width &&
+            y >= elem.y && y <= elem.y + elem.height) {
+            app.selectedElement = i;
+            updateElementProperties();
+            renderCurrentSlide();
+            openInlineEditor(elem);
+            break;
+        }
+    }
 }
 
 function handleCanvasMouseDown(e) {
@@ -821,11 +917,13 @@ function syncBackgroundControls() {
         gradientType.value = 'linear';
         gradColor1.value = colors[0];
         gradColor2.value = colors[1];
+        bgColor.value = colors[0];
     } else if (bg.includes('radial-gradient')) {
         const colors = bg.match(/#[a-f0-9]{6}/gi) || ['#3b82f6', '#8b5cf6'];
         gradientType.value = 'radial';
         gradColor1.value = colors[0];
         gradColor2.value = colors[1];
+        bgColor.value = colors[0];
     } else {
         gradientType.value = 'none';
         bgColor.value = bg;
@@ -1038,9 +1136,12 @@ function setupEventListeners() {
     document.getElementById('exportPdfBtn').addEventListener('click', exportPdf);
 
     // Properties
+    document.getElementById('bgColor').addEventListener('input', updateSlideBackground);
     document.getElementById('bgColor').addEventListener('change', updateSlideBackground);
     document.getElementById('gradientType').addEventListener('change', updateSlideBackground);
+    document.getElementById('gradientColor1').addEventListener('input', updateSlideBackground);
     document.getElementById('gradientColor1').addEventListener('change', updateSlideBackground);
+    document.getElementById('gradientColor2').addEventListener('input', updateSlideBackground);
     document.getElementById('gradientColor2').addEventListener('change', updateSlideBackground);
 
     // Text properties
