@@ -562,20 +562,21 @@ function openInlineEditor(elem) {
     editor.style.width = `${elem.width * scaleX}px`;
     editor.style.height = `${elem.height * scaleY}px`;
     editor.style.fontFamily = elem.font;
-    editor.style.fontSize = `${Math.max(12, elem.size * scaleY)}px`;
+    editor.style.fontSize = `${elem.size * scaleY}px`;
     editor.style.color = elem.color;
     editor.style.fontWeight = elem.bold ? '700' : '400';
     editor.style.fontStyle = elem.italic ? 'italic' : 'normal';
     editor.style.textDecoration = elem.underline ? 'underline' : 'none';
     editor.style.lineHeight = '1.2';
-    editor.style.padding = '6px 8px';
-    editor.style.border = '2px solid #3b82f6';
+    editor.style.padding = '8px';
+    editor.style.border = '2px dashed #3b82f6';
     editor.style.borderRadius = '6px';
-    editor.style.background = 'rgba(255,255,255,0.98)';
-    editor.style.boxShadow = '0 8px 20px rgba(0,0,0,0.25)';
+    editor.style.background = 'transparent';
     editor.style.zIndex = '2000';
     editor.style.resize = 'none';
     editor.style.outline = 'none';
+    editor.style.boxSizing = 'border-box';
+    editor.style.caretColor = elem.color;
 
     editor.addEventListener('input', () => {
         elem.text = editor.value;
