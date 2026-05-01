@@ -732,6 +732,24 @@
                 currentPage2 = 1;
                 renderPage(1, currentPage1);
                 renderPage(2, currentPage2);
+
+                // Save to HistoryDB
+                if (window.OnlinePDFPro && window.OnlinePDFPro.HistoryDB) {
+                    const file1 = document.getElementById('file1').files[0];
+                    const file2 = document.getElementById('file2').files[0];
+                    
+                    const virtualBlob = new Blob(['Comparison of ' + file1.name + ' and ' + file2.name], { type: 'text/plain' });
+                    const historyName = `Comparison: ${file1.name} vs ${file2.name}`;
+                    const originalFiles = [
+                        { name: file1.name, size: file1.size, type: file1.type },
+                        { name: file2.name, size: file2.size, type: file2.type }
+                    ];
+
+                    window.OnlinePDFPro.HistoryDB.saveEntry(virtualBlob, historyName, originalFiles).catch(err => {
+                        console.warn('Failed to save comparison to history:', err);
+                    });
+                }
+
                 if (typeof incrementCounter === 'function') incrementCounter('comparePDF');
                 if (typeof incrementTodayCount === 'function') incrementTodayCount();
             }
