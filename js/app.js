@@ -243,6 +243,14 @@ const FileUploader = {
         });
 
         if (validFiles.length > 0) {
+            // Track globally for history
+            if (window.OnlinePDFPro) {
+                window.OnlinePDFPro._currentFiles = validFiles.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    type: f.type
+                }));
+            }
             config.onFilesSelected(validFiles);
         }
     },
@@ -375,7 +383,7 @@ const AutoClear = {
 // =========================================
 
 const HistoryDB = {
-    DB_NAME: 'pdfpro-history',
+    DB_NAME: 'OnlinePDFPro-History-v2',
     DB_VERSION: 1,
     STORE_NAME: 'files',
     _db: null,
@@ -412,18 +420,26 @@ const HistoryDB = {
         return pageTitle || 'Unknown Tool';
     },
 
-    async saveEntry(blob, filename) {
+    async saveEntry(blob, filename, originalFiles = null) {
         try {
             const db = await this.init();
             const tool = this._getToolName();
+            
+            // If no original files passed, try to get from global state
+            if (!originalFiles && window.OnlinePDFPro && window.OnlinePDFPro._currentFiles) {
+                originalFiles = window.OnlinePDFPro._currentFiles;
+            }
+
             const entry = {
                 filename: filename,
                 tool: tool,
                 size: blob.size,
                 type: blob.type || 'application/octet-stream',
                 date: new Date().toISOString(),
-                blob: blob
+                blob: blob,
+                originalFiles: originalFiles // Array of {name, size, type}
             };
+            
             return new Promise((resolve, reject) => {
                 const tx = db.transaction(this.STORE_NAME, 'readwrite');
                 const store = tx.objectStore(this.STORE_NAME);
@@ -604,7 +620,7 @@ const Downloader = {
         document.head.appendChild(style);
     },
 
-    saveBlob(blob, filename) {
+    saveBlob(blob, filename, originalFiles = null) {
         this._injectCSS();
 
         // Store for share functionality
@@ -651,7 +667,7 @@ const Downloader = {
             overlay.classList.remove('active');
             setTimeout(() => {
                 overlay.remove();
-                this._directSave(blob, finalName);
+                this._directSave(blob, finalName, originalFiles);
             }, 300);
         };
 
@@ -675,7 +691,7 @@ const Downloader = {
         });
     },
 
-    _directSave(blob, filename) {
+    _directSave(blob, filename, originalFiles = null) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -687,7 +703,7 @@ const Downloader = {
 
         // Save to history (non-blocking)
         if (typeof indexedDB !== 'undefined') {
-            HistoryDB.saveEntry(blob, filename).catch(() => {});
+            HistoryDB.saveEntry(blob, filename, originalFiles).catch(() => {});
         }
 
         // Show share floating button
@@ -1745,6 +1761,40 @@ const FileSharer = {
         Downloader.saveBlob(blob, filename);
     }
 };
+
+// =========================================
+// Global File Tracking for History
+// =========================================
+
+if (typeof document !== 'undefined') {
+    // Track file input changes
+    document.addEventListener('change', (e) => {
+        if (e.target && e.target.type === 'file' && e.target.files) {
+            const files = Array.from(e.target.files);
+            if (files.length > 0 && window.OnlinePDFPro) {
+                window.OnlinePDFPro._currentFiles = files.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    type: f.type
+                }));
+            }
+        }
+    }, true);
+
+    // Track drag and drop
+    document.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            const files = Array.from(e.dataTransfer.files);
+            if (window.OnlinePDFPro) {
+                window.OnlinePDFPro._currentFiles = files.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    type: f.type
+                }));
+            }
+        }
+    }, true);
+}
 
 // =========================================
 // Public API

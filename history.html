@@ -6,12 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
-    <title>File History | OnlinePDFPro - Re-download Your Processed Files</title>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-    <meta name="description" content="View and re-download your previously processed files. All files are stored locally in your browser using IndexedDB. No server storage.">
+    <title>File History | OnlinePDFPro - Manage Your Processed Files</title>
+    <meta name="description" content="View and re-download your previously processed files. All files are stored safely in your browser. No server uploads.">
     <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="noindex, nofollow">
     <link rel="canonical" href="https://onlinepdfpro.com/history.html">
@@ -26,272 +22,467 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/style.css?v=8">
     <link rel="stylesheet" href="css/mobile-fix-v2.css">
     <link rel="stylesheet" href="css/tools-v2.css">
 
     <style>
-        .history-container {
-            max-width: 900px;
+        :root {
+            --history-accent: #2563eb;
+            --history-surface: var(--surface-1, #ffffff);
+            --history-bg: var(--bg-primary, #f8fafc);
+            --history-text: var(--text-primary, #1e293b);
+            --history-muted: var(--text-secondary, #64748b);
+            --history-border: var(--border, #e2e8f0);
+            --history-radius: 16px;
+        }
+
+        .history-page {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 40px 20px;
+            min-height: 80vh;
         }
 
         .history-header {
+            margin-bottom: 40px;
             text-align: center;
-            padding: 60px 0 30px;
         }
 
         .history-header h1 {
-            font-size: 2.2rem;
-            margin: 0 0 12px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--history-text);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .history-header p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin: 0;
+            font-size: 1.1rem;
+            color: var(--history-muted);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .history-bar {
+        .history-stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--history-surface);
+            padding: 20px 28px;
+            border-radius: var(--history-radius);
+            border: 1px solid var(--history-border);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--history-text);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--history-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--history-border);
+            background: var(--history-surface);
+            color: var(--history-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            background: var(--history-bg);
+            border-color: var(--history-accent);
+        }
+
+        .btn-danger {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: #ef4444;
+        }
+
+        .history-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            flex: 1;
+            position: relative;
+            min-width: 280px;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border-radius: 12px;
+            border: 1px solid var(--history-border);
+            background: var(--history-surface);
+            color: var(--history-text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--history-accent);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .history-list {
+            display: grid;
+            gap: 24px;
+        }
+
+        .history-card {
+            background: var(--history-surface);
+            border: 1px solid var(--history-border);
+            border-radius: var(--history-radius);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .history-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-color: var(--history-accent);
+        }
+
+        .card-header {
+            padding: 16px 24px;
+            background: rgba(0,0,0,0.02);
+            border-bottom: 1px solid var(--history-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 20px;
-            padding: 16px 20px;
-            background: var(--surface-1);
-            border: 1px solid var(--border);
-            border-radius: 14px;
         }
 
-        .history-bar-left {
+        .tool-info {
             display: flex;
             align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .history-stat {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .history-stat strong {
-            color: var(--text-primary);
+            gap: 10px;
             font-weight: 700;
+            color: var(--history-text);
+            font-size: 1rem;
         }
 
-        .history-warning {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 18px;
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 12px;
-            margin-bottom: 24px;
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
+        .tool-badge {
+            padding: 4px 10px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--history-accent);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
 
-        .history-warning-icon {
-            font-size: 1.2rem;
-            flex-shrink: 0;
-            margin-top: 1px;
+        .card-date {
+            font-size: 0.85rem;
+            color: var(--history-muted);
         }
 
-        .history-list {
+        .card-body {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .file-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .history-item {
+        .group-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--history-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mini-file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .mini-file {
+            padding: 8px 12px;
+            background: var(--history-bg);
+            border-radius: 8px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            background: var(--surface-1);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            transition: all 0.2s;
+            gap: 8px;
+            color: var(--history-text);
         }
 
-        .history-item:hover {
-            border-color: var(--border-hover, var(--border));
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        .mini-file-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
         }
 
-        .history-item-icon {
-            width: 44px;
-            height: 44px;
+        .arrow-divider {
+            font-size: 1.5rem;
+            color: var(--history-accent);
+            opacity: 0.5;
+        }
+
+        .result-file {
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            padding: 16px;
             border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .result-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .result-icon {
+            font-size: 2rem;
+            background: #fff;
+            width: 54px;
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            background: rgba(37, 99, 235, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
-        .history-item-info {
-            flex: 1;
+        .result-details {
+            display: flex;
+            flex-direction: column;
             min-width: 0;
         }
 
-        .history-item-name {
+        .result-name {
             font-weight: 700;
             font-size: 0.95rem;
-            color: var(--text-primary);
+            color: var(--history-text);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .history-item-meta {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
+        .result-meta {
+            font-size: 0.8rem;
+            color: var(--history-muted);
         }
 
-        .history-item-meta span {
+        .result-actions {
             display: flex;
-            align-items: center;
-            gap: 4px;
+            gap: 10px;
         }
 
-        .history-item-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .history-btn {
-            padding: 8px 16px;
-            border-radius: 10px;
+        .btn-download {
+            flex: 1;
+            padding: 10px;
+            background: var(--history-accent);
+            color: white;
             border: none;
+            border-radius: 8px;
+            font-weight: 700;
             font-size: 0.85rem;
-            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
         }
 
-        .history-btn-download {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            color: white;
-        }
-
-        .history-btn-download:hover {
+        .btn-download:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            filter: brightness(1.1);
         }
 
-        .history-btn-delete {
-            background: var(--surface-2, #f1f5f9);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-
-        .history-btn-delete:hover {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
-        .history-btn-clear {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 8px 18px;
-        }
-
-        .history-btn-clear:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .history-empty {
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .history-empty-icon {
-            font-size: 4rem;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .history-empty h2 {
-            font-size: 1.4rem;
-            margin: 0 0 10px;
-            color: var(--text-primary);
-        }
-
-        .history-empty p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            max-width: 400px;
-            margin: 0 auto 24px;
-            line-height: 1.6;
-        }
-
-        .history-empty a {
-            display: inline-block;
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            color: white;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
+        .btn-delete {
+            padding: 10px;
+            background: #fff;
+            border: 1px solid var(--history-border);
+            border-radius: 8px;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .history-empty a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+        .btn-delete:hover {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #ef4444;
         }
 
-        @media (max-width: 600px) {
-            .history-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--history-surface);
+            border-radius: var(--history-radius);
+            border: 1px dashed var(--history-border);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--history-text);
+        }
+
+        .empty-state p {
+            color: var(--history-muted);
+            margin-bottom: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--history-accent);
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .privacy-alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 14px;
+            margin-bottom: 30px;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            color: #10b981;
+        }
+
+        .alert-content h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #065f46;
+        }
+
+        .alert-content p {
+            font-size: 0.85rem;
+            color: #065f46;
+            opacity: 0.8;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
 
-            .history-item-actions {
-                width: 100%;
+            .arrow-divider {
+                transform: rotate(90deg);
+                text-align: center;
+                margin: 4px 0;
             }
 
-            .history-btn {
-                flex: 1;
-                justify-content: center;
-            }
-
-            .history-bar {
+            .history-stats-bar {
                 flex-direction: column;
                 align-items: flex-start;
             }
         }
     </style>
-    <script defer src="js/third-party-loader.js"></script>
 </head>
 
 <body>
-    <a href="#main" class="skip-link">Skip to main content</a>
-
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="logo">
@@ -302,113 +493,79 @@
                 <a href="tools.html" class="nav-link">All Tools</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="help.html" class="nav-link">Help</a>
-                <a href="history.html" class="nav-link">History</a>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback"
-                    class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
-
-                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲 Install App</a>
+                <a href="history.html" class="nav-link active">History</a>
+                <a href="blog.html" class="nav-link">Blog</a>
             </nav>
             <div class="header-actions">
-                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
-                <!-- Compact Header Search -->
-                <div class="header-search" style="position: relative; margin-right: 8px;">
-                    <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
-                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
-                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
-                </div>
-
-                <div class="lang-selector">
-                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
-                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                            <path d="M2 12h20"></path>
-                        </svg></button>
-                    <div class="lang-dropdown">
-                        <div class="lang-search-wrap">
-                            <input type="text" class="lang-search" placeholder="Search language...">
-                        </div>
-                        <ul class="lang-list"></ul>
-                    </div>
-                </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
                     <span class="theme-icon-light">🌙</span>
                     <span class="theme-icon-dark">☀️</span>
                 </button>
                 <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-
             </div>
         </div>
     </header>
 
-    <main id="main">
-        <div class="history-container">
-            <div class="history-header">
-                <h1>📂 File History</h1>
-                <p>Re-download your previously processed files. Stored locally in your browser.</p>
-            </div>
+    <main class="history-page">
+        <div class="history-header">
+            <h1>📂 Local History</h1>
+            <p>Your privacy matters. All files are stored locally in your browser's private storage and never touch our servers.</p>
+        </div>
 
-            <div id="historyContent">
-                <!-- Populated by JS -->
-                <div style="text-align:center; padding:60px 0; color:var(--text-secondary);">Loading history...</div>
+        <div class="privacy-alert">
+            <span class="alert-icon">🛡️</span>
+            <div class="alert-content">
+                <h4>100% Private & Secure</h4>
+                <p>History is persistent only until you clear your browser's site data. Using "Incognito" or "Private" mode will clear history as soon as you close the tab.</p>
+            </div>
+        </div>
+
+        <div id="statsBar" class="history-stats-bar" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-icon">📑</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="totalCount">0</span>
+                    <span class="stat-label">Tasks</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">💾</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="totalSize">0 KB</span>
+                    <span class="stat-label">Used Space</span>
+                </div>
+            </div>
+            <div class="history-actions">
+                <button class="btn-action btn-danger" onclick="clearAllHistory()">
+                    <span>🗑️</span> Clear All History
+                </button>
+            </div>
+        </div>
+
+        <div class="history-controls" id="controls" style="display: none;">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="historySearch" placeholder="Search by filename or tool..." oninput="filterHistory()">
+            </div>
+        </div>
+
+        <div id="historyList" class="history-list">
+            <div style="text-align: center; padding: 60px;">
+                <p style="color: var(--history-muted);">Loading your history...</p>
             </div>
         </div>
     </main>
 
     <footer style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
-        <div style="max-width:1200px; margin:0 auto;">
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-bottom:30px;">
-                <div>
-                    <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
-                    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide. No registration, no watermark, no limits.</p>
-                </div>
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Popular Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li>
-                        <li style="margin:8px 0;"><a href="pdf-editor.html">PDF Editor</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">More Tools</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li>
-                        <li style="margin:8px 0;"><a href="voice-to-pdf.html">Voice to PDF</a></li>
-                        <li style="margin:8px 0;"><a href="tools/pdf-to-images.html">PDF to JPG</a></li>
-                        <li style="margin:8px 0;"><a href="compare-pdf.html">Compare PDFs</a></li>
-                        <li style="margin:8px 0;"><a href="qr-pdf.html">QR Code in PDF</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color:var(--text-primary); margin:0 0 15px; font-size:16px;">Company</h4>
-                    <ul style="list-style:none; padding:0; margin:0;">
-                        <li style="margin:8px 0;"><a href="about.html">About Us</a></li>
-                        <li style="margin:8px 0;"><a href="contact.html">Contact Us</a></li>
-                        <li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li>
-                        <li style="margin:8px 0;"><a href="terms.html">Terms of Service</a></li>
-                        <li style="margin:8px 0;"><a href="disclaimer.html">Disclaimer</a></li>
-                        <li style="margin:8px 0;"><a href="dmca.html">DMCA Policy</a></li>
-                        <li style="margin:8px 0;"><a href="blog.html">Blog</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div style="height:1px; background:var(--border); margin:20px 0;"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-                <p style="color:var(--text-muted); font-size:13px; margin:0;">&copy; 2026 Online PDF Pro. All rights reserved. Made with ❤️ in India.</p>
-                <div style="display:flex; gap:15px;">
-                    <span style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒 Your files are safe</span>
-                    <span style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">⚡ 100% Client-Side</span>
-                </div>
-            </div>
+        <div style="max-width:1200px; margin:0 auto; text-align: center;">
+            <p style="color:var(--text-muted); font-size:13px; margin:0;">&copy; 2026 Online PDF Pro. All rights reserved.</p>
         </div>
     </footer>
 
-    <script defer src="js/app.js?v=8"></script>
+    <script src="js/app.js?v=9"></script>
     <script>
+        let allEntries = [];
+
         const ICON_MAP = {
             'pdf': '📄', 'zip': '📦', 'docx': '📝', 'xlsx': '📊',
             'pptx': '📽️', 'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️',
@@ -430,99 +587,119 @@
 
         function formatDate(isoStr) {
             const d = new Date(isoStr);
-            const now = new Date();
-            const diffMs = now - d;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return diffMins + 'm ago';
-            if (diffHours < 24) return diffHours + 'h ago';
-            if (diffDays < 7) return diffDays + 'd ago';
-
             return d.toLocaleDateString('en-IN', {
-                day: 'numeric', month: 'short', year: 'numeric',
+                day: 'numeric', month: 'short', year: 'numeric'
+            }) + ' • ' + d.toLocaleTimeString('en-IN', {
                 hour: '2-digit', minute: '2-digit'
             });
         }
 
-        async function renderHistory() {
-            const container = document.getElementById('historyContent');
+        async function loadHistory() {
+            const listContainer = document.getElementById('historyList');
+            const statsBar = document.getElementById('statsBar');
+            const controls = document.getElementById('controls');
 
             try {
-                const HistoryDB = window.OnlinePDFPro ? window.OnlinePDFPro.HistoryDB : null;
-                if (!HistoryDB) {
-                    container.innerHTML = '<div class="history-empty"><div class="history-empty-icon">⚠️</div><h2>History unavailable</h2><p>Your browser does not support this feature.</p></div>';
-                    return;
+                // Wait for app.js to initialize
+                if (!window.OnlinePDFPro || !window.OnlinePDFPro.HistoryDB) {
+                    await new Promise(r => setTimeout(r, 500));
                 }
 
-                const entries = await HistoryDB.getAll();
+                const HistoryDB = window.OnlinePDFPro.HistoryDB;
+                allEntries = await HistoryDB.getAll();
                 const usage = await HistoryDB.getStorageUsage();
 
-                if (entries.length === 0) {
-                    container.innerHTML = `
-                        <div class="history-empty">
-                            <div class="history-empty-icon">📂</div>
-                            <h2>No files yet</h2>
-                            <p>When you process and download files using any tool, they'll automatically appear here for re-download.</p>
-                            <a href="tools.html">Browse Tools</a>
+                if (allEntries.length === 0) {
+                    statsBar.style.display = 'none';
+                    controls.style.display = 'none';
+                    listContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📂</div>
+                            <h2>No History Found</h2>
+                            <p>You haven't processed any files yet. Try one of our tools to see them appear here.</p>
+                            <a href="tools.html" class="btn-primary">Explore Tools</a>
                         </div>
                     `;
                     return;
                 }
 
-                let html = `
-                    <div class="history-warning">
-                        <span class="history-warning-icon">⚠️</span>
-                        <span>Files are stored locally in your browser. Clearing browser data, using incognito mode, or uninstalling the browser will permanently erase all saved files.</span>
-                    </div>
+                statsBar.style.display = 'flex';
+                controls.style.display = 'flex';
+                document.getElementById('totalCount').textContent = allEntries.length;
+                document.getElementById('totalSize').textContent = formatSize(usage.bytes);
 
-                    <div class="history-bar">
-                        <div class="history-bar-left">
-                            <span class="history-stat"><strong>${entries.length}</strong> file${entries.length !== 1 ? 's' : ''}</span>
-                            <span class="history-stat"><strong>${formatSize(usage.bytes)}</strong> used</span>
-                        </div>
-                        <button class="history-btn history-btn-clear" onclick="clearAllHistory()">🗑️ Clear All</button>
-                    </div>
-
-                    <div class="history-list">
-                `;
-
-                entries.forEach(entry => {
-                    html += `
-                        <div class="history-item" id="history-item-${entry.id}">
-                            <div class="history-item-icon">${getFileIcon(entry.filename)}</div>
-                            <div class="history-item-info">
-                                <div class="history-item-name" title="${entry.filename}">${entry.filename}</div>
-                                <div class="history-item-meta">
-                                    <span>🛠️ ${entry.tool || 'Unknown'}</span>
-                                    <span>📦 ${formatSize(entry.size)}</span>
-                                    <span>🕐 ${formatDate(entry.date)}</span>
-                                </div>
-                            </div>
-                            <div class="history-item-actions">
-                                <button class="history-btn history-btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
-                                <button class="history-btn history-btn-delete" onclick="deleteEntry(${entry.id})">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += '</div>';
-                container.innerHTML = html;
+                renderEntries(allEntries);
 
             } catch (err) {
-                console.error('History render error:', err);
-                container.innerHTML = '<div class="history-empty"><div class="history-empty-icon">❌</div><h2>Error loading history</h2><p>' + err.message + '</p></div>';
+                console.error('History load error:', err);
+                listContainer.innerHTML = `<div class="empty-state"><h2>Error</h2><p>${err.message}</p></div>`;
             }
+        }
+
+        function renderEntries(entries) {
+            const listContainer = document.getElementById('historyList');
+            if (entries.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center; padding:40px; color:var(--history-muted);">No matching files found.</div>';
+                return;
+            }
+
+            listContainer.innerHTML = entries.map(entry => {
+                const inputFiles = entry.originalFiles || [];
+                const inputHtml = inputFiles.length > 0 
+                    ? `<div class="mini-file-list">${inputFiles.map(f => `<div class="mini-file"><span class="mini-icon">${getFileIcon(f.name)}</span><span class="mini-file-name" title="${f.name}">${f.name}</span><span style="opacity:0.5; font-size:0.7rem;">(${formatSize(f.size)})</span></div>`).join('')}</div>`
+                    : `<div class="mini-file"><i>Not recorded</i></div>`;
+
+                return `
+                    <div class="history-card" id="card-${entry.id}">
+                        <div class="card-header">
+                            <div class="tool-info">
+                                <span class="tool-badge">${entry.tool || 'Tool'}</span>
+                            </div>
+                            <div class="card-date">${formatDate(entry.date)}</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="file-group">
+                                <label class="group-label">Input Files</label>
+                                ${inputHtml}
+                            </div>
+                            <div class="arrow-divider">→</div>
+                            <div class="file-group">
+                                <label class="group-label">Processed Result</label>
+                                <div class="result-file">
+                                    <div class="result-main">
+                                        <div class="result-icon">${getFileIcon(entry.filename)}</div>
+                                        <div class="result-details">
+                                            <div class="result-name" title="${entry.filename}">${entry.filename}</div>
+                                            <div class="result-meta">${formatSize(entry.size)} • ${entry.type.split('/')[1] || 'FILE'}</div>
+                                        </div>
+                                    </div>
+                                    <div class="result-actions">
+                                        <button class="btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
+                                        <button class="btn-delete" onclick="deleteEntry(${entry.id})" title="Delete from history">🗑️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterHistory() {
+            const query = document.getElementById('historySearch').value.toLowerCase();
+            const filtered = allEntries.filter(entry => 
+                entry.filename.toLowerCase().includes(query) || 
+                (entry.tool && entry.tool.toLowerCase().includes(query)) ||
+                (entry.originalFiles && entry.originalFiles.some(f => f.name.toLowerCase().includes(query)))
+            );
+            renderEntries(filtered);
         }
 
         async function redownload(id) {
             try {
                 const entry = await OnlinePDFPro.HistoryDB.getFile(id);
                 if (!entry || !entry.blob) {
-                    alert('File not found in storage. It may have been cleared.');
+                    alert('File not found in storage. It may have been cleared by your browser.');
                     return;
                 }
                 const url = URL.createObjectURL(entry.blob);
@@ -539,28 +716,15 @@
         }
 
         async function deleteEntry(id) {
+            if (!confirm('Remove this item from history?')) return;
             try {
                 await OnlinePDFPro.HistoryDB.deleteEntry(id);
-                const el = document.getElementById('history-item-' + id);
-                if (el) {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateX(30px)';
-                    el.style.transition = 'all 0.3s ease';
-                    setTimeout(() => {
-                        el.remove();
-                        // Re-render if empty
-                        const list = document.querySelector('.history-list');
-                        if (list && list.children.length === 0) {
-                            renderHistory();
-                        } else {
-                            // Update stats
-                            OnlinePDFPro.HistoryDB.getStorageUsage().then(usage => {
-                                const stats = document.querySelectorAll('.history-stat');
-                                if (stats[0]) stats[0].innerHTML = '<strong>' + (list ? list.children.length : 0) + '</strong> file' + ((list && list.children.length !== 1) ? 's' : '');
-                                if (stats[1]) stats[1].innerHTML = '<strong>' + formatSize(usage.bytes) + '</strong> used';
-                            });
-                        }
-                    }, 300);
+                const card = document.getElementById('card-' + id);
+                if (card) {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    card.style.transition = 'all 0.3s ease';
+                    setTimeout(() => loadHistory(), 300);
                 }
             } catch (err) {
                 alert('Delete failed: ' + err.message);
@@ -568,161 +732,17 @@
         }
 
         async function clearAllHistory() {
-            if (!confirm('Delete all saved files? This cannot be undone.')) return;
+            if (!confirm('Permanently delete all history items? This cannot be undone.')) return;
             try {
                 await OnlinePDFPro.HistoryDB.clearAll();
-                renderHistory();
+                loadHistory();
             } catch (err) {
                 alert('Clear failed: ' + err.message);
             }
         }
 
-        // Direct IndexedDB access — no dependency on app.js
-        function openHistoryDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open('OnlinePDFProHistory', 1);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains('files')) {
-                        const store = db.createObjectStore('files', { keyPath: 'id', autoIncrement: true });
-                        store.createIndex('date', 'date', { unique: false });
-                    }
-                };
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        // Override renderHistory to use direct DB access
-        async function renderHistoryDirect() {
-            const container = document.getElementById('historyContent');
-            try {
-                const db = await openHistoryDB();
-                const tx = db.transaction('files', 'readonly');
-                const store = tx.objectStore('files');
-                const entries = await new Promise((resolve, reject) => {
-                    const req = store.getAll();
-                    req.onsuccess = () => resolve(req.result || []);
-                    req.onerror = () => reject(req.error);
-                });
-
-                // Sort newest first
-                entries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // Calculate storage
-                let totalBytes = 0;
-                entries.forEach(e => { totalBytes += (e.size || 0); });
-
-                if (entries.length === 0) {
-                    container.innerHTML = `
-                        <div class="history-empty">
-                            <div class="history-empty-icon">📂</div>
-                            <h2>No files yet</h2>
-                            <p>When you process and download files using any tool, they'll automatically appear here for re-download.</p>
-                            <a href="tools.html">Browse Tools</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = `
-                    <div class="history-warning">
-                        <span class="history-warning-icon">⚠️</span>
-                        <span>Files are stored locally in your browser. Clearing browser data, using incognito mode, or uninstalling the browser will permanently erase all saved files.</span>
-                    </div>
-
-                    <div class="history-bar">
-                        <div class="history-bar-left">
-                            <span class="history-stat"><strong>${entries.length}</strong> file${entries.length !== 1 ? 's' : ''}</span>
-                            <span class="history-stat"><strong>${formatSize(totalBytes)}</strong> used</span>
-                        </div>
-                        <button class="history-btn history-btn-clear" onclick="clearAllHistory()">🗑️ Clear All</button>
-                    </div>
-
-                    <div class="history-list">
-                `;
-
-                entries.forEach(entry => {
-                    html += `
-                        <div class="history-item" id="history-item-${entry.id}">
-                            <div class="history-item-icon">${getFileIcon(entry.filename)}</div>
-                            <div class="history-item-info">
-                                <div class="history-item-name" title="${entry.filename}">${entry.filename}</div>
-                                <div class="history-item-meta">
-                                    <span>🛠️ ${entry.tool || 'Unknown'}</span>
-                                    <span>📦 ${formatSize(entry.size)}</span>
-                                    <span>🕐 ${formatDate(entry.date)}</span>
-                                </div>
-                            </div>
-                            <div class="history-item-actions">
-                                <button class="history-btn history-btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
-                                <button class="history-btn history-btn-delete" onclick="deleteEntry(${entry.id})">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += '</div>';
-                container.innerHTML = html;
-
-            } catch (err) {
-                console.error('History render error:', err);
-                container.innerHTML = '<div class="history-empty"><div class="history-empty-icon">❌</div><h2>Error loading history</h2><p>' + err.message + '</p></div>';
-            }
-        }
-
-        // Override redownload/delete to use direct DB
-        async function redownload(id) {
-            try {
-                const db = await openHistoryDB();
-                const tx = db.transaction('files', 'readonly');
-                const req = tx.objectStore('files').get(id);
-                const entry = await new Promise((resolve, reject) => {
-                    req.onsuccess = () => resolve(req.result);
-                    req.onerror = () => reject(req.error);
-                });
-                if (!entry || !entry.blob) { alert('File not found.'); return; }
-                const url = URL.createObjectURL(entry.blob);
-                const a = document.createElement('a');
-                a.href = url; a.download = entry.filename;
-                document.body.appendChild(a); a.click();
-                document.body.removeChild(a); URL.revokeObjectURL(url);
-            } catch (err) { alert('Download failed: ' + err.message); }
-        }
-
-        async function deleteEntry(id) {
-            try {
-                const db = await openHistoryDB();
-                const tx = db.transaction('files', 'readwrite');
-                tx.objectStore('files').delete(id);
-                await new Promise((resolve, reject) => {
-                    tx.oncomplete = resolve;
-                    tx.onerror = () => reject(tx.error);
-                });
-                const el = document.getElementById('history-item-' + id);
-                if (el) {
-                    el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all 0.3s ease';
-                    setTimeout(() => { el.remove(); const list = document.querySelector('.history-list'); if (list && list.children.length === 0) renderHistoryDirect(); }, 300);
-                }
-            } catch (err) { alert('Delete failed: ' + err.message); }
-        }
-
-        async function clearAllHistory() {
-            if (!confirm('Delete all saved files? This cannot be undone.')) return;
-            try {
-                const db = await openHistoryDB();
-                const tx = db.transaction('files', 'readwrite');
-                tx.objectStore('files').clear();
-                await new Promise((resolve, reject) => {
-                    tx.oncomplete = resolve;
-                    tx.onerror = () => reject(tx.error);
-                });
-                renderHistoryDirect();
-            } catch (err) { alert('Clear failed: ' + err.message); }
-        }
-
-        // Run immediately — no dependency on app.js
-        renderHistoryDirect();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadHistory);
     </script>
 </body>
 
