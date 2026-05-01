@@ -19,11 +19,153 @@ const app = {
     lastSnapshot: '',
     imageCache: {},
     inlineEditor: null,
-    inlineEditIndex: null
+    inlineEditIndex: null,
+    pendingExportType: null,
+    isPresenting: false
 };
 
 const HISTORY_LIMIT = 100;
 const HANDLE_SIZE = 8;
+const SLIDE_WIDTH = 960;
+const SLIDE_HEIGHT = 540;
+const PPTX_LAYOUT = { width: 10, height: 5.625 };
+
+const SYSTEM_FONTS = new Set([
+    'Arial',
+    'Helvetica',
+    'Times New Roman',
+    'Courier New',
+    'Georgia',
+    'Trebuchet MS',
+    'Verdana',
+    'Comic Sans MS'
+]);
+const GOOGLE_FONTS = new Set([
+    'Inter',
+    'Poppins',
+    'Roboto',
+    'Open Sans',
+    'Playfair Display',
+    'Merriweather',
+    'Montserrat',
+    'Raleway',
+    'Quicksand'
+]);
+const LOADED_FONTS = new Set();
+
+function normalizeHexColor(color, fallback = 'FFFFFF') {
+    if (!color || typeof color !== 'string') {
+        return fallback;
+    }
+    const hex = color.trim().replace('#', '').toUpperCase();
+    if (/^[0-9A-F]{6}$/.test(hex)) {
+        return hex;
+    }
+    return fallback;
+}
+
+function buildGoogleFontUrl(fontFamily) {
+    const family = encodeURIComponent(fontFamily).replace(/%20/g, '+');
+    return `https://fonts.googleapis.com/css2?family=${family}&display=swap`;
+}
+
+function ensureFontLoaded(fontFamily) {
+    if (!fontFamily || SYSTEM_FONTS.has(fontFamily)) {
+        return Promise.resolve();
+    }
+    if (!GOOGLE_FONTS.has(fontFamily)) {
+        return Promise.resolve();
+    }
+    if (LOADED_FONTS.has(fontFamily)) {
+        return Promise.resolve();
+    }
+
+    LOADED_FONTS.add(fontFamily);
+    return new Promise((resolve) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = buildGoogleFontUrl(fontFamily);
+        link.onload = () => resolve();
+        link.onerror = () => resolve();
+        document.head.appendChild(link);
+    });
+}
+
+async function ensureFontsForSlides(slides) {
+    if (!Array.isArray(slides)) {
+        return;
+    }
+    const fonts = new Set();
+    slides.forEach((slide) => {
+        (slide.elements || []).forEach((elem) => {
+            if (elem.type === 'text' && elem.font) {
+                fonts.add(elem.font);
+            }
+        });
+    });
+    await Promise.all(Array.from(fonts).map((font) => ensureFontLoaded(font)));
+    if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+    }
+}
+
+async function ensureFontsForPresentation() {
+    await ensureFontsForSlides(app.presentation ? app.presentation.slides : []);
+}
+
+function parseGradient(background) {
+    const colors = background.match(/#[a-f0-9]{6}/gi) || ['#3b82f6', '#8b5cf6'];
+    const isRadial = background.includes('radial');
+    let angle = 135;
+    const angleMatch = background.match(/(-?\d+\.?\d*)deg/);
+    if (angleMatch) {
+        angle = parseFloat(angleMatch[1]);
+    }
+    return { colors, isRadial, angle };
+}
+
+function createCanvasGradient(ctx, background, width, height) {
+    const { colors, isRadial, angle } = parseGradient(background);
+    if (isRadial) {
+        const grad = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.max(width, height));
+        grad.addColorStop(0, colors[0]);
+        grad.addColorStop(1, colors[1]);
+        return grad;
+    }
+
+    const radians = ((angle - 90) * Math.PI) / 180;
+    const x = Math.cos(radians);
+    const y = Math.sin(radians);
+    const startX = width / 2 - x * (width / 2);
+    const startY = height / 2 - y * (height / 2);
+    const endX = width / 2 + x * (width / 2);
+    const endY = height / 2 + y * (height / 2);
+    const grad = ctx.createLinearGradient(startX, startY, endX, endY);
+    grad.addColorStop(0, colors[0]);
+    grad.addColorStop(1, colors[1]);
+    return grad;
+}
+
+function drawSlideBackground(ctx, background, width, height) {
+    const bg = background || '#ffffff';
+    if (bg.includes('gradient')) {
+        ctx.fillStyle = createCanvasGradient(ctx, bg, width, height);
+    } else {
+        ctx.fillStyle = bg;
+    }
+    ctx.fillRect(0, 0, width, height);
+}
+
+function scaleElement(elem, scale) {
+    return {
+        ...elem,
+        x: elem.x * scale,
+        y: elem.y * scale,
+        width: elem.width * scale,
+        height: elem.height * scale,
+        size: elem.size ? elem.size * scale : elem.size
+    };
+}
 
 // Templates
 const TEMPLATES = [
@@ -149,6 +291,41 @@ const TEMPLATES = [
     }
 ];
 
+function normalizeElement(elem) {
+    if (!elem || typeof elem !== 'object') {
+        return;
+    }
+    if (elem.type === 'text') {
+        elem.text = typeof elem.text === 'string' ? elem.text : '';
+        elem.font = elem.font || 'Arial';
+        elem.size = Number.isFinite(elem.size) ? elem.size : 24;
+        elem.color = elem.color || '#000000';
+        elem.bold = typeof elem.bold === 'boolean' ? elem.bold : false;
+        elem.italic = typeof elem.italic === 'boolean' ? elem.italic : false;
+        elem.underline = typeof elem.underline === 'boolean' ? elem.underline : false;
+        elem.align = elem.align || 'left';
+    }
+    if (elem.type === 'image') {
+        elem.x = Number.isFinite(elem.x) ? elem.x : 100;
+        elem.y = Number.isFinite(elem.y) ? elem.y : 100;
+        elem.width = Number.isFinite(elem.width) ? elem.width : 300;
+        elem.height = Number.isFinite(elem.height) ? elem.height : 200;
+    }
+}
+
+function normalizePresentation(presentation) {
+    if (!presentation || !Array.isArray(presentation.slides)) {
+        return;
+    }
+    presentation.slides.forEach((slide) => {
+        slide.background = slide.background || '#ffffff';
+        if (!Array.isArray(slide.elements)) {
+            slide.elements = [];
+        }
+        slide.elements.forEach(normalizeElement);
+    });
+}
+
 // ======================== INITIALIZATION ========================
 function init() {
     loadPresentation();
@@ -157,6 +334,8 @@ function init() {
     renderSlides();
     updateSlideCounter();
     syncBackgroundControls();
+    updateUndoRedoButtons();
+    ensureFontsForPresentation();
 }
 
 function loadPresentation() {
@@ -170,13 +349,14 @@ function loadPresentation() {
                 {
                     background: '#ffffff',
                     elements: [
-                        { type: 'text', x: 50, y: 50, width: 860, height: 100, text: 'Title', font: 'Arial', size: 54, color: '#000000', bold: true, italic: false, underline: false },
-                        { type: 'text', x: 50, y: 170, width: 860, height: 300, text: 'Subtitle', font: 'Arial', size: 32, color: '#666666', bold: false, italic: false, underline: false }
+                        { type: 'text', x: 50, y: 50, width: 860, height: 100, text: 'Title', font: 'Arial', size: 54, color: '#000000', bold: true, italic: false, underline: false, align: 'left' },
+                        { type: 'text', x: 50, y: 170, width: 860, height: 300, text: 'Subtitle', font: 'Arial', size: 32, color: '#666666', bold: false, italic: false, underline: false, align: 'left' }
                     ]
                 }
             ]
         };
     }
+    normalizePresentation(app.presentation);
     app.currentSlideIndex = 0;
 }
 
@@ -207,6 +387,8 @@ function saveHistory() {
         app.history.shift();
         app.historyIndex = Math.max(0, app.historyIndex - 1);
     }
+
+    updateUndoRedoButtons();
 }
 
 function undo() {
@@ -219,6 +401,7 @@ function undo() {
         syncBackgroundControls();
         savePresentation();
     }
+    updateUndoRedoButtons();
 }
 
 function redo() {
@@ -231,6 +414,17 @@ function redo() {
         syncBackgroundControls();
         savePresentation();
     }
+    updateUndoRedoButtons();
+}
+
+function updateUndoRedoButtons() {
+    const undoBtn = document.getElementById('undoBtn');
+    const redoBtn = document.getElementById('redoBtn');
+    if (!undoBtn || !redoBtn) {
+        return;
+    }
+    undoBtn.disabled = app.historyIndex <= 0;
+    redoBtn.disabled = app.historyIndex >= app.history.length - 1;
 }
 
 // ======================== SLIDES MANAGEMENT ========================
@@ -238,8 +432,8 @@ function addSlide() {
     const newSlide = {
         background: '#ffffff',
         elements: [
-            { type: 'text', x: 50, y: 50, width: 860, height: 100, text: 'Title', font: 'Arial', size: 54, color: '#000000', bold: true, italic: false, underline: false },
-            { type: 'text', x: 50, y: 170, width: 860, height: 300, text: 'Click to add content', font: 'Arial', size: 32, color: '#666666', bold: false, italic: false, underline: false }
+            { type: 'text', x: 50, y: 50, width: 860, height: 100, text: 'Title', font: 'Arial', size: 54, color: '#000000', bold: true, italic: false, underline: false, align: 'left' },
+            { type: 'text', x: 50, y: 170, width: 860, height: 300, text: 'Click to add content', font: 'Arial', size: 32, color: '#666666', bold: false, italic: false, underline: false, align: 'left' }
         ]
     };
     app.presentation.slides.push(newSlide);
@@ -293,29 +487,18 @@ function renderSlides() {
         const ctx = canvas.getContext('2d');
 
         // Draw background
-        const bg = slide.background || '#ffffff';
-        if (bg.includes('gradient')) {
-            const colors = bg.match(/#[a-f0-9]{6}/gi) || ['#3b82f6', '#8b5cf6'];
-            if (bg.includes('radial')) {
-                const grad = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height));
-                grad.addColorStop(0, colors[0]);
-                grad.addColorStop(1, colors[1]);
-                ctx.fillStyle = grad;
-            } else {
-                const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                grad.addColorStop(0, colors[0]);
-                grad.addColorStop(1, colors[1]);
-                ctx.fillStyle = grad;
-            }
-        } else {
-            ctx.fillStyle = bg;
-        }
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawSlideBackground(ctx, slide.background, canvas.width, canvas.height);
 
-        // Draw text (simplified)
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '10px Arial';
-        ctx.fillText(`Slide ${index + 1}`, 10, 20);
+        // Draw elements
+        const scale = canvas.width / SLIDE_WIDTH;
+        slide.elements.forEach((elem) => {
+            const scaledElem = scaleElement(elem, scale);
+            if (elem.type === 'text') {
+                drawTextElement(ctx, scaledElem, false, { showBorder: false });
+            } else if (elem.type === 'image') {
+                drawImageElement(ctx, scaledElem, { onLoad: renderSlides });
+            }
+        });
 
         const canvasImg = canvas.toDataURL();
         thumbnail.innerHTML = `<img src="${canvasImg}" class="slide-thumbnail-canvas"><div class="slide-number-badge">${index + 1}</div>`;
@@ -376,37 +559,16 @@ function renderCurrentSlide() {
     const ctx = canvas.getContext('2d');
     const slide = app.presentation.slides[app.currentSlideIndex];
 
-    // Clear canvas
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw background
-    const bg = slide.background || '#ffffff';
-    if (bg.includes('gradient')) {
-        const colors = bg.match(/#[a-f0-9]{6}/gi) || ['#3b82f6', '#8b5cf6'];
-        if (bg.includes('linear')) {
-            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            grad.addColorStop(0, colors[0]);
-            grad.addColorStop(1, colors[1]);
-            ctx.fillStyle = grad;
-        } else {
-            const grad = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height));
-            grad.addColorStop(0, colors[0]);
-            grad.addColorStop(1, colors[1]);
-            ctx.fillStyle = grad;
-        }
-    } else {
-        ctx.fillStyle = bg;
-    }
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSlideBackground(ctx, slide.background, canvas.width, canvas.height);
 
     // Draw elements
     slide.elements.forEach((elem, index) => {
         const isSelected = index === app.selectedElement;
         if (elem.type === 'text') {
-            drawTextElement(ctx, elem, isSelected);
+            drawTextElement(ctx, elem, isSelected, { showBorder: true });
         } else if (elem.type === 'image') {
-            drawImageElement(ctx, elem, isSelected);
+            drawImageElement(ctx, elem, { onLoad: renderSlides });
         }
     });
 
@@ -416,8 +578,12 @@ function renderCurrentSlide() {
     }
 }
 
-function drawTextElement(ctx, elem, isSelected) {
+function drawTextElement(ctx, elem, isSelected, options = {}) {
     ctx.save();
+
+    const showBorder = options.showBorder !== false;
+    const showSelection = options.showSelection !== false;
+    const align = elem.align || 'left';
     
     // Apply text style
     let fontStyle = '';
@@ -426,27 +592,39 @@ function drawTextElement(ctx, elem, isSelected) {
     ctx.font = `${fontStyle}${elem.size}px ${elem.font}`;
     ctx.fillStyle = elem.color;
     ctx.textBaseline = 'top';
+    ctx.textAlign = align === 'right' ? 'right' : align === 'center' ? 'center' : 'left';
 
     // Draw text with word wrap
     const lines = wrapText(ctx, elem.text, elem.width - 16);
     let y = elem.y + 8;
     lines.forEach(line => {
-        ctx.fillText(line, elem.x + 8, y);
+        const textX = align === 'right'
+            ? elem.x + elem.width - 8
+            : align === 'center'
+                ? elem.x + elem.width / 2
+                : elem.x + 8;
+        ctx.fillText(line, textX, y);
         if (elem.underline) {
             const textWidth = ctx.measureText(line).width;
             const underlineY = y + elem.size + 2;
+            let underlineStart = textX;
+            if (ctx.textAlign === 'center') {
+                underlineStart = textX - textWidth / 2;
+            } else if (ctx.textAlign === 'right') {
+                underlineStart = textX - textWidth;
+            }
             ctx.strokeStyle = elem.color;
             ctx.lineWidth = Math.max(1, Math.round(elem.size / 14));
             ctx.beginPath();
-            ctx.moveTo(elem.x + 8, underlineY);
-            ctx.lineTo(elem.x + 8 + textWidth, underlineY);
+            ctx.moveTo(underlineStart, underlineY);
+            ctx.lineTo(underlineStart + textWidth, underlineY);
             ctx.stroke();
         }
         y += elem.size * 1.2;
     });
 
     // Draw selection border
-    if (isSelected) {
+    if (isSelected && showSelection) {
         ctx.strokeStyle = '#3b82f6';
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]);
@@ -455,14 +633,16 @@ function drawTextElement(ctx, elem, isSelected) {
     }
 
     // Draw border
-    ctx.strokeStyle = 'rgba(129, 140, 248, 0.2)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(elem.x, elem.y, elem.width, elem.height);
+    if (showBorder) {
+        ctx.strokeStyle = 'rgba(129, 140, 248, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(elem.x, elem.y, elem.width, elem.height);
+    }
 
     ctx.restore();
 }
 
-function drawImageElement(ctx, elem) {
+function drawImageElement(ctx, elem, options = {}) {
     if (!elem.src) {
         return;
     }
@@ -470,7 +650,8 @@ function drawImageElement(ctx, elem) {
     let img = app.imageCache[elem.src];
     if (!img) {
         img = new Image();
-        img.onload = () => renderCurrentSlide();
+        const onLoad = options.onLoad || renderCurrentSlide;
+        img.onload = () => onLoad();
         img.src = elem.src;
         app.imageCache[elem.src] = img;
     }
@@ -481,20 +662,30 @@ function drawImageElement(ctx, elem) {
 }
 
 function wrapText(ctx, text, maxWidth) {
-    const words = text.split(' ');
+    const normalized = (text || '').toString();
+    const paragraphs = normalized.split(/\n/);
     const lines = [];
-    let currentLine = '';
 
-    words.forEach(word => {
-        const testLine = currentLine + (currentLine ? ' ' : '') + word;
-        if (ctx.measureText(testLine).width > maxWidth) {
-            if (currentLine) lines.push(currentLine);
-            currentLine = word;
-        } else {
-            currentLine = testLine;
+    paragraphs.forEach((paragraph) => {
+        if (paragraph === '') {
+            lines.push('');
+            return;
         }
+
+        const words = paragraph.split(' ');
+        let currentLine = '';
+
+        words.forEach(word => {
+            const testLine = currentLine + (currentLine ? ' ' : '') + word;
+            if (ctx.measureText(testLine).width > maxWidth) {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+            } else {
+                currentLine = testLine;
+            }
+        });
+        if (currentLine) lines.push(currentLine);
     });
-    if (currentLine) lines.push(currentLine);
     return lines;
 }
 
@@ -567,6 +758,7 @@ function openInlineEditor(elem) {
     editor.style.fontWeight = elem.bold ? '700' : '400';
     editor.style.fontStyle = elem.italic ? 'italic' : 'normal';
     editor.style.textDecoration = elem.underline ? 'underline' : 'none';
+    editor.style.textAlign = elem.align || 'left';
     editor.style.lineHeight = '1.2';
     editor.style.padding = '8px';
     editor.style.border = '2px dashed #3b82f6';
@@ -632,7 +824,8 @@ function addTextBox() {
         color: '#000000',
         bold: false,
         italic: false,
-        underline: false
+        underline: false,
+        align: 'left'
     };
     slide.elements.push(newText);
     app.selectedElement = slide.elements.length - 1;
@@ -642,7 +835,11 @@ function addTextBox() {
 }
 
 function addImage() {
-    document.getElementById('imageFile').click();
+    const imageInput = document.getElementById('imageInput');
+    if (imageInput) {
+        imageInput.value = '';
+    }
+    openModal('imageModal');
 }
 
 function deleteElement() {
@@ -693,6 +890,40 @@ function setupCanvasListeners() {
     canvas.addEventListener('mousedown', (e) => handleCanvasMouseDown(e));
     canvas.addEventListener('mousemove', (e) => handleCanvasMouseMove(e));
     canvas.addEventListener('mouseup', (e) => handleCanvasMouseUp(e));
+
+    canvas.addEventListener('touchstart', handleCanvasTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleCanvasTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleCanvasTouchEnd, { passive: false });
+}
+
+function handleCanvasTouchStart(e) {
+    if (!e.touches.length) {
+        return;
+    }
+    e.preventDefault();
+    const touch = e.touches[0];
+    const point = { clientX: touch.clientX, clientY: touch.clientY };
+    handleCanvasClick(point);
+    handleCanvasMouseDown(point);
+}
+
+function handleCanvasTouchMove(e) {
+    if (!e.touches.length) {
+        return;
+    }
+    e.preventDefault();
+    const touch = e.touches[0];
+    handleCanvasMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
+}
+
+function handleCanvasTouchEnd(e) {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    if (touch) {
+        handleCanvasMouseUp({ clientX: touch.clientX, clientY: touch.clientY });
+    } else {
+        handleCanvasMouseUp(e);
+    }
 }
 
 function handleCanvasClick(e) {
@@ -863,13 +1094,22 @@ function handleCanvasMouseUp(e) {
 function updateElementProperties() {
     const propertiesDiv = document.getElementById('elementProperties');
     const textContent = document.getElementById('textContent');
+    const textGroup = document.getElementById('textPropertiesGroup');
+    const alignGroup = document.getElementById('textAlignGroup');
     
     if (app.selectedElement !== null) {
         const slide = app.presentation.slides[app.currentSlideIndex];
         const elem = slide.elements[app.selectedElement];
 
+        propertiesDiv.style.display = 'block';
+        document.getElementById('elemX').value = Math.round(elem.x);
+        document.getElementById('elemY').value = Math.round(elem.y);
+        document.getElementById('elemWidth').value = Math.round(elem.width);
+        document.getElementById('elemHeight').value = Math.round(elem.height);
+
         if (elem.type === 'text') {
-            propertiesDiv.style.display = 'block';
+            textGroup.style.display = 'block';
+            alignGroup.style.display = 'block';
             textContent.value = elem.text;
             document.getElementById('fontFamily').value = elem.font;
             document.getElementById('fontSize').value = elem.size;
@@ -877,13 +1117,23 @@ function updateElementProperties() {
             document.getElementById('boldCheckbox').checked = elem.bold;
             document.getElementById('italicCheckbox').checked = elem.italic;
             document.getElementById('underlineCheckbox').checked = elem.underline;
+            setAlignButtonState(elem.align || 'left');
         } else {
-            propertiesDiv.style.display = 'none';
+            textGroup.style.display = 'none';
+            alignGroup.style.display = 'none';
+            textContent.value = '';
         }
     } else {
         propertiesDiv.style.display = 'none';
         textContent.value = '';
     }
+}
+
+function setAlignButtonState(align) {
+    const alignButtons = document.querySelectorAll('.align-btn');
+    alignButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.align === align);
+    });
 }
 
 function updateSlideBackground() {
@@ -900,6 +1150,8 @@ function updateSlideBackground() {
     } else {
         slide.background = `radial-gradient(circle, ${gradColor1} 0%, ${gradColor2} 100%)`;
     }
+
+    toggleGradientControls(gradientType);
 
     commitChange();
     renderSlides();
@@ -929,18 +1181,41 @@ function syncBackgroundControls() {
         gradientType.value = 'none';
         bgColor.value = bg;
     }
+
+    toggleGradientControls(gradientType.value);
+}
+
+function toggleGradientControls(gradientType) {
+    const controls = document.getElementById('gradientControls');
+    if (!controls) {
+        return;
+    }
+    controls.style.display = gradientType === 'none' ? 'none' : 'flex';
 }
 
 // ======================== TEMPLATES ========================
-function showTemplates() {
+async function showTemplates() {
     const modal = document.getElementById('templateModal');
     const grid = document.getElementById('templateGrid');
     grid.innerHTML = '';
 
+    const templateSlides = TEMPLATES.flatMap((template) => template.slides || []);
+    await ensureFontsForSlides(templateSlides);
+
     TEMPLATES.forEach((template, index) => {
         const item = document.createElement('div');
         item.className = 'template-item';
-        item.textContent = template.name;
+        const preview = document.createElement('img');
+        preview.className = 'template-preview';
+        preview.alt = `${template.name} preview`;
+        preview.src = createSlidePreviewData(template.slides[0]);
+
+        const label = document.createElement('div');
+        label.className = 'template-name';
+        label.textContent = template.name;
+
+        item.appendChild(preview);
+        item.appendChild(label);
         item.onclick = () => applyTemplate(index);
         grid.appendChild(item);
     });
@@ -950,25 +1225,63 @@ function showTemplates() {
 
 function applyTemplate(templateIndex) {
     const template = TEMPLATES[templateIndex];
-    app.presentation.slides = JSON.parse(JSON.stringify(template.slides));
-    app.currentSlideIndex = 0;
+    const slides = JSON.parse(JSON.stringify(template.slides));
+    const insertIndex = app.currentSlideIndex + 1;
+    app.presentation.slides.splice(insertIndex, 0, ...slides);
+    app.currentSlideIndex = insertIndex;
     app.selectedElement = null;
     commitChange();
     renderSlides();
     updateSlideCounter();
     syncBackgroundControls();
     closeModal('templateModal');
+    ensureFontsForSlides(slides);
+}
+
+function createSlidePreviewData(slide, width = 240, height = 135) {
+    if (!slide) {
+        return '';
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    drawSlideBackground(ctx, slide.background, width, height);
+    const scale = width / SLIDE_WIDTH;
+
+    slide.elements.forEach((elem) => {
+        const scaledElem = scaleElement(elem, scale);
+        if (elem.type === 'text') {
+            drawTextElement(ctx, scaledElem, false, { showBorder: false, showSelection: false });
+        } else if (elem.type === 'image' && elem.src) {
+            const img = app.imageCache[elem.src];
+            if (img && img.complete) {
+                ctx.drawImage(img, scaledElem.x, scaledElem.y, scaledElem.width, scaledElem.height);
+            }
+        }
+    });
+
+    return canvas.toDataURL();
+}
+
+function createGradientDataUrl(background) {
+    const canvas = document.createElement('canvas');
+    canvas.width = SLIDE_WIDTH;
+    canvas.height = SLIDE_HEIGHT;
+    const ctx = canvas.getContext('2d');
+    drawSlideBackground(ctx, background, canvas.width, canvas.height);
+    return canvas.toDataURL('image/png');
 }
 
 // ======================== EXPORT ========================
-function exportPptx() {
+async function exportPptx(name) {
     if (typeof PptxGenJS === 'undefined') {
         alert('PptxGenJS is not available. Please refresh the page.');
         return;
     }
 
-    const name = prompt('Enter presentation name:', 'My Presentation');
-    if (!name) return;
+    const exportName = name || app.presentation.name || 'My Presentation';
+    await ensureFontsForPresentation();
 
     const pres = new PptxGenJS();
     pres.defineLayout({ name: 'LAYOUT1', width: 10, height: 5.625 });
@@ -977,11 +1290,12 @@ function exportPptx() {
         const layout = pres.addSlide('LAYOUT1');
 
         // Background
-        if (slide.background.includes('gradient')) {
-            const colors = slide.background.match(/#[a-f0-9]{6}/gi) || ['#3b82f6', '#8b5cf6'];
-            layout.background = { fill: colors[0] };
+        const bg = slide.background || '#ffffff';
+        if (bg.includes('gradient')) {
+            const gradientImage = createGradientDataUrl(bg);
+            layout.addImage({ data: gradientImage, x: 0, y: 0, w: PPTX_LAYOUT.width, h: PPTX_LAYOUT.height });
         } else {
-            layout.background = { fill: slide.background };
+            layout.background = { fill: normalizeHexColor(bg) };
         }
 
         // Elements
@@ -994,11 +1308,11 @@ function exportPptx() {
                     h: elem.height / 96,
                     fontSize: elem.size,
                     fontFace: elem.font,
-                    color: elem.color.replace('#', ''),
+                    color: normalizeHexColor(elem.color),
                     bold: elem.bold,
                     italic: elem.italic,
-                    underline: elem.underline,
-                    align: 'left',
+                    underline: elem.underline ? { style: 'sng' } : undefined,
+                    align: elem.align || 'left',
                     valign: 'top'
                 });
             } else if (elem.type === 'image' && elem.src) {
@@ -1013,17 +1327,17 @@ function exportPptx() {
         });
     });
 
-    pres.save({ fileName: name + '.pptx' });
+    pres.save({ fileName: exportName + '.pptx' });
 }
 
-async function exportPdf() {
+async function exportPdf(name) {
     if (typeof html2canvas === 'undefined' || !window.jspdf) {
         alert('PDF export libraries are not available. Please refresh the page.');
         return;
     }
 
-    const name = prompt('Enter presentation name:', 'My Presentation');
-    if (!name) return;
+    const exportName = name || app.presentation.name || 'My Presentation';
+    await ensureFontsForPresentation();
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
@@ -1047,7 +1361,7 @@ async function exportPdf() {
         pdf.addImage(imgData, 'PNG', 0, 0, 254, 143);
     }
 
-    pdf.save(name + '.pdf');
+    pdf.save(exportName + '.pdf');
 }
 
 function buildExportSlide(slide) {
@@ -1082,6 +1396,7 @@ function buildExportSlide(slide) {
             textEl.style.fontWeight = elem.bold ? '700' : '400';
             textEl.style.fontStyle = elem.italic ? 'italic' : 'normal';
             textEl.style.textDecoration = elem.underline ? 'underline' : 'none';
+            textEl.style.textAlign = elem.align || 'left';
             textEl.style.whiteSpace = 'pre-wrap';
             textEl.style.lineHeight = '1.2';
             textEl.style.overflow = 'hidden';
@@ -1239,6 +1554,12 @@ function setupEventListeners() {
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
+        if (app.isPresenting) {
+            return;
+        }
+        if (isTypingTarget(e.target) || app.inlineEditor) {
+            return;
+        }
         if (e.ctrlKey && e.key === 'z') {
             e.preventDefault();
             undo();
@@ -1253,6 +1574,14 @@ function setupEventListeners() {
     });
 
     setupCanvasListeners();
+}
+
+function isTypingTarget(target) {
+    if (!target) {
+        return false;
+    }
+    const tag = target.tagName ? target.tagName.toLowerCase() : '';
+    return tag === 'input' || tag === 'textarea' || target.isContentEditable;
 }
 
 // ======================== STARTUP ========================
