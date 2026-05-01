@@ -387,42 +387,68 @@ const HistoryDB = {
     DB_VERSION: 1,
     STORE_NAME: 'files',
     _db: null,
+    _initPromise: null,
 
     async init() {
         if (this._db) return this._db;
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
-            request.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains(this.STORE_NAME)) {
-                    const store = db.createObjectStore(this.STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                    store.createIndex('date', 'date', { unique: false });
-                    store.createIndex('tool', 'tool', { unique: false });
-                }
-            };
-            request.onsuccess = (e) => {
-                this._db = e.target.result;
-                resolve(this._db);
-            };
-            request.onerror = (e) => {
-                console.warn('[HistoryDB] Failed to open:', e.target.error);
-                reject(e.target.error);
-            };
+        if (this._initPromise) return this._initPromise;
+
+        this._initPromise = new Promise((resolve, reject) => {
+            try {
+                const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(this.STORE_NAME)) {
+                        const store = db.createObjectStore(this.STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('date', 'date', { unique: false });
+                        store.createIndex('tool', 'tool', { unique: false });
+                    }
+                };
+
+                request.onsuccess = (e) => {
+                    this._db = e.target.result;
+                    this._db.onversionchange = () => {
+                        this._db.close();
+                        this._db = null;
+                        this._initPromise = null;
+                    };
+                    resolve(this._db);
+                };
+
+                request.onerror = (e) => {
+                    console.warn('[HistoryDB] Open failed:', e.target.error);
+                    this._initPromise = null;
+                    reject(e.target.error);
+                };
+
+                request.onblocked = () => {
+                    console.warn('[HistoryDB] Open blocked by other tab');
+                };
+            } catch (err) {
+                this._initPromise = null;
+                reject(err);
+            }
         });
+
+        return this._initPromise;
     },
 
     _getToolName() {
         const titleEl = document.querySelector('.tool-title');
         if (titleEl) {
-            return titleEl.textContent.split('\u2014')[0].split('\u2013')[0].trim();
+            // Remove everything after em-dash or en-dash
+            return titleEl.textContent.split('\u2014')[0].split('\u2013')[0].split('—')[0].split('–')[0].trim();
         }
-        const pageTitle = document.title.split('|')[0].split('\u2014')[0].trim();
+        const pageTitle = document.title.split('|')[0].split('\u2014')[0].split('—')[0].trim();
         return pageTitle || 'Unknown Tool';
     },
 
     async saveEntry(blob, filename, originalFiles = null) {
         try {
             const db = await this.init();
+            if (!db) return;
+
             const tool = this._getToolName();
             
             // If no original files passed, try to get from global state

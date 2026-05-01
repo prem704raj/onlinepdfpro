@@ -579,7 +579,7 @@
         </div>
     </footer>
 
-    <script src="js/app.js?v=9"></script>
+    <script src="js/app.js?v=11"></script>
     <script>
         let allEntries = [];
 
@@ -611,20 +611,32 @@
             });
         }
 
-        async function loadHistory() {
+        async function loadHistory(retries = 3) {
             const listContainer = document.getElementById('historyList');
             const statsBar = document.getElementById('statsBar');
             const controls = document.getElementById('controls');
 
             try {
-                // Wait for app.js to initialize
+                // Wait for app.js to initialize (more robustly)
+                let waitCount = 0;
+                while ((!window.OnlinePDFPro || !window.OnlinePDFPro.HistoryDB) && waitCount < 10) {
+                    await new Promise(r => setTimeout(r, 200));
+                    waitCount++;
+                }
+
                 if (!window.OnlinePDFPro || !window.OnlinePDFPro.HistoryDB) {
-                    await new Promise(r => setTimeout(r, 500));
+                    throw new Error('Library not initialized. Please refresh the page.');
                 }
 
                 const HistoryDB = window.OnlinePDFPro.HistoryDB;
                 allEntries = await HistoryDB.getAll();
                 const usage = await HistoryDB.getStorageUsage();
+
+                // If nothing found and we have retries left, try again in case of IDB delay
+                if (allEntries.length === 0 && retries > 0) {
+                    setTimeout(() => loadHistory(retries - 1), 500);
+                    return;
+                }
 
                 if (allEntries.length === 0) {
                     statsBar.style.display = 'none';
