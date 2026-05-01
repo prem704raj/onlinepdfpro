@@ -67,7 +67,18 @@ function incrementCounter(toolName) {
     counter.realUsage++;
 
     saveCounter(counter);
+    
+    // Sync for PWA manager
+    localStorage.setItem('onlinepdfpro_usage', counter.realUsage.toString());
+    
     updateCounterDisplay();
+
+    // Trigger PWA suggest if available
+    if (window.PwaInstallManager && typeof window.PwaInstallManager.suggestInstall === 'function') {
+        window.PwaInstallManager.suggestInstall();
+    } else if (window.OnlinePDFPro && window.OnlinePDFPro.PwaInstallManager) {
+        window.OnlinePDFPro.PwaInstallManager.suggestInstall();
+    }
 }
 
 // Calculate daily growth (simulates organic growth)

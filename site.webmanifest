@@ -1,21 +1,36 @@
 {
-    "name": "OnlinePDFPro - Free PDF Tools",
-    "short_name": "PDFPro",
-    "description": "India's best free online PDF tools",
+    "name": "OnlinePDFPro - 100% Free Browser PDF Tools",
+    "short_name": "OnlinePDFPro",
+    "description": "Privacy-first PDF tools. Merge, Compress, Sign, and Edit PDFs directly in your browser. No file uploads required.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#2563eb",
+    "categories": ["utilities", "productivity"],
+    "orientation": "any",
+    "lang": "en",
+    "dir": "ltr",
+    "prefer_related_applications": false,
     "icons": [
         {
             "src": "/icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "/icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/design-specs/mockups/hero_centered.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Desktop Home"
         }
     ]
 }
