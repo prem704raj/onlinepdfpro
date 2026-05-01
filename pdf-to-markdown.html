@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Markdown Converter Free Online | OnlinePDFPro</title>
+    <meta name="description"
+        content="Convert PDF to Markdown (.md) for AI and ChatGPT. Extract structured text with headers, lists, and tables entirely in your browser.">
+    <meta name="author" content="OnlinePDFPro">
+    <link rel="canonical" href="https://onlinepdfpro.com/pdf-to-markdown.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/pdf-to-markdown.html">
+    <meta property="og:title" content="PDF to Markdown Converter Free Online | OnlinePDFPro">
+    <meta property="og:description"
+        content="The best tool for AI researchers. Convert PDFs to clean Markdown format for LLM context windows. No uploads, 100% private.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+
+    <style>
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        body {
+            color: var(--text-primary) !important;
+        }
+
+        header {
+            background: #1e293b !important;
+        }
+
+        header h1,
+        header h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .workspace {
+            display: none;
+            max-width: 1080px;
+            margin: 28px auto;
+            padding: 24px;
+            background: var(--surface-1);
+            border-radius: 20px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        .workspace-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .workspace-head h2 {
+            margin: 0;
+            font-size: 25px;
+            color: var(--text-primary);
+        }
+
+        .markdown-editor {
+            width: 100%;
+            min-height: 400px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            resize: vertical;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        .markdown-editor:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px 20px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn-copy { background: #2563eb; }
+        .btn-download { background: #10b981; }
+        .btn-reset { background: #64748b; }
+
+        .progress-section {
+            display: none;
+            max-width: 760px;
+            margin: 24px auto;
+            padding: 20px;
+            background: var(--surface-1);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.3s;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="history.html" class="nav-link">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-top: 40px; margin-bottom:42px;">
+                <div style="margin-bottom: 15px;"><span class="ai-badge">AI Ready</span></div>
+                <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px;">PDF to Markdown</h1>
+                <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:740px; margin:0 auto;">
+                    Convert your PDF documents into clean, structured Markdown. Perfect for LLMs like ChatGPT, Claude, and Gemini.
+                    Privacy-first: No files ever leave your browser.
+                </p>
+            </div>
+
+            <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; border: 2px dashed #cbd5e1; padding: 60px 20px; text-align: center; border-radius: 20px;">
+                <span style="font-size: 48px; display: block; margin-bottom: 20px;">📄</span>
+                <p style="font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px;">Drop PDF here or click to select</p>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 25px;">Maximum privacy: Local conversion only.</p>
+                <button class="btn btn-primary" style="padding: 12px 30px; font-weight: 700; border-radius: 10px;">Choose File</button>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+            </div>
+
+            <div class="progress-section" id="progressSection">
+                <h3 id="progressText" style="margin: 0; font-size: 18px;">Analyzing document...</h3>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+
+            <section class="workspace" id="workspace">
+                <div class="workspace-head">
+                    <h2>Markdown Result</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span style="font-size: 13px; color: var(--text-secondary);">Ready for AI context</span>
+                    </div>
+                </div>
+
+                <textarea id="markdownOutput" class="markdown-editor" spellcheck="false"></textarea>
+
+                <div class="actions-row">
+                    <button class="action-btn btn-copy" id="copyBtn"><span>📋</span> Copy Markdown</button>
+                    <button class="action-btn btn-download" id="downloadBtn"><span>💾</span> Download .md</button>
+                    <button class="action-btn btn-reset" id="resetBtn"><span>🔄</span> Start Over</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- SEO Content -->
+        <section class="container" style="margin-top: 80px; padding-bottom: 60px;">
+            <div style="max-width: 900px; margin: 0 auto; background: var(--surface-1); padding: 40px; border-radius: 20px; border: 1px solid var(--border);">
+                <h2 style="font-size: 24px; margin-bottom: 20px;">Why use PDF to Markdown for AI?</h2>
+                <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px;">
+                    Modern Large Language Models (LLMs) like ChatGPT perform significantly better when provided with structured text. 
+                    Raw PDF extraction often loses headers, lists, and emphasis. Our converter preserves the structure as Markdown, 
+                    making it the ideal format for feeding document content into AI context windows.
+                </p>
+                <div style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); display: grid; gap: 30px;">
+                    <div>
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: var(--accent);">Preserves Structure</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Converts headers, bold text, and lists into their Markdown equivalents.</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: var(--accent);">Privacy Guaranteed</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Unlike other converters, your sensitive documents never touch a server.</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 18px; margin-bottom: 10px; color: var(--accent);">Clean Formatting</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary);">Removes unnecessary artifacts from PDF layers for a cleaner output.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/vendor/pdfjs/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdfjs/pdf.worker.min.js';
+
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const workspace = document.getElementById('workspace');
+        const progressSection = document.getElementById('progressSection');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const markdownOutput = document.getElementById('markdownOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+        dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.borderColor = '#2563eb'; });
+        dropArea.addEventListener('dragleave', () => dropArea.style.borderColor = '#cbd5e1');
+        dropArea.addEventListener('drop', e => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#cbd5e1';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        async function handleFiles(files) {
+            if (!files.length) return;
+            const file = files[0];
+            if (file.type !== 'application/pdf') return alert('Please upload a PDF file.');
+
+            dropArea.style.display = 'none';
+            progressSection.style.display = 'block';
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                let fullMarkdown = `# ${file.name.replace('.pdf', '')}\n\n`;
+                
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    progressText.textContent = `Processing Page ${i} of ${pdf.numPages}...`;
+                    progressFill.style.width = `${(i / pdf.numPages) * 100}%`;
+                    
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageItems = textContent.items;
+                    
+                    fullMarkdown += `## Page ${i}\n\n`;
+                    
+                    let lastY = -1;
+                    let pageText = '';
+                    
+                    for (const item of pageItems) {
+                        if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
+                            pageText += '\n';
+                        }
+                        pageText += item.str + ' ';
+                        lastY = item.transform[5];
+                    }
+                    
+                    fullMarkdown += pageText.trim() + '\n\n';
+                }
+
+                markdownOutput.value = fullMarkdown;
+                progressSection.style.display = 'none';
+                workspace.style.display = 'block';
+                
+                // Track in history
+                if (window.OnlinePDFPro && window.OnlinePDFPro.HistoryDB) {
+                    window.OnlinePDFPro.HistoryDB.add({
+                        tool: 'PDF to Markdown',
+                        fileName: file.name,
+                        status: 'Success'
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error processing PDF. Please try another file.');
+                resetAll();
+            }
+        }
+
+        copyBtn.addEventListener('click', () => {
+            markdownOutput.select();
+            document.execCommand('copy');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<span>✅</span> Copied!';
+            setTimeout(() => copyBtn.innerHTML = originalText, 2000);
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const blob = new Blob([markdownOutput.value], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'extracted_document.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        resetBtn.addEventListener('click', resetAll);
+
+        function resetAll() {
+            workspace.style.display = 'none';
+            dropArea.style.display = 'block';
+            fileInput.value = '';
+            markdownOutput.value = '';
+            progressFill.style.width = '0%';
+        }
+    </script>
+</body>
+</html>

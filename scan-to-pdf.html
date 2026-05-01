@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Scan to PDF | Mobile Browser Scanner | OnlinePDFPro</title>
+    <meta name="description" content="Turn your phone camera into a professional PDF scanner. Capture photos and convert them to PDF instantly in your browser. No app required.">
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <style>
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .camera-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 20px auto;
+            position: relative;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .capture-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            border: 5px solid #2563eb;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        .capture-btn:active { transform: scale(0.9); }
+        .capture-btn::after {
+            content: '';
+            width: 50px;
+            height: 50px;
+            background: #2563eb;
+            border-radius: 50%;
+        }
+
+        .scanned-pages {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .page-thumb {
+            position: relative;
+            aspect-ratio: 3/4;
+            background: var(--surface-2);
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            overflow: hidden;
+        }
+        .page-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .remove-page {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface-1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            gap: 15px;
+            z-index: 100;
+            border: 1px solid var(--border);
+        }
+
+        #cameraOverlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid rgba(255,255,255,0.5);
+            margin: 20px;
+            pointer-events: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="tool-page">
+        <div class="container">
+            <div class="tool-header" style="text-align:center; margin-top: 40px;">
+                <h1 class="tool-title" style="font-size:2.2rem; font-weight:800;">Direct Scan to PDF</h1>
+                <p class="tool-description" style="color:var(--text-secondary);">Fastest way to scan documents from your phone. No app needed.</p>
+            </div>
+
+            <div id="setupView" style="text-align: center; padding: 40px 0;">
+                <button id="startCameraBtn" class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem; border-radius: 50px;">
+                    📷 Start Scanning
+                </button>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">Requires camera access</p>
+            </div>
+
+            <div id="cameraView" style="display: none;">
+                <div class="camera-container">
+                    <video id="video" autoplay playsinline></video>
+                    <div id="cameraOverlay"></div>
+                </div>
+                <div class="camera-controls">
+                    <button class="capture-btn" id="captureBtn" title="Capture Page"></button>
+                </div>
+            </div>
+
+            <div id="previewSection">
+                <div class="scanned-pages" id="pagesGrid"></div>
+            </div>
+
+            <div class="floating-actions" id="floatingActions">
+                <span style="font-weight: 700; color: var(--text-primary);" id="pageCounter">0 Pages</span>
+                <button class="btn btn-primary" id="generatePdfBtn" style="border-radius: 50px;">💾 Save as PDF</button>
+                <button class="btn btn-secondary" id="cancelBtn" style="border-radius: 50px;">Cancel</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/vendor/jspdf/jspdf.umd.min.js"></script>
+    <script>
+        let stream = null;
+        let capturedImages = [];
+        const video = document.getElementById('video');
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const setupView = document.getElementById('setupView');
+        const cameraView = document.getElementById('cameraView');
+        const captureBtn = document.getElementById('captureBtn');
+        const pagesGrid = document.getElementById('pagesGrid');
+        const floatingActions = document.getElementById('floatingActions');
+        const pageCounter = document.getElementById('pageCounter');
+        const generatePdfBtn = document.getElementById('generatePdfBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        startCameraBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }, 
+                    audio: false 
+                });
+                video.srcObject = stream;
+                setupView.style.display = 'none';
+                cameraView.style.display = 'block';
+            } catch (err) {
+                alert('Could not access camera. Please check permissions.');
+                console.error(err);
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            const imageData = canvas.toDataURL('image/jpeg', 0.85);
+            capturedImages.push(imageData);
+            renderPages();
+            
+            // Visual feedback
+            video.style.opacity = '0.5';
+            setTimeout(() => video.style.opacity = '1', 100);
+        });
+
+        function renderPages() {
+            pagesGrid.innerHTML = '';
+            capturedImages.forEach((img, idx) => {
+                const div = document.createElement('div');
+                div.className = 'page-thumb fade-in';
+                div.innerHTML = `
+                    <img src="${img}">
+                    <button class="remove-page" onclick="removePage(${idx})">✕</button>
+                    <div style="position:absolute; bottom:5px; left:5px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:10px;">Page ${idx+1}</div>
+                `;
+                pagesGrid.appendChild(div);
+            });
+            
+            if (capturedImages.length > 0) {
+                floatingActions.style.display = 'flex';
+                pageCounter.textContent = `${capturedImages.length} Page${capturedImages.length > 1 ? 's' : ''}`;
+            } else {
+                floatingActions.style.display = 'none';
+            }
+        }
+
+        window.removePage = (idx) => {
+            capturedImages.splice(idx, 1);
+            renderPages();
+        };
+
+        generatePdfBtn.addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            generatePdfBtn.disabled = true;
+            generatePdfBtn.textContent = 'Processing...';
+
+            for (let i = 0; i < capturedImages.length; i++) {
+                if (i > 0) doc.addPage();
+                const img = capturedImages[i];
+                
+                // Calculate dimensions to fit A4
+                const props = doc.getImageProperties(img);
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                const ratio = Math.min(pdfWidth / props.width, pdfHeight / props.height);
+                const width = props.width * ratio;
+                const height = props.height * ratio;
+                const x = (pdfWidth - width) / 2;
+                const y = (pdfHeight - height) / 2;
+                
+                doc.addImage(img, 'JPEG', x, y, width, height);
+            }
+
+            doc.save('scanned_document.pdf');
+            generatePdfBtn.disabled = false;
+            generatePdfBtn.textContent = '💾 Save as PDF';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            capturedImages = [];
+            renderPages();
+            setupView.style.display = 'block';
+            cameraView.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
