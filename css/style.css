@@ -59,6 +59,10 @@
     --nav-height: 56px;
     --header-h: calc(var(--nav-height) + 24px);
 
+    /* Search/Input Colors */
+    --bg-primary: var(--surface-1);
+    --bg-secondary: var(--surface-2);
+
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
     --transition: 0.2s var(--ease);
@@ -86,8 +90,10 @@
     --text-primary: #09090b;
     --text-secondary: #52525b;
     --text-muted: #a1a1aa;
-    --border: rgba(0, 0, 0, 0.4);
-    --border-hover: rgba(0, 0, 0, 0.6);
+    --border: rgba(0, 0, 0, 0.1);
+    --border-hover: rgba(0, 0, 0, 0.2);
+    --bg-primary: #ffffff;
+    --bg-secondary: #f4f4f5;
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --midnight: var(--bg);
@@ -613,8 +619,64 @@ footer a:active {
 }
 
 /* ---- Mobile-only elements (hidden on desktop) ---- */
-.mobile-search-toggle,
-.mobile-search-bar,
+.mobile-search-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    transition: transform 0.2s;
+}
+
+.mobile-search-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--surface-1);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    transform: translateY(-100%);
+    transition: transform 0.3s var(--ease);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.mobile-search-bar.active {
+    transform: translateY(0);
+}
+
+.mobile-search-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+
+.mobile-search-content input {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 10px 16px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+}
+
+#mobileSearchClose {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
 .pwa-install-link {
     display: none;
 }
@@ -743,6 +805,14 @@ footer a:active {
 
     .menu-toggle {
         display: block;
+    }
+
+    .mobile-search-toggle {
+        display: block;
+    }
+
+    .header-search {
+        display: none !important;
     }
 
     .hero {
