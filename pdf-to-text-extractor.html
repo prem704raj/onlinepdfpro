@@ -617,7 +617,8 @@
         const state = {
             fileName: '',
             pageTexts: [],
-            searchIndex: -1
+            searchIndex: -1,
+            currentFile: null
         };
 
         const elements = {
@@ -940,14 +941,23 @@
         }
 
         function downloadBlob(blob, fileName) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            if (window.OnlinePDFPro && window.OnlinePDFPro.Downloader) {
+                const originalFiles = state.currentFile ? [{
+                    name: state.currentFile.name,
+                    size: state.currentFile.size,
+                    type: state.currentFile.type
+                }] : null;
+                window.OnlinePDFPro.Downloader.saveBlob(blob, fileName, originalFiles);
+            } else {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
         }
 
         function buildMarkdownText() {
@@ -973,6 +983,7 @@
                 return;
             }
 
+            state.currentFile = file;
             resetOutputOnly();
             state.pageTexts = [];
             state.fileName = file.name;

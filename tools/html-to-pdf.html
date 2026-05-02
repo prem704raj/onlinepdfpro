@@ -546,7 +546,7 @@ Example:
                 const container = document.createElement('div');
                 container.innerHTML = html;
                 container.style.cssText = `
-                    position: fixed; top: 0; left: 0;
+                    position: absolute; top: -9999px; left: -9999px;
                     width: ${containerWidthPx / scale}px;
                     padding: 0; margin: 0;
                     font-family: Calibri, Arial, sans-serif;
@@ -603,7 +603,13 @@ Example:
                 }
 
                 const pdfBlob = pdf.output('blob');
-                OnlinePDFPro.Downloader.saveBlob(pdfBlob, 'document.pdf');
+                const htmlSnippet = html.trim().substring(0, 50).replace(/<[^>]*>/g, '') + '...';
+                const originalFiles = [{
+                    name: 'HTML: ' + (htmlSnippet || 'Web Content'),
+                    size: html.length,
+                    type: 'text/html'
+                }];
+                OnlinePDFPro.Downloader.saveBlob(pdfBlob, 'document.pdf', originalFiles);
 
             } catch (err) {
                 console.error('PDF generation error:', err);

@@ -518,6 +518,7 @@
         let fullText = '';
         let summaryData = {};
         let _originalFileName = '';
+        let _originalFile = null;
 
         document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
         document.getElementById('fileInput').onchange = e => analyzePDF(e.target.files[0]);
@@ -526,6 +527,7 @@
 
         async function analyzePDF(file) {
             if (!file) return;
+            _originalFile = file;
             _originalFileName = file.name.replace(/\.pdf$/i, '');
 
             const arrayBuffer = await file.arrayBuffer();
@@ -645,7 +647,12 @@
 
             const bytes = await pdfDoc.save();
             const blob = new Blob([bytes], { type: 'application/pdf' });
-            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'Summary') + '-summary.pdf');
+            const originalFiles = _originalFile ? [{
+                name: _originalFile.name,
+                size: _originalFile.size,
+                type: _originalFile.type
+            }] : null;
+            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'Summary') + '-summary.pdf', originalFiles);
         }
 
         function downloadSummaryTxt() {
@@ -657,7 +664,12 @@
             summaryData.topWords.forEach(([w, c]) => { txt += w + ' (' + c + 'x)\n'; });
             txt += '\nSUMMARY:\n' + summaryData.summary;
             const blob = new Blob([txt], { type: 'text/plain' });
-            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'Summary') + '-summary.txt');
+            const originalFiles = _originalFile ? [{
+                name: _originalFile.name,
+                size: _originalFile.size,
+                type: _originalFile.type
+            }] : null;
+            OnlinePDFPro.Downloader.saveBlob(blob, (_originalFileName || 'Summary') + '-summary.txt', originalFiles);
         }
 
         function copySummary() {

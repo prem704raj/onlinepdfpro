@@ -566,12 +566,22 @@
     }
 
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'translated-text.txt';
-    a.click();
-    URL.revokeObjectURL(url);
+    const originalFiles = currentFile ? [{
+      name: currentFile.name,
+      size: currentFile.size,
+      type: currentFile.type
+    }] : null;
+    
+    if (window.OnlinePDFPro && window.OnlinePDFPro.Downloader) {
+      window.OnlinePDFPro.Downloader.saveBlob(blob, 'translated-text.txt', originalFiles);
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'translated-text.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
     showStatus('Downloaded translated-text.txt', 'success');
   });
 

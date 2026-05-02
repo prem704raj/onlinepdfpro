@@ -1091,7 +1091,13 @@
                 incrementCounter('voiceToPDF');
 incrementTodayCount();
             const pdfBlob = new Blob([pdfBytesOut], { type: 'application/pdf' });
-            OnlinePDFPro.Downloader.saveBlob(pdfBlob, title.replace(/\s+/g, '-') + '.pdf');
+            const transcriptSnippet = text.trim().substring(0, 50) + '...';
+            const originalFiles = [{
+                name: 'Voice: ' + (transcriptSnippet || 'Recorded Content'),
+                size: text.length,
+                type: 'text/plain'
+            }];
+            OnlinePDFPro.Downloader.saveBlob(pdfBlob, title.replace(/\s+/g, '-') + '.pdf', originalFiles);
         }
 
         // Download as Word
@@ -1120,7 +1126,13 @@ incrementTodayCount();
                 '</body></html>';
 
             const blob = new Blob([html], { type: 'application/msword' });
-            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '.doc');
+            const transcriptSnippet = text.trim().substring(0, 50) + '...';
+            const originalFiles = [{
+                name: 'Voice: ' + (transcriptSnippet || 'Recorded Content'),
+                size: text.length,
+                type: 'text/plain'
+            }];
+            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '.doc', originalFiles);
         }
 
         // Download as TXT
@@ -1130,7 +1142,13 @@ incrementTodayCount();
 
             const title = document.getElementById('docTitle').value || 'My Document';
             const blob = new Blob([text], { type: 'text/plain' });
-            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '.txt');
+            const transcriptSnippet = text.trim().substring(0, 50) + '...';
+            const originalFiles = [{
+                name: 'Voice: ' + (transcriptSnippet || 'Recorded Content'),
+                size: text.length,
+                type: 'text/plain'
+            }];
+            OnlinePDFPro.Downloader.saveBlob(blob, title.replace(/\s+/g, '-') + '.txt', originalFiles);
         }
 
         // Copy text

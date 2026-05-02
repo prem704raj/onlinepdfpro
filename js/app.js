@@ -388,10 +388,48 @@ const HistoryDB = {
             });
         } catch (err) { return []; }
     },
+    async getFile(id) {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readonly');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) { return null; }
+    },
     async deleteEntry(id) {
-        const db = await this.init();
-        const tx = db.transaction(this.STORE_NAME, 'readwrite');
-        tx.objectStore(this.STORE_NAME).delete(id);
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readwrite');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) { console.warn('[HistoryDB] Delete failed:', err); }
+    },
+    async clearAll() {
+        try {
+            const db = await this.init();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(this.STORE_NAME, 'readwrite');
+                const store = tx.objectStore(this.STORE_NAME);
+                const req = store.clear();
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        } catch (err) { console.warn('[HistoryDB] Clear failed:', err); }
+    },
+    async getStorageUsage() {
+        try {
+            const entries = await this.getAll();
+            const bytes = entries.reduce((sum, entry) => sum + (entry.size || 0), 0);
+            return { bytes, count: entries.length };
+        } catch (err) { return { bytes: 0, count: 0 }; }
     }
 };
 
