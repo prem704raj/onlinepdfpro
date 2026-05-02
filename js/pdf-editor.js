@@ -1,4 +1,4 @@
-﻿pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
             let pdfDoc = null;
             let pdfBytes = null;
@@ -48,7 +48,7 @@
                 currentSearchResultIndex = -1;
 
                 pdfBytes = await file.arrayBuffer();
-                // Pass a copy to pdfjsLib â€” it detaches the ArrayBuffer
+                // Pass a copy to pdfjsLib — it detaches the ArrayBuffer
                 pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
                 totalPages = pdfDoc.numPages;
                 currentPage = 1;
@@ -64,7 +64,7 @@
                 const toolHeader = document.getElementById('toolHeader');
                 toolHeader.style.marginBottom = '0';
                 toolHeader.style.padding = '12px 20px';
-                toolHeader.innerHTML = '<h1 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0; display:flex; align-items:center; gap:8px; justify-content:center;">âœï¸ PDF Editor <span style="font-size:0.85rem; font-weight:500; color:var(--text-secondary);">â€” ' + file.name + '</span></h1>';
+                toolHeader.innerHTML = '<h1 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0; display:flex; align-items:center; gap:8px; justify-content:center;">✍️ PDF Editor <span style="font-size:0.85rem; font-weight:500; color:var(--text-secondary);">— ' + file.name + '</span></h1>';
                 document.getElementById('editorLayout').style.display = 'flex';
 
                 await renderPage();
@@ -288,7 +288,7 @@
                 // Replace button
                 const btn = document.createElement('button');
                 btn.className = 'img-replace-btn';
-                btn.textContent = existing ? 'âœ… Change Again' : 'ðŸ–¼ï¸ Replace Image';
+                btn.textContent = existing ? '✅ Change Again' : '🖼️ Replace Image';
                 btn.onclick = function (e) {
                     e.stopPropagation();
                     activeReplaceTarget = {
@@ -333,7 +333,7 @@
                     target.div.style.backgroundSize = 'cover';
                     target.div.style.backgroundPosition = 'center';
                     target.div.style.borderColor = '#22c55e';
-                    target.div.querySelector('.img-replace-btn').textContent = 'âœ… Change Again';
+                    target.div.querySelector('.img-replace-btn').textContent = '✅ Change Again';
 
                     activeReplaceTarget = null;
                     updateLayers();
@@ -510,7 +510,7 @@
                     overlayCanvas.style.pointerEvents = 'auto';
                     overlayCanvas.style.cursor = 'text';
                 } else {
-                    // cursor, sticky, image, edit â€” let clicks pass through to DOM elements
+                    // cursor, sticky, image, edit — let clicks pass through to DOM elements
                     overlayCanvas.style.pointerEvents = 'none';
                     overlayCanvas.style.cursor = 'default';
                 }
@@ -557,7 +557,7 @@
                 if (options.height && options.height > 0) {
                     div.style.height = options.height + 'px';
                 }
-                div.innerHTML = '<img loading="lazy" src="' + src + '"><div class="img-resize"></div><button class="img-delete" onclick="this.parentElement.remove(); updateLayers();">Ã—</button>';
+                div.innerHTML = '<img loading="lazy" src="' + src + '"><div class="img-resize"></div><button class="img-delete" onclick="this.parentElement.remove(); updateLayers();">×</button>';
                 pageWrapper.appendChild(div);
                 makeDraggable(div);
                 makeImgResizable(div);
@@ -725,7 +725,7 @@
                 // Add delete button
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'text-delete';
-                deleteBtn.textContent = 'Ã—';
+                deleteBtn.textContent = '×';
                 deleteBtn.onclick = function (e) {
                     e.stopPropagation();
                     div.remove();
@@ -850,7 +850,7 @@
                 note.className = 'sticky-note';
                 note.style.left = x + 'px';
                 note.style.top = y + 'px';
-                note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">Ã—</button><textarea placeholder="Write your note..."></textarea>';
+                note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note..."></textarea>';
                 pageWrapper.appendChild(note);
                 makeDraggable(note);
                 note.querySelector('textarea').focus();
@@ -942,7 +942,7 @@
 
             function clearPage() {
                 const confirmed = confirm(
-                    "âš ï¸ Are you sure?\n\n" +
+                    "⚠️ Are you sure?\n\n" +
                     "This will erase ALL your edits on this page.\n" +
                     "This action cannot be undone."
                 );
@@ -967,26 +967,26 @@
 
                 let html = '';
                 if (modifiedCount > 0) {
-                    html += '<div class="layer-item"><span>âœï¸ ' + modifiedCount + ' Text Edit(s)</span></div>';
+                    html += '<div class="layer-item"><span>✍️ ' + modifiedCount + ' Text Edit(s)</span></div>';
                 }
                 textEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>ðŸ”¤ Text ' + (i + 1) + '</span><button class="layer-delete" onclick="this.closest(\'.layer-item\').remove(); document.querySelectorAll(\'.text-element\')[' + i + '].remove();">Ã—</button></div>';
+                    html += '<div class="layer-item"><span>🔤 Text ' + (i + 1) + '</span><button class="layer-delete" onclick="this.closest(\'.layer-item\').remove(); document.querySelectorAll(\'.text-element\')[' + i + '].remove();">×</button></div>';
                 });
                 imgEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>ðŸ–¼ï¸ Image ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.image-element\')[' + i + '].remove(); updateLayers();">Ã—</button></div>';
+                    html += '<div class="layer-item"><span>🖼️ Image ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.image-element\')[' + i + '].remove(); updateLayers();">×</button></div>';
                 });
                 noteEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>ðŸ“ Note ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.sticky-note\')[' + i + '].remove(); updateLayers();">Ã—</button></div>';
+                    html += '<div class="layer-item"><span>📝 Note ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.sticky-note\')[' + i + '].remove(); updateLayers();">×</button></div>';
                 });
                 if (drawCount > 0) {
-                    html += '<div class="layer-item"><span>âœï¸ ' + drawCount + ' Drawing(s)</span></div>';
+                    html += '<div class="layer-item"><span>✏️ ' + drawCount + ' Drawing(s)</span></div>';
                 }
 
                 if (html === '') html = '<p style="color:#94a3b8; font-size:13px; text-align:center;">No edits yet</p>';
                 list.innerHTML = html;
             }
 
-            // Undo/Redo â€” now saves both canvas drawings AND DOM elements
+            // Undo/Redo — now saves both canvas drawings AND DOM elements
             function getElementTextValue(el) {
                 const clone = el.cloneNode(true);
                 clone.querySelectorAll('.text-delete').forEach(btn => btn.remove());
@@ -1081,7 +1081,7 @@
                         note.className = 'sticky-note';
                         note.style.left = el.left;
                         note.style.top = el.top;
-                        note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">Ã—</button><textarea placeholder="Write your note...">' + (el.text || '') + '</textarea>';
+                        note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note...">' + (el.text || '') + '</textarea>';
                         pageWrapper.appendChild(note);
                         makeDraggable(note);
                     }

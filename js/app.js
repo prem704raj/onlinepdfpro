@@ -590,7 +590,7 @@ const PwaInstallManager = {
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
-        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.jpg" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>Install OnlinePDFPro</strong><span>Fast, private, and works offline</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
+        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.svg" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>Install OnlinePDFPro</strong><span>Fast, private, and works offline</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
         document.body.appendChild(this.installBanner);
         this.injectBannerCSS();
         document.getElementById('pwaBannerInstall').addEventListener('click', () => this.triggerInstall());
