@@ -485,7 +485,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.html" class="logo">
+            <a href="pdf-story.html" class="logo">
                 <img src="logo.jpg" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
@@ -630,7 +630,14 @@
 
                 const HistoryDB = window.OnlinePDFPro.HistoryDB;
                 allEntries = await HistoryDB.getAll();
-                const usage = await HistoryDB.getStorageUsage();
+                
+                // Safety check for getStorageUsage (might be missing in cached app.js)
+                let usage = { bytes: 0, count: allEntries.length };
+                if (typeof HistoryDB.getStorageUsage === 'function') {
+                    usage = await HistoryDB.getStorageUsage();
+                } else {
+                    usage.bytes = allEntries.reduce((sum, entry) => sum + (entry.size || 0), 0);
+                }
 
                 // If nothing found and we have retries left, try again in case of IDB delay
                 if (allEntries.length === 0 && retries > 0) {

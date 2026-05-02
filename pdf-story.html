@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Journey of PDF | OnlinePDFPro</title>
+    <meta name="description" content="Discover the fascinating story of how PDF was created, its origins in the Camelot Project, and how it became the world's universal document format.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+
+    <style>
+        :root {
+            --story-bg: #0f172a;
+            --story-accent: #3b82f6;
+            --story-text: #f8fafc;
+            --story-muted: #94a3b8;
+        }
+
+        body.story-mode {
+            background-color: var(--story-bg);
+            color: var(--story-text);
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .story-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 20px 100px;
+        }
+
+        .hero-section {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .hero-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.5rem;
+            color: var(--story-muted);
+            max-width: 600px;
+        }
+
+        .timeline-section {
+            position: relative;
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .timeline-section.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-section:nth-child(even) {
+            transform: translateX(50px);
+        }
+
+        .timeline-section:nth-child(even).active {
+            transform: translateX(0);
+        }
+
+        .year-label {
+            font-size: 5rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            left: -20px;
+            z-index: -1;
+            color: var(--story-accent);
+        }
+
+        .section-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .section-content p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--story-muted);
+            margin-bottom: 20px;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--story-accent);
+        }
+
+        .animated-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--story-muted);
+            font-size: 0.9rem;
+        }
+
+        .mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--story-muted);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .mouse::before {
+            content: '';
+            width: 4px;
+            height: 8px;
+            background: var(--story-muted);
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            animation: scroll-anim 2s infinite;
+        }
+
+        @keyframes scroll-anim {
+            0% { opacity: 0; transform: translate(-50%, 0); }
+            50% { opacity: 1; transform: translate(-50%, 10px); }
+            100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(124, 58, 237, 0.1));
+            filter: blur(80px);
+            border-radius: 50%;
+        }
+
+        .blob-1 { width: 400px; height: 400px; top: 10%; left: -100px; }
+        .blob-2 { width: 500px; height: 500px; bottom: 10%; right: -100px; }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--story-accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 60px;
+            padding: 12px 24px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .back-home:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 600px) {
+            .timeline-section { transform: translateY(50px) !important; opacity: 0 !important; }
+            .timeline-section.active { transform: translateY(0) !important; opacity: 1 !important; }
+            .year-label { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body class="story-mode">
+    <div class="parallax-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <header class="story-header">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                <img src="logo.jpg" alt="Logo" style="width:32px; height:32px; border-radius:8px;">
+                <span style="color: #fff; font-weight: 800; font-size: 1.2rem;">OnlinePDFPro</span>
+            </a>
+            <a href="index.html" style="color: var(--story-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Close Story ✕</a>
+        </div>
+    </header>
+
+    <div class="story-container">
+        <section class="hero-section">
+            <div class="animated-icon">✨</div>
+            <h1>The Birth of PDF</h1>
+            <p>From a vision of a paperless world to the most used document format on the planet.</p>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span>Scroll to begin</span>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <div class="year-label">1991</div>
+            <div class="section-content">
+                <h2>The Camelot Project</h2>
+                <p>It started with a memo. Dr. John Warnock, co-founder of Adobe, launched a project called "Camelot". His goal was to solve a fundamental problem: how to share documents between different computers and operating systems without losing formatting.</p>
+                <div class="feature-box">
+                    <strong>The Vision:</strong> "Imagine being able to send full text and graphics documents over a network... and have them viewable on any machine."
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <div class="year-label">1993</div>
+            <div class="section-content">
+                <h2>The World Meets PDF</h2>
+                <p>At the COMDEX conference in 1993, Adobe officially released PDF 1.0 (Portable Document Format). At the time, it was a proprietary format, and Adobe Acrobat (the software to read it) cost $50 per user!</p>
+                <p>In those days, the web was just beginning, and sharing 2MB files was a massive challenge over slow dial-up modems.</p>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <div class="year-label">2008</div>
+            <div class="section-content">
+                <h2>Set Free</h2>
+                <p>For 15 years, Adobe controlled the PDF specification. But in 2008, everything changed. Adobe released PDF as an <strong>open standard</strong> (ISO 32000-1).</p>
+                <p>This meant any developer in the world could create software to read, write, and edit PDFs without paying Adobe. This was the moment PDF truly became the language of the internet.</p>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <div class="year-label">Today</div>
+            <div class="section-content">
+                <h2>The Universal Language</h2>
+                <p>Today, billions of PDF files are created every year. From tax forms and legal contracts to interactive e-books and high-end printing, PDF is the bridge that connects every device on Earth.</p>
+                <div class="feature-box">
+                    <span class="animated-icon">🔒</span>
+                    <h3>Our Mission</h3>
+                    <p>At OnlinePDFPro, we continue this legacy by making PDF tools accessible to everyone, for free, with absolute privacy. Your documents never leave your browser, just as John Warnock envisioned a secure, universal way to share information.</p>
+                </div>
+                
+                <a href="index.html" class="back-home">
+                    <span>←</span> Start Processing Your PDFs
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Initial trigger for hero
+        setTimeout(() => {
+            document.querySelector('.hero-section').classList.add('active');
+        }, 100);
+    </script>
+</body>
+</html>

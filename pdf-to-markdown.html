@@ -318,11 +318,13 @@
                 
                 // Track in history
                 if (window.OnlinePDFPro && window.OnlinePDFPro.HistoryDB) {
-                    window.OnlinePDFPro.HistoryDB.add({
-                        tool: 'PDF to Markdown',
-                        fileName: file.name,
-                        status: 'Success'
-                    });
+                    const resultBlob = new Blob([fullMarkdown], { type: 'text/markdown' });
+                    const resultName = file.name.replace(/\.pdf$/i, '') + '_extracted.md';
+                    window.OnlinePDFPro.HistoryDB.saveEntry(resultBlob, resultName, [{
+                        name: file.name,
+                        size: file.size,
+                        type: file.type
+                    }]);
                 }
             } catch (err) {
                 console.error(err);
