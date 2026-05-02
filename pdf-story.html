@@ -15,10 +15,12 @@
 
     <style>
         :root {
-            --story-bg: #0f172a;
+            --story-bg: #020617;
             --story-accent: #3b82f6;
+            --story-accent-glow: rgba(59, 130, 246, 0.5);
             --story-text: #f8fafc;
             --story-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.4);
         }
 
         body.story-mode {
@@ -26,6 +28,59 @@
             color: var(--story-text);
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
+            margin: 0;
+            cursor: default;
+        }
+
+        /* Animated Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Logo Animation Enhancement */
+        .logo-glow {
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logo-glow:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .logo-glow::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            background: var(--story-accent);
+            filter: blur(15px);
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        .logo-glow:hover::after {
+            opacity: 0.6;
         }
 
         .story-header {
@@ -33,290 +88,337 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .story-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 120px 20px 100px;
-        }
-
         .hero-section {
-            height: 80vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease-out;
+            perspective: 1000px;
+            overflow: hidden;
         }
 
-        .hero-section.active {
+        /* Digital Paper Animation */
+        .digital-paper {
+            width: 200px;
+            height: 260px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: paper-float 6s infinite ease-in-out;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .paper-line {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            width: 100%;
+            transform: translateZ(20px);
+        }
+
+        @keyframes paper-float {
+            0%, 100% { transform: rotateY(-20deg) rotateX(10deg) translateY(0); }
+            50% { transform: rotateY(20deg) rotateX(-10deg) translateY(-20px); }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            line-height: 1;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-section.active .hero-title {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--story-muted);
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s 0.5s;
+        }
+
+        .hero-section.active .hero-subtitle {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .hero-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-section p {
-            font-size: 1.5rem;
-            color: var(--story-muted);
-            max-width: 600px;
-        }
-
-        .timeline-section {
+        /* Section Reveal Styles */
+        .reveal-section {
+            padding: 150px 0;
+            max-width: 800px;
+            margin: 0 auto;
             position: relative;
-            padding: 100px 0;
+        }
+
+        .reveal-content {
             opacity: 0;
-            transform: translateX(-50px);
-            transition: all 0.8s ease-out;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .timeline-section.active {
+        .reveal-content.active {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
-        .timeline-section:nth-child(even) {
-            transform: translateX(50px);
-        }
-
-        .timeline-section:nth-child(even).active {
-            transform: translateX(0);
-        }
-
-        .year-label {
-            font-size: 5rem;
+        .year-indicator {
+            font-size: 8rem;
             font-weight: 900;
-            opacity: 0.1;
+            font-family: 'Inter', sans-serif;
             position: absolute;
             top: 0;
-            left: -20px;
-            z-index: -1;
+            left: -100px;
             color: var(--story-accent);
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            -webkit-text-stroke: 1px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(to bottom, var(--story-accent), transparent);
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
-        .section-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #fff;
+        .reveal-content.active .year-indicator {
+            opacity: 0.15;
+            transform: translateX(0);
         }
 
-        .section-content p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: var(--story-muted);
-            margin-bottom: 20px;
-        }
-
-        .feature-box {
-            background: rgba(255,255,255,0.03);
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.05);
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: 40px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .feature-box::before {
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 4px;
-            height: 100%;
+            height: 0;
             background: var(--story-accent);
+            transition: height 1s 0.5s;
         }
 
-        .animated-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
+        .reveal-content.active .card::before {
+            height: 100%;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .scroll-indicator {
+        /* Specific Animation for 2008 Open Standard */
+        .energy-pulse {
             position: absolute;
-            bottom: 40px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            color: var(--story-muted);
-            font-size: 0.9rem;
-        }
-
-        .mouse {
-            width: 24px;
-            height: 40px;
-            border: 2px solid var(--story-muted);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .mouse::before {
-            content: '';
-            width: 4px;
-            height: 8px;
-            background: var(--story-muted);
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-            animation: scroll-anim 2s infinite;
-        }
-
-        @keyframes scroll-anim {
-            0% { opacity: 0; transform: translate(-50%, 0); }
-            50% { opacity: 1; transform: translate(-50%, 10px); }
-            100% { opacity: 0; transform: translate(-50%, 20px); }
-        }
-
-        .parallax-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
-            z-index: -2;
+            background: radial-gradient(circle, var(--story-accent-glow) 0%, transparent 70%);
+            opacity: 0;
             pointer-events: none;
         }
 
-        .blob {
-            position: absolute;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(124, 58, 237, 0.1));
-            filter: blur(80px);
-            border-radius: 50%;
+        .reveal-content.active .energy-pulse {
+            animation: pulse-out 2s forwards;
         }
 
-        .blob-1 { width: 400px; height: 400px; top: 10%; left: -100px; }
-        .blob-2 { width: 500px; height: 500px; bottom: 10%; right: -100px; }
+        @keyframes pulse-out {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
 
-        .back-home {
+        .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             color: var(--story-accent);
             text-decoration: none;
-            font-weight: 600;
-            margin-top: 60px;
-            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 40px;
+            padding: 15px 30px;
             background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-            transition: all 0.2s;
+            border-radius: 50px;
+            transition: all 0.3s;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        .back-home:hover {
-            background: rgba(59, 130, 246, 0.2);
-            transform: translateX(-5px);
+        .back-link:hover {
+            background: var(--story-accent);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--story-accent-glow);
         }
 
-        @media (max-width: 600px) {
-            .timeline-section { transform: translateY(50px) !important; opacity: 0 !important; }
-            .timeline-section.active { transform: translateY(0) !important; opacity: 1 !important; }
-            .year-label { font-size: 3rem; }
+        /* Scroll Progress */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--story-accent);
+            z-index: 1001;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        @media (max-width: 900px) {
+            .year-indicator { left: 20px; font-size: 5rem; top: -30px; }
+            .reveal-section { padding: 80px 20px; }
         }
     </style>
 </head>
 <body class="story-mode">
-    <div class="parallax-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="stars-container" id="starsContainer"></div>
 
     <header class="story-header">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.html" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
-                <img src="logo.jpg" alt="Logo" style="width:32px; height:32px; border-radius:8px;">
-                <span style="color: #fff; font-weight: 800; font-size: 1.2rem;">OnlinePDFPro</span>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="logo logo-glow" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+                <img src="logo.jpg" alt="Logo" style="width:36px; height:36px; border-radius:10px;">
+                <span style="color: #fff; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px;">OnlinePDFPro</span>
             </a>
-            <a href="index.html" style="color: var(--story-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Close Story ✕</a>
+            <a href="index.html" style="color: var(--story-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">Back to Tools</a>
         </div>
     </header>
 
     <div class="story-container">
-        <section class="hero-section">
-            <div class="animated-icon">✨</div>
-            <h1>The Birth of PDF</h1>
-            <p>From a vision of a paperless world to the most used document format on the planet.</p>
-            <div class="scroll-indicator">
-                <div class="mouse"></div>
-                <span>Scroll to begin</span>
+        <section class="hero-section" id="hero">
+            <div class="digital-paper">
+                <div class="paper-line" style="width: 60%;"></div>
+                <div class="paper-line"></div>
+                <div class="paper-line"></div>
+                <div class="paper-line" style="width: 80%;"></div>
+                <div class="paper-line"></div>
+                <div class="paper-line" style="width: 40%; background: var(--story-accent);"></div>
+                <div style="position: absolute; bottom: 20px; right: 20px; font-weight: 900; color: var(--story-accent); font-size: 0.8rem; transform: translateZ(30px);">PDF</div>
             </div>
-        </section>
-
-        <section class="timeline-section">
-            <div class="year-label">1991</div>
-            <div class="section-content">
-                <h2>The Camelot Project</h2>
-                <p>It started with a memo. Dr. John Warnock, co-founder of Adobe, launched a project called "Camelot". His goal was to solve a fundamental problem: how to share documents between different computers and operating systems without losing formatting.</p>
-                <div class="feature-box">
-                    <strong>The Vision:</strong> "Imagine being able to send full text and graphics documents over a network... and have them viewable on any machine."
+            <h1 class="hero-title">The Digital<br>Evolution</h1>
+            <p class="hero-subtitle">The story of how information became universal.</p>
+            <div class="scroll-indicator" style="position: absolute; bottom: 50px; opacity: 0.5;">
+                <div class="mouse" style="width: 26px; height: 45px; border: 2px solid #fff; border-radius: 20px; position: relative;">
+                    <div style="width: 4px; height: 8px; background: #fff; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 2px; animation: scroll-anim 2s infinite;"></div>
                 </div>
             </div>
         </section>
 
-        <section class="timeline-section">
-            <div class="year-label">1993</div>
-            <div class="section-content">
-                <h2>The World Meets PDF</h2>
-                <p>At the COMDEX conference in 1993, Adobe officially released PDF 1.0 (Portable Document Format). At the time, it was a proprietary format, and Adobe Acrobat (the software to read it) cost $50 per user!</p>
-                <p>In those days, the web was just beginning, and sharing 2MB files was a massive challenge over slow dial-up modems.</p>
-            </div>
-        </section>
-
-        <section class="timeline-section">
-            <div class="year-label">2008</div>
-            <div class="section-content">
-                <h2>Set Free</h2>
-                <p>For 15 years, Adobe controlled the PDF specification. But in 2008, everything changed. Adobe released PDF as an <strong>open standard</strong> (ISO 32000-1).</p>
-                <p>This meant any developer in the world could create software to read, write, and edit PDFs without paying Adobe. This was the moment PDF truly became the language of the internet.</p>
-            </div>
-        </section>
-
-        <section class="timeline-section">
-            <div class="year-label">Today</div>
-            <div class="section-content">
-                <h2>The Universal Language</h2>
-                <p>Today, billions of PDF files are created every year. From tax forms and legal contracts to interactive e-books and high-end printing, PDF is the bridge that connects every device on Earth.</p>
-                <div class="feature-box">
-                    <span class="animated-icon">🔒</span>
-                    <h3>Our Mission</h3>
-                    <p>At OnlinePDFPro, we continue this legacy by making PDF tools accessible to everyone, for free, with absolute privacy. Your documents never leave your browser, just as John Warnock envisioned a secure, universal way to share information.</p>
+        <section class="reveal-section">
+            <div class="reveal-content">
+                <div class="year-indicator">1991</div>
+                <div class="card">
+                    <h2 style="font-size: 2.5rem; margin-top: 0;">The Camelot Vision</h2>
+                    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--story-muted);">Before PDF, sharing a document was a nightmare. If the other person didn't have your exact fonts or software, your work looked broken.</p>
+                    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--story-muted);">John Warnock saw a future where documents were independent. He wrote a memo titled "The Camelot Project," envisioning a format that would look perfect on any screen, anywhere.</p>
                 </div>
-                
-                <a href="index.html" class="back-home">
-                    <span>←</span> Start Processing Your PDFs
-                </a>
+            </div>
+        </section>
+
+        <section class="reveal-section">
+            <div class="reveal-content">
+                <div class="year-indicator">1993</div>
+                <div class="card">
+                    <h2 style="font-size: 2.5rem; margin-top: 0;">The Launch</h2>
+                    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--story-muted);">PDF 1.0 was born. But it wasn't an instant hit. The software to read it cost $50, and files were massive for the slow internet of the 90s.</p>
+                    <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+                        <div style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">💾</div>
+                            <div style="font-weight: 700;">Static Layout</div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">🔤</div>
+                            <div style="font-weight: 700;">Font Embedding</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal-section">
+            <div class="reveal-content">
+                <div class="year-indicator">2008</div>
+                <div class="card">
+                    <div class="energy-pulse"></div>
+                    <h2 style="font-size: 2.5rem; margin-top: 0;">Freedom for PDF</h2>
+                    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--story-muted);">This is the most important date in PDF history. Adobe handed over the keys, making PDF an <strong>Open Standard (ISO 32000-1)</strong>.</p>
+                    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--story-muted);">Suddenly, anyone could build PDF tools without permission. This explosion of creativity is what allows sites like OnlinePDFPro to exist today.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal-section">
+            <div class="reveal-content" style="text-align: center;">
+                <div class="card" style="padding: 60px 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; animation: float 3s infinite ease-in-out;">🛡️</div>
+                    <h2 style="font-size: 3rem; margin-top: 0;">Our Contribution</h2>
+                    <p style="font-size: 1.3rem; line-height: 1.8; color: var(--story-muted);">We carry this legacy forward by ensuring PDF tools remain free, fast, and most importantly—<strong>Private.</strong></p>
+                    <p style="font-size: 1.3rem; line-height: 1.8; color: var(--story-muted);">Your documents stay on your machine, exactly as the visionaries of the 90s would have wanted.</p>
+                    <a href="index.html" class="back-link">
+                        <span>Get Started with Tools</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
             </div>
         </section>
     </div>
 
     <script>
+        // Generate Background Stars
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Scroll Progress Bar
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
+        // Intersection Observer for Reveal
         const observerOptions = {
-            threshold: 0.2
+            threshold: 0.3
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -327,14 +429,20 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
+        document.querySelectorAll('.reveal-content').forEach(el => {
+            observer.observe(el);
         });
 
-        // Initial trigger for hero
-        setTimeout(() => {
-            document.querySelector('.hero-section').classList.add('active');
-        }, 100);
+        // Hero Entrance
+        window.addEventListener('load', () => {
+            document.getElementById('hero').classList.add('active');
+        });
+
+        // Parallax Effect for Stars
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            starsContainer.style.transform = `translateY(${scrolled * 0.3}px)`;
+        });
     </script>
 </body>
 </html>
