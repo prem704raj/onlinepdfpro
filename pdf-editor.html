@@ -190,6 +190,18 @@
                     &#x2B1C;<span>Shape</span>
                 </button>
                 <button class="tool-btn" onclick="setTool('sticky', event)" title="Sticky Note">
+                    &#x1F4DD;<span>Sticky</span>
+                </button>
+            </div>
+            
+            <div class="top-options">
+                <label>Font:</label>
+                <select id="fontSelect" onchange="changeFontFamily(this.value)"
+                    style="padding:6px;border:1px solid var(--border);
+                    border-radius:8px;font-size:13px;max-width:140px;
+                    cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                    
+                    <optgroup label="-- Standard Serif --">
                         <option value="EB Garamond" style="font-family:'EB Garamond'">EB Garamond</option>
                         <option value="Bitter" style="font-family:Bitter">Bitter</option>
                         <option value="Tinos" style="font-family:Tinos">Tinos</option>
