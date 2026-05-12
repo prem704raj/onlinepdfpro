@@ -1,29 +1,31 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Document base with rounded corners -->
-  <rect x="64" y="32" width="320" height="416" rx="40" ry="40" fill="#3173F6"/>
+  <rect x="56" y="28" width="330" height="432" rx="44" ry="44" fill="#3173F6"/>
   
-  <!-- White fold triangle overlay -->
-  <path d="M272 32v92c0 13.25 10.75 24 24 24h88L272 32z" fill="white" opacity="0.35"/>
-  <path d="M272 32v92c0 13.25 10.75 24 24 24h88" fill="none" stroke="white" stroke-width="4" opacity="0.6"/>
+  <!-- Fold: white triangle at top-right corner -->
+  <path d="M280 28 L386 28 L386 134 Z" fill="#3173F6"/>
+  <path d="M280 28 L280 100 C280 118 294 134 312 134 L386 134 L280 28Z" fill="#5A9BFF"/>
+  <path d="M280 28 L280 100 C280 118 294 134 312 134 L386 134" fill="none" stroke="white" stroke-width="5"/>
 
-  <!-- Content lines (White) -->
-  <rect x="120" y="192" width="200" height="22" rx="11" fill="white"/>
-  <rect x="120" y="252" width="200" height="22" rx="11" fill="white"/>
-  <rect x="120" y="312" width="140" height="22" rx="11" fill="white"/>
+  <!-- Content lines (White, thick) -->
+  <rect x="116" y="190" width="210" height="26" rx="13" fill="white"/>
+  <rect x="116" y="256" width="210" height="26" rx="13" fill="white"/>
+  <rect x="116" y="322" width="150" height="26" rx="13" fill="white"/>
 
-  <!-- White circle background for refresh icon -->
-  <circle cx="360" cy="388" r="90" fill="white"/>
+  <!-- White circle background for refresh icon - LARGE -->
+  <circle cx="356" cy="396" r="100" fill="white"/>
 
-  <!-- Refresh arrow as a filled shape -->
+  <!-- Refresh/sync C-arrow - thick filled shape -->
+  <!-- Outer arc -->
   <path d="
-    M 380 328
-    A 72 72 0 1 0 396 378
-    L 382 378
-    A 56 56 0 1 1 370 342
-    L 370 358
-    L 404 334
-    L 364 310
-    L 364 328
+    M 384 332
+    A 78 78 0 1 0 404 388
+    L 386 388
+    A 58 58 0 1 1 368 348
+    L 368 370
+    L 412 340
+    L 362 310
+    L 362 332
     Z
   " fill="#3173F6"/>
 </svg>
