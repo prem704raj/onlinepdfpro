@@ -26,7 +26,6 @@ const STATIC_ASSETS = [
     'pdf-editor.html',
     'pdf-reader.html',
     'pdf-summary.html',
-    'pdf-translator.html',
     'privacy.html',
     'remove-background.html',
     'resume-cv-builder.html',
