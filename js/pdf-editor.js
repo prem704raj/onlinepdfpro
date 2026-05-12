@@ -389,6 +389,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
 
                 if (newText && newText !== origText) {
                     el.dataset.currentText = newText;
+                    el.textContent = newText;
                     el.classList.add('modified');
 
                     // Save modification
@@ -411,6 +412,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                     }
                 } else if (newText === origText) {
                     el.dataset.currentText = origText;
+                    el.textContent = origText;
                     el.classList.remove('modified');
                     extractedTexts[currentPage] = (extractedTexts[currentPage] || []).filter(m => m.lineIndex !== idx);
                 }
