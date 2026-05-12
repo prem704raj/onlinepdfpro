@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v64'; 
+const CACHE_NAME = 'onlinepdfpro-v65'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
