@@ -4,6 +4,21 @@
  */
 
 // =========================================
+// Smart Email Handler (Gmail web on desktop, native app on mobile)
+// =========================================
+
+function smartEmail(e) {
+    if (e) e.preventDefault();
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
+    if (isMobile) {
+        window.location.href = 'mailto:support@onlinepdfpro.com?subject=OnlinePDFPro%20Feedback';
+    } else {
+        window.open('https://mail.google.com/mail/?view=cm&fs=1&to=support@onlinepdfpro.com&su=OnlinePDFPro%20Feedback', '_blank');
+    }
+}
+
+// =========================================
 // Theme Management (Dark/Light Mode)
 // =========================================
 
