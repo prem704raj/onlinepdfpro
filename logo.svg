@@ -1,20 +1,29 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Document base -->
-  <!-- Top-left: x=96, y=64 (radius 32) -->
-  <!-- Bottom-left: x=96, y=448 (radius 32) -->
-  <!-- Bottom-right: x=384, y=448 (radius 32) -->
-  <!-- Top-right straight until fold: x=384, y=160 -->
-  <path d="M128 48C101.49 48 80 69.49 80 96v320c0 26.51 21.51 48 48 48h256c26.51 0 48-21.49 48-48V160H304c-17.67 0-32-14.33-32-32V48H128z" fill="#3173F6"/>
+  <!-- Document base with rounded corners -->
+  <rect x="64" y="32" width="320" height="416" rx="40" ry="40" fill="#3173F6"/>
   
-  <!-- Fold piece -->
-  <path d="M432 160l-128-128v96c0 17.67 14.33 32 32 32h96z" fill="#3173F6" stroke="white" stroke-width="8" stroke-linejoin="round"/>
-  
-  <!-- Content lines (White) -->
-  <rect x="144" y="200" width="224" height="24" rx="12" fill="white"/>
-  <rect x="144" y="260" width="224" height="24" rx="12" fill="white"/>
-  <rect x="144" y="320" width="160" height="24" rx="12" fill="white"/>
-  <rect x="144" y="380" width="112" height="24" rx="12" fill="white"/>
+  <!-- White fold triangle overlay -->
+  <path d="M272 32v92c0 13.25 10.75 24 24 24h88L272 32z" fill="white" opacity="0.35"/>
+  <path d="M272 32v92c0 13.25 10.75 24 24 24h88" fill="none" stroke="white" stroke-width="4" opacity="0.6"/>
 
-  <!-- Refresh Arrow directly on the document -->
-  <path d="M368 312c30.93 0 56 25.07 56 56 0 30.93-25.07 56-56 56-30.93 0-56-25.07-56-56 0-14.18 5.26-27.13 13.92-37M344 288l24 24-24 24" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Content lines (White) -->
+  <rect x="120" y="192" width="200" height="22" rx="11" fill="white"/>
+  <rect x="120" y="252" width="200" height="22" rx="11" fill="white"/>
+  <rect x="120" y="312" width="140" height="22" rx="11" fill="white"/>
+
+  <!-- White circle background for refresh icon -->
+  <circle cx="360" cy="388" r="90" fill="white"/>
+
+  <!-- Refresh arrow as a filled shape -->
+  <path d="
+    M 380 328
+    A 72 72 0 1 0 396 378
+    L 382 378
+    A 56 56 0 1 1 370 342
+    L 370 358
+    L 404 334
+    L 364 310
+    L 364 328
+    Z
+  " fill="#3173F6"/>
 </svg>
