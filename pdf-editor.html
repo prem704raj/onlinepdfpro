@@ -189,147 +189,172 @@
                 <button class="tool-btn" onclick="setTool('shape', event)" title="Add Shape">
                     &#x2B1C;<span>Shape</span>
                 </button>
-                <button class="tool-btn" onclick="setTool('sticky', event)" title="Sticky Note">
-                    &#x1F4DD;<span>Sticky</span>
+                <button class="tool-btn" onclick="setTool('sticky', event)" title="Add Comment">
+                    &#x1F4AC;<span>Comment</span>
+                </button>
+                <div style="width: 40px; height: 1px; background: var(--border); margin: 4px 0;"></div>
+                <button class="tool-btn" onclick="document.getElementById('signatureModal').style.display='flex'" title="Add Signature">
+                    &#x2712;&#xFE0F;<span>Sign</span>
+                </button>
+                <button class="tool-btn" onclick="undoAction()" title="Undo">
+                    &#x21B6;<span>Undo</span>
+                </button>
+                <button class="tool-btn" onclick="redoAction()" title="Redo">
+                    &#x21B7;<span>Redo</span>
                 </button>
             </div>
             
             <div class="top-options">
-                <label>Font:</label>
-                <select id="fontSelect" onchange="changeFontFamily(this.value)"
-                    style="padding:6px;border:1px solid var(--border);
-                    border-radius:8px;font-size:13px;max-width:140px;
-                    cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
-                    
-                    <optgroup label="-- Standard Serif --">
-                        <option value="EB Garamond" style="font-family:'EB Garamond'">EB Garamond</option>
-                        <option value="Bitter" style="font-family:Bitter">Bitter</option>
-                        <option value="Tinos" style="font-family:Tinos">Tinos</option>
-                        <option value="Noto Serif" style="font-family:'Noto Serif'">Noto Serif</option>
-                    </optgroup>
-
-                    <optgroup label="-- Handwriting / Script --">
-                        <option value="Dancing Script" style="font-family:'Dancing Script'">Dancing Script</option>
-                        <option value="Pacifico" style="font-family:Pacifico">Pacifico</option>
-                        <option value="Caveat" style="font-family:Caveat">Caveat</option>
-                        <option value="Satisfy" style="font-family:Satisfy">Satisfy</option>
-                        <option value="Great Vibes" style="font-family:'Great Vibes'">Great Vibes</option>
-                    </optgroup>
-
-                    <optgroup label="-- System Fonts --">
-                        <option value="Arial" selected>Arial</option>
-                        <option value="Helvetica">Helvetica</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Verdana">Verdana</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Tahoma">Tahoma</option>
-                    </optgroup>
-                </select>
-
-                <label>Size:</label>
-                <select id="fontSizeSelect" onchange="changeFontSize(this.value)"
-                    style="padding:6px 8px;border:1px solid var(--border);
-                    border-radius:8px;font-size:13px;width:60px;
-                    cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
-                    <option value="16">16</option>
-                    <option value="18" selected>18</option>
-                    <option value="20">20</option>
-                    <option value="24">24</option>
-                    <option value="28">28</option>
-                    <option value="32">32</option>
-                    <option value="36">36</option>
-                    <option value="40">40</option>
-                    <option value="48">48</option>
-                    <option value="56">56</option>
-                    <option value="64">64</option>
-                    <option value="72">72</option>
-                    <option value="96">96</option>
-                </select>
-
-                <!-- Alignment Controls -->
-                <div class="alignment-controls" 
-                    style="display:inline-flex;gap:2px;
-                    background:var(--surface-2);border-radius:8px;padding:2px;border:1px solid var(--border)">
-                    
-                    <button onclick="setTextAlign('left')" id="btnAlignLeft" title="Align Left"
-                        style="padding:6px 8px;background:var(--accent);color:#fff;
-                        border:none;border-radius:6px;cursor:pointer;
-                        transition:0.2s;display:flex;align-items:center">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                    <button onclick="setTextAlign('center')" id="btnAlignCenter" title="Align Center"
-                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
-                        border:none;border-radius:6px;cursor:pointer;
-                        transition:0.2s;display:flex;align-items:center">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
-                        </svg>
-                    </button>
-                    <button onclick="setTextAlign('right')" id="btnAlignRight" title="Align Right"
-                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
-                        border:none;border-radius:6px;cursor:pointer;
-                        transition:0.2s;display:flex;align-items:center">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/>
-                        </svg>
-                    </button>
-                    <button onclick="setTextAlign('justify')" id="btnAlignJustify" title="Justify"
-                        style="padding:6px 8px;background:transparent;color:var(--text-primary);
-                        border:none;border-radius:6px;cursor:pointer;
-                        transition:0.2s;display:flex;align-items:center">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <label>Color:</label>
-                <input type="color" id="fontColor" value="#000000" class="color-picker" onchange="updateTextStyle()">
-                <button class="opt-btn" onclick="makeBold()" title="Bold"><b>B</b></button>
-                <button class="opt-btn" onclick="makeItalic()" title="Italic"><i>I</i></button>
-                <button class="opt-btn" onclick="makeUnderlineText()" title="Underline"><u>U</u></button>
-
-                <div style="display:inline-flex;align-items:center;gap:4px">
-                    <label>Line:</label>
-                    <select onchange="setLineHeight(this.value)"
+                <div class="tool-group" style="display:inline-flex;align-items:center;gap:8px;padding-right:15px;border-right:1px solid var(--border);">
+                    <label>Font:</label>
+                    <select id="fontSelect" onchange="changeFontFamily(this.value)"
                         style="padding:6px;border:1px solid var(--border);
-                        border-radius:8px;font-size:13px;cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
-                        <option value="1.0">1.0</option>
-                        <option value="1.2">1.2</option>
-                        <option value="1.4" selected>1.4</option>
-                        <option value="1.6">1.6</option>
-                        <option value="1.8">1.8</option>
-                        <option value="2.0">2.0</option>
+                        border-radius:8px;font-size:13px;max-width:140px;
+                        cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                        
+                        <optgroup label="-- Standard Serif --">
+                            <option value="EB Garamond" style="font-family:'EB Garamond'">EB Garamond</option>
+                            <option value="Bitter" style="font-family:Bitter">Bitter</option>
+                            <option value="Tinos" style="font-family:Tinos">Tinos</option>
+                            <option value="Noto Serif" style="font-family:'Noto Serif'">Noto Serif</option>
+                        </optgroup>
+
+                        <optgroup label="-- Handwriting / Script --">
+                            <option value="Dancing Script" style="font-family:'Dancing Script'">Dancing Script</option>
+                            <option value="Pacifico" style="font-family:Pacifico">Pacifico</option>
+                            <option value="Caveat" style="font-family:Caveat">Caveat</option>
+                            <option value="Satisfy" style="font-family:Satisfy">Satisfy</option>
+                            <option value="Great Vibes" style="font-family:'Great Vibes'">Great Vibes</option>
+                        </optgroup>
+
+                        <optgroup label="-- System Fonts --">
+                            <option value="Arial" selected>Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Tahoma">Tahoma</option>
+                        </optgroup>
+                    </select>
+
+                    <label style="margin-left:8px;">Size:</label>
+                    <select id="fontSizeSelect" onchange="changeFontSize(this.value)"
+                        style="padding:6px 8px;border:1px solid var(--border);
+                        border-radius:8px;font-size:13px;width:60px;
+                        cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18" selected>18</option>
+                        <option value="20">20</option>
+                        <option value="24">24</option>
+                        <option value="28">28</option>
+                        <option value="32">32</option>
+                        <option value="36">36</option>
+                        <option value="40">40</option>
+                        <option value="48">48</option>
+                        <option value="56">56</option>
+                        <option value="64">64</option>
+                        <option value="72">72</option>
+                        <option value="96">96</option>
                     </select>
                 </div>
 
-                <div style="display:inline-flex;align-items:center;gap:4px">
-                    <label>Space:</label>
-                    <input type="range" id="letterSpacing" 
-                        min="-2" max="20" value="0" step="0.5"
-                        onchange="setLetterSpacing(this.value)"
-                        style="width:50px;cursor:pointer">
-                    <span id="spacingValue" style="font-size:12px;color:var(--accent);font-weight:700;min-width:25px">0px</span>
+                <div class="tool-group" style="display:inline-flex;align-items:center;gap:12px;padding-right:15px;border-right:1px solid var(--border);">
+                    <!-- Alignment Controls -->
+                    <div class="alignment-controls" 
+                        style="display:inline-flex;gap:2px;
+                        background:var(--surface-2);border-radius:8px;padding:2px;border:1px solid var(--border)">
+                        
+                        <button onclick="setTextAlign('left')" id="btnAlignLeft" title="Align Left"
+                            style="padding:6px 8px;background:var(--accent);color:#fff;
+                            border:none;border-radius:6px;cursor:pointer;
+                            transition:0.2s;display:flex;align-items:center">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                        <button onclick="setTextAlign('center')" id="btnAlignCenter" title="Align Center"
+                            style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                            border:none;border-radius:6px;cursor:pointer;
+                            transition:0.2s;display:flex;align-items:center">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+                            </svg>
+                        </button>
+                        <button onclick="setTextAlign('right')" id="btnAlignRight" title="Align Right"
+                            style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                            border:none;border-radius:6px;cursor:pointer;
+                            transition:0.2s;display:flex;align-items:center">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/>
+                            </svg>
+                        </button>
+                        <button onclick="setTextAlign('justify')" id="btnAlignJustify" title="Justify"
+                            style="padding:6px 8px;background:transparent;color:var(--text-primary);
+                            border:none;border-radius:6px;cursor:pointer;
+                            transition:0.2s;display:flex;align-items:center">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div style="display:inline-flex;align-items:center;gap:4px">
+                        <input type="color" id="fontColor" value="#000000" class="color-picker" title="Text Color" onchange="updateTextStyle()">
+                        <button class="opt-btn" onclick="makeBold()" title="Bold"><b>B</b></button>
+                        <button class="opt-btn" onclick="makeItalic()" title="Italic"><i>I</i></button>
+                        <button class="opt-btn" onclick="makeUnderlineText()" title="Underline"><u>U</u></button>
+                    </div>
                 </div>
 
-                <div style="width: 1px; height: 30px; background: var(--border); margin: 0 4px;"></div>
+                <div class="tool-group" style="display:inline-flex;align-items:center;gap:12px;padding-right:15px;border-right:1px solid var(--border);">
+                    <div style="display:inline-flex;align-items:center;gap:4px">
+                        <label title="Line Height">Line:</label>
+                        <select onchange="setLineHeight(this.value)"
+                            style="padding:6px;border:1px solid var(--border);
+                            border-radius:8px;font-size:13px;cursor:pointer;background:var(--surface-3);color:var(--text-primary)">
+                            <option value="1.0">1.0</option>
+                            <option value="1.2">1.2</option>
+                            <option value="1.4" selected>1.4</option>
+                            <option value="1.6">1.6</option>
+                            <option value="1.8">1.8</option>
+                            <option value="2.0">2.0</option>
+                        </select>
+                    </div>
 
-                <label>Stroke:</label>
-                <input type="number" id="strokeWidth" value="3" min="1" max="30" style="width:45px;">
-                <input type="color" id="strokeColor" value="#ff0000" class="color-picker" style="margin-left: -5px">
-                <label>Opacity:</label>
-                <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:55px;">
+                    <div style="display:inline-flex;align-items:center;gap:4px">
+                        <label title="Letter Spacing">Space:</label>
+                        <input type="range" id="letterSpacing" 
+                            min="-2" max="20" value="0" step="0.5"
+                            onchange="setLetterSpacing(this.value)"
+                            style="width:50px;cursor:pointer">
+                        <span id="spacingValue" style="font-size:12px;color:var(--accent);font-weight:700;min-width:25px">0px</span>
+                    </div>
+                </div>
+
+                <div class="tool-group" style="display:inline-flex;align-items:center;gap:12px;">
+                    <div style="display:inline-flex;align-items:center;gap:4px">
+                        <label title="Stroke Settings">Stroke:</label>
+                        <input type="number" id="strokeWidth" value="3" min="1" max="30" style="width:45px;" title="Stroke Width">
+                        <input type="color" id="strokeColor" value="#ff0000" class="color-picker" title="Stroke Color" style="margin-left: -5px">
+                    </div>
+                    
+                    <div style="display:inline-flex;align-items:center;gap:4px">
+                        <label title="Opacity Level">Opacity:</label>
+                        <div style="display:inline-flex;align-items:center;background:var(--surface-3);border:1px solid var(--border);border-radius:8px;">
+                            <input type="number" id="opacity" value="100" min="10" max="100" step="10" style="width:40px;border:none;background:none;outline:none;padding:4px;" title="Opacity %">
+                            <span style="padding-right:6px;font-size:12px;color:var(--text-secondary)">%</span>
+                        </div>
+                    </div>
+                </div>
                 
-                <button class="opt-btn danger" onclick="clearPage()">Clear Page</button>
+                <button class="opt-btn danger" style="margin-left:auto;" onclick="if(confirm('Are you sure you want to clear all edits on this page?')) clearPage()">Clear Page</button>
             </div>
             
             <div id="stampMenu" style="display:none;position:absolute;
