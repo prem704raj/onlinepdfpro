@@ -5,7 +5,7 @@ const CACHE_NAME = 'onlinepdfpro-v64';
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
-    'bulk-image-optimizer.html',
+
     'changelog.html',
     'compare-pdf.html',
     'contact.html',
@@ -25,7 +25,7 @@ const STATIC_ASSETS = [
     'pdf-bookmark.html',
     'pdf-editor.html',
     'pdf-reader.html',
-    'pdf-summary.html',
+
     'privacy.html',
     'remove-background.html',
     'resume-cv-builder.html',
@@ -67,7 +67,7 @@ const STATIC_ASSETS = [
     'tools/add-page-numbers.html',
     'tools/compress-pdf.html',
     'tools/crop-pdf.html',
-    'tools/csv-to-xlsx.html',
+
     'tools/delete-pages.html',
     'tools/excel-to-pdf.html',
     'tools/html-to-pdf.html',
@@ -91,7 +91,7 @@ const STATIC_ASSETS = [
     'tools/sign-pdf.html',
     'tools/split-pdf.html',
     'tools/word-to-pdf.html',
-    'tools/xlsx-to-csv.html',
+
     'css/style.css',
     'css/mobile-fix-v2.css',
     'css/tools-v2.css',

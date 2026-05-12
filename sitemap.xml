@@ -67,12 +67,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-summary.html</loc>
-    <lastmod>2026-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://onlinepdfpro.com/tools/pdf-to-word.html</loc>
     <lastmod>2026-03-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -126,12 +120,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://onlinepdfpro.com/tools/csv-to-xlsx.html</loc>
-    <lastmod>2026-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   <url>
     <loc>https://onlinepdfpro.com/tools/delete-pages.html</loc>
     <lastmod>2026-03-10</lastmod>
@@ -264,12 +253,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://onlinepdfpro.com/tools/xlsx-to-csv.html</loc>
-    <lastmod>2026-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   <url>
     <loc>https://onlinepdfpro.com/voice-to-pdf.html</loc>
     <lastmod>2026-03-10</lastmod>
