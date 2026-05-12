@@ -15,10 +15,6 @@
   <rect x="144" y="320" width="160" height="24" rx="12" fill="white"/>
   <rect x="144" y="380" width="112" height="24" rx="12" fill="white"/>
 
-  <!-- Refresh icon background circle to cutout the corner -->
-  <circle cx="368" cy="368" r="88" fill="white" />
-
-  <!-- Refresh Arrow inside the circle -->
-  <!-- Thick arrow with a path -->
-  <path d="M368 312c30.93 0 56 25.07 56 56 0 30.93-25.07 56-56 56-30.93 0-56-25.07-56-56 0-14.18 5.26-27.13 13.92-37M344 288l24 24-24 24" stroke="#3173F6" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Refresh Arrow directly on the document -->
+  <path d="M368 312c30.93 0 56 25.07 56 56 0 30.93-25.07 56-56 56-30.93 0-56-25.07-56-56 0-14.18 5.26-27.13 13.92-37M344 288l24 24-24 24" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 </svg>
