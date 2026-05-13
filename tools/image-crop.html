@@ -164,6 +164,7 @@
                 <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
                 <button class="btn btn-primary upload-btn">Choose Image</button>
             </div>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
 
             <div id="cropSection" style="display: none;">
                 <div class="options-panel glass-card" style="padding: 24px; margin-bottom: 32px;">
@@ -332,6 +333,12 @@
             const cropImage = document.getElementById('cropImage');
             const cropOverlay = document.getElementById('cropOverlay');
             const cropContainer = document.getElementById('cropContainer');
+
+            const fileInput = document.getElementById('fileInput');
+            uploadZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) handleFileSelected(e.target.files);
+            });
 
             OnlinePDFPro.FileUploader.init('uploadZone', {
                 accept: 'image/jpeg,image/png,image/webp',
