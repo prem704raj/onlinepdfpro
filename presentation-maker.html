@@ -808,7 +808,7 @@
                             <option value="linear">Linear</option>
                             <option value="radial">Radial</option>
                         </select>
-                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <div id="gradientControls" style="display: none; gap: 8px; margin-top: 8px;">
                             <div style="flex: 1;">
                                 <label class="property-label" style="margin-bottom: 4px;">Color 1</label>
                                 <input type="color" id="gradientColor1" class="property-color" value="#3b82f6">
@@ -821,7 +821,31 @@
                     </div>
 
                     <div id="elementProperties" style="display: none;">
+                        <!-- Position & Size -->
                         <div class="property-group">
+                            <label class="property-label">Position & Size</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div>
+                                    <label class="property-label" style="margin-bottom: 4px;">X</label>
+                                    <input type="number" id="elemX" class="property-input" value="0">
+                                </div>
+                                <div>
+                                    <label class="property-label" style="margin-bottom: 4px;">Y</label>
+                                    <input type="number" id="elemY" class="property-input" value="0">
+                                </div>
+                                <div>
+                                    <label class="property-label" style="margin-bottom: 4px;">Width</label>
+                                    <input type="number" id="elemWidth" class="property-input" value="0">
+                                </div>
+                                <div>
+                                    <label class="property-label" style="margin-bottom: 4px;">Height</label>
+                                    <input type="number" id="elemHeight" class="property-input" value="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Text Properties -->
+                        <div class="property-group" id="textPropertiesGroup">
                             <label class="property-label">Text Properties</label>
                             <div style="margin-bottom: 8px;">
                                 <label class="property-label" style="margin-bottom: 4px;">Text</label>
@@ -873,6 +897,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Text Alignment -->
+                        <div class="property-group" id="textAlignGroup">
+                            <label class="property-label">Text Alignment</label>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="toolbar-btn align-btn active" data-align="left" onclick="setTextAlignment('left')" title="Align Left" style="flex:1;justify-content:center;">⬅</button>
+                                <button class="toolbar-btn align-btn" data-align="center" onclick="setTextAlignment('center')" title="Center" style="flex:1;justify-content:center;">⬛</button>
+                                <button class="toolbar-btn align-btn" data-align="right" onclick="setTextAlignment('right')" title="Align Right" style="flex:1;justify-content:center;">➡</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -912,20 +946,7 @@
         </div>
     </div>
 
-    <!-- Image Upload Modal -->
-    <div class="modal-overlay" id="imageModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Add Image</h2>
-                <button class="modal-close" onclick="closeModal('imageModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <input type="file" id="imageInput" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-md);">
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden file inputs -->
+    <!-- Hidden file input for image upload -->
     <input type="file" id="imageFile" accept="image/*" style="display: none;">
 
     <!-- Load External Libraries -->

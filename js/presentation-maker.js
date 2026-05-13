@@ -568,7 +568,16 @@ function renderCurrentSlide() {
         if (elem.type === 'text') {
             drawTextElement(ctx, elem, isSelected, { showBorder: true });
         } else if (elem.type === 'image') {
-            drawImageElement(ctx, elem, { onLoad: renderSlides });
+            drawImageElement(ctx, elem, { onLoad: renderCurrentSlide });
+            if (isSelected) {
+                ctx.save();
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.strokeRect(elem.x, elem.y, elem.width, elem.height);
+                ctx.setLineDash([]);
+                ctx.restore();
+            }
         }
     });
 
@@ -835,11 +844,11 @@ function addTextBox() {
 }
 
 function addImage() {
-    const imageInput = document.getElementById('imageInput');
-    if (imageInput) {
-        imageInput.value = '';
+    const fileInput = document.getElementById('imageFile');
+    if (fileInput) {
+        fileInput.value = '';
+        fileInput.click();
     }
-    openModal('imageModal');
 }
 
 function deleteElement() {
@@ -941,9 +950,18 @@ function handleCanvasClick(e) {
         }
     }
 
+    const prevSelected = app.selectedElement;
     app.selectedElement = selectedIndex;
     updateElementProperties();
     renderCurrentSlide();
+
+    // Single click on an already-selected text element opens inline editor
+    if (selectedIndex !== null && selectedIndex === prevSelected) {
+        const elem = slide.elements[selectedIndex];
+        if (elem.type === 'text' && !app.inlineEditor) {
+            openInlineEditor(elem);
+        }
+    }
 }
 
 function handleCanvasDoubleClick(e) {
@@ -1134,6 +1152,19 @@ function setAlignButtonState(align) {
     alignButtons.forEach((button) => {
         button.classList.toggle('active', button.dataset.align === align);
     });
+}
+
+function setTextAlignment(align) {
+    if (app.selectedElement !== null) {
+        const slide = app.presentation.slides[app.currentSlideIndex];
+        const elem = slide.elements[app.selectedElement];
+        if (elem.type === 'text') {
+            elem.align = align;
+            setAlignButtonState(align);
+            commitChange();
+            renderCurrentSlide();
+        }
+    }
 }
 
 function updateSlideBackground() {
@@ -1527,26 +1558,57 @@ function setupEventListeners() {
         }
     });
 
+    // Position & Size inputs
+    ['elemX', 'elemY', 'elemWidth', 'elemHeight'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('change', () => {
+                if (app.selectedElement !== null) {
+                    const slide = app.presentation.slides[app.currentSlideIndex];
+                    const elem = slide.elements[app.selectedElement];
+                    const val = parseInt(input.value) || 0;
+                    if (id === 'elemX') elem.x = val;
+                    else if (id === 'elemY') elem.y = val;
+                    else if (id === 'elemWidth') elem.width = Math.max(val, 40);
+                    else if (id === 'elemHeight') elem.height = Math.max(val, 40);
+                    commitChange();
+                    renderCurrentSlide();
+                }
+            });
+        }
+    });
+
     // Image upload
     document.getElementById('imageFile').addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (event) => {
-                const slide = app.presentation.slides[app.currentSlideIndex];
-                const newImage = {
-                    type: 'image',
-                    x: 100,
-                    y: 100,
-                    width: 300,
-                    height: 300,
-                    src: event.target.result
+                const img = new Image();
+                img.onload = () => {
+                    const slide = app.presentation.slides[app.currentSlideIndex];
+                    // Calculate size to fit nicely on slide
+                    let w = img.width;
+                    let h = img.height;
+                    const maxW = 400;
+                    const maxH = 300;
+                    if (w > maxW) { h = h * (maxW / w); w = maxW; }
+                    if (h > maxH) { w = w * (maxH / h); h = maxH; }
+                    const newImage = {
+                        type: 'image',
+                        x: Math.round((SLIDE_WIDTH - w) / 2),
+                        y: Math.round((SLIDE_HEIGHT - h) / 2),
+                        width: Math.round(w),
+                        height: Math.round(h),
+                        src: event.target.result
+                    };
+                    slide.elements.push(newImage);
+                    app.selectedElement = slide.elements.length - 1;
+                    commitChange();
+                    renderSlides();
+                    updateElementProperties();
                 };
-                slide.elements.push(newImage);
-                app.selectedElement = slide.elements.length - 1;
-                commitChange();
-                renderCurrentSlide();
-                updateElementProperties();
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
