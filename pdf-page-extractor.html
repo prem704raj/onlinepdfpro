@@ -1028,7 +1028,7 @@
             elements.extractSingleBtn.textContent = 'Extracting...';
 
             try {
-                const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes.slice(0));
+                const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes, { ignoreEncryption: true });
                 const outDoc = await PDFLib.PDFDocument.create();
 
                 for (let i = 0; i < selectedIndices.length; i++) {
