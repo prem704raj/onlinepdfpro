@@ -357,6 +357,145 @@
 
         function imgFromBlob(blob){ return new Promise(function(res,rej){var img=new Image();img.onload=function(){res(img);};img.onerror=rej;img.src=URL.createObjectURL(blob);}); }
 
+        // ── Professional Edge Refinement Engine ──────────────────────────
+        function refineEdges(canvas, ctx, radius, threshold, erodeSize) {
+            var w = canvas.width, h = canvas.height;
+            var imgData = ctx.getImageData(0, 0, w, h);
+            var data = imgData.data;
+
+            // Step 1: Extract alpha channel
+            var alpha = new Float32Array(w * h);
+            for (var i = 0; i < w * h; i++) alpha[i] = data[i * 4 + 3] / 255;
+
+            // Step 2: Morphological erosion — shrink mask boundary to remove fringe
+            if (erodeSize > 0) {
+                var eroded = new Float32Array(alpha);
+                for (var pass = 0; pass < erodeSize; pass++) {
+                    var src = pass === 0 ? alpha : eroded;
+                    var dst = new Float32Array(w * h);
+                    for (var y = 0; y < h; y++) {
+                        for (var x = 0; x < w; x++) {
+                            var idx = y * w + x;
+                            var minVal = src[idx];
+                            if (x > 0) minVal = Math.min(minVal, src[idx - 1]);
+                            if (x < w - 1) minVal = Math.min(minVal, src[idx + 1]);
+                            if (y > 0) minVal = Math.min(minVal, src[(y - 1) * w + x]);
+                            if (y < h - 1) minVal = Math.min(minVal, src[(y + 1) * w + x]);
+                            dst[idx] = minVal;
+                        }
+                    }
+                    eroded = dst;
+                }
+                alpha = eroded;
+            }
+
+            // Step 3: Alpha threshold cleanup — kill ghost semi-transparent noise
+            for (var i = 0; i < w * h; i++) {
+                if (alpha[i] < threshold) alpha[i] = 0;
+                else if (alpha[i] > 1 - threshold) alpha[i] = 1;
+            }
+
+            // Step 4: Gaussian blur on alpha for smooth feathered edges
+            if (radius > 0) {
+                alpha = gaussianBlurAlpha(alpha, w, h, radius);
+            }
+
+            // Step 5: Small artifact removal — flood fill connected components
+            alpha = removeSmallIslands(alpha, w, h, Math.max(w, h) * 0.005);
+
+            // Step 6: Write refined alpha back
+            for (var i = 0; i < w * h; i++) {
+                data[i * 4 + 3] = Math.round(Math.max(0, Math.min(1, alpha[i])) * 255);
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function gaussianBlurAlpha(src, w, h, r) {
+            // Separable box blur (3 passes ≈ Gaussian)
+            var dst = new Float32Array(src);
+            for (var pass = 0; pass < 3; pass++) {
+                var tmp = new Float32Array(w * h);
+                // Horizontal pass
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var sum = 0, count = 0;
+                        for (var dx = -r; dx <= r; dx++) {
+                            var nx = x + dx;
+                            if (nx >= 0 && nx < w) { sum += dst[y * w + nx]; count++; }
+                        }
+                        tmp[y * w + x] = sum / count;
+                    }
+                }
+                // Vertical pass
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var sum = 0, count = 0;
+                        for (var dy = -r; dy <= r; dy++) {
+                            var ny = y + dy;
+                            if (ny >= 0 && ny < h) { sum += tmp[ny * w + x]; count++; }
+                        }
+                        dst[y * w + x] = sum / count;
+                    }
+                }
+            }
+            return dst;
+        }
+
+        function removeSmallIslands(alpha, w, h, minSize) {
+            // Remove small opaque islands (leftover debris)
+            var visited = new Uint8Array(w * h);
+            var minArea = minSize * minSize;
+
+            function floodFill(startIdx, isOpaque) {
+                var stack = [startIdx];
+                var region = [];
+                while (stack.length > 0) {
+                    var idx = stack.pop();
+                    if (visited[idx]) continue;
+                    var val = alpha[idx];
+                    if (isOpaque ? val < 0.5 : val >= 0.5) continue;
+                    visited[idx] = 1;
+                    region.push(idx);
+                    var x = idx % w, y = Math.floor(idx / w);
+                    if (x > 0) stack.push(idx - 1);
+                    if (x < w - 1) stack.push(idx + 1);
+                    if (y > 0) stack.push(idx - w);
+                    if (y < h - 1) stack.push(idx + w);
+                }
+                return region;
+            }
+
+            // Remove small opaque blobs (debris/artifacts)
+            visited.fill(0);
+            for (var i = 0; i < w * h; i++) {
+                if (!visited[i] && alpha[i] >= 0.5) {
+                    var region = floodFill(i, true);
+                    if (region.length < minArea) {
+                        for (var j = 0; j < region.length; j++) alpha[region[j]] = 0;
+                    }
+                }
+            }
+
+            // Remove small transparent holes inside subject
+            visited.fill(0);
+            for (var i = 0; i < w * h; i++) {
+                if (!visited[i] && alpha[i] < 0.5) {
+                    var region = floodFill(i, false);
+                    // Only fill holes that aren't touching image border
+                    var touchesBorder = false;
+                    for (var j = 0; j < region.length; j++) {
+                        var x = region[j] % w, y = Math.floor(region[j] / w);
+                        if (x === 0 || x === w - 1 || y === 0 || y === h - 1) { touchesBorder = true; break; }
+                    }
+                    if (!touchesBorder && region.length < minArea * 2) {
+                        for (var j = 0; j < region.length; j++) alpha[region[j]] = 1;
+                    }
+                }
+            }
+
+            return alpha;
+        }
+
         async function processFile(file){
             if(!file.type.startsWith('image/')){alert('Not an image');return;}
             if(file.size>10*1024*1024){alert('Too large');return;}
@@ -376,13 +515,40 @@
                             if(pb) pb.style.width=(20+pct*.35)+'%'; if(pt) pt.textContent='Downloading AI model... '+pct+'%';
                         }else{
                             if(mn) mn.style.display='none';
-                            if(pb) pb.style.width=(55+pct*.45)+'%'; if(pt) pt.textContent='Matting edges... '+pct+'%';
+                            if(pb) pb.style.width=(55+pct*.40)+'%'; if(pt) pt.textContent='Matting edges... '+pct+'%';
                         }
                     }
                 });
+
+                // ── Post-Processing: Professional Edge Refinement ──
+                if(pt) pt.textContent='Refining edges...';
+                if(pb) pb.style.width='96%';
+
+                // Draw raw AI result onto canvas for post-processing
                 resultBlob=blob; maskImgObj = await imgFromBlob(blob);
-                if(rCanvas && origImgObj) { rCanvas.width=origImgObj.naturalWidth; rCanvas.height=origImgObj.naturalHeight; rCtx.clearRect(0,0,rCanvas.width,rCanvas.height); rCtx.drawImage(maskImgObj, 0, 0); }
-                var origURL=URL.createObjectURL(file), resURL=URL.createObjectURL(blob);
+                if(rCanvas && origImgObj) {
+                    rCanvas.width=origImgObj.naturalWidth;
+                    rCanvas.height=origImgObj.naturalHeight;
+                    rCtx.clearRect(0,0,rCanvas.width,rCanvas.height);
+                    rCtx.drawImage(maskImgObj, 0, 0);
+
+                    // Adaptive parameters based on image resolution
+                    var maxDim = Math.max(rCanvas.width, rCanvas.height);
+                    var blurRadius = Math.max(1, Math.round(maxDim / 800));  // feather radius
+                    var erodePixels = Math.max(1, Math.round(maxDim / 1200)); // fringe removal
+                    var alphaThreshold = 0.12; // kill noise below 12% opacity
+
+                    refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, erodePixels);
+
+                    // Re-create the blob from refined canvas
+                    var refinedBlob = await new Promise(function(res) {
+                        rCanvas.toBlob(function(b) { res(b); }, 'image/png');
+                    });
+                    resultBlob = refinedBlob;
+                    maskImgObj = await imgFromBlob(refinedBlob);
+                }
+
+                var origURL=URL.createObjectURL(file), resURL=URL.createObjectURL(resultBlob);
                 var oi=$('originalImage'),ca=$('compareAfter'),cb=$('compareBefore_img'),rv=$('resultView');
                 if(oi) oi.src=origURL; if(ca) { ca.src=resURL; ca.style.display='none'; } if(cb) cb.src=origURL;
                 curBg='transparent'; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]'); if(tb) tb.classList.add('active');
