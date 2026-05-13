@@ -837,35 +837,52 @@
 
         async function cropAndDownload() {
             if (!pdfBytes) return;
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-            const pages = pdfDoc.getPages();
-            const applyAll = document.getElementById('applyAll').checked;
+            try {
+                const bytes = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes);
+                const pdfDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+                const pages = pdfDoc.getPages();
+                const applyAll = document.getElementById('applyAll').checked;
 
-            pages.forEach((page, index) => {
-                const pageNum = index + 1;
+                pages.forEach((page, index) => {
+                    const pageNum = index + 1;
+                    let ratio = applyAll ? pageRatios[currentPage] : pageRatios[pageNum];
 
-                // If applyAll is true, use whatever ratio is actively visible on the screen right now (for currentPage)
-                // If false, use the specific ratio the user set for this page. If missing, keep original dimensions by doing nothing.
-                let ratio = applyAll ? pageRatios[currentPage] : pageRatios[pageNum];
+                    if (ratio) {
+                        const { width, height } = page.getSize();
+                        const newLeft = width * ratio.rLeft;
+                        const newWidth = width * ratio.rWidth;
+                        const newHeight = height * ratio.rHeight;
+                        const newTopMargin = height * ratio.rTop;
+                        const newBottom = height - newTopMargin - newHeight;
 
-                if (ratio) {
-                    const { width, height } = page.getSize();
-                    const newLeft = width * ratio.rLeft;
-                    const newWidth = width * ratio.rWidth;
-                    const newHeight = height * ratio.rHeight;
-                    const newTopMargin = height * ratio.rTop;
-                    const newBottom = height - newTopMargin - newHeight;
+                        page.setCropBox(newLeft, newBottom, newWidth, newHeight);
+                        page.setMediaBox(newLeft, newBottom, newWidth, newHeight);
+                    }
+                });
 
-                    page.setCropBox(newLeft, newBottom, newWidth, newHeight);
-                    page.setMediaBox(newLeft, newBottom, newWidth, newHeight);
+                const croppedBytes = await pdfDoc.save();
+                try { incrementCounter('cropPDF'); incrementTodayCount(); } catch(e) {}
+                const blob = new Blob([croppedBytes], { type: 'application/pdf' });
+                const fname = _originalFileName ? _originalFileName.replace(/\.pdf$/i, '-cropped.pdf') : 'cropped.pdf';
+                // Use framework downloader if available, else fallback to direct anchor download
+                try {
+                    if (window.OnlinePDFPro && OnlinePDFPro.Downloader && OnlinePDFPro.Downloader.saveBlob) {
+                        OnlinePDFPro.Downloader.saveBlob(blob, fname);
+                    } else { throw new Error('No framework downloader'); }
+                } catch(dlErr) {
+                    // Fallback: universal anchor-click download
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = fname;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(() => URL.revokeObjectURL(url), 5000);
                 }
-            });
-
-            const croppedBytes = await pdfDoc.save();
-            incrementCounter('cropPDF');
-            incrementTodayCount();
-            const blob = new Blob([croppedBytes], { type: 'application/pdf' });
-            OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'cropped.pdf');
+            } catch (err) {
+                console.error('Crop failed:', err);
+                alert('Could not crop this PDF. Please try again or use a different file.');
+            }
         }
     </script>
 
