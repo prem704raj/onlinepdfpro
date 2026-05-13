@@ -69,8 +69,8 @@
     <style>
         .crop-container {
             max-width: 800px;
-            margin: 40px auto;
-            padding: 30px;
+            margin: 20px auto;
+            padding: 20px;
             background: var(--surface-1);
             border-radius: 24px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
@@ -308,6 +308,7 @@
             background: var(--surface-1);
             overflow: hidden;
             /* Constrain the massive box-shadow */
+            max-width: 100%;
         }
     </style>
 
@@ -619,6 +620,11 @@
             currentPage = 1;
             pageRatios = {};
 
+            // Hide upload area and tool header to maximize crop workspace
+            document.getElementById('dropArea').style.display = 'none';
+            var toolHeader = document.querySelector('.tool-header');
+            if (toolHeader) toolHeader.style.display = 'none';
+
             document.getElementById('fileInfo').style.display = 'block';
             document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
             document.getElementById('cropContainer').style.display = 'block';
@@ -629,26 +635,38 @@
 
         async function renderPage() {
             const page = await pdfJsDoc.getPage(currentPage);
-            const viewport = page.getViewport({ scale: 1.2 });
+            const unscaledViewport = page.getViewport({ scale: 1.0 });
+            
+            // Use the parent container width (the .crop-container) as the constraint
+            const containerElem = document.getElementById('cropContainer');
+            const availableWidth = (containerElem.clientWidth || 760) - 40; // padding
+            // Also limit height so the full page + toolbar fits on screen without scrolling
+            const availableHeight = window.innerHeight - 260; // leave room for toolbar, checkbox, button
+            
+            const scaleByWidth = availableWidth / unscaledViewport.width;
+            const scaleByHeight = availableHeight / unscaledViewport.height;
+            // Pick the smaller scale so the page fits both dimensions
+            const targetScale = Math.min(scaleByWidth, scaleByHeight, 1.5);
+            
+            const viewport = page.getViewport({ scale: targetScale });
             const dpr = Math.max(window.devicePixelRatio || 1, 2);
-            const hiResViewport = page.getViewport({ scale: 1.2 * dpr });
+            const hiResViewport = page.getViewport({ scale: targetScale * dpr });
             const canvas = document.getElementById('previewCanvas');
             canvas.width = hiResViewport.width;
             canvas.height = hiResViewport.height;
             canvas.style.width = viewport.width + 'px';
             canvas.style.height = viewport.height + 'px';
-
+            
             await page.render({ canvasContext: canvas.getContext('2d'), viewport: hiResViewport }).promise;
 
             document.getElementById('pageInput').value = currentPage;
             document.getElementById('totalPagesSpan').innerText = totalPages;
 
-            // After render, establish crop box for this page
-            currentCanvasRect = canvas.getBoundingClientRect();
+            // Use the canvas CSS dimensions directly for crop box math
+            // (getBoundingClientRect can be wrong if the page hasn't scrolled to it yet)
+            currentCanvasRect = { width: viewport.width, height: viewport.height };
 
             if (!pageRatios[currentPage]) {
-                // By default, 10% margins. If "Apply all" is checked, should we copy page 1?
-                // For per-page uniqueness, let's just initialize it independently or copy from 1 if it exists.
                 if (document.getElementById('applyAll').checked && pageRatios[1]) {
                     pageRatios[currentPage] = { ...pageRatios[1] };
                 } else {
@@ -698,7 +716,11 @@
 
         function initCropBox() {
             const canvas = document.getElementById('previewCanvas');
-            currentCanvasRect = canvas.getBoundingClientRect();
+            // Use CSS dimensions directly (matches renderPage logic)
+            currentCanvasRect = {
+                width: parseFloat(canvas.style.width) || canvas.clientWidth,
+                height: parseFloat(canvas.style.height) || canvas.clientHeight
+            };
 
             pageRatios[1] = { rLeft: 0.1, rTop: 0.1, rWidth: 0.8, rHeight: 0.8 };
             applyRatioToBox(pageRatios[1], currentCanvasRect);
@@ -815,8 +837,7 @@
 
         async function cropAndDownload() {
             if (!pdfBytes) return;
-
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes, { ignoreEncryption: true });
             const pages = pdfDoc.getPages();
             const applyAll = document.getElementById('applyAll').checked;
 
@@ -887,8 +908,7 @@
                         <li style="margin:8px 0;"><a href="ocr.html">OCR Extract
                                 Text</a></li>
                         <li style="margin:8px 0;"><a href="../voice-to-pdf.html">Voice to
-                        <li style="margin:8px 0;"><a href="pdf-to-images.html">PDF to
-                                JPG</a></li>
+                                PDF</a></li>
                         <li style="margin:8px 0;"><a href="../compare-pdf.html">Compare
                                 PDFs</a></li>
                     </ul>

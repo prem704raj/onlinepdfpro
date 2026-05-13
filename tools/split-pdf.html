@@ -654,7 +654,7 @@
                 progress.update(20, 'Analyzing document...');
 
                 try {
-                    const srcPdf = await PDFDocument.load(pdfBytes);
+                    const srcPdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
                     const newPdf = await PDFDocument.create();
                     const sortedPages = Array.from(selectedPages).sort((a, b) => a - b);
                     for (let i = 0; i < sortedPages.length; i++) {
@@ -776,8 +776,7 @@
                         <li style="margin:8px 0;"><a href="ocr.html">OCR Extract
                                 Text</a></li>
                         <li style="margin:8px 0;"><a href="../voice-to-pdf.html">Voice to
-                        <li style="margin:8px 0;"><a href="pdf-to-images.html">PDF to
-                                JPG</a></li>
+                                PDF</a></li>
                         <li style="margin:8px 0;"><a href="../compare-pdf.html">Compare
                                 PDFs</a></li>
                     </ul>

@@ -206,19 +206,27 @@
                             <input type="range" id="brushSize" min="5" max="150" value="20" style="width:100%;cursor:pointer;">
                         </div>
                         <div class="panel">
-                            <h3>&#127912; Background</h3>
+                            <h3>✨ Professional Finish</h3>
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Smoothing:</span> <span id="smoothVal">1px</span></div>
+                            <input type="range" id="edgeSmooth" min="0" max="10" value="1" style="width:100%;cursor:pointer;margin-bottom:12px;">
+                            
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Contrast:</span> <span id="contrastVal">20%</span></div>
+                            <input type="range" id="edgeContrast" min="0" max="100" value="20" style="width:100%;cursor:pointer;margin-bottom:12px;">
+                            
+                            <button class="dl-btn dl-btn-secondary" id="applyRefine" style="font-size:0.85rem;padding:8px;border-color:var(--accent);color:var(--accent);">Refine Now</button>
+                        </div>
+                        <div class="panel">
+                            <h3>🎨 Background</h3>
                             <div class="bg-colors">
                                 <button class="bg-color-btn bg-transparent-swatch active" data-bg="transparent" title="Transparent"></button>
                                 <button class="bg-color-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
                                 <button class="bg-color-btn" data-bg="#000000" style="background:#000" title="Black"></button>
-                                <button class="bg-color-btn" data-bg="#FF0000" style="background:#FF0000" title="Red"></button>
-                                <button class="bg-color-btn" data-bg="#00AA00" style="background:#00AA00" title="Green"></button>
+                                <button class="bg-color-btn" data-bg="#F3F4F6" style="background:#F3F4F6" title="Light Gray"></button>
                                 <button class="bg-color-btn" data-bg="#0066FF" style="background:#0066FF" title="Blue"></button>
                             </div>
                             <div class="color-row">
                                 <input type="color" id="colorPicker" value="#6C63FF">
                                 <input type="text" class="hex-field" id="hexInput" value="#6C63FF" placeholder="#HEX">
-                                <button class="bg-color-btn" id="applyColorBtn" style="background:#6C63FF" title="Apply"></button>
                             </div>
                         </div>
                         <div class="panel">
@@ -358,7 +366,7 @@
         function imgFromBlob(blob){ return new Promise(function(res,rej){var img=new Image();img.onload=function(){res(img);};img.onerror=rej;img.src=URL.createObjectURL(blob);}); }
 
         // ── Professional Edge Refinement Engine ──────────────────────────
-        function refineEdges(canvas, ctx, radius, threshold, erodeSize) {
+        function refineEdges(canvas, ctx, radius, threshold, contrast) {
             var w = canvas.width, h = canvas.height;
             var imgData = ctx.getImageData(0, 0, w, h);
             var data = imgData.data;
@@ -367,43 +375,29 @@
             var alpha = new Float32Array(w * h);
             for (var i = 0; i < w * h; i++) alpha[i] = data[i * 4 + 3] / 255;
 
-            // Step 2: Morphological erosion — shrink mask boundary to remove fringe
-            if (erodeSize > 0) {
-                var eroded = new Float32Array(alpha);
-                for (var pass = 0; pass < erodeSize; pass++) {
-                    var src = pass === 0 ? alpha : eroded;
-                    var dst = new Float32Array(w * h);
-                    for (var y = 0; y < h; y++) {
-                        for (var x = 0; x < w; x++) {
-                            var idx = y * w + x;
-                            var minVal = src[idx];
-                            if (x > 0) minVal = Math.min(minVal, src[idx - 1]);
-                            if (x < w - 1) minVal = Math.min(minVal, src[idx + 1]);
-                            if (y > 0) minVal = Math.min(minVal, src[(y - 1) * w + x]);
-                            if (y < h - 1) minVal = Math.min(minVal, src[(y + 1) * w + x]);
-                            dst[idx] = minVal;
-                        }
-                    }
-                    eroded = dst;
-                }
-                alpha = eroded;
-            }
-
-            // Step 3: Alpha threshold cleanup — kill ghost semi-transparent noise
-            for (var i = 0; i < w * h; i++) {
-                if (alpha[i] < threshold) alpha[i] = 0;
-                else if (alpha[i] > 1 - threshold) alpha[i] = 1;
-            }
-
-            // Step 4: Gaussian blur on alpha for smooth feathered edges
+            // Step 2: Smooth / Blur
             if (radius > 0) {
                 alpha = gaussianBlurAlpha(alpha, w, h, radius);
             }
 
-            // Step 5: Small artifact removal — flood fill connected components
+            // Step 3: Apply Contrast / Tighten to clean up fringes
+            // contrast is 0 to 1.0
+            var factor = 1 + contrast * 10;
+            for (var i = 0; i < w * h; i++) {
+                var a = alpha[i];
+                // Sigmoid-like contrast centering around 0.5
+                a = 1 / (1 + Math.exp(-factor * (a - 0.5)));
+                
+                // Cleanup absolute zero/one
+                if (a < threshold) a = 0;
+                if (a > 1 - threshold) a = 1;
+                alpha[i] = a;
+            }
+
+            // Step 4: Small artifact removal
             alpha = removeSmallIslands(alpha, w, h, Math.max(w, h) * 0.005);
 
-            // Step 6: Write refined alpha back
+            // Step 5: Write back
             for (var i = 0; i < w * h; i++) {
                 data[i * 4 + 3] = Math.round(Math.max(0, Math.min(1, alpha[i])) * 255);
             }
@@ -534,11 +528,11 @@
 
                     // Adaptive parameters based on image resolution
                     var maxDim = Math.max(rCanvas.width, rCanvas.height);
-                    var blurRadius = Math.max(1, Math.round(maxDim / 800));  // feather radius
-                    var erodePixels = Math.max(1, Math.round(maxDim / 1200)); // fringe removal
-                    var alphaThreshold = 0.12; // kill noise below 12% opacity
+                    var blurRadius = Math.max(1, Math.round(maxDim / 1000)); 
+                    var contrastVal = 0.2;
+                    var alphaThreshold = 0.05; 
 
-                    refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, erodePixels);
+                    refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, contrastVal);
 
                     // Re-create the blob from refined canvas
                     var refinedBlob = await new Promise(function(res) {
@@ -653,15 +647,41 @@
         document.addEventListener('mousemove',mvSlider); document.addEventListener('touchmove',mvSlider,{passive:false});
         function mvSlider(e){ if(!dragging||!cWrap||!cBefore||!slider) return; e.preventDefault(); var r=cWrap.getBoundingClientRect(); var cx=e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:0); var x=Math.max(0,Math.min(cx-r.left,r.width)); var pct=(x/r.width)*100; cBefore.style.width=pct+'%';slider.style.left=pct+'%'; }
 
+        // --- REFINEMENT CONTROLS ---
+        var eSmooth = $('edgeSmooth'), sVal = $('smoothVal'), eContrast = $('edgeContrast'), cVal = $('contrastVal'), applyRefine = $('applyRefine');
+        if(eSmooth) eSmooth.oninput = function(){ sVal.textContent = this.value + 'px'; };
+        if(eContrast) eContrast.oninput = function(){ cVal.textContent = this.value + '%'; };
+        if(applyRefine) applyRefine.onclick = async function() {
+            if(!maskImgObj || !rCanvas) return;
+            var oldText = applyRefine.textContent; applyRefine.textContent = 'Refining...';
+            
+            // Re-draw original mask result
+            rCtx.clearRect(0,0,rCanvas.width,rCanvas.height);
+            rCtx.drawImage(maskImgObj, 0, 0);
+            
+            var rad = parseInt(eSmooth.value);
+            var cont = parseInt(eContrast.value) / 100;
+            refineEdges(rCanvas, rCtx, rad, 0.05, cont);
+            
+            rCanvas.toBlob(function(b){
+                resultBlob = b;
+                if($('compareAfter')) $('compareAfter').src = URL.createObjectURL(b);
+                applyRefine.textContent = oldText;
+            }, 'image/png');
+        };
+
         // --- BACKGROUND ---
         document.querySelectorAll('.bg-color-btn[data-bg]').forEach(function(btn){
-            if(btn.id==='applyColorBtn') return;
             btn.addEventListener('click',function(){applyBg(btn.getAttribute('data-bg'));resetBgBtns();btn.classList.add('active');});
         });
-        var applyBtn=$('applyColorBtn'),cpick=$('colorPicker'),hinp=$('hexInput');
-        if(applyBtn) applyBtn.addEventListener('click',function(){if(cpick){applyBg(cpick.value);resetBgBtns();applyBtn.classList.add('active');}});
-        if(cpick) cpick.addEventListener('input',function(e){if(hinp)hinp.value=e.target.value;if(applyBtn)applyBtn.style.background=e.target.value;});
-        if(hinp) hinp.addEventListener('input',function(e){var v=e.target.value;if(!v.startsWith('#'))v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){if(cpick)cpick.value=v;if(applyBtn)applyBtn.style.background=v;}});
+        var cpick=$('colorPicker'),hinp=$('hexInput');
+        if(cpick) cpick.addEventListener('input',function(e){
+            var val = e.target.value;
+            if(hinp)hinp.value=val;
+            applyBg(val);
+            resetBgBtns();
+        });
+        if(hinp) hinp.addEventListener('input',function(e){var v=e.target.value;if(!v.startsWith('#'))v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){if(cpick)cpick.value=v; applyBg(v); resetBgBtns();}});
         function resetBgBtns(){document.querySelectorAll('.bg-color-btn').forEach(function(b){b.classList.remove('active');});}
         function applyBg(bg){
             curBg=bg; if(bg==='transparent'){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }else{ rv.classList.remove('checker-bg'); rv.style.backgroundColor=bg; }
