@@ -683,7 +683,7 @@
                     document.getElementById('progressFill').style.width = Math.round(40 + (i / pdfJsDoc.numPages) * 50) + '%';
 
                     const page = await pdfJsDoc.getPage(i);
-                    const viewport = page.getViewport({ scale: 2.0 });
+                    const viewport = page.getViewport({ scale: 3.0 });
                     const canvas = document.createElement('canvas');
                     canvas.width = viewport.width;
                     canvas.height = viewport.height;
@@ -701,7 +701,7 @@
                     });
 
                     // Convert canvas to image and add to new PDF
-                    const imgDataURL = canvas.toDataURL('image/jpeg', 0.95);
+                    const imgDataURL = canvas.toDataURL('image/jpeg', 1.0);
                     const imgBytes = Uint8Array.from(atob(imgDataURL.split(',')[1]), c => c.charCodeAt(0));
                     const img = await newPdfDoc.embedJpg(imgBytes);
 

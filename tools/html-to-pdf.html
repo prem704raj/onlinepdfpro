@@ -560,7 +560,7 @@ Example:
                 await new Promise(r => setTimeout(r, 300));
 
                 const canvas = await html2canvas(container, {
-                    scale: scale,
+                    scale: 3,
                     useCORS: true,
                     backgroundColor: '#ffffff',
                     logging: false
@@ -571,7 +571,7 @@ Example:
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({ orientation, unit: 'mm', format: pageSize });
 
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
                 const imgW = contentW;
                 const imgH = (canvas.height * contentW) / canvas.width;
 
@@ -596,7 +596,7 @@ Example:
                         const ctx = pageCanvas.getContext('2d');
                         ctx.drawImage(canvas, 0, srcY, canvas.width, pageCanvas.height, 0, 0, canvas.width, pageCanvas.height);
 
-                        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+                        const pageImgData = pageCanvas.toDataURL('image/jpeg', 1.0);
                         const drawH = (pageCanvas.height * contentW) / canvas.width;
                         pdf.addImage(pageImgData, 'JPEG', margin, margin, imgW, drawH);
                     }

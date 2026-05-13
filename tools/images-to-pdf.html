@@ -553,8 +553,8 @@
                             let w = img.width;
                             let h = img.height;
 
-                            // Safe scaling to prevent RAM crashes on mobile devices
-                            const MAX_DIM = 2500;
+                            // Safe scaling — 4K resolution limit for maximum quality
+                            const MAX_DIM = 4096;
                             if (w > h && w > MAX_DIM) {
                                 h = Math.round(h * MAX_DIM / w);
                                 w = MAX_DIM;
@@ -566,14 +566,16 @@
                             canvas.width = w;
                             canvas.height = h;
                             const ctx = canvas.getContext('2d');
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
 
                             // Fill white background (protects transparent PNGs/WebPs turning black)
                             ctx.fillStyle = '#FFFFFF';
                             ctx.fillRect(0, 0, w, h);
                             ctx.drawImage(img, 0, 0, w, h);
 
-                            // Export as high-quality standard JPEG
-                            const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                            // Export as maximum quality JPEG for PDF embedding
+                            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
 
                             // Securely convert Base64 Data URL to pristine ArrayBuffer (bypasses window.atob size limits)
                             fetch(dataUrl)

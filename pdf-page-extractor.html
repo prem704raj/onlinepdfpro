@@ -860,7 +860,7 @@
             canvas.height = Math.max(1, Math.floor(viewport.height));
             const ctx = canvas.getContext('2d', { alpha: false });
             await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
             state.thumbCache.set(pageIndex, dataUrl);
             return dataUrl;
         }

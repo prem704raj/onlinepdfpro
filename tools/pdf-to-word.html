@@ -499,7 +499,7 @@
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     await page.render({ canvasContext: ctx, viewport: imgViewport }).promise;
-                    pageImageBase64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+                    pageImageBase64 = canvas.toDataURL('image/jpeg', 1.0).split(',')[1];
                 } catch (imgErr) {
                     console.warn('Could not render page image:', imgErr);
                 }

@@ -596,7 +596,7 @@
                         item.classList.add('success');
                         statusText.textContent = 'Scaled Successfully';
                         statusResult.textContent = `${originalWidth}×${originalHeight} → ${newWidth}×${newHeight}`;
-                        results.push({ name: file.name.replace(/\.[^.]+$/, '-resized.jpg'), blob, newWidth, newHeight, success: true });
+                        results.push({ name: file.name.replace(/\.[^.]+$/, '-resized' + (file.type === 'image/png' ? '.png' : file.type === 'image/webp' ? '.webp' : '.jpg')), blob, newWidth, newHeight, success: true });
                     } catch (error) {
                         item.classList.add('error');
                         progressFill.style.width = '100%';
@@ -623,11 +623,17 @@
                         const canvas = document.createElement('canvas');
                         canvas.width = newWidth; canvas.height = newHeight;
                         const ctx = canvas.getContext('2d');
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
                         ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                        // Format-aware: preserve PNG as lossless, JPEG/WEBP at max quality
+                        const isPng = file.type === 'image/png';
+                        const isWebp = file.type === 'image/webp';
+                        const outMime = isPng ? 'image/png' : isWebp ? 'image/webp' : 'image/jpeg';
                         canvas.toBlob((blob) => {
                             if (blob) resolve({ blob, newWidth, newHeight, originalWidth: img.width, originalHeight: img.height });
                             else reject(new Error('Canvas failure'));
-                        }, 'image/jpeg', 0.9);
+                        }, outMime, 1.0);
                     };
                     img.onerror = () => reject(new Error('Corrupt image'));
                     img.src = URL.createObjectURL(file);
