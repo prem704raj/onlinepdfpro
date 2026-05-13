@@ -1,7 +1,6 @@
 https://onlinepdfpro.com/
 https://onlinepdfpro.com/about.html
 https://onlinepdfpro.com/blog.html
-https://onlinepdfpro.com/changelog.html
 https://onlinepdfpro.com/compare-pdf.html
 https://onlinepdfpro.com/contact.html
 https://onlinepdfpro.com/disclaimer.html
@@ -18,9 +17,7 @@ https://onlinepdfpro.com/pdf-page-reorder.html
 https://onlinepdfpro.com/pdf-presentation-mode.html
 https://onlinepdfpro.com/pdf-reader.html
 https://onlinepdfpro.com/pdf-story.html
-https://onlinepdfpro.com/pdf-summary.html
 https://onlinepdfpro.com/pdf-to-text-extractor.html
-https://onlinepdfpro.com/pdf-word-counter.html
 https://onlinepdfpro.com/presentation-maker.html
 https://onlinepdfpro.com/privacy.html
 https://onlinepdfpro.com/remove-background.html
@@ -33,7 +30,6 @@ https://onlinepdfpro.com/voice-to-pdf.html
 https://onlinepdfpro.com/tools/add-page-numbers.html
 https://onlinepdfpro.com/tools/compress-pdf.html
 https://onlinepdfpro.com/tools/crop-pdf.html
-https://onlinepdfpro.com/tools/csv-to-xlsx.html
 https://onlinepdfpro.com/tools/delete-pages.html
 https://onlinepdfpro.com/tools/excel-to-pdf.html
 https://onlinepdfpro.com/tools/html-to-pdf.html
@@ -52,12 +48,10 @@ https://onlinepdfpro.com/tools/pdf-unlock.html
 https://onlinepdfpro.com/tools/pdf-watermark.html
 https://onlinepdfpro.com/tools/ppt-to-pdf.html
 https://onlinepdfpro.com/tools/qr-generator.html
-https://onlinepdfpro.com/tools/rotate-pdf-godmode.html
 https://onlinepdfpro.com/tools/rotate-pdf.html
 https://onlinepdfpro.com/tools/sign-pdf.html
 https://onlinepdfpro.com/tools/split-pdf.html
 https://onlinepdfpro.com/tools/word-to-pdf.html
-https://onlinepdfpro.com/tools/xlsx-to-csv.html
 https://onlinepdfpro.com/blog/best-free-online-pdf-tools-in-2025-comparison.html
 https://onlinepdfpro.com/blog/best-free-pdf-tools-2025.html
 https://onlinepdfpro.com/blog/best-pdf-tools-for-students-in-india.html

@@ -1,12 +1,11 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-v65'; 
+const CACHE_NAME = 'onlinepdfpro-v66'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
 
-    'changelog.html',
     'compare-pdf.html',
     'contact.html',
     'disclaimer.html',
@@ -86,7 +85,6 @@ const STATIC_ASSETS = [
     'tools/pdf-watermark.html',
     'tools/ppt-to-pdf.html',
     'tools/qr-generator.html',
-    'tools/rotate-pdf-godmode.html',
     'tools/rotate-pdf.html',
     'tools/sign-pdf.html',
     'tools/split-pdf.html',
