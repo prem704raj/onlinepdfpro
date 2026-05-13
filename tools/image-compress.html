@@ -518,7 +518,7 @@
                         statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(compressedSize)} (${savedPercent}% smaller)`;
 
                         results.push({
-                            name: file.name.replace(/\.[^.]+$/, '-shrunk.jpg'),
+                            name: file.name.replace(/\.[^.]+$/, '-compressed' + (file.type === 'image/png' && quality >= 0.7 ? '.png' : file.type === 'image/webp' ? '.webp' : '.jpg')),
                             originalSize, compressedSize, savedPercent,
                             blob: compressedBlob, success: true
                         });
@@ -540,13 +540,44 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
+                        // Keep original full resolution — no dimension reduction
                         canvas.width = img.width; canvas.height = img.height;
                         const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0);
-                        canvas.toBlob((blob) => {
-                            if (blob) resolve(blob);
-                            else reject(new Error('Process failed'));
-                        }, 'image/jpeg', quality);
+                        // Use high-quality rendering
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                        // Determine output format based on input
+                        const isPng = file.type === 'image/png';
+                        const isWebp = file.type === 'image/webp';
+
+                        if (isPng) {
+                            // PNG: re-encode as PNG (lossless) which strips metadata & re-compresses
+                            // If quality slider is below 70, convert to high-quality JPEG for bigger savings
+                            if (quality < 0.7) {
+                                canvas.toBlob((blob) => {
+                                    if (blob) resolve(blob);
+                                    else reject(new Error('Process failed'));
+                                }, 'image/jpeg', quality);
+                            } else {
+                                canvas.toBlob((blob) => {
+                                    if (blob) resolve(blob);
+                                    else reject(new Error('Process failed'));
+                                }, 'image/png');
+                            }
+                        } else if (isWebp) {
+                            canvas.toBlob((blob) => {
+                                if (blob) resolve(blob);
+                                else reject(new Error('Process failed'));
+                            }, 'image/webp', quality);
+                        } else {
+                            // JPEG: apply quality-based compression
+                            canvas.toBlob((blob) => {
+                                if (blob) resolve(blob);
+                                else reject(new Error('Process failed'));
+                            }, 'image/jpeg', quality);
+                        }
                     };
                     img.onerror = () => reject(new Error('Invalid image'));
                     img.src = URL.createObjectURL(file);

@@ -180,24 +180,35 @@
             </div>
 
             <div id="fileSection" style="display: none;">
-                <div class="options-panel glass-card" style="padding: 40px; margin-bottom: 32px;">
-                    <h3 class="options-title"
-                        style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 24px;">Scaling
-                        Controls</h3>
+                <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary);">📐 Scaling Controls</h3>
 
-                    <div class="resize-mode-tabs">
-                        <button class="resize-mode-tab active" data-mode="percentage">Percentage</button>
-                        <button class="resize-mode-tab" data-mode="dimensions">Dimensions</button>
-                        <button class="resize-mode-tab" data-mode="presets">Presets</button>
+                    <!-- Professional Tab Bar -->
+                    <div class="resize-mode-tabs" style="display: flex; gap: 6px; background: var(--surface-2, rgba(255,255,255,0.06)); padding: 4px; border-radius: 12px; margin-bottom: 28px;">
+                        <button class="resize-mode-tab active" data-mode="percentage" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">📊 Percentage</button>
+                        <button class="resize-mode-tab" data-mode="dimensions" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);">📏 Dimensions</button>
+                        <button class="resize-mode-tab" data-mode="presets" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);">⚡ Presets</button>
                     </div>
 
                     <div id="percentageMode">
-                        <div style="text-align: center; padding: 20px 0;">
-                            <input type="range" id="percentSlider" min="10" max="200" value="100"
-                                style="width: 100%; accent-color: var(--primary);">
-                            <div
-                                style="font-size: 2.25rem; font-weight: 700; color: var(--primary); margin-top: 24px; font-family: 'Outfit', sans-serif;">
-                                <span id="percentValue">100</span>%
+                        <div style="text-align: center; padding: 16px 0;">
+                            <!-- Custom styled slider -->
+                            <div style="position: relative; padding: 0 4px;">
+                                <input type="range" id="percentSlider" min="10" max="200" value="100"
+                                    style="-webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 47%, rgba(255,255,255,0.1) 47%); outline: none; cursor: pointer;">
+                            </div>
+                            <!-- Scale labels -->
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; padding: 0 4px;">
+                                <span>10%</span>
+                                <span>50%</span>
+                                <span>100%</span>
+                                <span>150%</span>
+                                <span>200%</span>
+                            </div>
+                            <!-- Big value display -->
+                            <div style="margin-top: 20px; display: inline-flex; align-items: baseline; gap: 4px; background: var(--surface-2, rgba(255,255,255,0.06)); padding: 12px 32px; border-radius: 16px; border: 1px solid rgba(99,102,241,0.2);">
+                                <span id="percentValue" style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Inter', sans-serif;">100</span>
+                                <span style="font-size: 1.25rem; font-weight: 600; color: var(--text-muted);">%</span>
                             </div>
                         </div>
                     </div>
@@ -426,8 +437,16 @@
 
             document.querySelectorAll('.resize-mode-tab').forEach(tab => {
                 tab.onclick = () => {
-                    document.querySelectorAll('.resize-mode-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.resize-mode-tab').forEach(t => {
+                        t.classList.remove('active');
+                        t.style.background = 'transparent';
+                        t.style.color = 'var(--text-secondary)';
+                        t.style.boxShadow = 'none';
+                    });
                     tab.classList.add('active');
+                    tab.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
+                    tab.style.color = '#fff';
+                    tab.style.boxShadow = '0 4px 12px rgba(99,102,241,0.3)';
                     resizeMode = tab.dataset.mode;
                     document.getElementById('percentageMode').style.display = resizeMode === 'percentage' ? 'block' : 'none';
                     document.getElementById('dimensionsMode').style.display = resizeMode === 'dimensions' ? 'block' : 'none';
@@ -437,10 +456,16 @@
 
             const percentSlider = document.getElementById('percentSlider');
             const percentValue = document.getElementById('percentValue');
+            function updateSliderTrack() {
+                const pct = ((percentSlider.value - 10) / (200 - 10)) * 100;
+                percentSlider.style.background = 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 ' + pct + '%, rgba(255,255,255,0.1) ' + pct + '%)';
+            }
             percentSlider.oninput = () => {
                 percentageScale = parseInt(percentSlider.value);
                 percentValue.textContent = percentageScale;
+                updateSliderTrack();
             };
+            updateSliderTrack();
 
             const widthInput = document.getElementById('widthInput');
             const heightInput = document.getElementById('heightInput');
