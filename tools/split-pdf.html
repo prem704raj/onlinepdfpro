@@ -552,21 +552,35 @@
 
                     // Generate text layer overlay
                     const textLayerNode = item.querySelector(`#text-layer-${i}`);
-                    const textContent = await page.getTextContent();
-                    textContent.items.forEach(textItem => {
-                        const tx = pdfjsLib.Util.transform(cssViewport.transform, textItem.transform);
-                        const fontHeight = Math.sqrt((tx[2] * tx[2]) + (tx[3] * tx[3]));
-                        const textSpan = document.createElement('span');
-                        textSpan.textContent = textItem.str;
-                        textSpan.style.left = tx[4] + 'px';
-                        textSpan.style.top = (tx[5] - fontHeight * 1.05) + 'px'; // Ascender shift
-                        textSpan.style.fontSize = fontHeight + 'px';
-                        textSpan.style.fontFamily = textItem.fontName;
-                        textSpan.style.width = (textItem.width * cssViewport.scale) + 'px';
-                        textSpan.style.height = (fontHeight * 1.4) + 'px'; // Covers descenders
-                        textSpan.style.transform = `scaleX(${(textItem.width * cssViewport.scale) / textItem.width})`;
-                        textLayerNode.appendChild(textSpan);
-                    });
+                    try {
+                        const textContent = await page.getTextContent();
+                        textContent.items.forEach(textItem => {
+                            // Manual transform calculation in case pdfjsLib.Util is missing
+                            const m1 = cssViewport.transform;
+                            const m2 = textItem.transform;
+                            const tx = [
+                                m1[0] * m2[0] + m1[2] * m2[1],
+                                m1[1] * m2[0] + m1[3] * m2[1],
+                                m1[0] * m2[2] + m1[2] * m2[3],
+                                m1[1] * m2[2] + m1[3] * m2[3],
+                                m1[0] * m2[4] + m1[2] * m2[5] + m1[4],
+                                m1[1] * m2[4] + m1[3] * m2[5] + m1[5]
+                            ];
+                            const fontHeight = Math.sqrt((tx[2] * tx[2]) + (tx[3] * tx[3]));
+                            const textSpan = document.createElement('span');
+                            textSpan.textContent = textItem.str;
+                            textSpan.style.left = tx[4] + 'px';
+                            textSpan.style.top = (tx[5] - fontHeight * 1.05) + 'px'; // Ascender shift
+                            textSpan.style.fontSize = fontHeight + 'px';
+                            textSpan.style.fontFamily = textItem.fontName;
+                            textSpan.style.width = (textItem.width * cssViewport.scale) + 'px';
+                            textSpan.style.height = (fontHeight * 1.4) + 'px'; // Covers descenders
+                            textSpan.style.transform = `scaleX(${(textItem.width * cssViewport.scale) / textItem.width})`;
+                            textLayerNode.appendChild(textSpan);
+                        });
+                    } catch (e) {
+                        console.warn("Text layer could not be rendered for page " + i, e);
+                    }
 
                     // Update click logic so text interaction is allowed without triggering page selection
                     item.addEventListener('click', (e) => {
@@ -681,7 +695,11 @@
             document.getElementById('downloadBtn').addEventListener('click', () => {
                 if (!extractedPdfBytes) return;
                 const blob = new Blob([extractedPdfBytes], { type: 'application/pdf' });
-                OnlinePDFPro.Downloader.saveBlob(blob, (pdfFile ? pdfFile.name : 'split-document.pdf'));
+                let newName = 'split-document.pdf';
+                if (pdfFile && pdfFile.name) {
+                    newName = pdfFile.name.replace(/\.[^/.]+$/, "") + "_split.pdf";
+                }
+                OnlinePDFPro.Downloader.saveBlob(blob, newName);
             });
 
             document.getElementById('splitAnother').addEventListener('click', resetTool);
