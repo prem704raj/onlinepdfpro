@@ -232,6 +232,50 @@
             gap: 4px;
         }
 
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+            padding-left: 8px;
+            border-left: 1px solid var(--border);
+        }
+
+        .zoom-controls button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--border);
+            background: var(--surface-1);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .zoom-controls button:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .zoom-controls button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .zoom-level {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 38px;
+            text-align: center;
+        }
+
         .page-controls button {
             width: 28px;
             height: 28px;
@@ -569,6 +613,11 @@
                                     onchange="jumpToPage(1)" />
                                 <span class="page-total" id="pageTotal1">/ 1</span>
                                 <button onclick="changePage(1, 1)" id="next1">▶</button>
+                                <div class="zoom-controls">
+                                    <button onclick="zoomPanel(1, -1)" id="zoomOut1" title="Zoom Out">−</button>
+                                    <span class="zoom-level" id="zoomLevel1">100%</span>
+                                    <button onclick="zoomPanel(1, 1)" id="zoomIn1" title="Zoom In">+</button>
+                                </div>
                             </div>
                         </div>
                         <div class="canvas-wrapper" id="wrapper1">
@@ -589,6 +638,11 @@
                                     onchange="jumpToPage(2)" />
                                 <span class="page-total" id="pageTotal2">/ 1</span>
                                 <button onclick="changePage(2, 1)" id="next2">▶</button>
+                                <div class="zoom-controls">
+                                    <button onclick="zoomPanel(2, -1)" id="zoomOut2" title="Zoom Out">−</button>
+                                    <span class="zoom-level" id="zoomLevel2">100%</span>
+                                    <button onclick="zoomPanel(2, 1)" id="zoomIn2" title="Zoom In">+</button>
+                                </div>
                             </div>
                         </div>
                         <div class="canvas-wrapper" id="wrapper2">
@@ -687,6 +741,11 @@
         var textItems2 = [];
         var canvasScale1 = 1;
         var canvasScale2 = 1;
+        var zoomLevel1 = 100;
+        var zoomLevel2 = 100;
+        var ZOOM_STEP = 25;
+        var ZOOM_MIN = 50;
+        var ZOOM_MAX = 300;
 
         // File upload handlers
         document.getElementById('file1').addEventListener('change', async function (e) {
@@ -766,11 +825,13 @@
             var page = await pdfDoc.getPage(pageNum);
             var viewport = page.getViewport({ scale: 1 });
 
-            // Scale to fit the panel width
+            // Scale to fit the panel width, then apply user zoom
             var wrapperWidth = wrapper.clientWidth - 20;
-            var scale = wrapperWidth / viewport.width;
-            if (scale < 0.5) scale = 0.5;
-            if (scale > 2.5) scale = 2.5;
+            var baseScale = wrapperWidth / viewport.width;
+            if (baseScale < 0.5) baseScale = 0.5;
+            if (baseScale > 2.5) baseScale = 2.5;
+            var zoomMultiplier = (panelNum === 1 ? zoomLevel1 : zoomLevel2) / 100;
+            var scale = baseScale * zoomMultiplier;
 
             // High-DPI rendering: render at 2x+ for crisp text & images
             var dpr = Math.max(window.devicePixelRatio || 1, 2);
@@ -881,6 +942,24 @@
             else currentPage2 = page;
 
             renderPage(panelNum, page);
+        }
+
+        function zoomPanel(panelNum, direction) {
+            var currentZoom = panelNum === 1 ? zoomLevel1 : zoomLevel2;
+            var newZoom = currentZoom + (direction * ZOOM_STEP);
+            if (newZoom < ZOOM_MIN) newZoom = ZOOM_MIN;
+            if (newZoom > ZOOM_MAX) newZoom = ZOOM_MAX;
+            if (newZoom === currentZoom) return;
+
+            if (panelNum === 1) zoomLevel1 = newZoom;
+            else zoomLevel2 = newZoom;
+
+            document.getElementById('zoomLevel' + panelNum).textContent = newZoom + '%';
+            document.getElementById('zoomIn' + panelNum).disabled = newZoom >= ZOOM_MAX;
+            document.getElementById('zoomOut' + panelNum).disabled = newZoom <= ZOOM_MIN;
+
+            var currentPage = panelNum === 1 ? currentPage1 : currentPage2;
+            renderPage(panelNum, currentPage);
         }
 
         function toggleHighlight() {
