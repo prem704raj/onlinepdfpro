@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v69'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v70'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
@@ -68,7 +68,7 @@ const STATIC_ASSETS = [
     'tools/crop-pdf.html',
 
     'tools/delete-pages.html',
-    'tools/excel-to-pdf.html',
+
     'tools/html-to-pdf.html',
     'tools/image-compress.html',
     'tools/image-crop.html',
@@ -77,17 +77,15 @@ const STATIC_ASSETS = [
     'tools/merge-pdf.html',
     'tools/ocr.html',
     'tools/pdf-lock.html',
-    'tools/pdf-to-excel.html',
-    'tools/pdf-to-ppt.html',
-    'tools/pdf-to-word.html',
+
     'tools/pdf-unlock.html',
     'tools/pdf-watermark.html',
-    'tools/ppt-to-pdf.html',
+
     'tools/qr-generator.html',
     'tools/rotate-pdf.html',
     'tools/sign-pdf.html',
     'tools/split-pdf.html',
-    'tools/word-to-pdf.html',
+
 
     'css/style.css',
     'css/mobile-fix-v2.css',
