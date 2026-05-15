@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Background from Image Free Online | OnlinePDFPro</title>
+    <meta name="description" content="Remove background from any image for free using AI. 100% private, works in your browser. No upload needed. Supports JPG, PNG, WEBP.">
+    <meta name="keywords" content="remove background, background remover, remove bg, transparent background, image background remover free">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <link rel="canonical" href="https://onlinepdfpro.com/remove-background.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/remove-background.html">
+    <meta property="og:title" content="Remove Background from Image Free Online | OnlinePDFPro">
+    <meta property="og:description" content="Remove background from any image for free using AI. 100% private, works in your browser.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools.html"},{"@type":"ListItem","position":3,"name":"Remove Background","item":"https://onlinepdfpro.com/remove-background.html"}]}</script>
+    <style>
+    .bg-tool-editor{display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:24px}
+    .bg-tool-preview{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:20px;min-height:400px;display:flex;flex-direction:column}
+    .bg-tool-sidebar{display:flex;flex-direction:column;gap:16px}
+    .bg-tool-sidebar .panel{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:20px}
+    .bg-tool-sidebar .panel h3{font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--text-primary);display:flex;align-items:center;gap:8px}
+    .view-tabs{display:flex;gap:4px;margin-bottom:14px;background:var(--surface-2);padding:3px;border-radius:10px}
+    .view-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--text-secondary);font-size:.82rem;font-weight:600;cursor:pointer;border-radius:8px;transition:all .2s;font-family:inherit}
+    .view-tab.active{background:var(--accent);color:#fff}
+    .preview-area{flex:1;display:flex;align-items:center;justify-content:center;border-radius:12px;overflow:hidden;min-height:350px;position:relative}
+    .preview-area img{max-width:100%;max-height:450px;object-fit:contain}
+    .checker-bg{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+    [data-theme="dark"] .checker-bg{background-image:linear-gradient(45deg,#333 25%,transparent 25%),linear-gradient(-45deg,#333 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#333 75%),linear-gradient(-45deg,transparent 75%,#333 75%)}
+    .bg-colors{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .bg-color-btn{width:36px;height:36px;border-radius:10px;border:2px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
+    .bg-color-btn:hover,.bg-color-btn.active{border-color:var(--accent);transform:scale(1.1)}
+    .bg-color-btn.active::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;color:var(--accent)}
+    .bg-transparent-swatch{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0}
+    .color-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .color-row input[type="color"]{width:40px;height:36px;border:2px solid var(--border);border-radius:10px;cursor:pointer;padding:2px;background:var(--surface-2)}
+    .hex-field{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--surface-2);color:var(--text-primary);font-family:monospace}
+    .dl-btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-bottom:8px}
+    .dl-btn:hover{transform:translateY(-2px)}
+    .dl-btn-primary{background:var(--accent);color:#fff}
+    .dl-btn-secondary{background:var(--surface-2);border:2px solid var(--border);color:var(--text-primary)}
+    .processing-overlay{text-align:center;padding:48px 24px}
+    .processing-overlay .spinner{width:60px;height:60px;border:4px solid var(--border);border-top:4px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .progress-track{width:100%;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;margin:16px 0}
+    .progress-fill-bar{height:100%;background:var(--accent);border-radius:4px;width:0%;transition:width .3s}
+    .model-info{background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);color:#f59e0b;padding:12px 16px;border-radius:12px;font-size:.8rem;margin-top:16px;line-height:1.5}
+    .error-box{background:var(--surface-1);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;max-width:500px;margin:0 auto}
+    .error-box h3{margin:12px 0 8px;font-size:1.2rem}
+    .error-box p{color:var(--text-secondary);font-size:.9rem;margin-bottom:16px}
+    .error-detail{background:var(--surface-2);padding:12px;border-radius:8px;font-size:.75rem;color:var(--text-secondary);text-align:left;max-height:100px;overflow-y:auto;font-family:monospace;word-break:break-all;margin-bottom:16px}
+    .compare-wrap{position:relative;display:inline-block;max-width:100%}
+    .compare-wrap > img{max-width:100%;max-height:450px;display:block;width:auto;height:auto;margin:0 auto}
+    .compare-before{position:absolute;top:0;left:0;height:100%;overflow:hidden;width:50%}
+    .compare-before img{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none;display:block;}
+    .compare-slider-line{position:absolute;top:0;left:50%;width:4px;height:100%;background:var(--accent);cursor:ew-resize;z-index:10;transform:translateX(-50%)}
+    .compare-slider-line::after{content:"⟨⟩";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700}
+    .compare-label{position:absolute;top:10px;padding:4px 10px;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;font-weight:600;border-radius:16px;z-index:5}
+    .compare-label-before{left:10px}
+    .compare-label-after{right:10px}
+    @media(max-width:768px){.bg-tool-editor{grid-template-columns:1fr}.bg-tool-preview{min-height:280px}}
+    
+    .dl-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #resultView{cursor:crosshair;touch-action:none;}
+    #brushCursor{position:absolute;border:1px solid #fff;border-radius:50%;box-shadow:0 0 2px rgba(0,0,0,0.5);pointer-events:none;display:none;transform:translate(-50%,-50%);z-index:50;background:rgba(255,255,255,0.2);}
+</style>
+    <script defer src="js/third-party-loader.js"></script>
+</head>
+<body class="fade-in">
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.svg" alt="OnlinePDFPro" class="logo-icon" style="width:28px;height:28px;border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="#" onclick="smartEmail(event)"  class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242; Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
+                <div class="header-search" style="position:relative;margin-right:8px;">
+                    <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.9rem;opacity:0.5;">&#128269;</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..." style="padding:8px 12px 8px 32px;border-radius:20px;border:1px solid var(--border,#e2e8f0);background:var(--bg-primary,#fff);color:var(--text-primary,#1a1a2e);font-size:0.85rem;width:180px;transition:width 0.2s;outline:none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg></button>
+                    <div class="lang-dropdown"><div class="lang-search-wrap"><input type="text" class="lang-search" placeholder="Search language..."></div><ul class="lang-list"></ul></div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px;background:none;border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;">
+                    <span class="theme-icon-light">&#127769;</span>
+                    <span class="theme-icon-dark">&#9728;&#65039;</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="tool-page">
+        <div class="container" style="max-width:900px;">
+            <div class="tool-header">
+                <span class="section-tag fade-in">AI Image Tool</span>
+                <h1 class="tool-title fade-in">Remove Background from Image — Free & Private</h1>
+                <p class="tool-description fade-in" style="animation-delay:0.1s;">AI-powered background remover. Works 100% in your browser — images never leave your device. No signup, no watermark.</p>
+            </div>
+
+            <!-- UPLOAD -->
+            <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay:0.2s;">
+                <span class="upload-icon">&#9986;&#127912;</span>
+                <p class="upload-text">Drop image here or click to upload</p>
+                <p class="upload-hint" style="display:flex;gap:12px;justify-content:center;align-items:center;">
+                    <span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span>
+                    <span>&bull;</span><span>Max: 10MB</span>
+                    <span>&bull;</span><span>JPG, PNG, WEBP</span>
+                </p>
+                <button class="btn btn-primary upload-btn">Choose Image</button>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" style="display:none">
+            <div style="text-align:center; margin-bottom: 24px; padding: 15px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border);">
+                <label for="aiQuality" style="font-weight:600; font-size: 0.95rem; color: var(--text-secondary);">AI Quality: </label>
+                <select id="aiQuality" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-primary); cursor:pointer; font-family:inherit; font-weight:500; font-size:0.9rem; margin-left: 6px;">
+                    <option value="isnet_fp16">Standard Quality (Fast)</option>
+                    <option value="isnet" selected>High Accuracy (Best, Slower)</option>
+                </select>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Higher accuracy dramatically improves complex edges like hair and feathers.</div>
+            </div>
+
+            <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-secondary" id="pasteBtn" style="padding:8px 18px;font-size:.85rem;">&#128203; Paste from Clipboard</button>
+                <button class="btn btn-secondary" id="sampleBtn" style="padding:8px 18px;font-size:.85rem;">&#128248; Try Sample</button>
+            </div>
+
+            <!-- PROCESSING -->
+            <div id="processingSection" style="display:none;">
+                <div class="glass-card processing-overlay">
+                    <div class="spinner"></div>
+                    <h3 id="processingTitle" style="font-size:1.3rem;margin-bottom:4px;">Loading AI Model...</h3>
+                    <div class="progress-track"><div class="progress-fill-bar" id="progressBar"></div></div>
+                    <p id="progressText" style="color:var(--text-secondary);font-size:.9rem;">Initializing...</p>
+                    <div class="model-info" id="modelNotice">&#9432; First time takes 30-90s to download the AI model (~45MB). It gets cached for future use!</div>
+                </div>
+            </div>
+
+            <!-- ERROR -->
+            <div id="errorSection" style="display:none;">
+                <div class="error-box">
+                    <span style="font-size:3rem;">&#9888;&#65039;</span>
+                    <h3>Something Went Wrong</h3>
+                    <p id="errorMessage">Failed to process image.</p>
+                    <div class="error-detail" id="errorDetails"></div>
+                    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                        <button class="btn btn-primary" id="retryBtn">&#128260; Try Again</button>
+                        <button class="btn btn-secondary" id="backBtn">&#8592; Go Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDITOR -->
+            <div id="editorSection" style="display:none;">
+                <div class="bg-tool-editor">
+                    <div class="bg-tool-preview">
+                        <div class="view-tabs">
+                            <button class="view-tab active" data-view="result">Result</button>
+                            <button class="view-tab" data-view="original">Original</button>
+                            <button class="view-tab" data-view="compare">Compare</button>
+                        </div>
+                        <div class="preview-area checker-bg" id="resultView" style="position:relative;"><canvas id="resultCanvas" style="max-width:100%;max-height:450px;display:block;margin:0 auto;"></canvas><div id="brushCursor"></div></div>
+                        <div class="preview-area" id="originalView" style="display:none;"><img id="originalImage" alt="Original"></div>
+                        <div class="preview-area" id="compareView" style="display:none;">
+                            <div class="compare-wrap" id="compareWrap">
+                                <img id="compareAfter" alt="After">
+                                <div class="compare-before" id="compareBefore"><img id="compareBefore_img" alt="Before"></div>
+                                <div class="compare-slider-line" id="compareSlider"></div>
+                                <span class="compare-label compare-label-before">Before</span>
+                                <span class="compare-label compare-label-after">After</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-tool-sidebar">
+                        <div class="panel">
+                            <h3>&#128396;&#65039; Touch Up</h3>
+                            <div style="display:flex;gap:8px;margin-bottom:12px;">
+                                <button class="dl-btn dl-btn-secondary active" id="modeRestore" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Restore</button>
+                                <button class="dl-btn dl-btn-secondary" id="modeErase" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Erase</button>
+                            </div>
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Brush Size:</span> <span id="brushSizeVal">20px</span></div>
+                            <input type="range" id="brushSize" min="5" max="150" value="20" style="width:100%;cursor:pointer;">
+                        </div>
+                        <div class="panel">
+                            <h3>✨ Professional Finish</h3>
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Smoothing:</span> <span id="smoothVal">1px</span></div>
+                            <input type="range" id="edgeSmooth" min="0" max="10" value="1" style="width:100%;cursor:pointer;margin-bottom:12px;">
+                            
+                            <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Contrast:</span> <span id="contrastVal">20%</span></div>
+                            <input type="range" id="edgeContrast" min="0" max="100" value="20" style="width:100%;cursor:pointer;margin-bottom:12px;">
+                            
+                            <button class="dl-btn dl-btn-secondary" id="applyRefine" style="font-size:0.85rem;padding:8px;border-color:var(--accent);color:var(--accent);">Refine Now</button>
+                        </div>
+                        <div class="panel">
+                            <h3>🎨 Background</h3>
+                            <div class="bg-colors">
+                                <button class="bg-color-btn bg-transparent-swatch active" data-bg="transparent" title="Transparent"></button>
+                                <button class="bg-color-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
+                                <button class="bg-color-btn" data-bg="#000000" style="background:#000" title="Black"></button>
+                                <button class="bg-color-btn" data-bg="#F3F4F6" style="background:#F3F4F6" title="Light Gray"></button>
+                                <button class="bg-color-btn" data-bg="#0066FF" style="background:#0066FF" title="Blue"></button>
+                            </div>
+                            <div class="color-row">
+                                <input type="color" id="colorPicker" value="#6C63FF">
+                                <input type="text" class="hex-field" id="hexInput" value="#6C63FF" placeholder="#HEX">
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <h3>&#128229; Download</h3>
+                            <button class="dl-btn dl-btn-primary" id="downloadPng">&#128229; Download PNG</button>
+                            <button class="dl-btn dl-btn-secondary" id="downloadJpg">&#128229; Download JPG</button>
+                        </div>
+                        <div class="panel">
+                            <button class="dl-btn dl-btn-secondary" id="newImageBtn" style="border-color:var(--accent);color:var(--accent);">&#128260; Upload New Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="privacy-reminder fade-in" style="animation-delay:0.3s;margin-top:20px;">
+                <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+                <span>AI runs in your browser. Images never leave your device.</span>
+            </div>
+        </div>
+
+        
+
+        <!-- Ad Spacer -->
+        <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+
+        <section class="how-it-works" style="margin:20px auto;padding:30px;background:var(--surface-1);border-radius:16px;border:1px solid var(--border);max-width:900px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">How to Remove Background from Images</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 1: Upload Image</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Click upload or drag & drop your image into the tool.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 2: AI Processes</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Our AI model runs in your browser to detect and remove the background.</p></div>
+                <div><h3 style="font-size:16px;color:var(--accent);margin:0 0 8px;">Step 3: Download</h3><p style="font-size:14px;color:var(--text-secondary);margin:0;">Choose a background color or keep transparent, then download PNG or JPG.</p></div>
+            </div>
+        </section>
+        <section class="related-tools" style="margin:40px auto 20px;padding:0 20px;max-width:900px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">Related Image Tools</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+                <a href="tools/image-compress.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Compress Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Reduce image file size</p></a>
+                <a href="tools/image-resize.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Resize Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Change image dimensions</p></a>
+                <a href="tools/image-crop.html" style="display:block;padding:20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:transform .2s;"><h3 style="margin:0 0 8px;color:var(--accent);font-size:18px;">Crop Image</h3><p style="margin:0;color:var(--text-secondary);font-size:14px;">Crop and trim images</p></a>
+            </div>
+        </section>
+        <section class="faq-section" style="margin:40px auto;max-width:900px;padding:0 20px;">
+            <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">Frequently Asked Questions</h2>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Is this really free?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! No signup, no watermarks, no limits. Download full HD results for free.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Are my images safe?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes. Everything is processed in your browser using AI. No images are uploaded to any server.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Why is the first use slow?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">The AI model (~45MB) downloads on first use. It gets cached in your browser for instant use afterwards.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Works on mobile?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! Works on all devices. May be slower on low-end phones.</p></div>
+        </section>
+    </main>
+
+    <script src="js/app.js?v=11"></script>
+
+    <footer style="background:var(--surface-1);border-top:1px solid var(--border);padding:40px 20px;margin-top:60px;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-bottom:30px;">
+                <div><h4 style="color:#60a5fa;margin:0 0 15px;font-size:18px;">Online PDF Pro</h4><p style="color:var(--text-secondary);font-size:14px;line-height:1.6;">Free online PDF tools used by 100,000+ people worldwide.</p></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">Popular Tools</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="tools/merge-pdf.html">Merge PDF</a></li><li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li><li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li><li style="margin:8px 0;"><a href="tools/pdf-to-word.html">PDF to Word</a></li></ul></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">More Tools</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="tools/ocr.html">OCR Extract Text</a></li><li style="margin:8px 0;"><a href="tools/image-compress.html">Image Compress</a></li><li style="margin:8px 0;"><a href="tools/image-resize.html">Image Resize</a></li></ul></div>
+                <div><h4 style="color:var(--text-primary);margin:0 0 15px;font-size:16px;">Company</h4><ul style="list-style:none;padding:0;margin:0;"><li style="margin:8px 0;"><a href="about.html">About Us</a></li><li style="margin:8px 0;"><a href="contact.html">Contact</a></li><li style="margin:8px 0;"><a href="privacy.html">Privacy Policy</a></li><li style="margin:8px 0;"><a href="terms.html">Terms</a></li><li style="margin:8px 0;"><a href="blog.html">Blog</a></li>    <li style="margin:8px 0;"><a href="mailto:support@onlinepdfpro.com">support@onlinepdfpro.com</a></li>
+                    </ul></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:20px 0;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
+                <p style="color:var(--text-muted);font-size:13px;margin:0;">&copy; 2026 Online PDF Pro. All rights reserved. Made with &#10084;&#65039; in India.</p>
+                <div style="display:flex;gap:15px;">
+                    <span style="padding:6px 14px;background:rgba(37,99,235,.15);border-radius:20px;font-size:12px;color:#60a5fa;font-weight:bold;">&#128274; Your files are safe</span>
+                    <span style="padding:6px 14px;background:rgba(16,185,129,.15);border-radius:20px;font-size:12px;color:#4ade80;font-weight:bold;">&#10003; 100% Client-Side</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('[BG] Init...');
+        var removeBgFn = null, libReady = false;
+        
+        var origFile = null, resultBlob = null, curBg = 'transparent';
+        var origImgObj = null, maskImgObj = null; // Stored HTMLImageElements
+        var brushMode = 'restore', brushSize = 20, isDrawing = false;
+        var rCanvas = $('resultCanvas'), rCtx = rCanvas ? rCanvas.getContext('2d') : null;
+        var lastPt = null;
+
+        function $(id) { return document.getElementById(id); }
+
+        // --- SECTIONS ---
+        function showOnly(id) {
+            ['uploadZone','processingSection','errorSection','editorSection'].forEach(function(s) {
+                var el = $(s); if(el) el.style.display = 'none';
+            });
+            var btns = document.querySelector('.upload-zone + input + div');
+            if(btns) btns.style.display = id === 'uploadZone' ? '' : 'none';
+            var el = $(id); if(el) el.style.display = id === 'uploadZone' ? '' : 'block';
+            window.scrollTo({top:0,behavior:'smooth'});
+        }
+
+        // --- LOAD AI ---
+        async function loadAI() {
+            if(libReady && removeBgFn) return true;
+            var urls = ['https://esm.sh/@imgly/background-removal@1.5.5', 'https://esm.sh/@imgly/background-removal', 'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'];
+            for(var i=0;i<urls.length;i++){
+                try{
+                    var mod = await import(urls[i]);
+                    var fn = mod.removeBackground || mod.default;
+                    if(typeof fn !== 'function'){ for(var k in mod){ if(typeof mod[k]==='function'){fn=mod[k];break;} } }
+                    if(typeof fn === 'function'){ removeBgFn=fn; libReady=true; return true; }
+                }catch(e){console.warn('[BG] Failed: '+urls[i],e.message);}
+            }
+            return false;
+        }
+
+        // --- FILE UPLOAD ---
+        var uploadZone = $('uploadZone'), fileInput = $('fileInput');
+        if(window.OnlinePDFPro && OnlinePDFPro.FileUploader){
+            OnlinePDFPro.FileUploader.init('uploadZone',{ accept:'image/jpeg,image/png,image/webp,image/bmp', multiple:false, maxFiles:1, maxSize:10*1024*1024, onFilesSelected:function(files){if(files.length>0) processFile(files[0]);} });
+        } else {
+            if(uploadZone){ uploadZone.addEventListener('click',function(){fileInput.click();}); uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.classList.add('dragover');}); uploadZone.addEventListener('dragleave',function(e){e.preventDefault();uploadZone.classList.remove('dragover');}); uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)processFile(e.dataTransfer.files[0]);}); }
+            if(fileInput) fileInput.addEventListener('change',function(e){if(e.target.files.length)processFile(e.target.files[0]);});
+        }
+        var pasteBtn=$('pasteBtn');
+        if(pasteBtn) pasteBtn.addEventListener('click',async function(){
+            try{ var items=await navigator.clipboard.read(); for(var i=0;i<items.length;i++){ var types=items[i].types; for(var j=0;j<types.length;j++){ if(types[j].startsWith('image/')){ var blob=await items[i].getType(types[j]); processFile(new File([blob],'pasted.png',{type:types[j]})); return; } } } alert('No clipboard image'); }catch(e){alert('Paste failed');}
+        });
+        document.addEventListener('paste',function(e){
+            var items=e.clipboardData?e.clipboardData.items:null; if(!items) return;
+            for(var i=0;i<items.length;i++){ if(items[i].type.startsWith('image/')){ var f=items[i].getAsFile(); if(f) processFile(f); return; } }
+        });
+        var sampleBtn=$('sampleBtn');
+        if(sampleBtn) sampleBtn.addEventListener('click',function(){
+            var c=document.createElement('canvas');c.width=500;c.height=600;var ctx=c.getContext('2d');
+            var g=ctx.createLinearGradient(0,0,500,600);g.addColorStop(0,'#667eea');g.addColorStop(1,'#764ba2');ctx.fillStyle=g;ctx.fillRect(0,0,500,600);
+            ctx.fillStyle='#FFE0BD';ctx.beginPath();ctx.arc(250,200,80,0,Math.PI*2);ctx.fill();
+            ctx.fillStyle='#3498DB';ctx.beginPath();ctx.moveTo(140,300);ctx.lineTo(360,300);ctx.lineTo(380,580);ctx.lineTo(120,580);ctx.closePath();ctx.fill();
+            c.toBlob(function(b){if(b) processFile(new File([b],'sample.png',{type:'image/png'}));});
+        });
+
+        function imgFromBlob(blob){ return new Promise(function(res,rej){var img=new Image();img.onload=function(){res(img);};img.onerror=rej;img.src=URL.createObjectURL(blob);}); }
+
+        // ── Professional Edge Refinement Engine ──────────────────────────
+        function refineEdges(canvas, ctx, radius, threshold, contrast) {
+            var w = canvas.width, h = canvas.height;
+            var imgData = ctx.getImageData(0, 0, w, h);
+            var data = imgData.data;
+
+            // Step 1: Extract alpha channel
+            var alpha = new Float32Array(w * h);
+            for (var i = 0; i < w * h; i++) alpha[i] = data[i * 4 + 3] / 255;
+
+            // Step 2: Smooth / Blur
+            if (radius > 0) {
+                alpha = gaussianBlurAlpha(alpha, w, h, radius);
+            }
+
+            // Step 3: Apply Contrast / Tighten to clean up fringes
+            // contrast is 0 to 1.0
+            var factor = 1 + contrast * 10;
+            for (var i = 0; i < w * h; i++) {
+                var a = alpha[i];
+                // Sigmoid-like contrast centering around 0.5
+                a = 1 / (1 + Math.exp(-factor * (a - 0.5)));
+                
+                // Cleanup absolute zero/one
+                if (a < threshold) a = 0;
+                if (a > 1 - threshold) a = 1;
+                alpha[i] = a;
+            }
+
+            // Step 4: Small artifact removal
+            alpha = removeSmallIslands(alpha, w, h, Math.max(w, h) * 0.005);
+
+            // Step 5: Write back
+            for (var i = 0; i < w * h; i++) {
+                data[i * 4 + 3] = Math.round(Math.max(0, Math.min(1, alpha[i])) * 255);
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function gaussianBlurAlpha(src, w, h, r) {
+            // Separable box blur (3 passes ≈ Gaussian)
+            var dst = new Float32Array(src);
+            for (var pass = 0; pass < 3; pass++) {
+                var tmp = new Float32Array(w * h);
+                // Horizontal pass
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var sum = 0, count = 0;
+                        for (var dx = -r; dx <= r; dx++) {
+                            var nx = x + dx;
+                            if (nx >= 0 && nx < w) { sum += dst[y * w + nx]; count++; }
+                        }
+                        tmp[y * w + x] = sum / count;
+                    }
+                }
+                // Vertical pass
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var sum = 0, count = 0;
+                        for (var dy = -r; dy <= r; dy++) {
+                            var ny = y + dy;
+                            if (ny >= 0 && ny < h) { sum += tmp[ny * w + x]; count++; }
+                        }
+                        dst[y * w + x] = sum / count;
+                    }
+                }
+            }
+            return dst;
+        }
+
+        function removeSmallIslands(alpha, w, h, minSize) {
+            // Remove small opaque islands (leftover debris)
+            var visited = new Uint8Array(w * h);
+            var minArea = minSize * minSize;
+
+            function floodFill(startIdx, isOpaque) {
+                var stack = [startIdx];
+                var region = [];
+                while (stack.length > 0) {
+                    var idx = stack.pop();
+                    if (visited[idx]) continue;
+                    var val = alpha[idx];
+                    if (isOpaque ? val < 0.5 : val >= 0.5) continue;
+                    visited[idx] = 1;
+                    region.push(idx);
+                    var x = idx % w, y = Math.floor(idx / w);
+                    if (x > 0) stack.push(idx - 1);
+                    if (x < w - 1) stack.push(idx + 1);
+                    if (y > 0) stack.push(idx - w);
+                    if (y < h - 1) stack.push(idx + w);
+                }
+                return region;
+            }
+
+            // Remove small opaque blobs (debris/artifacts)
+            visited.fill(0);
+            for (var i = 0; i < w * h; i++) {
+                if (!visited[i] && alpha[i] >= 0.5) {
+                    var region = floodFill(i, true);
+                    if (region.length < minArea) {
+                        for (var j = 0; j < region.length; j++) alpha[region[j]] = 0;
+                    }
+                }
+            }
+
+            // Remove small transparent holes inside subject
+            visited.fill(0);
+            for (var i = 0; i < w * h; i++) {
+                if (!visited[i] && alpha[i] < 0.5) {
+                    var region = floodFill(i, false);
+                    // Only fill holes that aren't touching image border
+                    var touchesBorder = false;
+                    for (var j = 0; j < region.length; j++) {
+                        var x = region[j] % w, y = Math.floor(region[j] / w);
+                        if (x === 0 || x === w - 1 || y === 0 || y === h - 1) { touchesBorder = true; break; }
+                    }
+                    if (!touchesBorder && region.length < minArea * 2) {
+                        for (var j = 0; j < region.length; j++) alpha[region[j]] = 1;
+                    }
+                }
+            }
+
+            return alpha;
+        }
+
+        async function processFile(file){
+            if(!file.type.startsWith('image/')){alert('Not an image');return;}
+            if(file.size>10*1024*1024){alert('Too large');return;}
+            origFile=file; origImgObj = await imgFromBlob(file);
+            showOnly('processingSection');
+            var pb=$('progressBar'),pt=$('progressText'),pti=$('processingTitle'),mn=$('modelNotice');
+            try{
+                if(pb) pb.style.width='5%'; if(pt) pt.textContent='Loading AI library...';
+                var ok=await loadAI(); if(!ok) throw new Error('Failed to load AI');
+                var selModel = $('aiQuality') ? $('aiQuality').value : 'isnet';
+                if(pb) pb.style.width='20%'; if(pt) pt.textContent='AI ready...'; if(pti) pti.textContent='Removing Background... ('+(selModel==='isnet'?'High Accuracy':'Standard')+')';
+                var blob=await removeBgFn(file,{
+                    model: selModel, output: { format: 'image/png', quality: 1.0 },
+                    progress:function(key,cur,tot){
+                        var pct=tot>0?Math.round(cur/tot*100):0;
+                        if(key.indexOf('fetch')>-1||key.indexOf('download')>-1){
+                            if(pb) pb.style.width=(20+pct*.35)+'%'; if(pt) pt.textContent='Downloading AI model... '+pct+'%';
+                        }else{
+                            if(mn) mn.style.display='none';
+                            if(pb) pb.style.width=(55+pct*.40)+'%'; if(pt) pt.textContent='Matting edges... '+pct+'%';
+                        }
+                    }
+                });
+
+                // ── Post-Processing: Professional Edge Refinement ──
+                if(pt) pt.textContent='Refining edges...';
+                if(pb) pb.style.width='96%';
+
+                // Draw raw AI result onto canvas for post-processing
+                resultBlob=blob; maskImgObj = await imgFromBlob(blob);
+                if(rCanvas && origImgObj) {
+                    rCanvas.width=origImgObj.naturalWidth;
+                    rCanvas.height=origImgObj.naturalHeight;
+                    rCtx.clearRect(0,0,rCanvas.width,rCanvas.height);
+                    rCtx.drawImage(maskImgObj, 0, 0);
+
+                    // Adaptive parameters based on image resolution
+                    var maxDim = Math.max(rCanvas.width, rCanvas.height);
+                    var blurRadius = Math.max(1, Math.round(maxDim / 1000)); 
+                    var contrastVal = 0.2;
+                    var alphaThreshold = 0.05; 
+
+                    refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, contrastVal);
+
+                    // Re-create the blob from refined canvas
+                    var refinedBlob = await new Promise(function(res) {
+                        rCanvas.toBlob(function(b) { res(b); }, 'image/png');
+                    });
+                    resultBlob = refinedBlob;
+                    maskImgObj = await imgFromBlob(refinedBlob);
+                }
+
+                var origURL=URL.createObjectURL(file), resURL=URL.createObjectURL(resultBlob);
+                var oi=$('originalImage'),ca=$('compareAfter'),cb=$('compareBefore_img'),rv=$('resultView');
+                if(oi) oi.src=origURL; if(ca) { ca.src=resURL; ca.style.display='none'; } if(cb) cb.src=origURL;
+                curBg='transparent'; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]'); if(tb) tb.classList.add('active');
+                if(rv){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }
+                if(pb) pb.style.width='100%'; if(pt) pt.textContent='Done!';
+                setTimeout(function(){showOnly('editorSection');},500);
+            }catch(err){
+                console.error(err); var em=$('errorMessage'),ed=$('errorDetails');
+                if(em) em.textContent=err.message||'Failed'; if(ed) ed.textContent=String(err.stack||err).substring(0,500); showOnly('errorSection');
+            }
+        }
+
+        var retryBtn=$('retryBtn'),backBtn=$('backBtn'),newBtn=$('newImageBtn');
+        if(retryBtn) retryBtn.addEventListener('click',function(){if(origFile) processFile(origFile);else resetAll();});
+        if(backBtn||newBtn) [backBtn,newBtn].forEach(b=>b&&b.addEventListener('click',resetAll));
+        function resetAll(){origFile=null;resultBlob=null;curBg='transparent';origImgObj=null;maskImgObj=null;if(fileInput)fileInput.value=''; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');if(tb)tb.classList.add('active');showOnly('uploadZone');}
+
+        // --- TOUCH UP (BRUSH) ---
+        var mRestore=$('modeRestore'), mErase=$('modeErase'), bSlider=$('brushSize'), bVal=$('brushSizeVal'), cursor=$('brushCursor'), rv=$('resultView');
+        if(mRestore){ mRestore.onclick=function(){brushMode='restore';mRestore.classList.add('active');mErase.classList.remove('active');}; }
+        if(mErase){ mErase.onclick=function(){brushMode='erase';mErase.classList.add('active');mRestore.classList.remove('active');}; }
+        if(bSlider){ bSlider.oninput=function(){brushSize=parseInt(this.value); bVal.textContent=brushSize+'px'; syncCursorSize();}; }
+        
+        function syncCursorSize() { 
+            if(!rCanvas || !cursor) return;
+            var rect=rCanvas.getBoundingClientRect(); var scale = rect.width / rCanvas.width;
+            var visualSize = brushSize * scale; cursor.style.width = cursor.style.height = visualSize+'px';
+        }
+        
+        function getPt(e) {
+            var rect = rCanvas.getBoundingClientRect();
+            var cx = e.clientX||(e.touches?e.touches[0].clientX:0); var cy = e.clientY||(e.touches?e.touches[0].clientY:0);
+            return { x: (cx - rect.left) * (rCanvas.width / rect.width), y: (cy - rect.top) * (rCanvas.height / rect.height) };
+        }
+        
+        function drawLine(p1, p2) {
+            if(!rCtx) return;
+            rCtx.save();
+            rCtx.lineCap = 'round'; rCtx.lineJoin = 'round'; rCtx.lineWidth = brushSize;
+            if(brushMode === 'restore') {
+                rCtx.globalCompositeOperation = 'source-over';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke();
+                // Magic part to copy from original image:
+                rCtx.globalCompositeOperation = 'source-in'; // keep only new strokes
+                rCtx.drawImage(origImgObj, 0, 0); // draw orig img strictly into the stroke
+                
+                // Now we need to blend this newly restored part back into the main image.
+                // Wait! If we use source-in, we erase everything else. We need an offscreen canvas.
+            } else {
+                rCtx.globalCompositeOperation = 'destination-out';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke();
+            }
+            rCtx.restore();
+        }
+        
+        // Simpler brush logic:
+        var pathCanvas = document.createElement('canvas');
+        var pathCtx = pathCanvas.getContext('2d');
+        
+        function strokePt(p1, p2) {
+            if(!rCtx) return;
+            if (brushMode === 'erase') {
+                rCtx.save(); rCtx.lineCap='round'; rCtx.lineJoin='round'; rCtx.lineWidth=brushSize; rCtx.globalCompositeOperation='destination-out';
+                rCtx.beginPath(); rCtx.moveTo(p1.x, p1.y); rCtx.lineTo(p2.x, p2.y); rCtx.stroke(); rCtx.restore();
+            } else { // restore
+                pathCanvas.width = rCanvas.width; pathCanvas.height = rCanvas.height;
+                pathCtx.clearRect(0,0,pathCanvas.width,pathCanvas.height);
+                pathCtx.lineCap='round'; pathCtx.lineJoin='round'; pathCtx.lineWidth=brushSize;
+                pathCtx.beginPath(); pathCtx.moveTo(p1.x, p1.y); pathCtx.lineTo(p2.x, p2.y); pathCtx.stroke();
+                pathCtx.globalCompositeOperation='source-in'; pathCtx.drawImage(origImgObj,0,0);
+                rCtx.save(); rCtx.globalCompositeOperation='source-over'; rCtx.drawImage(pathCanvas,0,0); rCtx.restore();
+            }
+            // Update compareAfter trick
+            rCanvas.toBlob(function(b){ if($('compareAfter')) $('compareAfter').src=URL.createObjectURL(b); });
+        }
+
+        if(rv){
+            rv.addEventListener('pointerenter', function(){ cursor.style.display='block'; syncCursorSize(); });
+            rv.addEventListener('pointerleave', function(){ cursor.style.display='none'; isDrawing=false; });
+            rv.addEventListener('pointerdown', function(e){ isDrawing=true; lastPt=getPt(e); strokePt(lastPt, lastPt); cursor.style.left=e.offsetX+'px'; cursor.style.top=e.offsetY+'px'; });
+            rv.addEventListener('pointermove', function(e){
+                cursor.style.left=e.offsetX+'px'; cursor.style.top=e.offsetY+'px';
+                if(!isDrawing) return;
+                var pt=getPt(e); strokePt(lastPt, pt); lastPt=pt;
+            });
+            window.addEventListener('pointerup', function(){ isDrawing=false; });
+        }
+
+        // --- VIEW TABS ---
+        document.querySelectorAll('.view-tab').forEach(function(tab){
+            tab.addEventListener('click',function(){
+                document.querySelectorAll('.view-tab').forEach(function(t){t.classList.remove('active');}); tab.classList.add('active');
+                var v=tab.getAttribute('data-view'),ov=$('originalView'),cv=$('compareView');
+                if(rv) rv.style.display='none'; if(ov) ov.style.display='none'; if(cv) cv.style.display='none';
+                if(v==='result'&&rv) rv.style.display=''; else if(v==='original'&&ov) ov.style.display=''; else if(v==='compare'&&cv) cv.style.display='';
+            });
+        });
+
+        var dragging=false,slider=$('compareSlider'),cWrap=$('compareWrap'),cBefore=$('compareBefore');
+        if(slider){ slider.addEventListener('mousedown',function(){dragging=true;}); slider.addEventListener('touchstart',function(){dragging=true;},{passive:true}); }
+        document.addEventListener('mouseup',function(){dragging=false;}); document.addEventListener('touchend',function(){dragging=false;});
+        document.addEventListener('mousemove',mvSlider); document.addEventListener('touchmove',mvSlider,{passive:false});
+        function mvSlider(e){ if(!dragging||!cWrap||!cBefore||!slider) return; e.preventDefault(); var r=cWrap.getBoundingClientRect(); var cx=e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:0); var x=Math.max(0,Math.min(cx-r.left,r.width)); var pct=(x/r.width)*100; cBefore.style.width=pct+'%';slider.style.left=pct+'%'; }
+
+        // --- REFINEMENT CONTROLS ---
+        var eSmooth = $('edgeSmooth'), sVal = $('smoothVal'), eContrast = $('edgeContrast'), cVal = $('contrastVal'), applyRefine = $('applyRefine');
+        if(eSmooth) eSmooth.oninput = function(){ sVal.textContent = this.value + 'px'; };
+        if(eContrast) eContrast.oninput = function(){ cVal.textContent = this.value + '%'; };
+        if(applyRefine) applyRefine.onclick = async function() {
+            if(!maskImgObj || !rCanvas) return;
+            var oldText = applyRefine.textContent; applyRefine.textContent = 'Refining...';
+            
+            // Re-draw original mask result
+            rCtx.clearRect(0,0,rCanvas.width,rCanvas.height);
+            rCtx.drawImage(maskImgObj, 0, 0);
+            
+            var rad = parseInt(eSmooth.value);
+            var cont = parseInt(eContrast.value) / 100;
+            refineEdges(rCanvas, rCtx, rad, 0.05, cont);
+            
+            rCanvas.toBlob(function(b){
+                resultBlob = b;
+                if($('compareAfter')) $('compareAfter').src = URL.createObjectURL(b);
+                applyRefine.textContent = oldText;
+            }, 'image/png');
+        };
+
+        // --- BACKGROUND ---
+        document.querySelectorAll('.bg-color-btn[data-bg]').forEach(function(btn){
+            btn.addEventListener('click',function(){applyBg(btn.getAttribute('data-bg'));resetBgBtns();btn.classList.add('active');});
+        });
+        var cpick=$('colorPicker'),hinp=$('hexInput');
+        if(cpick) cpick.addEventListener('input',function(e){
+            var val = e.target.value;
+            if(hinp)hinp.value=val;
+            applyBg(val);
+            resetBgBtns();
+        });
+        if(hinp) hinp.addEventListener('input',function(e){var v=e.target.value;if(!v.startsWith('#'))v='#'+v;if(/^#[0-9A-Fa-f]{6}$/.test(v)){if(cpick)cpick.value=v; applyBg(v); resetBgBtns();}});
+        function resetBgBtns(){document.querySelectorAll('.bg-color-btn').forEach(function(b){b.classList.remove('active');});}
+        function applyBg(bg){
+            curBg=bg; if(bg==='transparent'){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }else{ rv.classList.remove('checker-bg'); rv.style.backgroundColor=bg; }
+        }
+
+        // --- DOWNLOAD ---
+        var dlPng=$('downloadPng'),dlJpg=$('downloadJpg');
+        if(dlPng) dlPng.addEventListener('click',function(){dl('png');});
+        if(dlJpg) dlJpg.addEventListener('click',function(){dl('jpg');});
+        async function dl(fmt){
+            var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+            canvas.width=rCanvas.width; canvas.height=rCanvas.height;
+            if(fmt==='jpg'||(fmt==='png'&&curBg!=='transparent')){ ctx.fillStyle=curBg==='transparent'?'#FFFFFF':curBg; ctx.fillRect(0,0,canvas.width,canvas.height); }
+            ctx.drawImage(rCanvas,0,0);
+            var mime=fmt==='png'?'image/png':'image/jpeg';
+            canvas.toBlob(function(b){
+                var name=origFile?origFile.name.replace(/\.[^.]+$/,'')+'_no_bg.'+fmt:'result.'+fmt;
+                if(window.saveAs) saveAs(b,name); else if(window.OnlinePDFPro&&OnlinePDFPro.Downloader) OnlinePDFPro.Downloader.saveBlob(b,name); else{var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+            },mime,fmt==='jpg'?0.92:undefined);
+        }
+// --- INIT ---
+        showOnly('uploadZone');
+        console.log('[BG] Ready!');
+        setTimeout(function(){loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});},2000);
+    });
+    </script>
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Remove Background","description":"Remove background from any image for free using AI. 100% private.","url":"https://onlinepdfpro.com/remove-background.html","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com"}}</script>
+
+    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(e){});});}</script>
+</body>
+</html>
+
