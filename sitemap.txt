@@ -1,4 +1,3 @@
-https://onlinepdfpro.com/
 https://onlinepdfpro.com/about.html
 https://onlinepdfpro.com/blog.html
 https://onlinepdfpro.com/compare-pdf.html
@@ -8,6 +7,7 @@ https://onlinepdfpro.com/dmca.html
 https://onlinepdfpro.com/flatten-pdf.html
 https://onlinepdfpro.com/help.html
 https://onlinepdfpro.com/history.html
+https://onlinepdfpro.com/
 https://onlinepdfpro.com/invoice-generator.html
 https://onlinepdfpro.com/pdf-bookmark.html
 https://onlinepdfpro.com/pdf-editor.html
@@ -30,7 +30,6 @@ https://onlinepdfpro.com/tools/add-page-numbers.html
 https://onlinepdfpro.com/tools/compress-pdf.html
 https://onlinepdfpro.com/tools/crop-pdf.html
 https://onlinepdfpro.com/tools/delete-pages.html
-
 https://onlinepdfpro.com/tools/html-to-pdf.html
 https://onlinepdfpro.com/tools/image-compress.html
 https://onlinepdfpro.com/tools/image-crop.html
@@ -39,17 +38,12 @@ https://onlinepdfpro.com/tools/images-to-pdf.html
 https://onlinepdfpro.com/tools/merge-pdf.html
 https://onlinepdfpro.com/tools/ocr.html
 https://onlinepdfpro.com/tools/pdf-lock.html
-
-
-
 https://onlinepdfpro.com/tools/pdf-unlock.html
 https://onlinepdfpro.com/tools/pdf-watermark.html
-
 https://onlinepdfpro.com/tools/qr-generator.html
 https://onlinepdfpro.com/tools/rotate-pdf.html
 https://onlinepdfpro.com/tools/sign-pdf.html
 https://onlinepdfpro.com/tools/split-pdf.html
-
 https://onlinepdfpro.com/blog/best-free-online-pdf-tools-in-2025-comparison.html
 https://onlinepdfpro.com/blog/best-free-pdf-tools-2025.html
 https://onlinepdfpro.com/blog/best-pdf-tools-for-students-in-india.html
@@ -59,13 +53,8 @@ https://onlinepdfpro.com/blog/how-to-compress-pdf-below-100kb.html
 https://onlinepdfpro.com/blog/how-to-compress-pdf-files-without-losing-quality.html
 https://onlinepdfpro.com/blog/how-to-compress-pdf-without-losing-quality.html
 https://onlinepdfpro.com/blog/how-to-convert-aadhaar-pdf-to-jpg.html
-
 https://onlinepdfpro.com/blog/how-to-convert-images-to-pdf-online.html
 https://onlinepdfpro.com/blog/how-to-convert-images-to-pdf.html
-
-
-
-
 https://onlinepdfpro.com/blog/how-to-convert-whatsapp-chat-to-pdf.html
 https://onlinepdfpro.com/blog/how-to-edit-pdf-files-online-without-adobe-acrobat.html
 https://onlinepdfpro.com/blog/how-to-edit-pdf-online-free.html
