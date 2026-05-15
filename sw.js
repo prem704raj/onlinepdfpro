@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v70'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v71'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
@@ -42,13 +42,13 @@ const STATIC_ASSETS = [
     'blog/how-to-compress-pdf-files-without-losing-quality.html',
     'blog/how-to-compress-pdf-without-losing-quality.html',
     'blog/how-to-convert-aadhaar-pdf-to-jpg.html',
-    'blog/how-to-convert-excel-to-pdf-online.html',
+
     'blog/how-to-convert-images-to-pdf-online.html',
     'blog/how-to-convert-images-to-pdf.html',
-    'blog/how-to-convert-pdf-to-word-free.html',
-    'blog/how-to-convert-pdf-to-word-online-free.html',
-    'blog/how-to-convert-ppt-to-pdf-online.html',
-    'blog/how-to-convert-scanned-pdf-to-word.html',
+
+
+
+
     'blog/how-to-convert-whatsapp-chat-to-pdf.html',
     'blog/how-to-edit-pdf-files-online-without-adobe-acrobat.html',
     'blog/how-to-edit-pdf-online-free.html',
