@@ -1,14 +1,8 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Mask to cutout the bottom right corner (for the arrow) and the top right fold gap -->
+    <!-- Mask to create the top right fold gap -->
     <mask id="doc-mask">
       <rect x="0" y="0" width="512" height="512" fill="white" />
-      
-      <!-- Cutout for the refresh arrow -->
-      <circle cx="368" cy="368" r="88" fill="black" />
-      
-      <!-- Cutout gap for the fold -->
-      <!-- The fold path itself to create the gap outline -->
       <path d="M432 160l-128-128v96c0 17.67 14.33 32 32 32h96z" fill="none" stroke="black" stroke-width="24" stroke-linejoin="round"/>
     </mask>
   </defs>
@@ -30,5 +24,5 @@
 
   <!-- Refresh Arrow -->
   <!-- Thick arrow path -->
-  <path d="M368 312c30.93 0 56 25.07 56 56 0 30.93-25.07 56-56 56-30.93 0-56-25.07-56-56 0-14.18 5.26-27.13 13.92-37M372 284v42h42" stroke="#3173F6" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M368 312c30.93 0 56 25.07 56 56 0 30.93-25.07 56-56 56-30.93 0-56-25.07-56-56 0-14.18 5.26-27.13 13.92-37M372 284v42h42" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 </svg>
