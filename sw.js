@@ -103,7 +103,7 @@ const STATIC_ASSETS = [
     'apple-touch-icon.png',
     'favicon-32x32.png',
     'favicon-16x16.png',
-    'logo.svg'
+    'logo.png'
 ];
 
 self.addEventListener('install', (event) => {
