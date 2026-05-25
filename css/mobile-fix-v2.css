@@ -856,9 +856,9 @@
         padding-top: 0 !important;
     }
 
-    /* ══════════════════════════════════════════
-       WHY I BUILT THIS — Full story on mobile
-       ══════════════════════════════════════════ */
+     /* ══════════════════════════════════════════
+         WHY I BUILT THIS — Short on mobile
+         ══════════════════════════════════════════ */
     .why-story-section {
         margin: 32px 0 0 !important;
         padding: 0 16px !important;
@@ -877,18 +877,23 @@
     }
 
     .why-story p {
-        display: block !important;
+        display: none !important;
         font-size: 14px !important;
         line-height: 1.7 !important;
         margin-bottom: 12px !important;
     }
 
     .why-story p:first-of-type {
-        display: block !important;
-        -webkit-line-clamp: unset !important;
-        -webkit-box-orient: unset !important;
-        overflow: visible !important;
-        margin-bottom: 12px !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 4 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Add breathing room after the tools CTA on mobile */
+    div[style*="text-align:center"][style*="margin-top:40px"] > a.btn.btn-secondary[href="tools.html"] {
+        margin-bottom: 14px !important;
     }
 
     /* ══════════════════════════════════════════
