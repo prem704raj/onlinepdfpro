@@ -208,6 +208,16 @@ a {
     padding: 0 20px;
 }
 
+/* Ad placeholders to reserve space and reduce CLS */
+.ad-placeholder {
+    width: 100%;
+    min-height: 250px;
+    display: block;
+    margin: 24px 0;
+    border-radius: var(--radius-lg);
+    background: transparent;
+}
+
 /* ---- Header ---- */
 .header {
     position: fixed;
