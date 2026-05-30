@@ -383,8 +383,9 @@
             var image = await RawImage.fromBlob(new Blob([arrayBuf], {type: file.type}));
             var origW = image.width, origH = image.height;
 
-            // Resize large images to prevent WASM out-of-memory (max ~2048px)
-            var MAX_DIM = 2048;
+            // Resize large images to prevent WASM out-of-memory (max 1024px)
+            // BiRefNet takes significant memory during inference; 1024px prevents std::bad_alloc
+            var MAX_DIM = 1024;
             if(origW > MAX_DIM || origH > MAX_DIM) {
                 var scale = MAX_DIM / Math.max(origW, origH);
                 var newW = Math.round(origW * scale);
