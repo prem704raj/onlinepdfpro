@@ -138,12 +138,13 @@
             </div>
             <input type="file" id="fileInput" accept="image/*" style="display:none">
             <div style="text-align:center; margin-bottom: 24px; padding: 15px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border);">
-                <label for="aiQuality" style="font-weight:600; font-size: 0.95rem; color: var(--text-secondary);">AI Quality: </label>
+                <label for="aiQuality" style="font-weight:600; font-size: 0.95rem; color: var(--text-secondary);">AI Engine: </label>
                 <select id="aiQuality" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-primary); cursor:pointer; font-family:inherit; font-weight:500; font-size:0.9rem; margin-left: 6px;">
-                    <option value="isnet_fp16">Standard Quality (Fast)</option>
-                    <option value="isnet" selected>High Accuracy (Best, Slower)</option>
+                    <option value="birefnet" selected>✨ BiRefNet — Best Quality (Recommended)</option>
+                    <option value="isnet">ISNet — High Accuracy (Fallback)</option>
+                    <option value="isnet_fp16">ISNet FP16 — Standard (Fast)</option>
                 </select>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">Higher accuracy dramatically improves complex edges like hair and feathers.</div>
+                <div id="engineDesc" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">BiRefNet: State-of-the-art AI with superior hair, fur & edge detail. MIT Licensed, runs 100% in your browser.</div>
             </div>
 
             <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
@@ -158,7 +159,7 @@
                     <h3 id="processingTitle" style="font-size:1.3rem;margin-bottom:4px;">Loading AI Model...</h3>
                     <div class="progress-track"><div class="progress-fill-bar" id="progressBar"></div></div>
                     <p id="progressText" style="color:var(--text-secondary);font-size:.9rem;">Initializing...</p>
-                    <div class="model-info" id="modelNotice">&#9432; First time takes 30-90s to download the AI model (~45MB). It gets cached for future use!</div>
+                    <div class="model-info" id="modelNotice">&#9432; First time takes 30-90s to download the AI model (~85MB for BiRefNet, ~45MB for ISNet). It gets cached for future use!</div>
                 </div>
             </div>
 
@@ -274,7 +275,8 @@
             <h2 style="font-size:22px;color:var(--text-primary);margin-bottom:20px;">Frequently Asked Questions</h2>
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Is this really free?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! No signup, no watermarks, no limits. Download full HD results for free.</p></div>
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Are my images safe?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes. Everything is processed in your browser using AI. No images are uploaded to any server.</p></div>
-            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Why is the first use slow?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">The AI model (~45MB) downloads on first use. It gets cached in your browser for instant use afterwards.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Why is the first use slow?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">The AI model (~85MB for BiRefNet, ~45MB for ISNet) downloads on first use. It gets cached in your browser for instant use afterwards.</p></div>
+            <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> What is BiRefNet?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">BiRefNet (Bilateral Reference Network) is a state-of-the-art open-source AI model for image segmentation. It excels at capturing complex details like hair, fur, and intricate edges that other models often miss. It's MIT licensed and runs entirely in your browser.</p></div>
             <div style="margin-bottom:16px;padding:20px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border);"><h3 style="font-size:17px;color:var(--text-primary);margin:0 0 10px;font-weight:600;"><span style="color:var(--accent);">Q.</span> Works on mobile?</h3><p style="font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0;">Yes! Works on all devices. May be slower on low-end phones.</p></div>
         </section>
     </main>
@@ -305,6 +307,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('[BG] Init...');
         var removeBgFn = null, libReady = false;
+        var birefnetModel = null, birefnetProcessor = null, birefnetReady = false;
         
         var origFile = null, resultBlob = null, curBg = 'transparent';
         var origImgObj = null, maskImgObj = null; // Stored HTMLImageElements
@@ -313,6 +316,17 @@
         var lastPt = null;
 
         function $(id) { return document.getElementById(id); }
+
+        // --- ENGINE DESCRIPTION SWITCHER ---
+        var aiQualitySel = $('aiQuality'), engineDesc = $('engineDesc');
+        if(aiQualitySel) aiQualitySel.addEventListener('change', function(){
+            var descs = {
+                birefnet: 'BiRefNet: State-of-the-art AI with superior hair, fur & edge detail. MIT Licensed, runs 100% in your browser.',
+                isnet: 'ISNet: High-accuracy background removal. Good for general images.',
+                isnet_fp16: 'ISNet FP16: Faster processing with slightly reduced accuracy. Best for quick edits.'
+            };
+            if(engineDesc) engineDesc.textContent = descs[this.value] || '';
+        });
 
         // --- SECTIONS ---
         function showOnly(id) {
@@ -325,7 +339,83 @@
             window.scrollTo({top:0,behavior:'smooth'});
         }
 
-        // --- LOAD AI ---
+        // --- LOAD BiRefNet AI (Transformers.js) ---
+        async function loadBiRefNet(progressCb) {
+            if(birefnetReady && birefnetModel && birefnetProcessor) return true;
+            try {
+                var tf = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.1');
+                var AutoModel = tf.AutoModel;
+                var AutoProcessor = tf.AutoProcessor;
+                var modelId = 'onnx-community/BiRefNet_lite-ONNX';
+                if(progressCb) progressCb('Loading BiRefNet model...', 25);
+                birefnetModel = await AutoModel.from_pretrained(modelId, {
+                    dtype: 'fp32',
+                    progress_callback: function(p) {
+                        if(p && p.progress !== undefined && progressCb) {
+                            progressCb('Downloading BiRefNet model... ' + Math.round(p.progress) + '%', 25 + (p.progress * 0.3));
+                        }
+                    }
+                });
+                if(progressCb) progressCb('Loading BiRefNet processor...', 58);
+                birefnetProcessor = await AutoProcessor.from_pretrained(modelId);
+                birefnetReady = true;
+                // Store RawImage class for later use
+                window._birefnetRawImage = tf.RawImage;
+                return true;
+            } catch(e) {
+                console.error('[BG] BiRefNet load failed:', e);
+                return false;
+            }
+        }
+
+        // --- Run BiRefNet inference ---
+        async function runBiRefNet(file, progressCb) {
+            var RawImage = window._birefnetRawImage;
+            if(!RawImage || !birefnetModel || !birefnetProcessor) throw new Error('BiRefNet not loaded');
+            
+            if(progressCb) progressCb('Preparing image...', 62);
+            var arrayBuf = await file.arrayBuffer();
+            var image = await RawImage.fromBlob(new Blob([arrayBuf], {type: file.type}));
+            
+            if(progressCb) progressCb('Running BiRefNet AI segmentation...', 65);
+            var inputs = await birefnetProcessor(image);
+            var output = await birefnetModel({ input_image: inputs.pixel_values });
+            
+            if(progressCb) progressCb('Generating mask...', 85);
+            // output_image → sigmoid → scale to 0-255 → resize to original
+            var mask = await RawImage.fromTensor(
+                output.output_image[0].sigmoid().mul(255).to('uint8')
+            );
+            mask = await mask.resize(image.width, image.height);
+            
+            if(progressCb) progressCb('Compositing result...', 90);
+            // Create output canvas: original image with alpha from mask
+            var canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            var ctx = canvas.getContext('2d');
+            
+            // Draw original image
+            var origBitmap = await createImageBitmap(file);
+            ctx.drawImage(origBitmap, 0, 0, image.width, image.height);
+            
+            // Apply mask as alpha channel
+            var imgData = ctx.getImageData(0, 0, image.width, image.height);
+            var pixels = imgData.data;
+            var maskData = mask.data; // Uint8Array grayscale
+            for(var i = 0; i < image.width * image.height; i++) {
+                pixels[i * 4 + 3] = maskData[i]; // set alpha from mask
+            }
+            ctx.putImageData(imgData, 0, 0);
+            
+            // Convert to blob
+            var blob = await new Promise(function(res) {
+                canvas.toBlob(function(b) { res(b); }, 'image/png');
+            });
+            return blob;
+        }
+
+        // --- LOAD @imgly AI (legacy fallback) ---
         async function loadAI() {
             if(libReady && removeBgFn) return true;
             var urls = ['https://esm.sh/@imgly/background-removal@1.5.5', 'https://esm.sh/@imgly/background-removal', 'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'];
@@ -498,27 +588,47 @@
             origFile=file; origImgObj = await imgFromBlob(file);
             showOnly('processingSection');
             var pb=$('progressBar'),pt=$('progressText'),pti=$('processingTitle'),mn=$('modelNotice');
+            var selEngine = $('aiQuality') ? $('aiQuality').value : 'birefnet';
+            var useBiRefNet = (selEngine === 'birefnet');
+
+            function updateProgress(text, pct) {
+                if(pt) pt.textContent = text;
+                if(pb && pct !== undefined) pb.style.width = pct + '%';
+            }
+
             try{
-                if(pb) pb.style.width='5%'; if(pt) pt.textContent='Loading AI library...';
-                var ok=await loadAI(); if(!ok) throw new Error('Failed to load AI');
-                var selModel = $('aiQuality') ? $('aiQuality').value : 'isnet';
-                if(pb) pb.style.width='20%'; if(pt) pt.textContent='AI ready...'; if(pti) pti.textContent='Removing Background... ('+(selModel==='isnet'?'High Accuracy':'Standard')+')';
-                var blob=await removeBgFn(file,{
-                    model: selModel, output: { format: 'image/png', quality: 1.0 },
-                    progress:function(key,cur,tot){
-                        var pct=tot>0?Math.round(cur/tot*100):0;
-                        if(key.indexOf('fetch')>-1||key.indexOf('download')>-1){
-                            if(pb) pb.style.width=(20+pct*.35)+'%'; if(pt) pt.textContent='Downloading AI model... '+pct+'%';
-                        }else{
-                            if(mn) mn.style.display='none';
-                            if(pb) pb.style.width=(55+pct*.40)+'%'; if(pt) pt.textContent='Matting edges... '+pct+'%';
+                var blob;
+
+                if(useBiRefNet) {
+                    // ── BiRefNet Engine ──
+                    if(pti) pti.textContent='Removing Background... (BiRefNet AI)';
+                    updateProgress('Loading BiRefNet AI engine...', 5);
+                    var biOk = await loadBiRefNet(updateProgress);
+                    if(!biOk) throw new Error('Failed to load BiRefNet. Try ISNet fallback.');
+                    if(mn) mn.style.display='none';
+                    blob = await runBiRefNet(file, updateProgress);
+                } else {
+                    // ── ISNet Engine (legacy @imgly) ──
+                    if(pti) pti.textContent='Removing Background... ('+(selEngine==='isnet'?'High Accuracy':'Standard')+')';
+                    updateProgress('Loading AI library...', 5);
+                    var ok=await loadAI(); if(!ok) throw new Error('Failed to load AI');
+                    updateProgress('AI ready...', 20);
+                    blob=await removeBgFn(file,{
+                        model: selEngine, output: { format: 'image/png', quality: 1.0 },
+                        progress:function(key,cur,tot){
+                            var pct=tot>0?Math.round(cur/tot*100):0;
+                            if(key.indexOf('fetch')>-1||key.indexOf('download')>-1){
+                                updateProgress('Downloading AI model... '+pct+'%', 20+pct*.35);
+                            }else{
+                                if(mn) mn.style.display='none';
+                                updateProgress('Matting edges... '+pct+'%', 55+pct*.40);
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 // ── Post-Processing: Professional Edge Refinement ──
-                if(pt) pt.textContent='Refining edges...';
-                if(pb) pb.style.width='96%';
+                updateProgress('Refining edges...', 96);
 
                 // Draw raw AI result onto canvas for post-processing
                 resultBlob=blob; maskImgObj = await imgFromBlob(blob);
@@ -530,8 +640,8 @@
 
                     // Adaptive parameters based on image resolution
                     var maxDim = Math.max(rCanvas.width, rCanvas.height);
-                    var blurRadius = Math.max(1, Math.round(maxDim / 1000)); 
-                    var contrastVal = 0.2;
+                    var blurRadius = useBiRefNet ? Math.max(0, Math.round(maxDim / 1500)) : Math.max(1, Math.round(maxDim / 1000)); 
+                    var contrastVal = useBiRefNet ? 0.15 : 0.2;
                     var alphaThreshold = 0.05; 
 
                     refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, contrastVal);
@@ -549,7 +659,7 @@
                 if(oi) oi.src=origURL; if(ca) { ca.src=resURL; ca.style.display='none'; } if(cb) cb.src=origURL;
                 curBg='transparent'; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]'); if(tb) tb.classList.add('active');
                 if(rv){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }
-                if(pb) pb.style.width='100%'; if(pt) pt.textContent='Done!';
+                updateProgress('Done!', 100);
                 setTimeout(function(){showOnly('editorSection');},500);
             }catch(err){
                 console.error(err); var em=$('errorMessage'),ed=$('errorDetails');
@@ -707,7 +817,15 @@
 // --- INIT ---
         showOnly('uploadZone');
         console.log('[BG] Ready!');
-        setTimeout(function(){loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});},2000);
+        // Pre-load the selected engine in background
+        setTimeout(function(){
+            var sel = $('aiQuality') ? $('aiQuality').value : 'birefnet';
+            if(sel === 'birefnet') {
+                loadBiRefNet(function(msg, pct){ console.log('[BG] Pre-load:', msg); }).then(function(ok){console.log(ok?'[BG] BiRefNet pre-loaded!':'[BG] BiRefNet pre-load failed, will fallback');});
+            } else {
+                loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});
+            }
+        },2000);
     });
     </script>
 
