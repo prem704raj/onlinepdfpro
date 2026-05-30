@@ -340,27 +340,32 @@
         }
 
         // --- LOAD BiRefNet AI (Transformers.js) ---
+        var _tfModule = null;
         async function loadBiRefNet(progressCb) {
             if(birefnetReady && birefnetModel && birefnetProcessor) return true;
             try {
-                var tf = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.1');
+                if(progressCb) progressCb('Loading Transformers.js library...', 10);
+                if(!_tfModule) {
+                    _tfModule = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0');
+                }
+                var tf = _tfModule;
                 var AutoModel = tf.AutoModel;
                 var AutoProcessor = tf.AutoProcessor;
-                var modelId = 'onnx-community/BiRefNet_lite-ONNX';
-                if(progressCb) progressCb('Loading BiRefNet model...', 25);
+                var modelId = 'onnx-community/BiRefNet_lite';
+                if(progressCb) progressCb('Loading BiRefNet model...', 20);
                 birefnetModel = await AutoModel.from_pretrained(modelId, {
                     dtype: 'fp32',
                     progress_callback: function(p) {
                         if(p && p.progress !== undefined && progressCb) {
-                            progressCb('Downloading BiRefNet model... ' + Math.round(p.progress) + '%', 25 + (p.progress * 0.3));
+                            progressCb('Downloading BiRefNet model... ' + Math.round(p.progress) + '%', 20 + (p.progress * 0.35));
                         }
                     }
                 });
                 if(progressCb) progressCb('Loading BiRefNet processor...', 58);
                 birefnetProcessor = await AutoProcessor.from_pretrained(modelId);
                 birefnetReady = true;
-                // Store RawImage class for later use
                 window._birefnetRawImage = tf.RawImage;
+                console.log('[BG] BiRefNet loaded successfully!');
                 return true;
             } catch(e) {
                 console.error('[BG] BiRefNet load failed:', e);
@@ -376,34 +381,45 @@
             if(progressCb) progressCb('Preparing image...', 62);
             var arrayBuf = await file.arrayBuffer();
             var image = await RawImage.fromBlob(new Blob([arrayBuf], {type: file.type}));
+            var origW = image.width, origH = image.height;
+
+            // Resize large images to prevent WASM out-of-memory (max ~2048px)
+            var MAX_DIM = 2048;
+            if(origW > MAX_DIM || origH > MAX_DIM) {
+                var scale = MAX_DIM / Math.max(origW, origH);
+                var newW = Math.round(origW * scale);
+                var newH = Math.round(origH * scale);
+                if(progressCb) progressCb('Resizing image for AI (' + newW + 'x' + newH + ')...', 63);
+                image = await image.resize(newW, newH);
+            }
             
             if(progressCb) progressCb('Running BiRefNet AI segmentation...', 65);
             var inputs = await birefnetProcessor(image);
             var output = await birefnetModel({ input_image: inputs.pixel_values });
             
             if(progressCb) progressCb('Generating mask...', 85);
-            // output_image → sigmoid → scale to 0-255 → resize to original
+            // output_image → sigmoid → scale to 0-255 → resize to ORIGINAL dimensions
             var mask = await RawImage.fromTensor(
                 output.output_image[0].sigmoid().mul(255).to('uint8')
             );
-            mask = await mask.resize(image.width, image.height);
+            mask = await mask.resize(origW, origH);
             
             if(progressCb) progressCb('Compositing result...', 90);
-            // Create output canvas: original image with alpha from mask
+            // Create output canvas at original resolution
             var canvas = document.createElement('canvas');
-            canvas.width = image.width;
-            canvas.height = image.height;
+            canvas.width = origW;
+            canvas.height = origH;
             var ctx = canvas.getContext('2d');
             
-            // Draw original image
+            // Draw original image at full resolution
             var origBitmap = await createImageBitmap(file);
-            ctx.drawImage(origBitmap, 0, 0, image.width, image.height);
+            ctx.drawImage(origBitmap, 0, 0, origW, origH);
             
             // Apply mask as alpha channel
-            var imgData = ctx.getImageData(0, 0, image.width, image.height);
+            var imgData = ctx.getImageData(0, 0, origW, origH);
             var pixels = imgData.data;
             var maskData = mask.data; // Uint8Array grayscale
-            for(var i = 0; i < image.width * image.height; i++) {
+            for(var i = 0; i < origW * origH; i++) {
                 pixels[i * 4 + 3] = maskData[i]; // set alpha from mask
             }
             ctx.putImageData(imgData, 0, 0);
