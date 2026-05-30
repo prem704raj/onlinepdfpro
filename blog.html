@@ -64,6 +64,49 @@
             line-height: 1.6;
         }
 
+        .blog-hub {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(14, 116, 144, 0.12), rgba(15, 118, 110, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .blog-hub h3 {
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+        }
+
+        .blog-hub p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .blog-hub-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: #0f766e;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .blog-hub-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(15, 118, 110, 0.25);
+        }
+
         /* Grid layout adjustments - smaller cards */
         .blog-grid {
             max-width: 1200px;
@@ -167,6 +210,13 @@
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
         }
+
+        @media (max-width:720px) {
+            .blog-hub {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
     <!-- MOBILE FIX -->
 
@@ -232,184 +282,52 @@
         <p>Free guides, tutorials, and tips for working with PDFs — privacy first, always.</p>
     </div>
 
-    <div class="blog-grid">
-        <a href="blog/pdf-vs-docx-which-format-should-you-use.html" class="blog-card">
-            <div class="blog-card-img">💡</div>
-            <div class="blog-card-body">
-                <h3>PDF vs DOCX: Which Format Should You Use?</h3>
-            </div>
-        </a>
-
-        <a href="blog/ocr-technology-how-to-extract-text-from-images.html" class="blog-card">
-            <div class="blog-card-img">🔍</div>
-            <div class="blog-card-body">
-                <h3>OCR Technology: How to Extract Text from Images</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-split-pdf-online.html" class="blog-card">
-            <div class="blog-card-img">✂️</div>
-            <div class="blog-card-body">
-                <h3>How to Split PDF into Multiple Files Online (2025)</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-split-pdf-into-multiple-files.html" class="blog-card">
-            <div class="blog-card-img">📑</div>
-            <div class="blog-card-body">
-                <h3>How to Split PDF into Multiple Files</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-sign-pdf-documents-online-for-free.html" class="blog-card">
-            <div class="blog-card-img">✍️</div>
-            <div class="blog-card-body">
-                <h3>How to Sign PDF Documents Online for Free</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-remove-password-from-pdf-online.html" class="blog-card">
-            <div class="blog-card-img">🔓</div>
-            <div class="blog-card-body">
-                <h3>How to Remove Password from PDF Online</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-reduce-pdf-size-for-email.html" class="blog-card">
-            <div class="blog-card-img">📧</div>
-            <div class="blog-card-body">
-                <h3>How to Reduce PDF Size for Email (Under 5MB, 1MB, 100KB)</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-reduce-pdf-file-size-for-email.html" class="blog-card">
-            <div class="blog-card-img">📉</div>
-            <div class="blog-card-body">
-                <h3>How to Reduce PDF File Size for Email</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-merge-pdf-online-free.html" class="blog-card">
-            <div class="blog-card-img">📎</div>
-            <div class="blog-card-body">
-                <h3>How to Merge PDF Files Online for Free in 2025</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-merge-pdf-on-iphone-without-app.html" class="blog-card">
-            <div class="blog-card-img">📱</div>
-            <div class="blog-card-body">
-                <h3>How to Merge PDF on iPhone Without App</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-merge-pdf-files-online-for-free-2025-guide.html" class="blog-card">
-            <div class="blog-card-img">🗂️</div>
-            <div class="blog-card-body">
-                <h3>How to Merge PDF Files Online for Free (2025 Guide)</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-edit-pdf-online-free.html" class="blog-card">
-            <div class="blog-card-img">📝</div>
-            <div class="blog-card-body">
-                <h3>How to Edit PDF Files Online Free (Without PDF 3) in 2025</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-edit-pdf-files-online-without-adobe-acrobat.html" class="blog-card">
-            <div class="blog-card-img">✏️</div>
-            <div class="blog-card-body">
-                <h3>How to Edit PDF Files Online Without PDF 3</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-convert-whatsapp-chat-to-pdf.html" class="blog-card">
-            <div class="blog-card-img">💬</div>
-            <div class="blog-card-body">
-                <h3>How to Convert WhatsApp Chat to PDF</h3>
-            </div>
-        </a>
-
-
-
-
-
-
-
-
-
-        <a href="blog/how-to-convert-images-to-pdf.html" class="blog-card">
-            <div class="blog-card-img">🪪</div>
-            <div class="blog-card-body">
-                <h3>How to Convert Images to PDF Online Free (JPG, PNG to PDF)</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-convert-images-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img">📐</div>
-            <div class="blog-card-body">
-                <h3>How to Convert Images to PDF Online</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-convert-aadhaar-pdf-to-jpg.html" class="blog-card">
-            <div class="blog-card-img">🗜️</div>
-            <div class="blog-card-body">
-                <h3>How to Convert Aadhaar PDF to JPG</h3>
-            </div>
-        </a>
-
-
-
-        <a href="blog/how-to-compress-pdf-without-losing-quality.html" class="blog-card">
-            <div class="blog-card-img">🔢</div>
-            <div class="blog-card-body">
-                <h3>How to Compress PDF Without Losing Quality (2025 Guide)</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-compress-pdf-files-without-losing-quality.html" class="blog-card">
-            <div class="blog-card-img">🎓</div>
-            <div class="blog-card-body">
-                <h3>How to Compress PDF Files Without Losing Quality</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-compress-pdf-below-100kb.html" class="blog-card">
-            <div class="blog-card-img">💾</div>
-            <div class="blog-card-body">
-                <h3>How to Compress PDF Below 100KB</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-add-watermark-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img">🏆</div>
-            <div class="blog-card-body">
-                <h3>How to Add Watermark to PDF Online</h3>
-            </div>
-        </a>
-
-        <a href="blog/how-to-add-page-numbers-to-pdf-online.html" class="blog-card">
-            <div class="blog-card-img">⚡</div>
-            <div class="blog-card-body">
-                <h3>How to Add Page Numbers to PDF Online</h3>
-            </div>
-        </a>
-
-        <a href="blog/best-pdf-tools-for-students-in-india.html" class="blog-card">
-            <div class="blog-card-img">📰</div>
-            <div class="blog-card-body">
-                <h3>Best PDF Tools for Students in India</h3>
-            </div>
-        </a>
-
-        <a href="blog/best-free-pdf-tools-2025.html" class="blog-card">
-            <div class="blog-card-img">🛡️</div>
-            <div class="blog-card-body">
-                <h3>Best Free Online PDF Tools in 2025 — Complete Comparison</h3>
-            </div>
-        </a>
+    <div class="blog-hub">
+        <div>
+            <h3>PDF Guides Hub</h3>
+            <p>Curated workflows and core guides for the most common PDF tasks.</p>
+                <a href="blog/how-to-merge-pdf-online-free.html" class="blog-card">
+                    <div class="blog-card-img">📎</div>
+                    <div class="blog-card-body">
+                        <h3>How to Merge PDF Files Online for Free in 2025</h3>
+                    </div>
+                </a>
+                <a href="blog/how-to-edit-pdf-online-free.html" class="blog-card">
+                    <div class="blog-card-img">📝</div>
+                    <div class="blog-card-body">
+                        <h3>How to Edit PDF Files Online Free (Without PDF 3) in 2025</h3>
+                    </div>
+                </a>
+                <a href="blog/how-to-convert-images-to-pdf.html" class="blog-card">
+                    <div class="blog-card-img">🪪</div>
+                    <div class="blog-card-body">
+                        <h3>How to Convert Images to PDF Online Free (JPG, PNG to PDF)</h3>
+                    </div>
+                </a>
+                <a href="blog/how-to-compress-pdf-without-losing-quality.html" class="blog-card">
+                    <div class="blog-card-img">🔢</div>
+                    <div class="blog-card-body">
+                        <h3>How to Compress PDF Without Losing Quality (2025 Guide)</h3>
+                    </div>
+                </a>
+                <a href="blog/best-free-pdf-tools-2025.html" class="blog-card">
+                    <div class="blog-card-img">🛡️</div>
+                    <div class="blog-card-body">
+                        <h3>Best Free Online PDF Tools in 2025 — Complete Comparison</h3>
+                    </div>
+                </a>
+                <a href="blog/how-to-reduce-pdf-size-for-email.html" class="blog-card">
+                    <div class="blog-card-img">📧</div>
+                    <div class="blog-card-body">
+                        <h3>How to Reduce PDF Size for Email (Under 5MB, 1MB, 100KB)</h3>
+                    </div>
+                </a>
+                <a href="blog/how-to-split-pdf-online.html" class="blog-card">
+                    <div class="blog-card-img">✂️</div>
+                    <div class="blog-card-body">
+                        <h3>How to Split PDF into Multiple Files Online (2025)</h3>
+                    </div>
+                </a>
 
         <a href="blog/best-free-online-pdf-tools-in-2025-comparison.html" class="blog-card">
             <div class="blog-card-img">⭐</div>

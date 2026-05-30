@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Guides and Workflows | OnlinePDFPro</title>
+    <meta name="description" content="Step-by-step PDF workflows for merging, compressing, converting, editing, and signing. Privacy-first tools that run in your browser.">
+    <link rel="canonical" href="https://onlinepdfpro.com/guides.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PDF Guides and Workflows | OnlinePDFPro">
+    <meta property="og:description" content="Step-by-step PDF workflows for merging, compressing, converting, editing, and signing.">
+    <meta property="og:url" content="https://onlinepdfpro.com/guides.html">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PDF Guides and Workflows | OnlinePDFPro">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="css/tools-v2.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hub-accent: #0f766e;
+            --hub-accent-2: #d97706;
+            --hub-ink: #0f172a;
+            --hub-muted: #475569;
+            --hub-card: #ffffff;
+            --hub-border: #e2e8f0;
+            --hub-bg: #f8fafc;
+        }
+
+        body {
+            font-family: "Source Sans 3", system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 10% 10%, rgba(14, 116, 144, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(217, 119, 6, 0.08), transparent 45%),
+                var(--hub-bg);
+            color: var(--hub-ink);
+        }
+
+        h1, h2, h3 {
+            font-family: "Space Grotesk", "Source Sans 3", sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .hub-main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 60px 20px 80px;
+        }
+
+        .hub-hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            align-items: center;
+            padding: 40px 32px;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.15), rgba(14, 116, 144, 0.06));
+            border: 1px solid var(--hub-border);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            animation: rise-in 0.7s ease both;
+        }
+
+        .hub-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.18), transparent 55%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .hub-eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 0.75rem;
+            color: var(--hub-accent);
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .hub-hero h1 {
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            margin-bottom: 16px;
+        }
+
+        .hub-hero p {
+            font-size: 1.1rem;
+            color: var(--hub-muted);
+            line-height: 1.7;
+        }
+
+        .hub-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-primary {
+            background: var(--hub-accent);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(15, 118, 110, 0.25);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--hub-accent);
+            border: 1px solid var(--hub-accent);
+            padding: 11px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hub-panel {
+            background: #ffffff;
+            border: 1px solid var(--hub-border);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 16px;
+        }
+
+        .panel-item {
+            display: grid;
+            gap: 6px;
+        }
+
+        .panel-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--hub-muted);
+        }
+
+        .panel-value {
+            font-weight: 600;
+        }
+
+        .hub-section {
+            margin-top: 50px;
+            animation: fade-up 0.8s ease both;
+        }
+
+        .section-head {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .section-head p {
+            color: var(--hub-muted);
+            max-width: 720px;
+        }
+
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .hub-card {
+            background: var(--hub-card);
+            border: 1px solid var(--hub-border);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+            animation: fade-up 0.9s ease both;
+        }
+
+        .hub-card h3 {
+            font-size: 1.15rem;
+        }
+
+        .hub-card p {
+            color: var(--hub-muted);
+            line-height: 1.6;
+        }
+
+        .hub-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .hub-links a {
+            color: var(--hub-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hub-links a.secondary {
+            color: var(--hub-accent-2);
+        }
+
+        .hub-split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .hub-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .hub-list li {
+            background: #ffffff;
+            border: 1px solid var(--hub-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .hub-list span {
+            color: var(--hub-muted);
+            font-size: 0.92rem;
+        }
+
+        .hub-collection {
+            background: #ffffff;
+            border: 1px solid var(--hub-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .hub-collection h3 {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+        .hub-callout {
+            background: #ffffff;
+            border: 1px solid var(--hub-border);
+            border-radius: 20px;
+            padding: 24px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .hub-steps {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--hub-muted);
+            display: grid;
+            gap: 10px;
+        }
+
+        .hub-steps a {
+            color: var(--hub-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hub-steps a:hover {
+            text-decoration: underline;
+        }
+
+        .blog-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--hub-muted);
+            border-top: 1px solid var(--hub-border);
+            margin-top: 60px;
+            background: #ffffff;
+        }
+
+        .blog-footer a {
+            color: var(--hub-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hub-hero,
+            .hub-section,
+            .hub-card {
+                animation: none;
+            }
+        }
+
+        @keyframes rise-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script defer src="js/third-party-loader.js"></script>
+    <!-- CMP PLACEHOLDER: Paste Google Funding Choices CMP script here (Privacy & messaging). -->
+    <!-- EZOIC PLACEHOLDER: Paste Ezoic integration script here (load async). -->
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="tools.html" class="nav-link">All Tools</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="help.html" class="nav-link">Help</a>
+                <a href="history.html" class="nav-link">History</a>
+                <a href="#" onclick="smartEmail(event)" class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲 Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="hub-main">
+        <section class="hub-hero">
+            <div>
+                <div class="hub-eyebrow">PDF Guides Hub</div>
+                <h1>PDF workflows that get you done faster</h1>
+                <p>Step-by-step paths for common tasks. All tools run in your browser, so your files stay on your device. No sign-up required.</p>
+                <div class="hub-cta">
+                    <a class="btn-primary" href="blog/how-to-merge-pdf-online-free.html">Start with the merge guide</a>
+                    <a class="btn-ghost" href="tools.html">Browse all tools</a>
+                </div>
+            </div>
+            <div class="hub-panel">
+                <div class="panel-item">
+                    <span class="panel-label">Privacy</span>
+                    <span class="panel-value">Client-side processing</span>
+                </div>
+                <div class="panel-item">
+                    <span class="panel-label">Speed</span>
+                    <span class="panel-value">No uploads required</span>
+                </div>
+                <div class="panel-item">
+                    <span class="panel-label">Last updated</span>
+                    <span class="panel-value">May 2026</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="hub-section">
+            <div class="section-head">
+                <h2>Choose a workflow</h2>
+                <p>Pick a goal and follow a short path: guide, tool, done.</p>
+            </div>
+            <div class="hub-grid">
+                <article class="hub-card">
+                    <h3>Compress for email</h3>
+                    <p>Reduce size without losing clarity so attachments fit email limits.</p>
+                    <div class="hub-links">
+                        <a href="blog/how-to-reduce-pdf-size-for-email.html">Guide</a>
+                        <a class="secondary" href="tools/compress-pdf.html">Compress tool</a>
+                    </div>
+                </article>
+                <article class="hub-card">
+                    <h3>Merge and reorder</h3>
+                    <p>Combine files, rearrange pages, and export a single clean PDF.</p>
+                    <div class="hub-links">
+                        <a href="blog/how-to-merge-pdf-online-free.html">Guide</a>
+                        <a class="secondary" href="tools/merge-pdf.html">Merge tool</a>
+                        <a class="secondary" href="tools/rotate-pdf.html">Rotate pages</a>
+                    </div>
+                </article>
+                <article class="hub-card">
+                    <h3>Split large documents</h3>
+                    <p>Break long PDFs into chapters or separate client files.</p>
+                    <div class="hub-links">
+                        <a href="blog/how-to-split-pdf-online.html">Guide</a>
+                        <a class="secondary" href="tools/split-pdf.html">Split tool</a>
+                    </div>
+                </article>
+                <article class="hub-card">
+                    <h3>Convert images to PDF</h3>
+                    <p>Turn scans or photos into a single PDF for easy sharing.</p>
+                    <div class="hub-links">
+                        <a href="blog/how-to-convert-images-to-pdf.html">Guide</a>
+                        <a class="secondary" href="tools/images-to-pdf.html">Images to PDF</a>
+                    </div>
+                </article>
+                <article class="hub-card">
+                    <h3>Edit and annotate</h3>
+                    <p>Add text, highlights, and quick edits without installing software.</p>
+                    <div class="hub-links">
+                        <a href="blog/how-to-edit-pdf-online-free.html">Guide</a>
+                        <a class="secondary" href="pdf-editor.html">PDF editor</a>
+                    </div>
+                </article>
+                <article class="hub-card">
+                    <h3>Sign and protect</h3>
+                    <p>Sign a document and lock it before sharing.</p>
+                    <div class="hub-links">
+                        <a href="tools/sign-pdf.html">Sign tool</a>
+                        <a class="secondary" href="tools/pdf-lock.html">Lock tool</a>
+                        <a class="secondary" href="tools/pdf-unlock.html">Unlock tool</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="hub-section hub-split">
+            <div>
+                <div class="section-head">
+                    <h2>Core guides</h2>
+                    <p>High value guides that answer the most common PDF questions.</p>
+                </div>
+                <ul class="hub-list">
+                    <li>
+                        <a href="blog/how-to-merge-pdf-online-free.html">How to merge PDF files online for free</a>
+                        <span>Best for multi-file uploads and quick merges.</span>
+                    </li>
+                    <li>
+                        <a href="blog/how-to-compress-pdf-without-losing-quality.html">How to compress PDF without losing quality</a>
+                        <span>Balance size and clarity for reports and resumes.</span>
+                    </li>
+                    <li>
+                        <a href="blog/how-to-reduce-pdf-size-for-email.html">How to reduce PDF size for email</a>
+                        <span>Target 5MB, 1MB, and 100KB limits.</span>
+                    </li>
+                    <li>
+                        <a href="blog/how-to-edit-pdf-online-free.html">How to edit PDF files online free</a>
+                        <span>Make quick edits without software installs.</span>
+                    </li>
+                    <li>
+                        <a href="blog/how-to-convert-images-to-pdf.html">How to convert images to PDF</a>
+                        <span>Combine scans into a single clean PDF.</span>
+                    </li>
+                    <li>
+                        <a href="blog/best-free-pdf-tools-2025.html">Best free PDF tools in 2025</a>
+                        <span>Compare the most useful tools in one place.</span>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <div class="section-head">
+                    <h2>Tool collections</h2>
+                    <p>Focused sets of tools for each stage of your document workflow.</p>
+                </div>
+                <div class="hub-collection">
+                    <h3>Organize pages</h3>
+                    <div class="hub-links">
+                        <a href="tools/merge-pdf.html">Merge</a>
+                        <a href="tools/split-pdf.html">Split</a>
+                        <a href="tools/delete-pages.html">Delete pages</a>
+                        <a href="tools/rotate-pdf.html">Rotate</a>
+                    </div>
+                </div>
+                <div class="hub-collection">
+                    <h3>Convert and capture</h3>
+                    <div class="hub-links">
+                        <a href="tools/images-to-pdf.html">Images to PDF</a>
+                        <a href="tools/html-to-pdf.html">HTML to PDF</a>
+                        <a href="tools/ocr.html">OCR</a>
+                    </div>
+                </div>
+                <div class="hub-collection">
+                    <h3>Secure and sign</h3>
+                    <div class="hub-links">
+                        <a href="tools/sign-pdf.html">Sign</a>
+                        <a href="tools/pdf-lock.html">Lock</a>
+                        <a href="tools/pdf-unlock.html">Unlock</a>
+                        <a href="tools/pdf-watermark.html">Watermark</a>
+                    </div>
+                </div>
+                <div class="hub-collection">
+                    <h3>Review and present</h3>
+                    <div class="hub-links">
+                        <a href="pdf-reader.html">PDF reader</a>
+                        <a href="pdf-presentation-mode.html">Presentation mode</a>
+                        <a href="pdf-highlighter-extractor.html">Highlight extractor</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="hub-section">
+            <div class="hub-callout">
+                <h2>Quick stacks</h2>
+                <p>Use these simple sequences when you need a repeatable process.</p>
+                <ol class="hub-steps">
+                    <li><a href="tools/merge-pdf.html">Merge files</a>, <a href="tools/add-page-numbers.html">add page numbers</a>, then <a href="tools/compress-pdf.html">compress</a> for <a href="blog/how-to-reduce-pdf-size-for-email.html">email</a>.</li>
+                    <li><a href="tools/images-to-pdf.html">Convert images to PDF</a>, then <a href="pdf-editor.html">edit</a> and <a href="tools/sign-pdf.html">sign</a>.</li>
+                    <li><a href="tools/split-pdf.html">Split</a> a large PDF, then <a href="tools/pdf-lock.html">lock</a> each section before sharing.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <div class="blog-footer">
+        <p>(c) 2026 <a href="index.html">OnlinePDFPro.com</a> - Privacy first PDF tools</p>
+        <p style="margin-top:10px">
+            <a href="tools.html">All Tools</a> ·
+            <a href="about.html">About</a> ·
+            <a href="privacy.html">Privacy</a> · <a href="mailto:support@onlinepdfpro.com">support@onlinepdfpro.com</a>
+        </p>
+    </div>
+
+    <script defer src="/js/app.js?v=11"></script>
+</body>
+</html>

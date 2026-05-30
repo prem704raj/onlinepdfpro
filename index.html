@@ -853,203 +853,6 @@
 </div>
 </div>
 </section>
-<!-- FLOATING REVIEWS SECTION -->
-<style>
-            .hp-reviews-container {
-                max-width: 100vw;
-                margin: 60px 0 0;
-                overflow: hidden;
-                position: relative;
-                padding: 20px 0;
-            }
-            .hp-reviews-track {
-                display: flex;
-                width: max-content;
-                gap: 24px;
-                animation: scrollMarquee 40s linear infinite;
-            }
-             .hp-reviews-track:hover {
-                 animation-play-state: paused;
-             }
-             @media (prefers-reduced-motion: reduce) {
-                 .hp-reviews-track {
-                     animation: none;
-                 }
-             }
-             @keyframes scrollMarquee {
-                 0% { transform: translateX(0); }
-                 100% { transform: translateX(calc(-50% - 12px)); }
-             }
-            .hp-review-card {
-                width: 320px;
-                padding: 24px;
-                background: var(--surface-1);
-                border-radius: 16px;
-                border: 1px solid var(--border);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-                text-align: left;
-                flex-shrink: 0;
-            }
-            .hp-review-stars {
-                color: #fbbf24;
-                font-size: 14px;
-                margin-bottom: 12px;
-                letter-spacing: 2px;
-            }
-            .hp-review-text {
-                font-size: 14px;
-                color: var(--text-secondary);
-                line-height: 1.6;
-                margin-bottom: 20px;
-            }
-            .hp-review-author {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-            .hp-review-avatar {
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                background: rgba(37,99,235,0.1);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-                color: #2563eb;
-                font-size: 15px;
-            }
-            .hp-review-name {
-                font-size: 14px;
-                font-weight: 700;
-                color: var(--text-primary);
-                display: block;
-            }
-            .hp-review-role {
-                font-size: 12px;
-                color: var(--text-muted);
-            }
-        </style>
-<section class="hp-reviews-container">
-<div style="text-align:center; margin-bottom: 30px;">
-<h2 style="font-size:24px; font-weight:800; color:var(--text-primary); margin:0 0 8px;">Loved by People Worldwide</h2>
-<p style="font-size:15px; color:var(--text-secondary);">Here's what our daily users are saying.</p>
-</div>
-<div class="hp-reviews-track">
-<!-- Group 1 -->
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"Finally, a PDF editor that doesn't ask me to upload my sensitive tax documents to some random server. Phenomenal privacy approach."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">S</div>
-<div>
-<span class="hp-review-name">Sarah T.</span>
-<span class="hp-review-role">Accountant</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"I use this every day at work. The merge and compress tools are visibly faster than other alternatives because there's no uploading delay. Outstanding tool."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">M</div>
-<div>
-<span class="hp-review-name">Michael R.</span>
-<span class="hp-review-role">Project Manager</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"I was amazed at how completely I finished merging and editing my presentation because it is so fast and secure. Magic!"</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">E</div>
-<div>
-<span class="hp-review-name">Elena G.</span>
-<span class="hp-review-role">Sales Consultant</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"No forced sign-ups, no hidden paywalls after processing 2 files. Just simple, honest, and insanely fast PDF utilities."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">D</div>
-<div>
-<span class="hp-review-name">David K.</span>
-<span class="hp-review-role">Student</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"The UI is gorgeous and incredibly intuitive. Without a doubt the best free browser-based PDF suite I've found on the internet."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">P</div>
-<div>
-<span class="hp-review-name">Priya M.</span>
-<span class="hp-review-role">Freelance Designer</span>
-</div>
-</div>
-</div>
-<!-- Group 2 (Duplicate for continuous loop) -->
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"Finally, a PDF editor that doesn't ask me to upload my sensitive tax documents to some random server. Phenomenal privacy approach."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">S</div>
-<div>
-<span class="hp-review-name">Sarah T.</span>
-<span class="hp-review-role">Accountant</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"I use this every day at work. The merge and compress tools are visibly faster than Adobe because there's no uploading delay. Outstanding tool."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">M</div>
-<div>
-<span class="hp-review-name">Michael R.</span>
-<span class="hp-review-role">Project Manager</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"I was amazed at how completely I finished merging and editing my presentation because it is so fast and secure. Magic!"</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">E</div>
-<div>
-<span class="hp-review-name">Elena G.</span>
-<span class="hp-review-role">Sales Consultant</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"No forced sign-ups, no hidden paywalls after processing 2 files. Just simple, honest, and insanely fast PDF utilities."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">D</div>
-<div>
-<span class="hp-review-name">David K.</span>
-<span class="hp-review-role">Student</span>
-</div>
-</div>
-</div>
-<div class="hp-review-card">
-<div class="hp-review-stars">★★★★★</div>
-<p class="hp-review-text">"The UI is gorgeous and incredibly intuitive. Without a doubt the best free browser-based PDF suite I've found on the internet."</p>
-<div class="hp-review-author">
-<div class="hp-review-avatar">P</div>
-<div>
-<span class="hp-review-name">Priya M.</span>
-<span class="hp-review-role">Freelance Designer</span>
-</div>
-</div>
-</div>
-</div>
-</section>
 </main>
 <footer style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:60px;">
 <div style="max-width:1200px; margin:0 auto;">
@@ -1058,9 +861,7 @@
 <!-- About -->
 <div>
 <h4 style="color:#60a5fa; margin:0 0 15px; font-size:18px;">Online PDF Pro</h4>
-<p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools used
-                        by 100,000+
-                        people worldwide. No registration, no watermark, no limits.</p>
+<p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Free online PDF tools that run in your browser. No registration, no watermark, no limits.</p>
 </div>
 <!-- Popular Tools -->
 <div>
@@ -1109,8 +910,7 @@
 <!-- Bottom Footer -->
 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
 <p style="color:var(--text-muted); font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights
-                    reserved. Made
-                    with ❤️ in India.</p>
+                    reserved. Made with ❤️ for people.</p>
 <div style="display:flex; gap:15px;">
 <span style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">🔒
                         Your files are safe</span>
