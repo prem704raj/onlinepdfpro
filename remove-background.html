@@ -351,7 +351,7 @@
                 var tf = _tfModule;
                 var AutoModel = tf.AutoModel;
                 var AutoProcessor = tf.AutoProcessor;
-                var modelId = 'onnx-community/BiRefNet_lite';
+                var modelId = 'onnx-community/BiRefNet_lite-ONNX';
                 if(progressCb) progressCb('Loading BiRefNet model...', 20);
                 birefnetModel = await AutoModel.from_pretrained(modelId, {
                     dtype: 'fp32',
@@ -369,7 +369,7 @@
                 return true;
             } catch(e) {
                 console.error('[BG] BiRefNet load failed:', e);
-                return false;
+                throw new Error('Failed to load BiRefNet AI model: ' + (e.message || e));
             }
         }
 
@@ -619,8 +619,7 @@
                     // ── BiRefNet Engine ──
                     if(pti) pti.textContent='Removing Background... (BiRefNet AI)';
                     updateProgress('Loading BiRefNet AI engine...', 5);
-                    var biOk = await loadBiRefNet(updateProgress);
-                    if(!biOk) throw new Error('Failed to load BiRefNet. Try ISNet fallback.');
+                    await loadBiRefNet(updateProgress);
                     if(mn) mn.style.display='none';
                     blob = await runBiRefNet(file, updateProgress);
                 } else {
@@ -837,7 +836,9 @@
         setTimeout(function(){
             var sel = $('aiQuality') ? $('aiQuality').value : 'birefnet';
             if(sel === 'birefnet') {
-                loadBiRefNet(function(msg, pct){ console.log('[BG] Pre-load:', msg); }).then(function(ok){console.log(ok?'[BG] BiRefNet pre-loaded!':'[BG] BiRefNet pre-load failed, will fallback');});
+                loadBiRefNet(function(msg, pct){ console.log('[BG] Pre-load:', msg); })
+                    .then(function(){console.log('[BG] BiRefNet pre-loaded!');})
+                    .catch(function(err){console.warn('[BG] BiRefNet pre-load failed:', err.message);});
             } else {
                 loadAI().then(function(ok){console.log(ok?'[BG] AI pre-loaded!':'[BG] AI pre-load failed');});
             }
