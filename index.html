@@ -498,7 +498,36 @@
             background: #f43f5e;
         }
 
+        /* Light mode overrides for home screen boxes (Day mode) */
+        [data-theme="light"] .hp-tool-card,
+        [data-theme="light"] .hp-stats,
+        [data-theme="light"] .hp-trust-pill {
+            background: #faf7f0 !important;
+            border-color: #e6dec9 !important;
+        }
 
+        [data-theme="light"] .hp-tool-card:hover,
+        [data-theme="light"] .hp-trust-pill:hover {
+            background: #f3ede0 !important;
+            border-color: #dcd0b3 !important;
+            box-shadow: 0 12px 32px rgba(61, 51, 35, 0.08) !important;
+        }
+
+        [data-theme="light"] .hp-tool-card h3,
+        [data-theme="light"] .hp-stat-num,
+        [data-theme="light"] .hp-trust-pill strong {
+            color: #3d3323 !important;
+        }
+
+        [data-theme="light"] .hp-tool-card p,
+        [data-theme="light"] .hp-stat-label,
+        [data-theme="light"] .hp-trust-pill div span {
+            color: #7a6b54 !important;
+        }
+
+        [data-theme="light"] .hp-tool-card-icon svg {
+            stroke: #3d3323 !important;
+        }
 
         @keyframes blink {
 
