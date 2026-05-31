@@ -14,12 +14,12 @@
     /* Backgrounds — layered elevation */
     --bg: #000000;
     /* Pure black background */
-    --surface-1: #0a0f1d;
-    /* Very dark navy card surface */
-    --surface-2: #121829;
-    /* Slightly lighter dark navy */
-    --surface-3: #1b233a;
-    /* Elevated dark navy surface */
+    --surface-1: #16161a;
+    /* Very dark charcoal card surface */
+    --surface-2: #1c1c21;
+    /* Slightly lighter dark charcoal */
+    --surface-3: #26262b;
+    /* Elevated dark charcoal surface */
     /* Subtle accent surfaces — slate-600  */
 
     /* Accent */
@@ -45,9 +45,9 @@
     /* slate-500 — placeholders/hints     */
 
     /* Borders — subtle, no harsh shadows */
-    --border: rgba(148, 163, 184, 0.15);
-    /* slate-400 at low opacity */
-    --border-hover: rgba(148, 163, 184, 0.30);
+    --border: rgba(255, 255, 255, 0.08);
+    /* subtle gray border at low opacity */
+    --border-hover: rgba(255, 255, 255, 0.16);
     /* slightly more visible    */
 
     /* Sizing */
