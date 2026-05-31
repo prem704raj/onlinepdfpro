@@ -754,6 +754,10 @@ document.addEventListener('DOMContentLoaded', () => {
     RecentlyUsedUI.render();
     ToolReset.init();
     
+    // Set page body class based on path for CSS overrides
+    const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
+    document.body.classList.add('page-' + filename);
+    
     // Auto-track tool
     const toolPage = document.querySelector('.tool-page');
     if (toolPage) {
