@@ -572,6 +572,57 @@
             stroke: #f3f4f6 !important;
         }
 
+        /* Light mode overrides for bottom sections (Day mode) */
+        [data-theme="light"] .why-story,
+        [data-theme="light"] table {
+            background: #faf7f0 !important;
+            border-color: #e6dec9 !important;
+        }
+
+        [data-theme="light"] .why-story > div:last-child,
+        [data-theme="light"] table thead tr {
+            background: #f3ede0 !important;
+            border-color: #e6dec9 !important;
+        }
+
+        [data-theme="light"] table td,
+        [data-theme="light"] table th {
+            border-bottom: 1.5px solid #e6dec9 !important;
+        }
+
+        [data-theme="light"] .why-story > div:last-child div[style*="background:var(--border)"] {
+            background: #e6dec9 !important;
+        }
+
+        /* Dark mode overrides for bottom sections (Night mode) */
+        [data-theme="dark"] .why-story,
+        [data-theme="dark"] table,
+        html:not([data-theme="light"]) .why-story,
+        html:not([data-theme="light"]) table {
+            background: #16161a !important;
+            border-color: #26262b !important;
+        }
+
+        [data-theme="dark"] .why-story > div:last-child,
+        [data-theme="dark"] table thead tr,
+        html:not([data-theme="light"]) .why-story > div:last-child,
+        html:not([data-theme="light"]) table thead tr {
+            background: #1c1c21 !important;
+            border-color: #26262b !important;
+        }
+
+        [data-theme="dark"] table td,
+        [data-theme="dark"] table th,
+        html:not([data-theme="light"]) table td,
+        html:not([data-theme="light"]) table th {
+            border-bottom: 1.5px solid #26262b !important;
+        }
+
+        [data-theme="dark"] .why-story > div:last-child div[style*="background:var(--border)"],
+        html:not([data-theme="light"]) .why-story > div:last-child div[style*="background:var(--border)"] {
+            background: #26262b !important;
+        }
+
         @keyframes blink {
 
             0%,
