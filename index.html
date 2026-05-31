@@ -529,6 +529,49 @@
             stroke: #3d3323 !important;
         }
 
+        /* Dark mode overrides for home screen boxes (Night mode) */
+        [data-theme="dark"] .hp-tool-card,
+        [data-theme="dark"] .hp-stats,
+        [data-theme="dark"] .hp-trust-pill,
+        html:not([data-theme="light"]) .hp-tool-card,
+        html:not([data-theme="light"]) .hp-stats,
+        html:not([data-theme="light"]) .hp-trust-pill {
+            background: #18130e !important;
+            border-color: #2b2118 !important;
+        }
+
+        [data-theme="dark"] .hp-tool-card:hover,
+        [data-theme="dark"] .hp-trust-pill:hover,
+        html:not([data-theme="light"]) .hp-tool-card:hover,
+        html:not([data-theme="light"]) .hp-trust-pill:hover {
+            background: #231b14 !important;
+            border-color: #403224 !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        [data-theme="dark"] .hp-tool-card h3,
+        [data-theme="dark"] .hp-stat-num,
+        [data-theme="dark"] .hp-trust-pill strong,
+        html:not([data-theme="light"]) .hp-tool-card h3,
+        html:not([data-theme="light"]) .hp-stat-num,
+        html:not([data-theme="light"]) .hp-trust-pill strong {
+            color: #eddcd0 !important;
+        }
+
+        [data-theme="dark"] .hp-tool-card p,
+        [data-theme="dark"] .hp-stat-label,
+        [data-theme="dark"] .hp-trust-pill div span,
+        html:not([data-theme="light"]) .hp-tool-card p,
+        html:not([data-theme="light"]) .hp-stat-label,
+        html:not([data-theme="light"]) .hp-trust-pill div span {
+            color: #a89384 !important;
+        }
+
+        [data-theme="dark"] .hp-tool-card-icon svg,
+        html:not([data-theme="light"]) .hp-tool-card-icon svg {
+            stroke: #eddcd0 !important;
+        }
+
         @keyframes blink {
 
             0%,
