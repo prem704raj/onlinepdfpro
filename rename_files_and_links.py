@@ -7,12 +7,11 @@ BASE_DIR = r"c:\Users\prem7\.gemini\antigravity\scratch\doctools"
 # Map of old file path to new file path (relative to BASE_DIR)
 # We also update all references to these paths in HTML files
 FILE_RENAMES = {
-    "tools/images-to-pdf.html": "tools/jpg-to-pdf.html",
-    "tools/pdf-lock.html": "tools/password-protect-pdf.html",
-    "tools/delete-pages.html": "tools/delete-pdf-pages.html",
-    "voice-to-pdf.html": "speech-to-text.html",
-    "tools/image-compress.html": "tools/image-compressor.html",
-    "tools/add-page-numbers.html": "tools/add-page-numbers-to-pdf.html"
+    "pdf-page-extractor.html": "pdf-to-jpg.html",
+    "tools/ocr.html": "tools/image-to-text.html",
+    "text-to-audio.html": "text-to-speech.html",
+    "tools/privacy-shield.html": "tools/redact-pdf.html",
+    "tools/qr-generator.html": "tools/qr-code-generator.html"
 }
 
 def update_links_in_file(filepath):

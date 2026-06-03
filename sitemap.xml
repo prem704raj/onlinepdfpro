@@ -85,12 +85,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-page-extractor.html</loc>
-    <lastmod>2026-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://onlinepdfpro.com/pdf-page-reorder.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -104,6 +98,12 @@
   </url>
   <url>
     <loc>https://onlinepdfpro.com/pdf-reader.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/pdf-to-jpg.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -151,7 +151,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/text-to-audio.html</loc>
+    <loc>https://onlinepdfpro.com/text-to-speech.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -217,6 +217,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://onlinepdfpro.com/tools/image-to-text.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://onlinepdfpro.com/tools/jpg-to-pdf.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -224,12 +230,6 @@
   </url>
   <url>
     <loc>https://onlinepdfpro.com/tools/merge-pdf.html</loc>
-    <lastmod>2026-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/tools/ocr.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -253,13 +253,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/privacy-shield.html</loc>
+    <loc>https://onlinepdfpro.com/tools/qr-code-generator.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/qr-generator.html</loc>
+    <loc>https://onlinepdfpro.com/tools/redact-pdf.html</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
