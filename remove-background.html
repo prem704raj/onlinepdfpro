@@ -369,7 +369,7 @@
                 var modelId = 'onnx-community/BEN2-ONNX';
                 if(progressCb) progressCb('Loading BEN2 model...', 20);
                 ben2Pipeline = await tf.pipeline('image-segmentation', modelId, {
-                    dtype: 'fp32',
+                    dtype: 'fp16',
                     progress_callback: function(p) {
                         if(p && p.progress !== undefined && progressCb) {
                             progressCb('Downloading BEN2 model... ' + Math.round(p.progress) + '%', 20 + (p.progress * 0.35));
