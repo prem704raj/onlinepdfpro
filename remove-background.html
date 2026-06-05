@@ -366,10 +366,23 @@
                     _tfModule = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0');
                 }
                 var tf = _tfModule;
+                
+                // Speed up WASM fallback
+                tf.env.backends.onnx.wasm.numThreads = navigator.hardwareConcurrency || 4;
+                
+                var deviceToUse = 'wasm';
+                if (navigator.gpu) {
+                    try {
+                        var adapter = await navigator.gpu.requestAdapter();
+                        if (adapter) deviceToUse = 'webgpu';
+                    } catch(e) {}
+                }
+
                 var modelId = 'onnx-community/BEN2-ONNX';
-                if(progressCb) progressCb('Loading BEN2 model...', 20);
+                if(progressCb) progressCb('Loading BEN2 model (' + deviceToUse.toUpperCase() + ')...', 20);
                 ben2Pipeline = await tf.pipeline('image-segmentation', modelId, {
                     dtype: 'fp16',
+                    device: deviceToUse,
                     progress_callback: function(p) {
                         if(p && p.progress !== undefined && progressCb) {
                             progressCb('Downloading BEN2 model... ' + Math.round(p.progress) + '%', 20 + (p.progress * 0.35));
@@ -390,7 +403,31 @@
             if(!ben2Pipeline) throw new Error('BEN2 not loaded');
             
             if(progressCb) progressCb('Preparing image...', 62);
-            var url = URL.createObjectURL(file);
+            
+            var origImg = await createImageBitmap(file);
+            var origW = origImg.width, origH = origImg.height;
+
+            var MAX_DIM = 1024;
+            var processFile = file;
+            if(origW > MAX_DIM || origH > MAX_DIM) {
+                var scale = MAX_DIM / Math.max(origW, origH);
+                var newW = Math.round(origW * scale);
+                var newH = Math.round(origH * scale);
+                if(progressCb) progressCb('Resizing image for AI...', 63);
+                
+                var c = document.createElement('canvas');
+                c.width = newW;
+                c.height = newH;
+                var cx = c.getContext('2d');
+                cx.drawImage(origImg, 0, 0, newW, newH);
+                
+                var blobData = await new Promise(function(res) {
+                    c.toBlob(function(b) { res(b); }, 'image/jpeg', 0.95);
+                });
+                processFile = new File([blobData], file.name, {type: 'image/jpeg'});
+            }
+
+            var url = URL.createObjectURL(processFile);
             
             if(progressCb) progressCb('Running BEN2 AI segmentation...', 65);
             var result = await ben2Pipeline(url);
