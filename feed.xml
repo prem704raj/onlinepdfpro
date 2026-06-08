@@ -5,7 +5,7 @@
     <link>https://onlinepdfpro.com/blog.html</link>
     <description>Tips, guides, and tutorials for working with PDFs, images, and documents online. 100% free, 100% private.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Mar 2026 08:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 Jun 2026 08:00:00 +0000</lastBuildDate>
     <atom:link href="https://onlinepdfpro.com/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
       <url>https://onlinepdfpro.com/icon-192.png</url>
@@ -165,6 +165,38 @@
       <description>Compress PDF files to under 100KB for email and form submissions. Free online tool.</description>
       <pubDate>Tue, 18 Feb 2026 08:00:00 +0000</pubDate>
       <guid>https://onlinepdfpro.com/blog/how-to-compress-pdf-below-100kb.html</guid>
+    </item>
+
+    <item>
+      <title>Introducing PDF Scratchpad — Your Quick Notes Companion</title>
+      <link>https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html</link>
+      <description>Meet PDF Scratchpad — a fast, privacy-first notepad for quick notes, drafts, and ideas. Auto-saves to your browser, works offline, and exports to PDF or TXT.</description>
+      <pubDate>Sun, 08 Jun 2026 08:00:00 +0000</pubDate>
+      <guid>https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html</guid>
+    </item>
+
+    <item>
+      <title>How to Protect PDF from Copying</title>
+      <link>https://onlinepdfpro.com/blog/how-to-protect-pdf-from-copying.html</link>
+      <description>Learn how to password-protect and restrict copying on your PDF documents online for free.</description>
+      <pubDate>Tue, 03 Jun 2026 08:00:00 +0000</pubDate>
+      <guid>https://onlinepdfpro.com/blog/how-to-protect-pdf-from-copying.html</guid>
+    </item>
+
+    <item>
+      <title>Why Client-Side Processing Is Safer for Your Documents</title>
+      <link>https://onlinepdfpro.com/blog/why-client-side-processing-is-safer.html</link>
+      <description>Understand why processing files in your browser is more private and secure than uploading to cloud servers.</description>
+      <pubDate>Tue, 03 Jun 2026 07:00:00 +0000</pubDate>
+      <guid>https://onlinepdfpro.com/blog/why-client-side-processing-is-safer.html</guid>
+    </item>
+
+    <item>
+      <title>Best Free Presentation Makers in 2025</title>
+      <link>https://onlinepdfpro.com/blog/best-free-presentation-makers.html</link>
+      <description>Compare the best free online presentation makers. Create stunning slides without PowerPoint or paid software.</description>
+      <pubDate>Tue, 03 Jun 2026 06:00:00 +0000</pubDate>
+      <guid>https://onlinepdfpro.com/blog/best-free-presentation-makers.html</guid>
     </item>
 
   </channel>
