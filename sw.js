@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v74'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v75'; 
 const STATIC_ASSETS = [
     'about.html',
     'blog.html',
@@ -34,6 +34,7 @@ const STATIC_ASSETS = [
     'text-to-audio.html',
     'tools.html',
     'voice-to-pdf.html',
+    'blog/introducing-pdf-scratchpad-online.html',
     'blog/best-free-online-pdf-tools-in-2025-comparison.html',
     'blog/best-free-pdf-tools-2025.html',
     'blog/best-pdf-tools-for-students-in-india.html',

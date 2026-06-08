@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing PDF Scratchpad: Your Offline-Capable PDF Companion (2026) | OnlinePDFPro Blog</title>
+    <meta name="description" content="Discover our new PDF Scratchpad tool. A free, offline-capable notepad designed specifically to help you draft, extract, and organize text alongside your PDF workflow.">
+    <meta name="keywords" content="pdf scratchpad, online notepad, offline notepad, extract pdf text, online pdf tools">
+    <link rel="canonical" href="https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Introducing PDF Scratchpad: Your Offline-Capable PDF Companion (2026)">
+    <meta property="og:description" content="Discover our new PDF Scratchpad tool. A free, offline-capable notepad designed specifically to help you draft, extract, and organize text alongside your PDF workflow.">
+    <meta property="og:url" content="https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="article:published_time" content="2026-06-08">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Introducing PDF Scratchpad: Your Offline-Capable PDF Companion (2026)">
+    <meta name="twitter:description" content="Discover our new PDF Scratchpad tool. A free, offline-capable notepad designed specifically to help you draft, extract, and organize text alongside your PDF workflow.">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="../css/tools-v2.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: var(--text-primary);
+            --text: var(--text-secondary);
+            --light: var(--surface-2);
+            --border: var(--border);
+            --accent: #10b981;
+            --tip-bg: rgba(16, 185, 129, 0.1);
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --table-header-bg: var(--surface-3);
+        }
+        [data-theme="light"] {
+            --tip-bg: #f0fdf4;
+            --warning-bg: #fffbeb;
+            --table-header-bg: #1e293b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--text);  line-height:1.8; }
+        header {  padding:20px; }
+        header .container { max-width:1200px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
+        header h1 { font-size:22px; margin:0; } header h1 a { color:#fff; text-decoration:none; }
+        header nav a { color:#94a3b8; text-decoration:none; margin-left:25px; font-weight:600; font-size:15px; }
+        header nav a:hover { color:#fff; }
+        .breadcrumbs { max-width:800px; margin:25px auto 0; padding:0 20px; font-size:14px; color:#94a3b8; }
+        .breadcrumbs a { color:var(--primary); text-decoration:none; }
+        article { max-width:800px; margin:30px auto; padding:0 20px; }
+        .article-category { display:inline-block; padding:6px 16px; background:rgba(37,99,235,0.1); color:var(--primary); border-radius:50px; font-size:13px; font-weight:700; margin-bottom:15px; }
+        article h1 { font-size:clamp(28px,5vw,42px); color:var(--dark); line-height:1.3; margin-bottom:20px; }
+        .article-meta { display:flex; gap:25px; font-size:14px; color:var(--text-secondary); flex-wrap:wrap; margin-bottom:25px; padding-bottom:25px; border-bottom:2px solid var(--border); }
+        .article-meta span { display:flex; align-items:center; gap:6px; }
+        article h2 { font-size:28px; color:var(--dark); margin:45px 0 18px; padding-top:20px; border-top:2px solid var(--border); }
+        article h2:first-of-type { border-top:none; padding-top:0; }
+        article h3 { font-size:22px; color:var(--dark); margin:30px 0 12px; }
+        article p { margin-bottom:18px; font-size:17px; }
+        article ul, article ol { margin:15px 0 25px 25px; } article li { margin-bottom:10px; font-size:17px; }
+        .cta-box { background:linear-gradient(135deg,var(--primary),#1d4ed8); color:#fff; padding:35px; border-radius:20px; text-align:center; margin:40px 0; }
+        .cta-box h3 { color:#fff; font-size:24px; margin-bottom:12px; }
+        .cta-box p { color:rgba(255,255,255,0.9); margin-bottom:20px; }
+        .cta-btn { display:inline-block; padding:16px 40px; background:#ffffff; color:#2563eb; text-decoration:none; border-radius:14px; font-weight:700; font-size:18px; transition:0.3s; }
+        .cta-btn:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+        .info-box { background:var(--light); border-left:5px solid var(--primary); padding:25px; border-radius:0 12px 12px 0; margin:25px 0; }
+        .info-box.tip { border-left-color:var(--accent); background:var(--tip-bg); }
+        .info-box.warning { border-left-color:#f59e0b; background:var(--warning-bg); }
+        .info-box h4 { margin-bottom:8px; font-size:16px; } .info-box p { margin:0; font-size:15px; }
+        .step-box { background:var(--light); padding:30px; border-radius:16px; margin:20px 0; border:2px solid var(--border); }
+        .step-number { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; background:var(--primary); color:#fff; border-radius:50%; font-weight:700; font-size:18px; margin-bottom:12px; }
+        .step-box h3 { margin-top:0; }
+        .comparison-table { width:100%; border-collapse:collapse; margin:25px 0; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+        .comparison-table th { background:var(--table-header-bg); color:#fff; padding:15px 20px; text-align:left; font-size:14px; }
+        .comparison-table td { padding:14px 20px; border-bottom:1px solid var(--border); font-size:15px; }
+        .comparison-table tr:nth-child(even) { background:var(--light); }
+        .comparison-table .highlight { background:rgba(37,99,235,0.08); font-weight:700; }
+        .faq-item { border:2px solid var(--border); border-radius:14px; margin-bottom:12px; overflow:hidden; }
+        .faq-q { padding:20px 25px; font-weight:700; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:17px; transition:0.3s; }
+        .faq-q:hover { background:var(--light); }
+        .faq-a { padding:0 25px; max-height:0; overflow:hidden; transition:all 0.4s; color:var(--text-secondary); }
+        .faq-item.open .faq-a { padding:0 25px 20px; max-height:500px; }
+        .faq-item.open .arrow { transform:rotate(180deg); } .arrow { transition:0.3s; }
+        .toc { background:var(--light); padding:25px 30px; border-radius:16px; margin:25px 0; border:2px solid var(--border); }
+        .toc h4 { margin-bottom:12px; font-size:18px; color:var(--dark); }
+        .toc ul { list-style:none; margin:0; padding:0; } .toc li { margin:8px 0; }
+        .toc a { color:var(--primary); text-decoration:none; font-size:15px; font-weight:600; }
+        .related-section { margin:50px 0; padding:35px; background:var(--light); border-radius:20px; }
+        .related-section h2 { border-top:none; padding-top:0; }
+        .related-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+        .related-card { background:var(--surface-1); padding:20px; border-radius:14px; text-decoration:none; color:var(--text); transition:0.3s; border:2px solid var(--border); }
+        .related-card:hover { border-color:var(--primary); transform:translateY(-3px); }
+        .related-card h4 { font-size:16px; color:var(--dark); margin-bottom:8px; }
+        .related-card p { font-size:13px; color:var(--text-secondary); margin:0; }
+        .author-box { display:flex; gap:20px; padding:30px; background:var(--light); border-radius:16px; margin:40px 0; align-items:center; }
+        .author-avatar { width:70px; height:70px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; flex-shrink:0; }
+        .share-section { display:flex; align-items:center; gap:15px; margin:30px 0; flex-wrap:wrap; }
+        .share-section span { font-weight:700; font-size:16px; }
+        .share-btn { padding:10px 20px; border:none; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; text-decoration:none; color:#fff; transition:0.3s; }
+        .share-btn:hover { transform:translateY(-2px); }
+        .share-btn.twitter { background:#1DA1F2; } .share-btn.whatsapp { background:#25D366; }
+        .share-btn.linkedin { background:#0A66C2; } .share-btn.facebook { background:#1877F2; }
+        .blog-footer { background:var(--dark); color:#94a3b8; padding:50px 20px; text-align:center; margin-top:60px; }
+        .blog-footer a { color:var(--primary); text-decoration:none; }
+        @media (max-width:768px) { article h1 { font-size:28px; } article h2 { font-size:22px; } .author-box { flex-direction:column; text-align:center; } }
+    </style>
+    <!-- MOBILE FIX -->
+
+        <script defer src="../js/third-party-loader.js"></script>
+    <!-- CMP PLACEHOLDER: Paste Google Funding Choices CMP script here (Privacy & messaging). -->
+    <!-- EZOIC PLACEHOLDER: Paste Ezoic integration script here (load async). -->
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="../tools.html" class="nav-link">All Tools</a>
+                <a href="../blog.html" class="nav-link">Blog</a>
+                <a href="../about.html" class="nav-link">About</a>
+                <a href="../help.html" class="nav-link">Help</a>
+                <a href="../history.html" class="nav-link">History</a>
+                <a href="#" onclick="smartEmail(event)"  class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
+                <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲 Install App</a>
+            </nav>
+            <div class="header-actions">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">🔍</button>
+                <div class="header-search" style="position: relative; margin-right: 8px;">
+                    <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">🔍</span>
+                    <input type="text" id="globalToolSearch" placeholder="Search tools..."
+                        style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+                </div>
+                <div class="lang-selector">
+                    <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                            <path d="M2 12h20"></path>
+                        </svg></button>
+                    <div class="lang-dropdown">
+                        <div class="lang-search-wrap">
+                            <input type="text" class="lang-search" placeholder="Search language...">
+                        </div>
+                        <ul class="lang-list"></ul>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light">🌙</span>
+                    <span class="theme-icon-dark">☀️</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+    <div class="breadcrumbs"><a href="../index.html">Home</a> &gt; <a href="../blog.html">Blog</a> &gt; <span>PDF Scratchpad</span></div>
+<article>
+    <div class="article-header">
+        <span class="article-category">🚀 Product Update</span>
+        <h1>Introducing PDF Scratchpad: Your Offline-Capable PDF Companion</h1>
+        <div class="article-meta">
+            <span>📅 2026-06-08</span>
+            <span>👤 OnlinePDFPro Team</span>
+            <span>⏱️ 4 min read</span>
+        </div>
+    </div>
+    
+    <div class="toc"><h4>📋 Table of Contents</h4><ul><li><a href="#problem">The Missing Link in PDF Workflows</a></li><li><a href="#solution">Meet PDF Scratchpad</a></li><li><a href="#features">Key Features</a></li><li><a href="#get-started">How to Use It</a></li></ul></div>
+    <div class="cta-box"><h3>🚀 Try the New PDF Scratchpad</h3><p>Draft, organize, and extract text privately and offline.</p><a href="../pdf-scratchpad.html" class="cta-btn">Open Scratchpad</a></div>
+    
+    <h2 id="problem">The Missing Link in PDF Workflows</h2>
+    <p>If you work with PDFs frequently, you know the struggle: you extract some text from a document, and then... where do you put it? You probably open a completely separate app like Notepad, Apple Notes, or Word just to temporarily store a few sentences.</p>
+    <p>We realized there was a gap in our ecosystem. You come to OnlinePDFPro to manage your PDFs, but you still had to leave our site to manage the <em>content</em> of those PDFs. Not anymore.</p>
+    
+    <h2 id="solution">Meet PDF Scratchpad</h2>
+    <p>Today, we're thrilled to introduce <strong>PDF Scratchpad</strong>, a brand new tool built directly into OnlinePDFPro. It's a clean, fast, and completely private online notepad designed to live side-by-side with your PDF workflow.</p>
+    <p>Just like all our other tools, the Scratchpad runs 100% in your browser. Nothing you type is ever uploaded to our servers.</p>
+    
+    <h2 id="features">Key Features</h2>
+    <ul>
+        <li><strong>📝 Multiple Notes:</strong> Create, rename, and delete as many notes as you need using the intuitive sidebar.</li>
+        <li><strong>💾 Auto-Save:</strong> Never lose your work. The Scratchpad saves your text automatically to your browser's local storage as you type.</li>
+        <li><strong>🔌 Offline Capable:</strong> Since it's a Progressive Web App (PWA), you can use the Scratchpad even when your internet goes down.</li>
+        <li><strong>📊 Built-in Counters:</strong> Keep track of your length with real-time word and character counts.</li>
+        <li><strong>📥 Easy Export:</strong> Download any of your notes instantly as a clean <code>.txt</code> file.</li>
+    </ul>
+
+    <h2 id="get-started">How to Use It</h2>
+    <div class="step-box">
+        <div class="step-number">1</div>
+        <h3>Open the Scratchpad</h3>
+        <p>Head over to the <a href="../pdf-scratchpad.html">PDF Scratchpad</a> from our home page or tools menu.</p>
+    </div>
+    <div class="step-box">
+        <div class="step-number">2</div>
+        <h3>Create a Note</h3>
+        <p>Click the <strong>+ New Note</strong> button in the sidebar to start a fresh draft.</p>
+    </div>
+    <div class="step-box">
+        <div class="step-number">3</div>
+        <h3>Draft and Export</h3>
+        <p>Paste text from your PDFs, draft new content, and click <strong>Download TXT</strong> when you're ready to save it to your computer.</p>
+    </div>
+
+    <div class="info-box tip">
+        <h4>Pro Tip: Seamless Workflow</h4>
+        <p>Keep the <a href="../pdf-to-text-extractor.html">PDF to Text Extractor</a> open in one tab, and the Scratchpad in another. You can rapidly extract text and organize it in your Scratchpad without missing a beat.</p>
+    </div>
+
+    <div class="cta-box"><h3>Ready to Organize Your Thoughts?</h3><p>Try it out for free, with no signup required.</p><a href="../pdf-scratchpad.html" class="cta-btn">🚀 Open PDF Scratchpad</a></div>
+
+</article>
+
+<div class="share-section">
+    <span>📤 Share this update:</span>
+    <a href="https://twitter.com/intent/tweet?text=Introducing PDF Scratchpad: Your Offline-Capable PDF Companion&url=https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html" target="_blank" rel="noopener noreferrer" class="share-btn twitter">Twitter</a>
+    <a href="https://wa.me/?text=Introducing PDF Scratchpad: Your Offline-Capable PDF Companion https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp">WhatsApp</a>
+    <a href="https://www.linkedin.com/shareArticle?url=https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html&title=Introducing PDF Scratchpad: Your Offline-Capable PDF Companion" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">LinkedIn</a>
+</div>
+<div class="author-box">
+    <div class="author-avatar">📝</div>
+    <div class="author-info">
+        <h4>OnlinePDFPro Team</h4>
+        <p>We build free, privacy-first PDF tools that run directly in your browser. No uploads, no servers.</p>
+    </div>
+</div>
+<div class="related-section">
+    <h2>📚 Related Articles</h2>
+    <div class="related-grid">
+        <a href="best-free-pdf-tools-2025.html" class="related-card"><h4>Best Free PDF Tools 2025</h4><p>Full comparison guide.</p></a>
+        <a href="how-to-edit-pdf-online-free.html" class="related-card"><h4>How to Edit PDF Online</h4><p>A complete guide to PDF editing.</p></a>
+    </div>
+</div>
+
+<div class="blog-footer">
+    <p>© 2026 <a href="../index.html">OnlinePDFPro.com</a> — Privacy-First PDF Tools</p>
+    <p style="margin-top:10px"><a href="../tools.html">All Tools</a> · <a href="../blog.html">Blog</a> · <a href="../about.html">About</a> · <a href="../privacy.html">Privacy</a> &middot; <a href="mailto:support@onlinepdfpro.com">support@onlinepdfpro.com</a></p>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Introducing PDF Scratchpad: Your Offline-Capable PDF Companion",
+  "description": "Discover our new PDF Scratchpad tool. A free, offline-capable notepad designed specifically to help you draft, extract, and organize text alongside your PDF workflow.",
+  "author": {
+    "@type": "Organization",
+    "name": "OnlinePDFPro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "OnlinePDFPro",
+    "url": "https://onlinepdfpro.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://onlinepdfpro.com/icon-512.png"
+    }
+  },
+  "datePublished": "2026-06-08",
+  "dateModified": "2026-06-08",
+  "mainEntityOfPage": "https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html",
+  "url": "https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html"
+}
+</script>
+<script defer src="../js/app.js?v=11"></script>
+</body>
+</html>
