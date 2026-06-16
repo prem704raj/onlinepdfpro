@@ -695,11 +695,7 @@
 <a class="hp-tool-card" data-accent="blue" href="tools/split-pdf.html"><span class="hp-tool-card-icon">✂️</span>
 <h3>Split PDF</h3>
 <p>Extract pages or split into files</p>
-</a>
-<a class="hp-tool-card" data-accent="orange" href="pdf-editor.html"><span class="hp-tool-card-icon">✏️</span>
-<h3>PDF Editor</h3>
-<p>Edit text, images, draw &amp; highlight</p>
-</a>
+</a>
 <a class="hp-tool-card" data-accent="rose" href="pdf-reader.html"><span class="hp-tool-card-icon">📖</span>
 <h3>PDF Reader</h3>
 <p>Fast in-browser viewer with search</p>
@@ -1024,8 +1020,7 @@
 <li style="margin:8px 0;"><a href="tools/compress-pdf.html">Compress PDF</a></li>
 <li style="margin:8px 0;"><a href="tools/sign-pdf.html">Sign PDF</a></li>
 
-<li style="margin:8px 0;"><a href="pdf-editor.html">PDF
-                                Editor</a></li>
+
 </ul>
 </div>
 <!-- More Tools -->
@@ -1084,7 +1079,7 @@
                         if (nameEl) {
                             const name = nameEl.textContent.toLowerCase();
                             const desc = descEl ? descEl.textContent.toLowerCase() : '';
-                            const Query = name.includes(query) || desc.includes(query);
+                            const matchesQuery = name.includes(query) || desc.includes(query);
                             card.style.display = matchesQuery ? 'flex' : 'none';
                         }
                     });
@@ -1096,26 +1091,7 @@
             navigator.serviceWorker.register('sw.js');
         }
     </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "OnlinePDFPro",
-  "url": "https://onlinepdfpro.com",
-  "logo": "https://onlinepdfpro.com/images/logo.png",
-  "description": "India's best free online PDF tools. Merge, split, compress, convert PDFs and more.",
-  "sameAs": [
-    "https://twitter.com/onlinepdfpro",
-    "https://facebook.com/onlinepdfpro",
-    "https://instagram.com/onlinepdfpro"
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer support",
-    "email": "support@onlinepdfpro.com"
-  }
-}
-    </script>
+
 <!-- Point 8: Analytics & Event Tracking -->
 <script>
         document.addEventListener('DOMContentLoaded', function () {

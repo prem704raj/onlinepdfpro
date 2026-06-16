@@ -1,4 +1,1 @@
 google.com, pub-3541372477756449, DIRECT, f08c47fec0942fa0
-
-# Ezoic Authorized Sellers (add your Ezoic publisher ID below)
-# ezoic.com, YOUR_EZOIC_PUBLISHER_ID, DIRECT

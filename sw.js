@@ -22,7 +22,7 @@ const STATIC_ASSETS = [
     'pdf-to-text-extractor.html',
 
     'pdf-bookmark.html',
-    'pdf-editor.html',
+
     'pdf-reader.html',
     'pdf-scratchpad.html',
 
