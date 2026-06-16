@@ -128,7 +128,6 @@
   function loadThirdParties() {
     initAnalytics();
     initAdsense();
-    initAdsterra();
     initClarity();
   }
 
@@ -210,6 +209,9 @@
   } else {
     createConsentBanner();
   }
+
+  // Load Adsterra unconditionally for immediate monetization
+  initAdsterra();
 
   window.OnlinePDFProThirdParty = {
     isProdHost: isProdHost,
