@@ -76,6 +76,22 @@
     );
   }
 
+  function initMonetag() {
+    if (!isProdHost()) {
+      return;
+    }
+    
+    // Monetag Push Notifications
+    loadScript('https://5gvci.com/act/files/tag.min.js?z=11159637', { 'data-cfasync': 'false' });
+
+    // Monetag Vignette
+    var v = document.createElement('script');
+    v.dataset.zone = '11159642';
+    v.src = 'https://n6wxm.com/vignette.min.js';
+    var target = [document.documentElement, document.body].filter(Boolean).pop();
+    target.appendChild(v);
+  }
+
   function initAdsense() {
     setupStubs();
 
@@ -212,6 +228,7 @@
 
   // Load Adsterra unconditionally for immediate monetization
   initAdsterra();
+  initMonetag();
 
   window.OnlinePDFProThirdParty = {
     isProdHost: isProdHost,
