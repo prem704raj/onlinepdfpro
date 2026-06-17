@@ -342,26 +342,7 @@
     </script>
 
         <script defer src="../js/third-party-loader.js"></script>
-    <!-- Security & Anti-Hacking Script -->
-    <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) { return false; }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 73) { return false; }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 74) { return false; }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 67) { return false; }
-            if(e.ctrlKey && e.keyCode == 85) { return false; }
-        };
-        setInterval(function() {
-            var before = new Date().getTime();
-            debugger;
-            var after = new Date().getTime();
-            if (after - before > 100) {
-                document.body.innerHTML = "<div style='display:flex;height:100vh;align-items:center;justify-content:center;background:#000;color:red;font-family:monospace;font-size:24px;'>Access Denied.</div>";
-            }
-        }, 1000);
-    </script>
-
+    <script src="js/security-shield.js"></script>
 </head>
 
 <body class="fade-in">
