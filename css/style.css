@@ -1671,7 +1671,7 @@ main.tool-page > .container {
 }
 
 main.tool-page > section {
-    order: 2;
+    order: 4;
     width: 100%;
 }
 
@@ -1685,7 +1685,7 @@ main.tool-page > section {
 }
 
 .adsterra-bottom-banner {
-    order: 4;
+    order: 2;
     text-align: center;
     margin: 30px auto;
     width: 100%;
