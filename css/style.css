@@ -1675,6 +1675,10 @@ main.tool-page > section {
     width: 100%;
 }
 
+main#main {
+    position: relative;
+}
+
 .adsterra-left-sidebar {
     order: 3;
     text-align: center;
