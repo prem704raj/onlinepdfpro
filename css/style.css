@@ -1701,5 +1701,21 @@ main.tool-page > section {
         width: 160px; 
         margin: 0;
     }
+    .adsterra-right-sidebar {
+        position: absolute;
+        right: 10px; 
+        top: 20px; 
+        width: 160px; 
+        margin: 0;
+    }
+}
+
+.adsterra-right-sidebar {
+    order: 3;
+    text-align: center;
+    margin: 30px auto;
+    width: 100%;
+    overflow: hidden;
+    min-height: 600px;
 }
 
