@@ -1,4 +1,13 @@
 // OnlinePDFPro Service Worker
+
+// Monetag Push Notifications Adsterra script
+self.options = {
+    "domain": "5gvci.com",
+    "zoneId": 11159628
+}
+self.lary = ""
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
+
 // Modern PWA support with reliable caching strategy
 
 const CACHE_NAME = 'onlinepdfpro-cache-v75'; 
