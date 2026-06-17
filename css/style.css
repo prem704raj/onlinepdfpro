@@ -1679,25 +1679,16 @@ main#main {
     position: relative;
 }
 
-.adsterra-left-sidebar {
+.adsterra-left-sidebar, .adsterra-right-sidebar {
     order: 3;
     text-align: center;
     margin: 30px auto;
-    width: 100%;
-    overflow: hidden;
-    min-height: 250px;
-}
-
-.adsterra-bottom-banner {
-    order: 2;
-    text-align: center;
-    margin: 30px auto;
-    width: 100%;
+    width: 160px;
     overflow: hidden;
     min-height: 90px;
 }
 
-@media (min-width: 1250px) {
+@media (min-width: 1024px) {
     .adsterra-left-sidebar {
         position: fixed;
         left: 5px; 
@@ -1716,12 +1707,11 @@ main#main {
     }
 }
 
-.adsterra-right-sidebar {
-    order: 3;
+.adsterra-bottom-banner {
+    order: 2;
     text-align: center;
     margin: 30px auto;
     width: 100%;
     overflow: hidden;
-    min-height: 600px;
+    min-height: 90px;
 }
-
