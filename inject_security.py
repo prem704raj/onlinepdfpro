@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="robots" content="noindex, follow"><meta http-equiv="refresh" content="0; url=/tools/delete-pdf-pages.html"><link rel="canonical" href="https://onlinepdfpro.com/tools/delete-pdf-pages.html"><title>Redirecting...</title>
+import os
+import glob
+
+html_files = glob.glob('*.html') + glob.glob('blog/*.html') + glob.glob('tools/*.html')
+
+security_script = """
     <!-- Security & Anti-Hacking Script -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -18,5 +23,27 @@
             }
         }, 1000);
     </script>
+"""
 
-</head><body><p>This page has moved. <a href="/tools/delete-pdf-pages.html">Click here</a> if not redirected.</p></body></html>
+for filepath in html_files:
+    if not os.path.isfile(filepath):
+        continue
+    
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+        
+    if 'Security & Anti-Hacking Script' in content:
+        continue # Already injected
+        
+    # Inject right before </head>
+    if '</head>' in content:
+        content = content.replace('</head>', security_script + '\n</head>')
+    else:
+        # If no </head>, try to inject before <style> or after last <meta>
+        if '<style>' in content:
+            content = content.replace('<style>', security_script + '\n<style>', 1)
+            
+    with open(filepath, 'w', encoding='utf-8') as f:
+        f.write(content)
+        
+print(f"Injected security script into {len(html_files)} files.")
