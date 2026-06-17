@@ -1692,18 +1692,22 @@ main#main {
     .adsterra-left-sidebar {
         position: fixed;
         left: 5px; 
-        top: 250px; 
+        top: 50%; 
+        transform: translateY(-50%);
         width: 160px; 
         margin: 0;
         z-index: 100;
+        max-height: 100vh;
     }
     .adsterra-right-sidebar {
         position: fixed;
         right: 5px; 
-        top: 250px; 
+        top: 50%; 
+        transform: translateY(-50%);
         width: 160px; 
         margin: 0;
         z-index: 100;
+        max-height: 100vh;
     }
 }
 
