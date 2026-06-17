@@ -141,8 +141,7 @@
                 <select id="aiQuality" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-primary); cursor:pointer; font-family:inherit; font-weight:500; font-size:0.9rem; margin-left: 6px;">
                     <option value="ben2" selected>🏆 BEN2 — Best Quality (Recommended)</option>
                     <option value="birefnet">✨ BiRefNet — Great Quality</option>
-                    <option value="isnet">ISNet — High Accuracy (Fallback)</option>
-                    <option value="isnet_fp16">ISNet FP16 — Standard (Fast)</option>
+
                 </select>
                 <div id="engineDesc" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">BEN2: The newest & best AI model with confidence-guided matting for perfect hair, fur & edge detail. Downloads once, works forever in your browser.</div>
             </div>
@@ -207,6 +206,10 @@
                             </div>
                             <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Brush Size:</span> <span id="brushSizeVal">20px</span></div>
                             <input type="range" id="brushSize" min="5" max="150" value="20" style="width:100%;cursor:pointer;">
+                            <div style="display:flex;gap:8px;margin-top:12px;">
+                                <button class="dl-btn dl-btn-secondary" id="btnUndo" disabled style="margin:0;flex:1;font-size:0.85rem;padding:8px;border-color:var(--border);color:var(--text-muted);">&#8617; Undo</button>
+                                <button class="dl-btn dl-btn-secondary" id="btnRedo" disabled style="margin:0;flex:1;font-size:0.85rem;padding:8px;border-color:var(--border);color:var(--text-muted);">&#8618; Redo</button>
+                            </div>
                         </div>
                         <div class="panel">
                             <h3>✨ Professional Finish</h3>
@@ -612,20 +615,7 @@
             return blob;
         }
 
-        // --- LOAD @imgly AI (legacy fallback) ---
-        async function loadAI() {
-            if(libReady && removeBgFn) return true;
-            var urls = ['https://esm.sh/@imgly/background-removal@1.5.5', 'https://esm.sh/@imgly/background-removal', 'https://cdn.skypack.dev/@imgly/background-removal@1.5.5'];
-            for(var i=0;i<urls.length;i++){
-                try{
-                    var mod = await import(urls[i]);
-                    var fn = mod.removeBackground || mod.default;
-                    if(typeof fn !== 'function'){ for(var k in mod){ if(typeof mod[k]==='function'){fn=mod[k];break;} } }
-                    if(typeof fn === 'function'){ removeBgFn=fn; libReady=true; return true; }
-                }catch(e){console.warn('[BG] Failed: '+urls[i],e.message);}
-            }
-            return false;
-        }
+
 
         // --- FILE UPLOAD ---
         var uploadZone = $('uploadZone'), fileInput = $('fileInput');
@@ -812,24 +802,6 @@
                     await loadBiRefNet(updateProgress);
                     if(mn) mn.style.display='none';
                     blob = await runBiRefNet(file, updateProgress);
-                } else {
-                    // ── ISNet Engine (legacy @imgly) ──
-                    if(pti) pti.textContent='Removing Background... ('+(selEngine==='isnet'?'High Accuracy':'Standard')+')';
-                    updateProgress('Loading AI library...', 5);
-                    var ok=await loadAI(); if(!ok) throw new Error('Failed to load AI');
-                    updateProgress('AI ready...', 20);
-                    blob=await removeBgFn(file,{
-                        model: selEngine, output: { format: 'image/png', quality: 1.0 },
-                        progress:function(key,cur,tot){
-                            var pct=tot>0?Math.round(cur/tot*100):0;
-                            if(key.indexOf('fetch')>-1||key.indexOf('download')>-1){
-                                updateProgress('Downloading AI model... '+pct+'%', 20+pct*.35);
-                            }else{
-                                if(mn) mn.style.display='none';
-                                updateProgress('Matting edges... '+pct+'%', 55+pct*.40);
-                            }
-                        }
-                    });
                 }
 
                 // ── Post-Processing: Professional Edge Refinement ──
@@ -865,6 +837,7 @@
                 curBg='transparent'; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]'); if(tb) tb.classList.add('active');
                 if(rv){ rv.style.backgroundColor=''; rv.classList.add('checker-bg'); }
                 updateProgress('Done!', 100);
+                undoStack = []; redoStack = []; saveState();
                 setTimeout(function(){showOnly('editorSection');},500);
             }catch(err){
                 console.error(err); var em=$('errorMessage'),ed=$('errorDetails');
@@ -876,6 +849,42 @@
         if(retryBtn) retryBtn.addEventListener('click',function(){if(origFile) processFile(origFile);else resetAll();});
         if(backBtn||newBtn) [backBtn,newBtn].forEach(b=>b&&b.addEventListener('click',resetAll));
         function resetAll(){origFile=null;resultBlob=null;curBg='transparent';origImgObj=null;maskImgObj=null;if(fileInput)fileInput.value=''; resetBgBtns(); var tb=document.querySelector('.bg-color-btn[data-bg="transparent"]');if(tb)tb.classList.add('active');showOnly('uploadZone');}
+
+        // --- UNDO / REDO LOGIC ---
+        var undoStack = [], redoStack = [];
+        var btnUndo = $('btnUndo'), btnRedo = $('btnRedo');
+        function updateUndoUI() {
+            if(btnUndo) { btnUndo.disabled = undoStack.length <= 1; btnUndo.style.color = undoStack.length <= 1 ? 'var(--text-muted)' : 'var(--text-primary)'; }
+            if(btnRedo) { btnRedo.disabled = redoStack.length === 0; btnRedo.style.color = redoStack.length === 0 ? 'var(--text-muted)' : 'var(--text-primary)'; }
+        }
+        function saveState() {
+            if(!rCanvas) return;
+            undoStack.push(rCanvas.toDataURL('image/png'));
+            if(undoStack.length > 20) undoStack.shift();
+            redoStack = [];
+            updateUndoUI();
+        }
+        if(btnUndo) btnUndo.onclick = function() {
+            if(undoStack.length <= 1) return;
+            redoStack.push(undoStack.pop()); // pop current
+            restoreState(undoStack[undoStack.length - 1]); // restore previous
+        };
+        if(btnRedo) btnRedo.onclick = function() {
+            if(redoStack.length === 0) return;
+            var state = redoStack.pop();
+            undoStack.push(state);
+            restoreState(state);
+        };
+        function restoreState(dataUrl) {
+            var img = new Image();
+            img.onload = function() {
+                rCtx.clearRect(0, 0, rCanvas.width, rCanvas.height);
+                rCtx.drawImage(img, 0, 0);
+                rCanvas.toBlob(function(b){ if($('compareAfter')) $('compareAfter').src=URL.createObjectURL(b); });
+                updateUndoUI();
+            };
+            img.src = dataUrl;
+        }
 
         // --- TOUCH UP (BRUSH) ---
         var mRestore=$('modeRestore'), mErase=$('modeErase'), bSlider=$('brushSize'), bVal=$('brushSizeVal'), cursor=$('brushCursor'), rv=$('resultView');
@@ -945,7 +954,7 @@
                 if(!isDrawing) return;
                 var pt=getPt(e); strokePt(lastPt, pt); lastPt=pt;
             });
-            window.addEventListener('pointerup', function(){ isDrawing=false; });
+            window.addEventListener('pointerup', function(){ if(isDrawing){ saveState(); } isDrawing=false; });
         }
 
         // --- VIEW TABS ---
@@ -984,6 +993,7 @@
                 resultBlob = b;
                 if($('compareAfter')) $('compareAfter').src = URL.createObjectURL(b);
                 applyRefine.textContent = oldText;
+                saveState();
             }, 'image/png');
         };
 
