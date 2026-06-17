@@ -674,8 +674,9 @@
             var factor = 1 + contrast * 10;
             for (var i = 0; i < w * h; i++) {
                 var a = alpha[i];
-                // Sigmoid-like contrast centering around 0.5
-                a = 1 / (1 + Math.exp(-factor * (a - 0.5)));
+                
+                // Linear contrast centering around 0.5
+                a = (a - 0.5) * factor + 0.5;
                 
                 // Cleanup absolute zero/one
                 if (a < threshold) a = 0;
