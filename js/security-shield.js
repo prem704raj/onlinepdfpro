@@ -29,19 +29,20 @@
     }, true);
 
     // ── 3. ANTI-DEBUGGING TRAP ──
-    // If someone forces DevTools open, the debugger statement pauses execution.
-    // We detect the pause time and nuke the page.
-    var _adInterval = setInterval(function() {
+    // Check once on load, then only on suspicious activity.
+    // Continuous debugger statements break heavy async tasks (AI model downloads).
+    function _antiDebugCheck() {
         var t1 = performance.now();
         debugger;
         var t2 = performance.now();
         if (t2 - t1 > 100) {
-            clearInterval(_adInterval);
             document.documentElement.innerHTML = '';
             document.title = 'Access Denied';
             try { window.location.href = 'about:blank'; } catch(x) {}
         }
-    }, 1500);
+    }
+    // Run once after page settles
+    setTimeout(_antiDebugCheck, 3000);
 
     // ── 4. DISABLE TEXT SELECTION & COPY ──
     document.addEventListener('selectstart', function(e) {
