@@ -110,7 +110,8 @@
                                 'esm.sh', 'cdn.skypack.dev', 'huggingface.co',
                                 'onlinepdfpro.com', '5gvci.com', 'pagead2.googlesyndication.com',
                                 'googletagmanager.com', 'google-analytics.com',
-                                'googlesyndication.com', 'adsbygoogle.js'
+                                'googlesyndication.com', 'adsbygoogle.js',
+                                'highperformanceformat.com', 'effectivecpmnetwork.com'
                             ];
                             var isTrusted = !src || trusted.some(function(d) { return src.indexOf(d) > -1; });
                             if (!isTrusted) {
@@ -122,7 +123,8 @@
                             var iframeSrc = (node.src || '').toLowerCase();
                             var trustedIframes = [
                                 'googlesyndication.com', 'google.com', 'doubleclick.net',
-                                'youtube.com', 'onlinepdfpro.com'
+                                'youtube.com', 'onlinepdfpro.com', 'about:blank',
+                                'highperformanceformat.com', 'effectivecpmnetwork.com'
                             ];
                             var isOk = !iframeSrc || trustedIframes.some(function(d) { return iframeSrc.indexOf(d) > -1; });
                             if (!isOk) {
