@@ -644,6 +644,36 @@
             background: #26262b !important;
         }
 
+        /* Light mode homepage UI fixes */
+        [data-theme="light"] .hp-stats {
+            background: #f8f8fc !important;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
+            border: none !important;
+        }
+
+        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon {
+            background: #fef3c7 !important;
+        }
+        
+        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon svg {
+            stroke: #d97706 !important;
+        }
+
+        [data-theme="light"] .hp-trust-pill {
+            border: 1px solid #e0e0e8 !important;
+            background: #f0f0f8 !important;
+        }
+
+        [data-theme="light"] .hp-hero::after {
+            background: linear-gradient(to bottom, transparent, #ffffff) !important;
+            height: 100px !important;
+        }
+
+        [data-theme="light"] .header {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+            border-bottom: none !important;
+        }
+
         @keyframes blink {
 
             0%,
