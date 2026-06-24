@@ -84,7 +84,7 @@
 </head>
 <body class="fade-in">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header class="header">
+<header class="header" style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08);">
 <div class="header-content">
 <a class="logo" href="index.html">
 <img alt="OnlinePDFPro - Free Privacy-First PDF Tools" class="logo-icon" src="logo.png" style="width:28px; height:28px; border-radius:6px;"/>
@@ -147,6 +147,23 @@
 
         [data-theme="dark"] .hp-hero {
             background: linear-gradient(120deg, #0f172a 0%, #1e3a8a 50%, #4c1d95 100%);
+        }
+
+        .hp-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 70%, #0a0a0a 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hp-hero .container {
+            position: relative;
+            z-index: 2;
         }
 
         .hp-hero h1, .hp-hero p {
@@ -216,28 +233,22 @@
             margin-bottom: 30px;
         }
 
-        .hp-hero-actions a {
-            padding: 14px 32px;
+        .hp-btn-gradient {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white !important;
+            border: none;
             border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
+            padding: 14px 28px;
+            font-weight: 600;
+            transition: all 0.25s;
             text-decoration: none;
-            transition: all 0.25s;
+            display: inline-block;
         }
 
-        .hp-btn-primary {
-            background: #ffffff;
-            color: #4f46e5 !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 2px solid #ffffff;
-            transition: all 0.25s;
-        }
-
-        .hp-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-            background: #f8fafc;
-            color: #4338ca !important;
+        .hp-btn-gradient:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
 
         .hp-btn-ghost {
@@ -246,6 +257,11 @@
             border: 2px solid rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(4px);
             transition: all 0.25s;
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .hp-btn-ghost:hover {
@@ -644,45 +660,46 @@
 <!-- HERO -->
 <section class="hp-hero">
 <div class="container">
+<div style="display: inline-block; padding: 6px 16px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); font-size: 0.875rem; color: rgba(255,255,255,0.9); margin-bottom: 24px;">✨ Now with AI-powered text &amp; image extraction</div>
 <h1>Privacy-First PDF Tools That Run in <br/><span>Your Browser.</span></h1>
 <div class="hp-hero-actions">
-<a class="hp-btn-primary" href="#tools-section" id="heroCTA" style="padding: 16px 40px; font-size: 1.1rem; font-weight: 800;">Process PDFs — No Uploads</a>
-<a class="hp-btn-ghost" href="tools.html" style="font-size:1.05rem;">Try Free Tools</a>
+<a class="hp-btn-gradient" href="tools.html" style="font-size:1.1rem;">Try Free Tools</a>
+<a class="hp-btn-ghost" href="#tools-section" id="heroCTA" style="font-size:1.1rem;">Process PDFs — No Uploads</a>
 </div>
 </div>
 </section>
 <!-- 4-COLUMN EMOJI FEATURES BAR -->
 <div class="hp-stats">
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#eff6ff; color:#2563eb;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+<div class="hp-stat-icon" style="background:rgba(59, 130, 246, 0.3); border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Secure</div>
 <div class="hp-stat-label">Files stay on device</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#fef3c7; color:#d97706;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+<div class="hp-stat-icon" style="background:rgba(245, 158, 11, 0.3); border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Instant</div>
 <div class="hp-stat-label">Zero upload wait times</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#f3e8ff; color:#7c3aed;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 3.82-13.04l.33-.5a2.08 2.08 0 0 1 2.48-.5l.5.33a22 22 0 0 1 5.92 13.84l3 3"></path><path d="m15 8-3-3"></path><path d="m12 15 3 3"></path></svg></div>
+<div class="hp-stat-icon" style="background:rgba(139, 92, 246, 0.3); border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">No Signups</div>
 <div class="hp-stat-label">Jump right in instantly</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#dcfce3; color:#10b981;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+<div class="hp-stat-icon" style="background:rgba(16, 185, 129, 0.3); border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">100% Free</div>
 <div class="hp-stat-label">No sneaky paywalls</div>
 </div>
 </div>
 <!-- TRUST PILLS - Linked to Proof (Point 6) -->
 <div class="hp-trust-row">
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon">🧰</span>
+<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hp-trust-pill-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
 <div><strong>30+ tools</strong><span>Everything you need in one place</span></div>
 </div>
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon">✨</span>
+<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hp-trust-pill-icon"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></span>
 <div><strong>AI Enhanced</strong><span>Smart text &amp; image extraction</span></div>
 </div>
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon">💎</span>
+<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hp-trust-pill-icon"><path d="M12 22a8 8 0 0 0 8-8c0-3.5-3-7-8-12-5 5-8 8.5-8 12a8 8 0 0 0 8 8Z"/><line x1="2" y1="2" x2="22" y2="22"/></svg></span>
 <div><strong>No Watermarks</strong><span>Clean &amp; professional results</span></div>
 </div>
 </div>
