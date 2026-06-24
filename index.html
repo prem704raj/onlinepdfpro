@@ -650,33 +650,59 @@
         }
 
         /* Light mode homepage UI fixes */
-        [data-theme="light"] .hp-stats {
-            background: #f8f8fc !important;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
-            border: none !important;
+        [data-theme="light"] body {
+            background-color: #f8f8fc !important;
         }
 
-        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon {
-            background: #fef3c7 !important;
+        [data-theme="light"] .hp-stats {
+            background: #ffffff !important;
+            border: 1px solid #e8e8f0 !important;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10) !important;
+            border-radius: 20px !important;
         }
-        
-        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon svg {
-            stroke: #d97706 !important;
-        }
+
+        [data-theme="light"] .hp-stat:nth-child(1) .hp-stat-icon { background: #eff6ff !important; }
+        [data-theme="light"] .hp-stat:nth-child(1) .hp-stat-icon svg { stroke: #3b82f6 !important; }
+
+        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon { background: #fefce8 !important; }
+        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon svg { stroke: #ca8a04 !important; }
+
+        [data-theme="light"] .hp-stat:nth-child(3) .hp-stat-icon { background: #faf5ff !important; }
+        [data-theme="light"] .hp-stat:nth-child(3) .hp-stat-icon svg { stroke: #9333ea !important; }
+
+        [data-theme="light"] .hp-stat:nth-child(4) .hp-stat-icon { background: #f0fdf4 !important; }
+        [data-theme="light"] .hp-stat:nth-child(4) .hp-stat-icon svg { stroke: #16a34a !important; }
 
         [data-theme="light"] .hp-trust-pill {
-            border: 1px solid #e0e0e8 !important;
             background: #f0f0f8 !important;
+            border: 1px solid #d8d8e8 !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+        }
+
+        [data-theme="light"] .hp-trust-pill,
+        [data-theme="light"] .hp-trust-pill div strong,
+        [data-theme="light"] .hp-trust-pill div span {
+            color: #333344 !important;
+        }
+        
+        [data-theme="light"] .hp-trust-pill-icon svg {
+            stroke: #333344 !important;
         }
 
         [data-theme="light"] .hp-hero::after {
-            background: linear-gradient(to bottom, transparent, #ffffff) !important;
-            height: 100px !important;
+            background: linear-gradient(to bottom, transparent 50%, rgba(248, 248, 252, 0.8) 80%, #f8f8fc 100%) !important;
+            height: 120px !important;
         }
 
         [data-theme="light"] .header {
             box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
             border-bottom: none !important;
+        }
+
+        [data-theme="light"] .hp-btn-gradient {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+            border: 2px solid rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5) !important;
         }
 
         @keyframes blink {
