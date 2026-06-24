@@ -137,8 +137,8 @@
 <!-- Homepage Scoped Styles -->
 <style>
         .hp-hero {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%);
-            color: white;
+            background: linear-gradient(120deg, #1d4ed8 0%, #6366f1 50%, #8b5cf6 100%);
+            color: #ffffff;
             padding: 80px 20px 60px;
             text-align: center;
             position: relative;
@@ -147,7 +147,11 @@
         }
 
         [data-theme="dark"] .hp-hero {
-            background: linear-gradient(135deg, #090e1a 0%, #111e38 45%, #1d3557 75%, #0e7490 100%);
+            background: linear-gradient(120deg, #0f172a 0%, #1e3a8a 50%, #4c1d95 100%);
+        }
+
+        .hp-hero h1, .hp-hero p {
+            color: #ffffff !important;
         }
 
         /* Newsletter must keep blue gradient in both modes */
@@ -223,26 +227,31 @@
         }
 
         .hp-btn-primary {
-            background: rgba(255, 255, 255, 0.98);
-            color: #374151 !important;
+            background: #ffffff;
+            color: #4f46e5 !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 2px solid #ffffff;
+            transition: all 0.25s;
         }
 
         .hp-btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-            color: #1f2937 !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            background: #f8fafc;
+            color: #4338ca !important;
         }
 
         .hp-btn-ghost {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #ffffff !important;
+            border: 2px solid rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(4px);
+            transition: all 0.25s;
         }
 
         .hp-btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ffffff;
         }
 
         .hp-hero-badge {
@@ -638,30 +647,30 @@
 <div class="container">
 <h1>Privacy-First PDF Tools That Run in <br/><span>Your Browser.</span></h1>
 <div class="hp-hero-actions">
-<a class="hp-btn-primary" href="#tools-section" id="heroCTA" style="padding: 16px 40px; font-size: 1.1rem;">Process PDFs — No Uploads</a>
-<a class="hp-btn-ghost" href="privacy.html" style="font-size:0.95rem;">Privacy Policy</a>
+<a class="hp-btn-primary" href="#tools-section" id="heroCTA" style="padding: 16px 40px; font-size: 1.1rem; font-weight: 800;">Process PDFs — No Uploads</a>
+<a class="hp-btn-ghost" href="tools.html" style="font-size:1.05rem;">Try Free Tools</a>
 </div>
 </div>
 </section>
 <!-- 4-COLUMN EMOJI FEATURES BAR -->
 <div class="hp-stats">
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#eff6ff;"><span>🔒</span></div>
+<div class="hp-stat-icon" style="background:#eff6ff; color:#2563eb;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Secure</div>
 <div class="hp-stat-label">Files stay on device</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#fef3c7;"><span>⚡</span></div>
+<div class="hp-stat-icon" style="background:#fef3c7; color:#d97706;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Instant</div>
 <div class="hp-stat-label">Zero upload wait times</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#f3e8ff;"><span>🚀</span></div>
+<div class="hp-stat-icon" style="background:#f3e8ff; color:#7c3aed;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 3.82-13.04l.33-.5a2.08 2.08 0 0 1 2.48-.5l.5.33a22 22 0 0 1 5.92 13.84l3 3"></path><path d="m15 8-3-3"></path><path d="m12 15 3 3"></path></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">No Signups</div>
 <div class="hp-stat-label">Jump right in instantly</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:#dcfce3;"><span>💸</span></div>
+<div class="hp-stat-icon" style="background:#dcfce3; color:#10b981;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">100% Free</div>
 <div class="hp-stat-label">No sneaky paywalls</div>
 </div>
