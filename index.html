@@ -651,16 +651,38 @@
             background: #26262b !important;
         }
 
+        .hp-announcement-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 24px;
+        }
+
         /* Light mode homepage UI fixes */
         [data-theme="light"] body {
-            background-color: #f8f8fc !important;
+            background-color: #f5f5fa !important;
+        }
+
+        [data-theme="light"] .hp-announcement-pill {
+            background: rgba(255,255,255,0.25) !important;
+            border: 1px solid rgba(255,255,255,0.5) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: white !important;
         }
 
         [data-theme="light"] .hp-stats {
             background: #ffffff !important;
             border: 1px solid #e8e8f0 !important;
-            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.10) !important;
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.12) !important;
             border-radius: 20px !important;
+            margin-top: -60px !important;
+            position: relative !important;
+            z-index: 10 !important;
         }
 
         [data-theme="light"] .hp-stat:nth-child(1) .hp-stat-icon { background: #eff6ff !important; }
@@ -676,7 +698,7 @@
         [data-theme="light"] .hp-stat:nth-child(4) .hp-stat-icon svg { stroke: #16a34a !important; }
 
         [data-theme="light"] .hp-trust-pill {
-            background: #f0f0f8 !important;
+            background: #ececf4 !important;
             border: 1px solid #d8d8e8 !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
         }
@@ -684,16 +706,16 @@
         [data-theme="light"] .hp-trust-pill,
         [data-theme="light"] .hp-trust-pill div strong,
         [data-theme="light"] .hp-trust-pill div span {
-            color: #333344 !important;
+            color: #444455 !important;
+            font-weight: 500 !important;
         }
         
         [data-theme="light"] .hp-trust-pill-icon svg {
-            stroke: #333344 !important;
+            stroke: #444455 !important;
         }
 
         [data-theme="light"] .hp-hero::after {
-            background: linear-gradient(to bottom, transparent 50%, rgba(248, 248, 252, 0.8) 80%, #f8f8fc 100%) !important;
-            height: 120px !important;
+            display: none !important;
         }
 
         [data-theme="light"] .header {
@@ -704,7 +726,8 @@
         [data-theme="light"] .hp-btn-gradient {
             background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
             border: 2px solid rgba(255, 255, 255, 0.4) !important;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5) !important;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4) !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
         }
 
         @keyframes blink {
@@ -724,7 +747,7 @@
 <!-- HERO -->
 <section class="hp-hero">
 <div class="container">
-<div style="display: inline-block; padding: 6px 16px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); font-size: 0.875rem; color: rgba(255,255,255,0.9); margin-bottom: 24px;">✨ Now with AI-powered text &amp; image extraction</div>
+<div class="hp-announcement-pill">✨ Now with AI-powered text &amp; image extraction</div>
 <h1>Privacy-First PDF Tools That Run in <br/><span>Your Browser.</span></h1>
 <div class="hp-hero-actions">
 <a class="hp-btn-gradient" href="tools.html" style="font-size:1.1rem;">Try Free Tools</a>
