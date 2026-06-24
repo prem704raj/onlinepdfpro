@@ -152,11 +152,12 @@
         .hp-hero::after {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, transparent 70%, #0a0a0a 100%);
+            height: 120px;
+            width: 100%;
+            background: linear-gradient(to bottom, transparent, #0a0a0a);
             pointer-events: none;
             z-index: 1;
         }
@@ -676,7 +677,7 @@
 <div class="hp-stat-label">Files stay on device</div>
 </div>
 <div class="hp-stat">
-<div class="hp-stat-icon" style="background:rgba(245, 158, 11, 0.3); border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+<div class="hp-stat-icon" style="background:#1e3a5f; border-radius:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
 <div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Instant</div>
 <div class="hp-stat-label">Zero upload wait times</div>
 </div>
