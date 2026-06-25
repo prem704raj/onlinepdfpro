@@ -238,6 +238,13 @@
         }
     </style>
     <script src="js/security-shield.js"></script>
+    <!-- Theme Prevention (FOIT) -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -508,5 +515,6 @@
             }
         });
     </script>
+    <script defer src="js/app.js?v=11"></script>
 </body>
 </html>

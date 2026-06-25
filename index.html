@@ -82,6 +82,13 @@
     </script>
 <link href="https://onlinepdfpro.com/feed.xml" rel="alternate" title="OnlinePDFPro Blog" type="application/rss+xml"/><script defer="" src="js/third-party-loader.js"></script>
 <script src="js/security-shield.js"></script>
+    <!-- Theme Prevention (FOIT) -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body class="fade-in">
 <a class="skip-link" href="#main">Skip to main content</a>

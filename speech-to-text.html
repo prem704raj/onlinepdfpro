@@ -455,6 +455,13 @@
 
         <script defer src="js/third-party-loader.js"></script>
     <script src="js/security-shield.js"></script>
+    <!-- Theme Prevention (FOIT) -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -1070,6 +1077,13 @@ incrementTodayCount();
     </script>
 
     <script src="js/security-shield.js"></script>
+    <!-- Theme Prevention (FOIT) -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head><body>' +
                 '<h1>Speech to Text (Voice to PDF)</h1>' +
                 '<p style="color:gray;">' + new Date().toLocaleDateString() + '</p><hr>' +
