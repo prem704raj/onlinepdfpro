@@ -44,7 +44,7 @@
         .blog-hero {
             text-align: center;
             padding: 120px 20px 60px; /* Extra top padding to clear header */
-            background: linear-gradient(135deg, #090e1a 0%, #111e38 45%, #1d3557 75%, #0e7490 100%);
+            background: transparent;
             color: white;
             position: relative;
             overflow: hidden;
@@ -52,31 +52,21 @@
             margin-bottom: 40px;
         }
 
-        .blog-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 65%),
-                        radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.1) 0%, transparent 65%);
-            pointer-events: none;
-        }
+        
 
         .blog-hero h2 {
             font-size: clamp(2.2rem, 5vw, 3.5rem);
             margin-bottom: 16px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            color: white !important;
+            
             position: relative;
             z-index: 1;
         }
 
         .blog-hero p {
             font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.9) !important;
+            
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
@@ -208,7 +198,7 @@
                 <a href="blog.html" class="nav-link active">Blog</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="help.html" class="nav-link">Help</a>
-                <a href="history.html" class="nav-link">History</a> <a href="blog.html" class="nav-link">Blog</a>
+                <a href="history.html" class="nav-link">History</a>
                 <a href="#" onclick="smartEmail(event)"  class="nav-link" target="_blank" rel="noopener noreferrer">Feedback</a>
                 <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">📲 Install App</a>
             </nav>
@@ -247,7 +237,7 @@
     
 
     <div class="blog-hero">
-        <h2>📚 OnlinePDFPro Blog</h2>
+        <h2 style="display:flex; justify-content:center; align-items:center;"><span class="hp-section-head-icon" style="background: #2563eb; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span> OnlinePDFPro Blog</h2>
         <p>Free guides, tutorials, and tips for working with PDFs — privacy first, always.</p>
     </div>
 

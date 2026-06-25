@@ -401,37 +401,21 @@ html[data-theme="dark"] .theme-icon-dark {
 
 /* ---- Hero ---- */
 .hero {
-    background: linear-gradient(135deg, #090e1a 0%, #111e38 45%, #1d3557 75%, #0e7490 100%);
-    color: white;
-    padding: 100px 0 60px;
+    padding: 60px 0 40px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 65%),
-                radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.1) 0%, transparent 65%);
-    pointer-events: none;
 }
 
 .hero-title {
     font-size: clamp(2.25rem, 6vw, 3.5rem);
     line-height: 1.1;
     margin-bottom: 20px;
-    color: white !important;
     font-weight: 700;
 }
 
 .hero-title .highlight {
-    color: #a5f3fc;
+    color: var(--accent);
 }
 
 .hero-subtitle {
