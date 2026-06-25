@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -465,6 +466,17 @@
     <!-- No external library needed! All formats supported natively by browsers via Canvas -->
 
     <script>
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
         (function () {
             let files = [];
             let results = [];
@@ -634,7 +646,7 @@
                         <div class="batch-file-header">
                             <img loading="lazy" src="${thumbnails[file.name + file.size]}" class="batch-file-thumb" alt="">
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600; margin-left:4px;">${getFileFormatBadge(file)}</span></div>
+                                <div class="batch-file-name">${escapeHTML(file.name)} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600; margin-left:4px;">${getFileFormatBadge(file)}</span></div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                             <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem;" data-index="${index}">Remove</button>
@@ -676,7 +688,7 @@
                         <div class="batch-file-header">
                             <img loading="lazy" src="${thumbnails[file.name + file.size]}" class="batch-file-thumb" alt="">
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${getFileFormatBadge(file)}</span> → <span style="display:inline-block; background:rgba(16,185,129,0.15); color:#10b981; font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${FORMAT_INFO[outputFormat].label}</span></div>
+                                <div class="batch-file-name">${escapeHTML(file.name)} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${getFileFormatBadge(file)}</span> → <span style="display:inline-block; background:rgba(16,185,129,0.15); color:#10b981; font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${FORMAT_INFO[outputFormat].label}</span></div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                         </div>

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
@@ -308,6 +309,17 @@
         <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
         <script>
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         </script>
 <script src="../js/app.js?v=11"></script>
@@ -445,7 +457,7 @@
                         <div class="batch-file-header">
                             <span class="file-icon" style="font-size: 2rem;">📄</span>
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-name">${escapeHTML(file.name)}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                             <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem;" data-index="${index}">Remove</button>
@@ -491,7 +503,7 @@
                         <div class="batch-file-header">
                             <span class="file-icon" style="font-size: 2rem;">📄</span>
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-name">${escapeHTML(file.name)}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                         </div>

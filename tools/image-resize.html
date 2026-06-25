@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -334,6 +335,17 @@
 
     <script src="../js/app.js?v=11"></script>
     <script>
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
         (function () {
             let files = [];
             let results = [];
@@ -463,7 +475,7 @@
                         <div class="batch-file-header" style="margin-bottom: 0;">
                             <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" style="width: 40px; height: 40px;">
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-name">${escapeHTML(file.name)}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                             <button class="btn-remove-file" onclick="window.removeFile(${index})">✕</button>
@@ -500,7 +512,7 @@
                         <div class="batch-file-header">
                             <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb">
                             <div class="batch-file-info">
-                                <div class="batch-file-name">${file.name}</div>
+                                <div class="batch-file-name">${escapeHTML(file.name)}</div>
                                 <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
                             </div>
                             <div class="batch-file-actions"></div>

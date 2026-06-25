@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -213,6 +214,17 @@
 </head>
     <!-- Security & Anti-Hacking Script -->
     <script>
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
             if(e.keyCode == 123) { return false; }
@@ -411,7 +423,7 @@ async function loadFile(file) {
 
   document.getElementById('dropArea').style.display = 'none';
   document.getElementById('fileInfo').style.display = 'block';
-  document.getElementById('fileInfo').textContent = `📄 ${file.name} — ${totalPages} pages`;
+  document.getElementById('fileInfo').textContent = `📄 ${escapeHTML(file.name)} — ${totalPages} pages`;
   document.getElementById('optionsBox').style.display = 'block';
 }
 

@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -480,7 +481,18 @@
             }
         }
     </style>
-    <script src="js/security-shield.js"></script>
+    <script src="js/security-shield.js">
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+</script>
 </head>
 
 <body>
@@ -693,7 +705,7 @@
             listContainer.innerHTML = entries.map(entry => {
                 const inputFiles = entry.originalFiles || [];
                 const inputHtml = inputFiles.length > 0 
-                    ? `<div class="mini-file-list">${inputFiles.map(f => `<div class="mini-file"><span class="mini-icon">${getFileIcon(f.name)}</span><span class="mini-file-name" title="${f.name}">${f.name}</span><span style="opacity:0.5; font-size:0.7rem;">(${formatSize(f.size)})</span></div>`).join('')}</div>`
+                    ? `<div class="mini-file-list">${inputFiles.map(f => `<div class="mini-file"><span class="mini-icon">${getFileIcon(f.name)}</span><span class="mini-file-name" title="${escapeHTML(f.name)}">${escapeHTML(f.name)}</span><span style="opacity:0.5; font-size:0.7rem;">(${formatSize(f.size)})</span></div>`).join('')}</div>`
                     : `<div class="mini-file"><i>Not recorded</i></div>`;
 
                 return `

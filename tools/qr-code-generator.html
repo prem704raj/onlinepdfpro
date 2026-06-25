@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; frame-ancestors 'none';">
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
 <title>QR Code Generator Free — Create QR Codes Online | OnlinePDFPro</title>
@@ -274,6 +275,17 @@
         </div>
 
     <script>
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
         /* ═══════════════════════════════════════════
            50+ QR DESIGN PRESETS
            ═══════════════════════════════════════════ */
@@ -488,7 +500,7 @@
             let ok = 0;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                setProgress((i/files.length)*100, `Processing: ${file.name}`);
+                setProgress((i/files.length)*100, `Processing: ${escapeHTML(file.name)}`);
                 try {
                     const imgbbKey = document.getElementById('imgbbKey')?.value.trim();
                     const url = imgbbKey
@@ -498,7 +510,7 @@
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(url, noExt(file.name), id);
                     ok++;
-                } catch(err) { setStatus(`⚠️ Skipped ${file.name}: ${err.message}`, 'var(--warning)'); }
+                } catch(err) { setStatus(`⚠️ Skipped ${escapeHTML(file.name)}: ${err.message}`, 'var(--warning)'); }
             }
             showProgress(false);
             ok > 0 ? finalizeResults() : setStatus('❌ All uploads failed.', 'var(--error)');
@@ -512,13 +524,13 @@
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 try {
-                    setProgress((i/files.length)*100, `Uploading ${file.name}...`);
-                    const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${file.name}: ${Math.round(pct)}%`));
+                    setProgress((i/files.length)*100, `Uploading ${escapeHTML(file.name)}...`);
+                    const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${escapeHTML(file.name)}: ${Math.round(pct)}%`));
                     const id = 'qr-file-'+i;
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(url, noExt(file.name), id);
                     ok++;
-                } catch(err) { setStatus(`❌ ${file.name} failed: ${err.message}`, 'var(--error)'); }
+                } catch(err) { setStatus(`❌ ${escapeHTML(file.name)} failed: ${err.message}`, 'var(--error)'); }
             }
             showProgress(false);
             ok > 0 ? finalizeResults() : setStatus('❌ All uploads failed.', 'var(--error)');
@@ -553,15 +565,15 @@
             let ok = 0;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                if (file.size > 100*1024*1024) { setStatus(`⚠️ ${file.name} exceeds 100MB`, 'var(--warning)'); continue; }
+                if (file.size > 100*1024*1024) { setStatus(`⚠️ ${escapeHTML(file.name)} exceeds 100MB`, 'var(--warning)'); continue; }
                 try {
-                    setProgress((i/files.length)*100, `Uploading: ${file.name}...`);
-                    const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${file.name}: ${Math.round(pct)}%`));
+                    setProgress((i/files.length)*100, `Uploading: ${escapeHTML(file.name)}...`);
+                    const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${escapeHTML(file.name)}: ${Math.round(pct)}%`));
                     const id = 'qr-video-'+i;
                     addQRWrapper(id, file.name, 'qrOutput');
                     await makeQR(url, noExt(file.name), id);
                     ok++;
-                } catch(err) { setStatus(`❌ ${file.name} failed`, 'var(--error)'); }
+                } catch(err) { setStatus(`❌ ${escapeHTML(file.name)} failed`, 'var(--error)'); }
             }
             showProgress(false);
             ok > 0 ? finalizeResults() : setStatus('❌ All video uploads failed.', 'var(--error)');
@@ -692,7 +704,7 @@
         function showFiles(files) {
             const el = document.getElementById('fileListShow');
             el.style.display = files.length ? 'block' : 'none';
-            el.innerHTML = files.map(f => `<div class="file-item">📎 ${f.name} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
+            el.innerHTML = files.map(f => `<div class="file-item">📎 ${escapeHTML(f.name)} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
         }
 
         function clearAll() {
