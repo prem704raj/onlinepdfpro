@@ -7,6 +7,7 @@
 
 (function() {
     'use strict';
+    return; // Temporarily disabled for development
 
     // ── 1. DISABLE RIGHT-CLICK ──
     document.addEventListener('contextmenu', function(e) {
