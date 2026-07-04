@@ -163,7 +163,7 @@
             align-items: center;
         }
 
-        [data-theme="disabled_dark"] .canvas-area {
+        [data-theme="dark"] .canvas-area {
             background: #1a1f2e;
         }
 

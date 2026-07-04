@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
     <meta charset="UTF-8">
@@ -41,7 +41,7 @@
     .preview-area{flex:1;display:flex;align-items:center;justify-content:center;border-radius:12px;overflow:hidden;min-height:350px;position:relative}
     .preview-area img{max-width:100%;max-height:450px;object-fit:contain}
     .checker-bg{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
-    [data-theme="disabled_dark"] .checker-bg{background-image:linear-gradient(45deg,#333 25%,transparent 25%),linear-gradient(-45deg,#333 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#333 75%),linear-gradient(-45deg,transparent 75%,#333 75%)}
+    [data-theme="dark"] .checker-bg{background-image:linear-gradient(45deg,#333 25%,transparent 25%),linear-gradient(-45deg,#333 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#333 75%),linear-gradient(-45deg,transparent 75%,#333 75%)}
     .bg-colors{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .bg-color-btn{width:36px;height:36px;border-radius:10px;border:2px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
     .bg-color-btn:hover,.bg-color-btn.active{border-color:var(--accent);transform:scale(1.1)}
@@ -80,6 +80,13 @@
     #brushCursor{position:absolute;border:1px solid #fff;border-radius:50%;box-shadow:0 0 2px rgba(0,0,0,0.5);pointer-events:none;display:none;transform:translate(-50%,-50%);z-index:50;background:rgba(255,255,255,0.2);}
 </style>
     <script defer src="js/third-party-loader.js"></script>    <script src="js/security-shield.js"></script>
+    <!-- Theme Prevention (FOIT) -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body class="fade-in">
     <a href="#main" class="skip-link">Skip to main content</a>
@@ -107,7 +114,10 @@
                     <button class="lang-btn" aria-label="Change language" title="Change language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg></button>
                     <div class="lang-dropdown"><div class="lang-search-wrap"><input type="text" class="lang-search" placeholder="Search language..."></div><ul class="lang-list"></ul></div>
                 </div>
-                
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px;background:none;border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;">
+                    <span class="theme-icon-light">&#127769;</span>
+                    <span class="theme-icon-dark">&#9728;&#65039;</span>
+                </button>
                 <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
             </div>
         </div>
