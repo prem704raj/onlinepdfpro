@@ -24,14 +24,30 @@ function smartEmail(e) {
 
 const ThemeManager = {
     init() {
-        // Night mode removed. Always use day mode.
-        document.documentElement.setAttribute('data-theme', 'light');
+        const savedTheme = localStorage.getItem('doctools-theme');
+
+        // Default to light mode. Only use dark if user explicitly chose it before.
+        if (savedTheme) {
+            this.setTheme(savedTheme);
+        } else {
+            this.setTheme('light');
+        }
+
+        // Theme toggle button
+        const toggleBtn = document.getElementById('themeToggle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => this.toggle());
+        }
     },
+
     setTheme(theme) {
-        // Disabled
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('doctools-theme', theme);
     },
+
     toggle() {
-        // Disabled
+        const current = document.documentElement.getAttribute('data-theme');
+        this.setTheme(current === 'dark' ? 'light' : 'dark');
     }
 };
 
