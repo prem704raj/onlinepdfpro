@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
@@ -90,13 +90,6 @@
 
         <script defer src="../js/third-party-loader.js"></script>
     <script src="js/security-shield.js"></script>
-    <!-- Theme Prevention (FOIT) -->
-    <script>
-        (function() {
-            var theme = localStorage.getItem('doctools-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
 </head>
 
 <body class="fade-in">
@@ -146,11 +139,7 @@
                         <ul class="lang-list"></ul>
                     </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
-                    style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
-                    <span class="theme-icon-light">🌙</span>
-                    <span class="theme-icon-dark">☀️</span>
-                </button>
+                
                 <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
 
             </div>

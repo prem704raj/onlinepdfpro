@@ -5,7 +5,7 @@
    OnlinePDFPro — Minimalist Design System
    ========================================= */
 
-:root {
+:root_dark_disabled {
     /* ===== DARK MODE (Default) =====
        Modern, eye-friendly slate palette.
        Soft deep background, elevated cards, muted text.
@@ -82,7 +82,7 @@
 }
 
 /* Light Mode */
-[data-theme="light"] {
+:root {
     --bg: #fafafa;
     --surface-1: #ffffff;
     --surface-2: #f4f4f5;
@@ -102,8 +102,8 @@
 }
 
 /* Light mode: header must be fully opaque to hide hero gradient behind it */
-[data-theme="light"] .header,
-[data-theme="light"] header {
+.header,
+header {
     background: rgba(255, 255, 255, 0.95) !important;
     border: 1.5px solid #000000 !important;
 }
@@ -122,12 +122,12 @@
     color: white !important;
 }
 
-[data-theme="light"] .newsletter-box {
+.newsletter-box {
     background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
 }
 
-[data-theme="light"] .newsletter-box h2,
-[data-theme="light"] .newsletter-box p {
+.newsletter-box h2,
+.newsletter-box p {
     color: white !important;
 }
 
@@ -241,7 +241,7 @@ a {
     overflow: visible;
 }
 
-[data-theme="light"] .header {
+.header {
     background: rgba(250, 250, 250, 0.85);
 }
 
@@ -348,11 +348,11 @@ a {
 }
 
 /* Dark Mode: Show Moon, Hide Sun */
-html[data-theme="dark"] .theme-icon-light {
+html[data-theme="disabled_dark"] .theme-icon-light {
     display: inline;
 }
 
-html[data-theme="dark"] .theme-icon-dark {
+html[data-theme="disabled_dark"] .theme-icon-dark {
     display: none;
 }
 
@@ -1592,16 +1592,16 @@ body {
     }
 
     /* Dark mode full width */
-    body.dark,
-    body.dark-mode,
-    [data-theme="dark"] body {
+    body.disabled_dark,
+    body.disabled_dark-mode,
+    [data-theme="disabled_dark"] body {
         width: 100% !important;
     }
 
-    body.dark header,
-    body.dark footer,
-    body.dark main,
-    body.dark section {
+    body.disabled_dark header,
+    body.disabled_dark footer,
+    body.disabled_dark main,
+    body.disabled_dark section {
         width: 100% !important;
         max-width: 100% !important;
     }

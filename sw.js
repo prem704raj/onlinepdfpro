@@ -10,7 +10,7 @@ importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
 
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v76'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v77'; 
 const STATIC_ASSETS = [
     '.tmp_migrate_thirdparty.js',
     '404.html',

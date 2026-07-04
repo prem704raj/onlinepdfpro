@@ -24,37 +24,14 @@ function smartEmail(e) {
 
 const ThemeManager = {
     init() {
-        const savedTheme = localStorage.getItem('doctools-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        if (savedTheme) {
-            this.setTheme(savedTheme);
-        } else if (prefersDark) {
-            this.setTheme('dark');
-        }
-
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('doctools-theme')) {
-                this.setTheme(e.matches ? 'dark' : 'light');
-            }
-        });
-
-        // Theme toggle button
-        const toggleBtn = document.getElementById('themeToggle');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => this.toggle());
-        }
+        // Night mode removed. Always use day mode.
+        document.documentElement.setAttribute('data-theme', 'light');
     },
-
     setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('doctools-theme', theme);
+        // Disabled
     },
-
     toggle() {
-        const current = document.documentElement.getAttribute('data-theme');
-        this.setTheme(current === 'dark' ? 'light' : 'dark');
+        // Disabled
     }
 };
 
