@@ -5,50 +5,34 @@
    OnlinePDFPro — Minimalist Design System
    ========================================= */
 
-:root_dark_disabled {
-    /* ===== DARK MODE (Default) =====
-       Modern, eye-friendly slate palette.
-       Soft deep background, elevated cards, muted text.
+:root {
+    /* ===== LIGHT MODE ONLY =====
+       Clean, bright design. No dark mode.
     */
 
-    /* Backgrounds — layered elevation */
-    --bg: #000000;
-    /* Pure black background */
-    --surface-1: #16161a;
-    /* Very dark charcoal card surface */
-    --surface-2: #1c1c21;
-    /* Slightly lighter dark charcoal */
-    --surface-3: #26262b;
-    /* Elevated dark charcoal surface */
-    /* Subtle accent surfaces — slate-600  */
+    /* Backgrounds */
+    --bg: #fafafa;
+    --surface-1: #ffffff;
+    --surface-2: #f4f4f5;
+    --surface-3: #e4e4e7;
 
     /* Accent */
     --accent: #818cf8;
-    /* Indigo-400 — softer on dark bg */
     --accent-hover: #a5b4fc;
-    /* Indigo-300                      */
-    --accent-subtle: rgba(129, 140, 248, 0.12);
+    --accent-subtle: rgba(99, 102, 241, 0.06);
 
     --success: #4ade80;
-    /* green-400  */
     --warning: #fbbf24;
-    /* amber-400  */
     --error: #f87171;
-    /* red-400    */
 
-    /* Text — off-white hierarchy */
-    --text-primary: #E2E8F0;
-    /* slate-200 — readable, not blinding */
-    --text-secondary: #94A3B8;
-    /* slate-400 — secondary info         */
-    --text-muted: #64748B;
-    /* slate-500 — placeholders/hints     */
+    /* Text */
+    --text-primary: #09090b;
+    --text-secondary: #52525b;
+    --text-muted: #a1a1aa;
 
-    /* Borders — subtle, no harsh shadows */
-    --border: rgba(255, 255, 255, 0.08);
-    /* subtle gray border at low opacity */
-    --border-hover: rgba(255, 255, 255, 0.16);
-    /* slightly more visible    */
+    /* Borders */
+    --border: rgba(0, 0, 0, 0.22);
+    --border-hover: rgba(0, 0, 0, 0.4);
 
     /* Sizing */
     --radius-sm: 6px;
@@ -61,8 +45,8 @@
     --header-h: calc(var(--nav-height) + 24px);
 
     /* Search/Input Colors */
-    --bg-primary: var(--surface-1);
-    --bg-secondary: var(--surface-2);
+    --bg-primary: #ffffff;
+    --bg-secondary: #f4f4f5;
 
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -71,7 +55,6 @@
     /* Legacy compat aliases */
     --aurora-violet: var(--accent);
     --aurora-azure: #38bdf8;
-    /* sky-400 — softer on dark bg */
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --glass-glow: transparent;
@@ -79,26 +62,6 @@
     --midnight: var(--bg);
     --primary: var(--accent);
     --secondary: var(--aurora-azure);
-}
-
-/* Light Mode */
-:root {
-    --bg: #fafafa;
-    --surface-1: #ffffff;
-    --surface-2: #f4f4f5;
-    --surface-3: #e4e4e7;
-    --accent-subtle: rgba(99, 102, 241, 0.06);
-    --text-primary: #09090b;
-    --text-secondary: #52525b;
-    --text-muted: #a1a1aa;
-    --border: rgba(0, 0, 0, 0.22);
-    --border-hover: rgba(0, 0, 0, 0.4);
-    --bg-primary: #ffffff;
-    --bg-secondary: #f4f4f5;
-    --glass-bg: var(--surface-1);
-    --glass-border: var(--border);
-    --midnight: var(--bg);
-    --surface-0: var(--bg);
 }
 
 /* Light mode: header must be fully opaque to hide hero gradient behind it */
