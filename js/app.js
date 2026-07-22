@@ -223,7 +223,64 @@ const FileUploader = {
             this.handleFiles(e.dataTransfer.files, config);
         });
 
+        // Setup full-page drag-and-drop overlay
+        this._setupPageDrop(zone, config);
+
         return { zone, input, config };
+    },
+
+    _setupPageDrop(zone, config) {
+        // Don't add if overlay already exists (multiple init calls)
+        if (document.getElementById('pageDropOverlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'pageDropOverlay';
+        overlay.className = 'page-drop-overlay';
+        overlay.innerHTML = `
+            <div class="page-drop-content">
+                <div class="page-drop-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </div>
+                <p class="page-drop-title">Drop your file here</p>
+                <p class="page-drop-hint">Release to start processing</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        let dragCounter = 0;
+
+        document.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            dragCounter++;
+            // Only show overlay if upload zone is visible (tool hasn't been used yet)
+            if (zone.offsetParent !== null || zone.style.display !== 'none') {
+                overlay.classList.add('active');
+            }
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter <= 0) {
+                dragCounter = 0;
+                overlay.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        overlay.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragCounter = 0;
+            overlay.classList.remove('active');
+            this.handleFiles(e.dataTransfer.files, config);
+        });
     },
 
     handleFiles(fileList, config) {
