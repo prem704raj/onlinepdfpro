@@ -471,7 +471,7 @@ html[data-theme="dark"] .theme-icon-dark {
 
 /* ---- Tool Cards (shared) ---- */
 .tool-card {
-    padding: 32px 24px;
+    padding: 16px 20px;
     /* Fix: Increased hit area */
     text-decoration: none;
     color: inherit;
