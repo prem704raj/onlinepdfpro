@@ -626,7 +626,7 @@ footer a {
 footer a:hover {
     color: var(--accent) !important;
     transform: scale(1.08) !important;
-    text-decoration: none;
+    text-decoration: underline !important;
 }
 
 .footer-links-group a:active,

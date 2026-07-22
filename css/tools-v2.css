@@ -514,6 +514,24 @@
         color: var(--text-secondary) !important;
     }
 
+    /* Mobile: scale down the image wrapper for tool cards */
+    .tool-card .hp-tool-image-wrapper {
+        aspect-ratio: 16 / 9 !important;
+        margin-bottom: 8px !important;
+        border-radius: 8px !important;
+    }
+
+    .tool-card .hp-tool-image-icon-bg {
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 14px !important;
+    }
+
+    .tool-card .hp-tool-image-icon-bg svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
     .category-filter {
         margin-bottom: 16px !important;
         gap: 6px !important;
