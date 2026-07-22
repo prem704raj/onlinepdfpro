@@ -746,8 +746,7 @@
 </div>
 <!-- TOOLS SECTION -->
 <div class="hp-section" id="tools-section">
-<!-- Jump Back In — Recent Tools -->
-<div id="recentToolsSection" style="display:none;margin-bottom:8px;"></div>
+
 <!-- Essential PDF Tools -->
 <div class="hp-section-head">
 <h2>Essential PDF Tools</h2>
@@ -1322,29 +1321,6 @@
 <!-- Homepage Smart Drop & Recent Tools -->
 <script>
 (function() {
-    // === RECENT TOOLS ("Jump Back In") ===
-    var recentSection = document.getElementById('recentToolsSection');
-    if (recentSection) {
-        try {
-            var recent = JSON.parse(localStorage.getItem('doctools-recent')) || [];
-            if (recent.length > 0) {
-                var items = recent.slice(0, 3);
-                recentSection.style.display = 'block';
-                recentSection.innerHTML =
-                    '<div class="hp-section-head" style="margin-top:30px;margin-bottom:16px;">' +
-                    '<h2>Jump Back In</h2>' +
-                    '<div class="hp-section-head-line"></div></div>' +
-                    '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">' +
-                    items.map(function(r) {
-                        return '<a href="tools/' + r.id + '.html" style="padding:12px 20px;background:var(--surface-1,#16161a);border:1.5px solid var(--border,#26262b);border-radius:14px;text-decoration:none;color:var(--text-primary,#f3f4f6);font-size:14px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;" onmouseenter="this.style.borderColor=\'var(--accent,#6366f1)\';this.style.transform=\'translateY(-2px)\'" onmouseleave="this.style.borderColor=\'var(--border,#26262b)\';this.style.transform=\'none\'">' +
-                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>' +
-                        r.name + '</a>';
-                    }).join('') +
-                    '</div>';
-            }
-        } catch(e) {}
-    }
-
     // === HOMEPAGE SMART DROP ZONE ===
     var overlay = document.getElementById('homeDropOverlay');
     var modal = document.getElementById('homeDropModal');
