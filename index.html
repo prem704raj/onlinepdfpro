@@ -136,7 +136,7 @@
         .hp-hero {
             background: transparent;
             color: var(--text-primary);
-            padding: 48px 20px 20px;
+            padding: 32px 20px 0;
             position: relative;
             overflow: hidden;
         }
@@ -168,13 +168,13 @@
         }
 
         .hp-hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-size: clamp(2rem, 4.5vw, 2.8rem);
             font-weight: 800;
-            margin: 0 0 16px;
-            line-height: 1.1;
+            margin: 0 0 12px;
+            line-height: 1.12;
             letter-spacing: -0.03em;
             text-align: left;
-            max-width: 700px;
+            max-width: 600px;
             color: var(--text-primary);
         }
 
@@ -188,12 +188,12 @@
         }
 
         .hp-hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-secondary);
-            max-width: 520px;
-            line-height: 1.7;
+            max-width: 480px;
+            line-height: 1.6;
             text-align: left;
-            margin: 0 0 28px;
+            margin: 0 0 20px;
         }
 
         .hp-hero-actions {
@@ -247,10 +247,10 @@
         /* Features strip — replaces the old stats bar and trust pills */
         .hp-features-strip {
             display: flex;
-            gap: 24px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin: 32px auto 0;
-            padding: 0 20px;
+            margin: 0 auto;
+            padding: 16px 20px 24px;
             max-width: 1060px;
         }
 
@@ -588,14 +588,15 @@
 </span>
 </div>
 </div>
-</section>
-<!-- Inline features strip — replaces stats bar + trust pills -->
+<!-- Features strip -->
 <div class="hp-features-strip">
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#0d9488;"></div>Files never uploaded</div>
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#f59e0b;"></div>Instant processing</div>
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#8b5cf6;"></div>No account needed</div>
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#10b981;"></div>Completely free</div>
 </div>
+</section>
+<div style="max-width:1060px;margin:0 auto;padding:0 20px;"><div style="height:1px;background:linear-gradient(to right, var(--border), transparent);margin-bottom:8px;"></div></div>
 <!-- SMART DROP OVERLAY (Homepage) -->
 <div id="homeDropOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.2s,visibility 0.2s;pointer-events:none;">
 <div style="text-align:center;padding:48px 64px;border:3px dashed rgba(99,102,241,0.6);border-radius:24px;background:rgba(99,102,241,0.08);">
