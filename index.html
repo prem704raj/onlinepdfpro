@@ -409,8 +409,13 @@
         .hp-section-head-line {
             flex: 1;
             height: 1px;
-            background: linear-gradient(to right, #0d9488, transparent);
+            background: linear-gradient(to right, #000, transparent);
             margin-left: 16px;
+        }
+
+        [data-theme="dark"] .hp-section-head-line,
+        html:not([data-theme="light"]) .hp-section-head-line {
+            background: linear-gradient(to right, #fff, transparent);
         }
 
         .hp-section-head h2 {
