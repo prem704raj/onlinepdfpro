@@ -712,65 +712,7 @@ function triggerPwaInstall(e) { if (e) e.preventDefault(); PwaInstallManager.tri
 // =========================================
 
 const LanguageSelector = {
-    languages: [
-        { code: 'en', name: 'English', native: 'English' },
-        { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
-        { code: 'es', name: 'Spanish', native: 'Español' },
-        { code: 'fr', name: 'French', native: 'Français' },
-        { code: 'de', name: 'German', native: 'Deutsch' },
-        { code: 'it', name: 'Italian', native: 'Italiano' },
-        { code: 'pt', name: 'Portuguese', native: 'Português' },
-        { code: 'ru', name: 'Russian', native: 'Русский' },
-        { code: 'zh-CN', name: 'Chinese', native: '简体中文' },
-        { code: 'ja', name: 'Japanese', native: '日本語' },
-        { code: 'ko', name: 'Korean', native: '한국어' },
-        { code: 'ar', name: 'Arabic', native: 'العربية' },
-        { code: 'bn', name: 'Bengali', native: 'বাংলা' },
-        { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ' },
-        { code: 'ur', name: 'Urdu', native: 'اردو' },
-        { code: 'ta', name: 'Tamil', native: 'தமிழ்' },
-        { code: 'te', name: 'Telugu', native: 'తెలుగు' },
-        { code: 'mr', name: 'Marathi', native: 'मराठी' },
-        { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી' },
-        { code: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ' },
-        { code: 'ml', name: 'Malayalam', native: 'മലയാളം' }
-    ],
-    init() {
-        const container = document.querySelector('.lang-selector'); if (!container) return;
-        const btn = container.querySelector('.lang-btn');
-        const dropdown = container.querySelector('.lang-dropdown');
-        const list = container.querySelector('.lang-list');
-        const search = container.querySelector('.lang-search');
-
-        this.renderList(list, this.languages);
-        btn.onclick = (e) => { e.stopPropagation(); dropdown.classList.toggle('open'); if (search) search.focus(); };
-        if (search) {
-            search.oninput = (e) => {
-                const q = e.target.value.toLowerCase();
-                const filtered = this.languages.filter(l => l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q));
-                this.renderList(list, filtered);
-            };
-        }
-        document.addEventListener('click', () => dropdown.classList.remove('open'));
-        this.loadGoogleTranslate();
-    },
-    renderList(list, langs) {
-        const current = localStorage.getItem('doctools-lang') || 'en';
-        list.innerHTML = langs.map(l => `<li class="lang-item ${l.code === current ? 'active' : ''}" data-code="${l.code}"><span>${l.name}</span><small>${l.native}</small></li>`).join('');
-        list.querySelectorAll('.lang-item').forEach(i => {
-            i.onclick = () => { this.setLanguage(i.dataset.code); window.location.reload(); };
-        });
-    },
-    setLanguage(code) { localStorage.setItem('doctools-lang', code); },
-    loadGoogleTranslate() {
-        const div = document.createElement('div'); div.id = 'google_translate_element'; div.style.display = 'none'; document.body.appendChild(div);
-        window.googleTranslateElementInit = () => {
-            new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
-            const saved = localStorage.getItem('doctools-lang');
-            if (saved && saved !== 'en') setTimeout(() => { const s = document.querySelector('.goog-te-combo'); if (s) { s.value = saved; s.dispatchEvent(new Event('change')); } }, 1000);
-        };
-        const s = document.createElement('script'); s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'; s.async = true; document.head.appendChild(s);
-    }
+    init() { /* Removed — no translated pages available */ }
 };
 
 // =========================================
