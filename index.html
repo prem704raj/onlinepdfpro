@@ -130,54 +130,150 @@
 </div>
 <!-- Homepage Scoped Styles -->
 <style>
+        /* ═══════════════════════════════════════
+           REDESIGNED HERO — Clean, Human-Crafted
+           ═══════════════════════════════════════ */
         .hp-hero {
-            background: linear-gradient(120deg, #1d4ed8 0%, #6366f1 50%, #8b5cf6 100%);
-            color: #ffffff;
-            padding: 40px 20px 60px;
-            text-align: center;
+            background: transparent;
+            color: var(--text-primary);
+            padding: 48px 20px 20px;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
-        }
-
-        [data-theme="dark"] .hp-hero,
-        html:not([data-theme="light"]) .hp-hero {
-            background: transparent;
-        }
-
-        [data-theme="dark"] .hp-hero::before,
-        html:not([data-theme="light"]) .hp-hero::before,
-        [data-theme="dark"] .hp-hero::after,
-        html:not([data-theme="light"]) .hp-hero::after {
-            display: none;
-        }
-
-        .hp-hero::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 120px;
-            width: 100%;
-            background: linear-gradient(to bottom, transparent, #0a0a0a);
-            pointer-events: none;
-            z-index: 1;
         }
 
         .hp-hero .container {
             position: relative;
             z-index: 2;
+            max-width: 1060px;
+            margin: 0 auto;
         }
 
-        .hp-hero h1, .hp-hero p {
-            color: #ffffff !important;
+        /* Subtle dot grid pattern — adds texture without being distracting */
+        .hp-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(20, 184, 166, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            mask-image: linear-gradient(to left, rgba(0,0,0,0.4) 0%, transparent 70%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.4) 0%, transparent 70%);
         }
 
-        /* Newsletter must keep blue gradient in both modes */
+        .hp-hero::after {
+            display: none;
+        }
+
+        .hp-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 800;
+            margin: 0 0 16px;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            text-align: left;
+            max-width: 700px;
+            color: var(--text-primary);
+        }
+
+        .hp-hero h1 span {
+            color: #0d9488;
+        }
+
+        [data-theme="dark"] .hp-hero h1 span,
+        html:not([data-theme="light"]) .hp-hero h1 span {
+            color: #2dd4bf;
+        }
+
+        .hp-hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            line-height: 1.7;
+            text-align: left;
+            margin: 0 0 28px;
+        }
+
+        .hp-hero-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: flex-start;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+
+        .hp-btn-gradient {
+            background: #0d9488;
+            color: white !important;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 32px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+
+        .hp-btn-gradient:hover {
+            background: #0f766e;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3);
+        }
+
+        .hp-hero-proof {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hp-hero-proof svg {
+            color: #0d9488;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .hp-hero-proof svg,
+        html:not([data-theme="light"]) .hp-hero-proof svg {
+            color: #2dd4bf;
+        }
+
+        /* Features strip — replaces the old stats bar and trust pills */
+        .hp-features-strip {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 32px auto 0;
+            padding: 0 20px;
+            max-width: 1060px;
+        }
+
+        .hp-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .hp-feature-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Newsletter must keep gradient in both modes */
         .newsletter-box {
             padding: 40px;
-            background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
+            background: linear-gradient(135deg, #134e4a, #0d9488) !important;
             border-radius: 20px;
             color: white !important;
         }
@@ -195,202 +291,6 @@
         .newsletter-box input[type="email"]::placeholder {
             color: #9ca3af !important;
             opacity: 1;
-            
-        }
-
-        .hp-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 65%),
-                        radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.1) 0%, transparent 65%);
-            pointer-events: none;
-        }
-
-        .hp-hero h1 {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 800;
-            margin: 0 0 16px;
-            line-height: 1.15;
-        }
-
-        .hp-hero h1 span {
-            color: #a5f3fc;
-        }
-
-        .hp-hero p {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 32px;
-            line-height: 1.6;
-        }
-
-        .hp-hero-actions {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-
-        .hp-btn-gradient {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white !important;
-            border: none;
-            border-radius: 12px;
-            padding: 14px 28px;
-            font-weight: 600;
-            transition: all 0.25s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .hp-btn-gradient:hover {
-            filter: brightness(1.1);
-            transform: scale(1.02);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-        }
-
-        .hp-btn-ghost {
-            background: transparent;
-            color: #ffffff !important;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(4px);
-            transition: all 0.25s;
-            border-radius: 12px;
-            padding: 14px 28px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .hp-btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #ffffff;
-        }
-
-        .hp-hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
-        }
-
-        .hp-hero-badge svg {
-            color: #34d399;
-            flex-shrink: 0;
-        }
-
-        .hp-stats {
-            max-width: 900px;
-            margin: -40px auto 0;
-            padding: 28px 30px;
-            background: var(--surface-1);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .hp-stat {
-            text-align: center;
-        }
-
-        .hp-stat-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 20px;
-        }
-
-        .hp-stat-num {
-            font-size: 28px;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .hp-stat-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-
-        .hp-trust-row {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: nowrap;
-            margin: 30px auto 40px;
-            max-width: 900px;
-            padding: 0 15px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .hp-trust-row::-webkit-scrollbar {
-            display: none;
-        }
-
-        .hp-trust-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: var(--surface-1);
-            border-radius: 60px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-            border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .hp-trust-pill:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .hp-trust-pill-icon {
-            font-size: 20px;
-            flex-shrink: 0;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .hp-trust-pill strong {
-            font-size: 13px;
-            color: var(--text-primary);
-            display: block;
-            line-height: 1.2;
-            margin-bottom: 2px;
-        }
-
-        .hp-trust-pill div span {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.2;
-            display: block;
         }
 
         .hp-section {
@@ -409,7 +309,7 @@
         .hp-section-head-line {
             flex: 1;
             height: 1px;
-            background: linear-gradient(to right, #3b82f6, transparent);
+            background: linear-gradient(to right, #0d9488, transparent);
             margin-left: 16px;
         }
 
@@ -485,8 +385,6 @@
             display: none;
         }
 
-        
-
         .hp-tool-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
@@ -514,70 +412,47 @@
             line-height: 1.5;
         }
 
-        /* Light mode overrides for home screen boxes (Day mode) */
-        [data-theme="light"] .hp-tool-card,
-        [data-theme="light"] .hp-stats,
-        [data-theme="light"] .hp-trust-pill {
+        /* Light mode overrides for tool cards */
+        [data-theme="light"] .hp-tool-card {
             background: #f8fafc !important;
             border-color: #e2e8f0 !important;
         }
 
-        [data-theme="light"] .hp-tool-card:hover,
-        [data-theme="light"] .hp-trust-pill:hover {
+        [data-theme="light"] .hp-tool-card:hover {
             background: #f1f5f9 !important;
             border-color: #cbd5e1 !important;
             box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06) !important;
         }
 
-        [data-theme="light"] .hp-tool-card h3,
-        [data-theme="light"] .hp-stat-num,
-        [data-theme="light"] .hp-trust-pill strong {
+        [data-theme="light"] .hp-tool-card h3 {
             color: #0f172a !important;
         }
 
-        [data-theme="light"] .hp-tool-card p,
-        [data-theme="light"] .hp-stat-label,
-        [data-theme="light"] .hp-trust-pill div span {
+        [data-theme="light"] .hp-tool-card p {
             color: #515b6b !important;
         }
 
-        
-
-        /* Dark mode overrides for home screen boxes (Night mode) */
+        /* Dark mode overrides for tool cards */
         [data-theme="dark"] .hp-tool-card,
-        [data-theme="dark"] .hp-stats,
-        [data-theme="dark"] .hp-trust-pill,
-        html:not([data-theme="light"]) .hp-tool-card,
-        html:not([data-theme="light"]) .hp-stats,
-        html:not([data-theme="light"]) .hp-trust-pill {
+        html:not([data-theme="light"]) .hp-tool-card {
             background: #16161a !important;
             border-color: #26262b !important;
         }
 
         [data-theme="dark"] .hp-tool-card:hover,
-        [data-theme="dark"] .hp-trust-pill:hover,
-        html:not([data-theme="light"]) .hp-tool-card:hover,
-        html:not([data-theme="light"]) .hp-trust-pill:hover {
+        html:not([data-theme="light"]) .hp-tool-card:hover {
             background: #1c1c21 !important;
             border-color: #3b3b42 !important;
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
         }
 
         [data-theme="dark"] .hp-tool-card h3,
-        [data-theme="dark"] .hp-stat-num,
-        [data-theme="dark"] .hp-trust-pill strong,
-        html:not([data-theme="light"]) .hp-tool-card h3,
-        html:not([data-theme="light"]) .hp-stat-num,
-        html:not([data-theme="light"]) .hp-trust-pill strong {
+        html:not([data-theme="light"]) .hp-tool-card h3 {
             color: #f3f4f6 !important;
         }
 
         [data-theme="dark"] .hp-tool-card p,
-        [data-theme="dark"] .hp-stat-label,
-        [data-theme="dark"] .hp-trust-pill div span,
-        html:not([data-theme="light"]) .hp-tool-card p,
-        html:not([data-theme="light"]) .hp-stat-label,
-        html:not([data-theme="light"]) .hp-trust-pill div span {
+        html:not([data-theme="light"]) .hp-tool-card p {
             color: #9ca3af !important;
         }
 
@@ -586,7 +461,7 @@
             stroke: #f3f4f6 !important;
         }
 
-        /* Light mode overrides for bottom sections (Day mode) */
+        /* Light mode overrides for bottom sections */
         [data-theme="light"] .why-story,
         [data-theme="light"] table {
             background: #f8fafc !important;
@@ -608,7 +483,7 @@
             background: #e2e8f0 !important;
         }
 
-        /* Dark mode overrides for bottom sections (Night mode) */
+        /* Dark mode overrides for bottom sections */
         [data-theme="dark"] .why-story,
         [data-theme="dark"] table,
         html:not([data-theme="light"]) .why-story,
@@ -637,123 +512,38 @@
             background: #26262b !important;
         }
 
-        .hp-announcement-pill {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 9999px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.08);
-            font-size: 0.875rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 24px;
-        }
-
-        /* Light mode homepage UI fixes */
+        /* Light mode hero fixes */
         [data-theme="light"] body {
             background-color: #ffffff !important;
         }
 
-        [data-theme="light"] .hp-announcement-pill {
-            background: rgba(0, 0, 0, 0.04) !important;
-            border: 1px solid rgba(0, 0, 0, 0.08) !important;
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
-            color: #334155 !important;
-        }
-
-        [data-theme="light"] .hp-stats {
-            background: #ffffff !important;
-            border: 1px solid #e8e8f0 !important;
-            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.12) !important;
-            border-radius: 20px !important;
-            margin-top: -60px !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-
-        [data-theme="light"] .hp-stat:nth-child(1) .hp-stat-icon { background: #eff6ff !important; }
-        [data-theme="light"] .hp-stat:nth-child(1) .hp-stat-icon svg { stroke: #3b82f6 !important; }
-
-        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon { background: #fefce8 !important; }
-        [data-theme="light"] .hp-stat:nth-child(2) .hp-stat-icon svg { stroke: #ca8a04 !important; }
-
-        [data-theme="light"] .hp-stat:nth-child(3) .hp-stat-icon { background: #faf5ff !important; }
-        [data-theme="light"] .hp-stat:nth-child(3) .hp-stat-icon svg { stroke: #9333ea !important; }
-
-        [data-theme="light"] .hp-stat:nth-child(4) .hp-stat-icon { background: #f0fdf4 !important; }
-        [data-theme="light"] .hp-stat:nth-child(4) .hp-stat-icon svg { stroke: #16a34a !important; }
-
-        [data-theme="light"] .hp-trust-pill {
-            background: #ececf4 !important;
-            border: 1px solid #d8d8e8 !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-        }
-
-        [data-theme="light"] .hp-trust-pill,
-        [data-theme="light"] .hp-trust-pill div strong,
-        [data-theme="light"] .hp-trust-pill div span {
-            color: #444455 !important;
-            font-weight: 500 !important;
-        }
-        
-        [data-theme="light"] .hp-trust-pill-icon svg {
-            stroke: #444455 !important;
-        }
-
-        [data-theme="light"] .hp-hero::after,
         [data-theme="light"] .hp-hero::before {
-            display: none !important;
+            background-image: radial-gradient(circle, rgba(13, 148, 136, 0.12) 1px, transparent 1px);
         }
 
-        [data-theme="light"] .hp-hero {
-            background: transparent !important;
-            box-shadow: none !important;
+        [data-theme="light"] .hp-btn-gradient {
+            background: #0d9488 !important;
+            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.25) !important;
         }
 
-        [data-theme="light"] .hp-hero h1,
-        [data-theme="light"] .hp-hero p {
-            color: #0f172a !important;
-        }
-
-        [data-theme="light"] .hp-hero h1 span {
-            color: #4f46e5 !important;
-        }
-
-        [data-theme="light"] .hp-btn-ghost {
-            color: #4f46e5 !important;
-            border-color: #cbd5e1 !important;
-            background: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        [data-theme="light"] .hp-btn-gradient:hover {
+            background: #0f766e !important;
         }
 
         [data-theme="light"] .header {
             box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
         }
 
-        [data-theme="light"] .hp-btn-gradient {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
-            border: 2px solid rgba(255, 255, 255, 0.4) !important;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4) !important;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
-        }
-
         @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: 0.3
-            }
+            0%, 100% { opacity: 1 }
+            50% { opacity: 0.3 }
         }
     
         .hp-badge-new {
             position: absolute;
             top: 16px;
             right: 16px;
-            background: #7c3aed;
+            background: #0d9488;
             color: white;
             font-size: 10px;
             border-radius: 4px;
@@ -785,51 +575,26 @@
 
     </style>
 <main id="main">
-<!-- HERO -->
+<!-- HERO — Redesigned: Left-aligned, no purple, single CTA -->
 <section class="hp-hero">
 <div class="container">
-<div class="hp-announcement-pill">✨ Now with advanced text &amp; image extraction</div>
-<h1>Privacy-First PDF Tools That Run in <br/><span>Your Browser.</span></h1>
+<h1>Your PDFs stay on your device.<br/><span>Always.</span></h1>
+<p class="hp-hero-subtitle">30+ tools that work entirely in your browser. No uploads, no servers, no signups. Just open a file and get it done.</p>
 <div class="hp-hero-actions">
-<a class="hp-btn-gradient" href="tools.html" style="font-size:1.1rem;">Try Free Tools</a>
-<a class="hp-btn-ghost" href="#tools-section" id="heroCTA" style="font-size:1.1rem;">Process PDFs — No Uploads</a>
+<a class="hp-btn-gradient" href="tools.html">Browse All Tools →</a>
+<span class="hp-hero-proof">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+100% private — nothing leaves your device
+</span>
 </div>
 </div>
 </section>
-<!-- 4-COLUMN EMOJI FEATURES BAR -->
-<div class="hp-stats">
-<div class="hp-stat">
-<div class="hp-stat-icon" style="background:rgba(59, 130, 246, 0.3); border-radius:12px;"><svg fill="none" height="22" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-<div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Secure</div>
-<div class="hp-stat-label">Files stay on device</div>
-</div>
-<div class="hp-stat">
-<div class="hp-stat-icon" style="background:#1e3a5f; border-radius:12px;"><svg fill="none" height="22" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
-<div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">Instant</div>
-<div class="hp-stat-label">Zero upload wait times</div>
-</div>
-<div class="hp-stat">
-<div class="hp-stat-icon" style="background:rgba(139, 92, 246, 0.3); border-radius:12px;"><svg fill="none" height="22" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" x2="23" y1="8" y2="13"></line><line x1="23" x2="18" y1="8" y2="13"></line></svg></div>
-<div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">No Signups</div>
-<div class="hp-stat-label">Jump right in instantly</div>
-</div>
-<div class="hp-stat">
-<div class="hp-stat-icon" style="background:rgba(16, 185, 129, 0.3); border-radius:12px;"><svg fill="none" height="22" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
-<div class="hp-stat-num" style="color:var(--text-primary); font-size: 18px;">100% Free</div>
-<div class="hp-stat-label">No sneaky paywalls</div>
-</div>
-</div>
-<!-- TRUST PILLS - Linked to Proof (Point 6) -->
-<div class="hp-trust-row">
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg class="hp-trust-pill-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>
-<div><strong>30+ tools</strong><span>Everything you need in one place</span></div>
-</div>
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg class="hp-trust-pill-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg></span>
-<div><strong>Smart Extraction</strong><span>Advanced text &amp; image extraction</span></div>
-</div>
-<div class="hp-trust-pill"><span class="hp-trust-pill-icon"><svg class="hp-trust-pill-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 22a8 8 0 0 0 8-8c0-3.5-3-7-8-12-5 5-8 8.5-8 12a8 8 0 0 0 8 8Z"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg></span>
-<div><strong>No Watermarks</strong><span>Clean &amp; professional results</span></div>
-</div>
+<!-- Inline features strip — replaces stats bar + trust pills -->
+<div class="hp-features-strip">
+<div class="hp-feature-item"><div class="hp-feature-dot" style="background:#0d9488;"></div>Files never uploaded</div>
+<div class="hp-feature-item"><div class="hp-feature-dot" style="background:#f59e0b;"></div>Instant processing</div>
+<div class="hp-feature-item"><div class="hp-feature-dot" style="background:#8b5cf6;"></div>No account needed</div>
+<div class="hp-feature-item"><div class="hp-feature-dot" style="background:#10b981;"></div>Completely free</div>
 </div>
 <!-- SMART DROP OVERLAY (Homepage) -->
 <div id="homeDropOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.2s,visibility 0.2s;pointer-events:none;">
@@ -858,7 +623,7 @@
 <div id="recentToolsSection" style="display:none;margin-bottom:8px;"></div>
 <!-- Essential PDF Tools -->
 <div class="hp-section-head">
-<h2><span class="hp-section-head-icon" style="background: #1e3a5f;"><svg fill="none" height="16" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>Essential PDF Tools</h2>
+<h2><span class="hp-section-head-icon" style="background: #134e4a;"><svg fill="none" height="16" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>Essential PDF Tools</h2>
 <div class="hp-section-head-line"></div>
 </div>
 <div class="hp-tools-grid">
