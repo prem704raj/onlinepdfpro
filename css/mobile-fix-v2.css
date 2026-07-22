@@ -28,8 +28,8 @@
     }
 
     body {
-        padding-top: 52px !important;
-        /* space for fixed navbar — must match header height */
+        padding-top: 104px !important;
+        /* space for fixed navbar (52px) + visible search bar (52px) */
         top: 0 !important;
         /* prevent Google Translate from pushing body down */
     }
@@ -144,47 +144,28 @@
         z-index: 9998 !important;
     }
 
-    /* Header search — hidden by default, shown via toggle */
+    /* Header search (desktop version) */
     .header-search {
         display: none !important;
     }
 
-    /* Mobile search toggle button (🔍) */
+    /* Mobile search toggle button (🔍) - Hidden since search is now always visible */
     .mobile-search-toggle {
-        display: flex !important;
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        padding: 0 !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 16px !important;
-        flex-shrink: 0 !important;
-        background: transparent !important;
-        border: 1px solid var(--border) !important;
-        border-radius: 10px !important;
-        color: var(--text-secondary) !important;
-        cursor: pointer !important;
-        order: -1 !important;
+        display: none !important;
     }
 
     /* Full-width search bar that appears below header */
     .mobile-search-bar {
-        display: none;
+        display: flex; /* Changed from none to flex */
         position: fixed;
-        top: 56px;
+        top: 52px; /* Adjusted to match new 52px header height */
         left: 0;
         right: 0;
-        z-index: 999;
+        z-index: 998; /* Just below header */
         padding: 8px 12px;
         background: var(--bg-primary);
         border-bottom: 1px solid var(--border);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        animation: slideDown 0.2s ease;
-    }
-
-    .mobile-search-bar.active {
-        display: flex;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .mobile-search-bar input {
