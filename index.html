@@ -139,7 +139,6 @@
             padding: 32px 20px 0;
             position: relative;
             overflow: hidden;
-            text-align: center;
         }
 
         .hp-hero .container {
@@ -171,11 +170,10 @@
         .hp-hero h1 {
             font-size: clamp(2rem, 4.5vw, 2.8rem);
             font-weight: 800;
-            margin: 0 auto 12px;
+            margin: 0 0 12px;
             line-height: 1.12;
             letter-spacing: -0.03em;
-            text-align: center;
-            max-width: 600px;
+            text-align: left;
             color: var(--text-primary);
         }
 
@@ -191,16 +189,16 @@
         .hp-hero-subtitle {
             font-size: 1rem;
             color: var(--text-secondary);
-            max-width: 480px;
+            max-width: 420px;
             line-height: 1.6;
-            text-align: center;
-            margin: 0 auto 20px;
+            text-align: left;
+            margin: 0 0 20px;
         }
 
         .hp-hero-actions {
             display: flex;
             gap: 14px;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             flex-wrap: wrap;
             margin-bottom: 0;
@@ -245,15 +243,25 @@
             color: #2dd4bf;
         }
 
-        /* Features strip — replaces the old stats bar and trust pills */
+        /* Features strip */
         .hp-features-strip {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
             margin: 0 auto;
             padding: 16px 20px 24px;
             max-width: 1060px;
+        }
+
+        @media (max-width: 768px) {
+            .hp-hero .container {
+                text-align: center;
+            }
+            .hp-hero h1 { text-align: center; }
+            .hp-hero-subtitle { text-align: center; margin: 0 auto 20px; }
+            .hp-hero-actions { justify-content: center; }
+            .hp-features-strip { justify-content: center; }
         }
 
         .hp-feature-item {
@@ -596,6 +604,7 @@
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#f59e0b;"></div>Instant processing</div>
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#8b5cf6;"></div>No account needed</div>
 <div class="hp-feature-item"><div class="hp-feature-dot" style="background:#10b981;"></div>Completely free</div>
+</div>
 </div>
 </section>
 <div style="max-width:1060px;margin:0 auto;padding:0 20px;"><div style="height:1px;background:linear-gradient(to right, var(--border), transparent);margin-bottom:8px;"></div></div>
