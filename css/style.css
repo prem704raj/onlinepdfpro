@@ -1703,3 +1703,7 @@ main#main {
     overflow: hidden;
     min-height: 90px;
 }
+
+/* History visibility */
+@media (min-width: 769px) { .mobile-only-nav { display: none !important; } }
+@media (max-width: 768px) { .desktop-only-action { display: none !important; } }
