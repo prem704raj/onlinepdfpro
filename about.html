@@ -3,6 +3,8 @@
 <html lang="en">
 
 <head>
+    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -155,7 +157,7 @@
  </h2>
  <p style="color: var(--text-secondary); line-height: 1.7;">
  OnlinePDFPro provides free, fast document processing tools. We believe everyone
- should have access to essential document tools without unnecessary hassle or frivacy or paying
+ should have access to essential document tools without unnecessary hassle, privacy concerns, or paying
  subscription fees.
  </p>
  <div style="margin-top: 24px; display: flex; gap: 16px; flex-wrap: wrap;">
@@ -177,7 +179,7 @@
  </h2>
  <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
  Unlike other document tools, your files <strong>never leave your device</strong>. All
- processing happens right securely using JavaScript. We use efficient your files to any
+ processing happens securely in your browser using JavaScript. We never send your files to any
  server, we don't store them, and we can't see them.
  </p>
  <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: 24px;">
@@ -204,7 +206,7 @@
  How It Works
  </h2>
  <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
- Our tools use modern web technologies to process documents directly securely:
+ Our tools use modern web technologies to process documents entirely in your browser:
  </p>
  <ul style="color: var(--text-secondary); line-height: 1.7; padding-left: 24px;">
  <li style="margin-bottom: 8px;"><strong>PDF Tools:</strong> Powered by PDF-lib and PDF.js
@@ -269,7 +271,7 @@
  <p style="margin-bottom: 15px;">We focus on making the best PDF tools available. We do not have access to your data. There are no databases storing your sensitive information, and there are no background processes analyzing your documents. What happens on your device stays on your device.</p>
 
  <h2 style="font-size: 1.5rem; color: var(--text-primary); margin: 30px 0 15px;">Who We Are</h2>
- <p style="margin-bottom: 15px;">We are a dedicated group of developers and designersy advocates who were frustrated by the lack of secure, free, and user-friendly document tools on the web. We decided to scratch our own itch and build the platform we wanted to use—one that respects the user, values design, and prioritizes data security above all else.</p>
+ <p style="margin-bottom: 15px;">OnlinePDFPro is built and maintained by an independent developer passionate about privacy and accessible technology. What started as a personal frustration with bloated, ad-heavy PDF tools became a mission to create something better—a platform that respects users, values clean design, and prioritizes data security above all else.</p>
  </section>
  
  
