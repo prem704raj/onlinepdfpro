@@ -163,13 +163,14 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
+            padding: 7px 16px;
             background: rgba(79,70,229,0.1);
             border: 1px solid rgba(79,70,229,0.2);
             border-radius: 20px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #4f46e5;
+            letter-spacing: 0.03em;
             width: fit-content;
             margin-bottom: 16px;
         }
@@ -191,18 +192,23 @@
             color: var(--text-primary);
         }
 
-        .hp-hero h1 span { color: #4f46e5; }
+        .hp-hero h1 span { color: #4f46e5; font-size: 1.15em; letter-spacing: -0.04em; }
 
         [data-theme="dark"] .hp-hero h1 span,
         html:not([data-theme="light"]) .hp-hero h1 span { color: #818cf8; }
 
         .hp-hero-subtitle {
             font-size: 1rem;
-            color: var(--text-secondary);
+            color: #4b5563;
             max-width: 440px;
             line-height: 1.65;
             text-align: left;
             margin: 0 0 24px;
+        }
+
+        [data-theme="dark"] .hp-hero-subtitle,
+        html:not([data-theme="light"]) .hp-hero-subtitle {
+            color: #9ca3af;
         }
 
         .hp-hero-actions {
@@ -279,7 +285,17 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
-        /* Right side floating cards */
+        /* ====================================
+           HERO VISUAL — FLOATING CARDS SYSTEM
+           Color System: Category-based
+             Organize = Indigo family
+             Optimize = Amber
+             Convert  = Teal
+             Security = Violet
+             Creative = Rose
+             Extract  = Emerald
+           ==================================== */
+
         .hp-hero-visual {
             display: flex;
             align-items: center;
@@ -300,7 +316,7 @@
             position: absolute;
             top: 10%; left: 10%;
             width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(79,70,229,0.12) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(79,70,229,0.1) 0%, transparent 70%);
             border-radius: 50%;
             filter: blur(40px);
             z-index: 0;
@@ -311,10 +327,18 @@
             position: absolute;
             bottom: 10%; right: 10%;
             width: 180px; height: 180px;
-            background: radial-gradient(circle, rgba(13,148,136,0.12) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(13,148,136,0.1) 0%, transparent 70%);
             border-radius: 50%;
             filter: blur(40px);
             z-index: 0;
+        }
+
+        /* Connector lines (SVG overlay) */
+        .hp-hero-connectors {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .hp-float-card {
@@ -333,28 +357,54 @@
             transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
             z-index: 2;
             cursor: pointer;
+            text-decoration: none !important;
         }
 
-        /* Colored left border accent per card */
-        .hp-float-card:nth-child(1) { border-left: 3px solid #4f46e5; box-shadow: 0 8px 32px rgba(79,70,229,0.12), 0 2px 8px rgba(0,0,0,0.04); }
-        .hp-float-card:nth-child(2) { border-left: 3px solid #0d9488; box-shadow: 0 8px 32px rgba(13,148,136,0.12), 0 2px 8px rgba(0,0,0,0.04); }
-        .hp-float-card:nth-child(3) { border-left: 3px solid #f59e0b; box-shadow: 0 8px 32px rgba(245,158,11,0.12), 0 2px 8px rgba(0,0,0,0.04); }
-        .hp-float-card:nth-child(4) { border-left: 3px solid #8b5cf6; box-shadow: 0 8px 32px rgba(139,92,246,0.12), 0 2px 8px rgba(0,0,0,0.04); }
-        .hp-float-card:nth-child(5) { border-left: 3px solid #ec4899; box-shadow: 0 8px 32px rgba(236,72,153,0.12), 0 2px 8px rgba(0,0,0,0.04); }
-        .hp-float-card:nth-child(6) { border-left: 3px solid #10b981; box-shadow: 0 8px 32px rgba(16,185,129,0.12), 0 2px 8px rgba(0,0,0,0.04); }
+        /* === CATEGORY COLORS: border + shadow per card === */
+        /* Card 1: Merge = Organize (Indigo) */
+        .hp-float-card:nth-child(1) {
+            border-left: 3px solid #4f46e5;
+            box-shadow: 0 12px 40px rgba(79,70,229,0.14), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Card 2: Compress = Optimize (Amber) */
+        .hp-float-card:nth-child(2) {
+            border-left: 3px solid #d97706;
+            box-shadow: 0 8px 32px rgba(217,119,6,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Card 3: Split = Organize (Indigo mid) */
+        .hp-float-card:nth-child(3) {
+            border-left: 3px solid #6366f1;
+            box-shadow: 0 8px 32px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Card 4: Sign = Security (Violet) */
+        .hp-float-card:nth-child(4) {
+            border-left: 3px solid #7c3aed;
+            box-shadow: 0 8px 32px rgba(124,58,237,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Card 5: JPG→PDF = Convert (Teal) */
+        .hp-float-card:nth-child(5) {
+            border-left: 3px solid #0d9488;
+            box-shadow: 0 6px 24px rgba(13,148,136,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
+        /* Card 6: Rotate = Organize (Indigo light) */
+        .hp-float-card:nth-child(6) {
+            border-left: 3px solid #818cf8;
+            box-shadow: 0 6px 24px rgba(129,140,248,0.12), 0 2px 8px rgba(0,0,0,0.04);
+        }
 
+        /* Hover glow per card */
         .hp-float-card:hover {
             transform: translateY(-6px) scale(1.05) !important;
             z-index: 10;
         }
+        .hp-float-card:nth-child(1):hover { box-shadow: 0 20px 48px rgba(79,70,229,0.28), 0 4px 12px rgba(0,0,0,0.06); }
+        .hp-float-card:nth-child(2):hover { box-shadow: 0 16px 48px rgba(217,119,6,0.25), 0 4px 12px rgba(0,0,0,0.06); }
+        .hp-float-card:nth-child(3):hover { box-shadow: 0 16px 48px rgba(99,102,241,0.25), 0 4px 12px rgba(0,0,0,0.06); }
+        .hp-float-card:nth-child(4):hover { box-shadow: 0 16px 48px rgba(124,58,237,0.25), 0 4px 12px rgba(0,0,0,0.06); }
+        .hp-float-card:nth-child(5):hover { box-shadow: 0 16px 48px rgba(13,148,136,0.25), 0 4px 12px rgba(0,0,0,0.06); }
+        .hp-float-card:nth-child(6):hover { box-shadow: 0 16px 48px rgba(129,140,248,0.25), 0 4px 12px rgba(0,0,0,0.06); }
 
-        .hp-float-card:nth-child(1):hover { box-shadow: 0 16px 48px rgba(79,70,229,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-        .hp-float-card:nth-child(2):hover { box-shadow: 0 16px 48px rgba(13,148,136,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-        .hp-float-card:nth-child(3):hover { box-shadow: 0 16px 48px rgba(245,158,11,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-        .hp-float-card:nth-child(4):hover { box-shadow: 0 16px 48px rgba(139,92,246,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-        .hp-float-card:nth-child(5):hover { box-shadow: 0 16px 48px rgba(236,72,153,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-        .hp-float-card:nth-child(6):hover { box-shadow: 0 16px 48px rgba(16,185,129,0.25), 0 4px 12px rgba(0,0,0,0.06); }
-
+        /* Dark mode card styling */
         [data-theme="dark"] .hp-float-card,
         html:not([data-theme="light"]) .hp-float-card {
             background: rgba(25,25,32,0.92);
@@ -362,17 +412,17 @@
         }
 
         [data-theme="dark"] .hp-float-card:nth-child(1),
-        html:not([data-theme="light"]) .hp-float-card:nth-child(1) { border-left-color: #818cf8; box-shadow: 0 8px 32px rgba(129,140,248,0.15), 0 2px 8px rgba(0,0,0,0.2); }
+        html:not([data-theme="light"]) .hp-float-card:nth-child(1) { border-left-color: #818cf8; box-shadow: 0 12px 40px rgba(129,140,248,0.18), 0 2px 8px rgba(0,0,0,0.2); }
         [data-theme="dark"] .hp-float-card:nth-child(2),
-        html:not([data-theme="light"]) .hp-float-card:nth-child(2) { border-left-color: #2dd4bf; box-shadow: 0 8px 32px rgba(45,212,191,0.15), 0 2px 8px rgba(0,0,0,0.2); }
+        html:not([data-theme="light"]) .hp-float-card:nth-child(2) { border-left-color: #fbbf24; box-shadow: 0 8px 32px rgba(251,191,36,0.15), 0 2px 8px rgba(0,0,0,0.2); }
         [data-theme="dark"] .hp-float-card:nth-child(3),
-        html:not([data-theme="light"]) .hp-float-card:nth-child(3) { border-left-color: #fbbf24; box-shadow: 0 8px 32px rgba(251,191,36,0.15), 0 2px 8px rgba(0,0,0,0.2); }
+        html:not([data-theme="light"]) .hp-float-card:nth-child(3) { border-left-color: #a5b4fc; box-shadow: 0 8px 32px rgba(165,180,252,0.15), 0 2px 8px rgba(0,0,0,0.2); }
         [data-theme="dark"] .hp-float-card:nth-child(4),
         html:not([data-theme="light"]) .hp-float-card:nth-child(4) { border-left-color: #a78bfa; box-shadow: 0 8px 32px rgba(167,139,250,0.15), 0 2px 8px rgba(0,0,0,0.2); }
         [data-theme="dark"] .hp-float-card:nth-child(5),
-        html:not([data-theme="light"]) .hp-float-card:nth-child(5) { border-left-color: #f472b6; box-shadow: 0 8px 32px rgba(244,114,182,0.15), 0 2px 8px rgba(0,0,0,0.2); }
+        html:not([data-theme="light"]) .hp-float-card:nth-child(5) { border-left-color: #2dd4bf; box-shadow: 0 6px 24px rgba(45,212,191,0.15), 0 2px 8px rgba(0,0,0,0.2); }
         [data-theme="dark"] .hp-float-card:nth-child(6),
-        html:not([data-theme="light"]) .hp-float-card:nth-child(6) { border-left-color: #34d399; box-shadow: 0 8px 32px rgba(52,211,153,0.15), 0 2px 8px rgba(0,0,0,0.2); }
+        html:not([data-theme="light"]) .hp-float-card:nth-child(6) { border-left-color: #c4b5fd; box-shadow: 0 6px 24px rgba(196,181,253,0.15), 0 2px 8px rgba(0,0,0,0.2); }
 
         .hp-float-card .fc-icon {
             width: 40px; height: 40px;
@@ -384,56 +434,70 @@
 
         .hp-float-card .fc-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; }
         .hp-float-card .fc-text { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); letter-spacing: -0.01em; }
-        .hp-float-card .fc-sub { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+        /* Point 6: contrast fix — darken subtext from --text-muted to gray-500 */
+        .hp-float-card .fc-sub { font-size: 0.7rem; color: #6b7280; font-weight: 400; margin-top: 2px; }
 
-        /* Card positions — spread evenly in orbital layout */
-        .hp-float-card:nth-child(1) { top: 4%; left: 4%; animation-delay: 0s; }
-        .hp-float-card:nth-child(2) { top: 2%; right: 0%; animation-delay: -1s; }
-        .hp-float-card:nth-child(3) { top: 37%; left: -8%; animation-delay: -2s; }
-        .hp-float-card:nth-child(4) { top: 39%; right: -6%; animation-delay: -3s; }
-        .hp-float-card:nth-child(5) { bottom: 14%; left: 2%; animation-delay: -4s; }
-        .hp-float-card:nth-child(6) { bottom: 8%; right: 0%; animation-delay: -5s; }
+        [data-theme="dark"] .hp-float-card .fc-sub,
+        html:not([data-theme="light"]) .hp-float-card .fc-sub { color: #9ca3af; }
+
+        /* === ORBITAL POSITIONS — 60° apart, radius ~38% from center ===
+           Positions calculated: center = 50%,50%
+           R = 38% of container
+           Angle 0 (top-right):    50 + 38*cos(60°), 50 - 38*sin(60°)  = 69%, 17%
+           Angle 1 (right):        50 + 38*cos(0°),  50 - 38*sin(0°)   = 88%, 50%
+           Angle 2 (bottom-right): 50 + 38*cos(-60°),50 - 38*sin(-60°) = 69%, 83%
+           Angle 3 (bottom-left):  50 + 38*cos(-120°),50-38*sin(-120°) = 31%, 83%
+           Angle 4 (left):         50 + 38*cos(180°), 50-38*sin(180°)  = 12%, 50%
+           Angle 5 (top-left):     50 + 38*cos(120°), 50-38*sin(120°)  = 31%, 17%
+           Offset by ~half card width (~80px ≈ 8%) for centering */
+
+        .hp-float-card:nth-child(1) { top: 9%;  left: calc(50% + 5%);  animation-delay: 0s; }
+        .hp-float-card:nth-child(2) { top: 9%;  right: calc(50% + 5%); animation-delay: -1s; }
+        .hp-float-card:nth-child(3) { top: 42%; right: -4%;            animation-delay: -2s; }
+        .hp-float-card:nth-child(4) { top: 42%; left: -4%;             animation-delay: -3s; }
+        .hp-float-card:nth-child(5) { bottom: 9%; left: calc(50% + 5%);  animation-delay: -4s; }
+        .hp-float-card:nth-child(6) { bottom: 9%; right: calc(50% + 5%); animation-delay: -5s; }
 
         @keyframes heroFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
 
-        /* Center circle — gradient filled */
+        /* === CENTER CIRCLE — gradient hub === */
         .hp-hero-center-circle {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 140px; height: 140px;
+            width: 130px; height: 130px;
             border-radius: 50%;
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
             border: none;
             display: flex; align-items: center; justify-content: center;
             z-index: 3;
-            box-shadow: 0 8px 40px rgba(79,70,229,0.3), 0 0 80px rgba(79,70,229,0.1);
+            box-shadow: 0 8px 40px rgba(79,70,229,0.3), 0 0 60px rgba(79,70,229,0.08);
             animation: centerPulse 4s ease-in-out infinite;
         }
 
         @keyframes centerPulse {
-            0%, 100% { box-shadow: 0 8px 40px rgba(79,70,229,0.3), 0 0 80px rgba(79,70,229,0.1); }
-            50% { box-shadow: 0 8px 40px rgba(79,70,229,0.4), 0 0 100px rgba(79,70,229,0.15); }
+            0%, 100% { box-shadow: 0 8px 40px rgba(79,70,229,0.3), 0 0 60px rgba(79,70,229,0.08); }
+            50% { box-shadow: 0 8px 40px rgba(79,70,229,0.4), 0 0 80px rgba(79,70,229,0.12); }
         }
 
         .hp-hero-center-circle::before {
             content: '';
             position: absolute;
-            inset: -20px;
+            inset: -18px;
             border-radius: 50%;
-            border: 1.5px dashed rgba(79,70,229,0.2);
+            border: 1.5px dashed rgba(79,70,229,0.18);
             animation: spinOrbit 25s linear infinite;
         }
 
         .hp-hero-center-circle::after {
             content: '';
             position: absolute;
-            inset: -40px;
+            inset: -36px;
             border-radius: 50%;
-            border: 1px dashed rgba(124,58,237,0.1);
+            border: 1px dashed rgba(124,58,237,0.08);
             animation: spinOrbit 40s linear infinite reverse;
         }
 
@@ -449,14 +513,14 @@
             color: #ffffff;
             text-align: center;
             line-height: 1.25;
-            font-size: 1.05rem;
+            font-size: 1rem;
             text-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
 
         [data-theme="dark"] .hp-hero-center-circle,
         html:not([data-theme="light"]) .hp-hero-center-circle {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            box-shadow: 0 8px 40px rgba(99,102,241,0.35), 0 0 80px rgba(99,102,241,0.12);
+            box-shadow: 0 8px 40px rgba(99,102,241,0.35), 0 0 60px rgba(99,102,241,0.1);
         }
 
         [data-theme="dark"] .hp-hero-center-circle svg,
@@ -465,6 +529,7 @@
         .hp-hero-proof { display: none; }
         .hp-features-strip { display: none; }
 
+        /* === MOBILE: 2-column grid fallback === */
         @media (max-width: 768px) {
             .hp-hero .container {
                 grid-template-columns: 1fr;
@@ -477,17 +542,34 @@
             .hp-hero-badge { margin: 0 auto 16px; }
             .hp-hero-quick { justify-content: center; }
             .hp-hero-visual { order: -1; }
-            .hp-hero-illust { max-width: 300px; }
-            .hp-float-card { padding: 8px 10px 8px 8px; border-radius: 10px; gap: 8px; }
-            .hp-float-card .fc-icon { width: 28px; height: 28px; border-radius: 8px; }
-            .hp-float-card .fc-icon svg { width: 14px; height: 14px; }
-            .hp-float-card .fc-text { font-size: 0.72rem; }
+
+            /* Collapse orbit into clean 2-column grid */
+            .hp-hero-illust {
+                max-width: 340px;
+                aspect-ratio: auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .hp-hero-illust::before,
+            .hp-hero-illust::after { display: none; }
+
+            .hp-hero-center-circle { display: none; }
+            .hp-hero-connectors { display: none; }
+
+            .hp-float-card {
+                position: static !important;
+                animation: none !important;
+                padding: 12px;
+                border-radius: 12px;
+                gap: 10px;
+                min-height: 44px; /* touch target */
+                border-left-width: 3px !important;
+            }
+            .hp-float-card .fc-icon { width: 32px; height: 32px; border-radius: 9px; }
+            .hp-float-card .fc-icon svg { width: 15px; height: 15px; }
+            .hp-float-card .fc-text { font-size: 0.76rem; }
             .hp-float-card .fc-sub { display: none; }
-            .hp-hero-center-circle { width: 100px; height: 100px; }
-            .hp-hero-center-text { font-size: 0.82rem; }
-            .hp-hero-center-circle::before { inset: -14px; }
-            .hp-hero-center-circle::after { inset: -28px; }
-            .hp-hero-illust::before, .hp-hero-illust::after { display: none; }
         }
 
         /* Newsletter must keep gradient in both modes */
@@ -795,7 +877,7 @@
 <div class="hp-hero-left">
 <div class="hp-hero-badge">
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
-30+ free tools &mdash; no signup needed
+<span id="toolCountNum">30+</span> free tools &mdash; no signup needed
 </div>
 <h1>All your PDF tools<br/><span>in one place</span></h1>
 <p class="hp-hero-subtitle">Merge, compress, convert, sign, and edit PDFs in seconds. 100% free, no watermarks, no limits.</p>
@@ -808,27 +890,27 @@
 <div class="hp-hero-illust">
 <!-- Floating tool cards -->
 <a href="tools/merge-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#4f46e5;"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div>
+<div class="fc-icon" style="background:#4f46e5;"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div><!-- Organize: Indigo -->
 <div><div class="fc-text">Merge PDF</div><div class="fc-sub">Combine files</div></div>
 </a>
 <a href="tools/compress-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#0d9488;"><svg viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
+<div class="fc-icon" style="background:#d97706;"><svg viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div><!-- Optimize: Amber -->
 <div><div class="fc-text">Compress</div><div class="fc-sub">Reduce size</div></div>
 </a>
 <a href="tools/split-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#f59e0b;"><svg viewBox="0 0 24 24"><line x1="16" y1="3" x2="16" y2="21"/><line x1="8" y1="3" x2="8" y2="21"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+<div class="fc-icon" style="background:#6366f1;"><svg viewBox="0 0 24 24"><line x1="16" y1="3" x2="16" y2="21"/><line x1="8" y1="3" x2="8" y2="21"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div><!-- Organize: Indigo mid -->
 <div><div class="fc-text">Split PDF</div><div class="fc-sub">Extract pages</div></div>
 </a>
 <a href="tools/sign-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#8b5cf6;"><svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+<div class="fc-icon" style="background:#7c3aed;"><svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><!-- Security: Violet -->
 <div><div class="fc-text">Sign PDF</div><div class="fc-sub">Add signature</div></div>
 </a>
 <a href="tools/jpg-to-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#ec4899;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+<div class="fc-icon" style="background:#0d9488;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><!-- Convert: Teal -->
 <div><div class="fc-text">JPG &rarr; PDF</div><div class="fc-sub">Convert images</div></div>
 </a>
 <a href="tools/rotate-pdf.html" class="hp-float-card" style="text-decoration: none;">
-<div class="fc-icon" style="background:#10b981;"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+<div class="fc-icon" style="background:#818cf8;"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div><!-- Organize: Indigo light -->
 <div><div class="fc-text">Rotate PDF</div><div class="fc-sub">Fix orientation</div></div>
 </a>
 <!-- Center circle -->
@@ -1518,6 +1600,28 @@
     modal.addEventListener('click', function(e) {
         if (e.target === modal) modal.style.display = 'none';
     });
+})();
+</script>
+<!-- Animated "30+" Counter -->
+<script>
+(function() {
+    var el = document.getElementById('toolCountNum');
+    if (!el || !('IntersectionObserver' in window)) return;
+    var done = false;
+    var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !done) {
+            done = true;
+            var target = 30, current = 0;
+            var step = function() {
+                current += 1;
+                el.textContent = current + (current >= target ? '+' : '');
+                if (current < target) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+            observer.disconnect();
+        }
+    }, { threshold: 0.5 });
+    observer.observe(el);
 })();
 </script>
 </body>
