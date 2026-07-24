@@ -1,802 +1,802 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
-    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
- <!-- Primary Meta Tags -->
- <title>File History | OnlinePDFPro - Manage Your Processed Files</title>
- <meta name="description" content="View and re-download your previously processed files. All files are stored safely securely. No server uploads.">
- <meta name="author" content="OnlinePDFPro">
- <meta name="robots" content="noindex, nofollow">
- <link rel="canonical" href="https://onlinepdfpro.com/history.html">
-
- <!-- Favicons -->
- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
- <link rel="manifest" href="/site.webmanifest">
- <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
- <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
-
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
- <!-- Core CSS -->
- <link rel="stylesheet" href="css/style.css?v=8">
- <link rel="stylesheet" href="css/mobile-fix-v2.css">
- <link rel="stylesheet" href="css/tools-v2.css">
-
- <style>
- :root {
- --history-accent: #2563eb;
- --history-surface: var(--surface-1, #ffffff);
- --history-bg: var(--bg-primary, #f8fafc);
- --history-text: var(--text-primary, #1e293b);
- --history-muted: var(--text-secondary, #64748b);
- --history-border: var(--border, #e2e8f0);
- --history-radius: 16px;
- }
-
- .history-page {
- max-width: 1000px;
- margin: 0 auto;
- padding: calc(var(--header-h, 80px) + 40px) 20px 40px;
- min-height: 80vh;
- }
-
- .history-header {
- margin-bottom: 40px;
- text-align: center;
- }
-
- .history-header h1 {
- font-size: 2.5rem;
- font-weight: 800;
- color: var(--history-text);
- margin-bottom: 12px;
- letter-spacing: -0.02em;
- }
-
- .history-header p {
- font-size: 1.1rem;
- color: var(--history-muted);
- max-width: 600px;
- margin: 0 auto;
- }
-
- .history-stats-bar {
- display: flex;
- justify-content: space-between;
- align-items: center;
- background: var(--history-surface);
- padding: 20px 28px;
- border-radius: var(--history-radius);
- border: 1px solid var(--history-border);
- margin-bottom: 30px;
- box-shadow: 0 4px 12px rgba(0,0,0,0.03);
- flex-wrap: wrap;
- gap: 20px;
- }
-
- .stat-item {
- display: flex;
- align-items: center;
- gap: 12px;
- }
-
- .stat-icon {
- font-size: 1.5rem;
- background: rgba(37, 99, 235, 0.1);
- width: 48px;
- height: 48px;
- display: flex;
- align-items: center;
- justify-content: center;
- border-radius: 12px;
- }
-
- .stat-content {
- display: flex;
- flex-direction: column;
- }
-
- .stat-value {
- font-weight: 700;
- font-size: 1.1rem;
- color: var(--history-text);
- }
-
- .stat-label {
- font-size: 0.8rem;
- color: var(--history-muted);
- text-transform: uppercase;
- letter-spacing: 0.05em;
- }
-
- .history-actions {
- display: flex;
- gap: 12px;
- flex-wrap: wrap;
- }
-
- .btn-action {
- padding: 10px 20px;
- border-radius: 10px;
- font-weight: 600;
- font-size: 0.9rem;
- cursor: pointer;
- transition: all 0.2s;
- border: 1px solid var(--history-border);
- background: var(--history-surface);
- color: var(--history-text);
- display: flex;
- align-items: center;
- gap: 8px;
- }
-
- .btn-action:hover {
- background: var(--history-bg);
- border-color: var(--history-accent);
- }
-
- .btn-danger {
- color: #ef4444;
- border-color: rgba(239, 68, 68, 0.2);
- }
-
- .btn-danger:hover {
- background: rgba(239, 68, 68, 0.05);
- border-color: #ef4444;
- }
-
- .history-controls {
- display: flex;
- gap: 16px;
- margin-bottom: 24px;
- flex-wrap: wrap;
- }
-
- .search-wrap {
- flex: 1;
- position: relative;
- min-width: 280px;
- }
-
- .search-wrap input {
- width: 100%;
- padding: 12px 16px 12px 40px;
- border-radius: 12px;
- border: 1px solid var(--history-border);
- background: var(--history-surface);
- color: var(--history-text);
- font-size: 0.95rem;
- outline: none;
- transition: border-color 0.2s;
- }
-
- .search-wrap input:focus {
- border-color: var(--history-accent);
- }
-
- .search-icon {
- position: absolute;
- left: 14px;
- top: 50%;
- transform: translateY(-50%);
- opacity: 0.5;
- }
-
- .history-list {
- display: grid;
- gap: 24px;
- }
-
- .history-card {
- background: var(--history-surface);
- border: 1px solid var(--history-border);
- border-radius: var(--history-radius);
- overflow: hidden;
- transition: transform 0.2s, box-shadow 0.2s;
- box-shadow: 0 4px 10px rgba(0,0,0,0.02);
- }
-
- .history-card:hover {
- transform: translateY(-2px);
- box-shadow: 0 10px 25px rgba(0,0,0,0.05);
- border-color: var(--history-accent);
- }
-
- .card-header {
- padding: 16px 24px;
+! 
  
- border-bottom: 1px solid var(--history-border);
- display: flex;
- justify-content: space-between;
- align-items: center;
- flex-wrap: wrap;
- gap: 12px;
- }
 
- .tool-info {
- display: flex;
- align-items: center;
- gap: 10px;
- font-weight: 700;
- color: var(--history-text);
- font-size: 1rem;
- }
 
- .tool-badge {
- padding: 4px 10px;
- background: rgba(37, 99, 235, 0.1);
- color: var(--history-accent);
- border-radius: 6px;
- font-size: 0.75rem;
- text-transform: uppercase;
- letter-spacing: 0.02em;
- }
+ !-- ( - ) --
+ ('' ).''.(,)/
+ --- - '' - '' '-' //.. //.. //. //.. //.. //.. //. //. //.. - '' '-' //.. - '' //.. - '' - '' - '' //.. //.. //. //*.. //.. - '' - ''
+ - /
+ -, -. /
 
- .card-date {
- font-size: 0.85rem;
- color: var(--history-muted);
- }
-
- .card-body {
- padding: 24px;
- display: grid;
- grid-template-columns: 1fr auto 1fr;
- align-items: center;
- gap: 24px;
- }
-
- .file-group {
- display: flex;
- flex-direction: column;
- gap: 12px;
- }
-
- .group-label {
- font-size: 0.75rem;
- font-weight: 700;
- color: var(--history-muted);
- text-transform: uppercase;
- letter-spacing: 0.05em;
- }
-
- .mini-file-list {
- display: flex;
- flex-direction: column;
- gap: 6px;
- }
-
- .mini-file {
- padding: 8px 12px;
- background: var(--history-bg);
- border-radius: 8px;
- font-size: 0.85rem;
- display: flex;
- align-items: center;
- gap: 8px;
- color: var(--history-text);
- }
-
- .mini-file-name {
- white-space: nowrap;
- overflow: hidden;
- text-overflow: ellipsis;
- max-width: 180px;
- }
-
- .arrow-divider {
- font-size: 1.5rem;
- color: var(--history-accent);
- opacity: 0.5;
- }
-
- .result-file {
- background: rgba(37, 99, 235, 0.05);
- border: 1px solid rgba(37, 99, 235, 0.1);
- padding: 16px;
- border-radius: 12px;
- display: flex;
- flex-direction: column;
- gap: 12px;
- }
-
- .result-main {
- display: flex;
- align-items: center;
- gap: 12px;
- }
-
- .result-icon {
- font-size: 2rem;
- background: #fff;
- width: 54px;
- height: 54px;
- display: flex;
- align-items: center;
- justify-content: center;
- border-radius: 10px;
- box-shadow: 0 4px 8px rgba(0,0,0,0.05);
- }
-
- .result-details {
- display: flex;
- flex-direction: column;
- min-width: 0;
- }
-
- .result-name {
- font-weight: 700;
- font-size: 0.95rem;
- color: var(--history-text);
- white-space: nowrap;
- overflow: hidden;
- text-overflow: ellipsis;
- }
-
- .result-meta {
- font-size: 0.8rem;
- color: var(--history-muted);
- }
-
- .result-actions {
- display: flex;
- gap: 10px;
- }
-
- .btn-download {
- flex: 1;
- padding: 10px;
- background: var(--history-accent);
- color: white;
- border: none;
- border-radius: 8px;
- font-weight: 700;
- font-size: 0.85rem;
- cursor: pointer;
- transition: all 0.2s;
- display: flex;
- align-items: center;
- justify-content: center;
- gap: 6px;
- }
-
- .btn-download:hover {
- transform: translateY(-1px);
- box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
- filter: brightness(1.1);
- }
-
- .btn-delete {
- padding: 10px;
- background: #fff;
- border: 1px solid var(--history-border);
- border-radius: 8px;
- cursor: pointer;
- transition: all 0.2s;
- }
-
- .btn-delete:hover {
- background: #fee2e2;
- border-color: #ef4444;
- color: #ef4444;
- }
-
- .empty-state {
- text-align: center;
- padding: 80px 20px;
- background: var(--history-surface);
- border-radius: var(--history-radius);
- border: 1px dashed var(--history-border);
- }
-
- .empty-icon {
- font-size: 4rem;
- margin-bottom: 20px;
- opacity: 0.3;
- }
-
- .empty-state h2 {
- font-size: 1.5rem;
- margin-bottom: 12px;
- color: var(--history-text);
- }
-
- .empty-state p {
- color: var(--history-muted);
- margin-bottom: 30px;
- max-width: 400px;
- margin-left: auto;
- margin-right: auto;
- }
-
- .btn-primary {
- display: inline-block;
- padding: 14px 32px;
- background: var(--history-accent);
- color: white;
- border-radius: 12px;
- font-weight: 700;
- text-decoration: none;
- transition: all 0.2s;
- }
-
- .btn-primary:hover {
- transform: translateY(-2px);
- box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
- }
-
- .privacy-alert {
- display: flex;
- align-items: flex-start;
- gap: 16px;
- padding: 20px;
- background: rgba(16, 185, 129, 0.05);
- border: 1px solid rgba(16, 185, 129, 0.2);
- border-radius: 14px;
- margin-bottom: 30px;
- }
-
- .alert-icon {
- font-size: 1.5rem;
- color: #10b981;
- }
-
- .alert-content h4 {
- font-size: 0.95rem;
- font-weight: 700;
- margin-bottom: 4px;
- color: #065f46;
- }
-
- .alert-content p {
- font-size: 0.85rem;
- color: #065f46;
- opacity: 0.8;
- margin: 0;
- line-height: 1.5;
- }
-
- @media (max-width: 768px) {
- .card-body {
- grid-template-columns: 1fr;
- gap: 16px;
- }
-
- .arrow-divider {
- transform: rotate(90deg);
- text-align: center;
- margin: 4px 0;
- }
-
- .history-stats-bar {
- flex-direction: column;
- align-items: flex-start;
- }
- }
- </style>
- <script src="js/security-shield.js">
-
- function escapeHTML(str) {
- return String(str).replace(/[&<>'"]/g, tag => ({
- '&': '&amp;',
- '<': '&lt;',
- '>': '&gt;',
- "'": '&#39;',
- '"': '&quot;'
- }[tag] || tag));
- }
-</script>
- <!-- Theme Prevention (FOIT) -->
- <script>
- (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
- </script>
-</head>
-
-<body>
- <header class="header">
-<div class="header-content">
- <a href="index.html" class="logo">
- <img src="logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
- <span class="logo-text">OnlinePDFPro</span>
- </a>
- <nav class="nav" id="nav">
- <a href="tools.html" class="nav-link">All Tools</a>
- <a href="about.html" class="nav-link">About</a>
- <a href="help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="history.html">History</a> <a href="#" id="pwaNavInstall" class="nav-link pwa-install-link" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
- <div class="header-actions">
- <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
- <div class="header-search" style="position: relative; margin-right: 8px;">
- <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
- <input type="text" id="historySearch" placeholder="Search history..." style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;" oninput="filterHistory()">
- </div>
- <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
- <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
- <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
- </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
- </div>
- </div>
- </header>
- <div class="mobile-search-bar" id="mobileSearchBar">
- <div class="mobile-search-content">
- <input type="text" id="mobileHistorySearch" placeholder="Search history..." oninput="filterHistoryMobile()">
- <button id="mobileSearchClose">✕</button>
- </div>
- </div>
-
- <main class="history-page">
-
-<div class="history-header">
- <h1>📂 Local History</h1>
- <p>Your privacy matters. All files are stored in your browser's private local storage and never touch our servers.</p>
- </div>
-
- <div class="privacy-alert">
- <span class="alert-icon"></span>
- <div class="alert-content">
- <h4>100% Private & Secure</h4>
- <p>History is persistent only until you clear your browser's site data. Using "Incognito" or "Private" mode will clear history as soon as you close the tab.</p>
- </div>
- </div>
-
- <div id="statsBar" class="history-stats-bar" style="display: none;">
- <div class="stat-item">
- <div class="stat-icon">📑</div>
- <div class="stat-content">
- <span class="stat-value" id="totalCount">0</span>
- <span class="stat-label">Tasks</span>
- </div>
- </div>
- <div class="stat-item">
- <div class="stat-icon">💾</div>
- <div class="stat-content">
- <span class="stat-value" id="totalSize">0 KB</span>
- <span class="stat-label">Used Space</span>
- </div>
- </div>
- <div class="history-actions">
- <button class="btn-action btn-danger" onclick="clearAllHistory()">
- <span>🗑️</span> Clear All History
- </button>
- </div>
- </div>
-
- <div class="history-controls" id="controls" style="display: none;">
- </div>
-
- <div id="historyList" class="history-list">
- <div style="text-align: center; padding: 60px;">
- <p style="color: var(--history-muted);">Loading your history...</p>
- </div>
- </div>
-
-</main>
-
- <script src="js/app.js?v=11"></script>
- <script>
- let allEntries = [];
-
- const ICON_MAP = {
- 'pdf': '📄', 'zip': '📦', 'docx': '📝', 'xlsx': '📊',
- 'pptx': '📽️', 'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️',
- 'csv': '📋', 'txt': '📝', 'webp': '🖼️'
- };
-
- function getFileIcon(filename) {
- const ext = (filename || '').split('.').pop().toLowerCase();
- return ICON_MAP[ext] || '📄';
- }
-
- function formatSize(bytes) {
- if (!bytes || bytes === 0) return '0 Bytes';
- const k = 1024;
- const sizes = ['Bytes', 'KB', 'MB', 'GB'];
- const i = Math.floor(Math.log(bytes) / Math.log(k));
- return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
- }
-
- function formatDate(isoStr) {
- const d = new Date(isoStr);
- return d.toLocaleDateString('en-IN', {
- day: 'numeric', month: 'short', year: 'numeric'
- }) + ' • ' + d.toLocaleTimeString('en-IN', {
- hour: '2-digit', minute: '2-digit'
- });
- }
-
- async function loadHistory(retries = 3) {
- const listContainer = document.getElementById('historyList');
- const statsBar = document.getElementById('statsBar');
- const controls = document.getElementById('controls');
-
- try {
- // Wait for app.js to initialize (more robustly)
- let waitCount = 0;
- while ((!window.OnlinePDFPro || !window.OnlinePDFPro.HistoryDB) && waitCount < 10) {
- await new Promise(r => setTimeout(r, 200));
- waitCount++;
- }
-
- if (!window.OnlinePDFPro || !window.OnlinePDFPro.HistoryDB) {
- throw new Error('Library not initialized. Please refresh the page.');
- }
-
- const HistoryDB = window.OnlinePDFPro.HistoryDB;
- allEntries = await HistoryDB.getAll();
+ !-- --
+ - /
+ - . . .
  
- // Safety check for getStorageUsage (might be missing in cached app.js)
- let usage = { bytes: 0, count: allEntries.length };
- if (typeof HistoryDB.getStorageUsage === 'function') {
- usage = await HistoryDB.getStorageUsage();
- } else {
- usage.bytes = allEntries.reduce((sum, entry) => sum + (entry.size || 0), 0);
- }
+ , 
+ //./.
 
- // If nothing found and we have retries left, try again in case of IDB delay
- if (allEntries.length === 0 && retries > 0) {
- setTimeout(() => loadHistory(retries - 1), 500);
- return;
- }
+ !-- --
+ / /-.
+ / /-.
+ -- /--.
+ /.
+ - # (-- )
+ - # (-- )
 
- if (allEntries.length === 0) {
- statsBar.style.display = 'none';
- controls.style.display = 'none';
- listContainer.innerHTML = `
- <div class="empty-state">
- <div class="empty-icon">📂</div>
- <h2>No History Found</h2>
- <p>You haven't processed any files yet. Try one of our tools to see them appear here.</p>
- <a href="tools.html" class="btn-primary">Explore Tools</a>
- </div>
- `;
- return;
- }
+ //..
+ //.. 
+ //../& 
 
- statsBar.style.display = 'flex';
- controls.style.display = 'flex';
- document.getElementById('totalCount').textContent = allEntries.length;
- document.getElementById('totalSize').textContent = formatSize(usage.bytes);
+ !-- --
+ /.
+ /--.
+ /-.
 
- renderEntries(allEntries);
+ 
+ 
+ --- #
+ --- (---, #)
+ --- (---, #)
+ --- (---, #)
+ --- (---, #)
+ --- (--, #)
+ --- 
+ 
 
- } catch (err) {
- console.error('History load error:', err);
- listContainer.innerHTML = `<div class="empty-state"><h2>Error</h2><p>${err.message}</p></div>`;
- }
- }
+ .- 
+ - 
+ 
+ ((---, ) + ) 
+ - 
+ 
 
- function renderEntries(entries) {
- const listContainer = document.getElementById('historyList');
- if (entries.length === 0) {
- listContainer.innerHTML = '<div style="text-align:center; padding:40px; color:var(--history-muted);">No matching files found.</div>';
- return;
- }
+ .- 
+ - 
+ - 
+ 
 
- listContainer.innerHTML = entries.map(entry => {
- const inputFiles = entry.originalFiles || [];
- const inputHtml = inputFiles.length > 0 
- ? `<div class="mini-file-list">${inputFiles.map(f => `<div class="mini-file"><span class="mini-icon">${getFileIcon(f.name)}</span><span class="mini-file-name" title="${escapeHTML(f.name)}">${escapeHTML(f.name)}</span><span style="opacity:0.5; font-size:0.7rem;">(${formatSize(f.size)})</span></div>`).join('')}</div>`
- : `<div class="mini-file"><i>Not recorded</i></div>`;
+ .- 
+ - .
+ - 
+ (---)
+ - 
+ - -.
+ 
 
- return `
- <div class="history-card" id="card-${entry.id}">
- <div class="card-header">
- <div class="tool-info">
- <span class="tool-badge">${entry.tool || 'Tool'}</span>
- </div>
- <div class="card-date">${formatDate(entry.date)}</div>
- </div>
- <div class="card-body">
- <div class="file-group">
- <label class="group-label">Input Files</label>
- ${inputHtml}
- </div>
- <div class="arrow-divider">→</div>
- <div class="file-group">
- <label class="group-label">Processed Result</label>
- <div class="result-file">
- <div class="result-main">
- <div class="result-icon">${getFileIcon(entry.filename)}</div>
- <div class="result-details">
- <div class="result-name" title="${entry.filename}">${entry.filename}</div>
- <div class="result-meta">${formatSize(entry.size)} • ${entry.type.split('/')[1] || 'FILE'}</div>
- </div>
- </div>
- <div class="result-actions">
- <button class="btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
- <button class="btn-delete" onclick="deleteEntry(${entry.id})" title="Delete from history">🗑️</button>
- </div>
- </div>
- </div>
- </div>
- </div>
- `;
- }).join('');
- }
+ .- 
+ - .
+ (---)
+ - 
+ 
+ 
 
- function filterHistory() {
- const query = document.getElementById('historySearch').value.toLowerCase();
- const filtered = allEntries.filter(entry => 
- entry.filename.toLowerCase().includes(query) || 
- (entry.tool && entry.tool.toLowerCase().includes(query)) ||
- (entry.originalFiles && entry.originalFiles.some(f => f.name.toLowerCase().includes(query)))
- );
- renderEntries(filtered);
- }
+ .-- 
+ 
+ - -
+ - 
+ (---)
+ 
+ - (---)
+ (---)
+ - 
+ - (,,,.)
+ - 
+ 
+ 
 
- function filterHistoryMobile() {
- const query = document.getElementById('mobileHistorySearch').value.toLowerCase();
- const filtered = allEntries.filter(entry => 
- entry.filename.toLowerCase().includes(query) || 
- (entry.tool && entry.tool.toLowerCase().includes(query)) ||
- (entry.originalFiles && entry.originalFiles.some(f => f.name.toLowerCase().includes(query)))
- );
- renderEntries(filtered);
- }
+ .- 
+ 
+ - 
+ 
+ 
 
- async function redownload(id) {
- try {
- const entry = await OnlinePDFPro.HistoryDB.getFile(id);
- if (!entry || !entry.blob) {
- alert('File not found in storage. It may have been cleared by your browser.');
- return;
- }
- const url = URL.createObjectURL(entry.blob);
- const a = document.createElement('a');
- a.href = url;
- a.download = entry.filename;
- document.body.appendChild(a);
- a.click();
- document.body.removeChild(a);
- URL.revokeObjectURL(url);
- } catch (err) {
- alert('Download failed: ' + err.message);
- }
- }
+ .- 
+ - .
+ (, , , .)
+ 
+ 
+ 
+ - 
+ - 
+ - 
+ 
 
- async function deleteEntry(id) {
- if (!confirm('Remove this item from history?')) return;
- try {
- await OnlinePDFPro.HistoryDB.deleteEntry(id);
- const card = document.getElementById('card-' + id);
- if (card) {
- card.style.opacity = '0';
- card.style.transform = 'scale(0.95)';
- card.style.transition = 'all 0.3s ease';
- setTimeout(() => loadHistory(), 300);
- }
- } catch (err) {
- alert('Delete failed: ' + err.message);
- }
- }
+ .- 
+ 
+ - 
+ 
 
- async function clearAllHistory() {
- if (!confirm('Permanently delete all history items? This cannot be undone.')) return;
- try {
- await OnlinePDFPro.HistoryDB.clearAll();
- loadHistory();
- } catch (err) {
- alert('Clear failed: ' + err.message);
- }
- }
+ .- 
+ - 
+ - .
+ (---)
+ 
 
- // Initialize
- document.addEventListener('DOMContentLoaded', loadHistory);
- </script>
-</body>
+ .- 
+ - .
+ (---)
+ - 
+ - .
+ 
 
-</html>
+ .- 
+ 
+ 
+ - 
+ 
+
+ .- 
+ 
+ - 
+ - 
+ - .
+ 
+ .
+ (---)
+ (---)
+ (---)
+ 
+ - 
+ 
+ 
+
+ .- 
+ (---)
+ - (---)
+ 
+
+ .- 
+ #
+ - (, , , .)
+ 
+
+ .- 
+ (, , , .)
+ - #
+ 
+
+ .- 
+ 
+ 
+ - 
+ - 
+ 
+
+ .- 
+ 
+ 
+ - 
+ 
+
+ .- 
+ %
+ 
+ - 
+ (---)
+ (---)
+ (---)
+ - .
+ 
+ - .
+ 
+
+ .- 
+ - (---)
+ 
+
+ .- 
+ 
+ 
+ %
+ (-%)
+ .
+ 
+
+ .- 
+ 
+ 
+ 
+
+ .- 
+ (---)
+ (---)
+ - (---)
+ 
+ ., - .
+ - (,,,.)
+ 
+
+ .- 
+ (-)
+ - (,,,.)
+ - (---)
+ 
+
+ .- 
+ 
+ 
+ - (---)
+ 
+ - -
+ - 
+ - 
+ 
+ 
+
+ .- 
+ 
+ - 
+ 
+ - 
+ (---)
+ - 
+ 
+
+ .- 
+ 
+ (, , , .)
+ (---)
+ - 
+ - .
+ - 
+ - .
+ 
+
+ .- 
+ - .
+ (---)
+ 
+
+ .- 
+ 
+ 
+ -- 
+ - 
+ 
+ 
+
+ .- 
+ 
+ - 
+ 
+ 
+
+ .- 
+ - .
+ - 
+ (---)
+ - 
+ - .
+ 
+
+ .-- 
+ 
+ - 
+ 
+ 
+
+ .- 
+ 
+ (---)
+ - 
+ - .
+ 
+ - 
+ 
+ (---)
+ 
+
+ .-- 
+ - 
+ 
+ - 
+ - 
+ 
+
+ .- 
+ - .
+ (---)
+ .
+ 
+
+ .- 
+ (, , , .)
+ (, , , .)
+ 
+ - 
+ 
+ - 
+ 
+ 
+
+ .- 
+ 
+ - 
+ 
+ 
+
+ .- 
+ - 
+ #
+ 
+ 
+ 
+ - 
+ - 
+ - 
+ - (,,,.)
+ 
+
+ .- 
+ 
+ - 
+ - 
+ 
+
+ .- 
+ - 
+ - .
+ (---)
+ - 
+ 
+ - 
+ 
+
+ .- 
+ - .
+ (---)
+ 
+
+ .- 
+ 
+ 
+ 
+
+ .- 
+ 
+ 
+ (---)
+ 
+ 
+ - 
+ - 
+ - .
+ 
+ .
+ 
+ - 
+ - 
+ 
+ 
+
+ .- 
+ (-)
+ - (, , , .)
+ (.)
+ 
+
+ .- 
+ 
+ #
+ (---)
+ - 
+ 
+ .
+ 
+
+ .- 
+ #
+ - #
+ #
+ 
+
+ .- 
+ - 
+ 
+ (---)
+ - (---)
+ (---)
+ 
+
+ .- 
+ - 
+ - 
+ .
+ 
+
+ .- 
+ - .
+ - 
+ (---)
+ 
+
+ .- 
+ (---)
+ - 
+ - 
+ - 
+ - 
+ 
+
+ .- 
+ -
+ 
+ (---)
+ 
+ - 
+ - 
+ - 
+ .
+ 
+
+ .- 
+ (-)
+ - (, , , .)
+ 
+
+ .- 
+ 
+ - -
+ 
+ 
+ (, , , .)
+ (, , , .)
+ - 
+ - 
+ 
+
+ .- 
+ - .
+ #
+ 
+
+ .- 
+ - .
+ - 
+ - 
+ #
+ 
+
+ .- 
+ - .
+ #
+ .
+ 
+ - .
+ 
+
+ (- ) 
+ .- 
+ -- 
+ 
+ 
+
+ .- 
+ ()
+ - 
+ 
+ 
+
+ .-- 
+ - 
+ - -
+ 
+ 
+ /
+ /-.
+
+ () 
+ ().(/&'/, (
+ '&' '&',
+ '' '&',
+ '' '&',
+ ' '&#',
+ '' '&'
+ ))
+ 
+/
+ !-- () --
+ 
+ (() 
+ .('-') ''
+ ..('-', )
+ )()
+ /
+/
+
+
+ 
+ -
+ . 
+ . - -
+ -/
+ /
+ 
+ . - /
+ . -/
+ . -/
+ - -- ./ # - -- () - - - / . // /
+ /
+ -
+ -- - - - - / . .///
+ - - 
+ % (-%) - . . - - - / . .///
+ ... - (--, #) (---, #) (---, #) - . ., - . ()
+ /
+ - - - (--) -% - - .
+ -- - - - . . .///
+ -- - - - / / / . . . ./ . . . ./ / / . . . ./ . . . .///
+ /
+ - -/
+ /
+ /
+ /
+ -- 
+ --
+ ... ()
+ /
+ /
+ /
+
+ -
+
+ -
+ /
+ . ' ./
+ /
+
+ -
+ -/
+ -
+ % & /
+ ' . ./
+ /
+ /
+
+ -- 
+ -
+ -/
+ -
+ - /
+ -/
+ /
+ /
+ -
+ -/
+ -
+ - /
+ - /
+ /
+ /
+ -
+ - - ()
+ / 
+ /
+ /
+ /
+
+ - 
+ /
+
+ -
+ - 
+ (---) .../
+ /
+ /
+
+/
+
+ /./
+ 
+ 
+
+ 
+ '' '', '' '', '' '', '' '',
+ '' '', '' '', '' '', '' '',
+ '' '', '' '', '' ''
+ 
+
+ () 
+ ( '').('.').().()
+ ''
+ 
+
+ () 
+ (! ) ' '
+ 
+ '', '', '', ''
+ .(.() / .())
+ (( / .(, )).()) + ' ' + 
+ 
+
+ () 
+ ()
+ .('-', 
+ '', '', ''
+ ) + ' ' + .('-', 
+ '-', '-'
+ )
+ 
+
+ ( ) 
+ .('')
+ .('')
+ .('')
+
+ 
+ // . ( )
+ 
+ ((!. !..) && ) 
+ ( (, ))
+ ++
+ 
+
+ (!. !..) 
+ (' . .')
+ 
+
+ ..
+ .()
+ 
+ // ( .)
+ , . 
+ ( . '') 
+ .()
+ 
+ . .((, ) + (. ), )
+ 
+
+ // , 
+ (. && ) 
+ (() ( - ), )
+ 
+ 
+
+ (. ) 
+ .. ''
+ .. ''
+ . 
+ -
+ -/
+ /
+ ' . ./
+ . - /
+ /
+ 
+ 
+ 
+
+ .. ''
+ .. ''
+ .(''). .
+ .(''). (.)
+
+ ()
+
+ () 
+ .(' ', )
+ . -/$.//
+ 
+ 
+
+ () 
+ .('')
+ (. ) 
+ . ' - (---) ./'
+ 
+ 
+
+ . .( 
+ . 
+ . 
+ --$.( - -$(.)/ -- $(.)$(.)/ . -.($(.))//).('')/
+ - //
+
+ 
+ - -$.
+ -
+ -
+ -$. ''/
+ /
+ -$(.)/
+ /
+ -
+ -
+ - /
+ $
+ /
+ -/
+ -
+ - /
+ -
+ -
+ -$(.)/
+ -
+ - $.$./
+ -$(.) $..('/') ''/
+ /
+ /
+ -
+ - ($.) /
+ - ($.) /
+ /
+ /
+ /
+ /
+ /
+ 
+ ).('')
+ 
+
+ () 
+ .('')..()
+ .( 
+ ..().() 
+ (. && ..().()) 
+ (. && ..( ..().()))
+ )
+ ()
+ 
+
+ () 
+ .('')..()
+ .( 
+ ..().() 
+ (. && ..().()) 
+ (. && ..( ..().()))
+ )
+ ()
+ 
+
+ () 
+ 
+ ..()
+ (! !.) 
+ (' . .')
+ 
+ 
+ .(.)
+ .('')
+ . 
+ . .
+ ..()
+ .()
+ ..()
+ .()
+ () 
+ (' ' + .)
+ 
+ 
+
+ () 
+ (!(' ')) 
+ 
+ ..()
+ .('-' + )
+ () 
+ .. ''
+ .. '(.)'
+ .. ' . '
+ (() (), )
+ 
+ () 
+ (' ' + .)
+ 
+ 
+
+ () 
+ (!(' .')) 
+ 
+ ..()
+ ()
+ () 
+ (' ' + .)
+ 
+ 
+
+ // 
+ .('', )
+ /
+/
+
+/
