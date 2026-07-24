@@ -283,39 +283,39 @@
  <div class="fixed-top-bar"
  style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 16px 24px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
  <button onclick="openSignatureModal()"
- style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">✍️
+ style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
  Draw Signature</button>
 
  <!-- Page navigation: prev/next instead of scroll -->
  <div style="display: flex; align-items: center; gap: 8px;">
  <button id="prevPageBtn" onclick="prevPage()"
  style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
- disabled>◀</button>
+ disabled></button>
  <span id="pageIndicator"
  style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); min-width: 100px; text-align: center;">Page
  1 / 1</span>
  <button id="nextPageBtn" onclick="nextPage()"
- style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">▶</button>
+ style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"></button>
  </div>
  <select id="pageSelector" style="display:none;"></select>
 
  <button id="applyAllBtn" onclick="applyToAll()"
- style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">📋
+ style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
  Apply to All Pages</button>
 
  <button onclick="downloadPDF()"
- style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">📥
+ style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">
  Download Signed PDF</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">🔄 Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'"> Process Another File</button>
 
  <button onclick="clearAll()"
- style="padding: 10px 20px; background: var(--surface-2); color: #ef4444; border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">🗑
+ style="padding: 10px 20px; background: var(--surface-2); color: #ef4444; border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
  Clear All</button>
  </div>
 
  <div id="pages-container" class="fade-in">
  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 12px; text-align: center;">Draw
- a signature, then drag it anywhere on the page. Use ◀ ▶ to switch pages.</p>
+ a signature, then drag it anywhere on the page. Use   to switch pages.</p>
  <div id="pages" style="text-align: center;"></div>
  </div>
  </div>

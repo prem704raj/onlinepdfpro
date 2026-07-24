@@ -314,16 +314,16 @@
  Download as professional PDF</p>
 
  <div class="templates">
- <button class="template-btn" onclick="loadTemplate('resume')">📄 Resume Template</button>
- <button class="template-btn" onclick="loadTemplate('invoice')">🧾 Invoice Template</button>
- <button class="template-btn" onclick="loadTemplate('letter')">✉️ Letter Template</button>
- <button class="template-btn" onclick="loadTemplate('report')">📊 Report Template</button>
+ <button class="template-btn" onclick="loadTemplate('resume')"> Resume Template</button>
+ <button class="template-btn" onclick="loadTemplate('invoice')"> Invoice Template</button>
+ <button class="template-btn" onclick="loadTemplate('letter')">✉ Letter Template</button>
+ <button class="template-btn" onclick="loadTemplate('report')"> Report Template</button>
  </div>
 
  <div class="editor-container">
  <div class="editor-tabs">
- <button class="editor-tab active" onclick="showTab('code')">✏️ Code</button>
- <button class="editor-tab" onclick="showTab('preview')">👁️ Preview</button>
+ <button class="editor-tab active" onclick="showTab('code')"> Code</button>
+ <button class="editor-tab" onclick="showTab('preview')"> Preview</button>
  </div>
 
  <textarea class="code-area" id="codeArea" placeholder="Type or paste your HTML here...
@@ -356,7 +356,7 @@ Example:
  <option value="15" selected>Medium</option>
  <option value="25">Large</option>
  </select>
- <button onclick="downloadPDF()" class="dl-btn">📥 Download PDF</button>
+ <button onclick="downloadPDF()" class="dl-btn"> Download PDF</button>
  </div>
  </div>
 
@@ -407,7 +407,7 @@ Example:
  if (!html.trim()) return alert('Write or paste some HTML first!');
 
  const btn = document.querySelector('.dl-btn');
- btn.textContent = '⏳ Generating PDF...';
+ btn.textContent = ' Generating PDF...';
  btn.disabled = true;
 
  try {
@@ -503,7 +503,7 @@ Example:
  console.error('PDF generation error:', err);
  alert('Error generating PDF: ' + err.message);
  } finally {
- btn.textContent = '📥 Download PDF';
+ btn.textContent = ' Download PDF';
  btn.disabled = false;
  }
  }

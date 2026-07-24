@@ -406,7 +406,7 @@
  <div class="upload-zone glass-card fade-in" id="dropArea"
  style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
  <span class="upload-icon"
- style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;">✂️</span>
+ style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;"></span>
  <p class="upload-text"
  style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
  Drop your PDF here</p>
@@ -414,7 +414,7 @@
  trim PDF pages</p>
  <span class="btn btn-primary"
  style="display: inline-flex; align-items: center; gap: 8px; pointer-events: none;">
- <span>📄</span> Click to Upload
+ <span></span> Click to Upload
  </span>
  <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
  Max file size: 100MB. Processing happens instantly on your device.
@@ -457,7 +457,7 @@
  </div>
 
  <div class="apply-section">
- <button onclick="cropAndDownload()" class="apply-btn">✂️ Crop & Download PDF</button>
+ <button onclick="cropAndDownload()" class="apply-btn"> Crop & Download PDF</button>
  </div>
  </div>
 
@@ -516,7 +516,7 @@
  if (toolHeader) toolHeader.style.display = 'none';
 
  document.getElementById('fileInfo').style.display = 'block';
- document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+ document.getElementById('fileInfo').textContent = ' ' + file.name + ' — ' + totalPages + ' pages';
  document.getElementById('cropContainer').style.display = 'block';
 
  await renderPage();
