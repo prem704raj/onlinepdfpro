@@ -1,496 +1,496 @@
-! 
- 
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <!-- Primary Meta Tags -->
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>PDF Scratchpad Free Online | OnlinePDFPro</title>
+ <meta name="description"
+ content="A free, offline-capable browser notepad designed for drafting text and organizing content extracted from PDFs. Auto-saves in real-time.">
+ <meta name="keywords"
+ content="pdf scratchpad, online notepad, browser notepad, text extractor pad, offline notepad, pdf notes">
+ <meta name="author" content="OnlinePDFPro">
+ <meta name="robots" content="index, follow">
+ <link rel="canonical" href="https://onlinepdfpro.com/pdf-scratchpad.html">
 
- !-- ( - ) --
- ('' ).''.(,)/
- --- - '' - '' '-' //.. //.. //. //.. //.. //.. //. //. //.. - '' '-' //.. - '' //.. - '' - '' - '' //.. //.. //. //*.. //.. - '' - ''
- !-- --
- -
- -, -.
- /
- 
- , - . - -.
- 
- , , , , , 
- 
- , 
- //./-.
+ <!-- Open Graph -->
+ <meta property="og:type" content="website">
+ <meta property="og:url" content="https://onlinepdfpro.com/pdf-scratchpad.html">
+ <meta property="og:title" content="PDF Scratchpad Free Online | OnlinePDFPro">
+ <meta property="og:description"
+ content="Organize your extracted PDF text or draft new content with our real-time auto-saving browser notepad.">
+ <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+ <meta property="og:site_name" content="OnlinePDFPro">
+ <meta property="og:locale" content="en_US">
 
- !-- --
- 
- //./-.
- 
- 
- - - .
- //.//--.
- 
- 
+ <!-- Favicons -->
+ <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+ <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+ <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+ <link rel="manifest" href="/site.webmanifest">
+ <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+ <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
- !-- --
- / /-.
- / /-.
- -- /--.
- /.
- - # (-- )
- - # (-- )
+ <link rel="stylesheet" href="css/style.css?v=7">
+ <link rel="stylesheet" href="css/mobile-fix-v2.css">
+ <link rel="stylesheet" href="css/tools-v2.css">
 
- /.
- /--.
- /-.
+ <style>
+ .container {
+ max-width: 1180px;
+ margin: 0 auto;
+ padding: 0 20px;
+ }
 
- 
- . 
- - 
- 
- 
- 
+ body {
+ color: var(--text-primary) !important;
+ }
 
- 
- (---) !
- 
+ .workspace-grid {
+ display: grid;
+ grid-template-columns: 280px 1fr;
+ gap: 20px;
+ margin: 28px auto;
+ max-width: 1180px;
+ height: 70vh;
+ min-height: 500px;
+ }
 
- .- 
- 
- -- 
- 
- 
- - 
- 
- - 
- 
+ .sidebar {
+ background: var(--surface-1);
+ border-radius: 20px;
+ border: 1px solid var(--border);
+ box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+ padding: 20px;
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+ overflow: hidden;
+ }
 
- . 
- (---)
- - 
- (--)
- - (, , , .)
- 
- 
- - 
- 
- 
- 
+ .sidebar-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
 
- .- 
- 
- - -
- - 
- 
+ .sidebar-header h3 {
+ margin: 0;
+ font-size: 18px;
+ color: var(--text-primary);
+ }
 
- .- 
- 
- - 
- (---)
- 
+ .btn-new-note {
+ background: linear-gradient(135deg, #2563eb, #1d4ed8);
+ color: white;
+ border: none;
+ border-radius: 10px;
+ padding: 8px 14px;
+ font-size: 13px;
+ font-weight: 700;
+ cursor: pointer;
+ box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+ transition: transform 0.2s;
+ }
 
- .-- 
- -(, #, #)
- 
- 
- - 
- 
- - 
- - 
- 
- - (, , , .)
- .
- 
+ .btn-new-note:hover {
+ transform: translateY(-1px);
+ }
 
- .-- 
- (-)
- 
+ .notes-list {
+ list-style: none;
+ padding: 0;
+ margin: 0;
+ overflow-y: auto;
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+ }
 
- .- 
- - 
- 
- 
- - 
- 
- 
- - 
- 
- 
+ .note-item {
+ padding: 12px;
+ border-radius: 10px;
+ background: var(--surface-2);
+ border: 1px solid transparent;
+ cursor: pointer;
+ transition: all 0.2s;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
 
- .- 
- 
- - 
- (---)
- 
- 
- .
- 
- - -
- - 
- 
+ .note-item:hover {
+ border-color: var(--border);
+ background: var(--surface-hover, rgba(0,0,0,0.02));
+ }
 
- .- 
- - (--)
- (---, (,,,.))
- 
+ .note-item.active {
+ border-color: var(--accent);
+ background: rgba(37, 99, 235, 0.05);
+ }
 
- .-. 
- - (--)
- (, , , .)
- 
+ .note-title {
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--text-primary);
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ max-width: 170px;
+ }
 
- .- 
- - 
- - 
- (---)
- - 
- 
- - 
- - 
- 
+ .note-date {
+ font-size: 11px;
+ color: var(--text-secondary);
+ margin-top: 4px;
+ display: block;
+ }
 
- .- 
- - 
- (---)
- - 
- 
- 
+ .btn-delete {
+ background: none;
+ border: none;
+ color: var(--text-secondary);
+ cursor: pointer;
+ padding: 4px;
+ border-radius: 4px;
+ opacity: 0.5;
+ transition: opacity 0.2s, color 0.2s;
+ }
 
- .- 
- 
- 
- (---)
- 
- 
- - 
- .
- ., .
- 
+ .note-item:hover.btn-delete {
+ opacity: 1;
+ }
 
- .-.- 
- 
- 
+ .btn-delete:hover {
+ color: #ef4444;
+ background: rgba(239, 68, 68, 0.1);
+ }
 
- .- 
- #
- (, , , .)
- 
+ .editor-area {
+ background: var(--surface-1);
+ border-radius: 20px;
+ border: 1px solid var(--border);
+ box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+ padding: 24px;
+ display: flex;
+ flex-direction: column;
+ }
 
- .- 
- (---)
- - 
- (--)
- - (, , , .)
- 
- 
- - 
- 
+ .editor-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 16px;
+ }
 
- .- 
- 
- - -
- - 
- - 
- 
+ .editor-title-input {
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--text-primary);
+ border: none;
+ background: transparent;
+ outline: none;
+ width: 100%;
+ max-width: 600px;
+ }
 
- .-- 
- - 
- - 
- (---)
- 
- 
- 
- %
- - 
- 
+ .editor-title-input:focus {
+ border-bottom: 2px solid var(--accent);
+ }
 
- .-- 
- - (--)
- 
+ .textarea {
+ width: 100%;
+ flex: 1;
+ border: none;
+ background: transparent;
+ color: var(--text-primary);
+ font-size: 16px;
+ line-height: 1.6;
+ resize: none;
+ outline: none;
+ font-family: inherit;
+ }
 
- . 
- %
- 
- 
- 
- (---)
- - 
- - .
- 
- 
- - 
- 
+ .status-bar {
+ margin-top: 10px;
+ padding-top: 10px;
+ border-top: 1px solid var(--border);
+ display: flex;
+ justify-content: space-between;
+ font-size: 12px;
+ color: var(--text-secondary);
+ }
 
- .- 
- - 
- - 
- - (--)
- 
- - -
- - 
- (---)
- 
+ @media (max-width: 900px) {
+ .workspace-grid {
+ grid-template-columns: 1fr;
+ height: auto;
+ }
+ .sidebar {
+ max-height: 250px;
+ }
+ .editor-area {
+ height: 500px;
+ }
+ }
+ </style>
+ <script src="js/security-shield.js"></script>
+ <!-- Theme Prevention (FOIT) -->
+ <script>
+ (function() {
+ var theme = localStorage.getItem('doctools-theme') || 'light';
+ document.documentElement.setAttribute('data-theme', theme);
+ })();
+ </script>
+</head>
 
- (- ) 
- .- 
- -- 
- 
- 
- . 
- - 
- 
- .- 
- 
- 
- 
- /
- /-./
- !-- () --
- 
- (() 
- .('-') ''
- ..('-', )
- )()
- /
-/
+<body>
+ <a href="#main" class="skip-link">Skip to main content</a>
 
+ <header class="header">
+<div class="header-content">
+ <a href="index.html" class="logo">
+ <img src="logo.png" alt="OnlinePDFPro" class="logo-icon"
+ style="width:28px; height:28px; border-radius:6px;">
+ <span class="logo-text">OnlinePDFPro</span>
+ </a>
+ <nav class="nav" id="nav">
+ <a href="tools.html" class="nav-link">All Tools</a>
+ <a href="about.html" class="nav-link">About</a>
+ <a href="help.html" class="nav-link">Help</a> </nav>
+ <div class="header-actions">
+ <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+ style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+ </button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ </div>
+ </div>
+ </header>
 
- # - /
+ <main id="main" class="tool-page">
 
- 
- -
- . 
- . -
- -
- -/
- /
- 
- . - /
- . -/
- . -/ /
- -
- - - 
- - (--, #) -% - - .
- -- - - - . . .///
- -- - - - / / / . . . ./ . . . ./ / / . . . ./ . . . .///
- /
- - -/
- /
- /
- /
+<div class="container">
+ <div class="tool-header" style="text-align:center; margin-bottom:20px;">
+ <span class="section-tag"
+ style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Productivity</span>
+ <h1 class="tool-title"
+ style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">PDF Scratchpad</h1>
+ <p class="tool-description"
+ style="color:var(--text-secondary); font-size:1rem; max-width:740px; margin:0 auto; line-height:1.6;">An offline-capable notepad for your browser. Perfect for drafting content or pasting text extracted from PDFs. Everything auto-saves locally on your device.</p>
+ </div>
 
- -
+ <div class="workspace-grid">
+ <aside class="sidebar">
+ <div class="sidebar-header">
+ <h3>Your Notes</h3>
+ <button class="btn-new-note" id="newNoteBtn">+ New</button>
+ </div>
+ <ul class="notes-list" id="notesList">
+ <!-- Notes will be injected here -->
+ </ul>
+ </aside>
 
- 
- - - -
- -
- - (,,,.) (--) - -. - - - -/
- -
- -. - (---) -. /
- -
- (---) - - -. - . . - ./
- /
+ <section class="editor-area">
+ <div class="editor-header">
+ <input type="text" class="editor-title-input" id="noteTitle" placeholder="Note Title...">
+ <button class="btn-new-note" id="downloadBtn" style="background: linear-gradient(135deg, #10b981, #059669);">⬇ Download TXT</button>
+ </div>
+ <textarea class="textarea" id="noteContent" placeholder="Start typing here..."></textarea>
+ <div class="status-bar">
+ <span id="saveStatus">Saved</span>
+ <span><span id="wordCount">0</span> words | <span id="charCount">0</span> chars</span>
+ </div>
+ </section>
+ </div>
+ </div>
 
- -
- 
- -
- /
- -- + /
- /
- - 
- !-- --
- /
- /
+</main>
 
- -
- -
- -- ...
- -- -(, #, #) /
- /
- .../
- -
- /
- / / /
- /
- /
- /
- /
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ const notesList = document.getElementById('notesList');
+ const noteTitleInput = document.getElementById('noteTitle');
+ const noteContentInput = document.getElementById('noteContent');
+ const newNoteBtn = document.getElementById('newNoteBtn');
+ const downloadBtn = document.getElementById('downloadBtn');
+ const saveStatus = document.getElementById('saveStatus');
+ const wordCountSpan = document.getElementById('wordCount');
+ const charCountSpan = document.getElementById('charCount');
 
-/
+ let notes = JSON.parse(localStorage.getItem('pdf_scratchpad_notes')) || [];
+ let activeNoteId = null;
+ let saveTimeout = null;
 
- 
- .('', () 
- .('')
- .('')
- .('')
- .('')
- .('')
- .('')
- .('')
- .('')
+ // Initialize
+ if (notes.length === 0) {
+ createNewNote();
+ } else {
+ renderNotesList();
+ setActiveNote(notes[0].id);
+ }
 
- .(.('')) 
+ // Event Listeners
+ newNoteBtn.addEventListener('click', createNewNote);
  
- 
+ noteTitleInput.addEventListener('input', () => {
+ triggerSave();
+ updateActiveNoteInList();
+ });
 
- // 
- (. ) 
- ()
- 
- ()
- (.)
- 
+ noteContentInput.addEventListener('input', () => {
+ triggerSave();
+ updateCounts();
+ });
 
- // 
- .('', )
+ downloadBtn.addEventListener('click', () => {
+ const activeNote = notes.find(n => n.id === activeNoteId);
+ if (!activeNote) return;
  
- .('', () 
- ()
- ()
- )
+ const blob = new Blob([activeNote.content], { type: 'text/plain' });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = (activeNote.title || 'Untitled_Note').replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.txt';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+ });
 
- .('', () 
- ()
- ()
- )
+ function generateId() {
+ return Date.now().toString(36) + Math.random().toString(36).substring(2);
+ }
 
- .('', () 
- .( . )
- (!) 
- 
- (., '/' )
- .()
- .('')
- . 
- . (. '').(/--/, '').() + '.'
- ..()
- .()
- ..()
- .()
- )
+ function createNewNote() {
+ const newNote = {
+ id: generateId(),
+ title: 'Untitled Note',
+ content: '',
+ updatedAt: new Date().toISOString()
+ };
+ notes.unshift(newNote); // Add to beginning
+ saveToLocalStorage();
+ renderNotesList();
+ setActiveNote(newNote.id);
+ }
 
- () 
- .().() + .().().()
+ function deleteNote(id, event) {
+ event.stopPropagation();
+ notes = notes.filter(n => n.id !== id);
+ saveToLocalStorage();
  
+ if (notes.length === 0) {
+ createNewNote();
+ } else if (activeNoteId === id) {
+ setActiveNote(notes[0].id);
+ } else {
+ renderNotesList();
+ }
+ }
 
- () 
- 
- (),
- ' ',
- '',
- ().()
- 
- .() // 
- ()
- ()
- (.)
- 
+ function setActiveNote(id) {
+ activeNoteId = id;
+ const note = notes.find(n => n.id === id);
+ if (note) {
+ noteTitleInput.value = note.title;
+ noteContentInput.value = note.content;
+ updateCounts();
+ renderNotesList(); // Update active class
+ }
+ }
 
- (, ) 
- .()
- .( . ! )
- ()
- 
- (. ) 
- ()
- ( ) 
- (.)
- 
- ()
- 
- 
+ function triggerSave() {
+ saveStatus.textContent = 'Saving...';
+ saveStatus.style.color = '#eab308'; // yellow
+ clearTimeout(saveTimeout);
+ saveTimeout = setTimeout(saveActiveNote, 500);
+ }
 
- () 
+ function saveActiveNote() {
+ if (!activeNoteId) return;
  
- .( . )
- () 
- . .
- . .
- ()
- () // 
+ const noteIndex = notes.findIndex(n => n.id === activeNoteId);
+ if (noteIndex > -1) {
+ notes[noteIndex].title = noteTitleInput.value;
+ notes[noteIndex].content = noteContentInput.value;
+ notes[noteIndex].updatedAt = new Date().toISOString();
  
+ // Move to top if updated
+ const updatedNote = notes.splice(noteIndex, 1)[0];
+ notes.unshift(updatedNote);
  
+ saveToLocalStorage();
+ renderNotesList();
+ 
+ saveStatus.textContent = 'Saved';
+ saveStatus.style.color = '#10b981'; // green
+ }
+ }
 
- () 
- . '...'
- .. '#' // 
- ()
- (, )
- 
+ function saveToLocalStorage() {
+ localStorage.setItem('pdf_scratchpad_notes', JSON.stringify(notes));
+ }
 
- () 
- (!) 
- 
- .( . )
- ( -) 
- . .
- . .
- . ().()
- 
- // 
- .(, )
- .()
- 
- ()
- ()
- 
- . ''
- .. '#' // 
- 
- 
+ function formatDate(isoString) {
+ const date = new Date(isoString);
+ return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+ }
 
- () 
- .('', .())
+ function renderNotesList() {
+ notesList.innerHTML = '';
+ notes.forEach(note => {
+ const li = document.createElement('li');
+ li.className = `note-item ${note.id === activeNoteId ? 'active' : ''}`;
+ li.onclick = () => setActiveNote(note.id);
  
+ li.innerHTML = `
+ <div>
+ <div class="note-title" title="${escapeHtml(note.title || 'Untitled Note')}">
+ ${escapeHtml(note.title || 'Untitled Note')}
+ </div>
+ <span class="note-date">${formatDate(note.updatedAt)}</span>
+ </div>
+ <button class="btn-delete" title="Delete Note">✖</button>
+ `;
+ 
+ const deleteBtn = li.querySelector('.btn-delete');
+ deleteBtn.onclick = (e) => deleteNote(note.id, e);
+ 
+ notesList.appendChild(li);
+ });
+ }
 
- () 
- ()
- .() + ' ' + .(, '-', '-')
- 
+ function updateActiveNoteInList() {
+ const activeLi = notesList.querySelector('.note-item.active.note-title');
+ if (activeLi) {
+ activeLi.textContent = noteTitleInput.value || 'Untitled Note';
+ }
+ }
 
- () 
- . ''
- .( 
- .('')
- . - $. '' ''
- . () (.)
- 
- . 
- 
- - $(. ' ')
- $(. ' ')
- /
- -$(.)/
- /
- - /
- 
- 
- .('.-')
- . () (., )
- 
- .()
- )
- 
+ function updateCounts() {
+ const text = noteContentInput.value || '';
+ const words = text.match(/[a-zA-Z0-9'-]+/g);
+ wordCountSpan.textContent = words ? words.length : 0;
+ charCountSpan.textContent = text.length;
+ }
 
- () 
- .('.-..-')
- () 
- . . ' '
- 
- 
-
- () 
- . ''
- .(/---'-+/)
- . . 
- . .
- 
-
- () 
- ( '').()
- .(/&/, &)
- .(//, &)
- .(//, &)
- .(//, &)
- .(/'/, &#)
- 
- )
- /
- /./
-/
-/
+ function escapeHtml(unsafe) {
+ return (unsafe || '').toString()
+ .replace(/&/g, "&amp;")
+ .replace(/</g, "&lt;")
+ .replace(/>/g, "&gt;")
+ .replace(/"/g, "&quot;")
+ .replace(/'/g, "&#039;");
+ }
+ });
+ </script>
+ <script defer src="js/app.js?v=11"></script>
+</body>
+</html>
