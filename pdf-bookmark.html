@@ -374,7 +374,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="dropArea" style="animation-delay: 0.2s; cursor: pointer;">
- <span class="upload-icon">📑</span>
+ <span class="upload-icon"></span>
  <p class="upload-text">Drop your PDF here or Click to Upload</p>
  <p class="upload-hint">Add bookmarks, table of contents &amp; navigation to your PDF</p>
  <input type="file" id="fileInput" accept=".pdf" hidden>
@@ -382,28 +382,28 @@
  </div>
  <div class="file-info" id="fileInfo"></div>
  <div class="bookmark-editor" id="bookmarkEditor">
- <h2 style="text-align:center;color:var(--text-primary);margin:0 0 5px">📑 PDF Bookmark Editor</h2>
+ <h2 style="text-align:center;color:var(--text-primary);margin:0 0 5px"> PDF Bookmark Editor</h2>
  <p style="text-align:center;color:var(--text-secondary);margin:0 0 25px">Add bookmarks to quickly navigate to important pages
  </p>
  <div class="editor-layout">
  <div class="bookmarks-panel">
- <h3>📚 Bookmarks <button class="add-btn" onclick="addBookmark()">+ Add</button></h3>
+ <h3> Bookmarks <button class="add-btn" onclick="addBookmark()">+ Add</button></h3>
  <div class="bookmark-list" id="bookmarkList">
  <div class="empty-state" id="emptyState">
- <div class="icon">📖</div>
+ <div class="icon"></div>
  <p>No bookmarks yet.<br>Click "+ Add" to create one.</p>
  </div>
  </div>
  </div>
  <div class="preview-panel">
- <div class="preview-header"><span>📄 Preview</span>
+ <div class="preview-header"><span> Preview</span>
  <div class="preview-nav"><button onclick="prevPage()">← Prev</button><span id="pageInfo"
  style="padding:8px">Page 1 / 1</span><button onclick="nextPage()">Next →</button></div>
  </div>
  <div class="preview-canvas-container"><canvas id="previewCanvas"></canvas></div>
  </div>
  </div>
- <div class="save-section"><button onclick="savePDFWithBookmarks()" class="save-btn">📥 Save PDF with
+ <div class="save-section"><button onclick="savePDFWithBookmarks()" class="save-btn"> Save PDF with
  Bookmarks</button></div>
  </div>
 
@@ -425,7 +425,7 @@
  async function loadPDF(file) {
  if (!file) return; _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
  pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
- document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+ document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = ' ' + file.name + ' — ' + totalPages + ' pages';
  document.getElementById('bookmarkEditor').style.display = 'block'; document.getElementById('dropArea').style.display = 'none'; await renderPage(currentPage);
  }
  async function renderPage(num) {
@@ -446,7 +446,7 @@
  empty.style.display = 'none'; let h = '';
  bookmarks.forEach(bm => {
  let opts = ''; for (let i = 1; i <= totalPages; i++)opts += '<option value="' + i + '"' + (bm.page === i ? ' selected' : '') + '>Page ' + i + '</option>';
- h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:var(--surface-2);border:none;border-radius:8px;cursor:pointer;font-size:14px">👁️</button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')">🗑️</button></div></div>';
+ h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:var(--surface-2);border:none;border-radius:8px;cursor:pointer;font-size:14px"></button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')"></button></div></div>';
  });
  list.innerHTML = h;
  const items = list.querySelectorAll('.bookmark-item'); items.forEach(item => {

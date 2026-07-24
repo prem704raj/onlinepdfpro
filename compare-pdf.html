@@ -552,13 +552,13 @@
  <h2 style="text-align:center; margin:30px 0;">Upload Two PDF Files to Compare</h2>
  <div class="upload-row">
  <div class="upload-box" id="box1" onclick="document.getElementById('file1').click()">
- <h3>📄 PDF 1</h3>
+ <h3> PDF 1</h3>
  <p>Click to upload first PDF</p>
  <div class="file-name" id="name1"></div>
  <input type="file" id="file1" accept=".pdf" hidden />
  </div>
  <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
- <h3>📄 PDF 2</h3>
+ <h3> PDF 2</h3>
  <p>Click to upload second PDF</p>
  <div class="file-name" id="name2"></div>
  <input type="file" id="file2" accept=".pdf" hidden />
@@ -571,7 +571,7 @@
  <div class="viewer-toolbar">
  <button class="btn-highlight" id="btnHighlight" onclick="toggleHighlight()"> Highlight Similar
  Text</button>
- <button class="btn-new-compare" onclick="newCompare()">🔄 New Compare</button>
+ <button class="btn-new-compare" onclick="newCompare()"> New Compare</button>
  </div>
 
  <div class="color-picker-row" id="colorPicker"
@@ -595,13 +595,13 @@
  <!-- PDF 1 Panel -->
  <div class="pdf-panel panel-1">
  <div class="panel-header">
- <span class="panel-title">📄 <span id="viewer-name1">PDF 1</span></span>
+ <span class="panel-title"> <span id="viewer-name1">PDF 1</span></span>
  <div class="page-controls">
- <button onclick="changePage(1, -1)" id="prev1">◀</button>
+ <button onclick="changePage(1, -1)" id="prev1"></button>
  <input type="number" class="page-input" id="pageInput1" value="1" min="1"
  onchange="jumpToPage(1)" />
  <span class="page-total" id="pageTotal1">/ 1</span>
- <button onclick="changePage(1, 1)" id="next1">▶</button>
+ <button onclick="changePage(1, 1)" id="next1"></button>
  <div class="zoom-controls">
  <button onclick="zoomPanel(1, -1)" id="zoomOut1" title="Zoom Out">−</button>
  <span class="zoom-level" id="zoomLevel1">100%</span>
@@ -620,13 +620,13 @@
  <!-- PDF 2 Panel -->
  <div class="pdf-panel panel-2">
  <div class="panel-header">
- <span class="panel-title">📄 <span id="viewer-name2">PDF 2</span></span>
+ <span class="panel-title"> <span id="viewer-name2">PDF 2</span></span>
  <div class="page-controls">
- <button onclick="changePage(2, -1)" id="prev2">◀</button>
+ <button onclick="changePage(2, -1)" id="prev2"></button>
  <input type="number" class="page-input" id="pageInput2" value="1" min="1"
  onchange="jumpToPage(2)" />
  <span class="page-total" id="pageTotal2">/ 1</span>
- <button onclick="changePage(2, 1)" id="next2">▶</button>
+ <button onclick="changePage(2, 1)" id="next2"></button>
  <div class="zoom-controls">
  <button onclick="zoomPanel(2, -1)" id="zoomOut2" title="Zoom Out">−</button>
  <span class="zoom-level" id="zoomLevel2">100%</span>
@@ -680,7 +680,7 @@
  var file = e.target.files[0];
  if (!file) return;
  try {
- document.getElementById('name1').textContent = '⏳ Loading...';
+ document.getElementById('name1').textContent = ' Loading...';
  document.getElementById('box1').classList.add('loaded');
  var arrayBuffer = await file.arrayBuffer();
  pdfDoc1 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
@@ -688,7 +688,7 @@
  document.getElementById('viewer-name1').textContent = file.name;
  checkBothLoaded();
  } catch (err) {
- document.getElementById('name1').textContent = '❌ Error loading PDF';
+ document.getElementById('name1').textContent = ' Error loading PDF';
  alert('Error loading PDF 1: ' + err.message);
  }
  });
@@ -697,7 +697,7 @@
  var file = e.target.files[0];
  if (!file) return;
  try {
- document.getElementById('name2').textContent = '⏳ Loading...';
+ document.getElementById('name2').textContent = ' Loading...';
  document.getElementById('box2').classList.add('loaded');
  var arrayBuffer = await file.arrayBuffer();
  pdfDoc2 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
@@ -705,7 +705,7 @@
  document.getElementById('viewer-name2').textContent = file.name;
  checkBothLoaded();
  } catch (err) {
- document.getElementById('name2').textContent = '❌ Error loading PDF';
+ document.getElementById('name2').textContent = ' Error loading PDF';
  alert('Error loading PDF 2: ' + err.message);
  }
  });
@@ -895,7 +895,7 @@
  var btn = document.getElementById('btnHighlight');
  var picker = document.getElementById('colorPicker');
  if (highlightActive) {
- btn.textContent = '❌ Hide Highlights';
+ btn.textContent = ' Hide Highlights';
  btn.classList.add('active');
  picker.style.display = 'flex';
  applyHighlights();

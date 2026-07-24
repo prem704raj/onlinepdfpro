@@ -619,28 +619,28 @@
  <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Convert text or PDF documents to audio with 50+ voices in multiple languages. Free and instant.</p>
  </div>
 <div class="audio-container">
- <h2 style="text-align:center;color:var(--text-primary);margin:0 0 10px">🎧 Text to Speech &amp; PDF to Audio</h2>
+ <h2 style="text-align:center;color:var(--text-primary);margin:0 0 10px"> Text to Speech &amp; PDF to Audio</h2>
  <p style="text-align:center;color:var(--text-secondary);margin:0 0 30px">Type text, paste content, or upload PDF — Listen
  with 50+ voices</p>
- <div class="tab-switcher"><button class="tab-btn active" onclick="switchTab('text')">✏️ Type
- Text</button><button class="tab-btn" onclick="switchTab('pdf')">📄 Upload PDF</button></div>
+ <div class="tab-switcher"><button class="tab-btn active" onclick="switchTab('text')"> Type
+ Text</button><button class="tab-btn" onclick="switchTab('pdf')"> Upload PDF</button></div>
  <div class="input-section active" id="textTab">
  <textarea class="text-input-area" id="textInput"
  placeholder="Type or paste your text here... Click Play to listen!"></textarea>
  <div class="templates-section">
- <h3>📝 Quick Templates</h3>
+ <h3> Quick Templates</h3>
  <div class="template-btns">
- <button class="template-btn" onclick="loadTemplate('greeting')">👋 Greeting</button>
- <button class="template-btn" onclick="loadTemplate('story')">📖 Short Story</button>
- <button class="template-btn" onclick="loadTemplate('news')">📰 News Sample</button>
- <button class="template-btn" onclick="loadTemplate('poem')">🎭 Poem</button>
+ <button class="template-btn" onclick="loadTemplate('greeting')"> Greeting</button>
+ <button class="template-btn" onclick="loadTemplate('story')"> Short Story</button>
+ <button class="template-btn" onclick="loadTemplate('news')"> News Sample</button>
+ <button class="template-btn" onclick="loadTemplate('poem')"> Poem</button>
  <button class="template-btn" onclick="loadTemplate('hindi')">🇮🇳 Hindi Text</button>
  </div>
  </div>
  </div>
  <div class="input-section" id="pdfTab">
  <div class="upload-box" id="uploadBox" onclick="document.getElementById('pdfInput').click()">
- <div style="font-size:48px;margin-bottom:15px">📄</div>
+ <div style="font-size:48px;margin-bottom:15px"></div>
  <p style="font-size:18px;color:var(--text-primary);margin:0 0 10px">Drop your PDF here or Click to Upload</p>
  <p style="font-size:14px;color:var(--text-secondary);margin:0">Text will be extracted and converted to speech</p>
  <input type="file" id="pdfInput" accept=".pdf" hidden>
@@ -667,7 +667,7 @@
  <div class="wave-bar"></div>
  <div class="wave-bar"></div>
  </div>
- <button class="play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
+ <button class="play-btn" id="playBtn" onclick="togglePlay()"></button>
  <div class="progress-container">
  <div class="progress-bar-audio">
  <div class="progress-fill-audio" id="progressFill"></div>
@@ -675,18 +675,18 @@
  <div class="time-display"><span id="currentTime">0:00</span><span id="totalTime">0:00</span></div>
  </div>
  <div class="controls-row">
- <button class="ctrl-btn" onclick="restartAudio()" title="Restart">⏮️</button>
- <button class="ctrl-btn" onclick="decreaseSpeed()" title="Slower">🐢</button>
+ <button class="ctrl-btn" onclick="restartAudio()" title="Restart"></button>
+ <button class="ctrl-btn" onclick="decreaseSpeed()" title="Slower"></button>
  <div class="speed-display" id="speedDisplay">1.0x</div>
- <button class="ctrl-btn" onclick="increaseSpeed()" title="Faster">🐇</button>
- <button class="ctrl-btn" onclick="stopAudio()" title="Stop">⏹️</button>
+ <button class="ctrl-btn" onclick="increaseSpeed()" title="Faster"></button>
+ <button class="ctrl-btn" onclick="stopAudio()" title="Stop"></button>
  </div>
  </div>
  <div class="settings-section">
  <h3> Voice Settings</h3>
  <div class="settings-grid">
- <div class="setting-group"><label>🗣️ Voice</label><select id="voiceSelect"></select></div>
- <div class="setting-group"><label>🌐 Language</label><select id="langFilter"
+ <div class="setting-group"><label> Voice</label><select id="voiceSelect"></select></div>
+ <div class="setting-group"><label> Language</label><select id="langFilter"
  onchange="filterVoices()">
  <option value="all">All</option>
  <option value="en">English</option>
@@ -705,11 +705,11 @@
  max="3" step="0.25" value="1" oninput="updateSpeedDisplay()">
  <div class="range-value" id="speedValue">1.0x</div>
  </div>
- <div class="setting-group"><label>🎵 Pitch</label><input type="range" id="pitchRange" min="0.5"
+ <div class="setting-group"><label> Pitch</label><input type="range" id="pitchRange" min="0.5"
  max="2" step="0.1" value="1" oninput="updatePitchDisplay()">
  <div class="range-value" id="pitchValue">1.0</div>
  </div>
- <div class="setting-group"><label>🔊 Volume</label><input type="range" id="volumeRange" min="0"
+ <div class="setting-group"><label> Volume</label><input type="range" id="volumeRange" min="0"
  max="1" step="0.1" value="1" oninput="updateVolumeDisplay()">
  <div class="range-value" id="volumeValue">100%</div>
  </div>
@@ -717,16 +717,16 @@
  </div>
  <div class="quick-actions">
  <button onclick="copyText()" class="action-btn"
- style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">📋 Copy Text</button>
+ style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)"> Copy Text</button>
  <button onclick="clearText()" class="action-btn"
- style="background:linear-gradient(135deg,#64748b,#475569)">🗑️ Clear</button>
+ style="background:linear-gradient(135deg,#64748b,#475569)"> Clear</button>
  <button onclick="downloadText()" class="action-btn"
- style="background:linear-gradient(135deg,#10b981,#059669)">📥 Download TXT</button>
+ style="background:linear-gradient(135deg,#10b981,#059669)"> Download TXT</button>
  <button onclick="downloadAudio()" class="action-btn" id="dlAudioBtn"
- style="background:linear-gradient(135deg,#f59e0b,#d97706)">🎵 Download Audio</button>
+ style="background:linear-gradient(135deg,#f59e0b,#d97706)"> Download Audio</button>
  </div>
  <div class="history-section">
- <h3>📜 Recent History</h3>
+ <h3> Recent History</h3>
  <div class="history-list" id="historyList">
  <p style="text-align:center;color:#94a3b8;padding:20px">No history yet.</p>
  </div>

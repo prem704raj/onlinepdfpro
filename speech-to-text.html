@@ -507,13 +507,13 @@
 <div class="voice-container">
 
  <div style="text-align:center; margin-bottom:30px;">
- <h2 style="font-size:28px; color:var(--text-primary); margin:0 0 10px;">🎤 Speak & Create PDF</h2>
+ <h2 style="font-size:28px; color:var(--text-primary); margin:0 0 10px;"> Speak & Create PDF</h2>
  <p style="color:var(--text-secondary); font-size:16px;">Press the mic button, speak, and download as PDF instantly</p>
  </div>
 
  <!-- Language Selection -->
  <div class="lang-section">
- <label>🌐 Language:</label>
+ <label> Language:</label>
  <select id="langSelect">
  <option value="en-US">English (US)</option>
  <option value="en-GB">English (UK)</option>
@@ -543,7 +543,7 @@
 
  <!-- Mic Button -->
  <div class="mic-section">
- <button class="mic-btn" id="micBtn" onclick="toggleRecording()">🎤</button>
+ <button class="mic-btn" id="micBtn" onclick="toggleRecording()"></button>
  <div class="mic-status" id="micStatus">Click the mic to start speaking</div>
  <div class="wave-container" id="waveContainer">
  <div class="wave-bar"></div>
@@ -563,7 +563,7 @@
 
  <!-- Text Area -->
  <div class="text-section">
- <label>📝 Your Text (edit anytime):</label>
+ <label> Your Text (edit anytime):</label>
  <textarea class="text-area" id="textArea"
  placeholder="Your spoken words will appear here...&#10;&#10;You can also type or paste text manually.&#10;&#10;Press the mic button and start speaking!"></textarea>
  </div>
@@ -578,7 +578,7 @@
 
  <!-- Formatting -->
  <div class="format-section">
- <h3>📐 PDF Formatting</h3>
+ <h3> PDF Formatting</h3>
  <div class="format-grid">
  <div class="format-group">
  <label>Document Title</label>
@@ -631,17 +631,17 @@
 
  <!-- Action Buttons -->
  <div class="action-buttons">
- <button onclick="downloadPDF()" class="action-btn btn-pdf">📥 Download PDF</button>
- <button onclick="downloadWord()" class="action-btn btn-word">📄 Download Word</button>
- <button onclick="downloadTxt()" class="action-btn btn-txt">📝 Download TXT</button>
- <button onclick="copyText()" class="action-btn btn-copy">📋 Copy Text</button>
- <button onclick="clearText()" class="action-btn btn-clear">🗑️ Clear All</button>
+ <button onclick="downloadPDF()" class="action-btn btn-pdf"> Download PDF</button>
+ <button onclick="downloadWord()" class="action-btn btn-word"> Download Word</button>
+ <button onclick="downloadTxt()" class="action-btn btn-txt"> Download TXT</button>
+ <button onclick="copyText()" class="action-btn btn-copy"> Copy Text</button>
+ <button onclick="clearText()" class="action-btn btn-clear"> Clear All</button>
  </div>
 
  <!-- Tips -->
 <!-- Not Supported Message -->
  <div class="not-supported" id="notSupported">
- <h2>❌ Speech Recognition Not Supported</h2>
+ <h2> Speech Recognition Not Supported</h2>
  <p>Your browser doesn't support speech recognition. Please use Google Chrome or Microsoft Edge.</p>
  <p style="margin-top:15px;">You can still type or paste text below and download as PDF.</p>
  </div>
@@ -707,7 +707,7 @@
 
  // Show live text
  if (interimTranscript) {
- document.getElementById('liveText').textContent = '🔴 ' + interimTranscript;
+ document.getElementById('liveText').textContent = ' ' + interimTranscript;
  document.getElementById('liveText').classList.add('active');
  } else {
  document.getElementById('liveText').classList.remove('active');
@@ -758,7 +758,7 @@
  } catch (e) { }
 
  document.getElementById('micBtn').classList.add('recording');
- document.getElementById('micBtn').textContent = '⏹️';
+ document.getElementById('micBtn').textContent = '';
  document.getElementById('micStatus').textContent = 'Listening... Speak now!';
  document.getElementById('micStatus').classList.add('active');
  document.getElementById('waveContainer').classList.add('active');
@@ -776,7 +776,7 @@
  } catch (e) { }
 
  document.getElementById('micBtn').classList.remove('recording');
- document.getElementById('micBtn').textContent = '🎤';
+ document.getElementById('micBtn').textContent = '';
  document.getElementById('micStatus').textContent = 'Recording stopped. Click mic to continue.';
  document.getElementById('micStatus').classList.remove('active');
  document.getElementById('waveContainer').classList.remove('active');

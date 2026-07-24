@@ -234,7 +234,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
- <span class="upload-icon">🔄🖼️</span>
+ <span class="upload-icon"></span>
  <p class="upload-text">Drop any images here</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
@@ -285,7 +285,7 @@
  <!-- Format info badge -->
  <div id="formatInfo" style="margin-top: 20px; text-align: center;">
  <span id="formatBadge" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(37,99,235,0.1); border-radius: 20px; font-size: 0.85rem; color: var(--aurora-azure); font-weight: 500;">
- <span id="formatInfoIcon">📸</span>
+ <span id="formatInfoIcon"></span>
  <span id="formatInfoText">JPG — Best for photos. Small file size, universal compatibility.</span>
  </span>
  </div>
@@ -368,7 +368,7 @@
  <h2 style="font-size: 22px; color: var(--text-primary); margin-bottom: 20px;">Why Use Image Format Converter?</h2>
  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
  <div style="padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
- <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;">🔄 Universal Converter</h3>
+ <h3 style="font-size: 16px; color: var(--accent); margin: 0 0 8px;"> Universal Converter</h3>
  <p style="font-size: 14px; color: var(--text-secondary); margin: 0; line-height: 1.6;">One tool for all your image conversion needs. Convert between JPG, PNG, WebP, BMP, GIF, ICO, and TIFF without needing separate tools for each format pair.</p>
  </div>
  <div style="padding: 20px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border);">
@@ -396,10 +396,10 @@
  </tr>
  </thead>
  <tbody style="color: var(--text-secondary);">
- <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">JPG</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Photos, social media, email</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">❌</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Small</td></tr>
+ <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">JPG</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Photos, social media, email</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);"></td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Small</td></tr>
  <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">PNG</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Graphics, logos, screenshots</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);"></td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Medium</td></tr>
  <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">WebP</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Web images, modern browsers</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);"></td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Smallest</td></tr>
- <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">BMP</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Windows applications, raw data</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">❌</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Large</td></tr>
+ <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">BMP</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Windows applications, raw data</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);"></td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Large</td></tr>
  <tr><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);"><strong style="color: var(--text-primary);">GIF</strong></td><td style="padding: 10px 12px; border-bottom: 1px solid var(--border);">Simple graphics, icons</td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);"></td><td style="padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border);">Small</td></tr>
  <tr><td style="padding: 10px 12px;"><strong style="color: var(--text-primary);">ICO</strong></td><td style="padding: 10px 12px;">Website favicons, app icons</td><td style="padding: 10px 12px; text-align: center;"></td><td style="padding: 10px 12px; text-align: center;">Tiny</td></tr>
  </tbody>
@@ -436,12 +436,12 @@
  let thumbnails = {};
 
  const FORMAT_INFO = {
- jpeg: { label: 'JPG', ext: '.jpg', mime: 'image/jpeg', icon: '📸', desc: 'Best for photos. Small file size, universal compatibility.', lossy: true },
- png: { label: 'PNG', ext: '.png', mime: 'image/png', icon: '🎨', desc: 'Best for graphics & logos. Supports transparency.', lossy: false },
- webp: { label: 'WebP', ext: '.webp', mime: 'image/webp', icon: '🌐', desc: 'Modern format. Smallest file size, web-optimized.', lossy: true },
- bmp: { label: 'BMP', ext: '.bmp', mime: 'image/bmp', icon: '🖥️', desc: 'Uncompressed bitmap. Large files, Windows compatible.', lossy: false },
+ jpeg: { label: 'JPG', ext: '.jpg', mime: 'image/jpeg', icon: '', desc: 'Best for photos. Small file size, universal compatibility.', lossy: true },
+ png: { label: 'PNG', ext: '.png', mime: 'image/png', icon: '', desc: 'Best for graphics & logos. Supports transparency.', lossy: false },
+ webp: { label: 'WebP', ext: '.webp', mime: 'image/webp', icon: '', desc: 'Modern format. Smallest file size, web-optimized.', lossy: true },
+ bmp: { label: 'BMP', ext: '.bmp', mime: 'image/bmp', icon: '', desc: 'Uncompressed bitmap. Large files, Windows compatible.', lossy: false },
  gif: { label: 'GIF', ext: '.gif', mime: 'image/gif', icon: '', desc: 'Simple graphics & icons. Limited to 256 colors.', lossy: false },
- ico: { label: 'ICO', ext: '.png', mime: 'image/png', icon: '🔷', desc: 'Website favicons & app icons. Auto-resized to 256×256.', lossy: false, resize: 256 }
+ ico: { label: 'ICO', ext: '.png', mime: 'image/png', icon: '', desc: 'Website favicons & app icons. Auto-resized to 256×256.', lossy: false, resize: 256 }
  };
 
  const uploadZone = document.getElementById('uploadZone');
@@ -774,7 +774,7 @@
  resultsList.innerHTML = successResults.map((result, index) => `
  <div class="batch-file-item">
  <div class="batch-file-header">
- <span style="font-size: 1.5rem;">🖼️</span>
+ <span style="font-size: 1.5rem;"></span>
  <div class="batch-file-info">
  <div class="batch-file-name">${result.name}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.outputSize)}</div>

@@ -427,7 +427,7 @@
  <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Flatten PDF form fields and annotations into a clean, non-editable document. Your files never leave your device.</p>
  </div>
 <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
- <span class="upload-icon">📤</span>
+ <span class="upload-icon"></span>
  <p class="upload-text">Drop your PDF here or Click to Upload</p>
  <p class="upload-hint">Remove all editable fields and make PDF flat</p>
  <button class="btn btn-primary upload-btn">Choose PDF File</button>
@@ -442,22 +442,22 @@
  into static content. The PDF becomes non-editable and looks the same on every device.</p>
  <div class="info-cards">
  <div class="info-card card-form">
- <div class="icon">📝</div>
+ <div class="icon"></div>
  <h3>Form Fields</h3>
  <p>Text inputs, checkboxes, dropdowns become static text</p>
  </div>
  <div class="info-card card-anno">
- <div class="icon">📌</div>
+ <div class="icon"></div>
  <h3>Annotations</h3>
  <p>Highlights, stamps, markups merge into the page</p>
  </div>
  <div class="info-card card-comment">
- <div class="icon">💬</div>
+ <div class="icon"></div>
  <h3>Comments</h3>
  <p>Sticky notes and comments get removed or embedded</p>
  </div>
  <div class="info-card card-layer">
- <div class="icon">📄</div>
+ <div class="icon"></div>
  <h3>Layers</h3>
  <p>All layers merge into single flat layer</p>
  </div>
@@ -469,7 +469,7 @@
 
  <label class="option-item" for="opt1">
  <input type="checkbox" id="opt1" checked>
- <div class="option-icon">📝</div>
+ <div class="option-icon"></div>
  <div class="option-text">
  <h3>Flatten Form Fields</h3>
  <p>Convert text inputs, checkboxes, radio buttons to static content</p>
@@ -478,7 +478,7 @@
 
  <label class="option-item" for="opt2">
  <input type="checkbox" id="opt2" checked>
- <div class="option-icon">📌</div>
+ <div class="option-icon"></div>
  <div class="option-text">
  <h3>Flatten Annotations</h3>
  <p>Merge highlights, stamps, underlines into page content</p>
@@ -487,7 +487,7 @@
 
  <label class="option-item" for="opt3">
  <input type="checkbox" id="opt3" checked>
- <div class="option-icon">💬</div>
+ <div class="option-icon"></div>
  <div class="option-text">
  <h3>Remove Comments</h3>
  <p>Remove all sticky notes and comment threads</p>
@@ -496,7 +496,7 @@
 
  <label class="option-item" for="opt4">
  <input type="checkbox" id="opt4" checked>
- <div class="option-icon">🔗</div>
+ <div class="option-icon"></div>
  <div class="option-text">
  <h3>Remove Hyperlinks</h3>
  <p>Remove all clickable links from the document</p>
@@ -505,7 +505,7 @@
 
  <label class="option-item" for="opt5">
  <input type="checkbox" id="opt5">
- <div class="option-icon">📊</div>
+ <div class="option-icon"></div>
  <div class="option-text">
  <h3>Remove Metadata</h3>
  <p>Strip author, title, creation date and other hidden info</p>
@@ -531,7 +531,7 @@
 
  <div class="before-after" id="beforeAfter"></div>
 
- <button onclick="downloadFlattened()" class="download-btn">📥 Download Flattened PDF</button>
+ <button onclick="downloadFlattened()" class="download-btn"> Download Flattened PDF</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#x1f504; Process Another File</button>
  </div>
 
@@ -569,7 +569,7 @@
  originalSize = file.size;
 
  document.getElementById('fileInfo').style.display = 'block';
- document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' (' + formatSize(file.size) + ')';
+ document.getElementById('fileInfo').textContent = ' ' + file.name + ' (' + formatSize(file.size) + ')';
  document.getElementById('optionsBox').style.display = 'block';
  document.getElementById('infoSection').style.display = 'none';
  document.getElementById('resultBox').style.display = 'none';
