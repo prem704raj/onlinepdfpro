@@ -149,7 +149,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
- <span class="upload-icon"></span>
+ <span class="upload-icon">🖼️</span>
  <p class="upload-text">Select images to scale</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
@@ -166,12 +166,12 @@
 
  <div id="fileSection" style="display: none;">
  <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
- <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary);"> Scaling Controls</h3>
+ <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary);">📐 Scaling Controls</h3>
 
  <!-- Professional Tab Bar -->
  <div class="resize-mode-tabs" style="display: flex; gap: 6px; background: var(--surface-2, rgba(255,255,255,0.06)); padding: 4px; border-radius: 12px; margin-bottom: 28px;">
- <button class="resize-mode-tab active" data-mode="percentage" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);"> Percentage</button>
- <button class="resize-mode-tab" data-mode="dimensions" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);"> Dimensions</button>
+ <button class="resize-mode-tab active" data-mode="percentage" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">📊 Percentage</button>
+ <button class="resize-mode-tab" data-mode="dimensions" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);">📏 Dimensions</button>
  <button class="resize-mode-tab" data-mode="presets" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);"> Presets</button>
  </div>
 
@@ -270,7 +270,7 @@
  <div class="download-section">
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.ZIP)</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'"> Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">🔄 Process Another File</button>
  </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
  </div>
@@ -376,7 +376,7 @@
  lockBtn.onclick = () => {
  lockAspect = !lockAspect;
  lockBtn.classList.toggle('locked', lockAspect);
- lockBtn.textContent = lockAspect ? '' : '';
+ lockBtn.textContent = lockAspect ? '' : '🔓';
  if (lockAspect) aspectRatio = (parseInt(widthInput.value) || 1) / (parseInt(heightInput.value) || 1);
  };
 
@@ -547,7 +547,7 @@
  resultsList.innerHTML = successResults.map((result, index) => `
  <div class="batch-file-item" style="margin-bottom: 12px;">
  <div class="batch-file-header" style="margin-bottom: 0;">
- <span style="font-size: 1.5rem;"></span>
+ <span style="font-size: 1.5rem;">🖼️</span>
  <div class="batch-file-info">
  <div class="batch-file-name">${result.name}</div>
  <div class="batch-file-size">${result.newWidth}px wide</div>

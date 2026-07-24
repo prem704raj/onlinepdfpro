@@ -162,16 +162,16 @@
  <div class="container container-max">
  <div class="glass-card tool-card-main fade-in">
  <nav class="tab-nav" id="tabNav">
- <button class="tab-btn active" onclick="switchTab('text')"><span></span> Text / URL</button>
- <button class="tab-btn" onclick="switchTab('image')"><span></span> Image</button>
+ <button class="tab-btn active" onclick="switchTab('text')"><span>📝</span> Text / URL</button>
+ <button class="tab-btn" onclick="switchTab('image')"><span>🖼️</span> Image</button>
  <button class="tab-btn" onclick="switchTab('file')"><span></span> Any File</button>
- <button class="tab-btn" onclick="switchTab('folder')"><span></span> Folder</button>
- <button class="tab-btn" onclick="switchTab('video')"><span></span> Video</button>
+ <button class="tab-btn" onclick="switchTab('folder')"><span>🗂️</span> Folder</button>
+ <button class="tab-btn" onclick="switchTab('video')"><span>🎬</span> Video</button>
  </nav>
 
  <!-- Privacy Disclosure for Upload Modes -->
  <div id="qrPrivacyNotice" style="display:none; padding:12px 18px; margin-bottom:20px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:12px; font-size:0.85rem; color:var(--text-secondary); line-height:1.6;">
- <span style="font-weight:700; color:#d97706;"> Privacy Note:</span> This mode uploads your content to a third-party hosting service (<strong>tmpfiles.org</strong> or <strong>ImgBB</strong>) to generate a shareable link for the QR code. Files are temporary and auto-deleted. For fully private, offline QR codes, use the <strong>Text / URL</strong> tab instead.
+ <span style="font-weight:700; color:#d97706;">⚠️ Privacy Note:</span> This mode uploads your content to a third-party hosting service (<strong>tmpfiles.org</strong> or <strong>ImgBB</strong>) to generate a shareable link for the QR code. Files are temporary and auto-deleted. For fully private, offline QR codes, use the <strong>Text / URL</strong> tab instead.
  </div>
 
  <!-- Text Tab -->
@@ -232,7 +232,7 @@
 
  <!-- Design Picker -->
  <div class="design-section">
- <div class="design-section-title"> Choose QR Style <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400; margin-left:8px;">(50+ designs)</span></div>
+ <div class="design-section-title">🎨 Choose QR Style <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400; margin-left:8px;">(50+ designs)</span></div>
  <div class="design-grid" id="designGrid"></div>
  </div>
 
@@ -256,8 +256,8 @@
  <!-- Actions -->
  <div class="action-bar">
  <button class="btn btn-primary btn-lg" onclick="generateQR()" id="generateBtn"> Generate QR Code</button>
- <button class="btn btn-secondary" onclick="downloadAllAsZip()" id="downloadAllBtn" style="display:none;"> Download ZIP (All)</button>
- <button class="btn btn-secondary" onclick="clearAll()"> Clear</button>
+ <button class="btn btn-secondary" onclick="downloadAllAsZip()" id="downloadAllBtn" style="display:none;">📦 Download ZIP (All)</button>
+ <button class="btn btn-secondary" onclick="clearAll()">🗑️ Clear</button>
  </div>
 
  <!-- Status Msg -->
@@ -429,7 +429,7 @@
  async function generateQR() {
  clearOutput();
  State.qrList = [];
- setStatus(' Working...', 'var(--accent)');
+ setStatus('⏳ Working...', 'var(--accent)');
  try {
  switch (State.tab) {
  case 'text': await doText(); break;
@@ -439,14 +439,14 @@
  case 'video': await doVideos(); break;
  }
  } catch(err) {
- setStatus(' Error: ' + err.message, 'var(--error)');
+ setStatus('❌ Error: ' + err.message, 'var(--error)');
  console.error(err);
  }
  }
 
  async function doText() {
  let text = document.getElementById('textInput').value.trim();
- if (!text) return setStatus(' Please enter text or URL', 'var(--warning)');
+ if (!text) return setStatus('⚠️ Please enter text or URL', 'var(--warning)');
  
  // Smart URL detection: auto-prepend https:// if it looks like a URL
  text = smartURL(text);
@@ -492,7 +492,7 @@
 
  async function doImages() {
  const files = State.imageFiles;
- if (!files.length) return setStatus(' Select image(s)', 'var(--warning)');
+ if (!files.length) return setStatus('⚠️ Select image(s)', 'var(--warning)');
  showProgress(true);
  let ok = 0;
  for (let i = 0; i < files.length; i++) {
@@ -507,15 +507,15 @@
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(` Skipped ${escapeHTML(file.name)}: ${err.message}`, 'var(--warning)'); }
+ } catch(err) { setStatus(`⚠️ Skipped ${escapeHTML(file.name)}: ${err.message}`, 'var(--warning)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus(' All uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('❌ All uploads failed.', 'var(--error)');
  }
 
  async function doFiles() {
  const files = State.files;
- if (!files.length) return setStatus(' Select file(s)', 'var(--warning)');
+ if (!files.length) return setStatus('⚠️ Select file(s)', 'var(--warning)');
  showProgress(true);
  let ok = 0;
  for (let i = 0; i < files.length; i++) {
@@ -527,15 +527,15 @@
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(` ${escapeHTML(file.name)} failed: ${err.message}`, 'var(--error)'); }
+ } catch(err) { setStatus(`❌ ${escapeHTML(file.name)} failed: ${err.message}`, 'var(--error)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus(' All uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('❌ All uploads failed.', 'var(--error)');
  }
 
  async function doFolder() {
  const files = State.folderFiles;
- if (!files.length) return setStatus(' Select folder', 'var(--warning)');
+ if (!files.length) return setStatus('⚠️ Select folder', 'var(--warning)');
  showProgress(true);
  try {
  setProgress(10, 'Zipping folder...');
@@ -551,18 +551,18 @@
  addQRWrapper('qr-folder-0', ` ${folderName}`, 'qrOutput');
  await makeQR(url, folderName, 'qr-folder-0');
  finalizeResults();
- } catch(err) { setStatus(' Folder upload failed: '+err.message, 'var(--error)'); }
+ } catch(err) { setStatus('❌ Folder upload failed: '+err.message, 'var(--error)'); }
  showProgress(false);
  }
 
  async function doVideos() {
  const files = State.videoFiles;
- if (!files.length) return setStatus(' Select video(s)', 'var(--warning)');
+ if (!files.length) return setStatus('⚠️ Select video(s)', 'var(--warning)');
  showProgress(true);
  let ok = 0;
  for (let i = 0; i < files.length; i++) {
  const file = files[i];
- if (file.size > 100*1024*1024) { setStatus(` ${escapeHTML(file.name)} exceeds 100MB`, 'var(--warning)'); continue; }
+ if (file.size > 100*1024*1024) { setStatus(`⚠️ ${escapeHTML(file.name)} exceeds 100MB`, 'var(--warning)'); continue; }
  try {
  setProgress((i/files.length)*100, `Uploading: ${escapeHTML(file.name)}...`);
  const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${escapeHTML(file.name)}: ${Math.round(pct)}%`));
@@ -570,10 +570,10 @@
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(` ${escapeHTML(file.name)} failed`, 'var(--error)'); }
+ } catch(err) { setStatus(`❌ ${escapeHTML(file.name)} failed`, 'var(--error)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus(' All video uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('❌ All video uploads failed.', 'var(--error)');
  }
 
  /* ═══ QR CODE GENERATION (qr-code-styling) ═══ */
@@ -665,8 +665,8 @@
  <span class="qr-label">${label}</span>
  <div class="qr-canvas-wrap" id="${id}"></div>
  <div class="qr-actions">
- <button class="btn btn-primary" onclick="downloadPNG('${id}')"> PNG</button>
- <button class="btn btn-secondary" onclick="downloadSVG('${id}')"> SVG</button>
+ <button class="btn btn-primary" onclick="downloadPNG('${id}')">⬇ PNG</button>
+ <button class="btn btn-secondary" onclick="downloadSVG('${id}')">⬇ SVG</button>
  </div>`;
  out.appendChild(card);
  }
@@ -701,7 +701,7 @@
  function showFiles(files) {
  const el = document.getElementById('fileListShow');
  el.style.display = files.length ? 'block' : 'none';
- el.innerHTML = files.map(f => `<div class="file-item"> ${escapeHTML(f.name)} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
+ el.innerHTML = files.map(f => `<div class="file-item">📎 ${escapeHTML(f.name)} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
  }
 
  function clearAll() {
