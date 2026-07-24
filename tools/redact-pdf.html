@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+<!-- ===== MUST HAVE SEO META TAGS ===== -->
+<!-- Primary Meta Tags -->
+<title>Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro</title>
+<meta name="description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
+<meta name="keywords" content="Redact PDF (Privacy Shield), sensitive data remover, redact pdf, hide phone number, hide email, aadhaar redaction, pan redaction">
+<meta name="author" content="OnlinePDFPro">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/redact-pdf.html">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
+<meta property="og:title" content="Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro">
+<meta property="og:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
+<meta property="og:image" content="https://onlinepdfpro.com/images/og-tools.png">
+<meta property="og:site_name" content="OnlinePDFPro">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
+<meta name="twitter:title" content="Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro">
+<meta name="twitter:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
+<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-tools.png">
+
+<!-- Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+<!-- Hreflang (if you plan multilingual) -->
+<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/redact-pdf.html">
+<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/redact-pdf.html">
+
+<link rel="stylesheet" href="../css/style.css?v=21">
+<link rel="stylesheet" href="../css/mobile-fix-v2.css">
+<link rel="stylesheet" href="../css/tools-v2.css">
+
+<!-- PDF.js for client-side text extraction -->
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<!-- Tesseract.js for OCR on images/scanned PDFs -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<!-- pdf-lib for exporting blurred PDFs -->
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+ .tool-card-main { max-width: 980px; margin: 0 auto; padding: 36px; }
+ .shield-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+ .shield-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 16px; }
+ .shield-panel h4 { margin: 0 0 10px; font-size: 0.95rem; color: var(--text-primary); }
+ .shield-panel p { margin: 0; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4; }
+ .shield-input { width: 100%; min-height: 160px; padding: 14px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; resize: vertical; }
+ .shield-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+ .shield-actions.btn { border-radius: 12px; font-weight: 600; }
+ .file-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+ .file-row input[type="file"] { flex: 1; }
+ .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; background: rgba(14, 165, 233, 0.12); color: #38bdf8; font-weight: 600; }
+ .results-list { display: grid; gap: 10px; margin-top: 10px; }
+ .result-item { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+ .result-item span { color: var(--text-secondary); font-size: 0.85rem; }
+ .result-count { font-weight: 700; color: var(--text-primary); }
+ .note { font-size: 0.82rem; color: var(--text-muted); margin-top: 8px; }
+ .preview-wrap { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 16px; display: grid; gap: 12px; }
+ .preview-canvas { width: 100%; max-height: 520px; border-radius: 12px; background: var(--surface-1); display: block; }
+ .preview-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+ .page-controls { display: flex; gap: 8px; align-items: center; }
+ .page-pill { font-size: 0.8rem; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; }
+ .action-row { display: flex; flex-wrap: wrap; gap: 12px; }
+ .progress-bar { width: 100%; height: 8px; background: var(--surface-3); border-radius: 999px; overflow: hidden; }
+ .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #38bdf8, #4ade80); transition: width 0.2s; }
+
+ @media (max-width: 700px) {
+ .tool-card-main { padding: 22px; }
+ }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script defer src="../js/third-party-loader.js"></script><script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Redact PDF Online",
+ "url": "https://onlinepdfpro.com/tools/redact-pdf.html",
+ "description": "Free browser-based PDF redaction tool to hide sensitive data like phone numbers, emails, and Aadhaar IDs without uploading files to a server.",
+ "applicationCategory": "UtilityApplication",
+ "operatingSystem": "Any",
+ "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+ {
+ "@type": "Question",
+ "name": "How does this PDF redactor keep my data safe?",
+ "acceptedAnswer": {
+ "@type": "Answer",
+ "text": ""
+ }
+ },
+ {
+ "@type": "Question",
+ "name": "What type of data can it automatically detect?",
+ "acceptedAnswer": {
+ "@type": "Answer",
+ "text": "The tool can automatically detect and blur common sensitive information including phone numbers, email addresses, Aadhaar numbers, PAN IDs, and physical addresses."
+ }
+ }
+ ]
+}
+</script>
+ <script src="js/security-shield.js"></script>
+ <!-- Theme Prevention (FOIT) -->
+ <script>
+ (function() {
+ var theme = localStorage.getItem('doctools-theme') || 'light';
+ document.documentElement.setAttribute('data-theme', theme);
+ })();
+ </script>
+</head>
+
+<body class="fade-in">
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="header">
+<div class="header-content">
+ <a href="../index.html" class="logo">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+ <span class="logo-text">OnlinePDFPro</span>
+ </a>
+ <nav class="nav" id="nav">
+ <a href="../tools.html" class="nav-link">All Tools</a>
+ <a href="../about.html" class="nav-link">About</a>
+ <a href="../help.html" class="nav-link">Help</a>
+ <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
+ </nav>
+ <div class="header-actions">
+ <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+ <div class="header-search" style="position: relative; margin-right: 8px;">
+ <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+ <input type="text" id="globalToolSearch" placeholder="Search tools..."
+ style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
+ </div>
+ <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+ </button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ </div>
+ </div>
+</header>
+
+<main id="main" class="tool-page">
+
+<div class="container" style="max-width: 900px;">
+ <div class="tool-header">
+ <span class="section-tag fade-in">Security</span>
+ <h1 class="tool-title fade-in">Redact PDF (Privacy Shield) / Sensitive Data Remover</h1>
+ <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+ Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. 
+ </p>
+ </div>
+
+ <div class="glass-card tool-card-main fade-in" style="animation-delay: 0.2s;">
+ <div class="shield-grid" style="margin-bottom:18px;">
+ <div class="shield-panel">
+ <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> What it detects</h4>
+ <p>Phone numbers, email IDs, Aadhaar (12-digit), PAN IDs, address lines, and signature markers.</p>
+ </div>
+ <div class="shield-panel">
+ <h4> How it works</h4>
+ <p>Text is processed securely. Fast, no server storage, no tracking.</p>
+ </div>
+ <div class="shield-panel">
+ <h4>📄 PDF notes</h4>
+ <p>Text layer is detected first, then OCR runs automatically for scans and images.</p>
+ </div>
+ </div>
+
+ <div class="shield-panel" style="margin-bottom:16px;">
+ <div class="file-row">
+ <input id="fileInput" class="shield-input" style="min-height:unset;" type="file" accept=".pdf,image/*">
+ <span id="statusPill" class="status-pill">Ready to scan</span>
+ </div>
+ <p class="note">Upload a PDF or image. OCR runs automatically for scanned pages.</p>
+ </div>
+
+ <div class="shield-panel" style="margin-bottom:16px;">
+ <div class="action-row">
+ <button id="scanBtn" class="btn btn-primary">Scan &amp; Blur Sensitive Data</button>
+ <button id="clearBtn" class="btn btn-secondary">Clear</button>
+ <button id="downloadPdfBtn" class="btn btn-outline" disabled>Download Blurred PDF</button>
+ <button id="downloadImageBtn" class="btn btn-outline" disabled>Download Blurred Image</button>
+ </div>
+ <div id="progressWrap" style="display:none; margin-top: 12px;">
+ <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+ <p id="progressText" class="note">Preparing scan...</p>
+ </div>
+ <p class="note">Blurred output is exported without visible sensitive data.</p>
+ </div>
+
+ <div class="shield-panel preview-wrap" style="margin-bottom:16px;">
+ <div class="preview-bar">
+ <strong style="color:var(--text-primary);">Preview</strong>
+ <div class="page-controls">
+ <button id="prevPageBtn" class="btn btn-secondary" disabled>Prev</button>
+ <span id="pageIndicator" class="page-pill">Page 0 / 0</span>
+ <button id="nextPageBtn" class="btn btn-secondary" disabled>Next</button>
+ </div>
+ </div>
+ <canvas id="previewCanvas" class="preview-canvas"></canvas>
+ <p class="note">Preview shows blurred areas. Export keeps the same blur.</p>
+ </div>
+
+ <div class="shield-grid">
+ <div class="shield-panel">
+ <h4>Findings</h4>
+ <div id="resultsList" class="results-list"></div>
+ <p id="emptyResults" class="note">No scan results yet.</p>
+ </div>
+ <div class="shield-panel" style="grid-column: span 2;">
+ <h4>Export notes</h4>
+ <p class="note">PDFs export as a new blurred PDF. Images export as blurred PNGs. All processing stays on-device.</p>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Ad Spacer -->
+ <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+
+</main>
+
+<script defer src="../counter.js"></script>
+<script defer src="../js/app.js?v=11"></script>
+
+<script>
+const statusPill = document.getElementById('statusPill');
+const fileInput = document.getElementById('fileInput');
+const scanBtn = document.getElementById('scanBtn');
+const clearBtn = document.getElementById('clearBtn');
+const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+const downloadImageBtn = document.getElementById('downloadImageBtn');
+const previewCanvas = document.getElementById('previewCanvas');
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+const pageIndicator = document.getElementById('pageIndicator');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const resultsList = document.getElementById('resultsList');
+const emptyResults = document.getElementById('emptyResults');
+
+const BLUR_RADIUS = 10;
+const BLUR_TINT = 'rgba(14, 165, 233, 0.25)';
+
+const state = {
+ file: null,
+ fileType: null,
+ pdfDoc: null,
+ pages: [],
+ currentPage: 0,
+ worker: null
+};
+
+function setStatus(text, tone) {
+ statusPill.textContent = text;
+ if (tone === 'busy') {
+ statusPill.style.background = 'rgba(14, 165, 233, 0.15)';
+ statusPill.style.color = '#38bdf8';
+ } else if (tone === 'success') {
+ statusPill.style.background = 'rgba(34, 197, 94, 0.15)';
+ statusPill.style.color = '#4ade80';
+ } else if (tone === 'warn') {
+ statusPill.style.background = 'rgba(245, 158, 11, 0.15)';
+ statusPill.style.color = '#f59e0b';
+ } else {
+ statusPill.style.background = 'rgba(14, 165, 233, 0.15)';
+ statusPill.style.color = '#38bdf8';
+ }
+}
+
+const detectors = [
+ { key: 'email', label: 'Emails', regex: /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi },
+ { key: 'aadhaar', label: 'Aadhaar IDs', regex: /\b\d{4}\s?\d{4}\s?\d{4}\b/g },
+ { key: 'pan', label: 'PAN IDs', regex: /\b[A-Z]{5}\d{4}[A-Z]\b/g },
+ { key: 'phone', label: 'Phone numbers', regex: /\b(?:\+?\d{1,3}[\s.-]?)?(?:\(?\d{2,4}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}\b/g }
+];
+
+const addressRegex = /\b\d{1,6}[A-Za-z]?(?:[-\/][A-Za-z0-9]+)?\s+(?:[A-Za-z0-9]+[ ,.-]?){0,6}(?:street|st\.|road|rd\.|avenue|ave\.|lane|ln\.|sector|block|district|pincode|postal|zip|po box|p\.o\.)\b(?:,\s*(?!signed\b)[A-Za-z.-]{2,20}(?:\s+(?!signed\b)[A-Za-z.-]{2,20})?)?/gi;
+const signatureRegex = /\b(signature|signed by|signatory|\/s\/)\b/gi;
+
+function countMatches(text) {
+ const counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
+ detectors.forEach(detector => {
+ const regex = new RegExp(detector.regex.source, detector.regex.flags);
+ const matches = text.match(regex);
+ counts[detector.key] += matches ? matches.length : 0;
+ });
+ const addrMatches = text.match(new RegExp(addressRegex.source, addressRegex.flags));
+ counts.address += addrMatches ? addrMatches.length : 0;
+ const sigMatches = text.match(new RegExp(signatureRegex.source, signatureRegex.flags));
+ counts.signature += sigMatches ? sigMatches.length : 0;
+ counts.total = Object.values(counts).reduce((sum, val) => sum + (typeof val === 'number' ? val : 0), 0);
+ return counts;
+}
+
+function renderResults(counts) {
+ resultsList.innerHTML = '';
+ const items = [
+ { key: 'phone', label: 'Phone numbers' },
+ { key: 'email', label: 'Email IDs' },
+ { key: 'aadhaar', label: 'Aadhaar IDs' },
+ { key: 'pan', label: 'PAN IDs' },
+ { key: 'address', label: 'Addresses' },
+ { key: 'signature', label: 'Signatures' }
+ ];
+
+ let total = 0;
+ items.forEach(item => {
+ const count = counts[item.key] || 0;
+ total += count;
+ const row = document.createElement('div');
+ row.className = 'result-item';
+ row.innerHTML = `<strong>${item.label}</strong><span class="result-count">${count}</span>`;
+ resultsList.appendChild(row);
+ });
+
+ emptyResults.style.display = total === 0 ? 'block' : 'none';
+ if (total === 0) {
+ emptyResults.textContent = 'No sensitive data found.';
+ }
+}
+
+function resetState() {
+ state.file = null;
+ state.fileType = null;
+ state.pdfDoc = null;
+ state.pages = [];
+ state.currentPage = 0;
+ progressWrap.style.display = 'none';
+ progressFill.style.width = '0%';
+ progressText.textContent = 'Preparing scan...';
+ resultsList.innerHTML = '';
+ emptyResults.textContent = 'No scan results yet.';
+ emptyResults.style.display = 'block';
+ downloadPdfBtn.disabled = true;
+ downloadImageBtn.disabled = true;
+ updatePageControls();
+ clearPreview();
+}
+
+function clearPreview() {
+ const ctx = previewCanvas.getContext('2d');
+ previewCanvas.width = 1;
+ previewCanvas.height = 1;
+ ctx.clearRect(0, 0, 1, 1);
+}
+
+function updatePageControls() {
+ const total = state.pages.length;
+ const current = total ? state.currentPage + 1 : 0;
+ pageIndicator.textContent = `Page ${current} / ${total}`;
+ prevPageBtn.disabled = current <= 1;
+ nextPageBtn.disabled = current >= total;
+}
+
+function showProgress(step, total, label) {
+ progressWrap.style.display = 'block';
+ const pct = total > 0 ? Math.round((step / total) * 100) : 0;
+ progressFill.style.width = `${pct}%`;
+ progressText.textContent = label;
+}
+
+function renderResults(counts) {
+ resultsList.innerHTML = '';
+ const items = [
+ { key: 'phone', label: 'Phone numbers' },
+ { key: 'email', label: 'Email IDs' },
+ { key: 'aadhaar', label: 'Aadhaar IDs' },
+ { key: 'pan', label: 'PAN IDs' },
+ { key: 'address', label: 'Addresses' },
+ { key: 'signature', label: 'Signatures' }
+ ];
+
+ let total = 0;
+ items.forEach(item => {
+ const count = counts[item.key] || 0;
+ total += count;
+ const row = document.createElement('div');
+ row.className = 'result-item';
+ row.innerHTML = `<strong>${item.label}</strong><span class="result-count">${count}</span>`;
+ resultsList.appendChild(row);
+ });
+
+ emptyResults.style.display = total === 0 ? 'block' : 'none';
+ if (total === 0) {
+ emptyResults.textContent = 'No sensitive data found.';
+ }
+}
+
+function drawPreviewFromCanvas(sourceCanvas) {
+ const maxWidth = previewCanvas.parentElement ? previewCanvas.parentElement.clientWidth : 900;
+ const maxHeight = 520;
+ const scale = Math.min(maxWidth / sourceCanvas.width, maxHeight / sourceCanvas.height, 1);
+ previewCanvas.width = Math.max(1, Math.floor(sourceCanvas.width * scale));
+ previewCanvas.height = Math.max(1, Math.floor(sourceCanvas.height * scale));
+ const ctx = previewCanvas.getContext('2d');
+ ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+ ctx.drawImage(sourceCanvas, 0, 0, previewCanvas.width, previewCanvas.height);
+}
+
+async function getOcrWorker() {
+ if (!state.worker) {
+ state.worker = await Tesseract.createWorker();
+ await state.worker.load();
+ await state.worker.loadLanguage('eng');
+ await state.worker.initialize('eng');
+ }
+ return state.worker;
+}
+
+function normalizeRect(rect, width, height) {
+ const x = Math.max(0, Math.min(rect.x, width));
+ const y = Math.max(0, Math.min(rect.y, height));
+ const w = Math.max(1, Math.min(rect.width, width - x));
+ const h = Math.max(1, Math.min(rect.height, height - y));
+ return { x, y, width: w, height: h };
+}
+
+function blurRegions(canvas, regions) {
+ if (!regions.length) {
+ return;
+ }
+ const ctx = canvas.getContext('2d');
+ const source = document.createElement('canvas');
+ source.width = canvas.width;
+ source.height = canvas.height;
+ source.getContext('2d').drawImage(canvas, 0, 0);
+
+ regions.forEach(region => {
+ const rect = normalizeRect(region, canvas.width, canvas.height);
+ ctx.save();
+ ctx.filter = `blur(${BLUR_RADIUS}px)`;
+ ctx.drawImage(source, rect.x, rect.y, rect.width, rect.height, rect.x, rect.y, rect.width, rect.height);
+ ctx.restore();
+ ctx.fillStyle = BLUR_TINT;
+ ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+ });
+}
+
+function combineCounts(base, add) {
+ const next = {...base };
+ Object.keys(add).forEach(key => {
+ if (typeof add[key] === 'number') {
+ next[key] = (next[key] || 0) + add[key];
+ }
+ });
+ return next;
+}
+
+function getLineGroups(items, viewport) {
+ const lines = [];
+ items.forEach(item => {
+ if (!item.str || !item.str.trim()) {
+ return;
+ }
+ const transform = pdfjsLib.Util.transform(viewport.transform, item.transform);
+ const x = transform[4];
+ const y = transform[5];
+ const height = Math.max(1, Math.hypot(transform[2], transform[3]));
+ const width = Math.max(1, item.width * viewport.scale);
+ const line = lines.find(existing => Math.abs(existing.y - y) < height * 0.6);
+ const entry = { x, y, width, height, text: item.str };
+ if (line) {
+ line.items.push(entry);
+ } else {
+ lines.push({ y, items: [entry] });
+ }
+ });
+ return lines;
+}
+
+function getLineBoxesFromText(items, viewport) {
+ const lines = getLineGroups(items, viewport);
+ const regions = [];
+ let counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
+
+ lines.forEach(line => {
+ line.items.sort((a, b) => a.x - b.x);
+ const text = line.items.map(entry => entry.text).join(' ');
+ const lineCounts = countMatches(text);
+ if (lineCounts.total > 0) {
+ counts = combineCounts(counts, lineCounts);
+ line.items.forEach(entry => {
+ regions.push({
+ x: entry.x,
+ y: entry.y - entry.height,
+ width: entry.width,
+ height: entry.height
+ });
+ });
+ }
+ });
+
+ return { regions, counts };
+}
+
+async function getOcrBoxes(canvas) {
+ const worker = await getOcrWorker();
+ const { data } = await worker.recognize(canvas);
+ const regions = [];
+ let counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
+
+ if (data && data.lines) {
+ data.lines.forEach(line => {
+ const text = line.text || '';
+ const lineCounts = countMatches(text);
+ if (lineCounts.total > 0) {
+ counts = combineCounts(counts, lineCounts);
+ const { x0, y0, x1, y1 } = line.bbox;
+ regions.push({ x: x0, y: y0, width: x1 - x0, height: y1 - y0 });
+ }
+ });
+ }
+
+ return { regions, counts };
+}
+
+async function renderPdfPage(pageNumber, scale) {
+ const page = await state.pdfDoc.getPage(pageNumber);
+ const viewport = page.getViewport({ scale });
+ const canvas = document.createElement('canvas');
+ canvas.width = Math.ceil(viewport.width);
+ canvas.height = Math.ceil(viewport.height);
+ const ctx = canvas.getContext('2d');
+ await page.render({ canvasContext: ctx, viewport }).promise;
+ return { page, canvas, viewport };
+}
+
+async function processPdfPage(pageNumber) {
+ const { page, canvas, viewport } = await renderPdfPage(pageNumber, 2);
+ const textContent = await page.getTextContent();
+ let regions = [];
+ let counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
+
+ if (textContent.items && textContent.items.length > 0) {
+ const result = getLineBoxesFromText(textContent.items, viewport);
+ regions = result.regions;
+ counts = result.counts;
+ if (result.regions.length === 0) {
+ const ocrResult = await getOcrBoxes(canvas);
+ regions = ocrResult.regions;
+ counts = combineCounts(counts, ocrResult.counts);
+ }
+ } else {
+ const ocrResult = await getOcrBoxes(canvas);
+ regions = ocrResult.regions;
+ counts = ocrResult.counts;
+ }
+
+ blurRegions(canvas, regions);
+ return { canvas, counts };
+}
+
+async function processImageFile(file) {
+ const image = new Image();
+ const url = URL.createObjectURL(file);
+ const loaded = new Promise((resolve, reject) => {
+ image.onload = () => resolve();
+ image.onerror = reject;
+ });
+ image.src = url;
+ await loaded;
+
+ const maxDim = 2400;
+ const scale = Math.min(maxDim / image.width, maxDim / image.height, 1);
+ const canvas = document.createElement('canvas');
+ canvas.width = Math.ceil(image.width * scale);
+ canvas.height = Math.ceil(image.height * scale);
+ const ctx = canvas.getContext('2d');
+ ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+ URL.revokeObjectURL(url);
+
+ const ocrResult = await getOcrBoxes(canvas);
+ blurRegions(canvas, ocrResult.regions);
+ return { canvas, counts: ocrResult.counts };
+}
+
+async function scanAndBlur() {
+ if (!state.file) {
+ setStatus('Upload a file first', 'warn');
+ return;
+ }
+ setStatus('Scanning...', 'busy');
+ showProgress(0, state.pages.length || 1, 'Starting scan...');
+
+ let totals = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
+
+ if (state.fileType === 'pdf') {
+ const totalPages = state.pdfDoc.numPages;
+ state.pages = new Array(totalPages).fill(null);
+ for (let i = 0; i < totalPages; i += 1) {
+ showProgress(i + 1, totalPages, `Scanning page ${i + 1} of ${totalPages}...`);
+ const result = await processPdfPage(i + 1);
+ state.pages[i] = result.canvas;
+ totals = combineCounts(totals, result.counts);
+ }
+ downloadPdfBtn.disabled = false;
+ downloadImageBtn.disabled = true;
+ } else {
+ showProgress(1, 1, 'Scanning image...');
+ const result = await processImageFile(state.file);
+ state.pages = [result.canvas];
+ totals = combineCounts(totals, result.counts);
+ downloadImageBtn.disabled = false;
+ downloadPdfBtn.disabled = true;
+ }
+
+ state.currentPage = 0;
+ updatePageControls();
+ if (state.pages[0]) {
+ drawPreviewFromCanvas(state.pages[0]);
+ }
+ renderResults(totals);
+ setStatus('Scan complete', 'success');
+ showProgress(1, 1, 'Done');
+}
+
+fileInput.addEventListener('change', async event => {
+ const file = event.target.files && event.target.files[0];
+ if (!file) {
+ return;
+ }
+ resetState();
+ state.file = file;
+ const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+ state.fileType = isPdf ? 'pdf' : 'image';
+
+ try {
+ if (isPdf) {
+ setStatus('Loading PDF...', 'busy');
+ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+ const buffer = await file.arrayBuffer();
+ state.pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+ state.pages = new Array(state.pdfDoc.numPages).fill(null);
+ updatePageControls();
+ setStatus('PDF loaded', 'success');
+ } else {
+ setStatus('Image loaded', 'success');
+ }
+ } catch (error) {
+ console.error(error);
+ setStatus('Could not load file', 'warn');
+ }
+});
+
+scanBtn.addEventListener('click', scanAndBlur);
+
+clearBtn.addEventListener('click', () => {
+ resetState();
+ fileInput.value = '';
+ setStatus('Ready to scan', '');
+});
+
+prevPageBtn.addEventListener('click', () => {
+ if (state.currentPage > 0) {
+ state.currentPage -= 1;
+ updatePageControls();
+ if (state.pages[state.currentPage]) {
+ drawPreviewFromCanvas(state.pages[state.currentPage]);
+ }
+ }
+});
+
+nextPageBtn.addEventListener('click', () => {
+ if (state.currentPage < state.pages.length - 1) {
+ state.currentPage += 1;
+ updatePageControls();
+ if (state.pages[state.currentPage]) {
+ drawPreviewFromCanvas(state.pages[state.currentPage]);
+ }
+ }
+});
+
+downloadImageBtn.addEventListener('click', () => {
+ if (!state.pages.length) {
+ return;
+ }
+ const canvas = state.pages[state.currentPage];
+ canvas.toBlob(blob => {
+ if (!blob) {
+ return;
+ }
+ const url = URL.createObjectURL(blob);
+ const link = document.createElement('a');
+ link.href = url;
+ link.download = 'privacy-shield-blurred.png';
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+ URL.revokeObjectURL(url);
+ }, 'image/png');
+});
+
+downloadPdfBtn.addEventListener('click', async () => {
+ if (!state.pages.length) {
+ return;
+ }
+ const pdfDoc = await PDFLib.PDFDocument.create();
+ for (const canvas of state.pages) {
+ const dataUrl = canvas.toDataURL('image/png');
+ const imgBytes = await fetch(dataUrl).then(res => res.arrayBuffer());
+ const img = await pdfDoc.embedPng(imgBytes);
+ const page = pdfDoc.addPage([img.width, img.height]);
+ page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+ }
+ const pdfBytes = await pdfDoc.save();
+ const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+ const url = URL.createObjectURL(blob);
+ const link = document.createElement('a');
+ link.href = url;
+ link.download = 'privacy-shield-blurred.pdf';
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+ URL.revokeObjectURL(url);
+});
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+ });
+}
+</script>
+</body>
+</html>

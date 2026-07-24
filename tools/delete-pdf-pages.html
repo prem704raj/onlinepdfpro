@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+ <!-- ===== MUST HAVE SEO META TAGS ===== -->
+
+ <!-- Primary Meta Tags -->
+ <title>Delete PDF Pages - Remove Pages from PDF Free</title>
+ <meta name="description" content="Easily delete or remove pages from your PDF document online for free.">
+ <meta name="keywords" content="delete pdf pages, remove pages from pdf, delete page from pdf online free">
+ <meta name="author" content="OnlinePDFPro">
+ <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/delete-pdf-pages.html">
+
+ <!-- Open Graph / Facebook -->
+ <meta property="og:type" content="website">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/delete-pdf-pages.html">
+ <meta property="og:title" content="Delete Pages from PDF Online Free — Remove PDF Pages Instantly | OnlinePDFPro">
+ <meta property="og:description" content="Delete pages from PDF online free. Remove unwanted pages from any PDF document instantly. No upload needed — 100% free processing securely.">
+ <meta property="og:image" content="https://onlinepdfpro.com/images/og-delete-pages.png">
+ <meta property="og:site_name" content="OnlinePDFPro">
+ <meta property="og:locale" content="en_US">
+
+ <!-- Twitter -->
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/delete-pdf-pages.html">
+ <meta name="twitter:title" content="Delete Pages from PDF Online Free — Remove PDF Pages Instantly | OnlinePDFPro">
+ <meta name="twitter:description" content="Delete pages from PDF online free. Remove unwanted pages from any PDF document instantly. No upload needed — 100% free processing securely.">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-delete-pages.png">
+
+ <!-- Favicons -->
+ <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+ <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+ <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+ <link rel="manifest" href="/site.webmanifest">
+ <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+ <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+ <!-- Hreflang (if you plan multilingual) -->
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/delete-pdf-pages.html">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/delete-pdf-pages.html">
+
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+ <!-- Core CSS (Using absolute path for nested tools compatibility) -->
+ <link rel="stylesheet" href="../css/style.css">
+ <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+ <link rel="stylesheet" href="../css/tools-v2.css">
+
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Delete PDF Pages",
+ "url": "https://onlinepdfpro.com/delete-pdf-pages.html",
+ "description": "Free online tool to delete pages from PDF.",
+ "applicationCategory": "UtilityApplication",
+ "operatingSystem": "Any",
+ "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+ }
+ </script>
+ <style>
+ .top-controls {
+ position: sticky;
+ top: 60px;
+ background: var(--surface-1);
+ padding: 20px;
+ border-radius: 16px;
+ box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+ text-align: center;
+ z-index: 999;
+ margin: 20px 0;
+ display: none;
+ }
+
+ .top-controls button {
+ padding: 14px 30px;
+ margin: 5px 10px;
+ border-radius: 12px;
+ font-size: 16px;
+ font-weight: bold;
+ border: none;
+ cursor: pointer;
+ transition: all 0.3s;
+ }
+
+ .top-controls button:hover {
+ transform: translateY(-2px);
+ }
+
+ .pages-grid {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 25px;
+ justify-content: center;
+ padding: 20px;
+ margin: 30px 0;
+ }
+
+ .page-card {
+ position: relative;
+ width: 180px;
+ background: var(--surface-1);
+ border-radius: 16px;
+ overflow: hidden;
+ box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+ transition: all 0.3s;
+ cursor: pointer;
+ }
+
+ .page-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+ }
+
+ .page-card.selected {
+ border: 4px solid #ef4444;
+ opacity: 0.5;
+ }
+
+ .page-card.selected::after {
+ content: '🗑️ REMOVE';
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background: rgba(239, 68, 68, 0.9);
+ color: white;
+ padding: 10px 20px;
+ border-radius: 12px;
+ font-weight: bold;
+ font-size: 14px;
+ }
+
+ .page-card canvas {
+ width: 100%;
+ height: auto;
+ max-height: 240px;
+ object-fit: contain;
+ display: block;
+ background: #f9f9f9;
+ }
+
+ .page-label {
+ position: absolute;
+ top: 10px;
+ left: 10px;
+ background: rgba(0, 0, 0, 0.8);
+ color: white;
+ padding: 6px 14px;
+ border-radius: 10px;
+ font-weight: bold;
+ font-size: 13px;
+ z-index: 5;
+ }
+
+ .page-footer {
+ padding: 12px;
+ text-align: center;
+ font-weight: bold;
+ font-size: 14px;
+ color: var(--text-primary);
+ background: var(--surface-2);
+ }
+
+ .selected-count {
+ font-size: 18px;
+ color: var(--text-secondary);
+ margin: 10px 0;
+ }
+
+ .file-info {
+ display: none;
+ max-width: 500px;
+ margin: 20px auto;
+ padding: 15px 20px;
+ background: var(--surface-2);
+ border-radius: 14px;
+ border: 2px solid #2563eb;
+ text-align: center;
+ color: var(--accent);
+ font-weight: bold;
+ }
+
+ .progress-section {
+ display: none;
+ text-align: center;
+ margin: 20px 0;
+ }
+
+ .progress-bar {
+ width: 100%;
+ max-width: 500px;
+ height: 20px;
+ background: #e2e8f0;
+ border-radius: 50px;
+ margin: 20px auto;
+ overflow: hidden;
+ }
+
+ .progress-fill {
+ width: 0%;
+ height: 100%;
+ background: linear-gradient(90deg, #ef4444, #f59e0b);
+ border-radius: 50px;
+ transition: width 0.4s;
+ }
+ </style>
+
+ <!-- MOBILE FIX -->
+
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+ {
+ "@type": "ListItem",
+ "position": 1,
+ "name": "Home",
+ "item": "https://onlinepdfpro.com/"
+ },
+ {
+ "@type": "ListItem",
+ "position": 2,
+ "name": "Tools",
+ "item": "https://onlinepdfpro.com/tools.html"
+ },
+ {
+ "@type": "ListItem",
+ "position": 3,
+ "name": "Delete PDF Pages",
+ "item": "https://onlinepdfpro.com/tools/delete-pdf-pages.html"
+ }
+ ]
+}
+ </script>
+
+ <script defer src="../js/third-party-loader.js"></script>
+ <script src="js/security-shield.js"></script>
+ <!-- Theme Prevention (FOIT) -->
+ <script>
+ (function() {
+ var theme = localStorage.getItem('doctools-theme') || 'light';
+ document.documentElement.setAttribute('data-theme', theme);
+ })();
+ </script>
+</head>
+
+<body class="fade-in">
+ <a href="#main" class="skip-link">Skip to main content</a>
+
+ <header class="header">
+<div class="header-content">
+ <a href="../index.html" class="logo">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon"
+ style="width:28px; height:28px; border-radius:6px;">
+ <span class="logo-text">OnlinePDFPro</span>
+ </a>
+ <nav class="nav" id="nav">
+ <a href="../tools.html" class="nav-link">All Tools</a>
+ <a href="../about.html" class="nav-link">About</a>
+ <a href="../help.html" class="nav-link">Help</a>
+ <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+ Install App</a>
+ </nav>
+ <div class="header-actions">
+ <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+ <!-- Compact Header Search -->
+ <div class="header-search" style="position: relative; margin-right: 8px;">
+ <span
+ style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+ <input type="text" id="globalToolSearch" placeholder="Search tools..."
+ style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
+ </div>
+ <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
+ style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+ </button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+
+ </div>
+ </div>
+ </header>
+
+ <main id="main" class="tool-page">
+
+<div class="container" style="max-width: 800px;">
+ <div class="tool-header">
+ <span class="section-tag fade-in">Organizer Tool</span>
+ <h1 class="tool-title fade-in">Delete Pages from PDF Online Free</h1>
+ <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+ Remove unwanted pages from any PDF in seconds. Click to select the pages you want to delete, then download the trimmed document. No file upload to servers — everything stays on your device.
+ </p>
+ </div>
+
+ <div style="margin-top:20px; width:100%;">
+
+ <div class="upload-zone glass-card fade-in" id="dropArea"
+ style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
+ <span class="upload-icon"
+ style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;">🗑️</span>
+ <p class="upload-text"
+ style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+ Drop your PDF here</p>
+ <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem;">Select pages you
+ want to visually DELETE</p>
+ <span class="btn btn-primary"
+ style="display: inline-flex; align-items: center; gap: 8px; pointer-events: none;">
+ <span>📄</span> Click to Upload
+ </span>
+ <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+ Max file size: 100MB. Processing happens instantly on your device.
+ </div>
+ <input type="file" id="fileInput" accept=".pdf" hidden />
+ </div>
+
+ <div class="file-info" id="fileInfo"></div>
+
+ <div class="top-controls" id="topControls">
+ <p class="selected-count" id="selectedCount">Click on pages to select for deletion</p>
+ <button onclick="selectAll()" style="background:#fee2e2; color:#ef4444;">Select All</button>
+ <button onclick="deselectAll()" style="background:var(--surface-2); color:var(--accent);">Deselect
+ All</button>
+ <button onclick="deleteAndDownload()"
+ style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white; padding:16px 40px !important; font-size:18px !important; box-shadow:0 10px 30px rgba(239,68,68,0.3);">🗑️
+ Delete Selected & Download</button>
+ </div>
+
+ <div class="progress-section" id="progressSection">
+ <h3>Loading PDF pages...</h3>
+ <div class="progress-bar">
+ <div class="progress-fill" id="progressFill"></div>
+ </div>
+ </div>
+
+ <div class="pages-grid" id="pagesGrid"></div>
+
+ </div>
+ </div>
+
+ <!-- Added SEO Sections -->
+
+</main>
+
+ <script src="../js/app.js?v=11"></script>
+
+ <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+ <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+ let pdfBytes = null;
+ let totalPages = 0;
+ let selectedPages = new Set();
+ let _originalFileName = '';
+
+ document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
+ document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
+
+ document.getElementById('dropArea').ondragover = e => { e.preventDefault(); };
+ document.getElementById('dropArea').ondrop = e => {
+ e.preventDefault();
+ loadPDF(e.dataTransfer.files[0]);
+ };
+
+ async function loadPDF(file) {
+ if (!file) return;
+ _originalFileName = file.name;
+ pdfBytes = await file.arrayBuffer();
+ document.getElementById('progressSection').style.display = 'block';
+
+ // Pass a COPY to pdfjsLib — it detaches the ArrayBuffer, making it unusable for PDFLib later
+ const pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+ totalPages = pdfJsDoc.numPages;
+
+ document.getElementById('fileInfo').style.display = 'block';
+ document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+
+ const grid = document.getElementById('pagesGrid');
+ grid.innerHTML = '';
+ selectedPages.clear();
+
+ for (let i = 1; i <= totalPages; i++) {
+ const page = await pdfJsDoc.getPage(i);
+ // Render at a small scale for thumbnails
+ const scale = 1.5;
+ const viewport = page.getViewport({ scale: scale });
+ const canvas = document.createElement('canvas');
+ canvas.width = viewport.width;
+ canvas.height = viewport.height;
+ await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+
+ const card = document.createElement('div');
+ card.className = 'page-card';
+ card.dataset.page = i;
+
+ // Use DOM methods instead of innerHTML to preserve the canvas pixel data
+ const label = document.createElement('div');
+ label.className = 'page-label';
+ label.textContent = 'Page ' + i;
+ card.appendChild(label);
+
+ card.appendChild(canvas);
+
+ const footer = document.createElement('div');
+ footer.className = 'page-footer';
+ footer.textContent = 'Page ' + i;
+ card.appendChild(footer);
+
+ card.onclick = () => togglePage(card, i);
+ grid.appendChild(card);
+
+ document.getElementById('progressFill').style.width = Math.round((i / totalPages) * 100) + '%';
+ }
+
+ // Hide upload area and show controls
+ document.getElementById('dropArea').style.display = 'none';
+ document.getElementById('progressSection').style.display = 'none';
+ document.getElementById('topControls').style.display = 'block';
+
+ // Auto-scroll to page grid
+ document.getElementById('topControls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+ }
+
+ function togglePage(card, pageNum) {
+ if (selectedPages.has(pageNum)) {
+ selectedPages.delete(pageNum);
+ card.classList.remove('selected');
+ } else {
+ if (selectedPages.size >= totalPages - 1) {
+ alert('You must keep at least 1 page!');
+ return;
+ }
+ selectedPages.add(pageNum);
+ card.classList.add('selected');
+ }
+ updateCount();
+ }
+
+ function updateCount() {
+ const count = selectedPages.size;
+ document.getElementById('selectedCount').textContent = count === 0
+ ? 'Click on pages to select for deletion'
+ : count + ' page(s) selected for deletion — ' + (totalPages - count) + ' will remain';
+ }
+
+ function selectAll() {
+ const cards = document.querySelectorAll('.page-card');
+ selectedPages.clear();
+ cards.forEach((card, index) => {
+ if (index < cards.length - 1) {
+ selectedPages.add(index + 1);
+ card.classList.add('selected');
+ }
+ });
+ updateCount();
+ }
+
+ function deselectAll() {
+ selectedPages.clear();
+ document.querySelectorAll('.page-card').forEach(card => card.classList.remove('selected'));
+ updateCount();
+ }
+
+ async function deleteAndDownload() {
+ if (selectedPages.size === 0) return alert('Select at least 1 page to delete!');
+
+ try {
+ const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+ const pagesToKeep = [];
+
+ for (let i = 0; i < totalPages; i++) {
+ if (!selectedPages.has(i + 1)) {
+ pagesToKeep.push(i);
+ }
+ }
+
+ const newDoc = await PDFLib.PDFDocument.create();
+ const copiedPages = await newDoc.copyPages(pdfDoc, pagesToKeep);
+ copiedPages.forEach(page => newDoc.addPage(page));
+
+ const newPdfBytes = await newDoc.save();
+ const blob = new Blob([newPdfBytes], { type: 'application/pdf' });
+ OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'edited.pdf');
+ } catch (err) {
+ console.error('Delete PDF error:', err);
+ alert('Error: ' + err.message);
+ }
+ }
+ </script>
+
+ <script defer src="../counter.js"></script>
+
+ <script>
+ if ('serviceWorker' in navigator) {
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
+ });
+ }
+ </script>
+
+ <!-- GA4 Event Tracking -->
+ <script>
+ document.addEventListener('DOMContentLoaded', function () {
+ // Track tool usage
+ document.querySelectorAll('.upload-btn,.btn-primary').forEach(function (btn) {
+ btn.addEventListener('click', function () {
+ if (typeof gtag === 'function') {
+ gtag('event', 'tool_interaction', {
+ 'event_category': 'Tool',
+ 'event_label': document.title,
+ 'value': 1
+ });
+ }
+ });
+ });
+ // Track downloads
+ document.querySelectorAll('[id*="download"],.download-btn').forEach(function (btn) {
+ btn.addEventListener('click', function () {
+ if (typeof gtag === 'function') {
+ gtag('event', 'file_download', {
+ 'event_category': 'Download',
+ 'event_label': document.title,
+ 'value': 1
+ });
+ }
+ });
+ });
+ });
+ </script>
+</body>
+
+</html>
+
