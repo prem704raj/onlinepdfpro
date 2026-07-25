@@ -228,7 +228,7 @@
 .option-btn.active {
     background: var(--accent);
     border-color: var(--accent);
-    color: white;
+    color: var(--btn-primary-text, white);
 }
 
 /* Form Elements */

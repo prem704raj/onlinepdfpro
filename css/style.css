@@ -40,7 +40,7 @@
     /* Warm cream — readable */
     --text-secondary: #a89e8f;
     /* Warm muted — secondary */
-    --text-muted: #756b5e;
+    --text-muted: #8c8273;
     /* Warm dark — placeholders */
 
     /* Borders — warm subtle */
@@ -62,6 +62,9 @@
     /* Search/Input Colors */
     --bg-primary: var(--surface-1);
     --bg-secondary: var(--surface-2);
+
+    /* Button Text Contrast */
+    --btn-primary-text: #1a1714; /* Dark text on gold button */
 
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -90,11 +93,12 @@
     --accent-subtle: rgba(139, 105, 20, 0.06);
     --text-primary: #2c2418;
     --text-secondary: #6b5e4f;
-    --text-muted: #9a8e7f;
+    --text-muted: #706558;
     --border: #d9d0c3;
     --border-hover: #c4b9a9;
     --bg-primary: #ffffff;
     --bg-secondary: #efe9de;
+    --btn-primary-text: #ffffff; /* White text on dark gold button */
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --midnight: var(--bg);
@@ -384,13 +388,14 @@ html[data-theme="dark"] .theme-icon-dark {
 
 .btn-primary {
     background: var(--accent);
-    color: white;
+    color: var(--btn-primary-text, white);
 }
 
 .btn-primary:hover {
     background: var(--accent-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    box-shadow: 0 4px 12px var(--accent-subtle);
+    color: var(--btn-primary-text, white);
 }
 
 .btn-secondary {
@@ -430,7 +435,7 @@ html[data-theme="dark"] .theme-icon-dark {
 
 .hero-subtitle {
     font-size: 1.125rem;
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text-secondary) !important;
     max-width: 540px;
     margin: 0 auto 36px;
     line-height: 1.7;
