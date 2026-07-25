@@ -110,7 +110,6 @@
 [data-theme="light"] header {
     background: rgba(247, 243, 236, 0.97) !important;
     border: none !important;
-    border-bottom: 1px solid #d9d0c3 !important;
     box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
 }
 
@@ -118,7 +117,6 @@
 [data-theme="dark"] header {
     background: rgba(26, 23, 20, 0.97) !important;
     border: none !important;
-    border-bottom: 1px solid #3a342a !important;
     box-shadow: none !important;
 }
 
@@ -247,7 +245,7 @@ a {
     background: rgba(10, 10, 11, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
+    border: none;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
@@ -257,6 +255,7 @@ a {
 
 [data-theme="light"] .header {
     background: rgba(250, 250, 250, 0.85);
+    border: none;
 }
 
 .header-content {
