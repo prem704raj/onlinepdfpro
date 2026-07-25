@@ -1,33 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
 /* =========================================
-   OnlinePDFPro — Minimalist Design System
+   OnlinePDFPro — Warm Editorial Design System
    ========================================= */
 
 :root {
     /* ===== DARK MODE (Default) =====
-       Modern, eye-friendly slate palette.
-       Soft deep background, elevated cards, muted text.
+       Warm, earthy dark palette.
+       Deep browns, gold accents, creamy text.
     */
 
-    /* Backgrounds — layered elevation */
-    --bg: #000000;
-    /* Pure black background */
-    --surface-1: #16161a;
-    /* Very dark charcoal card surface */
-    --surface-2: #1c1c21;
-    /* Slightly lighter dark charcoal */
-    --surface-3: #26262b;
-    /* Elevated dark charcoal surface */
-    /* Subtle accent surfaces — slate-600  */
+    /* Backgrounds — warm layered elevation */
+    --bg: #1a1714;
+    /* Warm dark background */
+    --surface-1: #2a2520;
+    /* Warm dark card surface */
+    --surface-2: #342e27;
+    /* Warm elevated surface */
+    --surface-3: #3a342a;
+    /* Warm border-level surface */
 
-    /* Accent */
-    --accent: #818cf8;
-    /* Indigo-400 — softer on dark bg */
-    --accent-hover: #a5b4fc;
-    /* Indigo-300                      */
-    --accent-subtle: rgba(129, 140, 248, 0.12);
+    /* Accent — warm gold */
+    --accent: #d4a942;
+    /* Gold — warm on dark bg */
+    --accent-hover: #e6be5a;
+    /* Lighter gold */
+    --accent-subtle: rgba(212, 169, 66, 0.12);
 
     --success: #4ade80;
     /* green-400  */
@@ -36,25 +35,25 @@
     --error: #f87171;
     /* red-400    */
 
-    /* Text — off-white hierarchy */
-    --text-primary: #E2E8F0;
-    /* slate-200 — readable, not blinding */
-    --text-secondary: #94A3B8;
-    /* slate-400 — secondary info         */
-    --text-muted: #64748B;
-    /* slate-500 — placeholders/hints     */
+    /* Text — warm off-white hierarchy */
+    --text-primary: #f0ebe2;
+    /* Warm cream — readable */
+    --text-secondary: #a89e8f;
+    /* Warm muted — secondary */
+    --text-muted: #756b5e;
+    /* Warm dark — placeholders */
 
-    /* Borders — subtle, no harsh shadows */
-    --border: rgba(255, 255, 255, 0.08);
-    /* subtle gray border at low opacity */
-    --border-hover: rgba(255, 255, 255, 0.16);
-    /* slightly more visible    */
+    /* Borders — warm subtle */
+    --border: #3a342a;
+    /* Warm dark border */
+    --border-hover: #4d453a;
+    /* Warm border on hover */
 
     /* Sizing */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
     --radius-full: 9999px;
     --container-max: 1120px;
     --nav-height: 56px;
@@ -70,8 +69,7 @@
 
     /* Legacy compat aliases */
     --aurora-violet: var(--accent);
-    --aurora-azure: #38bdf8;
-    /* sky-400 — softer on dark bg */
+    --aurora-azure: #d4a942;
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --glass-glow: transparent;
@@ -81,39 +79,51 @@
     --secondary: var(--aurora-azure);
 }
 
-/* Light Mode */
+/* Light Mode — Warm Cream */
 [data-theme="light"] {
-    --bg: #ffffff;
+    --bg: #f7f3ec;
     --surface-1: #ffffff;
-    --surface-2: #f4f4f5;
-    --surface-3: #e4e4e7;
-    --accent-subtle: rgba(99, 102, 241, 0.06);
-    --text-primary: #09090b;
-    --text-secondary: #52525b;
-    --text-muted: #a1a1aa;
-    --border: rgba(0, 0, 0, 0.22);
-    --border-hover: rgba(0, 0, 0, 0.4);
+    --surface-2: #efe9de;
+    --surface-3: #e5ddd0;
+    --accent: #8b6914;
+    --accent-hover: #a47d1b;
+    --accent-subtle: rgba(139, 105, 20, 0.06);
+    --text-primary: #2c2418;
+    --text-secondary: #6b5e4f;
+    --text-muted: #9a8e7f;
+    --border: #d9d0c3;
+    --border-hover: #c4b9a9;
     --bg-primary: #ffffff;
-    --bg-secondary: #f4f4f5;
+    --bg-secondary: #efe9de;
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --midnight: var(--bg);
     --surface-0: var(--bg);
 }
 
-/* Light mode: header must be fully opaque to hide hero gradient behind it */
+/* Header — warm translucent in both modes */
 [data-theme="light"] .header,
 [data-theme="light"] header {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border: 1.5px solid #000000 !important;
+    background: rgba(247, 243, 236, 0.97) !important;
+    border: none !important;
+    border-bottom: 1px solid #d9d0c3 !important;
+    box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
 }
 
-/* Newsletter box must ALWAYS show gradient in both modes */
+[data-theme="dark"] .header,
+[data-theme="dark"] header {
+    background: rgba(26, 23, 20, 0.97) !important;
+    border: none !important;
+    border-bottom: 1px solid #3a342a !important;
+    box-shadow: none !important;
+}
+
+/* Newsletter box — warm gold gradient */
 .newsletter-box {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
+    background: linear-gradient(135deg, #3d2e0f, #8b6914) !important;
     color: white !important;
     padding: 40px;
-    border-radius: 20px;
+    border-radius: 0px;
 }
 
 .newsletter-box h2,
@@ -123,7 +133,7 @@
 }
 
 [data-theme="light"] .newsletter-box {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb) !important;
+    background: linear-gradient(135deg, #3d2e0f, #8b6914) !important;
 }
 
 [data-theme="light"] .newsletter-box h2,
