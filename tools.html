@@ -91,6 +91,40 @@
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+<style>
+/* Warm background matching homepage */
+body {
+    background: #f7f3ec !important;
+}
+[data-theme="dark"] body {
+    background: #1a1714 !important;
+}
+/* Header adjusted for warm bg */
+[data-theme="light"] .header,
+[data-theme="light"] header {
+    background: rgba(247, 243, 236, 0.95) !important;
+    border-bottom: 1px solid #d9d0c3 !important;
+}
+[data-theme="dark"] .header,
+[data-theme="dark"] header {
+    background: rgba(26, 23, 20, 0.95) !important;
+    border-bottom: 1px solid #3a342a !important;
+}
+/* Card surfaces for warm palette */
+[data-theme="light"] .tool-card,
+[data-theme="light"] .glass-card {
+    background: #ffffff;
+    border-color: #d9d0c3;
+}
+[data-theme="light"] .hero-section {
+    background: linear-gradient(135deg, #efe9de 0%, #f7f3ec 50%, #efe9de 100%);
+}
+/* Footer warm bg */
+[data-theme="light"] .site-footer {
+    background: #efe9de !important;
+    border-top: 1px solid #d9d0c3 !important;
+}
+</style>
 </head>
 <body class="fade-in">
 <a class="skip-link" href="#main">Skip to main content</a>
