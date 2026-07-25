@@ -251,7 +251,7 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
     position: relative;
     z-index: 3;
     text-align: center;
-    max-width: 780px;
+    max-width: 1200px;
     padding: 0 24px;
     padding-top: 100px;
     padding-bottom: 36px;
@@ -275,6 +275,13 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
     color: var(--hp-text);
     margin-bottom: 24px;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .hp-hero-heading {
+        white-space: normal;
+    }
 }
 
 .hp-hero-heading em {
