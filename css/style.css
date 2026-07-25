@@ -12,13 +12,13 @@
     */
 
     /* Backgrounds — warm layered elevation */
-    --bg: #1a1714;
+    --bg: #000000;
     /* Warm dark background */
-    --surface-1: #2a2520;
+    --surface-1: #111111;
     /* Warm dark card surface */
-    --surface-2: #342e27;
+    --surface-2: #1a1a1a;
     /* Warm elevated surface */
-    --surface-3: #3a342a;
+    --surface-3: #222222;
     /* Warm border-level surface */
 
     /* Accent — warm gold */
@@ -84,10 +84,10 @@
 
 /* Light Mode — Warm Cream */
 [data-theme="light"] {
-    --bg: #f7f3ec;
+    --bg: #ffffff;
     --surface-1: transparent;
-    --surface-2: #efe9de;
-    --surface-3: #e5ddd0;
+    --surface-2: #f5f5f5;
+    --surface-3: #eeeeee;
     --accent: #8b6914;
     --accent-hover: #a47d1b;
     --accent-subtle: rgba(139, 105, 20, 0.06);
@@ -108,14 +108,14 @@
 /* Header — warm translucent in both modes */
 [data-theme="light"] .header,
 [data-theme="light"] header {
-    background: rgba(247, 243, 236, 0.97) !important;
+    background: rgba(255, 255, 255, 0.97) !important;
     border: 1px solid #d9d0c3 !important;
     box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
 }
 
 [data-theme="dark"] .header,
 [data-theme="dark"] header {
-    background: rgba(26, 23, 20, 0.97) !important;
+    background: rgba(0, 0, 0, 0.97) !important;
     border: 1px solid #3a342a !important;
     box-shadow: none !important;
 }
