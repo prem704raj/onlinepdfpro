@@ -351,26 +351,35 @@ a {
 .desktop-only-action:hover {
     border-color: transparent !important;
     color: var(--text-primary);
-}
     background: var(--surface-2);
 }
 
-/* Default (Light Mode): Show Sun, Hide Moon */
-.theme-icon-light {
-    display: none;
-}
-
+/* Theme Toggle Icons - display only 1 icon at a time */
+.theme-icon-light,
 .theme-icon-dark {
-    display: inline;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Dark Mode: Show Moon, Hide Sun */
-html[data-theme="dark"] .theme-icon-light {
-    display: inline;
+/* In Light Mode: Show Moon (theme-icon-light), Hide Sun (theme-icon-dark) */
+[data-theme="light"] .theme-icon-dark,
+html:not([data-theme="dark"]) .theme-icon-dark {
+    display: none !important;
 }
 
-html[data-theme="dark"] .theme-icon-dark {
-    display: none;
+[data-theme="light"] .theme-icon-light,
+html:not([data-theme="dark"]) .theme-icon-light {
+    display: inline-flex !important;
+}
+
+/* In Dark Mode: Show Sun (theme-icon-dark), Hide Moon (theme-icon-light) */
+[data-theme="dark"] .theme-icon-light {
+    display: none !important;
+}
+
+[data-theme="dark"] .theme-icon-dark {
+    display: inline-flex !important;
 }
 
 /* ---- Buttons ---- */
