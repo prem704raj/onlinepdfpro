@@ -85,7 +85,7 @@
 /* Light Mode — Warm Cream */
 [data-theme="light"] {
     --bg: #f7f3ec;
-    --surface-1: #ffffff;
+    --surface-1: transparent;
     --surface-2: #efe9de;
     --surface-3: #e5ddd0;
     --accent: #8b6914;
@@ -96,7 +96,7 @@
     --text-muted: #706558;
     --border: #d9d0c3;
     --border-hover: #c4b9a9;
-    --bg-primary: #ffffff;
+    --bg-primary: transparent;
     --bg-secondary: #efe9de;
     --btn-primary-text: #ffffff; /* White text on dark gold button */
     --glass-bg: var(--surface-1);
