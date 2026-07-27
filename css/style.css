@@ -79,7 +79,7 @@
 
 /* Light Mode — Warm Cream */
 [data-theme="light"] {
-    --bg: #f4f0e6;
+    --bg: #f6f5f0;
     --surface-1: transparent;
     --surface-2: #efe9de;
     --surface-3: #e5ddd0;
@@ -103,7 +103,7 @@
 /* Header — warm translucent in both modes */
 [data-theme="light"] .header,
 [data-theme="light"] header {
-    background: rgba(244, 240, 230, 0.97) !important;
+    background: rgba(246, 245, 240, 0.97) !important;
     border: 1px solid #d9d0c3 !important;
     box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
 }
