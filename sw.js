@@ -10,7 +10,7 @@ importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
 
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v81'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v82'; 
 const STATIC_ASSETS = [
     '404.html',
     'about.html',
@@ -146,6 +146,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
+
+    // Skip blob: URLs — these are used for file downloads and must not be intercepted
+    if (url.protocol === 'blob:') return;
 
     // Map root / to index.html for cache matching
     let cacheKey = request;

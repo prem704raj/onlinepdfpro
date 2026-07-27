@@ -111,12 +111,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">All Tools</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -131,7 +132,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
 
  </div>
  </div>
@@ -149,7 +150,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
- <span class="upload-icon">🖼️</span>
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Select images to scale</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
@@ -166,12 +167,12 @@
 
  <div id="fileSection" style="display: none;">
  <div class="options-panel glass-card" style="padding: 32px; margin-bottom: 32px;">
- <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary);">📐 Scaling Controls</h3>
+ <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary);"> Scaling Controls</h3>
 
  <!-- Professional Tab Bar -->
  <div class="resize-mode-tabs" style="display: flex; gap: 6px; background: var(--surface-2, rgba(255,255,255,0.06)); padding: 4px; border-radius: 12px; margin-bottom: 28px;">
- <button class="resize-mode-tab active" data-mode="percentage" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">📊 Percentage</button>
- <button class="resize-mode-tab" data-mode="dimensions" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);">📏 Dimensions</button>
+ <button class="resize-mode-tab active" data-mode="percentage" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.3);"> Percentage</button>
+ <button class="resize-mode-tab" data-mode="dimensions" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);"> Dimensions</button>
  <button class="resize-mode-tab" data-mode="presets" style="flex: 1; padding: 10px 16px; border: none; border-radius: 10px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--text-secondary);"> Presets</button>
  </div>
 
@@ -270,7 +271,7 @@
  <div class="download-section">
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.ZIP)</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">🔄 Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
  </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
  </div>
@@ -376,7 +377,7 @@
  lockBtn.onclick = () => {
  lockAspect = !lockAspect;
  lockBtn.classList.toggle('locked', lockAspect);
- lockBtn.textContent = lockAspect ? '' : '🔓';
+ lockBtn.textContent = lockAspect ? '' : '';
  if (lockAspect) aspectRatio = (parseInt(widthInput.value) || 1) / (parseInt(heightInput.value) || 1);
  };
 
@@ -434,7 +435,7 @@
  <div class="batch-file-name">${escapeHTML(file.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
  </div>
- <button class="btn-remove-file" onclick="window.removeFile(${index})">✕</button>
+ <button class="btn-remove-file" onclick="window.removeFile(${index})"></button>
  </div>
  </div>
  `).join('');
@@ -547,7 +548,7 @@
  resultsList.innerHTML = successResults.map((result, index) => `
  <div class="batch-file-item" style="margin-bottom: 12px;">
  <div class="batch-file-header" style="margin-bottom: 0;">
- <span style="font-size: 1.5rem;">🖼️</span>
+ <span style="font-size: 1.5rem;"></span>
  <div class="batch-file-info">
  <div class="batch-file-name">${result.name}</div>
  <div class="batch-file-size">${result.newWidth}px wide</div>
@@ -680,4 +681,5 @@
 </body>
 
 </html>
+
 

@@ -1,0 +1,71 @@
+---
+permalink: /sitemap.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.w3.org/2005/Atom" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+{%- set staticPages = [
+  { url: '/', priority: '1.0', changefreq: 'weekly' },
+  { url: '/about/', priority: '0.6', changefreq: 'weekly' },
+  { url: '/tools/', priority: '0.9', changefreq: 'weekly' },
+  { url: '/blog/', priority: '0.8', changefreq: 'weekly' },
+  { url: '/contact/', priority: '0.6', changefreq: 'yearly' },
+  { url: '/disclaimer/', priority: '0.5', changefreq: 'yearly' },
+  { url: '/dmca/', priority: '0.5', changefreq: 'yearly' },
+  { url: '/help/', priority: '0.8', changefreq: 'weekly' },
+  { url: '/privacy/', priority: '0.5', changefreq: 'yearly' },
+  { url: '/terms/', priority: '0.5', changefreq: 'yearly' },
+  { url: '/history.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/compare-pdf.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/flatten-pdf.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/invoice-generator.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-bookmark.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-highlighter-extractor.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-page-reorder.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-presentation-mode.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-reader.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-scratchpad.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/pdf-to-jpg.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/presentation-maker.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/remove-background.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/resume-cv-builder.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/speech-to-text.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/text-to-audio.html', priority: '0.8', changefreq: 'weekly' },
+  { url: '/text-to-speech.html', priority: '0.8', changefreq: 'weekly' }
+] -%}
+{%- set toolPages = [
+  '/tools/merge-pdf.html', '/tools/compress-pdf.html', '/tools/split-pdf.html',
+  '/tools/sign-pdf.html', '/tools/jpg-to-pdf.html', '/tools/image-to-text.html',
+  '/tools/image-compressor.html', '/tools/image-resize.html', '/tools/image-crop.html',
+  '/tools/heic-to-jpg.html', '/tools/webp-to-jpg.html', '/tools/image-format-converter.html',
+  '/tools/passport-photo-maker.html', '/tools/crop-pdf.html', '/tools/delete-pdf-pages.html',
+  '/tools/delete-pages.html', '/tools/rotate-pdf.html', '/tools/add-page-numbers-to-pdf.html',
+  '/tools/add-page-numbers.html', '/tools/pdf-watermark.html', '/tools/password-protect-pdf.html',
+  '/tools/pdf-unlock.html', '/tools/redact-pdf.html', '/tools/html-to-pdf.html',
+  '/tools/qr-code-generator.html', '/tools/qr-generator.html', '/tools/csv-to-xlsx.html',
+  '/tools/xlsx-to-csv.html', '/tools/pdf-to-text-extractor.html', '/tools/ocr.html'
+] -%}
+{%- for page in staticPages %}
+  <url>
+    <loc>https://onlinepdfpro.com{{ page.url }}</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>{{ page.changefreq }}</changefreq>
+    <priority>{{ page.priority }}</priority>
+  </url>
+{%- endfor %}
+{%- for toolUrl in toolPages %}
+  <url>
+    <loc>https://onlinepdfpro.com{{ toolUrl }}</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+{%- endfor %}
+{%- for post in collections.blog %}
+  <url>
+    <loc>https://onlinepdfpro.com{{ post.url | url }}</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+{%- endfor %}
+</urlset>

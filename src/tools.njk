@@ -1,0 +1,247 @@
+---
+title: "Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More"
+description: "100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, Image to Text (OCR) extractor. No registration, No watermark, Works on mobile."
+keywords: "free pdf tools online, pdf merge online, compress pdf free, pdf editor online, convert pdf, sign pdf free, ocr pdf, pdf tools no signup"
+bodyClass: tp-body
+---
+{% extends "base.njk" %}
+{% block head %}
+<style>
+:root { --tp-bg: #f1ecd9; --tp-bg-alt: #efe9de; --tp-bg-dark: #1c1610; --tp-text: #2c2418; --tp-text-secondary: #6b5e4f; --tp-text-muted: #706558; --tp-accent: #8b6914; --tp-accent-hover: #a47d1b; --tp-border: #d9d0c3; --tp-card-bg: transparent; --tp-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; --tp-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+[data-theme="dark"] { --tp-bg: #1a1714; --tp-bg-alt: #242019; --tp-bg-dark: #0f0d0a; --tp-text: #f0ebe2; --tp-text-secondary: #a89e8f; --tp-text-muted: #8c8273; --tp-accent: #d4a942; --tp-accent-hover: #e6be5a; --tp-border: #3a342a; --tp-card-bg: #2a2520; }
+body.tp-body { background: var(--tp-bg) !important; color: var(--tp-text) !important; }
+body.tp-body .header { background: rgba(241,236,217,0.97) !important; backdrop-filter: blur(16px) !important; -webkit-backdrop-filter: blur(16px) !important; border: 1px solid var(--tp-border) !important; box-shadow: none !important; }
+[data-theme="dark"] body.tp-body .header { background: rgba(26,23,20,0.97) !important; border: 1px solid var(--tp-border) !important; }
+body.tp-body .header .logo-text { color: var(--tp-text) !important; }
+body.tp-body .header .nav-link { color: var(--tp-text-secondary) !important; }
+body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
+.tp-hero { background: transparent; padding: 20px 24px 80px; text-align: center; position: relative; overflow: hidden; border-bottom: none; }
+.tp-hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(139,105,20,0.06) 0%, transparent 70%); pointer-events: none; }
+.tp-hero-label { font-family: var(--tp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 16px; position: relative; }
+.tp-hero-heading { font-family: var(--tp-serif); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.15; color: var(--tp-text); margin-bottom: 16px; letter-spacing: -0.01em; position: relative; white-space: nowrap; }
+@media (max-width: 768px) { .tp-hero-heading, .tp-hero-subtitle { white-space: normal; } }
+.tp-hero-heading em { font-style: italic; }
+.tp-hero-subtitle { font-family: var(--tp-sans); font-size: 0.92rem; color: var(--tp-text-secondary); line-height: 1.7; max-width: 950px; margin: 0 auto 32px; position: relative; white-space: nowrap; }
+.tp-search-wrap { max-width: 440px; margin: 0 auto; position: relative; }
+.tp-search-wrap input { width: 100%; padding: 16px 20px 16px 48px; border: 1.5px solid var(--tp-border); background: var(--tp-card-bg); color: var(--tp-text); font-family: var(--tp-sans); font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+.tp-search-wrap input:focus { border-color: var(--tp-accent); }
+.tp-search-wrap input::placeholder { color: var(--tp-text-muted); }
+.tp-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--tp-text-muted); pointer-events: none; }
+.tp-search-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+.tp-main { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.tp-category { padding: 56px 0 0; }
+.tp-category-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.tp-category-title { font-family: var(--tp-serif); font-size: 1.25rem; font-weight: 500; color: var(--tp-text); white-space: nowrap; }
+.tp-category-line { flex: 1; height: 1px; background: var(--tp-border); }
+.tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+@media (max-width: 768px) { .tp-grid { grid-template-columns: 1fr; } }
+.tp-card { display: flex; align-items: center; gap: 16px; padding: 20px 18px; background: var(--tp-card-bg); border: 1px solid var(--tp-border); text-decoration: none; color: inherit; transition: all 0.3s ease; position: relative; overflow: hidden; }
+
+.tp-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(44,36,24,0.06); border-color: var(--tp-accent); }
+
+.tp-card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tp-card-icon svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tp-card-name { font-family: var(--tp-serif); font-size: 0.95rem; font-weight: 500; color: var(--tp-text); margin-bottom: 2px; }
+.tp-card-desc { font-family: var(--tp-sans); font-size: 0.75rem; color: var(--tp-text-muted); line-height: 1.4; }
+.tp-card.coming-soon { opacity: 0.45; cursor: default; pointer-events: none; }
+.tp-fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.tp-fade-up.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 768px) { .tp-hero { padding: 80px 20px 56px; } .tp-category { padding: 40px 0 0; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ═══════ HERO ═══════ -->
+<section class="tp-hero">
+    <p class="tp-hero-label">30+ Free Tools — No Signup Needed</p>
+    <h1 class="tp-hero-heading">All Your PDF Tools, <em>in One Place</em></h1>
+    <p class="tp-hero-subtitle">Merge, compress, convert, sign, and edit PDFs in seconds. 100% free, easy to use, no watermarks.</p>
+    <div class="tp-search-wrap">
+        <div class="tp-search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input type="text" id="toolSearch" placeholder="Search tools..." autocomplete="off"/>
+    </div>
+</section>
+
+<!-- ═══════ TOOLS ═══════ -->
+<div class="tp-main" id="tools-section">
+
+{% set categories = {
+  'Essential PDF Tools': [
+    { name: 'Compress PDF', desc: 'Reduce file size up to 80%', href: 'tools/compress-pdf.html', color: '#ea580c', svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
+    { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: 'tools/merge-pdf.html', color: '#7c3aed', svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
+    { name: 'Split PDF', desc: 'Extract pages or split into files', href: 'tools/split-pdf.html', color: '#6366f1', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="4" y1="14" x2="20" y2="14" stroke-dasharray="2 2"/>' },
+    { name: 'PDF Reader', desc: 'Fast in-browser viewer with search', href: 'pdf-reader.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="3"/><line x1="13.1" y1="16.1" x2="16" y2="19"/>' },
+    { name: 'PDF Presentation', desc: 'Fullscreen slides with timer & draw', href: 'pdf-presentation-mode.html', color: '#2563eb', svg: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>' }
+  ],
+  'Document Converters': [
+    { name: 'PDF to Text', desc: 'Extract and export as TXT/MD', href: 'tools/pdf-to-text-extractor.html', color: '#16a34a', svg: '<path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h5"/><polyline points="12 2 12 8 18 8"/><line x1="16" y1="13" x2="22" y2="13"/><line x1="16" y1="16" x2="21" y2="16"/><line x1="16" y1="19" x2="20" y2="19"/>' },
+    { name: 'HTML to PDF', desc: 'Code editor with live preview', href: 'tools/html-to-pdf.html', color: '#16a34a', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="8 12 6 14 8 16"/><polyline points="12 12 14 14 12 16"/>' },
+    { name: 'PDF Scratchpad', desc: 'Offline notepad to draft PDF text', href: 'pdf-scratchpad.html', color: '#7c3aed', svg: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>' }
+  ],
+  'Image & Media Tools': [
+    { name: 'JPG to PDF', desc: 'Create PDF from your photos', href: 'tools/jpg-to-pdf.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
+    { name: 'Image Compressor', desc: 'Optimize JPG & PNG in bulk', href: 'tools/image-compressor.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="8 8 12 12 16 8"/><polyline points="8 16 12 12 16 16"/>' },
+    { name: 'Image Resize', desc: 'Resize to any dimension', href: 'tools/image-resize.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v6h6"/><path d="M3 15h6v6"/>' },
+    { name: 'Image Crop', desc: 'Crop and rotate images', href: 'tools/image-crop.html', color: '#0d9488', svg: '<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>' },
+    { name: 'Background Remover', desc: 'AI-powered removal', href: 'remove-background.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/><circle cx="12" cy="10" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>' },
+    { name: 'HEIC to JPG', desc: 'Convert iPhone HEIC photos', href: 'tools/heic-to-jpg.html', color: '#16a34a', svg: '<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>' },
+    { name: 'WebP to JPG', desc: 'Convert WebP images instantly', href: 'tools/webp-to-jpg.html', color: '#16a34a', svg: '<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>' },
+    { name: 'Image Format Converter', desc: 'Convert between formats', href: 'tools/image-format-converter.html', color: '#16a34a', svg: '<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>' },
+    { name: 'Passport Photo Maker', desc: 'Any country format', href: 'tools/passport-photo-maker.html', color: '#0d9488', svg: '<rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><circle cx="12" cy="10" r="3"/><path d="M7 20v-1a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v1"/>' }
+  ],
+  'Organize & Manage': [
+    { name: 'Crop PDF', desc: 'Visual crop with precision', href: 'tools/crop-pdf.html', color: '#ea580c', svg: '<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>' },
+    { name: 'Delete PDF Pages', desc: 'Remove unwanted pages', href: 'tools/delete-pdf-pages.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="14" x2="15" y2="14"/>' },
+    { name: 'Rotate PDF', desc: 'Fix page orientation', href: 'tools/rotate-pdf.html', color: '#ea580c', svg: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>' },
+    { name: 'PDF Page Reorder', desc: 'Drag and drop rearrange', href: 'pdf-page-reorder.html', color: '#7c3aed', svg: '<rect x="6" y="2" width="12" height="5" rx="1"/><rect x="6" y="9" width="12" height="5" rx="1"/><rect x="6" y="16" width="12" height="5" rx="1"/>' },
+    { name: 'PDF to JPG', desc: 'Export pages as 4K images', href: 'pdf-to-jpg.html', color: '#16a34a', svg: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
+    { name: 'PDF Bookmarks', desc: 'Add TOC & navigation', href: 'pdf-bookmark.html', color: '#7c3aed', svg: '<path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>' },
+    { name: 'Add Page Numbers', desc: 'Professional numbering', href: 'tools/add-page-numbers-to-pdf.html', color: '#7c3aed', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="17" x2="15" y2="17"/>' },
+    { name: 'PDF Watermark', desc: 'Text or image watermarks', href: 'tools/pdf-watermark.html', color: '#ea580c', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="6" y1="20" x2="18" y2="8" stroke-dasharray="3 2" opacity="0.5"/>' }
+  ],
+  'Security & Safety': [
+    { name: 'Sign PDF', desc: 'Draw or type your e-signature', href: 'tools/sign-pdf.html', color: '#8b6914', svg: '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>' },
+    { name: 'Password Protect', desc: 'Encrypt your files', href: 'tools/password-protect-pdf.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="9" y="14" width="6" height="5" rx="1"/><path d="M10 14v-3a2 2 0 0 1 4 0v3"/>' },
+    { name: 'PDF Unlock', desc: 'Remove password protection', href: 'tools/pdf-unlock.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M10 15v-4a2 2 0 0 1 4 0"/>' },
+    { name: 'Redact PDF', desc: 'Hide sensitive data', href: 'tools/redact-pdf.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="7" y="12" width="10" height="2.5" rx="0.5" fill="currentColor" stroke="none" opacity="0.4"/><rect x="7" y="16.5" width="7" height="2.5" rx="0.5" fill="currentColor" stroke="none" opacity="0.4"/>' },
+    { name: 'Flatten PDF', desc: 'Remove forms, make non-editable', href: 'flatten-pdf.html', color: '#ea580c', svg: '<rect x="2" y="12" width="20" height="5" rx="1"/><path d="M12 17v5"/><polyline points="9 20 12 22 15 20"/>' }
+  ],
+  'AI & Smart Tools': [
+    { name: 'Image to Text (OCR)', desc: 'Read text from scanned docs', href: 'tools/image-to-text.html', color: '#d97706', svg: '<rect x="2" y="3" width="12" height="12" rx="2"/><circle cx="6" cy="7" r="1.5"/><polyline points="14 12 11 9 2 15"/><line x1="17" y1="6" x2="22" y2="6"/><line x1="17" y1="10" x2="22" y2="10"/><line x1="17" y1="14" x2="22" y2="14"/>' },
+    { name: 'Speech to Text', desc: 'Voice to PDF in 20+ languages', href: 'speech-to-text.html', color: '#d97706', svg: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>' },
+    { name: 'Text to Speech', desc: 'Convert text to speech, 50+ voices', href: 'text-to-speech.html', color: '#d97706', svg: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>' }
+  ],
+  'Smart Utilities': [
+    { name: 'Presentation Maker', desc: 'Create slides, export PPTX/PDF', href: 'presentation-maker.html', color: '#4f46e5', svg: '<rect x="2" y="6" width="20" height="14" rx="2"/><rect x="4" y="4" width="16" height="2" rx="1"/><line x1="7" y1="11" x2="13" y2="11"/><line x1="7" y1="14" x2="17" y2="14"/>' },
+    { name: 'QR Code Generator', desc: 'URLs, text, files & more', href: 'tools/qr-code-generator.html', color: '#4f46e5', svg: '<rect x="2" y="2" width="7" height="7" rx="1"/><rect x="15" y="2" width="7" height="7" rx="1"/><rect x="2" y="15" width="7" height="7" rx="1"/><rect x="15" y="15" width="3" height="3" rx="0.5"/><rect x="19" y="15" width="3" height="3" rx="0.5"/><rect x="15" y="19" width="3" height="3" rx="0.5"/>' },
+    { name: 'Compare PDFs', desc: 'Side-by-side diff highlighting', href: 'compare-pdf.html', color: '#2563eb', svg: '<path d="M3 3h7v18H3z"/><path d="M14 3h7v18h-7z"/><line x1="5" y1="7" x2="8" y2="7"/><line x1="16" y1="7" x2="19" y2="7"/><line x1="5" y1="10" x2="8" y2="10"/><line x1="16" y1="10" x2="19" y2="10"/>' },
+    { name: 'Highlight Extractor', desc: 'Extract notes & annotations', href: 'pdf-highlighter-extractor.html', color: '#ea580c', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' }
+  ],
+  'Business & Career': [
+    { name: 'Resume & CV Builder', desc: 'ATS-friendly, 13 templates', href: 'resume-cv-builder.html', color: '#4f46e5', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="12" r="2"/><line x1="14" y1="12" x2="17" y2="12"/><line x1="8" y1="17" x2="17" y2="17"/>' },
+    { name: 'Invoice Generator', desc: 'Branded invoices, export PDF', href: 'invoice-generator.html', color: '#4f46e5', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/>' }
+  ]
+} %}
+
+{% for categoryName, tools in categories %}
+<div class="tp-category tp-fade-up">
+    <div class="tp-category-header">
+        <h2 class="tp-category-title">{{ categoryName }}</h2>
+        <div class="tp-category-line"></div>
+    </div>
+    <div class="tp-grid">
+        {% for tool in tools %}
+        <a class="tp-card" href="{{ '/' + tool.href | url }}">
+            <div class="tp-card-icon" style="background: {{ tool.color }};"><svg viewBox="0 0 24 24">{{ tool.svg | safe }}</svg></div>
+            <div><div class="tp-card-name">{{ tool.name }}</div><div class="tp-card-desc">{{ tool.desc }}</div></div>
+        </a>
+        {% endfor %}
+</div>
+</div>
+{% endfor %}
+
+</div><!-- end tp-main -->
+
+<!-- ═══════ SMART DROP OVERLAY ═══════ -->
+<div id="homeDropOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(28,22,16,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.2s,visibility 0.2s;pointer-events:none;">
+<div style="text-align:center;padding:48px 64px;border:2px dashed rgba(212,169,66,0.4);border-radius:0;background:rgba(212,169,66,0.05);">
+<div style="width:80px;height:80px;margin:0 auto 20px;border-radius:50%;background:rgba(212,169,66,0.1);display:flex;align-items:center;justify-content:center;color:#d4a942;">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+</div>
+<p style="font-size:1.5rem;font-weight:700;color:#f0ebe2;margin-bottom:8px;font-family:'Playfair Display',serif;">Drop your file here</p>
+<p style="font-size:0.9rem;color:rgba(240,235,226,0.5);font-family:'Inter',sans-serif;">We'll help you pick the right tool</p>
+</div>
+</div>
+
+<script>
+// Search filtering
+(function() {
+    var input = document.getElementById('toolSearch');
+    if (!input) return;
+    input.addEventListener('input', function() {
+        var q = this.value.toLowerCase().trim();
+        var cards = document.querySelectorAll('.tp-card');
+        var categories = document.querySelectorAll('.tp-category');
+        cards.forEach(function(card) {
+            var name = card.querySelector('.tp-card-name');
+            var desc = card.querySelector('.tp-card-desc');
+            var text = (name ? name.textContent : '') + ' ' + (desc ? desc.textContent : '');
+            card.style.display = text.toLowerCase().includes(q) || q === '' ? 'flex' : 'none';
+        });
+        categories.forEach(function(cat) {
+            var visible = cat.querySelectorAll('.tp-card[style*="flex"], .tp-card:not([style])');
+            var hasVisible = false;
+            visible.forEach(function(c) { if (c.style.display !== 'none') hasVisible = true; });
+            cat.style.display = hasVisible || q === '' ? 'block' : 'none';
+        });
+    });
+})();
+// Fade-up animations
+(function() {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.tp-fade-up').forEach(function(el) { el.classList.add('visible'); });
+        return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.tp-fade-up').forEach(function(el) { observer.observe(el); });
+})();
+// Smart drop zone
+(function() {
+    var overlay = document.getElementById('homeDropOverlay');
+    if (!overlay) return;
+    var dragCounter = 0;
+    var toolMap = {
+        pdf: [
+            { name: 'Compress', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>', href: 'tools/compress-pdf.html' },
+            { name: 'Merge', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', href: 'tools/merge-pdf.html' },
+            { name: 'Split', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.47" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>', href: 'tools/split-pdf.html' },
+            { name: 'Read', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>', href: 'pdf-reader.html' },
+            { name: 'Protect', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>', href: 'tools/password-protect-pdf.html' },
+            { name: 'Sign', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>', href: 'tools/sign-pdf.html' },
+            { name: 'Rotate', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>', href: 'tools/rotate-pdf.html' }
+        ],
+        image: [
+            { name: 'Compress', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>', href: 'tools/image-compressor.html' },
+            { name: 'Resize', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>', href: 'tools/image-resize.html' },
+            { name: 'Crop', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>', href: 'tools/image-crop.html' },
+            { name: 'To PDF', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', href: 'tools/jpg-to-pdf.html' },
+            { name: 'Extract Text', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>', href: 'tools/image-to-text.html' }
+        ]
+    };
+    document.addEventListener('dragenter', function(e) { e.preventDefault(); dragCounter++; overlay.style.opacity='1'; overlay.style.visibility='visible'; overlay.style.pointerEvents='auto'; });
+    document.addEventListener('dragleave', function(e) { e.preventDefault(); dragCounter--; if(dragCounter<=0){dragCounter=0; overlay.style.opacity='0'; overlay.style.visibility='hidden'; overlay.style.pointerEvents='none';} });
+    document.addEventListener('dragover', function(e) { e.preventDefault(); });
+    overlay.addEventListener('drop', function(e) {
+        e.preventDefault(); dragCounter=0; overlay.style.opacity='0'; overlay.style.visibility='hidden'; overlay.style.pointerEvents='none';
+        var files=e.dataTransfer.files; if(!files||files.length===0) return;
+        var file=files[0]; var isPDF=file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf');
+        var isImage=file.type.startsWith('image/');
+        var tools=isPDF?toolMap.pdf:(isImage?toolMap.image:toolMap.pdf);
+        var fileName=document.getElementById('dropModalFileName');
+        if(!fileName) return;
+        fileName.textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+' MB)';
+        var ad=document.getElementById('dropModalActions');
+        if(!ad) return;
+        ad.innerHTML=tools.map(function(t){return '<a href="'+t.href+'" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--tp-bg-alt);border:1px solid var(--tp-border);text-decoration:none;color:var(--tp-text);font-weight:500;font-size:0.9rem;font-family:Inter,sans-serif;transition:all 0.2s;" onmouseenter="this.style.borderColor=\'var(--tp-accent)\'" onmouseleave="this.style.borderColor=\'var(--tp-border)\'"><span style="font-size:1.3rem;">'+t.svg+'</span>'+t.name+'</a>';}).join('');
+        var modal = document.getElementById('homeDropModal');
+        if(modal) modal.style.display='flex';
+    });
+})();
+</script>
+
+<!-- ═══════ TOOL PICKER MODAL ═══════ -->
+<div id="homeDropModal" style="position:fixed;inset:0;z-index:100000;background:rgba(28,22,16,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
+<div style="background:var(--tp-card-bg);border:1px solid var(--tp-border);border-radius:0;padding:36px 32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+<div style="text-align:center;margin-bottom:24px;">
+<p style="font-size:1.1rem;font-weight:500;color:var(--tp-text);margin-bottom:4px;font-family:'Playfair Display',serif;" id="dropModalFileName">file.pdf</p>
+<p style="font-size:0.85rem;color:var(--tp-text-muted);font-family:'Inter',sans-serif;">What would you like to do?</p>
+</div>
+<div id="dropModalActions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+<button onclick="document.getElementById('homeDropModal').style.display='none'" style="display:block;margin:20px auto 0;padding:10px 24px;background:transparent;border:1px solid var(--tp-border);border-radius:0;color:var(--tp-text-muted);cursor:pointer;font-size:0.85rem;font-family:'Inter',sans-serif;">Cancel</button>
+</div>
+</div>
+{% endblock %}

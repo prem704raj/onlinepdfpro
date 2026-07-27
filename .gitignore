@@ -1,3 +1,7 @@
+# Build output
+_site/
+_site
+
 # Dependencies
 node_modules/
 

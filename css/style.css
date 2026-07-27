@@ -1,9 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
-
-/* =========================================
-   OnlinePDFPro — Warm Editorial Design System
-   ========================================= */
+/* Reset */
 
 :root {
     /* ===== DARK MODE (Default) =====
@@ -84,7 +79,7 @@
 
 /* Light Mode — Warm Cream */
 [data-theme="light"] {
-    --bg: #f7f3ec;
+    --bg: #f1ecd9;
     --surface-1: transparent;
     --surface-2: #efe9de;
     --surface-3: #e5ddd0;
@@ -108,7 +103,7 @@
 /* Header — warm translucent in both modes */
 [data-theme="light"] .header,
 [data-theme="light"] header {
-    background: rgba(247, 243, 236, 0.97) !important;
+    background: rgba(241, 236, 217, 0.97) !important;
     border: 1px solid #d9d0c3 !important;
     box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
 }
@@ -1734,3 +1729,31 @@ main#main {
 /* History visibility */
 @media (min-width: 769px) { .mobile-only-nav { display: none !important; } }
 @media (max-width: 768px) { .desktop-only-action { display: none !important; } }
+
+/* UNIVERSAL OVERRIDES (APPLIED GLOBALLY TO ENSURE ALL PAGES GET THEM) */
+.upload-zone {
+    background-color: transparent !important;
+    border: 2px dashed #8b6914 !important;
+    color: #8a6d3b !important;
+}
+.upload-zone .upload-text {
+    color: #3a3122 !important;
+}
+.upload-zone .upload-hint {
+    color: #8a6d3b !important;
+}
+.upload-zone svg, .upload-icon, .page-drop-icon, .upload-zone > svg, .upload-zone svg[width="48"] {
+    display: none !important;
+}
+.upload-zone .upload-btn, .upload-zone .btn-primary {
+    background-color: #8a6d3b !important;
+    color: #ffffff !important;
+    border-color: #8a6d3b !important;
+    border-radius: 9999px !important;
+}
+.upload-zone:hover, .upload-zone.dragover {
+    background-color: #e8e2d4 !important;
+}
+.privacy-reminder {
+    display: none !important;
+}

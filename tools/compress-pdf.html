@@ -110,11 +110,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">All Tools</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -128,7 +130,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
 
  </div>
  </div>
@@ -146,7 +148,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
- <span class="upload-icon">📦</span>
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop your documents here</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
  <button class="btn btn-primary upload-btn">Choose Files</button>
@@ -165,7 +167,7 @@
 
  <!-- Quick Preset Buttons -->
  <div id="presetButtons" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
- <button class="option-btn" data-preset="strong" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;">📉 Strong</button>
+ <button class="option-btn" data-preset="strong" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Strong</button>
  <button class="option-btn active" data-preset="balanced" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 2px solid var(--accent); background: rgba(99,102,241,0.1); color: var(--accent); cursor: pointer; font-weight: 600; transition: all 0.2s;"> Balanced</button>
  <button class="option-btn" data-preset="quality" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Quality</button>
  <button class="option-btn" data-preset="lossless" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Lossless</button>
@@ -245,7 +247,7 @@
  <div class="download-section">
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.zip)</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">🔄 Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
  </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Results will clear in 5:00</div>
  </div>
@@ -290,7 +292,7 @@
  let results = [];
  let isCancelled = false;
 
- // ── Quality-First Compression Engine ──
+ //  Quality-First Compression Engine 
  // Phase 1 (Lossless): copyPages + object streams — 100% quality preserved
  // Phase 2 (Smart Fallback): high-res render only if lossless isn't enough
  //
@@ -471,7 +473,7 @@
  fileList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" data-index="${index}">
  <div class="batch-file-header">
- <span class="file-icon" style="font-size: 2rem;">📄</span>
+ <span class="file-icon" style="font-size: 2rem;"></span>
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -502,9 +504,9 @@
  document.getElementById('cancelBtn').addEventListener('click', () => { isCancelled = true; });
  document.getElementById('compressAnother').addEventListener('click', resetTool);
 
- // ═══════════════════════════════════════════
+ // 
  // PHASE 1 — Lossless structural optimization
- // ═══════════════════════════════════════════
+ // 
  async function losslessCompress(arrayBuffer) {
  const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
  const newDoc = await PDFDocument.create();
@@ -525,9 +527,9 @@
  });
  }
 
- // ═══════════════════════════════════════════
+ // 
  // PHASE 2 — High-quality rasterization fallback
- // ═══════════════════════════════════════════
+ // 
  async function rasterizeCompress(arrayBuffer, preset, statusText, progressFill, numPagesTotal) {
  const newPdfDoc = await PDFDocument.create();
  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
@@ -575,9 +577,9 @@
  return await newPdfDoc.save({ useObjectStreams: true });
  }
 
- // ═══════════════════════════════════════════
+ // 
  // Main batch compression loop
- // ═══════════════════════════════════════════
+ // 
  async function startBatchCompression() {
  if (files.length === 0) return;
 
@@ -594,7 +596,7 @@
  processingList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" id="process-${index}">
  <div class="batch-file-header">
- <span class="file-icon" style="font-size: 2rem;">📄</span>
+ <span class="file-icon" style="font-size: 2rem;"></span>
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -631,7 +633,7 @@
 
  const originalSize = file.size;
 
- // ── PHASE 1: Lossless structural optimization ──
+ //  PHASE 1: Lossless structural optimization 
  statusText.textContent = 'Phase 1: Structural optimization...';
  progressFill.style.width = '20%';
 
@@ -646,7 +648,7 @@
 
  progressFill.style.width = '45%';
 
- // ── PHASE 2: Smart rasterization (only if not lossless-only) ──
+ //  PHASE 2: Smart rasterization (only if not lossless-only) 
  if (!preset.losslessOnly && isCancelled === false) {
  statusText.textContent = 'Phase 2: Smart re-encoding...';
 
@@ -717,7 +719,7 @@
  resultsList.innerHTML = successResults.map((result, index) => `
  <div class="batch-file-item">
  <div class="batch-file-header">
- <span class="file-icon" style="font-size: 2rem;">📄</span>
+ <span class="file-icon" style="font-size: 2rem;"></span>
  <div class="batch-file-info">
  <div class="batch-file-name">${result.name}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} &rarr; ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
@@ -880,4 +882,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
 

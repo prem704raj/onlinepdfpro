@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E3A5F"/>
+      <stop offset="100%" stop-color="#0096c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="144" height="144" rx="29" fill="url(#bg)"/>
+  <text x="72" y="60.48" text-anchor="middle" font-family="Arial, sans-serif" font-size="50" font-weight="700" fill="white">PDF</text>
+  <text x="72" y="103.67999999999999" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" font-weight="500" fill="rgba(255,255,255,0.9)">PRO</text>
+</svg>

@@ -1,0 +1,62 @@
+---
+title: Blog - PDF Tips, Guides & Tutorials | OnlinePDFPro
+description: Learn how to merge, split, compress, convert PDFs and more. Free guides, tutorials, and tips for working with PDF documents.
+---
+{% extends "base.njk" %}
+{% block head %}
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: var(--text-primary); }
+.blog-hero { text-align: center; padding: 120px 20px 60px; background: transparent; color: white; position: relative; overflow: hidden; box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05); margin-bottom: 40px; }
+.blog-hero h2 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin-bottom: 16px; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; }
+.blog-hero p { font-size: 1.15rem; max-width: 600px; margin: 0 auto; line-height: 1.6; position: relative; z-index: 1; }
+.blog-grid { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
+.blog-card { padding: 32px 24px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s, border-color 0.2s; }
+.blog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); border-color: var(--border-hover); }
+.hp-icon-container { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.hp-icon-container svg { width: 24px; height: 24px; stroke: white; }
+.blog-card-body { padding: 20px 16px; flex: 1; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+.blog-card-body h3 { font-size: 1.05rem; margin: 0; color: var(--text-primary); line-height: 1.5; letter-spacing: -0.2px; text-align: center; }
+.blog-card-body p, .meta, .category { display: none; }
+.blog-footer { text-align: center; padding: 40px 20px; color: var(--text-secondary); border-top: 1px solid var(--border); margin-top: 40px; }
+.blog-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.blog-footer a:hover { text-decoration: underline; }
+@media (max-width:768px) { .blog-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="blog-hero">
+<h2 style="display:flex; justify-content:center; align-items:center;"><span class="hp-section-head-icon" style="background:transparent; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; margin-right:10px;"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span> OnlinePDFPro Blog</h2>
+<p>Free guides, tutorials, and tips for working with PDFs — Free, always.</p>
+</div>
+<div class="blog-grid">
+{% for post in collections.blog %}
+<a class="blog-card" href="{{ post.url | url }}">
+<div class="hp-icon-container" style="background: #4f46e5; box-shadow: 0 10px 20px -5px #4f46e580;">{{ post.data.icon | safe }}</div>
+<div class="blog-card-body">
+<h3>{{ post.data.title }}</h3>
+</div>
+</a>
+{% endfor %}
+</div>
+<div class="blog-footer">
+<p>© 2026 <a href="{{ '/' | url }}">OnlinePDFPro.com</a> — Free PDF Tools</p>
+<p style="margin-top:10px">
+<a href="{{ '/tools.html' | url }}">All Tools</a> ·
+<a href="{{ '/about.html' | url }}">About</a> ·
+<a href="{{ '/privacy.html' | url }}">Privacy</a>
+</p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="blog-footer">
+<p>© 2026 <a href="{{ '/' | url }}">OnlinePDFPro.com</a> — Free PDF Tools</p>
+<p style="margin-top:10px">
+<a href="{{ '/tools.html' | url }}">All Tools</a> ·
+<a href="{{ '/about.html' | url }}">About</a> ·
+<a href="{{ '/privacy.html' | url }}">Privacy</a>
+</p>
+</div>
+{% endblock %}

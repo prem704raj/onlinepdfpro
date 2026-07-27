@@ -1,0 +1,180 @@
+Found Emojis:
+Emoji: ✏ (b'\\u270f')
+Emoji: ⛶ (b'\\u26f6')
+Emoji: ✉ (b'\\u2709')
+Emoji: 📝 (b'\\U0001f4dd')
+Emoji: 💧 (b'\\U0001f4a7')
+Emoji: ✖ (b'\\u2716')
+Emoji: 📧 (b'\\U0001f4e7')
+Emoji: ➖ (b'\\u2796')
+Emoji: 🎬 (b'\\U0001f3ac')
+Emoji: 🔴 (b'\\U0001f534')
+Emoji: 🖨 (b'\\U0001f5a8')
+Emoji: 📎 (b'\\U0001f4ce')
+Emoji: ➡ (b'\\u27a1')
+Emoji: 국 (b'\\uad6d')
+Emoji: 🇰 (b'\\U0001f1f0')
+Emoji: ⚠ (b'\\u26a0')
+Emoji: ─ (b'\\u2500')
+Emoji: 🎨 (b'\\U0001f3a8')
+Emoji: ⬅ (b'\\u2b05')
+Emoji: ➕ (b'\\u2795')
+Emoji: 🌍 (b'\\U0001f30d')
+Emoji: 🖼 (b'\\U0001f5bc')
+Emoji: 🔄 (b'\\U0001f504')
+Emoji: ⭐ (b'\\u2b50')
+Emoji: 📦 (b'\\U0001f4e6')
+Emoji: 🇿 (b'\\U0001f1ff')
+Emoji: 📰 (b'\\U0001f4f0')
+Emoji: ▼ (b'\\u25bc')
+Emoji: 어 (b'\\uc5b4')
+Emoji: 📏 (b'\\U0001f4cf')
+Emoji: ⟩ (b'\\u27e9')
+Emoji: 📐 (b'\\U0001f4d0')
+Emoji: 📄 (b'\\U0001f4c4')
+Emoji: 🗣 (b'\\U0001f5e3')
+Emoji: 🇵 (b'\\U0001f1f5')
+Emoji: 📽 (b'\\U0001f4fd')
+Emoji: 🇪 (b'\\U0001f1ea')
+Emoji: 🌎 (b'\\U0001f30e')
+Emoji: 🏠 (b'\\U0001f3e0')
+Emoji: ✕ (b'\\u2715')
+Emoji: 🔗 (b'\\U0001f517')
+Emoji: 🕒 (b'\\U0001f552')
+Emoji: ◀ (b'\\u25c0')
+Emoji: 📤 (b'\\U0001f4e4')
+Emoji: ❌ (b'\\u274c')
+Emoji: ▲ (b'\\u25b2')
+Emoji: 🎭 (b'\\U0001f3ad')
+Emoji: 🐇 (b'\\U0001f407')
+Emoji: 🇦 (b'\\U0001f1e6')
+Emoji: 🇭 (b'\\U0001f1ed')
+Emoji: 📋 (b'\\U0001f4cb')
+Emoji: 🇸 (b'\\U0001f1f8')
+Emoji: ✍ (b'\\u270d')
+Emoji: ⟨ (b'\\u27e8')
+Emoji: 📊 (b'\\U0001f4ca')
+Emoji: ﻿ (b'\\ufeff')
+Emoji: 🇫 (b'\\U0001f1eb')
+Emoji: 🐢 (b'\\U0001f422')
+Emoji: 🌐 (b'\\U0001f310')
+Emoji: 📂 (b'\\U0001f4c2')
+Emoji: 🖥 (b'\\U0001f5a5')
+Emoji: 🌗 (b'\\U0001f317')
+Emoji: 🎤 (b'\\U0001f3a4')
+Emoji: 📜 (b'\\U0001f4dc')
+Emoji: ⬇ (b'\\u2b07')
+Emoji: 📚 (b'\\U0001f4da')
+Emoji: 🇾 (b'\\U0001f1fe')
+Emoji: 本 (b'\\u672c')
+Emoji: 📍 (b'\\U0001f4cd')
+Emoji: 📥 (b'\\U0001f4e5')
+Emoji: 🇧 (b'\\U0001f1e7')
+Emoji: 🔊 (b'\\U0001f50a')
+Emoji: ☰ (b'\\u2630')
+Emoji: 💰 (b'\\U0001f4b0')
+Emoji: 🇮 (b'\\U0001f1ee')
+Emoji: 📸 (b'\\U0001f4f8')
+Emoji: 🌏 (b'\\U0001f30f')
+Emoji: 🇬 (b'\\U0001f1ec')
+Emoji: 🔓 (b'\\U0001f513')
+Emoji: 👋 (b'\\U0001f44b')
+Emoji: 🇯 (b'\\U0001f1ef')
+Emoji: 🎵 (b'\\U0001f3b5')
+Emoji: 🇨 (b'\\U0001f1e8')
+Emoji: 🏆 (b'\\U0001f3c6')
+Emoji: 🇳 (b'\\U0001f1f3')
+Emoji: 🎧 (b'\\U0001f3a7')
+Emoji: 🇷 (b'\\U0001f1f7')
+Emoji: 👁 (b'\\U0001f441')
+Emoji: 🔷 (b'\\U0001f537')
+Emoji: 🇽 (b'\\U0001f1fd')
+Emoji: 📖 (b'\\U0001f4d6')
+Emoji: 🗂 (b'\\U0001f5c2')
+Emoji: 📉 (b'\\U0001f4c9')
+Emoji: 🇩 (b'\\U0001f1e9')
+Emoji: 日 (b'\\u65e5')
+Emoji: 文 (b'\\u6587')
+Emoji: 💾 (b'\\U0001f4be')
+Emoji: ═ (b'\\u2550')
+Emoji: 🗜 (b'\\U0001f5dc')
+Emoji: 🇺 (b'\\U0001f1fa')
+Emoji: 💬 (b'\\U0001f4ac')
+Emoji: ️ (b'\\ufe0f')
+Emoji: 🖍 (b'\\U0001f58d')
+Emoji: ⬛ (b'\\u2b1b')
+Emoji: ⟲ (b'\\u27f2')
+Emoji: 🇹 (b'\\U0001f1f9')
+Emoji: ▶ (b'\\u25b6')
+Emoji: 📑 (b'\\U0001f4d1')
+Emoji: 📌 (b'\\U0001f4cc')
+Emoji: ✓ (b'\\u2713')
+Emoji: ✂ (b'\\u2702')
+Emoji: 🗑 (b'\\U0001f5d1')
+Emoji: 한 (b'\\ud55c')
+Emoji: 🇲 (b'\\U0001f1f2')
+Emoji: ➜ (b'\\u279c')
+Emoji: 中 (b'\\u4e2d')
+Emoji: 🐛 (b'\\U0001f41b')
+Emoji: ⬆ (b'\\u2b06')
+Emoji: 語 (b'\\u8a9e')
+
+Files:
+.\404.html: 📦, ☰, ️, 📝, 📎, ✂, 🏠, ✍
+.\about.html: ☰, 📖
+.\blog.html: 🕒, ☰
+.\compare-pdf.html: ☰, ◀, 📄, 🔄, ❌, ▶
+.\contact.html: ☰, 📧, ⭐, 🐛
+.\disclaimer.html: ☰
+.\dmca.html: ☰
+.\flatten-pdf.html: ☰, 💬, 📄, 📊, 📌, 📤, 📝, 🔗, 📥
+.\help.html: ☰, 📖, ️, ⚠, 🗜
+.\history.html: 📦, ☰, 📂, 📄, 📊, ️, 📑, 📋, 📽, 📝, 🖼, ⬇, 💾, ✕, 🗑
+.\index.html: ═, ☰
+.\invoice-generator.html: ☰
+.\pdf-bookmark.html: ☰, 📖, 👁, 📄, ️, 📑, 📚, 🗑, 📥
+.\pdf-highlighter-extractor.html: ️, ☰, 🖍
+.\pdf-page-reorder.html: ☰
+.\pdf-presentation-mode.html: ☰, ◀, 🖥, ️, ▶
+.\pdf-reader.html: ➕, ☰, ⛶, 📑, 🎨, ➖
+.\pdf-scratchpad.html: ⬇, ☰, ✖
+.\pdf-to-jpg.html: ☰, 📚
+.\pdf-to-text-extractor.html: ☰, 📝
+.\presentation-maker.html: ➕, 📄, 📋, ️, 🖼, 📝, ⬛, ⬆, ⬇, ➡, 💾, ✕, 🗑, 🎨, ⬅
+.\privacy.html: ☰, 💾, ✓, 🌗
+.\remove-background.html: ⟨, 🏆, ✓, ─, 🎨, ⟩
+.\resume-cv-builder.html: ☰
+.\speech-to-text.html: 🌐, 📐, 📄, 🎤, 📝, 日, 文, 本, 📥, ☰, ️, 🔴, 국, ❌, 📋, 🗑, 한, 中, 어, 語
+.\terms.html: ☰
+.\text-to-audio.html: ﻿
+.\text-to-speech.html: ✏, 🌐, 📖, 📄, 🗣, 📝, 📜, 📥, 🔊, ☰, 🇮, ️, 🎭, ▶, 🐇, 👋, 🎵, 📋, 🇳, 🗑, 🎧, 📰, 🐢
+.\tools.html: ═, ☰
+.\tools\add-page-numbers-to-pdf.html: 📄, ☰, 📥
+.\tools\add-page-numbers.html: ﻿
+.\tools\compress-pdf.html: 📦, ☰, 📄, 📉, 🔄, ─, ═
+.\tools\crop-pdf.html: ☰, ▼, 📄, ️, ✂, ▲
+.\tools\csv-to-xlsx.html: ﻿
+.\tools\delete-pages.html: ﻿
+.\tools\delete-pdf-pages.html: 🗑, ☰, ️, 📄
+.\tools\heic-to-jpg.html: 🌐, ➜, ️, 🖼, ✓
+.\tools\html-to-pdf.html: ✏, ☰, ✉, 👁, 📄, 📊, ️, 📥
+.\tools\image-compress.html: ﻿
+.\tools\image-crop.html: ✂, ☰, ️, 🔄
+.\tools\image-format-converter.html: 🌐, 🖥, ️, 🖼, 📸, 🔄, ✓, ❌, 🔷, 🎨
+.\tools\image-resize.html: ☰, 📐, 📊, ️, 🖼, 🔄, ✕, 📏, 🔓
+.\tools\image-to-text.html: ☰, 💾, 📋, 🔄
+.\tools\jpg-to-pdf.html: ☰, ️, 🖼
+.\tools\merge-pdf.html: ✕
+.\tools\ocr.html: ﻿
+.\tools\passport-photo-maker.html: 📐, 📄, 🇵, 🇪, 🇩, 🇾, ⬇, 🌎, 🇧, 📍, 🇺, 💰, 🇮, 🖨, ️, 📸, 🌏, 🇰, 🇹, 🇬, 🎨, 🌍, 🇯, 🇦, 🇨, 🇭, 🇳, 🇸, 🇲, 🇿, 🇷, 🇫, 🇽
+.\tools\password-protect-pdf.html: ☰, 👁, 📄, ️, ❌, 📥
+.\tools\pdf-unlock.html: ☰, 👁, 📄, ️, 🔄, ❌, 📥, 🔓
+.\tools\pdf-watermark.html: 📄, ☰, 🔄, 💧
+.\tools\qr-code-generator.html: 📦, ☰, 🗂, ️, 🖼, 📝, 📎, ⬇, ❌, ⚠, 🗑, ═, 🎨, 🎬, ─
+.\tools\qr-generator.html: ﻿
+.\tools\redact-pdf.html: 📄, ☰
+.\tools\rotate-pdf.html: ☰, 📄, 🔄, 💾, ⟲
+.\tools\sign-pdf.html: ☰, ◀, 📋, ️, 🔄, ✍, 🗑, 📥, ▶
+.\tools\split-pdf.html: ☰, ️, ✓, 🔄, ✂
+.\tools\webp-to-jpg.html: 🌐, ➜, ️, 🖼, ✓, 📧
+.\tools\xlsx-to-csv.html: ﻿

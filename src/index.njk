@@ -1,0 +1,246 @@
+---
+title: OnlinePDFPro - PDF Tools & Digital Study Materials
+description: Your all-in-one platform for 30+ free PDF tools and curated study materials. Merge, compress, sign, convert PDFs. Browse notes, books, and more.
+keywords: pdf tools, study materials, merge pdf, compress pdf, online pdf pro, free pdf tools
+bodyClass: hp-body
+---
+{% extends "base.njk" %}
+{% block head %}
+<style>
+/* ═══════════════════════════════════════════════
+   HOMEPAGE — Warm Editorial Design System
+   ═══════════════════════════════════════════════ */
+:root { --hp-bg: #f1ecd9; --hp-bg-alt: #efe9de; --hp-bg-dark: #1c1610; --hp-text: #2c2418; --hp-text-secondary: #6b5e4f; --hp-text-muted: #706558; --hp-accent: #8b6914; --hp-accent-hover: #a47d1b; --hp-border: #d9d0c3; --hp-card-bg: transparent; --hp-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; --hp-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+[data-theme="dark"] { --hp-bg: #1a1714; --hp-bg-alt: #242019; --hp-bg-dark: #0f0d0a; --hp-text: #f0ebe2; --hp-text-secondary: #a89e8f; --hp-text-muted: #8c8273; --hp-accent: #d4a942; --hp-accent-hover: #e6be5a; --hp-border: #3a342a; --hp-card-bg: #2a2520; }
+body.hp-body { background: var(--hp-bg) !important; color: var(--hp-text) !important; }
+body.hp-body main { padding-top: 0 !important; }
+body.hp-body .header { background: #f1ecd9 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; box-shadow: 0 4px 20px rgba(44,36,24,0.08) !important; }
+[data-theme="dark"] body.hp-body .header { background: #1a1714 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important; }
+body.hp-body .header .logo-text { color: var(--hp-text) !important; }
+body.hp-body .header .nav-link { color: var(--hp-text-secondary) !important; }
+body.hp-body .header .nav-link:hover { color: var(--hp-text) !important; }
+body.hp-body .header .theme-toggle { color: var(--hp-text) !important; border: none !important; }
+body.hp-body .header .menu-toggle { color: var(--hp-text) !important; }
+body.hp-body .header .desktop-only-action { color: var(--hp-text) !important; border: none !important; }
+body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle { display: none !important; }
+.hp-hero { position: relative; width: 100%; min-height: auto; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: transparent; }
+.hp-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(139,105,20,0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 20% 75%, rgba(180,130,50,0.04) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 80% 25%, rgba(212,169,66,0.04) 0%, transparent 50%); animation: heroGlow 10s ease-in-out infinite alternate; z-index: 1; }
+@keyframes heroGlow { 0% { opacity: 0.85; } 100% { opacity: 1; } }
+.hp-hero::after { content: ''; position: absolute; inset: 0; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); z-index: 2; pointer-events: none; }
+.hp-hero-content { position: relative; z-index: 3; text-align: center; max-width: 1200px; padding: 0 24px; padding-top: 100px; padding-bottom: 36px; }
+.hp-hero-label { font-family: var(--hp-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-accent); margin-bottom: 24px; }
+.hp-hero-heading { font-family: var(--hp-serif); font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 400; line-height: 1.15; color: var(--hp-text); margin-bottom: 24px; letter-spacing: -0.01em; white-space: nowrap; }
+@media (max-width: 768px) { .hp-hero-heading, .hp-hero-subtitle { white-space: normal; } }
+.hp-hero-heading em { font-style: italic; color: var(--hp-accent); }
+.hp-hero-subtitle { font-family: var(--hp-sans); font-size: 1rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 950px; margin: 0 auto 44px; white-space: nowrap; }
+.hp-hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.hp-btn { font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 40px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; cursor: pointer; display: inline-block; }
+.hp-btn:hover { background: var(--hp-text); color: var(--hp-bg); border-color: var(--hp-text); }
+.hp-btn-filled { background: var(--hp-accent); color: #fff; border-color: var(--hp-accent); }
+.hp-btn-filled:hover { background: var(--hp-accent-hover); color: #fff; border-color: var(--hp-accent-hover); }
+.hp-section { padding: 100px 24px; }
+.hp-container { max-width: 1100px; margin: 0 auto; }
+.hp-label { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-text-muted); margin-bottom: 14px; }
+.hp-section-heading { font-family: var(--hp-serif); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 400; color: var(--hp-text); line-height: 1.2; margin-bottom: 18px; letter-spacing: -0.01em; }
+.hp-section-heading em { font-style: italic; }
+.hp-section-desc { font-family: var(--hp-sans); font-size: 0.92rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 540px; }
+.hp-offerings { background: var(--hp-bg); }
+.hp-offerings-header { text-align: center; margin-bottom: 56px; }
+.hp-offerings-header .hp-section-desc { margin: 0 auto; }
+.hp-offerings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 1024px) { .hp-offerings-grid { grid-template-columns: 1fr; gap: 16px; } }
+.hp-offering-card { background: var(--hp-card-bg); border: 1px solid var(--hp-border); padding: 44px 32px 36px; text-align: left; text-decoration: none; color: inherit; transition: all 0.4s ease; position: relative; overflow: hidden; }
+
+.hp-offering-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(44,36,24,0.07); }
+
+.hp-offering-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--hp-accent); }
+.hp-offering-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.hp-offering-title { font-family: var(--hp-serif); font-size: 1.3rem; font-weight: 500; color: var(--hp-text); margin-bottom: 10px; }
+.hp-offering-desc { font-family: var(--hp-sans); font-size: 0.85rem; color: var(--hp-text-secondary); line-height: 1.7; margin-bottom: 24px; }
+.hp-offering-link { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hp-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: gap 0.3s ease; }
+.hp-offering-card:hover .hp-offering-link { gap: 14px; }
+.hp-offering-badge { display: inline-block; font-family: var(--hp-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--hp-accent); color: var(--hp-accent); margin-bottom: 18px; }
+.hp-tools-section { background: var(--hp-bg-alt); }
+.hp-tools-header { text-align: center; margin-bottom: 48px; }
+.hp-tools-header .hp-section-desc { margin: 0 auto; }
+.hp-tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; }
+@media (max-width: 1024px) { .hp-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) { .hp-tools-grid { grid-template-columns: 1fr; } }
+.hp-tool-item { display: flex; align-items: center; gap: 18px; padding: 24px 22px; background: var(--hp-card-bg); border: 1px solid var(--hp-border); text-decoration: none; color: inherit; transition: all 0.3s ease; }
+.hp-tool-item:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(44,36,24,0.06); border-color: var(--hp-accent); }
+.hp-tool-icon-wrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hp-tool-icon-wrap svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hp-tool-name { font-family: var(--hp-serif); font-size: 1rem; font-weight: 500; color: var(--hp-text); margin-bottom: 2px; }
+.hp-tool-desc { font-family: var(--hp-sans); font-size: 0.75rem; color: var(--hp-text-muted); }
+.hp-tools-cta { text-align: center; }
+.hp-btn-warm { font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 44px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; display: inline-block; }
+.hp-btn-warm:hover { background: var(--hp-text); color: var(--hp-bg); }
+.hp-philosophy { background: var(--hp-bg); }
+.hp-philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+@media (max-width: 1024px) { .hp-philosophy-grid { grid-template-columns: 1fr; gap: 40px; } .hp-philosophy-visual { order: -1; } }
+.hp-philosophy-visual { display: flex; align-items: center; justify-content: center; }
+.hp-philosophy-art { width: 100%; max-width: 360px; aspect-ratio: 1; position: relative; }
+.hp-philosophy-art::before { content: ''; position: absolute; inset: 12%; border: 1px solid var(--hp-border); transform: rotate(45deg); }
+.hp-philosophy-art::after { content: ''; position: absolute; inset: 28%; border: 1px solid var(--hp-border); opacity: 0.4; }
+.hp-philosophy-art-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 100px; height: 100px; background: var(--hp-accent); opacity: 0.07; border-radius: 50%; }
+.hp-feature-list { list-style: none; padding: 0; margin: 28px 0 0; }
+.hp-feature-list li { font-family: var(--hp-sans); font-size: 0.88rem; color: var(--hp-text-secondary); padding: 11px 0; border-bottom: 1px solid var(--hp-border); display: flex; align-items: center; gap: 12px; }
+.hp-feature-list li::before { content: '·'; font-size: 1.5rem; color: var(--hp-accent); line-height: 1; }
+.hp-stats { background: var(--hp-bg-dark); padding: 64px 24px; }
+.hp-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 1100px; margin: 0 auto; text-align: center; }
+@media (max-width: 768px) { .hp-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+.hp-stat-number { font-family: var(--hp-serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 400; color: #f0ebe2; margin-bottom: 8px; }
+.hp-stat-label { font-family: var(--hp-sans); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,235,226,0.35); }
+.hp-quote { background: var(--hp-bg); padding: 100px 24px; text-align: center; }
+.hp-quote-text { font-family: var(--hp-serif); font-size: clamp(1.4rem, 3.5vw, 2.1rem); font-weight: 400; font-style: italic; color: var(--hp-text); max-width: 680px; margin: 0 auto; line-height: 1.5; }
+.hp-fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.hp-fade-up.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 768px) { .hp-section { padding: 64px 20px; } .hp-hero-ctas { flex-direction: column; align-items: center; } .hp-btn { width: 100%; max-width: 260px; text-align: center; } .hp-philosophy-art { max-width: 240px; } .hp-offering-card { padding: 28px 22px 24px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ═══════ HERO ═══════ -->
+<section class="hp-hero">
+    <div class="hp-hero-content">
+        <p class="hp-hero-label">Your All-in-One PDF Platform</p>
+        <h1 class="hp-hero-heading">Everything PDF, <em>Beautifully Crafted</em></h1>
+        <p class="hp-hero-subtitle">From 30+ free fast and secure tools to curated study materials, notes, and books — everything you need, in one place.</p>
+        <div class="hp-hero-ctas">
+            <a href="{{ '/tools.html' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>
+            <a href="#offerings" class="hp-btn">Discover More</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ OFFERINGS ═══════ -->
+<section class="hp-section hp-offerings" id="offerings">
+    <div class="hp-container">
+        <div class="hp-offerings-header hp-fade-up">
+            <p class="hp-label">What We Offer</p>
+            <h2 class="hp-section-heading">Crafted for <em>Your Success</em></h2>
+            <p class="hp-section-desc">Whether you need to process documents, find study resources, or explore our growing ecosystem — we've got you covered.</p>
+        </div>
+        <div class="hp-offerings-grid">
+            <a href="{{ '/tools.html' | url }}" class="hp-offering-card hp-fade-up">
+                <div class="hp-offering-badge">30+ Tools</div>
+                <div class="hp-offering-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <h3 class="hp-offering-title">PDF Tools</h3>
+                <p class="hp-offering-desc">Merge, compress, split, sign, watermark, convert, and more. All free, all fast and secure, no signup required.</p>
+                <span class="hp-offering-link">Browse All Tools <span>→</span></span>
+            </a>
+            <a href="{{ '/study-materials.html' | url }}" class="hp-offering-card hp-fade-up">
+                <div class="hp-offering-icon">
+                    <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </div>
+                <h3 class="hp-offering-title">Study Materials</h3>
+                <p class="hp-offering-desc">Curated notes, handwritten PDFs, exam prep materials, and reference books — carefully selected for quality.</p>
+                <span class="hp-offering-link">Browse Materials <span>→</span></span>
+            </a>
+            <a href="{{ '/blog.html' | url }}" class="hp-offering-card hp-fade-up">
+                <div class="hp-offering-badge" style="border-color: #0d9488; color: #0d9488;">Guides & Tips</div>
+                <div class="hp-offering-icon">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <h3 class="hp-offering-title">Blog & Resources</h3>
+                <p class="hp-offering-desc">Tips, tutorials, and guides on working with PDFs. Learn how to get the most out of your documents.</p>
+                <span class="hp-offering-link">Read Articles <span>→</span></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ POPULAR TOOLS ═══════ -->
+<section class="hp-section hp-tools-section">
+    <div class="hp-container">
+        <div class="hp-tools-header hp-fade-up">
+            <p class="hp-label">Popular Tools</p>
+            <h2 class="hp-section-heading">100% Free – <em>No Watermarks</em></h2>
+            <p class="hp-section-desc">The essential tools that people reach for every day. Fast, reliable, and completely free.</p>
+        </div>
+        <div class="hp-tools-grid">
+            {% set popularTools = [
+              { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: 'tools/merge-pdf.html', color: '#7c3aed', svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
+              { name: 'Compress PDF', desc: 'Reduce file size up to 80%', href: 'tools/compress-pdf.html', color: '#ea580c', svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
+              { name: 'Split PDF', desc: 'Extract pages or split into files', href: 'tools/split-pdf.html', color: '#6366f1', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="4" y1="14" x2="20" y2="14" stroke-dasharray="2 2"/>' },
+              { name: 'Sign PDF', desc: 'Add your e-signature', href: 'tools/sign-pdf.html', color: '#8b6914', svg: '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>' },
+              { name: 'JPG to PDF', desc: 'Create PDF from images', href: 'tools/jpg-to-pdf.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
+              { name: 'Image to Text', desc: 'OCR in 20+ languages', href: 'tools/image-to-text.html', color: '#d97706', svg: '<rect x="2" y="3" width="12" height="12" rx="2"/><circle cx="6" cy="7" r="1.5"/><polyline points="14 12 11 9 2 15"/><line x1="17" y1="6" x2="22" y2="6"/><line x1="17" y1="10" x2="22" y2="10"/><line x1="17" y1="14" x2="22" y2="14"/>' }
+            ] %}
+            {% for tool in popularTools %}
+            <a href="{{ '/' + tool.href | url }}" class="hp-tool-item hp-fade-up">
+                <div class="hp-tool-icon-wrap" style="background: {{ tool.color }};"><svg viewBox="0 0 24 24">{{ tool.svg | safe }}</svg></div>
+                <div><div class="hp-tool-name">{{ tool.name }}</div><div class="hp-tool-desc">{{ tool.desc }}</div></div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="hp-tools-cta hp-fade-up">
+            <a href="{{ '/tools.html' | url }}" class="hp-btn-warm">View All 30+ Tools</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ PHILOSOPHY ═══════ -->
+<section class="hp-section hp-philosophy">
+    <div class="hp-container">
+        <div class="hp-philosophy-grid">
+            <div class="hp-philosophy-visual hp-fade-up">
+                <div class="hp-philosophy-art">
+                    <div class="hp-philosophy-art-inner"></div>
+                    <svg viewBox="0 0 300 300" style="width:100%;height:100%;position:absolute;inset:0;" fill="none" stroke="var(--hp-border)" stroke-width="0.5">
+                        <text x="150" y="70" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" fill="var(--hp-text-muted)" stroke="none" opacity="0.3" letter-spacing="3">P R I V A C Y</text>
+                        <text x="150" y="110" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" fill="var(--hp-text-muted)" stroke="none" opacity="0.22" letter-spacing="4">F R E E D O M</text>
+                        <text x="150" y="150" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" fill="var(--hp-text-muted)" stroke="none" opacity="0.35" letter-spacing="5">S I M P L I C I T Y</text>
+                        <text x="150" y="190" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" fill="var(--hp-text-muted)" stroke="none" opacity="0.25" letter-spacing="3">S E C U R I T Y</text>
+                        <text x="150" y="230" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" fill="var(--hp-text-muted)" stroke="none" opacity="0.18" letter-spacing="2">T R U S T</text>
+                        <line x1="80" y1="40" x2="80" y2="260" opacity="0.12"/>
+                        <line x1="220" y1="40" x2="220" y2="260" opacity="0.12"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="hp-fade-up">
+                <p class="hp-label">Our Philosophy</p>
+                <h2 class="hp-section-heading">Built <em>Different</em></h2>
+                <p class="hp-section-desc">Every tool on OnlinePDFPro processes your files quickly and securely. Your documents stay yours — always.</p>
+                <ul class="hp-feature-list">
+                    <li>Fast and secure processing</li>
+                    <li>Complete privacy and security</li>
+                    <li>Free forever, no hidden charges</li>
+                    <li>No registration or signup required</li>
+                    <li>Works on any device, anywhere</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ QUOTE ═══════ -->
+<section class="hp-quote hp-fade-up">
+    <p class="hp-quote-text">The best tools are the ones you never have to think about.</p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.hp-fade-up').forEach(function(el) { el.classList.add('visible'); });
+        return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.hp-fade-up').forEach(function(el) { observer.observe(el); });
+})();
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+        var t = document.querySelector(this.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+});
+</script>
+{% endblock %}

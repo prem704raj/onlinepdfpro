@@ -127,7 +127,7 @@
  }
 
  .page-card.selected::after {
- content: '🗑️ REMOVE';
+ content: ' REMOVE';
  position: absolute;
  top: 50%;
  left: 50%;
@@ -266,12 +266,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">All Tools</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -286,7 +287,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
 
  </div>
  </div>
@@ -308,7 +309,7 @@
  <div class="upload-zone glass-card fade-in" id="dropArea"
  style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
  <span class="upload-icon"
- style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;">🗑️</span>
+ style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;"></span>
  <p class="upload-text"
  style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
  Drop your PDF here</p>
@@ -316,7 +317,7 @@
  want to visually DELETE</p>
  <span class="btn btn-primary"
  style="display: inline-flex; align-items: center; gap: 8px; pointer-events: none;">
- <span>📄</span> Click to Upload
+ <span></span> Click to Upload
  </span>
  <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
  Max file size: 100MB. Processing happens instantly on your device.
@@ -332,7 +333,7 @@
  <button onclick="deselectAll()" style="background:var(--surface-2); color:var(--accent);">Deselect
  All</button>
  <button onclick="deleteAndDownload()"
- style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white; padding:16px 40px !important; font-size:18px !important; box-shadow:0 10px 30px rgba(239,68,68,0.3);">🗑️
+ style="background:linear-gradient(135deg,#ef4444,#dc2626); color:white; padding:16px 40px !important; font-size:18px !important; box-shadow:0 10px 30px rgba(239,68,68,0.3);">
  Delete Selected & Download</button>
  </div>
 
@@ -383,7 +384,7 @@
  totalPages = pdfJsDoc.numPages;
 
  document.getElementById('fileInfo').style.display = 'block';
- document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
+ document.getElementById('fileInfo').textContent = ' ' + file.name + ' — ' + totalPages + ' pages';
 
  const grid = document.getElementById('pagesGrid');
  grid.innerHTML = '';

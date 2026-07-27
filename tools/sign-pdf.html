@@ -234,12 +234,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">All Tools</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -254,7 +255,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
 
  </div>
  </div>
@@ -273,7 +274,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
- <span class="upload-icon"></span>
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop your PDF here or click to upload</p>
  <span class="file-limit-note"> Works best with files under 50MB. 100% local processing.</span>
  <input type="file" id="fileInput" accept=".pdf" hidden />
@@ -283,39 +284,39 @@
  <div class="fixed-top-bar"
  style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 16px 24px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
  <button onclick="openSignatureModal()"
- style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">✍️
+ style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
  Draw Signature</button>
 
  <!-- Page navigation: prev/next instead of scroll -->
  <div style="display: flex; align-items: center; gap: 8px;">
  <button id="prevPageBtn" onclick="prevPage()"
  style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
- disabled>◀</button>
+ disabled></button>
  <span id="pageIndicator"
  style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); min-width: 100px; text-align: center;">Page
  1 / 1</span>
  <button id="nextPageBtn" onclick="nextPage()"
- style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">▶</button>
+ style="padding: 10px 16px; background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"></button>
  </div>
  <select id="pageSelector" style="display:none;"></select>
 
  <button id="applyAllBtn" onclick="applyToAll()"
- style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">📋
+ style="display: none; padding: 12px 24px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
  Apply to All Pages</button>
 
  <button onclick="downloadPDF()"
- style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">📥
+ style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(245,158,11,0.3);">
  Download Signed PDF</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">🔄 Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
 
  <button onclick="clearAll()"
- style="padding: 10px 20px; background: var(--surface-2); color: #ef4444; border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">🗑
+ style="padding: 10px 20px; background: var(--surface-2); color: #ef4444; border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
  Clear All</button>
  </div>
 
  <div id="pages-container" class="fade-in">
  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 12px; text-align: center;">Draw
- a signature, then drag it anywhere on the page. Use ◀ ▶ to switch pages.</p>
+ a signature, then drag it anywhere on the page. Use   to switch pages.</p>
  <div id="pages" style="text-align: center;"></div>
  </div>
  </div>

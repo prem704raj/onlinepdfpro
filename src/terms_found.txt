@@ -1,0 +1,37 @@
+.\about.html: browser-based, in your browser, stays on your device
+.\disclaimer.html: browser-based
+.\dmca.html: browser-based
+.\help.html: in your browser
+.\history.html: in your browser
+.\index.html: browser-based, in your browser, browser based, no file upload, nothing is uploaded
+.\invoice-generator.html: browser-based, stays on your device
+.\pdf-highlighter-extractor.html: no file upload
+.\pdf-page-reorder.html: browser-based, nothing is uploaded
+.\pdf-presentation-mode.html: browser-based, in your browser, nothing is uploaded
+.\pdf-reader.html: in your browser, no upload, stays on your device, processed locally, server-side storage
+.\pdf-to-jpg.html: browser-based, no upload
+.\pdf-to-text-extractor.html: no file upload
+.\privacy.html: no upload, processed locally
+.\remove-background.html: no upload
+.\resume-cv-builder.html: browser-based, in your browser, no upload
+.\terms.html: browser-based, processed locally
+.\tools.html: browser-based
+.\blog\edit-pdf-text-online-free.html: in your browser
+.\tools\add-page-numbers-to-pdf.html: no upload
+.\tools\compress-pdf.html: no upload
+.\tools\crop-pdf.html: no upload, processed locally
+.\tools\delete-pdf-pages.html: no upload, no file upload, stays on your device
+.\tools\heic-to-jpg.html: nothing is uploaded, stays on your device
+.\tools\image-compressor.html: no upload
+.\tools\image-crop.html: no upload
+.\tools\image-format-converter.html: no file upload
+.\tools\jpg-to-pdf.html: processed locally
+.\tools\merge-pdf.html: no file upload
+.\tools\passport-photo-maker.html: no upload
+.\tools\password-protect-pdf.html: no upload
+.\tools\pdf-watermark.html: no upload, processed locally
+.\tools\redact-pdf.html: browser-based
+.\tools\rotate-pdf.html: no file upload
+.\tools\sign-pdf.html: no upload
+.\tools\split-pdf.html: browser-based
+.\tools\webp-to-jpg.html: no file upload
