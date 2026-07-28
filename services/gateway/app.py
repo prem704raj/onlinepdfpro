@@ -25,8 +25,8 @@ from fastapi.responses import Response
 # ---------------------------------------------------------------------------
 # Config (all from env vars)
 # ---------------------------------------------------------------------------
-DOCX2PDF_URL = os.getenv("DOCX2PDF_URL", "http://docx2pdf:8000")
-PDF2DOCX_MODAL_URL = os.getenv("PDF2DOCX_MODAL_URL", "")
+DOCX2PDF_URL = os.getenv("DOCX2PDF_URL", "http://127.0.0.1:8001")
+PDF2DOCX_MODAL_URL = os.getenv("PDF2DOCX_MODAL_URL", "https://prem736raj--pdf2docx-convert.modal.run")
 RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", "10"))
 MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "50"))
 MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024
