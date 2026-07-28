@@ -1,0 +1,6 @@
+Euler's Identity: e^(i*pi) + 1 = 0
+Quadratic Formula: x = (-b ± sqrt(b² - 4ac)) / (2a)
+Pythagorean Theorem: a² + b² = c²
+Einstein's Mass-Energy: E = mc²
+Integral: ∫₀^∞ e^(-x²) dx = √π / 2
+Summation: ∑(k=1 to n) k = n(n+1)/2

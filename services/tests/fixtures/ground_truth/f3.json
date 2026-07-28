@@ -1,0 +1,11 @@
+{
+  "num_tables": 2,
+  "table1": {
+    "rows": 5,
+    "cols": 3
+  },
+  "table2": {
+    "rows": 6,
+    "cols": 4
+  }
+}
