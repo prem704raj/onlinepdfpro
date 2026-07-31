@@ -1,8 +1,9 @@
 """
 Service A — DOCX → PDF conversion via LibreOffice on Modal.
 
-Optimized for fast cold starts and low cost.
-Uses LibreOffice headless with essential fonts only.
+Optimized for high-quality output matching Microsoft Word rendering.
+Includes Microsoft-compatible fonts (Carlito=Calibri, Caladea=Cambria,
+Liberation=Arial/Times New Roman) to prevent layout shifts.
 """
 
 import json
@@ -18,17 +19,32 @@ import modal
 from fastapi import Request
 
 # ---------------------------------------------------------------------------
-# Modal infrastructure — optimized for fast startup
+# Modal infrastructure
 # ---------------------------------------------------------------------------
 app = modal.App("docx2pdf-converter")
 
+# Install LibreOffice Writer + all Microsoft-compatible fonts
+# Carlito = metric-compatible with Calibri (default MS Word font)
+# Caladea = metric-compatible with Cambria
+# Liberation = metric-compatible with Arial, Times New Roman, Courier New
+# MS core fonts = actual Microsoft fonts (Arial, Times, Courier, etc.)
 image = (
     modal.Image.debian_slim(python_version="3.11")
+    .run_commands(
+        # Enable contrib repo for MS core fonts + pre-accept EULA
+        "sed -i 's/^Components: main$/Components: main contrib/' /etc/apt/sources.list.d/debian.sources",
+        "apt-get update",
+        "echo 'ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true' | debconf-set-selections",
+    )
     .apt_install(
-        "libreoffice-writer",       # Only writer component (not full libreoffice)
+        "libreoffice-writer",
         "fonts-liberation",
+        "fonts-liberation2",
         "fonts-dejavu-core",
         "fonts-noto-core",
+        "fonts-crosextra-carlito",      # Calibri substitute (metric-compatible)
+        "fonts-crosextra-caladea",       # Cambria substitute (metric-compatible)
+        "ttf-mscorefonts-installer",     # Actual MS core fonts (Arial, Times New Roman, etc.)
         "fontconfig",
     )
     .pip_install("fastapi")
@@ -171,4 +187,3 @@ async def convert_endpoint(request: Request):
 @modal.fastapi_endpoint(method="GET", label="docx2pdf-health")
 async def health():
     return {"status": "healthy", "timestamp": time.time()}
-
