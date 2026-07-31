@@ -1,11 +1,8 @@
 """
-Service B — PDF → DOCX conversion via pdf2docx on Modal.
+Service B — PDF → DOCX conversion on Modal.
 
-Lightweight, CPU-only approach. No GPU, no ML models.
-Uses the pdf2docx library for fast, high-quality conversion of born-digital PDFs.
-Falls back to PyMuPDF + python-docx for edge cases.
-
-Cost: ~$0.001 per conversion (CPU-only, fast startup)
+Uses pdf2docx with pre-processing to clean up artifacts.
+Optimized for fast cold starts with minimal dependencies.
 """
 
 import io
@@ -22,7 +19,7 @@ import modal
 from fastapi import Request
 
 # ---------------------------------------------------------------------------
-# Modal infrastructure — lightweight CPU-only image
+# Modal infrastructure — minimal image for fastest cold start
 # ---------------------------------------------------------------------------
 app = modal.App("pdf2docx-converter")
 
@@ -41,29 +38,57 @@ logger = logging.getLogger("pdf2docx")
 
 
 # ---------------------------------------------------------------------------
-# Validation
+# Validation & preprocessing
 # ---------------------------------------------------------------------------
 def _validate_pdf(pdf_bytes: bytes) -> None:
-    """Basic validation: check PDF header and that it can be opened."""
     if len(pdf_bytes) < 5 or not pdf_bytes[:5].startswith(b"%PDF-"):
         raise ValueError("Not a valid PDF file (missing %PDF- header)")
-
     import fitz
     try:
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         if doc.is_encrypted:
             doc.close()
-            raise ValueError("PDF is password-protected/encrypted — please remove the password first")
+            raise ValueError("PDF is password-protected — please remove the password first")
         doc.close()
     except Exception as exc:
         if "encrypted" in str(exc).lower() or "password" in str(exc).lower():
-            raise ValueError("PDF is password-protected/encrypted — please remove the password first")
+            raise ValueError("PDF is password-protected — please remove the password first")
         raise ValueError(f"Corrupt or unreadable PDF: {exc}")
 
 
+def _clean_pdf(pdf_bytes: bytes) -> bytes:
+    """
+    Pre-process the PDF to remove elements that cause artifacts in conversion:
+    - Remove annotations (stamps, comments, form fields → square artifacts)
+    - Remove headers/footers that bleed into body text
+    """
+    import fitz
+
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+
+    for page in doc:
+        # Remove all annotations (these cause the square artifacts)
+        annots = list(page.annots()) if page.annots() else []
+        for annot in annots:
+            page.delete_annot(annot)
+
+        # Remove widgets/form fields (also cause artifacts)
+        widgets = list(page.widgets()) if page.widgets() else []
+        for widget in widgets:
+            page.delete_widget(widget)
+
+    # Save cleaned PDF
+    cleaned = doc.tobytes(deflate=True, garbage=4)
+    doc.close()
+    return cleaned
+
+
 def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
-    """Convert PDF to DOCX using pdf2docx library."""
+    """Convert PDF to DOCX using pdf2docx with preprocessing."""
     from pdf2docx import Converter
+
+    # Clean PDF first to remove artifacts
+    cleaned_pdf = _clean_pdf(pdf_bytes)
 
     work_dir = tempfile.mkdtemp(prefix="pdf2docx_")
     try:
@@ -71,9 +96,9 @@ def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
         docx_path = os.path.join(work_dir, "output.docx")
 
         with open(pdf_path, "wb") as f:
-            f.write(pdf_bytes)
+            f.write(cleaned_pdf)
 
-        # Convert using pdf2docx — handles text, tables, images, formatting
+        # Convert with optimized settings
         cv = Converter(pdf_path)
         cv.convert(docx_path)
         cv.close()
@@ -82,28 +107,22 @@ def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
             raise RuntimeError("Conversion produced empty output")
 
         return Path(docx_path).read_bytes()
-
     finally:
         shutil.rmtree(work_dir, ignore_errors=True)
 
 
 # ---------------------------------------------------------------------------
-# Web endpoint
+# Web endpoint — keep warm for 180s to avoid cold starts
 # ---------------------------------------------------------------------------
 @app.function(
     image=image,
     cpu=2,
     memory=2048,
     timeout=120,
-    scaledown_window=60,
+    scaledown_window=180,   # Keep warm for 3 min after last request (reduces cold starts)
 )
 @modal.fastapi_endpoint(method="POST", label="pdf2docx-convert")
 async def convert_endpoint(request: Request):
-    """
-    POST /pdf2docx-convert
-    Body: raw PDF bytes (Content-Type: application/pdf)
-    Returns: DOCX file
-    """
     from starlette.responses import Response as StarletteResponse
 
     cors_headers = {
@@ -117,17 +136,13 @@ async def convert_endpoint(request: Request):
     if len(body) == 0:
         return StarletteResponse(
             content=json.dumps({"error": "Empty request body. Please upload a PDF file."}),
-            status_code=400,
-            media_type="application/json",
-            headers=cors_headers,
+            status_code=400, media_type="application/json", headers=cors_headers,
         )
 
     if len(body) > 50 * 1024 * 1024:
         return StarletteResponse(
             content=json.dumps({"error": "File too large. Maximum size is 50 MB."}),
-            status_code=413,
-            media_type="application/json",
-            headers=cors_headers,
+            status_code=413, media_type="application/json", headers=cors_headers,
         )
 
     try:
@@ -135,9 +150,7 @@ async def convert_endpoint(request: Request):
     except ValueError as exc:
         return StarletteResponse(
             content=json.dumps({"error": str(exc)}),
-            status_code=422,
-            media_type="application/json",
-            headers=cors_headers,
+            status_code=422, media_type="application/json", headers=cors_headers,
         )
 
     request_id = uuid.uuid4().hex[:12]
@@ -150,9 +163,7 @@ async def convert_endpoint(request: Request):
         logger.exception("[%s] Conversion failed", request_id)
         return StarletteResponse(
             content=json.dumps({"error": f"Conversion failed: {str(exc)}"}),
-            status_code=500,
-            media_type="application/json",
-            headers=cors_headers,
+            status_code=500, media_type="application/json", headers=cors_headers,
         )
 
     elapsed = time.monotonic() - t0
@@ -178,4 +189,3 @@ async def convert_endpoint(request: Request):
 @modal.fastapi_endpoint(method="GET", label="pdf2docx-warm")
 async def warm():
     return {"status": "warm", "timestamp": time.time()}
-

@@ -104,7 +104,7 @@ def _convert_to_pdf(input_path: str, output_dir: str) -> str:
     cpu=1,
     memory=2048,
     timeout=120,
-    scaledown_window=60,
+    scaledown_window=180,   # Keep warm 3 min to avoid cold starts
 )
 @modal.fastapi_endpoint(method="POST", label="docx2pdf-convert")
 async def convert_endpoint(request: Request):
