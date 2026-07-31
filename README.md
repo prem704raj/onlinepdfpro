@@ -1,6 +1,6 @@
 # OnlinePDFPro
 
-OnlinePDFPro is a privacy-first PDF tools website where processing happens directly in the browser.
+OnlinePDFPro is a privacy-first PDF tools website where processing happens directly in the browser. (edited)
 
 ## About
 

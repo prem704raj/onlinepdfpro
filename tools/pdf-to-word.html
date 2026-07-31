@@ -3,13 +3,13 @@
 
 <head>
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.modal.run https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ===== SEO META TAGS ===== -->
     <title>PDF to Word Converter Free — Convert PDF to Editable DOCX Online | OnlinePDFPro</title>
-    <meta name="description" content="Convert PDF to Word (.docx) free online. Transform PDFs into editable Microsoft Word documents. Works entirely in your browser — no upload to any server.">
+    <meta name="description" content="Convert PDF to Word (.docx) free online. Transform PDFs into editable Microsoft Word documents with AI-powered layout detection, table formatting, and OCR accuracy.">
     <meta name="keywords" content="pdf to word, convert pdf to word, pdf to docx, pdf to word converter free, editable docx from pdf">
     <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -19,7 +19,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-to-word.html">
     <meta property="og:title" content="PDF to Word Converter Free — Convert PDF to Editable DOCX Online | OnlinePDFPro">
-    <meta property="og:description" content="Convert PDF to Word (.docx) free online. Works entirely in your browser — no upload to any server.">
+    <meta property="og:description" content="Convert PDF to Word (.docx) free online with AI-powered layout detection. Preserves tables, fonts, and images.">
     <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
     <meta property="og:site_name" content="OnlinePDFPro">
 
@@ -50,12 +50,10 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .file-pill {
             display: inline-flex;
             align-items: center;
@@ -67,7 +65,6 @@
             font-weight: 500;
             margin-bottom: 24px;
         }
-
         .progress-bar-container {
             width: 100%;
             max-width: 400px;
@@ -81,7 +78,7 @@
             height: 100%;
             background: var(--accent, #2563eb);
             border-radius: 3px;
-            transition: width 0.3s ease;
+            transition: width 0.5s ease;
             width: 0%;
         }
     </style>
@@ -113,11 +110,10 @@
     <main id="main" class="tool-page">
         <div class="container" style="max-width: 800px; padding: 40px 20px;">
             <div class="tool-header" style="text-align: center; margin-bottom: 40px;">
-                <span class="section-tag fade-in">Browser-Based Converter</span>
+                <span class="section-tag fade-in">AI Document Converter</span>
                 <h1 class="tool-title fade-in">Convert PDF to Word (.docx) Online Free</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Transform your PDF files into editable Microsoft Word documents (.docx). 
-                    Works entirely in your browser — your files never leave your device.
+                    Transform your PDF files into editable Microsoft Word documents (.docx) with AI-powered layout detection. Preserves tables, fonts, multi-column reading order, images, and formatting automatically.
                 </p>
             </div>
 
@@ -126,24 +122,24 @@
                 <input type="file" id="fileInput" accept=".pdf" style="display: none;" />
                 <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
                 <h3 style="margin-bottom: 8px;">Drop your PDF file here</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 24px;">Supports all PDF documents • Processed locally in your browser</p>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Supports all PDF documents • Up to 50 MB</p>
                 <button class="btn btn-primary" id="selectBtn" style="padding: 14px 32px; font-size: 1rem; border-radius: 12px;">
                     Choose PDF File
                 </button>
             </div>
 
-            <!-- Processing / Converting Section -->
+            <!-- Processing Section -->
             <div id="processingSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 60px 20px; border-radius: 20px; margin-top: 20px;">
                 <div class="spinner"></div>
                 <h2 style="margin-bottom: 12px;">Converting PDF to Word...</h2>
                 <p id="processingStatus" style="color: var(--text-secondary); margin-bottom: 8px;">
-                    Extracting text and formatting from your PDF...
+                    Uploading and analyzing document layout...
                 </p>
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" id="progressBar"></div>
                 </div>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); opacity: 0.7; margin-top: 12px;">
-                    Processing happens in your browser. No files are uploaded.
+                    AI-powered conversion typically takes 10–30 seconds depending on document length.
                 </p>
             </div>
 
@@ -154,12 +150,10 @@
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">
                     Your PDF has been successfully converted into an editable Microsoft Word document.
                 </p>
-
                 <div class="file-pill" id="resultPill">
                     <span>📄</span>
                     <span id="resultFilename" style="font-weight: 600;">document.docx</span>
                 </div>
-
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
                     <a id="downloadBtn" class="btn btn-primary btn-lg" style="padding: 16px 44px; font-size: 1.1rem; border-radius: 12px; text-decoration: none; display: inline-block;">
                         ⬇️ Download Word (.docx)
@@ -173,21 +167,21 @@
             <!-- Features Section -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 60px;">
                 <div class="glass-card" style="padding: 24px; border-radius: 16px;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">🔒 100% Private</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">🧠 AI Layout OCR</h3>
                     <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                        Your PDF is processed entirely in your browser. No files are ever uploaded to any server. Your data stays on your device.
+                        Powered by deep learning layout detection (Marker AI) to accurately reconstruct paragraphs, headers, images, and complex reading orders.
                     </p>
                 </div>
                 <div class="glass-card" style="padding: 24px; border-radius: 16px;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">📊 Text Extraction</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">📊 Table Preservation</h3>
                     <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                        Extracts all text content from your PDF pages and reconstructs it into properly formatted Word paragraphs.
+                        Detects table rows, columns, and merged cells automatically so your tabular data remains structured in Word.
                     </p>
                 </div>
                 <div class="glass-card" style="padding: 24px; border-radius: 16px;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">⚡ Instant Results</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">🌐 Multi-Language & CJK</h3>
                     <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                        No waiting for server processing. Conversion happens instantly on your device with zero network latency.
+                        Full Unicode support including English, Hindi, Chinese, Japanese, Korean, and European languages.
                     </p>
                 </div>
             </div>
@@ -202,19 +196,15 @@
                     </p>
                 </div>
                 <div class="glass-card" style="padding: 24px; border-radius: 16px; margin-bottom: 16px;">
-                    <h4 style="margin-bottom: 8px;">Are my files uploaded anywhere?</h4>
+                    <h4 style="margin-bottom: 8px;">Will my tables, images, and columns look the same in Microsoft Word?</h4>
                     <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                        No! Everything happens in your browser using JavaScript. Your PDF file never leaves your device and is never sent to any server.
+                        Yes! Our AI conversion engine uses advanced OCR and structure analysis to preserve your original tables, columns, images, font styles, and reading order.
                     </p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- PDF.js for reading PDFs -->
-    <script src="../js/vendor/pdfjs/pdf.min.js"></script>
-    <!-- docx library for creating Word documents -->
-    <script src="../js/vendor/docx/index.umd.min.js"></script>
     <script src="../js/app.js?v=11"></script>
     <script>
         (function () {
@@ -228,10 +218,8 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const resultFilename = document.getElementById('resultFilename');
 
-            // Set pdf.js worker
-            if (window.pdfjsLib) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = '../js/vendor/pdfjs/pdf.worker.min.js';
-            }
+            // Modal.com deployed endpoint for PDF→DOCX (Marker AI)
+            const API_URL = 'https://prem736raj--pdf2docx-convert.modal.run';
 
             selectBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -272,144 +260,50 @@
                     alert('Please select a valid .pdf file.');
                     return;
                 }
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('File is too large. Maximum size is 50 MB.');
+                    return;
+                }
 
                 // Show processing UI
                 uploadZone.style.display = 'none';
                 processingSection.style.display = 'block';
                 resultsSection.style.display = 'none';
-                progressBar.style.width = '0%';
+                progressBar.style.width = '10%';
+                processingStatus.textContent = 'Uploading PDF to conversion server...';
 
                 try {
-                    processingStatus.textContent = 'Reading PDF file...';
-                    progressBar.style.width = '10%';
-
+                    // Read file as ArrayBuffer and send raw bytes
                     const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                    const totalPages = pdf.numPages;
 
-                    processingStatus.textContent = `Extracting text from ${totalPages} page${totalPages > 1 ? 's' : ''}...`;
-                    progressBar.style.width = '20%';
+                    progressBar.style.width = '30%';
+                    processingStatus.textContent = 'AI is analyzing document layout, extracting text, tables & images...';
 
-                    // Extract text from all pages
-                    const pageTexts = [];
-                    for (let i = 1; i <= totalPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        
-                        // Group text items into lines based on Y position
-                        const items = textContent.items;
-                        if (items.length === 0) {
-                            pageTexts.push('');
-                            continue;
-                        }
-
-                        // Sort by Y (descending = top to bottom), then X (left to right)
-                        const sorted = items.slice().sort((a, b) => {
-                            const yDiff = b.transform[5] - a.transform[5];
-                            if (Math.abs(yDiff) > 3) return yDiff;
-                            return a.transform[4] - b.transform[4];
-                        });
-
-                        // Group into lines
-                        const lines = [];
-                        let currentLine = [];
-                        let lastY = sorted[0].transform[5];
-
-                        for (const item of sorted) {
-                            const y = item.transform[5];
-                            if (Math.abs(y - lastY) > 5) {
-                                if (currentLine.length > 0) {
-                                    lines.push(currentLine.map(it => it.str).join(' '));
-                                }
-                                currentLine = [];
-                                lastY = y;
-                            }
-                            currentLine.push(item);
-                        }
-                        if (currentLine.length > 0) {
-                            lines.push(currentLine.map(it => it.str).join(' '));
-                        }
-
-                        pageTexts.push(lines.join('\n'));
-
-                        // Update progress
-                        const pct = 20 + Math.round((i / totalPages) * 50);
-                        progressBar.style.width = pct + '%';
-                        processingStatus.textContent = `Extracting text... (page ${i}/${totalPages})`;
-                    }
-
-                    processingStatus.textContent = 'Building Word document...';
-                    progressBar.style.width = '80%';
-
-                    // Build DOCX using the docx library
-                    const { Document, Packer, Paragraph, TextRun, PageBreak, HeadingLevel, AlignmentType } = docx;
-
-                    const sections = [];
-                    for (let i = 0; i < pageTexts.length; i++) {
-                        const text = pageTexts[i];
-                        const paragraphs = [];
-
-                        if (text.trim().length === 0) {
-                            paragraphs.push(new Paragraph({
-                                children: [new TextRun({ text: '(No extractable text on this page)', italics: true, color: '888888' })]
-                            }));
-                        } else {
-                            const textLines = text.split('\n');
-                            for (const line of textLines) {
-                                const trimmed = line.trim();
-                                if (trimmed.length === 0) {
-                                    paragraphs.push(new Paragraph({ children: [] }));
-                                    continue;
-                                }
-
-                                // Detect headings (short lines, possibly uppercase or larger)
-                                const isHeading = trimmed.length < 80 && trimmed === trimmed.toUpperCase() && trimmed.length > 2;
-
-                                paragraphs.push(new Paragraph({
-                                    children: [
-                                        new TextRun({
-                                            text: trimmed,
-                                            size: isHeading ? 28 : 22,
-                                            bold: isHeading,
-                                            font: 'Calibri',
-                                        })
-                                    ],
-                                    heading: isHeading ? HeadingLevel.HEADING_2 : undefined,
-                                    spacing: { after: 120 },
-                                }));
-                            }
-                        }
-
-                        // Add page break between pages (except last)
-                        if (i < pageTexts.length - 1) {
-                            paragraphs.push(new Paragraph({
-                                children: [new PageBreak()],
-                            }));
-                        }
-
-                        sections.push(...paragraphs);
-                    }
-
-                    const doc = new Document({
-                        sections: [{
-                            properties: {
-                                page: {
-                                    margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
-                                },
-                            },
-                            children: sections,
-                        }],
-                        creator: 'OnlinePDFPro',
-                        description: 'Converted from PDF using OnlinePDFPro',
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/pdf',
+                        },
+                        body: arrayBuffer,
                     });
 
-                    processingStatus.textContent = 'Generating downloadable file...';
+                    progressBar.style.width = '80%';
+
+                    if (!response.ok) {
+                        let errText = 'Conversion failed. Please check if the document is valid or encrypted.';
+                        try {
+                            const errJson = await response.json();
+                            if (errJson.error) errText = errJson.error;
+                        } catch (e) {}
+                        throw new Error(errText);
+                    }
+
+                    processingStatus.textContent = 'Preparing download...';
                     progressBar.style.width = '90%';
 
-                    const blob = await Packer.toBlob(doc);
-                    const url = URL.createObjectURL(blob);
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
 
-                    // Output filename (.docx)
                     const outputName = file.name.replace(/\.pdf$/i, '') + '.docx';
                     resultFilename.textContent = outputName;
 
@@ -418,13 +312,13 @@
 
                     progressBar.style.width = '100%';
 
-                    // Show results UI
+                    // Show results
                     processingSection.style.display = 'none';
                     resultsSection.style.display = 'block';
 
                 } catch (err) {
                     console.error('PDF to Word conversion error:', err);
-                    alert('Error: ' + (err.message || 'Failed to convert the PDF. The file may be corrupted or password-protected.'));
+                    alert('Error: ' + err.message);
                     uploadZone.style.display = 'block';
                     processingSection.style.display = 'none';
                 }

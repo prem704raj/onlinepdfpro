@@ -289,6 +289,12 @@ async def convert_endpoint(request: Request):
     import json
     from starlette.responses import Response as StarletteResponse
 
+    cors_headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "*",
+    }
+
     body = await request.body()
 
     if len(body) == 0:
@@ -296,6 +302,7 @@ async def convert_endpoint(request: Request):
             content=json.dumps({"error": "Empty request body"}),
             status_code=400,
             media_type="application/json",
+            headers=cors_headers,
         )
 
     try:
@@ -305,6 +312,7 @@ async def convert_endpoint(request: Request):
             content=json.dumps({"error": str(exc)}),
             status_code=422,
             media_type="application/json",
+            headers=cors_headers,
         )
 
     # Decide path
@@ -324,6 +332,7 @@ async def convert_endpoint(request: Request):
             content=json.dumps({"error": f"Conversion failed: {exc}\n{traceback.format_exc()}"}),
             status_code=500,
             media_type="application/json",
+            headers=cors_headers,
         )
 
     elapsed = time.monotonic() - t0
@@ -334,9 +343,29 @@ async def convert_endpoint(request: Request):
         status_code=200,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
+            **cors_headers,
             "Content-Disposition": 'attachment; filename="converted.docx"',
             "X-Convert-Time": f"{elapsed:.2f}",
             "X-Path": "gpu-ocr" if is_scanned else "cpu-text",
+        },
+    )
+
+
+# ---------------------------------------------------------------------------
+# CORS preflight handler
+# ---------------------------------------------------------------------------
+@app.function(image=base_image, cpu=0.25, memory=128)
+@modal.fastapi_endpoint(method="OPTIONS", label="pdf2docx-convert")
+async def cors_preflight(request: Request):
+    from starlette.responses import Response as StarletteResponse
+    return StarletteResponse(
+        content="",
+        status_code=204,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Max-Age": "86400",
         },
     )
 
@@ -349,3 +378,4 @@ async def convert_endpoint(request: Request):
 async def warm():
     """Ping this to pre-warm containers."""
     return {"status": "warm", "timestamp": time.time()}
+
