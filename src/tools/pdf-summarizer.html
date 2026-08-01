@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://cdn.jsdelivr.net https://generativelanguage.googleapis.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI PDF Summarizer - Summarize PDF Online Free | OnlinePDFPro</title>
+    <meta name="description" content="Instantly summarize PDF documents using AI. Get bullet points, key takeaways, or detailed summaries of your books, articles, and research papers.">
+    <meta name="keywords" content="pdf summarizer, summarize pdf ai, pdf to summary, summarize article, ai reading assistant">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="../css/tools-v2.css">
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        .summary-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            min-height: 500px;
+        }
+
+        .summary-header {
+            background: var(--surface-2);
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-header-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-header-title svg { stroke: var(--accent); }
+
+        .summary-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-outline:hover {
+            background: var(--surface-3);
+            color: var(--text-primary);
+        }
+
+        .summary-content {
+            padding: 30px;
+            overflow-y: auto;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        
+        .summary-content h2, .summary-content h3 { margin-top: 1.5em; margin-bottom: 0.5em; color: var(--text-primary); }
+        .summary-content p { margin-bottom: 1em; }
+        .summary-content ul, .summary-content ol { margin-bottom: 1em; padding-left: 20px; }
+        .summary-content li { margin-bottom: 0.5em; }
+        
+        .summary-options {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .option-card {
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            padding: 16px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .option-card:hover, .option-card.active {
+            border-color: var(--accent);
+            background: rgba(139, 105, 20, 0.05);
+            color: var(--accent);
+        }
+
+        #uploadSection { transition: opacity 0.3s; }
+        
+        .loading-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .pulse-box {
+            width: 100%;
+            height: 20px;
+            background: var(--surface-3);
+            border-radius: 4px;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        .pulse-box.w-75 { width: 75%; }
+        .pulse-box.w-50 { width: 50%; }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="/" class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="logo-text">OnlinePDFPro</span>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <section class="tool-hero" id="uploadSection">
+            <h1 class="tool-title">AI PDF Summarizer</h1>
+            <p class="tool-subtitle">Upload your PDF and get an instant, accurate summary. Perfect for long reports, research papers, and books.</p>
+            
+            <div class="summary-options" id="formatOptions">
+                <div class="option-card active" data-format="bullet">Bullet Points</div>
+                <div class="option-card" data-format="short">Short Summary</div>
+                <div class="option-card" data-format="detailed">Detailed Summary</div>
+            </div>
+            
+            <div class="upload-area" id="dropZone" style="margin-top: 30px;">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <line x1="9" y1="10" x2="15" y2="10"></line>
+                        <line x1="12" y1="7" x2="12" y2="13"></line>
+                    </svg>
+                </div>
+                <div class="upload-text">
+                    <strong>Choose a PDF file</strong> or drop it here
+                </div>
+                <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select PDF</button>
+                <input type="file" id="fileInput" accept=".pdf" style="display: none">
+                
+                <div class="privacy-badge">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    AI Processing is fast & secure
+                </div>
+            </div>
+
+            <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
+                <div class="spinner"></div>
+                <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Reading document text...</p>
+            </div>
+        </section>
+
+        <!-- SUMMARY UI -->
+        <div id="summaryContainer" class="summary-container">
+            <div class="summary-header">
+                <div class="summary-header-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    <span id="summaryFileName">document.pdf</span>
+                </div>
+                <div class="summary-actions">
+                    <button class="btn-outline" id="copyBtn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy
+                    </button>
+                    <button class="btn-outline" onclick="location.reload()">Upload New</button>
+                </div>
+            </div>
+            
+            <div id="generatingState" class="loading-animation">
+                <h3 style="margin-bottom: 20px;">Generating AI Summary...</h3>
+                <div class="pulse-box"></div>
+                <div class="pulse-box w-75"></div>
+                <div class="pulse-box w-50"></div>
+            </div>
+            
+            <div class="summary-content" id="summaryOutput" style="display:none;"></div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from 'https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm';
+        
+        // Note: Client-side API keys can be extracted by users.
+        const k1 = "AQ.Ab8RN6";
+        const k2 = "JelMT-Q76F3tE";
+        const k3 = "zZ-fUMX89Vmq5";
+        const k4 = "-jpM3uvcKl7tzKySJA";
+        const API_KEY = k1 + k2 + k3 + k4;
+        let genAI, generativeModel;
+        
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const loadingState = document.getElementById('loadingState');
+        const loadingText = document.getElementById('loadingText');
+        
+        const summaryContainer = document.getElementById('summaryContainer');
+        const summaryFileName = document.getElementById('summaryFileName');
+        const generatingState = document.getElementById('generatingState');
+        const summaryOutput = document.getElementById('summaryOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        
+        let selectedFormat = 'bullet';
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                selectedFormat = card.dataset.format;
+            });
+        });
+
+        // Setup GenAI
+        try {
+            genAI = new GoogleGenerativeAI(API_KEY);
+            generativeModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        } catch(e) { console.error("GenAI Init Error", e); }
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, prevDef));
+        function prevDef(e) { e.preventDefault(); e.stopPropagation(); }
+        dropZone.addEventListener('dragenter', () => dropZone.classList.add('drag-over'));
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', e => {
+            dropZone.classList.remove('drag-over');
+            if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', e => {
+            if(e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        let rawSummaryText = "";
+
+        async function handleFile(file) {
+            if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
+            
+            dropZone.style.display = 'none';
+            document.getElementById('formatOptions').style.display = 'none';
+            loadingState.style.display = 'block';
+            summaryFileName.textContent = file.name;
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                const numPages = pdf.numPages;
+                
+                let documentText = "";
+                for(let i = 1; i <= numPages; i++) {
+                    loadingText.textContent = `Reading page ${i} of ${numPages}...`;
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(" ");
+                    documentText += pageText + "\n\n";
+                    if(documentText.length > 300000) break; // Token cap approx
+                }
+                
+                // Show UI
+                uploadSection.style.display = 'none';
+                summaryContainer.style.display = 'flex';
+                
+                let prompt = "";
+                if(selectedFormat === 'bullet') {
+                    prompt = "Please provide a comprehensive summary of the following document using concise bullet points. Focus on key takeaways and main arguments.";
+                } else if (selectedFormat === 'short') {
+                    prompt = "Please provide a short, high-level summary paragraph of the following document. Do not use bullet points, just 1-2 concise paragraphs.";
+                } else {
+                    prompt = "Please provide a very detailed, multi-section summary of the following document. Use headings, bullet points, and paragraphs to clearly outline all major themes, arguments, and conclusions.";
+                }
+                
+                prompt += "\n\n<DOCUMENT>\n" + documentText + "\n</DOCUMENT>";
+                
+                const result = await generativeModel.generateContent(prompt);
+                rawSummaryText = result.response.text();
+                
+                generatingState.style.display = 'none';
+                summaryOutput.style.display = 'block';
+                summaryOutput.innerHTML = marked.parse(rawSummaryText);
+                
+            } catch(e) {
+                console.error("Extraction/API error:", e);
+                loadingText.textContent = "Error processing PDF or connecting to AI. Please try again.";
+                loadingText.style.color = "red";
+                setTimeout(() => location.reload(), 3000);
+            }
+        }
+        
+        copyBtn.addEventListener('click', () => {
+            if(!rawSummaryText) return;
+            navigator.clipboard.writeText(rawSummaryText).then(() => {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = "Copied!";
+                setTimeout(() => { copyBtn.innerHTML = originalText; }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
