@@ -127,6 +127,14 @@ body.hp-body main {
     padding-top: 0 !important;
 }
 
+/* On mobile, override the 104px body padding from mobile-fix-v2.css.
+   Homepage has no search bar and hero handles its own spacing. */
+@media (max-width: 768px) {
+    body.hp-body {
+        padding-top: 52px !important; /* Only header height, no search bar */
+    }
+}
+
 /* --- Header: solid frosted bar --- */
 body.hp-body .header {
     background: rgba(246, 245, 240, 0.88) !important;
@@ -153,7 +161,9 @@ body.hp-body .header .desktop-only-action { color: var(--hp-text) !important; bo
 
 /* Hide search bar on homepage header */
 body.hp-body .header .header-search,
-body.hp-body .header .mobile-search-toggle { display: none !important; }
+body.hp-body .header .mobile-search-toggle,
+body.hp-body ~ .mobile-search-bar,
+body.hp-body .mobile-search-bar { display: none !important; }
 
 /* ═══════════════════════════
    HERO — Aesthetic Banner
@@ -180,6 +190,8 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
         radial-gradient(ellipse 50% 40% at 80% 25%, rgba(212, 169, 66, 0.06) 0%, transparent 70%);
     animation: heroGlow 10s ease-in-out infinite alternate;
     z-index: 1;
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
 @keyframes heroGlow {
@@ -196,6 +208,8 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     z-index: 2;
     pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
 /* Decorative lines disabled */
@@ -825,7 +839,7 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
 }
 
 /* ═══════════════════════════
-   RESPONSIVE
+   RESPONSIVE — TABLET
    ═══════════════════════════ */
 @media (max-width: 1024px) {
     .hp-offerings-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -835,22 +849,341 @@ body.hp-body .header .mobile-search-toggle { display: none !important; }
     .hp-footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
 }
 
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+   Complete mobile-first redesign
+   ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
-    .hp-hero-content { padding-top: 120px; }
-    .hp-section { padding: 64px 20px; }
-    .hp-tools-grid { grid-template-columns: 1fr; }
-    .hp-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .hp-footer-grid { grid-template-columns: 1fr; gap: 24px; }
-    .hp-hero-ctas { flex-direction: column; align-items: center; }
-    .hp-btn { width: 100%; max-width: 260px; text-align: center; }
-    .hp-philosophy-art { max-width: 240px; }
-    .hp-offering-card { padding: 28px 22px 24px; }
-    .hp-hero-line-v1, .hp-hero-line-v2 { display: none; }
-    .hp-hero-circle, .hp-hero-circle-sm { display: none; }
+
+    /* --- HERO: Compact & Punchy --- */
+    .hp-hero {
+        min-height: auto !important;
+    }
+
+    .hp-hero::before,
+    .hp-hero::after {
+        display: none !important; /* Remove glow/grain on mobile — saves perf */
+    }
+
+    .hp-hero-content {
+        padding: 80px 20px 28px !important;
+    }
+
+    .hp-hero-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.25em;
+        margin-bottom: 14px;
+    }
+
+    .hp-hero-heading {
+        font-size: 1.65rem !important;
+        white-space: normal !important;
+        line-height: 1.25;
+        margin-bottom: 14px;
+    }
+
+    .hp-hero-subtitle {
+        font-size: 0.85rem;
+        white-space: normal !important;
+        line-height: 1.6;
+        margin: 0 auto 24px;
+        max-width: 100%;
+    }
+
+    .hp-hero-ctas {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hp-btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        padding: 14px 32px;
+        font-size: 0.65rem;
+    }
+
+    .hp-hero-scroll { display: none !important; }
+    .hp-hero-line-v1, .hp-hero-line-v2,
+    .hp-hero-circle, .hp-hero-circle-sm,
+    .hp-hero-dot { display: none !important; }
+
+    /* --- SECTIONS: Tight spacing --- */
+    .hp-section {
+        padding: 40px 16px !important;
+    }
+
+    .hp-label {
+        font-size: 0.6rem;
+        margin-bottom: 8px;
+    }
+
+    .hp-section-heading {
+        font-size: 1.35rem !important;
+        margin-bottom: 10px;
+    }
+
+    .hp-section-desc {
+        font-size: 0.82rem;
+        max-width: 100%;
+    }
+
+    /* --- OFFERINGS: Compact stacked cards --- */
+    .hp-offerings-header {
+        margin-bottom: 24px !important;
+    }
+
+    .hp-offerings-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .hp-offering-card {
+        padding: 20px 18px !important;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+    }
+
+    .hp-offering-card::before { display: none; }
+
+    .hp-offering-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        margin-bottom: 0 !important;
+    }
+
+    .hp-offering-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .hp-offering-badge {
+        display: none; /* Hide "30+ Tools" badge on mobile — saves space */
+    }
+
+    .hp-offering-title {
+        font-size: 1rem;
+        margin-bottom: 2px;
+    }
+
+    .hp-offering-desc {
+        font-size: 0.78rem;
+        margin-bottom: 6px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .hp-offering-link {
+        font-size: 0.6rem;
+    }
+
+    /* Hide "Launching Soon" card on mobile */
+    .hp-offering-card[style*="cursor: default"] {
+        display: none !important;
+    }
+
+    /* --- POPULAR TOOLS: Dense 2-column grid --- */
+    .hp-tools-header {
+        margin-bottom: 20px !important;
+    }
+
+    .hp-tools-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        margin-bottom: 24px !important;
+    }
+
+    .hp-tool-item {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 16px 10px !important;
+        gap: 8px !important;
+    }
+
+    .hp-tool-icon-wrap {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .hp-tool-icon-wrap svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .hp-tool-name {
+        font-size: 0.85rem;
+        margin-bottom: 0;
+    }
+
+    .hp-tool-desc {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+
+    .hp-btn-warm {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 24px;
+        font-size: 0.65rem;
+    }
+
+    /* --- PHILOSOPHY: Hide art, keep feature list compact --- */
+    .hp-philosophy-visual {
+        display: none !important; /* Hide decorative art on mobile */
+    }
+
+    .hp-philosophy-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+
+    .hp-feature-list {
+        margin-top: 16px;
+    }
+
+    .hp-feature-list li {
+        font-size: 0.82rem;
+        padding: 9px 0;
+    }
+
+    /* --- QUOTE: Hidden on mobile — filler content --- */
+    .hp-quote {
+        display: none !important;
+    }
+
+    /* --- STATS: Compact 2x2 grid --- */
+    .hp-stats {
+        padding: 32px 16px !important;
+    }
+
+    .hp-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+
+    .hp-stat-number {
+        font-size: 1.6rem;
+    }
+
+    .hp-stat-label {
+        font-size: 0.55rem;
+    }
+
+    /* --- FOOTER: Clean 2-column --- */
+    .hp-footer {
+        padding: 32px 16px 24px !important;
+    }
+
+    .hp-footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .hp-footer-brand {
+        grid-column: 1 / -1; /* Brand spans full width */
+    }
+
+    .hp-footer-brand h4 {
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+
+    .hp-footer-brand-sub {
+        font-size: 0.72rem;
+    }
+
+    .hp-footer-col h5 {
+        font-size: 0.55rem;
+        margin-bottom: 8px;
+    }
+
+    .hp-footer-col li {
+        margin-bottom: 5px;
+    }
+
+    .hp-footer-col a {
+        font-size: 0.78rem;
+    }
+
+    .hp-footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+        padding-top: 16px;
+    }
+
+    .hp-footer-copy {
+        font-size: 0.65rem;
+    }
+
+    .hp-footer-socials {
+        gap: 16px;
+    }
+
+    .hp-footer-socials svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* --- HEADER: Override homepage frosted glass on mobile --- */
+    body.hp-body .header {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: var(--hp-bg) !important;
+        border: none !important;
+        border-bottom: 1px solid var(--hp-border) !important;
+        box-shadow: none !important;
+    }
 }
 
-@media (max-width: 480px) {
-    .hp-hero-scroll { display: none; }
+/* ═══════════════════════════
+   TINY PHONES (≤380px)
+   ═══════════════════════════ */
+@media (max-width: 380px) {
+    .hp-hero-heading {
+        font-size: 1.4rem !important;
+    }
+
+    .hp-hero-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .hp-tools-grid {
+        gap: 8px !important;
+    }
+
+    .hp-tool-item {
+        padding: 12px 8px !important;
+    }
+
+    .hp-tool-name {
+        font-size: 0.78rem;
+    }
+
+    .hp-tool-desc {
+        font-size: 0.65rem;
+    }
+
+    .hp-offering-card {
+        padding: 16px 14px !important;
+    }
+
+    .hp-footer-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 </style>
 </head>

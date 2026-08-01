@@ -1,48 +1,33 @@
 /* Reset */
 
 :root {
-    /* ===== DARK MODE (Default) =====
-       Warm, earthy dark palette.
-       Deep browns, gold accents, creamy text.
+    /* ===== LIGHT MODE (Default) =====
+       Warm, cream palette.
     */
 
     /* Backgrounds — warm layered elevation */
-    --bg: #1a1714;
-    /* Warm dark background */
-    --surface-1: #2a2520;
-    /* Warm dark card surface */
-    --surface-2: #342e27;
-    /* Warm elevated surface */
-    --surface-3: #3a342a;
-    /* Warm border-level surface */
+    --bg: #f6f5f0;
+    --surface-1: transparent;
+    --surface-2: #efe9de;
+    --surface-3: #e5ddd0;
 
     /* Accent — warm gold */
-    --accent: #d4a942;
-    /* Gold — warm on dark bg */
-    --accent-hover: #e6be5a;
-    /* Lighter gold */
-    --accent-subtle: rgba(212, 169, 66, 0.12);
+    --accent: #8b6914;
+    --accent-hover: #a47d1b;
+    --accent-subtle: rgba(139, 105, 20, 0.06);
 
     --success: #4ade80;
-    /* green-400  */
     --warning: #fbbf24;
-    /* amber-400  */
     --error: #f87171;
-    /* red-400    */
 
-    /* Text — warm off-white hierarchy */
-    --text-primary: #f0ebe2;
-    /* Warm cream — readable */
-    --text-secondary: #a89e8f;
-    /* Warm muted — secondary */
-    --text-muted: #8c8273;
-    /* Warm dark — placeholders */
+    /* Text */
+    --text-primary: #2c2418;
+    --text-secondary: #6b5e4f;
+    --text-muted: #706558;
 
-    /* Borders — warm subtle */
-    --border: #3a342a;
-    /* Warm dark border */
-    --border-hover: #4d453a;
-    /* Warm border on hover */
+    /* Borders */
+    --border: #d9d0c3;
+    --border-hover: #c4b9a9;
 
     /* Sizing */
     --radius-sm: 0px;
@@ -55,11 +40,11 @@
     --header-h: calc(var(--nav-height) + 24px);
 
     /* Search/Input Colors */
-    --bg-primary: var(--surface-1);
-    --bg-secondary: var(--surface-2);
+    --bg-primary: transparent;
+    --bg-secondary: #efe9de;
 
     /* Button Text Contrast */
-    --btn-primary-text: #1a1714; /* Dark text on gold button */
+    --btn-primary-text: #ffffff;
 
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -67,7 +52,7 @@
 
     /* Legacy compat aliases */
     --aurora-violet: var(--accent);
-    --aurora-azure: #d4a942;
+    --aurora-azure: var(--accent);
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --glass-glow: transparent;
@@ -77,27 +62,28 @@
     --secondary: var(--aurora-azure);
 }
 
-/* Light Mode — Warm Cream */
-[data-theme="light"] {
-    --bg: #f6f5f0;
-    --surface-1: transparent;
-    --surface-2: #efe9de;
-    --surface-3: #e5ddd0;
-    --accent: #8b6914;
-    --accent-hover: #a47d1b;
-    --accent-subtle: rgba(139, 105, 20, 0.06);
-    --text-primary: #2c2418;
-    --text-secondary: #6b5e4f;
-    --text-muted: #706558;
-    --border: #d9d0c3;
-    --border-hover: #c4b9a9;
-    --bg-primary: transparent;
-    --bg-secondary: #efe9de;
-    --btn-primary-text: #ffffff; /* White text on dark gold button */
+/* Dark Mode — Warm Dark */
+[data-theme="dark"] {
+    --bg: #1a1714;
+    --surface-1: #2a2520;
+    --surface-2: #342e27;
+    --surface-3: #3a342a;
+    --accent: #d4a942;
+    --accent-hover: #e6be5a;
+    --accent-subtle: rgba(212, 169, 66, 0.12);
+    --text-primary: #f0ebe2;
+    --text-secondary: #a89e8f;
+    --text-muted: #8c8273;
+    --border: #3a342a;
+    --border-hover: #4d453a;
+    --bg-primary: var(--surface-1);
+    --bg-secondary: var(--surface-2);
+    --btn-primary-text: #1a1714;
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --midnight: var(--bg);
     --surface-0: var(--bg);
+    --aurora-azure: #d4a942;
 }
 
 /* Header — warm translucent in both modes */
