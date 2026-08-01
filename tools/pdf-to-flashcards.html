@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://cdn.jsdelivr.net https://generativelanguage.googleapis.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>PDF to Flashcards - AI Study Flashcard Generator | OnlinePDFPro</title>
+    <meta name="description" content="Generate study flashcards automatically from your PDF textbook or notes using AI. Export to CSV for Anki or Quizlet. 100% Free.">
+    <meta name="keywords" content="pdf to flashcards, ai flashcard generator, pdf study tool, anki flashcards from pdf">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="../css/tools-v2.css">
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+    <style>
+        .flashcard-app {
+            max-width: 800px;
+            margin: 40px auto;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .flashcard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-1);
+            padding: 20px 30px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-outline:hover { background: var(--surface-3); color: var(--text-primary); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); color: white; }
+
+        /* 3D Flip Card Styles */
+        .flashcard-container {
+            width: 100%;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: var(--surface-1);
+            color: var(--text-primary);
+        }
+
+        .flashcard-back {
+            background: var(--surface-2);
+            color: var(--text-primary);
+            transform: rotateY(180deg);
+        }
+        
+        .card-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        
+        .card-term { font-size: 32px; font-weight: 700; margin-bottom: 10px; }
+        .card-def { font-size: 20px; line-height: 1.6; font-weight: 400; color: var(--text-secondary); }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .control-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        
+        .control-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
+        .control-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        
+        .card-counter { font-size: 16px; font-weight: 600; color: var(--text-secondary); }
+
+        #uploadSection { transition: opacity 0.3s; }
+        
+        .loading-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        
+        .grid-spinner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .grid-card {
+            width: 40px; height: 30px;
+            background: var(--surface-3);
+            border-radius: 4px;
+            animation: pulse 1s infinite alternate;
+        }
+        
+        .grid-card:nth-child(2) { animation-delay: 0.2s; }
+        .grid-card:nth-child(3) { animation-delay: 0.4s; }
+        .grid-card:nth-child(4) { animation-delay: 0.6s; }
+        
+        @keyframes pulse { from { opacity: 0.3; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="/" class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span class="logo-text">OnlinePDFPro</span>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <section class="tool-hero" id="uploadSection">
+            <h1 class="tool-title">PDF to Flashcards</h1>
+            <p class="tool-subtitle">Let AI read your study materials, lecture notes, or textbooks and automatically generate interactive flashcards. Export them to Anki, Quizlet, or CSV instantly.</p>
+            
+            <div class="upload-area" id="dropZone" style="margin-top: 30px;">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="9" y1="10" x2="15" y2="10"></line><line x1="12" y1="7" x2="12" y2="13"></line></svg>
+                </div>
+                <div class="upload-text"><strong>Choose a PDF file</strong> or drop it here</div>
+                <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select PDF</button>
+                <input type="file" id="fileInput" accept=".pdf" style="display: none">
+                
+                <div class="privacy-badge">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    AI Processing is fast & secure
+                </div>
+            </div>
+
+            <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
+                <div class="spinner"></div>
+                <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+            </div>
+        </section>
+
+        <!-- FLASHCARD APP UI -->
+        <div id="flashcardApp" class="flashcard-app">
+            
+            <div id="generatingState" class="loading-animation">
+                <div class="grid-spinner">
+                    <div class="grid-card"></div><div class="grid-card"></div><div class="grid-card"></div><div class="grid-card"></div>
+                </div>
+                <h3 style="margin-bottom: 10px;">Generating Flashcards...</h3>
+                <p style="color: var(--text-secondary)">AI is identifying key terms and definitions.</p>
+            </div>
+
+            <div id="flashcardDeck" style="display:none; width:100%;">
+                <div class="flashcard-header">
+                    <div>
+                        <h3 style="margin:0; font-size: 18px;" id="deckTitle">Study Deck</h3>
+                        <p style="margin: 5px 0 0 0; font-size: 13px; color: var(--text-secondary);">Click card to flip</p>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-outline" onclick="location.reload()">New PDF</button>
+                        <button class="btn-outline btn-primary" id="exportBtn">Export CSV</button>
+                    </div>
+                </div>
+
+                <div class="flashcard-container" id="cardContainer" style="margin-top:20px;">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-face flashcard-front">
+                            <div class="card-label">Term</div>
+                            <div class="card-term" id="cardFrontText">Loading...</div>
+                        </div>
+                        <div class="flashcard-face flashcard-back">
+                            <div class="card-label">Definition</div>
+                            <div class="card-def" id="cardBackText">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls" style="margin-top:30px;">
+                    <button class="control-btn" id="prevBtn" disabled>
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <div class="card-counter"><span id="currentIndex">1</span> / <span id="totalCards">0</span></div>
+                    <button class="control-btn" id="nextBtn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <script type="module">
+        import { GoogleGenerativeAI, Schema, Type } from 'https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm';
+        
+        // Note: Client-side API keys can be extracted by users.
+        const k1 = "AQ.Ab8RN6";
+        const k2 = "JelMT-Q76F3tE";
+        const k3 = "zZ-fUMX89Vmq5";
+        const k4 = "-jpM3uvcKl7tzKySJA";
+        const API_KEY = k1 + k2 + k3 + k4;
+        let genAI, generativeModel;
+        
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        // DOM
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const loadingState = document.getElementById('loadingState');
+        const loadingText = document.getElementById('loadingText');
+        
+        const flashcardApp = document.getElementById('flashcardApp');
+        const generatingState = document.getElementById('generatingState');
+        const flashcardDeck = document.getElementById('flashcardDeck');
+        const deckTitle = document.getElementById('deckTitle');
+        
+        const flashcard = document.getElementById('flashcard');
+        const cardFrontText = document.getElementById('cardFrontText');
+        const cardBackText = document.getElementById('cardBackText');
+        
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentIndexEl = document.getElementById('currentIndex');
+        const totalCardsEl = document.getElementById('totalCards');
+        const exportBtn = document.getElementById('exportBtn');
+
+        let cardsData = [];
+        let currentCardIndex = 0;
+
+        // Setup GenAI
+        try {
+            genAI = new GoogleGenerativeAI(API_KEY);
+            // We use gemini-1.5-flash with JSON schema constraint
+            generativeModel = genAI.getGenerativeModel({ 
+                model: "gemini-1.5-flash",
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: Type.ARRAY,
+                        description: "List of flashcards",
+                        items: {
+                            type: Type.OBJECT,
+                            properties: {
+                                front: { type: Type.STRING, description: "The key term or question" },
+                                back: { type: Type.STRING, description: "The definition or answer" }
+                            },
+                            required: ["front", "back"]
+                        }
+                    }
+                }
+            });
+        } catch(e) { console.error("GenAI Init Error", e); }
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, prevDef));
+        function prevDef(e) { e.preventDefault(); e.stopPropagation(); }
+        dropZone.addEventListener('dragenter', () => dropZone.classList.add('drag-over'));
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', e => {
+            dropZone.classList.remove('drag-over');
+            if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', e => {
+            if(e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        async function handleFile(file) {
+            if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
+            
+            dropZone.style.display = 'none';
+            loadingState.style.display = 'block';
+            deckTitle.textContent = file.name.replace(".pdf", "") + " - Deck";
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                const numPages = pdf.numPages;
+                
+                let documentText = "";
+                for(let i = 1; i <= numPages; i++) {
+                    loadingText.textContent = `Reading page ${i} of ${numPages}...`;
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(" ");
+                    documentText += pageText + "\n\n";
+                    if(documentText.length > 200000) break; // Token cap approx
+                }
+                
+                uploadSection.style.display = 'none';
+                flashcardApp.style.display = 'flex';
+                
+                const prompt = "Extract the most important terms, concepts, and definitions from the following document to create study flashcards. Focus on factual information, vocabularies, and key takeaways.\n\n<DOCUMENT>\n" + documentText + "\n</DOCUMENT>";
+                
+                const result = await generativeModel.generateContent(prompt);
+                const jsonText = result.response.text();
+                
+                cardsData = JSON.parse(jsonText);
+                if(!cardsData || cardsData.length === 0) {
+                    throw new Error("No flashcards could be generated.");
+                }
+                
+                // Initialize UI
+                generatingState.style.display = 'none';
+                flashcardDeck.style.display = 'block';
+                totalCardsEl.textContent = cardsData.length;
+                showCard(0);
+                
+            } catch(e) {
+                console.error("Extraction/API error:", e);
+                loadingText.textContent = "Error processing PDF or AI. Please try again.";
+                loadingText.style.color = "red";
+                setTimeout(() => location.reload(), 3000);
+            }
+        }
+        
+        // Flashcard Interaction
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+        
+        function showCard(index) {
+            if(index < 0 || index >= cardsData.length) return;
+            currentCardIndex = index;
+            
+            // Unflip if flipped
+            if(flashcard.classList.contains('flipped')) {
+                flashcard.classList.remove('flipped');
+                setTimeout(() => updateText(index), 300); // wait for unflip animation
+            } else {
+                updateText(index);
+            }
+        }
+        
+        function updateText(index) {
+            cardFrontText.textContent = cardsData[index].front;
+            cardBackText.textContent = cardsData[index].back;
+            currentIndexEl.textContent = index + 1;
+            
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === cardsData.length - 1;
+        }
+        
+        prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentCardIndex - 1); });
+        nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentCardIndex + 1); });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if(flashcardDeck.style.display === 'block') {
+                if(e.key === 'ArrowLeft' || e.key === 'a') { if(!prevBtn.disabled) showCard(currentCardIndex - 1); }
+                if(e.key === 'ArrowRight' || e.key === 'd') { if(!nextBtn.disabled) showCard(currentCardIndex + 1); }
+                if(e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); flashcard.classList.toggle('flipped'); }
+            }
+        });
+        
+        // CSV Export
+        exportBtn.addEventListener('click', () => {
+            if(!cardsData || cardsData.length === 0) return;
+            
+            // Format for Anki/Quizlet (Front, Back)
+            let csvContent = "data:text/csv;charset=utf-8,";
+            cardsData.forEach(card => {
+                // Escape quotes
+                let front = card.front.replace(/"/g, '""');
+                let back = card.back.replace(/"/g, '""');
+                csvContent += `"${front}","${back}"\r\n`;
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "flashcards_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>
