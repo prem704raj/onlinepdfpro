@@ -1743,3 +1743,99 @@ main#main {
 .privacy-reminder {
     display: none !important;
 }
+
+/* ═══════════════════════════
+   GLOBAL FOOTER (hp-footer)
+   Used on ALL pages via footer.njk
+   ═══════════════════════════ */
+.hp-footer {
+    background: var(--surface-2, #efe9de);
+    border-top: 1px solid var(--border, #d9d0c3);
+    padding: 56px 24px 36px;
+}
+
+[data-theme="dark"] .hp-footer {
+    background: #242019;
+    border-top-color: #3a342a;
+}
+
+.hp-footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto 36px;
+}
+
+.hp-footer-brand h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary, #2c2418);
+    margin-bottom: 6px;
+}
+
+.hp-footer-brand-sub {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted, #706558);
+    line-height: 1.5;
+}
+
+.hp-footer-col h5 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted, #706558);
+    margin-bottom: 14px;
+}
+
+.hp-footer-col ul { list-style: none; padding: 0; margin: 0; }
+.hp-footer-col li { margin-bottom: 9px; }
+
+.hp-footer-col a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.83rem;
+    color: var(--text-secondary, #6b5e4f);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.hp-footer-col a:hover { color: var(--text-primary, #2c2418); }
+
+.hp-footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border, #d9d0c3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.hp-footer-copy {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-muted, #706558);
+}
+
+.hp-footer-socials {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    align-items: center;
+}
+
+.hp-footer-socials a {
+    color: var(--text-muted, #706558);
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.hp-footer-socials a:hover { color: var(--text-primary, #2c2418); }
+.hp-footer-socials svg { width: 16px; height: 16px; }
