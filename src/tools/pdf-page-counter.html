@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ===== MUST HAVE SEO META TAGS ===== -->
+    <title>PDF Page Counter - Count Pages in PDF Files Free Online</title>
+    <meta name="description" content="Count the number of pages in multiple PDF files instantly. 100% free, private, and works offline in your browser. No upload required.">
+    <meta name="keywords" content="pdf page counter, count pages in pdf, calculate pdf pages, count total pages multiple pdfs online, free pdf page counter">
+    <meta name="author" content="OnlinePDFPro">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta property="og:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
+    <meta property="og:description" content="Count the number of pages in multiple PDF files instantly. 100% free, private, and works offline in your browser. No upload required.">
+    <meta property="og:site_name" content="OnlinePDFPro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta name="twitter:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
+    <meta name="twitter:description" content="Count the number of pages in multiple PDF files instantly. 100% free, private, and works offline in your browser. No upload required.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+    <link rel="stylesheet" href="../css/tools-v2.css">
+
+    <!-- PDF.js for client-side rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+    <style>
+        .result-box {
+            max-width: 600px;
+            margin: 40px auto;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+            display: none;
+        }
+
+        .result-header {
+            background: var(--surface-2);
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .total-count {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .total-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .file-list {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .file-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 16px;
+        }
+
+        .file-pages {
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(139, 105, 20, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .action-bar {
+            padding: 20px;
+            text-align: center;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border);
+        }
+
+        .reset-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            border-color: var(--text-primary);
+            background: var(--surface-3);
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlinepdfpro.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://onlinepdfpro.com/tools.html" },
+            { "@type": "ListItem", "position": 3, "name": "PDF Page Counter", "item": "https://onlinepdfpro.com/tools/pdf-page-counter.html" }
+        ]
+    }
+    </script>
+    <script defer src="../js/third-party-loader.js"></script>
+    <script src="../js/security-shield.js"></script>
+    <script>
+        (function() {
+            var theme = localStorage.getItem('doctools-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="/" class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="logo-text">OnlinePDFPro</span>
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <nav class="nav-links" id="navLinks">
+            <a href="/tools.html" class="nav-link">All Tools</a>
+            <a href="/study-materials.html" class="nav-link">Study Materials</a>
+            <a href="/blog/" class="nav-link">Blog</a>
+            <a href="/about.html" class="nav-link">About Us</a>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="tool-hero">
+            <h1 class="tool-title">PDF Page Counter</h1>
+            <p class="tool-subtitle">Count the number of pages in one or multiple PDF files instantly. 100% private, files are processed directly in your browser.</p>
+            
+            <div class="upload-area" id="dropZone">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="upload-text">
+                    <strong>Choose PDF files</strong> or drop them here
+                </div>
+                <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select PDF files</button>
+                <input type="file" id="fileInput" multiple accept=".pdf" style="display: none">
+                
+                <div class="privacy-badge">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    100% Secure: Files never leave your device
+                </div>
+            </div>
+
+            <!-- RESULT AREA -->
+            <div id="resultBox" class="result-box">
+                <div class="result-header">
+                    <div class="total-count" id="totalCount">0</div>
+                    <div class="total-label">Total Pages</div>
+                </div>
+                <div class="file-list" id="fileList">
+                    <!-- Files will be injected here -->
+                </div>
+                <div class="action-bar">
+                    <button class="reset-btn" onclick="resetTool()">Count More PDFs</button>
+                </div>
+            </div>
+            
+            <!-- LOADING STATE -->
+            <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Reading PDF files...</p>
+            </div>
+        </section>
+
+        <!-- SEO Content -->
+        <section class="seo-content">
+            <div class="seo-container">
+                <h2>How to Count PDF Pages Online</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>1. Select Files</h3>
+                        <p>Click the upload button or drag and drop your PDF files into the designated area.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>2. Instant Counting</h3>
+                        <p>Our tool instantly reads the metadata of your PDFs to determine the exact page count without uploading them.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>3. View Results</h3>
+                        <p>See a breakdown of pages per file and the grand total immediately on your screen.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 60px;">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <h4>Are my PDF files safe?</h4>
+                            <p>Yes, absolutely. This tool uses JavaScript to process your files directly in your web browser. Your PDF files are never uploaded to any server, guaranteeing 100% privacy and security.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>Can I count pages in multiple PDFs at once?</h4>
+                            <p>Yes! You can select dozens of PDF files at the same time. The tool will give you a list of each file's page count along with a grand total.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>Is there a limit on file size?</h4>
+                            <p>Since the processing happens on your device, there are no file size limits or daily usage limits. You can use it as much as you need for free.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER INJECTED VIA JS (Same as other tools) -->
+    <div id="footer-container"></div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const resultBox = document.getElementById('resultBox');
+        const fileList = document.getElementById('fileList');
+        const totalCountEl = document.getElementById('totalCount');
+        const loadingState = document.getElementById('loadingState');
+
+        // Drag & Drop Handlers
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-over'), false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-over'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = [...dt.files].filter(f => f.type === 'application/pdf');
+            if (files.length > 0) processFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = [...e.target.files].filter(f => f.type === 'application/pdf');
+            if (files.length > 0) processFiles(files);
+        });
+
+        async function processFiles(files) {
+            dropZone.style.display = 'none';
+            loadingState.style.display = 'block';
+            resultBox.style.display = 'none';
+            
+            fileList.innerHTML = '';
+            let totalPages = 0;
+
+            for (const file of files) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    const numPages = pdf.numPages;
+                    totalPages += numPages;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.innerHTML = `
+                        <div class="file-name" title="${escapeHTML(file.name)}">${escapeHTML(file.name)}</div>
+                        <div class="file-pages">${numPages} ${numPages === 1 ? 'page' : 'pages'}</div>
+                    `;
+                    fileList.appendChild(div);
+                } catch (e) {
+                    console.error("Error reading PDF:", e);
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.innerHTML = `
+                        <div class="file-name" style="color:#ef4444" title="${escapeHTML(file.name)}">${escapeHTML(file.name)} (Error reading file)</div>
+                        <div class="file-pages" style="background:#fee2e2;color:#ef4444">-</div>
+                    `;
+                    fileList.appendChild(div);
+                }
+            }
+            
+            loadingState.style.display = 'none';
+            resultBox.style.display = 'block';
+            
+            // Animate total count
+            animateValue(totalCountEl, 0, totalPages, 1000);
+        }
+
+        function resetTool() {
+            fileInput.value = '';
+            resultBox.style.display = 'none';
+            dropZone.style.display = 'block';
+        }
+        
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+    
+    <!-- Load Theme Toggle and Mobile Menu (from main JS) -->
+    <script src="../js/main.js"></script>
+
+    <!-- Load Footer dynamically for HTML pages -->
+    <script>
+        fetch('../_includes/partials/footer.njk')
+            .then(res => res.text())
+            .then(html => {
+                // VERY basic rendering to strip nunjucks tags if needed
+                let cleanHtml = html.replace(/{%.*?%}/g, '').replace(/{{.*?}}/g, '');
+                document.getElementById('footer-container').innerHTML = cleanHtml;
+            }).catch(e => console.log('Footer load error:', e));
+    </script>
+</body>
+</html>
