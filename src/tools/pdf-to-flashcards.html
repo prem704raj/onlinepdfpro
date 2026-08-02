@@ -168,12 +168,18 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  const k1 = "AQ.Ab8RN6lit";
-  const k2 = "LrGK1XmC9rbadE";
-  const k3 = "KLV78WimJ2b3ln";
-  const k4 = "X1yZ73IAKqS8Q";
-  const API_KEY = k1 + k2 + k3 + k4;
-  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+  // Gemini API
+  const API_KEY = "AIzaSyCNL69AwLxuIgBm543ZcJg-mZIcBABEvF8";
+  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + API_KEY;
+
+  async function fetchWithRetry(url, opts, retries) {
+    for(let i = 0; i < retries; i++) {
+      const r = await fetch(url, opts);
+      if(r.status === 429) { await new Promise(x => setTimeout(x, (i+1)*10000)); continue; }
+      return r;
+    }
+    throw new Error("Rate limited. Please wait a minute and try again.");
+  }
 
   let cardsData = [];
   let currentIndex = 0;
@@ -230,7 +236,7 @@
 
       const prompt = 'Extract the most important terms, concepts, and definitions from the following document to create study flashcards. Focus on factual information, vocabularies, and key takeaways. Return ONLY a JSON array with objects having "front" (term/question) and "back" (definition/answer) keys. No markdown, no code fences, just the JSON array.\n\nDOCUMENT:\n' + documentText;
 
-      const response = await fetch(API_URL, {
+      const response = await fetchWithRetry(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -241,7 +247,7 @@
             responseMimeType: "application/json"
           }
         })
-      });
+      }, 3);
 
       const data = await response.json();
       loadingState.style.display = 'none';
