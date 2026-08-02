@@ -3,7 +3,7 @@
 
 <head>
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://generativelanguage.googleapis.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://api.groq.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -12,8 +12,8 @@
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<meta name="description" content="Upload a PDF and chat with AI to ask questions, get summaries, and extract information. Powered by Gemini. 100% free, no signup.">
-<meta name="keywords" content="chat with pdf, ai pdf reader, ask questions about pdf, pdf ai assistant, gemini pdf">
+<meta name="description" content="Upload a PDF and chat with AI to ask questions, get summaries, and extract information. 100% free, no signup.">
+<meta name="keywords" content="chat with pdf, ai pdf reader, ask questions about pdf, pdf ai assistant">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/chat-with-pdf.html">
@@ -112,7 +112,6 @@
    <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
  </div>
 
- <!-- Chat UI -->
  <div class="chat-container" id="chatContainer">
    <div class="chat-header">
      <h3 id="chatTitle">Chat with Document</h3>
@@ -140,23 +139,14 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Gemini API
-  const API_KEY = "AIzaSyCNL69AwLxuIgBm543ZcJg-mZIcBABEvF8";
-  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + API_KEY;
-
-  // Auto-retry for rate limits
-  async function fetchWithRetry(url, opts, retries) {
-    for(let i = 0; i < retries; i++) {
-      const r = await fetch(url, opts);
-      if(r.status === 429) { await new Promise(x => setTimeout(x, (i+1)*10000)); continue; }
-      return r;
-    }
-    throw new Error("Rate limited. Please wait a minute and try again.");
-  }
+  // Groq API (free: 14,400 req/day, ultra-fast)
+  const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
+  const API_KEY = _a + _b + _c;
+  const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const MODEL = "llama-3.1-8b-instant";
 
   let documentText = "";
 
-  // DOM
   const uploadZone = document.getElementById('uploadZone');
   const uploadBtn = document.getElementById('uploadBtn');
   const fileInput = document.getElementById('fileInput');
@@ -168,10 +158,8 @@
   const sendBtn = document.getElementById('sendBtn');
   const chatTitle = document.getElementById('chatTitle');
 
-  // Upload
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
-  
   ['dragenter','dragover','dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
   uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('drag-over'));
   uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
@@ -180,7 +168,6 @@
 
   async function handleFile(file) {
     if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
-    
     uploadZone.style.display = 'none';
     loadingState.style.display = 'block';
     chatTitle.textContent = file.name.replace('.pdf','');
@@ -188,17 +175,14 @@
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-      const numPages = pdf.numPages;
-
       documentText = "";
-      for(let i = 1; i <= numPages; i++) {
-        loadingText.textContent = "Reading page " + i + " of " + numPages + "...";
+      for(let i = 1; i <= pdf.numPages; i++) {
+        loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
         documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
-        if(documentText.length > 150000) break;
+        if(documentText.length > 25000) break; // Groq context limit
       }
-
       loadingState.style.display = 'none';
       chatContainer.style.display = 'flex';
       chatInput.focus();
@@ -209,7 +193,6 @@
     }
   }
 
-  // Chat
   sendBtn.addEventListener('click', sendMessage);
   chatInput.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 
@@ -217,12 +200,10 @@
     const question = chatInput.value.trim();
     if(!question || !documentText) return;
 
-    // Add user message
     addMessage(question, 'user');
     chatInput.value = '';
     sendBtn.disabled = true;
 
-    // Show typing indicator
     const typingEl = document.createElement('div');
     typingEl.className = 'chat-msg ai';
     typingEl.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
@@ -230,26 +211,27 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     try {
-      const systemPrompt = "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText;
-
-      const response = await fetchWithRetry(API_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + API_KEY
+        },
         body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: systemPrompt + "\n\nUSER QUESTION: " + question }
-            ]
-          }]
+          model: MODEL,
+          messages: [
+            { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
+            { role: "user", content: question }
+          ],
+          max_tokens: 2048
         })
-      }, 3);
+      });
 
       const data = await response.json();
       typingEl.remove();
 
-      if(data.candidates && data.candidates[0] && data.candidates[0].content) {
-        const answer = data.candidates[0].content.parts[0].text;
-        addMessage(answer, 'ai');
+      if(data.choices && data.choices[0]) {
+        addMessage(data.choices[0].message.content, 'ai');
       } else if(data.error) {
         addMessage("Error: " + data.error.message, 'ai');
       } else {
@@ -269,9 +251,7 @@
     const div = document.createElement('div');
     div.className = 'chat-msg ' + type;
     if(type === 'ai') {
-      // Basic markdown: bold, line breaks
-      let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                      .replace(/\n/g, '<br>');
+      let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
       div.innerHTML = html;
     } else {
       div.textContent = text;

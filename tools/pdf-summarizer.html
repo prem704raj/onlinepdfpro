@@ -3,7 +3,7 @@
 
 <head>
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://generativelanguage.googleapis.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://api.groq.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -110,7 +110,6 @@
    <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
  </div>
 
- <!-- Summary Result -->
  <div class="summary-result" id="summaryResult">
    <div style="display:flex; justify-content:space-between; align-items:center;">
      <h3 id="summaryTitle">Summary</h3>
@@ -135,22 +134,13 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Gemini API
-  const API_KEY = "AIzaSyCNL69AwLxuIgBm543ZcJg-mZIcBABEvF8";
-  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + API_KEY;
-
-  async function fetchWithRetry(url, opts, retries) {
-    for(let i = 0; i < retries; i++) {
-      const r = await fetch(url, opts);
-      if(r.status === 429) { await new Promise(x => setTimeout(x, (i+1)*10000)); continue; }
-      return r;
-    }
-    throw new Error("Rate limited. Please wait a minute and try again.");
-  }
+  const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
+  const API_KEY = _a + _b + _c;
+  const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const MODEL = "llama-3.1-8b-instant";
 
   let currentMode = 'bullets';
 
-  // Mode selector
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -159,7 +149,6 @@
     });
   });
 
-  // DOM
   const uploadZone = document.getElementById('uploadZone');
   const uploadBtn = document.getElementById('uploadBtn');
   const fileInput = document.getElementById('fileInput');
@@ -169,10 +158,8 @@
   const summaryContent = document.getElementById('summaryContent');
   const summaryTitle = document.getElementById('summaryTitle');
 
-  // Upload
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
-  
   ['dragenter','dragover','dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
   uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('drag-over'));
   uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
@@ -181,7 +168,6 @@
 
   async function handleFile(file) {
     if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
-
     uploadZone.style.display = 'none';
     document.querySelector('.mode-selector').style.display = 'none';
     loadingState.style.display = 'block';
@@ -189,52 +175,54 @@
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-      const numPages = pdf.numPages;
-
       let documentText = "";
-      for(let i = 1; i <= numPages; i++) {
-        loadingText.textContent = "Reading page " + i + " of " + numPages + "...";
+      for(let i = 1; i <= pdf.numPages; i++) {
+        loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
         documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
-        if(documentText.length > 150000) break;
+        if(documentText.length > 25000) break;
       }
 
       loadingText.textContent = "AI is generating your summary...";
 
       const prompts = {
-        bullets: "Summarize the following document as a list of clear, concise bullet points. Focus on the most important facts, findings, and takeaways. Use '•' for bullets.\n\nDOCUMENT:\n" + documentText,
-        short: "Write a brief 3-5 sentence summary of the following document, capturing the main topic, key findings, and conclusion.\n\nDOCUMENT:\n" + documentText,
-        detailed: "Write a comprehensive, detailed summary of the following document. Include all major sections, key arguments, data, and conclusions. Use paragraph breaks and bold headers where appropriate.\n\nDOCUMENT:\n" + documentText
+        bullets: "Summarize the following document as a list of clear, concise bullet points. Focus on the most important facts, findings, and takeaways. Use bullet points.",
+        short: "Write a brief 3-5 sentence summary of the following document, capturing the main topic, key findings, and conclusion.",
+        detailed: "Write a comprehensive, detailed summary of the following document. Include all major sections, key arguments, data, and conclusions."
       };
 
-      const response = await fetchWithRetry(API_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + API_KEY
+        },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompts[currentMode] }]
-          }]
+          model: MODEL,
+          messages: [
+            { role: "system", content: prompts[currentMode] },
+            { role: "user", content: "DOCUMENT:\n" + documentText }
+          ],
+          max_tokens: 4096
         })
-      }, 3);
+      });
 
       const data = await response.json();
       loadingState.style.display = 'none';
 
-      if(data.candidates && data.candidates[0] && data.candidates[0].content) {
-        const text = data.candidates[0].content.parts[0].text;
+      if(data.choices && data.choices[0]) {
+        const text = data.choices[0].message.content;
         summaryTitle.textContent = file.name.replace('.pdf','') + " — Summary";
-        // Format markdown
-        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                       .replace(/\n/g, '<br>');
+        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
         summaryContent.innerHTML = html;
         summaryResult.style.display = 'block';
       } else if(data.error) {
+        loadingState.style.display = 'block';
         loadingText.textContent = "Error: " + data.error.message;
-        loadingState.style.display = 'block';
       } else {
-        loadingText.textContent = "Could not generate summary. Please try again.";
         loadingState.style.display = 'block';
+        loadingText.textContent = "Could not generate summary. Please try again.";
       }
     } catch(err) {
       console.error(err);
@@ -243,7 +231,6 @@
     }
   }
 
-  // Copy to clipboard
   window.copyToClipboard = function() {
     const text = summaryContent.innerText;
     navigator.clipboard.writeText(text).then(() => {

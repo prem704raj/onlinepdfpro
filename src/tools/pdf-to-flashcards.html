@@ -3,7 +3,7 @@
 
 <head>
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://generativelanguage.googleapis.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://api.groq.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -49,7 +49,6 @@
    .fc-btns button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
    .fc-btns .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-   /* 3D Flip Card */
    .fc-card-wrap { width:100%; height: 340px; perspective: 1000px; cursor: pointer; margin-bottom: 20px; }
    .fc-card { width:100%; height:100%; position:relative; transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; border-radius: 20px; }
    .fc-card.flipped { transform: rotateY(180deg); }
@@ -119,7 +118,6 @@
    <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
  </div>
 
- <!-- Flashcard App -->
  <div class="fc-app" id="fcApp">
    <div class="fc-header">
      <h3 id="deckTitle">Study Deck</h3>
@@ -168,23 +166,14 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Gemini API
-  const API_KEY = "AIzaSyCNL69AwLxuIgBm543ZcJg-mZIcBABEvF8";
-  const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + API_KEY;
-
-  async function fetchWithRetry(url, opts, retries) {
-    for(let i = 0; i < retries; i++) {
-      const r = await fetch(url, opts);
-      if(r.status === 429) { await new Promise(x => setTimeout(x, (i+1)*10000)); continue; }
-      return r;
-    }
-    throw new Error("Rate limited. Please wait a minute and try again.");
-  }
+  const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
+  const API_KEY = _a + _b + _c;
+  const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const MODEL = "llama-3.1-8b-instant";
 
   let cardsData = [];
   let currentIndex = 0;
 
-  // DOM
   const uploadZone = document.getElementById('uploadZone');
   const uploadBtn = document.getElementById('uploadBtn');
   const fileInput = document.getElementById('fileInput');
@@ -201,10 +190,8 @@
   const deckTitle = document.getElementById('deckTitle');
   const exportBtn = document.getElementById('exportBtn');
 
-  // Upload
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
-  
   ['dragenter','dragover','dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
   uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('drag-over'));
   uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
@@ -213,7 +200,6 @@
 
   async function handleFile(file) {
     if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
-
     uploadZone.style.display = 'none';
     loadingState.style.display = 'block';
     deckTitle.textContent = file.name.replace('.pdf','') + ' — Deck';
@@ -221,40 +207,42 @@
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-      const numPages = pdf.numPages;
-
       let documentText = "";
-      for(let i = 1; i <= numPages; i++) {
-        loadingText.textContent = "Reading page " + i + " of " + numPages + "...";
+      for(let i = 1; i <= pdf.numPages; i++) {
+        loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
         documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
-        if(documentText.length > 150000) break;
+        if(documentText.length > 25000) break;
       }
 
       loadingText.textContent = "AI is generating flashcards...";
 
-      const prompt = 'Extract the most important terms, concepts, and definitions from the following document to create study flashcards. Focus on factual information, vocabularies, and key takeaways. Return ONLY a JSON array with objects having "front" (term/question) and "back" (definition/answer) keys. No markdown, no code fences, just the JSON array.\n\nDOCUMENT:\n' + documentText;
-
-      const response = await fetchWithRetry(API_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + API_KEY
+        },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }],
-          generationConfig: {
-            responseMimeType: "application/json"
-          }
+          model: MODEL,
+          messages: [
+            { role: "system", content: 'Extract the most important terms, concepts, and definitions from the document to create study flashcards. Return ONLY a valid JSON array with objects having "front" (term/question) and "back" (definition/answer) keys. No markdown, no explanations, just the raw JSON array.' },
+            { role: "user", content: "DOCUMENT:\n" + documentText }
+          ],
+          max_tokens: 4096,
+          response_format: { type: "json_object" }
         })
-      }, 3);
+      });
 
       const data = await response.json();
       loadingState.style.display = 'none';
 
-      if(data.candidates && data.candidates[0] && data.candidates[0].content) {
-        const jsonText = data.candidates[0].content.parts[0].text;
-        cardsData = JSON.parse(jsonText);
+      if(data.choices && data.choices[0]) {
+        const jsonText = data.choices[0].message.content;
+        const parsed = JSON.parse(jsonText);
+        // Handle both { flashcards: [...] } and direct array
+        cardsData = Array.isArray(parsed) ? parsed : (parsed.flashcards || parsed.cards || Object.values(parsed)[0]);
 
         if(!Array.isArray(cardsData) || cardsData.length === 0) {
           throw new Error("No flashcards generated");
@@ -272,12 +260,14 @@
       }
     } catch(err) {
       console.error(err);
-      loadingText.textContent = "Error processing PDF. Please try again.";
+      if(!loadingState.style.display || loadingState.style.display === 'none') {
+        loadingState.style.display = 'block';
+      }
+      loadingText.textContent = "Error: " + (err.message || "Please try again.");
       loadingText.style.color = "var(--error, red)";
     }
   }
 
-  // Flashcard interaction
   flashcard.addEventListener('click', () => flashcard.classList.toggle('flipped'));
 
   function showCard(index) {
@@ -302,7 +292,6 @@
   prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1); });
   nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1); });
 
-  // Keyboard
   document.addEventListener('keydown', (e) => {
     if(fcApp.style.display === 'block') {
       if(e.key === 'ArrowLeft' || e.key === 'a') { if(!prevBtn.disabled) showCard(currentIndex - 1); }
@@ -311,7 +300,6 @@
     }
   });
 
-  // CSV Export
   exportBtn.addEventListener('click', () => {
     if(!cardsData || cardsData.length === 0) return;
     let csv = "";
