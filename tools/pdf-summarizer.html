@@ -230,7 +230,7 @@
       }
     } catch(err) {
       console.error(err);
-      loadingText.textContent = "Error processing PDF. Please try again.";
+      loadingText.textContent = err.message || "Error processing PDF. Please try again.";
       loadingText.style.color = "var(--error, red)";
     }
   }
