@@ -216,6 +216,10 @@
         if(documentText.length > 25000) break;
       }
 
+      if (documentText.trim() === "") {
+        throw new Error("This PDF appears to be a scanned document or image. Our AI currently only works with text-based PDFs.");
+      }
+
       loadingText.textContent = "AI is generating flashcards...";
 
       const response = await fetch(API_URL, {

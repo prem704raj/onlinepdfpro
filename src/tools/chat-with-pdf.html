@@ -183,6 +183,11 @@
         documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
         if(documentText.length > 25000) break; // Groq context limit
       }
+
+      if (documentText.trim() === "") {
+        throw new Error("This PDF appears to be a scanned document or image. Our AI currently only works with text-based PDFs.");
+      }
+
       loadingState.style.display = 'none';
       chatContainer.style.display = 'flex';
       chatInput.focus();
