@@ -184,8 +184,41 @@
         if(documentText.length > 25000) break;
       }
 
-      if (documentText.trim() === "") {
-        throw new Error("This PDF appears to be a scanned document or image. Our AI currently only works with text-based PDFs.");
+      // OCR fallback for scanned/image PDFs
+      if (documentText.trim().length < 50) {
+        loadingText.textContent = "Scanned PDF detected. Running OCR...";
+        documentText = "";
+        const maxOcrPages = Math.min(pdf.numPages, 5);
+        for(let i = 1; i <= maxOcrPages; i++) {
+          loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
+          const page = await pdf.getPage(i);
+          const scale = 2;
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          const base64 = canvas.toDataURL('image/png');
+
+          const formData = new FormData();
+          formData.append('base64Image', base64);
+          formData.append('apikey', 'helloworld');
+          formData.append('language', 'eng');
+          formData.append('isOverlayRequired', 'false');
+          formData.append('OCREngine', '2');
+
+          const ocrResp = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
+          const ocrData = await ocrResp.json();
+          if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
+            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+          }
+          if(documentText.length > 25000) break;
+        }
+      }
+
+      if (documentText.trim().length < 10) {
+        throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
       loadingText.textContent = "AI is generating your summary...";
