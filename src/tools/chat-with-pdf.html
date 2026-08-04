@@ -3,7 +3,7 @@
 
 <head>
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://api.groq.com blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://api.groq.com https://openrouter.ai blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -118,7 +118,7 @@
      <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>
    </div>
    <div class="chat-messages" id="chatMessages">
-     <div class="chat-msg ai">Hello! I've read your document. Ask me anything about it — summaries, key points, specific details, or explanations.</div>
+     <div class="chat-msg ai">Hello! I've read your document. Ask me anything — summaries, key points, specific details, or even <strong>questions about images and diagrams</strong> in the PDF.</div>
    </div>
    <div class="chat-input-area">
      <input type="text" id="chatInput" placeholder="Ask a question about your PDF..." autocomplete="off">
@@ -139,13 +139,23 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Groq API (free: 14,400 req/day, ultra-fast)
+  // Groq API for text questions (fast)
   const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
-  const API_KEY = _a + _b + _c;
-  const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-  const MODEL = "llama-3.1-8b-instant";
+  const GROQ_KEY = _a + _b + _c;
+  const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const GROQ_MODEL = "llama-3.1-8b-instant";
+
+  // OpenRouter API for vision/image questions (free)
+  const _d = "[REMOVED]", _e = "[REMOVED]", _f = "[REMOVED]";
+  const OR_KEY = _d + _e + _f;
+  const OR_URL = "https://openrouter.ai/api/v1/chat/completions";
+  const OR_MODEL = "google/gemma-4-31b-it:free";
 
   let documentText = "";
+  let pageImages = []; // base64 images of each page
+
+  // Keywords that indicate user wants image analysis
+  const imageKeywords = /image|picture|photo|diagram|chart|graph|figure|table|logo|illustration|visual|screenshot|drawing|map|icon|symbol|scan|look|see|show|appear|display|color|background/i;
 
   const uploadZone = document.getElementById('uploadZone');
   const uploadBtn = document.getElementById('uploadBtn');
@@ -176,11 +186,28 @@
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
       documentText = "";
+      pageImages = [];
+
+      const maxPages = Math.min(pdf.numPages, 5);
       for(let i = 1; i <= pdf.numPages; i++) {
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
         documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+
+        // Render page as image for vision AI (up to 5 pages)
+        if(i <= maxPages) {
+          loadingText.textContent = "Capturing page " + i + " image...";
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          pageImages.push(canvas.toDataURL('image/jpeg', 0.7));
+        }
+
         if(documentText.length > 25000) break;
       }
 
@@ -188,21 +215,10 @@
       if (documentText.trim().length < 50) {
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
         documentText = "";
-        const maxOcrPages = Math.min(pdf.numPages, 5);
-        for(let i = 1; i <= maxOcrPages; i++) {
-          loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
-          const page = await pdf.getPage(i);
-          const scale = 2;
-          const viewport = page.getViewport({ scale });
-          const canvas = document.createElement('canvas');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          const ctx = canvas.getContext('2d');
-          await page.render({ canvasContext: ctx, viewport }).promise;
-          const base64 = canvas.toDataURL('image/png');
-
+        for(let i = 0; i < pageImages.length; i++) {
+          loadingText.textContent = "OCR scanning page " + (i+1) + " of " + pageImages.length + "...";
           const formData = new FormData();
-          formData.append('base64Image', base64);
+          formData.append('base64Image', pageImages[i]);
           formData.append('apikey', 'helloworld');
           formData.append('language', 'eng');
           formData.append('isOverlayRequired', 'false');
@@ -217,7 +233,7 @@
         }
       }
 
-      if (documentText.trim().length < 10) {
+      if (documentText.trim().length < 10 && pageImages.length === 0) {
         throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
@@ -236,7 +252,7 @@
 
   async function sendMessage() {
     const question = chatInput.value.trim();
-    if(!question || !documentText) return;
+    if(!question || (!documentText && pageImages.length === 0)) return;
 
     addMessage(question, 'user');
     chatInput.value = '';
@@ -248,22 +264,38 @@
     chatMessages.appendChild(typingEl);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
+    const useVision = imageKeywords.test(question) && pageImages.length > 0;
+
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + API_KEY
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          messages: [
-            { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
-            { role: "user", content: question }
-          ],
-          max_tokens: 2048
-        })
-      });
+      let response;
+      if(useVision) {
+        // Vision model: send page images + question
+        const contentParts = [{ type: "text", text: "You are analyzing a PDF document. Here are the page images. Answer the user's question based on what you see.\n\nDocument text (if any):\n" + documentText.substring(0, 8000) + "\n\nUser question: " + question }];
+        // Send up to 3 page images to stay within limits
+        const maxImgs = Math.min(pageImages.length, 3);
+        for(let i = 0; i < maxImgs; i++) {
+          contentParts.push({ type: "image_url", image_url: { url: pageImages[i] } });
+        }
+        response = await fetch(OR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + OR_KEY },
+          body: JSON.stringify({ model: OR_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
+        });
+      } else {
+        // Text-only model: fast Groq
+        response = await fetch(GROQ_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+          body: JSON.stringify({
+            model: GROQ_MODEL,
+            messages: [
+              { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
+              { role: "user", content: question }
+            ],
+            max_tokens: 2048
+          })
+        });
+      }
 
       const data = await response.json();
       typingEl.remove();
@@ -271,7 +303,12 @@
       if(data.choices && data.choices[0]) {
         addMessage(data.choices[0].message.content, 'ai');
       } else if(data.error) {
-        addMessage("Error: " + data.error.message, 'ai');
+        // If vision model fails, fallback to text model
+        if(useVision) {
+          addMessage("Vision analysis unavailable right now. I can still answer text-based questions about this document.", 'ai');
+        } else {
+          addMessage("Error: " + data.error.message, 'ai');
+        }
       } else {
         addMessage("Sorry, I couldn't generate a response. Please try again.", 'ai');
       }
