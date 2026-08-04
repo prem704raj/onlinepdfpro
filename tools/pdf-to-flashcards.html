@@ -25,7 +25,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
  <link rel="stylesheet" href="../css/style.css">
  <link rel="stylesheet" href="../css/mobile-fix-v2.css">
@@ -41,31 +41,104 @@
  </script>
 
  <style>
+   /* ===== Colorful Flashcard Styles ===== */
    .fc-app { display:none; max-width:800px; margin:24px auto 0; }
+
    .fc-header { display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 20px; }
-   .fc-header h3 { margin:0; font-size: 0.95rem; }
+   .fc-header h3 { margin:0; font-size: 0.95rem; font-weight: 700; }
    .fc-btns { display:flex; gap: 8px; }
-   .fc-btns button { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
-   .fc-btns button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-   .fc-btns .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+   .fc-btns button { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s; }
+   .fc-btns button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+   .fc-btns .primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; }
+   .fc-btns .primary:hover { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
 
-   .fc-card-wrap { width:100%; height: 340px; perspective: 1000px; cursor: pointer; margin-bottom: 20px; }
-   .fc-card { width:100%; height:100%; position:relative; transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; border-radius: 20px; }
+   /* Progress bar */
+   .fc-progress { width: 100%; height: 6px; background: var(--surface-2); border-radius: 100px; margin-bottom: 20px; overflow: hidden; }
+   .fc-progress-bar { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+   /* Card container */
+   .fc-card-wrap { width:100%; height: 360px; perspective: 1200px; cursor: pointer; margin-bottom: 20px; user-select: none; }
+   .fc-card { width:100%; height:100%; position:relative; transition: transform 0.7s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; border-radius: 24px; }
    .fc-card.flipped { transform: rotateY(180deg); }
-   .fc-face { position:absolute; width:100%; height:100%; backface-visibility: hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 40px; border-radius: 20px; border: 1px solid var(--border); text-align:center; }
-   .fc-front { background: var(--surface-1); }
-   .fc-back { background: var(--surface-2); transform: rotateY(180deg); }
-   .fc-label { position:absolute; top:16px; left:20px; font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; color: var(--text-muted); font-weight:600; }
-   .fc-term { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
-   .fc-def { font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary); }
 
+   /* Card faces with colorful gradients */
+   .fc-face { position:absolute; width:100%; height:100%; backface-visibility: hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 40px 32px; border-radius: 24px; text-align:center; overflow-y: auto; }
+
+   /* Front face - colorful gradients */
+   .fc-front { color: #fff; }
+   .fc-front.grad-0 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+   .fc-front.grad-1 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+   .fc-front.grad-2 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+   .fc-front.grad-3 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+   .fc-front.grad-4 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+   .fc-front.grad-5 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+   .fc-front.grad-6 { background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); }
+   .fc-front.grad-7 { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); }
+   .fc-front.grad-8 { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); }
+   .fc-front.grad-9 { background: linear-gradient(135deg, #667eea 0%, #00d2ff 100%); }
+
+   /* Dark mode adjustments for some lighter gradients */
+   .fc-front.grad-3 { color: #1a2e1a; }
+   .fc-front.grad-4 { color: #2d1a00; }
+   .fc-front.grad-7 { color: #1a1a3e; }
+
+   /* Back face */
+   .fc-back { background: var(--surface-1); border: 2px solid var(--border); transform: rotateY(180deg); color: var(--text-primary); }
+   [data-theme="dark"] .fc-back { background: #1e1e2e; border-color: #383850; }
+
+   /* Labels & content */
+   .fc-label { position:absolute; top:16px; left:20px; font-size:0.65rem; text-transform:uppercase; letter-spacing:3px; font-weight:700; opacity: 0.7; }
+   .fc-front .fc-label { color: rgba(255,255,255,0.7); }
+   .fc-front.grad-3 .fc-label,
+   .fc-front.grad-4 .fc-label,
+   .fc-front.grad-7 .fc-label { color: rgba(0,0,0,0.4); }
+
+   .fc-badge { position:absolute; top:14px; right:18px; font-size:0.7rem; font-weight:700; padding: 4px 10px; border-radius: 100px; }
+   .fc-front .fc-badge { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.9); }
+   .fc-front.grad-3 .fc-badge,
+   .fc-front.grad-4 .fc-badge,
+   .fc-front.grad-7 .fc-badge { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.6); }
+   .fc-back .fc-badge { background: var(--surface-2); color: var(--text-muted); }
+
+   .fc-question { font-size: 1.5rem; font-weight: 800; line-height: 1.4; max-width: 90%; }
+   .fc-answer { font-size: 1rem; line-height: 1.8; max-width: 90%; font-weight: 500; color: var(--text-secondary); }
+   .fc-answer strong { color: var(--text-primary); }
+
+   /* Swipe hint */
+   .fc-tap-hint { position: absolute; bottom: 16px; font-size: 0.7rem; opacity: 0.5; font-weight: 500; letter-spacing: 0.5px; }
+
+   /* Controls */
    .fc-controls { display:flex; justify-content:space-between; align-items:center; padding: 0 20px; }
-   .fc-nav-btn { background: var(--surface-2); border: 1px solid var(--border); width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color: var(--text-primary); transition: all 0.2s; }
-   .fc-nav-btn:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); }
-   .fc-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-   .fc-counter { font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); }
+   .fc-nav-btn { background: var(--surface-1); border: 2px solid var(--border); width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; color: var(--text-primary); transition: all 0.3s; font-size: 1.2rem; }
+   .fc-nav-btn:hover:not(:disabled) { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border-color: transparent; transform: scale(1.05); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3); }
+   .fc-nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+   .fc-counter { font-size: 1rem; font-weight: 700; color: var(--text-secondary); }
+   .fc-counter span { color: var(--text-primary); }
 
-   @media(max-width:768px) { .fc-card-wrap { height: 280px; } .fc-term { font-size: 1.2rem; } .fc-def { font-size: 0.9rem; } }
+   /* Keyboard hints */
+   .fc-hints { text-align:center; margin-top:16px; font-size:0.78rem; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+   .fc-hints kbd { display: inline-block; padding: 2px 8px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); font-family: inherit; font-size: 0.72rem; font-weight: 600; margin: 0 2px; }
+
+   /* Card entrance animation */
+   .fc-card-wrap.slide-left .fc-card { animation: slideLeft 0.4s ease; }
+   .fc-card-wrap.slide-right .fc-card { animation: slideRight 0.4s ease; }
+
+   @keyframes slideLeft {
+     0% { opacity: 0; transform: translateX(60px); }
+     100% { opacity: 1; transform: translateX(0); }
+   }
+   @keyframes slideRight {
+     0% { opacity: 0; transform: translateX(-60px); }
+     100% { opacity: 1; transform: translateX(0); }
+   }
+
+   @media(max-width:768px) {
+     .fc-card-wrap { height: 300px; }
+     .fc-question { font-size: 1.15rem; }
+     .fc-answer { font-size: 0.88rem; }
+     .fc-face { padding: 36px 24px; }
+     .fc-nav-btn { width: 44px; height: 44px; border-radius: 12px; }
+   }
  </style>
 </head>
 
@@ -123,34 +196,43 @@
      <h3 id="deckTitle">Study Deck</h3>
      <div class="fc-btns">
        <button onclick="location.reload()">New PDF</button>
-       <button class="primary" id="exportBtn">Export CSV</button>
+       <button class="primary" id="exportBtn">📥 Export CSV</button>
      </div>
    </div>
 
+   <div class="fc-progress"><div class="fc-progress-bar" id="progressBar" style="width: 0%"></div></div>
+
    <div class="fc-card-wrap" id="cardWrap">
      <div class="fc-card" id="flashcard">
-       <div class="fc-face fc-front">
-         <div class="fc-label">Term</div>
-         <div class="fc-term" id="frontText">Loading...</div>
+       <div class="fc-face fc-front grad-0">
+         <div class="fc-label">Question</div>
+         <div class="fc-badge" id="frontBadge">1 / 10</div>
+         <div class="fc-question" id="frontText">Loading...</div>
+         <div class="fc-tap-hint">Tap to reveal answer</div>
        </div>
        <div class="fc-face fc-back">
-         <div class="fc-label">Definition</div>
-         <div class="fc-def" id="backText">Loading...</div>
+         <div class="fc-label">Answer</div>
+         <div class="fc-badge" id="backBadge">1 / 10</div>
+         <div class="fc-answer" id="backText">Loading...</div>
+         <div class="fc-tap-hint" style="color: var(--text-muted);">Tap to see question</div>
        </div>
      </div>
    </div>
 
    <div class="fc-controls">
-     <button class="fc-nav-btn" id="prevBtn" disabled>
-       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+     <button class="fc-nav-btn" id="prevBtn" disabled aria-label="Previous card">
+       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
      </button>
      <div class="fc-counter"><span id="curIdx">1</span> / <span id="totalCards">0</span></div>
-     <button class="fc-nav-btn" id="nextBtn">
-       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+     <button class="fc-nav-btn" id="nextBtn" aria-label="Next card">
+       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
      </button>
    </div>
 
-   <p style="text-align:center; margin-top:16px; font-size:0.8rem; color: var(--text-muted);">Click card to flip &bull; Arrow keys to navigate &bull; Space to flip</p>
+   <div class="fc-hints">
+     <span><kbd>←</kbd> <kbd>→</kbd> Navigate</span>
+     <span><kbd>Space</kbd> Flip</span>
+   </div>
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 24px;">
@@ -171,6 +253,8 @@
   const API_URL = "https://api.groq.com/openai/v1/chat/completions";
   const MODEL = "llama-3.1-8b-instant";
 
+  const GRADIENTS = ['grad-0','grad-1','grad-2','grad-3','grad-4','grad-5','grad-6','grad-7','grad-8','grad-9'];
+
   let cardsData = [];
   let currentIndex = 0;
 
@@ -181,14 +265,19 @@
   const loadingText = document.getElementById('loadingText');
   const fcApp = document.getElementById('fcApp');
   const flashcard = document.getElementById('flashcard');
+  const fcFront = flashcard.querySelector('.fc-front');
   const frontText = document.getElementById('frontText');
   const backText = document.getElementById('backText');
+  const frontBadge = document.getElementById('frontBadge');
+  const backBadge = document.getElementById('backBadge');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const curIdx = document.getElementById('curIdx');
   const totalCards = document.getElementById('totalCards');
   const deckTitle = document.getElementById('deckTitle');
   const exportBtn = document.getElementById('exportBtn');
+  const progressBar = document.getElementById('progressBar');
+  const cardWrap = document.getElementById('cardWrap');
 
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
@@ -264,7 +353,20 @@
         body: JSON.stringify({
           model: MODEL,
           messages: [
-            { role: "system", content: 'Extract the most important terms, concepts, and definitions from the document to create study flashcards. Return ONLY a valid JSON array with objects having "front" (term/question) and "back" (definition/answer) keys. No markdown, no explanations, just the raw JSON array.' },
+            { role: "system", content: `You are a study flashcard generator. Create 8-12 high-quality study flashcards from the document.
+
+RULES:
+- Each flashcard must have a clear QUESTION on "front" and a DETAILED ANSWER on "back"
+- Questions should test understanding, not just definitions
+- Answers must be 2-4 sentences explaining the concept clearly
+- Include questions about: key concepts, code logic, function purposes, important steps, and practical applications
+- Do NOT create flashcards with just single words like "Recursion" or "Base case" — instead ask "What is recursion and how does it work in this program?"
+- Make answers educational and complete
+
+Return ONLY a valid JSON array like:
+[{"front": "What is the base case in the isPowerOfTwo function?", "back": "The base case is when n equals 1, because 2^0 = 1. This stops the recursion since 1 is the smallest power of two."}]
+
+No markdown, no code fences, just the raw JSON array.` },
             { role: "user", content: "DOCUMENT:\n" + documentText }
           ],
           max_tokens: 4096,
@@ -278,7 +380,6 @@
       if(data.choices && data.choices[0]) {
         const jsonText = data.choices[0].message.content;
         const parsed = JSON.parse(jsonText);
-        // Handle both { flashcards: [...] } and direct array
         cardsData = Array.isArray(parsed) ? parsed : (parsed.flashcards || parsed.cards || Object.values(parsed)[0]);
 
         if(!Array.isArray(cardsData) || cardsData.length === 0) {
@@ -307,9 +408,17 @@
 
   flashcard.addEventListener('click', () => flashcard.classList.toggle('flipped'));
 
-  function showCard(index) {
+  function showCard(index, direction) {
     if(index < 0 || index >= cardsData.length) return;
     currentIndex = index;
+
+    // Slide animation
+    if(direction) {
+      cardWrap.classList.remove('slide-left', 'slide-right');
+      void cardWrap.offsetWidth; // force reflow
+      cardWrap.classList.add(direction === 'next' ? 'slide-left' : 'slide-right');
+    }
+
     if(flashcard.classList.contains('flipped')) {
       flashcard.classList.remove('flipped');
       setTimeout(() => updateCard(index), 300);
@@ -319,20 +428,35 @@
   }
 
   function updateCard(index) {
-    frontText.textContent = cardsData[index].front;
-    backText.textContent = cardsData[index].back;
+    const card = cardsData[index];
+    frontText.textContent = card.front;
+    backText.innerHTML = card.back.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     curIdx.textContent = index + 1;
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === cardsData.length - 1;
+
+    // Update gradient color
+    const gradClass = GRADIENTS[index % GRADIENTS.length];
+    GRADIENTS.forEach(g => fcFront.classList.remove(g));
+    fcFront.classList.add(gradClass);
+
+    // Update badges
+    const badgeText = (index + 1) + ' / ' + cardsData.length;
+    frontBadge.textContent = badgeText;
+    backBadge.textContent = badgeText;
+
+    // Update progress bar
+    const pct = ((index + 1) / cardsData.length) * 100;
+    progressBar.style.width = pct + '%';
   }
 
-  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1); });
-  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1); });
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1, 'prev'); });
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1, 'next'); });
 
   document.addEventListener('keydown', (e) => {
     if(fcApp.style.display === 'block') {
-      if(e.key === 'ArrowLeft' || e.key === 'a') { if(!prevBtn.disabled) showCard(currentIndex - 1); }
-      if(e.key === 'ArrowRight' || e.key === 'd') { if(!nextBtn.disabled) showCard(currentIndex + 1); }
+      if(e.key === 'ArrowLeft' || e.key === 'a') { if(!prevBtn.disabled) showCard(currentIndex - 1, 'prev'); }
+      if(e.key === 'ArrowRight' || e.key === 'd') { if(!nextBtn.disabled) showCard(currentIndex + 1, 'next'); }
       if(e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); flashcard.classList.toggle('flipped'); }
     }
   });
