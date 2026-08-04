@@ -5,6 +5,12 @@ compatibility_date = "2024-01-01"
 [vars]
 ADOBE_CLIENT_ID = "7bc5164a08c9442eb1f4463dbed3e7eb"
 
-# ADOBE_CLIENT_SECRET must be set via:
+# ─── Secrets (NEVER put these in this file!) ───
+# Set them via Wrangler CLI:
+#
 #   npx wrangler secret put ADOBE_CLIENT_SECRET
-# (Never put secrets in this file!)
+#   npx wrangler secret put GROQ_API_KEY
+#   npx wrangler secret put OPENROUTER_API_KEY
+#
+# After setting secrets, deploy:
+#   npx wrangler deploy

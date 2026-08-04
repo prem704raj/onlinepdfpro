@@ -1,14 +1,19 @@
 /**
- * Cloudflare Worker — PDF Conversion Proxy for OnlinePDFPro
+ * Cloudflare Worker — API Proxy for OnlinePDFPro
  * 
- * Routes file conversions to Adobe PDF Services API.
+ * Routes:
+ *   POST /convert    — Adobe PDF Services (file conversions)
+ *   POST /ai/chat    — Groq LLM (text chat, summarizer, flashcards)
+ *   POST /ai/vision  — OpenRouter (vision/multimodal models)
+ *   GET  /health     — Health check
+ * 
  * Deploy: npx wrangler deploy (from cf-worker directory)
  * 
- * Environment Variables:
+ * Environment Variables (wrangler.toml + secrets):
  *   - ADOBE_CLIENT_ID (set in wrangler.toml)
- *   - ADOBE_CLIENT_SECRET (set via: npx wrangler secret put ADOBE_CLIENT_SECRET)
- * 
- * Free tier: 500 document operations/month (no card needed)
+ *   - ADOBE_CLIENT_SECRET (secret: npx wrangler secret put ADOBE_CLIENT_SECRET)
+ *   - GROQ_API_KEY (secret: npx wrangler secret put GROQ_API_KEY)
+ *   - OPENROUTER_API_KEY (secret: npx wrangler secret put OPENROUTER_API_KEY)
  */
 
 const ALLOWED_ORIGINS = [
@@ -37,17 +42,28 @@ export default {
 
         const url = new URL(request.url);
 
+        // Adobe PDF conversion
         if (url.pathname === '/convert' && request.method === 'POST') {
             return handleConversion(request, env);
         }
 
+        // AI Chat proxy (Groq — text-only LLM)
+        if (url.pathname === '/ai/chat' && request.method === 'POST') {
+            return handleGroqChat(request, env);
+        }
+
+        // AI Vision proxy (OpenRouter — multimodal)
+        if (url.pathname === '/ai/vision' && request.method === 'POST') {
+            return handleOpenRouterVision(request, env);
+        }
+
         if (url.pathname === '/health') {
-            return new Response(JSON.stringify({ status: 'ok', service: 'OnlinePDFPro Conversion Proxy' }), {
+            return new Response(JSON.stringify({ status: 'ok', service: 'OnlinePDFPro API Proxy', routes: ['/convert', '/ai/chat', '/ai/vision'] }), {
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
             });
         }
 
-        return new Response('OnlinePDFPro Conversion API. POST /convert to convert files.', {
+        return new Response('OnlinePDFPro API Proxy. Available routes: POST /convert, POST /ai/chat, POST /ai/vision', {
             status: 200,
             headers: getCORSHeaders(request)
         });
@@ -283,4 +299,85 @@ function handleCORS(request) {
         status: 204,
         headers: getCORSHeaders(request)
     });
+}
+
+// ─── AI Proxy: Groq (text chat/summarize/flashcards) ──────────────────
+
+async function handleGroqChat(request, env) {
+    const corsHeaders = getCORSHeaders(request);
+
+    if (!env.GROQ_API_KEY) {
+        return jsonResponse({ error: 'GROQ_API_KEY not configured' }, 500, corsHeaders);
+    }
+
+    try {
+        const body = await request.json();
+
+        // Validate required fields
+        if (!body.messages || !Array.isArray(body.messages)) {
+            return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
+        }
+
+        // Forward to Groq with server-side key
+        const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${env.GROQ_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: body.model || 'llama-3.1-8b-instant',
+                messages: body.messages,
+                max_tokens: Math.min(body.max_tokens || 4096, 8192),
+                temperature: body.temperature ?? 0.7,
+                response_format: body.response_format || undefined
+            })
+        });
+
+        const data = await groqResponse.json();
+        return jsonResponse(data, groqResponse.status, corsHeaders);
+
+    } catch (err) {
+        return jsonResponse({ error: 'AI proxy error: ' + err.message }, 500, corsHeaders);
+    }
+}
+
+// ─── AI Proxy: OpenRouter (vision/multimodal) ─────────────────────────
+
+async function handleOpenRouterVision(request, env) {
+    const corsHeaders = getCORSHeaders(request);
+
+    if (!env.OPENROUTER_API_KEY) {
+        return jsonResponse({ error: 'OPENROUTER_API_KEY not configured' }, 500, corsHeaders);
+    }
+
+    try {
+        const body = await request.json();
+
+        if (!body.messages || !Array.isArray(body.messages)) {
+            return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
+        }
+
+        // Forward to OpenRouter with server-side key
+        const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${env.OPENROUTER_API_KEY}`,
+                'HTTP-Referer': 'https://onlinepdfpro.com',
+                'X-Title': 'OnlinePDFPro'
+            },
+            body: JSON.stringify({
+                model: body.model || 'google/gemma-3-4b-it:free',
+                messages: body.messages,
+                max_tokens: Math.min(body.max_tokens || 4096, 8192)
+            })
+        });
+
+        const data = await orResponse.json();
+        return jsonResponse(data, orResponse.status, corsHeaders);
+
+    } catch (err) {
+        return jsonResponse({ error: 'Vision proxy error: ' + err.message }, 500, corsHeaders);
+    }
 }
