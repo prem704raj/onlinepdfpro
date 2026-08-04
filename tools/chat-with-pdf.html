@@ -140,15 +140,13 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   // Groq API for text questions (fast)
-  const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
-  const GROQ_KEY = _a + _b + _c;
-  const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const GROQ_KEY = "proxy";
+  const GROQ_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
   const GROQ_MODEL = "llama-3.1-8b-instant";
 
   // OpenRouter API for vision/image questions (free)
-  const _d = "[REMOVED]", _e = "[REMOVED]", _f = "[REMOVED]";
-  const OR_KEY = _d + _e + _f;
-  const OR_URL = "https://openrouter.ai/api/v1/chat/completions";
+  const OR_KEY = "proxy";
+  const OR_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
   const OR_MODEL = "google/gemma-4-31b-it:free";
 
   let documentText = "";

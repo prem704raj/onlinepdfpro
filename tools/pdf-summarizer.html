@@ -134,9 +134,8 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  const _a = "[REMOVED]", _b = "[REMOVED]", _c = "[REMOVED]";
-  const API_KEY = _a + _b + _c;
-  const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+  const API_KEY = "proxy";
+  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
   const MODEL = "llama-3.1-8b-instant";
 
   let currentMode = 'bullets';
