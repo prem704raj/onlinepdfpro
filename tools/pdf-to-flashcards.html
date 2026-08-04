@@ -35,6 +35,10 @@
  <script src="js/security-shield.js"></script>
  <script>
  (function() {
+ // Force light mode for new visitors. Only use dark if user explicitly toggled.
+ if (!localStorage.getItem('doctools-theme')) {
+   localStorage.setItem('doctools-theme', 'light');
+ }
  var theme = localStorage.getItem('doctools-theme') || 'light';
  document.documentElement.setAttribute('data-theme', theme);
  })();
@@ -46,11 +50,19 @@
 
    .fc-header { display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 20px; }
    .fc-header h3 { margin:0; font-size: 0.95rem; font-weight: 700; }
-   .fc-btns { display:flex; gap: 8px; }
+   .fc-btns { display:flex; gap: 8px; flex-wrap: wrap; }
    .fc-btns button { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s; }
    .fc-btns button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
    .fc-btns .primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; }
    .fc-btns .primary:hover { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+   .fc-btns .pdf-btn { background: linear-gradient(135deg, #ec4899, #f43f5e); color: #fff; border: none; }
+   .fc-btns .pdf-btn:hover { background: linear-gradient(135deg, #db2777, #e11d48); }
+
+   /* Card count selector */
+   .fc-count-selector { display: flex; align-items: center; gap: 12px; justify-content: center; margin-top: 16px; padding: 14px 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; }
+   .fc-count-selector label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+   .fc-count-selector select { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none; }
+   .fc-count-selector select:focus { border-color: #6366f1; }
 
    /* Progress bar */
    .fc-progress { width: 100%; height: 6px; background: var(--surface-2); border-radius: 100px; margin-bottom: 20px; overflow: hidden; }
@@ -184,6 +196,15 @@
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span>AI Powered</span> <span>&bull;</span> <span>Max: 50MB</span> <span>&bull;</span> <span>Instant</span></p>
  <button class="btn btn-primary upload-btn" id="uploadBtn">Choose PDF</button>
  <input type="file" id="fileInput" accept=".pdf" style="display:none">
+ <div class="fc-count-selector">
+   <label for="cardCount">📝 How many flashcards?</label>
+   <select id="cardCount">
+     <option value="5">5 cards</option>
+     <option value="10" selected>10 cards</option>
+     <option value="15">15 cards</option>
+     <option value="20">20 cards</option>
+   </select>
+ </div>
  </div>
 
  <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
@@ -196,6 +217,7 @@
      <h3 id="deckTitle">Study Deck</h3>
      <div class="fc-btns">
        <button onclick="location.reload()">New PDF</button>
+       <button class="pdf-btn" id="downloadPdfBtn">📄 Download PDF</button>
        <button class="primary" id="exportBtn">📥 Export CSV</button>
      </div>
    </div>
@@ -243,6 +265,7 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="../js/app.js?v=11"></script>
 <script>
 (function() {
@@ -276,8 +299,10 @@
   const totalCards = document.getElementById('totalCards');
   const deckTitle = document.getElementById('deckTitle');
   const exportBtn = document.getElementById('exportBtn');
+  const downloadPdfBtn = document.getElementById('downloadPdfBtn');
   const progressBar = document.getElementById('progressBar');
   const cardWrap = document.getElementById('cardWrap');
+  const cardCountSelect = document.getElementById('cardCount');
 
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
@@ -344,6 +369,8 @@
 
       loadingText.textContent = "AI is generating flashcards...";
 
+      const numCards = parseInt(cardCountSelect.value) || 10;
+
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -353,9 +380,10 @@
         body: JSON.stringify({
           model: MODEL,
           messages: [
-            { role: "system", content: `You are a study flashcard generator. Create 8-12 high-quality study flashcards from the document.
+            { role: "system", content: `You are a study flashcard generator. Create exactly ${numCards} high-quality study flashcards from the document.
 
 RULES:
+- Generate exactly ${numCards} flashcards
 - Each flashcard must have a clear QUESTION on "front" and a DETAILED ANSWER on "back"
 - Questions should test understanding, not just definitions
 - Answers must be 2-4 sentences explaining the concept clearly
@@ -474,6 +502,73 @@ No markdown, no code fences, just the raw JSON array.` },
     link.href = URL.createObjectURL(blob);
     link.download = 'flashcards_export.csv';
     link.click();
+  });
+
+  // PDF Download
+  downloadPdfBtn.addEventListener('click', () => {
+    if(!cardsData || cardsData.length === 0) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const w = doc.internal.pageSize.getWidth();
+    const h = doc.internal.pageSize.getHeight();
+    const gradColors = [
+      [[102,126,234],[118,75,162]],
+      [[240,147,251],[245,87,108]],
+      [[79,172,254],[0,242,254]],
+      [[67,233,123],[56,249,215]],
+      [[250,112,154],[254,225,64]],
+      [[161,140,209],[251,194,235]],
+      [[252,203,144],[213,126,235]],
+      [[224,195,252],[142,197,252]],
+      [[245,175,25],[241,39,17]],
+      [[102,126,234],[0,210,255]]
+    ];
+
+    cardsData.forEach((card, i) => {
+      if(i > 0) doc.addPage();
+      const [c1, c2] = gradColors[i % gradColors.length];
+
+      // Gradient background (simulate with colored rect)
+      doc.setFillColor(c1[0], c1[1], c1[2]);
+      doc.rect(0, 0, w, h/2, 'F');
+      doc.setFillColor(245, 245, 245);
+      doc.rect(0, h/2, w, h/2, 'F');
+
+      // Card number badge
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+      doc.text((i+1) + ' / ' + cardsData.length, w - 20, 15, { align: 'right' });
+
+      // Question label
+      doc.setFontSize(9);
+      doc.setTextColor(255, 255, 255);
+      doc.text('QUESTION', 20, 25);
+
+      // Question text
+      doc.setFontSize(18);
+      doc.setTextColor(255, 255, 255);
+      const qLines = doc.splitTextToSize(card.front, w - 40);
+      const qY = (h/2 - qLines.length * 9) / 2 + 15;
+      doc.text(qLines, w/2, qY, { align: 'center' });
+
+      // Answer label
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text('ANSWER', 20, h/2 + 15);
+
+      // Answer text
+      doc.setFontSize(12);
+      doc.setTextColor(50, 50, 50);
+      const aLines = doc.splitTextToSize(card.back, w - 40);
+      doc.text(aLines, 20, h/2 + 30);
+
+      // Divider line
+      doc.setDrawColor(c1[0], c1[1], c1[2]);
+      doc.setLineWidth(0.8);
+      doc.line(20, h/2 + 5, w - 20, h/2 + 5);
+    });
+
+    doc.save('flashcards.pdf');
   });
 })();
 </script>

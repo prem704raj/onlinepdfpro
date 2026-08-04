@@ -551,11 +551,20 @@ const Downloader = {
         nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doDownload(); });
     },
     _directSave(blob, filename, originalFiles) {
-        const url = URL.createObjectURL(blob);
+        // Force download by using octet-stream to prevent browser PDF viewer from opening it
+        const downloadBlob = new Blob([blob], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(downloadBlob);
         const a = document.createElement('a');
-        a.href = url; a.download = filename;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        a.href = url;
+        a.download = filename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        // Delay cleanup to give the browser time to initiate the download
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 1000);
         HistoryDB.saveEntry(blob, filename, originalFiles).catch(() => {});
         this._showShareToast(blob, filename);
     },
