@@ -33,11 +33,55 @@ const SUPPORTED_CONVERSIONS = {
     'pptx-pdf': true
 };
 
+const MAX_UPLOAD_SIZE = 20 * 1024 * 1024; // 20 MB
+const RATE_LIMIT_CACHE = new Map();
+const MAX_REQUESTS_PER_MINUTE = 50;
+
+function checkRateLimit(ip) {
+    if (!ip || ip === 'unknown') return true;
+    const now = Date.now();
+    let data = RATE_LIMIT_CACHE.get(ip);
+    
+    // Clear old entries occasionally to prevent memory leaks
+    if (RATE_LIMIT_CACHE.size > 10000) {
+        RATE_LIMIT_CACHE.clear();
+    }
+
+    if (!data || now - data.windowStart > 60000) {
+        RATE_LIMIT_CACHE.set(ip, { windowStart: now, count: 1 });
+        return true;
+    }
+    if (data.count >= MAX_REQUESTS_PER_MINUTE) {
+        return false;
+    }
+    data.count++;
+    return true;
+}
+
 export default {
     async fetch(request, env) {
         // CORS preflight
         if (request.method === 'OPTIONS') {
             return handleCORS(request);
+        }
+
+        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+        if (!checkRateLimit(ip)) {
+            return new Response(JSON.stringify({ error: 'Rate limit exceeded. Try again in a minute.' }), {
+                status: 429,
+                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
+            });
+        }
+
+        // Check file size for POST requests
+        if (request.method === 'POST') {
+            const contentLength = request.headers.get('content-length');
+            if (contentLength && parseInt(contentLength) > MAX_UPLOAD_SIZE) {
+                return new Response(JSON.stringify({ error: 'Payload too large. Maximum size is 20MB.' }), {
+                    status: 413,
+                    headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
+                });
+            }
         }
 
         const url = new URL(request.url);

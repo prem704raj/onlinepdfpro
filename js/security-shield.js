@@ -7,7 +7,29 @@
 
 (function() {
     'use strict';
-    return; // Temporarily disabled for development
+
+    // ── 0. GLOBAL INPUT SANITIZATION (XSS & Injection Protection) ──
+    document.addEventListener('input', function(e) {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            // Ignore file inputs and password inputs (sometimes passwords have symbols)
+            if (e.target.type === 'file' || e.target.type === 'password') return;
+            
+            var originalValue = e.target.value;
+            // Strip out <, >, script tags, and common SQL/XSS injection patterns
+            var sanitizedValue = originalValue
+                .replace(/</g, '')
+                .replace(/>/g, '')
+                .replace(/javascript:/gi, '')
+                .replace(/onload=/gi, '')
+                .replace(/onerror=/gi, '');
+                
+            if (originalValue !== sanitizedValue) {
+                e.target.value = sanitizedValue;
+            }
+        }
+    }, true);
+
+    return; // Temporarily disabled for development (anti-devtools below)
 
     // ── 1. DISABLE RIGHT-CLICK ──
     document.addEventListener('contextmenu', function(e) {
