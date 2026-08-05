@@ -803,6 +803,53 @@
  padding-left: 12px;
  }
 
+ .resume-sheet.template-engineering .resume-header {
+ text-align: center;
+ border-bottom: none;
+ padding-bottom: 6mm;
+ }
+ .resume-sheet.template-engineering .resume-name {
+ font-size: 26px;
+ font-weight: 700;
+ text-transform: uppercase;
+ color: #0f172a;
+ letter-spacing: 1px;
+ }
+ .resume-sheet.template-engineering .resume-role {
+ display: none;
+ }
+ .resume-sheet.template-engineering .resume-contact {
+ justify-content: center;
+ font-size: 11px;
+ margin-top: 6px;
+ }
+ .resume-sheet.template-engineering .resume-section h3 {
+ border-bottom: 1.5px solid var(--accent-color);
+ color: var(--accent-color);
+ padding-bottom: 3px;
+ font-size: 13px;
+ margin-bottom: 8px;
+ text-transform: uppercase;
+ }
+ .resume-sheet.template-engineering .resume-section {
+ margin-top: 14px;
+ }
+ .resume-sheet.template-engineering .item-title {
+ font-size: 12px;
+ color: #0f172a;
+ }
+ .resume-sheet.template-engineering .item-sub {
+ font-size: 11.5px;
+ color: var(--accent-color);
+ font-weight: 600;
+ }
+ .resume-sheet.template-engineering .item-desc {
+ margin-top: 4px;
+ }
+ .resume-sheet.template-engineering .item-title-row {
+ margin-bottom: 2px;
+ }
+
  .resume-sheet.template-horizon.resume-section h3::before {
  content: '';
  position: absolute;
@@ -977,6 +1024,7 @@
  <option value="atlas">Atlas Column</option>
  <option value="zenith">Zenith Minimal</option>
  <option value="horizon">Horizon Accent</option>
+ <option value="engineering">Engineering Academic</option>
  </select>
  </div>
  <div class="control-group">
@@ -1140,7 +1188,8 @@
  { key: 'slate', title: 'Slate Sidebar', hint: 'Strong sidebar identity' },
  { key: 'atlas', title: 'Atlas Column', hint: 'Magazine-like rhythm' },
  { key: 'zenith', title: 'Zenith Minimal', hint: 'Minimal with soft hierarchy' },
- { key: 'horizon', title: 'Horizon Accent', hint: 'Accent rails and markers' }
+ { key: 'horizon', title: 'Horizon Accent', hint: 'Accent rails and markers' },
+ { key: 'engineering', title: 'Engineering Academic', hint: 'Dense, classic IIT/NIT style' }
  ];
 
  function makeDefaultAvatarDataUri() {
@@ -1731,8 +1780,7 @@
  const photoHtml = hasValidPhoto ? '<img class="resume-photo" src="' + escapeAttr(photoSrc) + '" alt="Profile photo">' : '';
 
  elements.resumePreview.innerHTML = '<div id="resumeSheet" class="resume-sheet template-' + escapeHtml(state.template) + ' font-' + escapeHtml(state.font) + '" style="--accent-color:' + escapeHtml(state.accentColor) + ';">' +
- '<header class="resume-header">
-' +
+ '<header class="resume-header">' +
  '<div>' +
  '<h1 class="resume-name">' + escapeHtml(fullName) + '</h1>' +
  '<p class="resume-role">' + escapeHtml(role) + '</p>' +
