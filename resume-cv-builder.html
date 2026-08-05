@@ -803,51 +803,135 @@
  padding-left: 12px;
  }
 
+ /* ── Engineering Academic Template ── */
+ .resume-sheet.template-engineering {
+ font-family: "Times New Roman", Georgia, serif;
+ font-size: 11.5px;
+ line-height: 1.4;
+ }
  .resume-sheet.template-engineering .resume-header {
  text-align: center;
  border-bottom: none;
- padding-bottom: 6mm;
+ padding: 10mm 14mm 4mm;
+ display: block;
  }
  .resume-sheet.template-engineering .resume-name {
- font-size: 26px;
+ font-size: 22px;
  font-weight: 700;
  text-transform: uppercase;
  color: #0f172a;
- letter-spacing: 1px;
+ letter-spacing: 1.5px;
+ margin-bottom: 2px;
  }
  .resume-sheet.template-engineering .resume-role {
- display: none;
+ font-size: 11px;
+ color: #475569;
+ font-weight: 400;
+ margin-top: 2px;
  }
  .resume-sheet.template-engineering .resume-contact {
  justify-content: center;
- font-size: 11px;
- margin-top: 6px;
+ font-size: 10.5px;
+ margin-top: 4px;
+ color: #1e293b;
+ }
+ .resume-sheet.template-engineering .resume-contact-links {
+ gap: 3px 6px;
+ }
+ .resume-sheet.template-engineering .resume-contact-sep {
+ color: #64748b;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .resume-link {
+ color: #1e40af;
+ text-decoration: none;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .resume-photo {
+ display: none;
+ }
+ .resume-sheet.template-engineering .resume-body {
+ padding: 4mm 14mm 14mm;
+ }
+ .resume-sheet.template-engineering .resume-section {
+ margin-top: 10px;
+ }
+ .resume-sheet.template-engineering .resume-section:first-child {
+ margin-top: 0;
  }
  .resume-sheet.template-engineering .resume-section h3 {
  border-bottom: 1.5px solid var(--accent-color);
+ border-top: none;
+ background: none;
  color: var(--accent-color);
- padding-bottom: 3px;
- font-size: 13px;
- margin-bottom: 8px;
+ padding: 0 0 2px 0;
+ font-size: 12px;
+ font-weight: 700;
+ margin-bottom: 5px;
  text-transform: uppercase;
+ letter-spacing: 0.6px;
+ display: block;
  }
- .resume-sheet.template-engineering .resume-section {
- margin-top: 14px;
+ .resume-sheet.template-engineering .resume-text {
+ font-size: 11px;
+ line-height: 1.45;
+ color: #1e293b;
+ }
+ .resume-sheet.template-engineering .timeline-item {
+ margin-bottom: 7px;
  }
  .resume-sheet.template-engineering .item-title {
- font-size: 12px;
+ font-size: 11.5px;
+ font-weight: 700;
  color: #0f172a;
  }
  .resume-sheet.template-engineering .item-sub {
- font-size: 11.5px;
- color: var(--accent-color);
- font-weight: 600;
+ font-size: 11px;
+ color: #334155;
+ font-weight: 400;
+ font-style: italic;
+ }
+ .resume-sheet.template-engineering .item-date {
+ font-size: 11px;
+ font-weight: 700;
+ color: #0f172a;
  }
  .resume-sheet.template-engineering .item-desc {
- margin-top: 4px;
+ margin-top: 2px;
+ font-size: 11px;
+ line-height: 1.45;
+ color: #1e293b;
+ padding-left: 14px;
+ text-indent: -14px;
+ }
+ .resume-sheet.template-engineering .item-desc::before {
+ content: "• ";
+ font-weight: 700;
+ color: #334155;
  }
  .resume-sheet.template-engineering .item-title-row {
- margin-bottom: 2px;
+ margin-bottom: 0;
+ }
+ /* Skills & Languages: plain text, no chips */
+ .resume-sheet.template-engineering .chip-list {
+ display: block;
+ }
+ .resume-sheet.template-engineering .chip {
+ display: inline;
+ padding: 0;
+ margin: 0;
+ border: none;
+ border-radius: 0;
+ background: none;
+ color: #1e293b;
+ font-size: 11px;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .chip::after {
+ content: ", ";
+ }
+ .resume-sheet.template-engineering .chip:last-child::after {
+ content: "";
  }
 
  .resume-sheet.template-horizon.resume-section h3::before {
