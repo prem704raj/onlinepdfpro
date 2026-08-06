@@ -126,13 +126,7 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 
 /* Subtle warm glow behind hero */
 .tp-hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 600px; height: 400px;
-    background: radial-gradient(ellipse, rgba(139,105,20,0.06) 0%, transparent 70%);
-    pointer-events: none;
+    display: none !important;
 }
 
 .tp-hero-label {
@@ -188,8 +182,8 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 .tp-search-wrap input {
     width: 100%;
     padding: 16px 20px 16px 48px;
-    border: 1.5px solid transparent;
-    background: var(--tp-card-bg);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    background: transparent;
     color: var(--tp-text);
     font-family: var(--tp-sans);
     font-size: 0.9rem;
