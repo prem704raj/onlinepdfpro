@@ -774,7 +774,7 @@
  }
  } catch (err) {
  console.error('Crop failed:', err);
- alert('Could not crop this PDF. Please try again or use a different file.');
+ alert('Could not crop this PDF. Error: ' + (err.message || err));
  }
  }
  </script>
