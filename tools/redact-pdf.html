@@ -657,7 +657,7 @@ fileInput.addEventListener('change', async event => {
  try {
  if (isPdf) {
  setStatus('Loading PDF...', 'busy');
- pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+ pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
  const buffer = await file.arrayBuffer();
  state.pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
  state.pages = new Array(state.pdfDoc.numPages).fill(null);

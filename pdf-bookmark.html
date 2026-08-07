@@ -418,7 +418,7 @@
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script defer src="/js/vendor/download/download.min.js"></script>
  <script>
- pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+ pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
  let pdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 0, bookmarks = [], bookmarkCounter = 0, _originalFileName = 'bookmarked.pdf';
  document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
  document.getElementById('fileInput').onchange = e => loadPDF(e.target.files[0]);
