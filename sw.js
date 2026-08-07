@@ -6,7 +6,7 @@ self.options = {
     "zoneId": 11159628
 }
 self.lary = ""
-importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
+try { importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw'); } catch(e) { /* offline — ad script unavailable, ignore */ }
 
 // Modern PWA support with reliable caching strategy
 
@@ -89,6 +89,13 @@ const STATIC_ASSETS = [
     'js/vendor/pdfjs/pdf.worker.min.js',
     'js/vendor/pdflib/pdf-lib.min.js',
     'js/vendor/pptxgenjs/pptxgen.bundle.js',
+    'js/vendor/download/download.min.js',
+    'js/vendor/file-saver/FileSaver.min.js',
+    'js/vendor/heic2any/heic2any.min.js',
+    'js/vendor/marked/marked.min.js',
+    'js/vendor/pdf-lib-plus-encrypt/pdf-lib-plus-encrypt.min.js',
+    'js/vendor/qr-code-styling/qr-code-styling.js',
+    'js/vendor/tesseract/tesseract.min.js',
     'logo.jpg',
     'logo.png',
     'logo.svg',
@@ -210,9 +217,6 @@ self.addEventListener('fetch', (event) => {
                 }
                 return response;
             });
-        })
-    );
-});
         })
     );
 });
