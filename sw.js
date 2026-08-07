@@ -10,28 +10,51 @@ importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
 
 // Modern PWA support with reliable caching strategy
 
-const CACHE_NAME = 'onlinepdfpro-cache-v82'; 
+const CACHE_NAME = 'onlinepdfpro-cache-v83'; 
 const STATIC_ASSETS = [
     '404.html',
-    'about.html',
-    'apple-touch-icon.png',
-    'blog.html',
-    'blog/best-free-pdf-tools-2025.html',
-    'blog/best-free-presentation-makers.html',
-    'blog/how-to-compress-pdf-without-losing-quality.html',
-    'blog/how-to-convert-images-to-pdf.html',
-    'blog/how-to-edit-pdf-online-free.html',
-    'blog/how-to-merge-pdf-online-free.html',
-    'blog/how-to-protect-pdf-from-copying.html',
-    'blog/how-to-reduce-pdf-size-for-email.html',
-    'blog/how-to-split-pdf-online.html',
-    'blog/introducing-pdf-scratchpad-online.html',
-    'blog/ocr-technology-how-to-extract-text-from-images.html',
-    'blog/pdf-vs-docx-which-format-should-you-use.html',
-    'blog/why-client-side-processing-is-safer.html',
+    'about/index.html',
+    'blog/best-practices-creating-accessible-pdfs.html',
+    'blog/best-practices-creating-accessible-pdfs/index.html',
+    'blog/comparing-word-vs-pdf-when-to-use-which.html',
+    'blog/comparing-word-vs-pdf-when-to-use-which/index.html',
+    'blog/compress-pdf-without-losing-quality.html',
+    'blog/compress-pdf-without-losing-quality/index.html',
+    'blog/convert-jpg-to-pdf-online.html',
+    'blog/convert-jpg-to-pdf-online/index.html',
+    'blog/easy-ways-rearrange-delete-pdf-pages.html',
+    'blog/easy-ways-rearrange-delete-pdf-pages/index.html',
+    'blog/edit-pdf-text-online-free.html',
+    'blog/edit-pdf-text-online-free/index.html',
+    'blog/future-of-document-management-ai-and-pdfs.html',
+    'blog/future-of-document-management-ai-and-pdfs/index.html',
+    'blog/how-to-add-watermarks-to-your-pdf-documents.html',
+    'blog/how-to-add-watermarks-to-your-pdf-documents/index.html',
+    'blog/how-to-convert-excel-spreadsheets-to-pdf.html',
+    'blog/how-to-convert-excel-spreadsheets-to-pdf/index.html',
+    'blog/how-to-convert-powerpoint-presentations-to-pdf.html',
+    'blog/how-to-convert-powerpoint-presentations-to-pdf/index.html',
+    'blog/how-to-extract-text-from-scanned-pdfs-ocr.html',
+    'blog/how-to-extract-text-from-scanned-pdfs-ocr/index.html',
+    'blog/how-to-merge-pdf-files-free.html',
+    'blog/how-to-merge-pdf-files-free/index.html',
+    'blog/how-to-reduce-pdf-file-size-for-email.html',
+    'blog/how-to-reduce-pdf-file-size-for-email/index.html',
+    'blog/importance-of-pdfa-for-long-term-archiving.html',
+    'blog/importance-of-pdfa-for-long-term-archiving/index.html',
+    'blog/index.html',
+    'blog/step-by-step-guide-splitting-large-pdf-files.html',
+    'blog/step-by-step-guide-splitting-large-pdf-files/index.html',
+    'blog/top-benefits-going-paperless-in-office.html',
+    'blog/top-benefits-going-paperless-in-office/index.html',
+    'blog/ultimate-guide-digital-signatures-pdfs.html',
+    'blog/ultimate-guide-digital-signatures-pdfs/index.html',
+    'blog/understanding-pdf-security-password-protect.html',
+    'blog/understanding-pdf-security-password-protect/index.html',
+    'blog/why-your-resume-should-always-be-a-pdf.html',
+    'blog/why-your-resume-should-always-be-a-pdf/index.html',
     'compare-pdf.html',
-    'contact.html',
-    'counter.js',
+    'contact/index.html',
     'css/mobile-fix-v2.css',
     'css/mobile-fix.min.css',
     'css/pdf-editor-page.css',
@@ -39,14 +62,13 @@ const STATIC_ASSETS = [
     'css/style.min.css',
     'css/tools-v2.css',
     'css/tools.min.css',
-    'disclaimer.html',
-    'dmca.html',
+    'disclaimer/index.html',
+    'dmca/index.html',
     'favicon-16x16.png',
     'favicon-32x32.png',
     'flatten-pdf.html',
-    'founder_avatar.png',
     'google6ec5c9097526273f.html',
-    'help.html',
+    'help/index.html',
     'history.html',
     'icon-192.png',
     'icon-512.png',
@@ -59,12 +81,14 @@ const STATIC_ASSETS = [
     'js/presentation-maker.js',
     'js/security-shield.js',
     'js/tts-engine.js',
+    'js/vendor/docx/index.umd.min.js',
     'js/vendor/html2canvas/html2canvas.min.js',
     'js/vendor/jspdf/jspdf.umd.min.js',
     'js/vendor/jszip/jszip.min.js',
     'js/vendor/pdfjs/pdf.min.js',
     'js/vendor/pdfjs/pdf.worker.min.js',
     'js/vendor/pdflib/pdf-lib.min.js',
+    'js/vendor/pptxgenjs/pptxgen.bundle.js',
     'logo.jpg',
     'logo.png',
     'logo.svg',
@@ -76,19 +100,22 @@ const STATIC_ASSETS = [
     'pdf-reader.html',
     'pdf-scratchpad.html',
     'pdf-to-jpg.html',
-    'pdf-to-text-extractor.html',
     'presentation-maker.html',
-    'privacy.html',
+    'privacy/index.html',
     'remove-background.html',
     'resume-cv-builder.html',
     'site.webmanifest',
     'speech-to-text.html',
-    'terms.html',
+    'study-materials.html',
+    'terms/index.html',
+    'test/index.html',
+    'test2/index.html',
+    'test3/index.html',
     'text-to-audio.html',
     'text-to-speech.html',
-    'tools.html',
     'tools/add-page-numbers-to-pdf.html',
     'tools/add-page-numbers.html',
+    'tools/chat-with-pdf.html',
     'tools/compress-pdf.html',
     'tools/crop-pdf.html',
     'tools/csv-to-xlsx.html',
@@ -102,15 +129,18 @@ const STATIC_ASSETS = [
     'tools/image-format-converter.html',
     'tools/image-resize.html',
     'tools/image-to-text.html',
+    'tools/index.html',
     'tools/jpg-to-pdf.html',
     'tools/merge-pdf.html',
     'tools/ocr.html',
     'tools/passport-photo-maker.html',
     'tools/password-protect-pdf.html',
+    'tools/pdf-page-counter.html',
+    'tools/pdf-summarizer.html',
+    'tools/pdf-to-flashcards.html',
     'tools/pdf-to-word.html',
     'tools/pdf-unlock.html',
     'tools/pdf-watermark.html',
-    'tools/word-to-pdf.html',
     'tools/qr-code-generator.html',
     'tools/qr-generator.html',
     'tools/redact-pdf.html',
@@ -118,6 +148,7 @@ const STATIC_ASSETS = [
     'tools/sign-pdf.html',
     'tools/split-pdf.html',
     'tools/webp-to-jpg.html',
+    'tools/word-to-pdf.html',
     'tools/xlsx-to-csv.html'
 ];
 
@@ -149,16 +180,13 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Skip blob: URLs — these are used for file downloads and must not be intercepted
     if (url.protocol === 'blob:') return;
 
-    // Map root / to index.html for cache matching
     let cacheKey = request;
     if (url.origin === self.location.origin && url.pathname === '/') {
         cacheKey = new Request('index.html');
     }
 
-    // Network-first for HTML, falling back to cache
     if (request.headers.get('accept')?.includes('text/html')) {
         event.respondWith(
             fetch(request)
@@ -172,17 +200,19 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Cache-first for static assets
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
                 const clone = response.clone();
-                // Only cache valid responses and skip cross-origin resources unless necessary
-                if (response.status === 200 && response.type === 'basic') {
+                // Cache standard responses and opaque responses (for CDNs if any remain)
+                if (response.status === 200 || response.type === 'opaque' || response.type === 'cors') {
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                 }
                 return response;
             });
+        })
+    );
+});
         })
     );
 });

@@ -414,9 +414,9 @@
 </div>
 
 </main>
- <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+ <script src="/js/vendor/pdfjs/pdf.min.js"></script>
+ <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
+ <script defer src="/js/vendor/download/download.min.js"></script>
  <script>
  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
  let pdfBytes = null, pdfJsDoc = null, currentPage = 1, totalPages = 0, bookmarks = [], bookmarkCounter = 0, _originalFileName = 'bookmarked.pdf';
