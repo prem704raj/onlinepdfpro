@@ -12,6 +12,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/**/*.js');
   eleventyConfig.addPassthroughCopy('src/**/*.png');
   eleventyConfig.addPassthroughCopy('src/**/*.jpg');
+  eleventyConfig.addPassthroughCopy('src/**/*.jpeg');
   eleventyConfig.addPassthroughCopy('src/**/*.svg');
   eleventyConfig.addPassthroughCopy('src/**/*.ico');
   eleventyConfig.addPassthroughCopy('src/**/*.xml');
@@ -20,6 +21,11 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/**/*.json');
   eleventyConfig.addPassthroughCopy('src/**/*.webmanifest');
   eleventyConfig.addPassthroughCopy('src/**/*.woff2');
+  eleventyConfig.addPassthroughCopy('src/**/*.wasm');
+  eleventyConfig.addPassthroughCopy('src/**/*.gz');
+  // Required for GitHub Pages custom domain + Cloudflare Pages headers
+  eleventyConfig.addPassthroughCopy('src/CNAME');
+  eleventyConfig.addPassthroughCopy('src/_headers');
 
   // Custom filters
   eleventyConfig.addFilter('startsWith', function(str, prefix) {
@@ -31,15 +37,32 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByGlob('src/blog/*.md').reverse();
   });
 
-  // HTML minification transform
+  // Safe HTML minification transform.
+  // The previous regex minifier stripped newlines/whitespace from the WHOLE
+  // document — including inline <script>/<style>/<pre>/<textarea> content —
+  // which can corrupt JavaScript string literals and rendered whitespace.
+  // This version shields those regions before minifying the rest.
   eleventyConfig.addTransform('htmlmin', function(content, outputPath) {
     if (!outputPath || !outputPath.endsWith('.html')) return content;
-    return content
+
+    // Protect regions that must keep their exact whitespace/content
+    const protectedBlocks = [];
+    const PROTECTED_RE = /<(script|style|pre|textarea)(?:\s[^>]*)?>[\s\S]*?<\/\1>/gi;
+    content = content.replace(PROTECTED_RE, (match) => {
+      protectedBlocks.push(match);
+      return `@@PROTECTED_${protectedBlocks.length - 1}@@`;
+    });
+
+    let minified = content
+      // strip comments but keep IE conditional comments
+      .replace(/<!--(?!\[if\s)[\s\S]*?-->/g, '')
       .replace(/\s{2,}/g, ' ')
       .replace(/>\s+</g, '><')
-      .replace(/\n/g, '')
-      .replace(/\t/g, '')
+      .replace(/^\s+|\s+$/g, '')
       .trim();
+
+    minified = minified.replace(/@@PROTECTED_(\d+)@@/g, (_, i) => protectedBlocks[Number(i)]);
+    return minified;
   });
 
   return {

@@ -1,49 +1,45 @@
 // OnlinePDFPro Service Worker
+// NOTE: the previous version imported Monetag's push-notification script
+// (5gvci.com) and cached directory-style URLs (about/index.html, blog/<slug>/index.html)
+// that 404 on the live site. Both have been removed/fixed.
 
-// Monetag Push Notifications Adsterra script
-self.options = {
-    "domain": "5gvci.com",
-    "zoneId": 11159628
-}
-self.lary = ""
-try { importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw'); } catch(e) { /* offline — ad script unavailable, ignore */ }
+const CACHE_NAME = 'onlinepdfpro-cache-v86';
 
-// Modern PWA support with reliable caching strategy
-
-const CACHE_NAME = 'onlinepdfpro-cache-v84'; 
 const STATIC_ASSETS = [
-    // Core pages
+    // Core pages (flat URLs — matches the live site)
     'index.html',
     '404.html',
-    'about/index.html',
-    'contact/index.html',
-    'disclaimer/index.html',
-    'dmca/index.html',
-    'help/index.html',
-    'privacy/index.html',
-    'terms/index.html',
-    'blog/index.html',
+    'about.html',
+    'blog.html',
+    'contact.html',
+    'disclaimer.html',
+    'dmca.html',
+    'help.html',
+    'history.html',
+    'privacy.html',
+    'terms.html',
+    'tools.html',
 
-    // Blog posts (clean URL /index.html only — flat .html redirects on GitHub Pages)
-    'blog/best-practices-creating-accessible-pdfs/index.html',
-    'blog/comparing-word-vs-pdf-when-to-use-which/index.html',
-    'blog/compress-pdf-without-losing-quality/index.html',
-    'blog/convert-jpg-to-pdf-online/index.html',
-    'blog/easy-ways-rearrange-delete-pdf-pages/index.html',
-    'blog/edit-pdf-text-online-free/index.html',
-    'blog/future-of-document-management-ai-and-pdfs/index.html',
-    'blog/how-to-add-watermarks-to-your-pdf-documents/index.html',
-    'blog/how-to-convert-excel-spreadsheets-to-pdf/index.html',
-    'blog/how-to-convert-powerpoint-presentations-to-pdf/index.html',
-    'blog/how-to-extract-text-from-scanned-pdfs-ocr/index.html',
-    'blog/how-to-merge-pdf-files-free/index.html',
-    'blog/how-to-reduce-pdf-file-size-for-email/index.html',
-    'blog/importance-of-pdfa-for-long-term-archiving/index.html',
-    'blog/step-by-step-guide-splitting-large-pdf-files/index.html',
-    'blog/top-benefits-going-paperless-in-office/index.html',
-    'blog/ultimate-guide-digital-signatures-pdfs/index.html',
-    'blog/understanding-pdf-security-password-protect/index.html',
-    'blog/why-your-resume-should-always-be-a-pdf/index.html',
+    // Blog posts (flat .html — matches blog.html links)
+    'blog/best-practices-creating-accessible-pdfs.html',
+    'blog/comparing-word-vs-pdf-when-to-use-which.html',
+    'blog/compress-pdf-without-losing-quality.html',
+    'blog/convert-jpg-to-pdf-online.html',
+    'blog/easy-ways-rearrange-delete-pdf-pages.html',
+    'blog/edit-pdf-text-online-free.html',
+    'blog/future-of-document-management-ai-and-pdfs.html',
+    'blog/how-to-add-watermarks-to-your-pdf-documents.html',
+    'blog/how-to-convert-excel-spreadsheets-to-pdf.html',
+    'blog/how-to-convert-powerpoint-presentations-to-pdf.html',
+    'blog/how-to-extract-text-from-scanned-pdfs-ocr.html',
+    'blog/how-to-merge-pdf-files-free.html',
+    'blog/how-to-reduce-pdf-file-size-for-email.html',
+    'blog/importance-of-pdfa-for-long-term-archiving.html',
+    'blog/step-by-step-guide-splitting-large-pdf-files.html',
+    'blog/top-benefits-going-paperless-in-office.html',
+    'blog/ultimate-guide-digital-signatures-pdfs.html',
+    'blog/understanding-pdf-security-password-protect.html',
+    'blog/why-your-resume-should-always-be-a-pdf.html',
 
     // Standalone tool pages (root level)
     'compare-pdf.html',
@@ -56,10 +52,13 @@ const STATIC_ASSETS = [
     'pdf-reader.html',
     'pdf-scratchpad.html',
     'pdf-to-jpg.html',
+    'pdf-to-text-extractor.html',
     'presentation-maker.html',
     'remove-background.html',
     'resume-cv-builder.html',
     'speech-to-text.html',
+    'study-materials.html',
+    'text-to-audio.html',
     'text-to-speech.html',
 
     // Tools directory
@@ -103,20 +102,23 @@ const STATIC_ASSETS = [
 
     // CSS
     'css/mobile-fix-v2.css',
-    'css/mobile-fix.min.css',
+    'css/pdf-editor-page.css',
     'css/style.css',
-    'css/style.min.css',
     'css/tools-v2.css',
-    'css/tools.min.css',
 
     // JS core
+    'counter.js',
     'js/app.js',
+    'js/cloud-convert.js',
     'js/pdf-editor.js',
+    'js/pdf-encrypt-lite.js',
     'js/presentation-maker.js',
     'js/security-shield.js',
+    'js/third-party-loader.js',
     'js/tts-engine.js',
 
     // JS vendor (local copies of CDN scripts)
+    'js/vendor/docx/index.umd.min.js',
     'js/vendor/download/download.min.js',
     'js/vendor/file-saver/FileSaver.min.js',
     'js/vendor/heic2any/heic2any.min.js',
@@ -128,10 +130,16 @@ const STATIC_ASSETS = [
     'js/vendor/pdfjs/pdf.min.js',
     'js/vendor/pdfjs/pdf.worker.min.js',
     'js/vendor/pdflib/pdf-lib.min.js',
+    'js/vendor/pptxgenjs/pptxgen.bundle.js',
     'js/vendor/qr-code-styling/qr-code-styling.js',
     'js/vendor/tesseract/tesseract.min.js',
+    'js/vendor/tesseract/worker.min.js',
+    'js/vendor/tesseract/tesseract-core.wasm.js',
+    'js/vendor/tesseract/tesseract-core.wasm',
+    'js/vendor/tesseract/eng.traineddata.gz',
 
     // Images & manifest
+    'apple-touch-icon.png',
     'favicon-16x16.png',
     'favicon-32x32.png',
     'icon-192.png',
@@ -200,7 +208,6 @@ self.addEventListener('fetch', (event) => {
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
                 const clone = response.clone();
-                // Cache standard responses and opaque responses (for CDNs if any remain)
                 if (response.status === 200 || response.type === 'opaque' || response.type === 'cors') {
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                 }
