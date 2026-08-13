@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
  
@@ -90,7 +90,7 @@
  </script>
 
  <script defer src="../js/third-party-loader.js"></script>
- <script src="js/security-shield.js"></script>
+ <script src="/js/security-shield.js"></script>
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
@@ -106,16 +106,17 @@
  <header class="header">
 <div class="header-content">
  <a href="../index.html" class="logo">
- <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -142,13 +143,14 @@
  <span class="section-tag fade-in">Multi-File Optimizer</span>
  <h1 class="tool-title fade-in">Compress PDF Online Free — secure handling Required</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Reduce your PDF file size by up to 90% without losing quality. your files are handled securely — everything is processed securely. No signup, no limits, completely free.
+ Reduce your PDF file size by up to 90% without losing quality. Your files never leave your device — everything is processed securely. No signup, no limits, completely free.
  </p>
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop your documents here</p>
- <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> ⚡ Fast</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
+ <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Local</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
  <button class="btn btn-primary upload-btn">Choose Files</button>
  </div>
 
@@ -159,35 +161,20 @@
  <div id="fileSection" style="display: none;">
  <div class="options-panel glass-card fade-in">
  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
- <h3 class="option-label" style="margin: 0;">Compression Level</h3>
- <span id="compressionPercentDisplay" style="font-weight: 600; color: var(--accent); background: var(--surface-2); padding: 6px 14px; border-radius: 20px; font-size: 0.95rem;">Balanced — Excellent Quality</span>
+ <h3 class="option-label" style="margin: 0;">Target File Size</h3>
  </div>
 
- <!-- Quick Preset Buttons -->
- <div id="presetButtons" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
- <button class="option-btn" data-preset="strong" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Strong</button>
- <button class="option-btn active" data-preset="balanced" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 2px solid var(--accent); background: rgba(99,102,241,0.1); color: var(--accent); cursor: pointer; font-weight: 600; transition: all 0.2s;"> Balanced</button>
- <button class="option-btn" data-preset="quality" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Quality</button>
- <button class="option-btn" data-preset="lossless" style="padding: 10px 4px; font-size: 0.82rem; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; transition: all 0.2s;"> Lossless</button>
- </div>
- 
- <!-- Fine-Tune Slider -->
- <div style="background: var(--surface-2); border-radius: 12px; padding: 16px 20px;">
- <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
- <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500;">Fine-tune</span>
- <span id="dpiDisplay" style="font-size: 0.82rem; color: var(--text-secondary);">180 DPI · JPEG 92%</span>
- </div>
- <input type="range" id="compressionSlider" min="10" max="100" value="60" style="width: 100%; cursor: pointer; accent-color: var(--accent); height: 6px;">
- <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted, #999); margin-top: 8px;">
- <span>Smallest File</span>
- <span>Best Quality</span>
- </div>
+ <div style="background: var(--surface-2); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 12px;">
+ <input type="number" id="targetSizeInput" min="1" step="0.1" value="200" style="padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 1.1rem; width: 120px; outline: none; font-weight: 600;">
+ <select id="targetSizeUnit" style="padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; outline: none; cursor: pointer;">
+ <option value="KB">KB</option>
+ <option value="MB">MB</option>
+ </select>
  </div>
 
- <!-- Estimated Output -->
- <div id="estimatedOutput" style="margin-top: 16px; padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
- <span style="font-size: 1.1rem;"></span>
- <span>Estimated reduction: <strong style="color: var(--accent);">25-50%</strong> smaller · Sharp text & graphics preserved</span>
+ <div id="estimatedOutput" style="margin-top: 16px; padding: 12px 16px; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: 10px; font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px;">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent); flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+ <span style="line-height: 1.4;">The compressor will intelligently lower the PDF quality to match your requested size exactly. Please note that extreme reductions may cause blurriness.</span>
  </div>
  </div>
 
@@ -290,55 +277,6 @@
  let results = [];
  let isCancelled = false;
 
- //  Quality-First Compression Engine 
- // Phase 1 (Lossless): copyPages + object streams — 100% quality preserved
- // Phase 2 (Smart Fallback): high-res render only if lossless isn't enough
- //
- // Presets control ONLY the Phase 2 fallback behaviour:
- // - renderScale: canvas resolution vs original PDF points (higher = sharper)
- // - jpegQuality: JPEG encoding quality for rasterized pages
- // - losslessOnly: if true, never rasterize (pure structural optimization)
- let currentPreset = 'balanced';
-
- const PRESETS = {
- lossless: {
- renderScale: 0, // N/A — never rasterizes
- jpegQuality: 0,
- losslessOnly: true,
- label: 'Lossless — Perfect Quality',
- est: '5-30%',
- slider: 95,
- description: 'Structural optimization only. Zero quality loss.'
- },
- quality: {
- renderScale: 3.0, // ~216 DPI — nearly print quality
- jpegQuality: 0.95,
- losslessOnly: false,
- label: 'Quality — Visually Identical',
- est: '15-40%',
- slider: 80,
- description: 'High-res render. Indistinguishable from original.'
- },
- balanced: {
- renderScale: 2.5, // ~180 DPI — excellent screen quality
- jpegQuality: 0.92,
- losslessOnly: false,
- label: 'Balanced — Excellent Quality',
- est: '25-50%',
- slider: 60,
- description: 'Great balance of size and quality.'
- },
- strong: {
- renderScale: 2.0, // ~144 DPI — good screen quality
- jpegQuality: 0.85,
- losslessOnly: false,
- label: 'Strong — Good Quality',
- est: '40-65%',
- slider: 35,
- description: 'Noticeable on zoom but fine for screens.'
- }
- };
-
  const uploadZone = document.getElementById('uploadZone');
  const fileSection = document.getElementById('fileSection');
  const processingSection = document.getElementById('processingSection');
@@ -346,103 +284,6 @@
  const fileList = document.getElementById('fileList');
  const processingList = document.getElementById('processingList');
  const resultsList = document.getElementById('resultsList');
- 
- const compressionSlider = document.getElementById('compressionSlider');
- const compressionPercentDisplay = document.getElementById('compressionPercentDisplay');
- const dpiDisplay = document.getElementById('dpiDisplay');
- const estimatedOutput = document.getElementById('estimatedOutput');
- const presetBtns = document.querySelectorAll('#presetButtons.option-btn');
-
- function applyPreset(presetKey) {
- currentPreset = presetKey;
- const preset = PRESETS[presetKey];
- if (!preset) return;
-
- compressionSlider.value = preset.slider;
- compressionPercentDisplay.textContent = preset.label;
-
- if (preset.losslessOnly) {
- dpiDisplay.textContent = 'Lossless · No re-encoding';
- } else {
- const effectiveDPI = Math.round(preset.renderScale * 72);
- dpiDisplay.textContent = effectiveDPI + ' DPI · JPEG ' + Math.round(preset.jpegQuality * 100) + '%';
- }
-
- estimatedOutput.querySelector('strong').textContent = preset.est;
- 
- let estColor;
- if (presetKey === 'strong') estColor = '#f59e0b';
- else if (presetKey === 'balanced') estColor = '#10b981';
- else if (presetKey === 'quality') estColor = '#6366f1';
- else estColor = '#8b5cf6';
- estimatedOutput.querySelector('strong').style.color = estColor;
- }
-
- function updateFromSlider(val) {
- // Map slider value to a preset
- let presetKey;
- if (val >= 88) presetKey = 'lossless';
- else if (val >= 65) presetKey = 'quality';
- else if (val >= 45) presetKey = 'balanced';
- else presetKey = 'strong';
-
- currentPreset = presetKey;
- const preset = PRESETS[presetKey];
-
- if (preset.losslessOnly) {
- dpiDisplay.textContent = 'Lossless · No re-encoding';
- compressionPercentDisplay.textContent = preset.label;
- } else {
- // Allow fine-tuning within the preset range
- const effectiveDPI = Math.round(preset.renderScale * 72);
- dpiDisplay.textContent = effectiveDPI + ' DPI · JPEG ' + Math.round(preset.jpegQuality * 100) + '%';
- compressionPercentDisplay.textContent = preset.label;
- }
-
- estimatedOutput.querySelector('strong').textContent = preset.est;
-
- let estColor;
- if (presetKey === 'strong') estColor = '#f59e0b';
- else if (presetKey === 'balanced') estColor = '#10b981';
- else if (presetKey === 'quality') estColor = '#6366f1';
- else estColor = '#8b5cf6';
- estimatedOutput.querySelector('strong').style.color = estColor;
-
- // Deactivate all preset buttons (slider overrides)
- presetBtns.forEach(b => {
- b.style.border = '1px solid var(--border)';
- b.style.background = 'var(--surface-2)';
- b.style.color = 'var(--text-secondary)';
- b.style.fontWeight = '400';
- });
- }
-
- compressionSlider.addEventListener('input', (e) => {
- updateFromSlider(parseInt(e.target.value));
- });
-
- // Preset button handlers
- presetBtns.forEach(btn => {
- btn.addEventListener('click', () => {
- const presetKey = btn.dataset.preset;
- applyPreset(presetKey);
-
- const preset = PRESETS[presetKey];
- if (preset) compressionSlider.value = preset.slider;
-
- // Highlight active button
- presetBtns.forEach(b => {
- b.style.border = '1px solid var(--border)';
- b.style.background = 'var(--surface-2)';
- b.style.color = 'var(--text-secondary)';
- b.style.fontWeight = '400';
- });
- btn.style.border = '2px solid var(--accent)';
- btn.style.background = 'rgba(99,102,241,0.1)';
- btn.style.color = 'var(--accent)';
- btn.style.fontWeight = '600';
- });
- });
 
  // Add more files input
  const addMoreInput = document.createElement('input');
@@ -465,6 +306,20 @@
  renderFileList();
  uploadZone.style.display = 'none';
  fileSection.style.display = 'block';
+
+ // Automatically suggest a target size based on the first file (50% reduction)
+ if (files.length > 0 && document.getElementById('targetSizeInput').value === "200") {
+ let suggestedKB = Math.round(files[0].size / 1024 * 0.5);
+ if (suggestedKB < 1) suggestedKB = 1;
+ 
+ if (suggestedKB > 1024) {
+ document.getElementById('targetSizeInput').value = (suggestedKB / 1024).toFixed(1);
+ document.getElementById('targetSizeUnit').value = 'MB';
+ } else {
+ document.getElementById('targetSizeInput').value = suggestedKB;
+ document.getElementById('targetSizeUnit').value = 'KB';
+ }
+ }
  }
 
  function renderFileList() {
@@ -489,8 +344,6 @@
  });
  });
  }
-
- // level buttons removed in favor of slider
 
  document.getElementById('addMoreBtn').addEventListener('click', () => addMoreInput.click());
  addMoreInput.addEventListener('change', (e) => {
@@ -526,9 +379,77 @@
  }
 
  // 
- // PHASE 2 — High-quality rasterization fallback
+ // PHASE 2 — Target-Size Binary Search Estimator
  // 
- async function rasterizeCompress(arrayBuffer, preset, statusText, progressFill, numPagesTotal) {
+ async function findOptimalParams(arrayBuffer, targetBytes, statusText, progressFill) {
+ statusText.textContent = 'Estimating compression parameters...';
+ const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+ const numPages = srcDoc.getPageCount();
+ const targetBytesPerPage = targetBytes / numPages;
+ 
+ const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
+ const pdfDocJs = await loadingTask.promise;
+ const firstPage = await pdfDocJs.getPage(1);
+ 
+ const unscaledViewport = firstPage.getViewport({ scale: 1.0 });
+ const canvas = document.createElement('canvas');
+ const context = canvas.getContext('2d');
+ 
+ function getParamsFromIndex(idx) {
+ const t = Math.max(0, Math.min(1, idx / 100)); // 0 to 1
+ const renderScale = 0.5 + (t * 2.0); // 0.5 to 2.5
+ const jpegQuality = 0.1 + (t * 0.85); // 0.1 to 0.95
+ return { renderScale, jpegQuality };
+ }
+ 
+ async function testIndex(idx) {
+ const p = getParamsFromIndex(idx);
+ const viewport = firstPage.getViewport({ scale: p.renderScale });
+ canvas.width = viewport.width;
+ canvas.height = viewport.height;
+ await firstPage.render({ canvasContext: context, viewport: viewport }).promise;
+ 
+ const imgDataUrl = canvas.toDataURL('image/jpeg', p.jpegQuality);
+ const base64Data = imgDataUrl.split(',')[1];
+ const approxBytes = base64Data.length * 0.75;
+ return approxBytes;
+ }
+ 
+ let low = 0;
+ let high = 100;
+ let bestIndex = 50;
+ let bestDiff = Infinity;
+ 
+ for(let iter = 0; iter < 7; iter++) {
+ if (isCancelled) return getParamsFromIndex(50);
+ progressFill.style.width = (20 + (iter * 3)) + '%'; // 20% to 41%
+ 
+ let mid = Math.floor((low + high) / 2);
+ let bytes = await testIndex(mid);
+ 
+ let diff = Math.abs(bytes - targetBytesPerPage);
+ if (diff < bestDiff) {
+ bestDiff = diff;
+ bestIndex = mid;
+ }
+ 
+ if (bytes > targetBytesPerPage) {
+ high = mid - 1; 
+ } else {
+ low = mid + 1; 
+ }
+ }
+ 
+ canvas.width = 0;
+ canvas.height = 0;
+ 
+ return getParamsFromIndex(bestIndex);
+ }
+
+ // 
+ // PHASE 3 — High-quality rasterization fallback
+ // 
+ async function rasterizeCompress(arrayBuffer, optimalParams, statusText, progressFill, numPagesTotal) {
  const newPdfDoc = await PDFDocument.create();
  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
  const pdfDocJs = await loadingTask.promise;
@@ -537,12 +458,12 @@
  for (let p = 1; p <= numPages; p++) {
  if (isCancelled) return null;
 
- statusText.textContent = `Phase 2: Re-encoding (${p}/${numPages})...`;
- progressFill.style.width = `${50 + ((p / numPages) * 45)}%`;
+ statusText.textContent = `Re-encoding page ${p} of ${numPages}...`;
+ progressFill.style.width = `${45 + ((p / numPages) * 50)}%`;
 
  const page = await pdfDocJs.getPage(p);
  const unscaledViewport = page.getViewport({ scale: 1.0 });
- const viewport = page.getViewport({ scale: preset.renderScale });
+ const viewport = page.getViewport({ scale: optimalParams.renderScale });
 
  const canvas = document.createElement('canvas');
  const context = canvas.getContext('2d');
@@ -554,7 +475,7 @@
  viewport: viewport
  }).promise;
 
- const imgDataUrl = canvas.toDataURL('image/jpeg', preset.jpegQuality);
+ const imgDataUrl = canvas.toDataURL('image/jpeg', optimalParams.jpegQuality);
  const base64Data = imgDataUrl.split(',')[1];
  const jpgImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
 
@@ -581,7 +502,15 @@
  async function startBatchCompression() {
  if (files.length === 0) return;
 
- const preset = PRESETS[currentPreset];
+ const targetVal = parseFloat(document.getElementById('targetSizeInput').value);
+ const targetUnit = document.getElementById('targetSizeUnit').value;
+ if (isNaN(targetVal) || targetVal <= 0) {
+ alert("Please enter a valid target size.");
+ return;
+ }
+ let targetBytes = targetVal * 1024;
+ if (targetUnit === 'MB') targetBytes *= 1024;
+
  isCancelled = false;
  results = [];
 
@@ -629,13 +558,18 @@
  const arrayBuffer = await readFileAsArrayBuffer(file);
  if (isCancelled) break;
 
+ // NOTE: pdf.js and pdf-lib can DETACH/transfer the ArrayBuffer they
+ // receive (pdf.js transfers it to its worker thread). The same buffer is
+ // used by three phases below, so each phase must get its own copy or the
+ // later phases crash with "Cannot perform Construct on a detached
+ // ArrayBuffer". The pristine original stays untouched for the fallbacks.
  const originalSize = file.size;
 
  //  PHASE 1: Lossless structural optimization 
  statusText.textContent = 'Phase 1: Structural optimization...';
- progressFill.style.width = '20%';
+ progressFill.style.width = '15%';
 
- let bestBytes = await losslessCompress(arrayBuffer);
+ let bestBytes = await losslessCompress(arrayBuffer.slice(0));
  let bestSize = bestBytes.length;
 
  // Always keep original if lossless made it bigger
@@ -644,19 +578,21 @@
  bestSize = originalSize;
  }
 
- progressFill.style.width = '45%';
-
- //  PHASE 2: Smart rasterization (only if not lossless-only) 
- if (!preset.losslessOnly && isCancelled === false) {
- statusText.textContent = 'Phase 2: Smart re-encoding...';
-
+ //  PHASE 2 & 3: Smart rasterization (only if lossless didn't hit target) 
+ if (bestSize > targetBytes && isCancelled === false) {
+ 
+ // Binary search for optimal parameters to hit target size
+ const optimalParams = await findOptimalParams(arrayBuffer.slice(0), targetBytes, statusText, progressFill);
+ 
+ if (isCancelled === false) {
  const rasterBytes = await rasterizeCompress(
- arrayBuffer, preset, statusText, progressFill
+ arrayBuffer.slice(0), optimalParams, statusText, progressFill
  );
 
  if (rasterBytes && rasterBytes.length < bestSize) {
  bestBytes = rasterBytes;
  bestSize = rasterBytes.length;
+ }
  }
  }
 
@@ -880,4 +816,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
 

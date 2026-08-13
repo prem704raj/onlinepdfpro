@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
  
@@ -90,7 +90,7 @@
  </script>
 
  <script defer src="../js/third-party-loader.js"></script>
- <script src="js/security-shield.js"></script>
+ <script src="/js/security-shield.js"></script>
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
@@ -264,9 +264,13 @@
  // ---------- Tesseract.js (securely, offline) ----------
  async function runTesseract(blob) {
  try {
- const imageUrl = URL.createObjectURL(blob);
- const result = await Tesseract.recognize(imageUrl, 'eng', {
- logger: m => {
+ const imageUrl = URL.createObjectURL(blob);    const result = await Tesseract.recognize(imageUrl, 'eng', {
+      // All Tesseract assets are vendored locally so OCR works offline and
+      // isn't blocked by the page CSP (worker-src 'self' blob:).
+      workerPath: '/js/vendor/tesseract/worker.min.js',
+      corePath: '/js/vendor/tesseract/tesseract-core.wasm.js',
+      langPath: '/js/vendor/tesseract/',
+      logger: m => {
  if (m.status === 'recognizing text' && typeof m.progress === 'number') {
  const pct = Math.round(m.progress * 100);
  document.querySelector('.tool-description').textContent = `Recognizing text... ${pct}%`;

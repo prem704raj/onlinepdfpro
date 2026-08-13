@@ -90,7 +90,7 @@
  </script>
 
  <script defer src="../js/third-party-loader.js"></script>
- <script src="js/security-shield.js"></script>
+ <script src="/js/security-shield.js"></script>
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
@@ -558,13 +558,18 @@
  const arrayBuffer = await readFileAsArrayBuffer(file);
  if (isCancelled) break;
 
+ // NOTE: pdf.js and pdf-lib can DETACH/transfer the ArrayBuffer they
+ // receive (pdf.js transfers it to its worker thread). The same buffer is
+ // used by three phases below, so each phase must get its own copy or the
+ // later phases crash with "Cannot perform Construct on a detached
+ // ArrayBuffer". The pristine original stays untouched for the fallbacks.
  const originalSize = file.size;
 
  //  PHASE 1: Lossless structural optimization 
  statusText.textContent = 'Phase 1: Structural optimization...';
  progressFill.style.width = '15%';
 
- let bestBytes = await losslessCompress(arrayBuffer);
+ let bestBytes = await losslessCompress(arrayBuffer.slice(0));
  let bestSize = bestBytes.length;
 
  // Always keep original if lossless made it bigger
@@ -577,11 +582,11 @@
  if (bestSize > targetBytes && isCancelled === false) {
  
  // Binary search for optimal parameters to hit target size
- const optimalParams = await findOptimalParams(arrayBuffer, targetBytes, statusText, progressFill);
+ const optimalParams = await findOptimalParams(arrayBuffer.slice(0), targetBytes, statusText, progressFill);
  
  if (isCancelled === false) {
  const rasterBytes = await rasterizeCompress(
- arrayBuffer, optimalParams, statusText, progressFill
+ arrayBuffer.slice(0), optimalParams, statusText, progressFill
  );
 
  if (rasterBytes && rasterBytes.length < bestSize) {
