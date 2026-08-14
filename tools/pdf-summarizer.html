@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>AI PDF Summarizer — Instant Summaries for Any PDF | OnlinePDFPro</title>
+ <link rel="preconnect" href="https://cdn.jsdelivr.net">
+ <link rel="preconnect" href="https://unpkg.com">
+ <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+<meta name="description" content="Upload a PDF and get an instant AI-generated summary. Choose bullet points, short summary, or detailed summary. 100% free.">
+<meta name="keywords" content="pdf summarizer, ai summarize pdf, pdf summary tool, summarize document online free">
+<meta name="author" content="OnlinePDFPro">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-summarizer.html">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+ <link rel="stylesheet" href="../css/style.css">
+ <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+ <link rel="stylesheet" href="../css/tools-v2.css">
+
+ <script defer src="../js/third-party-loader.js"></script>
+ <script src="/js/security-shield.js"></script>
+ <script>
+ (function() {
+ var theme = localStorage.getItem('doctools-theme') || 'light';
+ document.documentElement.setAttribute('data-theme', theme);
+ })();
+ </script>
+
+ <style>
+   .mode-selector { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+   .mode-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+   .mode-btn.active { border: 2px solid var(--accent); background: rgba(99,102,241,0.1); color: var(--accent); font-weight: 600; }
+   .mode-btn:hover:not(.active) { border-color: var(--accent); color: var(--text-primary); }
+   .summary-result { display:none; max-width:800px; margin:24px auto 0; padding: 28px 32px; background: var(--surface-1, #fff); border: 1px solid var(--border); border-radius: 16px; }
+   .summary-result h3 { margin: 0 0 16px 0; font-size: 1.1rem; }
+   .summary-content { font-size: 0.92rem; line-height: 1.8; color: var(--text-secondary); white-space: pre-wrap; }
+   .summary-content strong { color: var(--text-primary); }
+   .summary-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+   .summary-actions button { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+   .summary-actions button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+ </style>
+</head>
+
+<body class="fade-in">
+ <a href="#main" class="skip-link">Skip to main content</a>
+
+ <header class="header">
+<div class="header-content">
+ <a href="../index.html" class="logo">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+ <span class="logo-text">OnlinePDFPro</span>
+ </a>
+ <nav class="nav" id="nav">
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+</nav>
+ <div class="header-actions">
+ <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+ </button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ </div>
+ </div>
+ </header>
+
+ <main id="main" class="tool-page">
+<div class="container" style="max-width: 800px;">
+ <div class="tool-header">
+ <span class="section-tag fade-in">AI-Powered</span>
+ <h1 class="tool-title fade-in">AI PDF Summarizer</h1>
+ <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+ Upload a PDF and get an instant, accurate summary. Perfect for long reports, research papers, and books. Choose your preferred summary format below.
+ </p>
+ </div>
+
+ <div class="mode-selector fade-in" style="animation-delay: 0.15s;">
+   <button class="mode-btn active" data-mode="bullets">Bullet Points</button>
+   <button class="mode-btn" data-mode="short">Short Summary</button>
+   <button class="mode-btn" data-mode="detailed">Detailed Summary</button>
+ </div>
+
+ <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+ <p class="upload-text">Drop your PDF here</p>
+ <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span>AI Powered</span> <span>&bull;</span> <span>Max: 50MB</span> <span>&bull;</span> <span>Instant</span></p>
+ <button class="btn btn-primary upload-btn" id="uploadBtn">Choose PDF</button>
+ <input type="file" id="fileInput" accept=".pdf" style="display:none">
+ </div>
+
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
+   <div class="spinner"></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ </div>
+
+ <div class="summary-result" id="summaryResult">
+   <div style="display:flex; justify-content:space-between; align-items:center;">
+     <h3 id="summaryTitle">Summary</h3>
+     <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>
+   </div>
+   <div class="summary-content" id="summaryContent"></div>
+   <div class="summary-actions">
+     <button onclick="copyToClipboard()">Copy to Clipboard</button>
+   </div>
+ </div>
+
+ <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 24px;">
+ <span class="privacy-reminder-icon"></span>
+ <span>Your files are processed securely using AI.</span>
+ </div>
+ </div>
+</main>
+
+<script src="/js/vendor/pdfjs/pdf.min.js"></script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function() {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
+
+  const API_KEY = "proxy";
+  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
+  const MODEL = "llama-3.1-8b-instant";
+
+  let currentMode = 'bullets';
+
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = btn.dataset.mode;
+    });
+  });
+
+  const uploadZone = document.getElementById('uploadZone');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('fileInput');
+  const loadingState = document.getElementById('loadingState');
+  const loadingText = document.getElementById('loadingText');
+  const summaryResult = document.getElementById('summaryResult');
+  const summaryContent = document.getElementById('summaryContent');
+  const summaryTitle = document.getElementById('summaryTitle');
+
+  uploadBtn.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
+  ['dragenter','dragover','dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
+  uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('drag-over'));
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => { uploadZone.classList.remove('drag-over'); if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+  fileInput.addEventListener('change', e => { if(e.target.files.length) handleFile(e.target.files[0]); });
+
+  async function handleFile(file) {
+    if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
+    uploadZone.style.display = 'none';
+    document.querySelector('.mode-selector').style.display = 'none';
+    loadingState.style.display = 'block';
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      let documentText = "";
+      for(let i = 1; i <= pdf.numPages; i++) {
+        loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
+        const page = await pdf.getPage(i);
+        const tc = await page.getTextContent();
+        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+        if(documentText.length > 25000) break;
+      }
+
+      // OCR fallback for scanned/image PDFs
+      if (documentText.trim().length < 50) {
+        loadingText.textContent = "Scanned PDF detected. Running OCR...";
+        documentText = "";
+        const maxOcrPages = Math.min(pdf.numPages, 5);
+        for(let i = 1; i <= maxOcrPages; i++) {
+          loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
+          const page = await pdf.getPage(i);
+          const scale = 2;
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          const base64 = canvas.toDataURL('image/png');
+
+          const formData = new FormData();
+          formData.append('base64Image', base64);
+          formData.append('apikey', 'helloworld');
+          formData.append('language', 'eng');
+          formData.append('isOverlayRequired', 'false');
+          formData.append('OCREngine', '2');
+
+          const ocrResp = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
+          const ocrData = await ocrResp.json();
+          if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
+            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+          }
+          if(documentText.length > 25000) break;
+        }
+      }
+
+      if (documentText.trim().length < 10) {
+        throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
+      }
+
+      loadingText.textContent = "AI is generating your summary...";
+
+      const prompts = {
+        bullets: "Summarize the following document as a list of clear, concise bullet points. Focus on the most important facts, findings, and takeaways. Use bullet points.",
+        short: "Write a brief 3-5 sentence summary of the following document, capturing the main topic, key findings, and conclusion.",
+        detailed: "Write a comprehensive, detailed summary of the following document. Include all major sections, key arguments, data, and conclusions."
+      };
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + API_KEY
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          messages: [
+            { role: "system", content: prompts[currentMode] },
+            { role: "user", content: "DOCUMENT:\n" + documentText }
+          ],
+          max_tokens: 4096
+        })
+      });
+
+      const data = await response.json();
+      loadingState.style.display = 'none';
+
+      if(data.choices && data.choices[0]) {
+        const text = data.choices[0].message.content;
+        summaryTitle.textContent = file.name.replace('.pdf','') + " — Summary";
+        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        summaryContent.innerHTML = html;
+        summaryResult.style.display = 'block';
+      } else if(data.error) {
+        loadingState.style.display = 'block';
+        loadingText.textContent = "Error: " + data.error.message;
+      } else {
+        loadingState.style.display = 'block';
+        loadingText.textContent = "Could not generate summary. Please try again.";
+      }
+    } catch(err) {
+      console.error(err);
+      loadingText.textContent = err.message || "Error processing PDF. Please try again.";
+      loadingText.style.color = "var(--error, red)";
+    }
+  }
+
+  window.copyToClipboard = function() {
+    const text = summaryContent.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.summary-actions button');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#fff';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+    });
+  };
+})();
+</script>
+</body>
+</html>

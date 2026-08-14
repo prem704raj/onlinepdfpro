@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Chat with PDF — AI-Powered Document Q&A | OnlinePDFPro</title>
+ <link rel="preconnect" href="https://cdn.jsdelivr.net">
+ <link rel="preconnect" href="https://unpkg.com">
+ <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+<meta name="description" content="Upload a PDF and chat with AI to ask questions, get summaries, and extract information. 100% free, no signup.">
+<meta name="keywords" content="chat with pdf, ai pdf reader, ask questions about pdf, pdf ai assistant">
+<meta name="author" content="OnlinePDFPro">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/chat-with-pdf.html">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+ <link rel="stylesheet" href="../css/style.css">
+ <link rel="stylesheet" href="../css/mobile-fix-v2.css">
+ <link rel="stylesheet" href="../css/tools-v2.css">
+
+ <script defer src="../js/third-party-loader.js"></script>
+ <script src="/js/security-shield.js"></script>
+ <script>
+ (function() {
+ var theme = localStorage.getItem('doctools-theme') || 'light';
+ document.documentElement.setAttribute('data-theme', theme);
+ })();
+ </script>
+
+ <style>
+   .chat-container { display:none; flex-direction:column; gap:0; max-width:800px; margin:0 auto; height: 60vh; min-height: 400px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface-1, #fff); }
+   .chat-header { display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+   .chat-header h3 { margin:0; font-size: 0.95rem; font-weight: 600; }
+   .chat-messages { flex:1; overflow-y:auto; padding: 20px; display:flex; flex-direction:column; gap: 16px; }
+   .chat-msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.6; word-wrap: break-word; }
+   .chat-msg.user { align-self: flex-end; background: var(--accent, #2563eb); color: #fff; border-bottom-right-radius: 4px; }
+   .chat-msg.ai { align-self: flex-start; background: var(--surface-2); color: var(--text-primary); border-bottom-left-radius: 4px; }
+   .chat-msg.ai strong { color: var(--accent); }
+   .chat-input-area { display:flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--surface-1); }
+   .chat-input-area input { flex:1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 24px; background: var(--surface-2); color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+   .chat-input-area input:focus { border-color: var(--accent); }
+   .chat-input-area button { padding: 12px 20px; border: none; border-radius: 24px; background: var(--accent, #2563eb); color: #fff; font-weight: 600; cursor: pointer; transition: opacity 0.2s; font-size: 0.9rem; }
+   .chat-input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+   .typing-dots { display: inline-flex; gap: 4px; align-items: center; }
+   .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: dotPulse 1.2s infinite; }
+   .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+   .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+   @keyframes dotPulse { 0%,80%,100%{opacity:0.3;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+   @media(max-width:768px) { .chat-container { height: 55vh; min-height: 350px; } .chat-msg { max-width: 90%; } }
+ </style>
+</head>
+
+<body class="fade-in">
+ <a href="#main" class="skip-link">Skip to main content</a>
+
+ <header class="header">
+<div class="header-content">
+ <a href="../index.html" class="logo">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+ <span class="logo-text">OnlinePDFPro</span>
+ </a>
+ <nav class="nav" id="nav">
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+</nav>
+ <div class="header-actions">
+ <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+ </button>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ </div>
+ </div>
+ </header>
+
+ <main id="main" class="tool-page">
+<div class="container" style="max-width: 800px;">
+ <div class="tool-header">
+ <span class="section-tag fade-in">AI-Powered</span>
+ <h1 class="tool-title fade-in">Chat with PDF</h1>
+ <p class="tool-description fade-in" style="animation-delay: 0.1s;">
+ Upload your PDF and let our AI assistant analyze it. Ask questions, get summaries, and find information instantly. Your files stay private — everything is processed securely.
+ </p>
+ </div>
+
+ <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+ <p class="upload-text">Drop your PDF here</p>
+ <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> AI Powered</span> <span>&bull;</span> <span>Max: 50MB</span> <span>&bull;</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Fast</span></p>
+ <button class="btn btn-primary upload-btn" id="uploadBtn">Choose PDF</button>
+ <input type="file" id="fileInput" accept=".pdf" style="display:none">
+ </div>
+
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
+   <div class="spinner"></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ </div>
+
+ <div class="chat-container" id="chatContainer">
+   <div class="chat-header">
+     <h3 id="chatTitle">Chat with Document</h3>
+     <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>
+   </div>
+   <div class="chat-messages" id="chatMessages">
+     <div class="chat-msg ai">Hello! I've read your document. Ask me anything — summaries, key points, specific details, or even <strong>questions about images and diagrams</strong> in the PDF.</div>
+   </div>
+   <div class="chat-input-area">
+     <input type="text" id="chatInput" placeholder="Ask a question about your PDF..." autocomplete="off">
+     <button id="sendBtn">Send</button>
+   </div>
+ </div>
+
+ <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 24px;">
+ <span class="privacy-reminder-icon"></span>
+ <span>Your files are processed securely using AI.</span>
+ </div>
+ </div>
+</main>
+
+<script src="/js/vendor/pdfjs/pdf.min.js"></script>
+<script src="../js/app.js?v=11"></script>
+<script>
+(function() {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
+
+  // Groq API for text questions (fast)
+  const GROQ_KEY = "proxy";
+  const GROQ_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
+  const GROQ_MODEL = "llama-3.1-8b-instant";
+
+  // OpenRouter API for vision/image questions (free)
+  const OR_KEY = "proxy";
+  const OR_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
+  const OR_MODEL = "google/gemma-4-31b-it:free";
+
+  let documentText = "";
+  let pageImages = []; // base64 images of each page
+
+  // Keywords that indicate user wants image analysis
+  const imageKeywords = /image|picture|photo|diagram|chart|graph|figure|table|logo|illustration|visual|screenshot|drawing|map|icon|symbol|scan|look|see|show|appear|display|color|background/i;
+
+  const uploadZone = document.getElementById('uploadZone');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('fileInput');
+  const loadingState = document.getElementById('loadingState');
+  const loadingText = document.getElementById('loadingText');
+  const chatContainer = document.getElementById('chatContainer');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const chatTitle = document.getElementById('chatTitle');
+
+  uploadBtn.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
+  ['dragenter','dragover','dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); }));
+  uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('drag-over'));
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => { uploadZone.classList.remove('drag-over'); if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+  fileInput.addEventListener('change', e => { if(e.target.files.length) handleFile(e.target.files[0]); });
+
+  async function handleFile(file) {
+    if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
+    uploadZone.style.display = 'none';
+    loadingState.style.display = 'block';
+    chatTitle.textContent = file.name.replace('.pdf','');
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      documentText = "";
+      pageImages = [];
+
+      const maxPages = Math.min(pdf.numPages, 5);
+      for(let i = 1; i <= pdf.numPages; i++) {
+        loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
+        const page = await pdf.getPage(i);
+        const tc = await page.getTextContent();
+        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+
+        // Render page as image for vision AI (up to 5 pages)
+        if(i <= maxPages) {
+          loadingText.textContent = "Capturing page " + i + " image...";
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          pageImages.push(canvas.toDataURL('image/jpeg', 0.7));
+        }
+
+        if(documentText.length > 25000) break;
+      }
+
+      // OCR fallback for scanned/image PDFs
+      if (documentText.trim().length < 50) {
+        loadingText.textContent = "Scanned PDF detected. Running OCR...";
+        documentText = "";
+        for(let i = 0; i < pageImages.length; i++) {
+          loadingText.textContent = "OCR scanning page " + (i+1) + " of " + pageImages.length + "...";
+          const formData = new FormData();
+          formData.append('base64Image', pageImages[i]);
+          formData.append('apikey', 'helloworld');
+          formData.append('language', 'eng');
+          formData.append('isOverlayRequired', 'false');
+          formData.append('OCREngine', '2');
+
+          const ocrResp = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
+          const ocrData = await ocrResp.json();
+          if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
+            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+          }
+          if(documentText.length > 25000) break;
+        }
+      }
+
+      if (documentText.trim().length < 10 && pageImages.length === 0) {
+        throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
+      }
+
+      loadingState.style.display = 'none';
+      chatContainer.style.display = 'flex';
+      chatInput.focus();
+    } catch(err) {
+      console.error(err);
+      loadingText.textContent = err.message || "Error reading PDF. Please try again.";
+      loadingText.style.color = "var(--error, red)";
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+  async function sendMessage() {
+    const question = chatInput.value.trim();
+    if(!question || (!documentText && pageImages.length === 0)) return;
+
+    addMessage(question, 'user');
+    chatInput.value = '';
+    sendBtn.disabled = true;
+
+    const typingEl = document.createElement('div');
+    typingEl.className = 'chat-msg ai';
+    typingEl.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingEl);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    const useVision = imageKeywords.test(question) && pageImages.length > 0;
+
+    try {
+      let response;
+      if(useVision) {
+        // Vision model: send page images + question
+        const contentParts = [{ type: "text", text: "You are analyzing a PDF document. Here are the page images. Answer the user's question based on what you see.\n\nDocument text (if any):\n" + documentText.substring(0, 8000) + "\n\nUser question: " + question }];
+        // Send up to 3 page images to stay within limits
+        const maxImgs = Math.min(pageImages.length, 3);
+        for(let i = 0; i < maxImgs; i++) {
+          contentParts.push({ type: "image_url", image_url: { url: pageImages[i] } });
+        }
+        response = await fetch(OR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + OR_KEY },
+          body: JSON.stringify({ model: OR_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
+        });
+      } else {
+        // Text-only model: fast Groq
+        response = await fetch(GROQ_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+          body: JSON.stringify({
+            model: GROQ_MODEL,
+            messages: [
+              { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
+              { role: "user", content: question }
+            ],
+            max_tokens: 2048
+          })
+        });
+      }
+
+      const data = await response.json();
+      typingEl.remove();
+
+      if(data.choices && data.choices[0]) {
+        addMessage(data.choices[0].message.content, 'ai');
+      } else if(data.error) {
+        // If vision model fails, fallback to text model
+        if(useVision) {
+          addMessage("Vision analysis unavailable right now. I can still answer text-based questions about this document.", 'ai');
+        } else {
+          addMessage("Error: " + data.error.message, 'ai');
+        }
+      } else {
+        addMessage("Sorry, I couldn't generate a response. Please try again.", 'ai');
+      }
+    } catch(err) {
+      typingEl.remove();
+      console.error(err);
+      addMessage("Network error. Please check your connection and try again.", 'ai');
+    }
+
+    sendBtn.disabled = false;
+    chatInput.focus();
+  }
+
+  function addMessage(text, type) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + type;
+    if(type === 'ai') {
+      let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      div.innerHTML = html;
+    } else {
+      div.textContent = text;
+    }
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+})();
+</script>
+</body>
+</html>
