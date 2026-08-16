@@ -1239,40 +1239,60 @@
 [data-theme="dark"] .page-presentation-maker .upload-zone {
     border-color: #f472b6 !important;
 }
-/* UNIVERSAL UPLOAD ZONE THEME */
-.upload-zone {
-    background-color: #f3efe5 !important;
-    border-color: #8a6d3b !important;
-    color: #8a6d3b !important;
+/* CUSTOM UPLOAD ZONE STYLING (Override all specific tool colors) */
+.upload-zone, 
+.page-merge-pdf .upload-zone,
+.page-split-pdf .upload-zone,
+.page-pdf-watermark .upload-zone,
+.page-sign-pdf .upload-zone,
+.page-add-page-numbers .upload-zone,
+.page-pdf-page-reorder .upload-zone,
+.page-pdf-page-extractor .upload-zone,
+.page-pdf-highlighter-extractor .upload-zone,
+.page-pdf-reader .upload-zone,
+.page-pdf-editor .upload-zone,
+.page-pdf-bookmark .upload-zone,
+.page-flatten-pdf .upload-zone,
+.page-compare-pdf .upload-zone,
+.page-tools .upload-zone,
+.page-compress-pdf .upload-zone,
+.page-crop-pdf .upload-zone,
+.page-delete-pages .upload-zone,
+.page-image-compress .upload-zone,
+.page-image-crop .upload-zone,
+.page-image-resize .upload-zone,
+.page-pdf-unlock .upload-zone,
+.page-pdf-lock .upload-zone,
+.page-privacy-shield .upload-zone,
+.page-voice-to-pdf .upload-zone,
+.page-text-to-audio .upload-zone,
+.page-ocr .upload-zone,
+.page-html-to-pdf .upload-zone,
+.page-images-to-pdf .upload-zone,
+.page-remove-background .upload-zone,
+.page-qr-generator .upload-zone,
+.page-invoice-generator .upload-zone,
+.page-resume-cv-builder .upload-zone,
+.page-presentation-maker .upload-zone {
+    border: 2px dashed #8b6914 !important;
+    background-color: transparent !important;
 }
-.upload-zone .upload-text {
-    color: #3b3024 !important;
-}
-.upload-zone .upload-hint {
-    color: #8a6d3b !important;
-}
-.upload-zone svg {
-    stroke: #8a6d3b !important;
-    color: #8a6d3b !important;
-}
-.upload-zone .upload-btn, .upload-zone .btn-primary {
-    background-color: #8a6d3b !important;
-    color: #ffffff !important;
-    border-color: #8a6d3b !important;
-}
-.upload-zone:hover,
+
+.upload-zone:hover, 
 .upload-zone.dragover {
-    background-color: #e8e2d4 !important;
+    border-color: #8b6914 !important;
+    background-color: rgba(139, 105, 20, 0.05) !important;
 }
-.upload-icon {
-    display: none !important;
-}
-.privacy-reminder {
-    display: none !important;
+
+[data-theme="dark"] .upload-zone {
+    border-color: #b09054 !important; /* Slightly lighter for dark mode */
 }
 .upload-zone > svg,
 .upload-zone svg[width="48"],
 .upload-icon,
 .page-drop-icon {
+    display: none !important;
+}
+.privacy-reminder {
     display: none !important;
 }

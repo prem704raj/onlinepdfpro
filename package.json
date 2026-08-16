@@ -15,10 +15,7 @@
     "build": "npx @11ty/eleventy",
     "dev": "npx @11ty/eleventy --serve",
     "start": "npm run dev",
-    "sync:root": "node scripts/sync-to-root.js",
-    "test:sweep": "node tests/sweep.js",
-    "test:sweep:dev": "node tests/sweep.js --dev",
-    "test": "npm run build && node tests/sweep.js"
+    "sync:root": "node scripts/sync-to-root.js"
   },
   "repository": {
     "type": "git",

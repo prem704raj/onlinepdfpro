@@ -2,7 +2,7 @@
 title: Step-by-Step Guide to Splitting Large PDF Files
 description: Got a massive PDF that's too big to email? Learn how to safely and easily split large PDF documents into smaller, manageable chunks.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
-toolLink: ../tools/
+toolLink: ../tools.html
 ctaTitle: Ready to optimize your document workflow?
 ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
 ctaButton: Explore All Tools

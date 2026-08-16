@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <!-- Primary Meta Tags -->
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -412,12 +412,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="tools/" class="nav-link">All Tools</a>
- <a href="about/" class="nav-link">About</a>
- <a href="help/" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+<a class="nav-link" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -451,6 +452,7 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
+ <span class="upload-icon">📚</span>
  <p class="upload-text">Drop your PDF here or click to upload</p>
  <p class="upload-hint">Everything is processed securely. secure handling to servers.</p>
  <button class="btn btn-primary upload-btn" id="chooseBtn">Choose PDF File</button>
@@ -470,7 +472,7 @@
  <section class="workspace" id="workspace">
  <div class="workspace-head">
  <h2>Page Selection</h2>
- <span class="privacy-pill">⚡ Fast & Free</span>
+ <span class="privacy-pill">100% Browser Processing</span>
  </div>
 
  <div class="stats-row">

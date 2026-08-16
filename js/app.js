@@ -603,6 +603,68 @@ const Utils = {
 // Global UI Components
 // =========================================
 
+const OfflineManager = {
+    serverTools: [
+        'word-to-pdf.html', 'pdf-to-word.html', 'pdf-to-flashcards.html',
+        'pdf-summarizer.html', 'image-to-text.html', 'chat-with-pdf.html'
+    ],
+    init() {
+        this.updateStatus();
+        window.addEventListener('online', () => this.updateStatus());
+        window.addEventListener('offline', () => this.updateStatus());
+        
+        // Prevent clicks on server-dependent tools if offline
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link && !navigator.onLine) {
+                const href = link.getAttribute('href');
+                if (href && this.serverTools.some(t => href.includes(t))) {
+                    e.preventDefault();
+                    Toast.show('⚠️ This tool requires an active internet connection.');
+                }
+            }
+        });
+        
+        // If we are currently ON a server-dependent tool and we load it offline
+        const currentPath = window.location.pathname;
+        if (!navigator.onLine && this.serverTools.some(t => currentPath.includes(t))) {
+            setTimeout(() => {
+                const uploadZone = document.getElementById('uploadZone') || document.querySelector('.upload-zone');
+                if (uploadZone) {
+                    uploadZone.innerHTML = `
+                        <div style="padding: 40px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">📶</div>
+                            <h3 style="color: var(--text-primary);">Internet Required</h3>
+                            <p style="color: var(--text-secondary); margin-top: 10px;">This specific tool uses a server API or AI model and requires an active internet connection to function.</p>
+                        </div>
+                    `;
+                    uploadZone.style.pointerEvents = 'none';
+                    uploadZone.style.opacity = '0.7';
+                }
+            }, 100);
+        }
+    },
+    updateStatus() {
+        let banner = document.getElementById('offlineBanner');
+        if (!navigator.onLine) {
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'offlineBanner';
+                banner.style.cssText = 'position:fixed; top:0; left:0; right:0; background:#f59e0b; color:white; text-align:center; padding:8px; font-weight:600; font-size:14px; z-index:100000; font-family:"Inter",sans-serif;';
+                banner.innerHTML = 'You are offline. Most tools will continue to work normally directly in your browser!';
+                document.body.prepend(banner);
+                document.body.style.paddingTop = '36px'; // offset for banner
+            }
+        } else {
+            if (banner) {
+                banner.remove();
+                document.body.style.paddingTop = '';
+                Toast.show('✅ Back online!');
+            }
+        }
+    }
+};
+
 const LoadingSpinner = {
     _el: null,
     show(m = 'Processing...') {
@@ -754,6 +816,7 @@ document.addEventListener('DOMContentLoaded', () => {
     FeedbackHandler.init();
     RecentlyUsedUI.render();
     ToolReset.init();
+    OfflineManager.init();
     
     // Set page body class based on path for CSS overrides
     const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';

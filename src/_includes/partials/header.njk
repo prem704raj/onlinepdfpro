@@ -5,10 +5,10 @@
 <span class="logo-text">OnlinePDFPro</span>
 </a>
 <nav class="nav" id="nav">
-<a class="nav-link{% if page.url | startsWith('/tools') %} active{% endif %}" href="{{ '/tools/' | url }}">Tools</a>
-<a class="nav-link{% if page.url | startsWith('/blog') %} active{% endif %}" href="{{ '/blog/' | url }}">Blog</a>
-<a class="nav-link{% if page.url === '/about/' %} active{% endif %}" href="{{ '/about/' | url }}">About</a>
-<a class="nav-link{% if page.url === '/help/' %} active{% endif %}" href="{{ '/help/' | url }}">Help</a>
+<a class="nav-link{% if page.url | startsWith('/tools') %} active{% endif %}" href="{{ '/tools.html' | url }}">Tools</a>
+<a class="nav-link{% if page.url | startsWith('/blog') %} active{% endif %}" href="{{ '/blog.html' | url }}">Blog</a>
+<a class="nav-link{% if page.url === '/about.html' %} active{% endif %}" href="{{ '/about.html' | url }}">About</a>
+<a class="nav-link{% if page.url === '/help.html' %} active{% endif %}" href="{{ '/help.html' | url }}">Help</a>
 <a class="nav-link mobile-only-nav" href="{{ '/history.html' | url }}">History</a>
 <a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
 </nav>

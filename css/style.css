@@ -1,53 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
-
-/* =========================================
-   OnlinePDFPro — Warm Editorial Design System
-   ========================================= */
+/* Reset */
 
 :root {
-    /* ===== DARK MODE (Default) =====
-       Warm, earthy dark palette.
-       Deep browns, gold accents, creamy text.
+    /* ===== LIGHT MODE (Default) =====
+       Warm, cream palette.
     */
 
     /* Backgrounds — warm layered elevation */
-    --bg: #1a1714;
-    /* Warm dark background */
-    --surface-1: #2a2520;
-    /* Warm dark card surface */
-    --surface-2: #342e27;
-    /* Warm elevated surface */
-    --surface-3: #3a342a;
-    /* Warm border-level surface */
+    --bg: #f6f5f0;
+    --surface-1: transparent;
+    --surface-2: #efe9de;
+    --surface-3: #e5ddd0;
 
     /* Accent — warm gold */
-    --accent: #d4a942;
-    /* Gold — warm on dark bg */
-    --accent-hover: #e6be5a;
-    /* Lighter gold */
-    --accent-subtle: rgba(212, 169, 66, 0.12);
+    --accent: #8b6914;
+    --accent-hover: #a47d1b;
+    --accent-subtle: rgba(139, 105, 20, 0.06);
 
     --success: #4ade80;
-    /* green-400  */
     --warning: #fbbf24;
-    /* amber-400  */
     --error: #f87171;
-    /* red-400    */
 
-    /* Text — warm off-white hierarchy */
-    --text-primary: #f0ebe2;
-    /* Warm cream — readable */
-    --text-secondary: #a89e8f;
-    /* Warm muted — secondary */
-    --text-muted: #8c8273;
-    /* Warm dark — placeholders */
+    /* Text */
+    --text-primary: #2c2418;
+    --text-secondary: #6b5e4f;
+    --text-muted: #706558;
 
-    /* Borders — warm subtle */
-    --border: #3a342a;
-    /* Warm dark border */
-    --border-hover: #4d453a;
-    /* Warm border on hover */
+    /* Borders */
+    --border: #d9d0c3;
+    --border-hover: #c4b9a9;
 
     /* Sizing */
     --radius-sm: 0px;
@@ -60,11 +40,11 @@
     --header-h: calc(var(--nav-height) + 24px);
 
     /* Search/Input Colors */
-    --bg-primary: var(--surface-1);
-    --bg-secondary: var(--surface-2);
+    --bg-primary: transparent;
+    --bg-secondary: #efe9de;
 
     /* Button Text Contrast */
-    --btn-primary-text: #1a1714; /* Dark text on gold button */
+    --btn-primary-text: #ffffff;
 
     /* Transition */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -72,7 +52,7 @@
 
     /* Legacy compat aliases */
     --aurora-violet: var(--accent);
-    --aurora-azure: #d4a942;
+    --aurora-azure: var(--accent);
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --glass-glow: transparent;
@@ -82,27 +62,28 @@
     --secondary: var(--aurora-azure);
 }
 
-/* Light Mode — Warm Cream */
-[data-theme="light"] {
-    --bg: #f6f5f0;
-    --surface-1: transparent;
-    --surface-2: #efe9de;
-    --surface-3: #e5ddd0;
-    --accent: #8b6914;
-    --accent-hover: #a47d1b;
-    --accent-subtle: rgba(139, 105, 20, 0.06);
-    --text-primary: #2c2418;
-    --text-secondary: #6b5e4f;
-    --text-muted: #706558;
-    --border: #d9d0c3;
-    --border-hover: #c4b9a9;
-    --bg-primary: transparent;
-    --bg-secondary: #efe9de;
-    --btn-primary-text: #ffffff; /* White text on dark gold button */
+/* Dark Mode — Warm Dark */
+[data-theme="dark"] {
+    --bg: #1a1714;
+    --surface-1: #2a2520;
+    --surface-2: #342e27;
+    --surface-3: #3a342a;
+    --accent: #d4a942;
+    --accent-hover: #e6be5a;
+    --accent-subtle: rgba(212, 169, 66, 0.12);
+    --text-primary: #f0ebe2;
+    --text-secondary: #a89e8f;
+    --text-muted: #8c8273;
+    --border: #3a342a;
+    --border-hover: #4d453a;
+    --bg-primary: var(--surface-1);
+    --bg-secondary: var(--surface-2);
+    --btn-primary-text: #1a1714;
     --glass-bg: var(--surface-1);
     --glass-border: var(--border);
     --midnight: var(--bg);
     --surface-0: var(--bg);
+    --aurora-azure: #d4a942;
 }
 
 /* Header — warm translucent in both modes */
@@ -1762,3 +1743,99 @@ main#main {
 .privacy-reminder {
     display: none !important;
 }
+
+/* ═══════════════════════════
+   GLOBAL FOOTER (hp-footer)
+   Used on ALL pages via footer.njk
+   ═══════════════════════════ */
+.hp-footer {
+    background: var(--surface-2, #efe9de);
+    border-top: 1px solid var(--border, #d9d0c3);
+    padding: 56px 24px 36px;
+}
+
+[data-theme="dark"] .hp-footer {
+    background: #242019;
+    border-top-color: #3a342a;
+}
+
+.hp-footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto 36px;
+}
+
+.hp-footer-brand h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary, #2c2418);
+    margin-bottom: 6px;
+}
+
+.hp-footer-brand-sub {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted, #706558);
+    line-height: 1.5;
+}
+
+.hp-footer-col h5 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted, #706558);
+    margin-bottom: 14px;
+}
+
+.hp-footer-col ul { list-style: none; padding: 0; margin: 0; }
+.hp-footer-col li { margin-bottom: 4px; }
+
+.hp-footer-col a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.83rem;
+    color: var(--text-secondary, #6b5e4f);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.hp-footer-col a:hover { color: var(--text-primary, #2c2418); }
+
+.hp-footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border, #d9d0c3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.hp-footer-copy {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-muted, #706558);
+}
+
+.hp-footer-socials {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    align-items: center;
+}
+
+.hp-footer-socials a {
+    color: var(--text-muted, #706558);
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.hp-footer-socials a:hover { color: var(--text-primary, #2c2418); }
+.hp-footer-socials svg { width: 16px; height: 16px; }

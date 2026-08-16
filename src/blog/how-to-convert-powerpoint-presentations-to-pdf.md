@@ -2,7 +2,7 @@
 title: How to Convert PowerPoint Presentations to PDF
 description: Ensure your slides look perfect on any device by learning how to convert your PowerPoint (.pptx) presentations to standard PDF files.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-toolLink: ../tools/
+toolLink: ../tools.html
 ctaTitle: Ready to optimize your document workflow?
 ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
 ctaButton: Explore All Tools

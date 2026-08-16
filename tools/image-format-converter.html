@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -77,7 +77,7 @@
  "@type": "ListItem",
  "position": 2,
  "name": "Tools",
- "item": "https://onlinepdfpro.com/tools/"
+ "item": "https://onlinepdfpro.com/tools.html"
  },
  {
  "@type": "ListItem",
@@ -104,7 +104,7 @@
  "price": "0",
  "priceCurrency": "USD"
  },
- "description": "Convert images between JPG, PNG, WebP, BMP, GIF, ICO and TIFF formats online for free. ⚡ Fast & Free, fast & secure. Batch convert multiple files instantly.",
+ "description": "Convert images between JPG, PNG, WebP, BMP, GIF, ICO and TIFF formats online for free. 100% client-side, no server upload. Batch convert multiple files instantly.",
  "featureList": [
  "Convert between JPG, PNG, WebP, BMP, GIF, ICO, TIFF",
  "Batch conversion up to 50 files",
@@ -152,7 +152,7 @@
  "name": "Is it safe to convert my images here?",
  "acceptedAnswer": {
  "@type": "Answer",
- "text": "Absolutely! Absolutely! Your images are processed securely and privately. Your privacy is fully protected."
+ "text": "Absolutely! Your images never leave your device. All conversion happens locally inside your browser using HTML5 Canvas. No data is sent to any server. Your privacy is fully protected."
  }
  },
  {
@@ -192,17 +192,17 @@
  <header class="header">
 <div class="header-content">
  <a href="../index.html" class="logo">
- <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
+ <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools/" class="nav-link">Tools</a>
- <a href="../blog/" class="nav-link">Blog</a>
- <a href="../about/" class="nav-link">About</a>
- <a href="../help/" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242;
- Install App</a>
- </nav>
+<a class="nav-link active" href="/tools.html">Tools</a>
+<a class="nav-link" href="/blog.html">Blog</a>
+<a class="nav-link" href="/about.html">About</a>
+<a class="nav-link" href="/help.html">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <!-- Compact Header Search -->
@@ -235,12 +235,13 @@
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
+ <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop any images here</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
- </svg> ⚡ Fast</span> <span>•</span> <span>All Major Formats</span> <span>•</span> <span
+ </svg> 100% Local</span> <span>•</span> <span>All Major Formats</span> <span>•</span> <span
  style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <circle cx="12" cy="12" r="10"></circle>
@@ -357,7 +358,7 @@
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
  <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
- <span>Your images are processed securely and privately.</span>
+ <span>Your images never leave your device. Everything runs locally.</span>
  </div>
  </div>
 
@@ -824,3 +825,4 @@
 </body>
 
 </html>
+
