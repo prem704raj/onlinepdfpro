@@ -803,6 +803,160 @@
  padding-left: 12px;
  }
 
+ /* ── Engineering Academic Template ── */
+ .resume-sheet.template-engineering {
+ font-family: "Times New Roman", Georgia, serif;
+ font-size: 11.5px;
+ line-height: 1.42;
+ }
+ .resume-sheet.template-engineering .resume-header {
+ text-align: center;
+ border-bottom: none;
+ padding: 8mm 12mm 3mm;
+ display: block;
+ }
+ .resume-sheet.template-engineering .resume-name {
+ font-size: 24px;
+ font-weight: 700;
+ text-transform: uppercase;
+ color: #0f172a;
+ letter-spacing: 2px;
+ margin-bottom: 0;
+ }
+ .resume-sheet.template-engineering .resume-location-line {
+ display: block;
+ font-size: 11px;
+ color: #334155;
+ margin-top: 2px;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .resume-role {
+ display: none;
+ }
+ .resume-sheet.template-engineering .resume-contact {
+ justify-content: center;
+ font-size: 10.5px;
+ margin-top: 4px;
+ color: #1e293b;
+ }
+ .resume-sheet.template-engineering .resume-contact-links {
+ gap: 2px 4px;
+ }
+ .resume-sheet.template-engineering .resume-contact-sep {
+ color: #334155;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .resume-link {
+ color: #1e40af;
+ text-decoration: underline;
+ text-decoration-thickness: 0.5px;
+ text-underline-offset: 1px;
+ font-weight: 400;
+ font-size: 10.5px;
+ }
+ .resume-sheet.template-engineering .resume-photo {
+ display: none;
+ }
+ .resume-sheet.template-engineering .resume-body {
+ padding: 3mm 12mm 10mm;
+ }
+ .resume-sheet.template-engineering .resume-section {
+ margin-top: 8px;
+ }
+ .resume-sheet.template-engineering .resume-section:first-child {
+ margin-top: 0;
+ }
+ .resume-sheet.template-engineering .resume-section h3 {
+ border-bottom: 2px solid var(--accent-color);
+ border-top: none;
+ background: none;
+ color: var(--accent-color);
+ padding: 0 0 1px 0;
+ font-size: 12.5px;
+ font-weight: 700;
+ margin-bottom: 4px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ display: block;
+ }
+ .resume-sheet.template-engineering .resume-text {
+ font-size: 11px;
+ line-height: 1.42;
+ color: #1e293b;
+ }
+ .resume-sheet.template-engineering .timeline-item {
+ margin-bottom: 6px;
+ }
+ .resume-sheet.template-engineering .timeline-item:last-child {
+ margin-bottom: 0;
+ }
+ .resume-sheet.template-engineering .item-title {
+ font-size: 11.5px;
+ font-weight: 700;
+ color: #0f172a;
+ }
+ .resume-sheet.template-engineering .item-sub {
+ font-size: 11px;
+ color: #334155;
+ font-weight: 400;
+ font-style: italic;
+ margin-top: 0;
+ }
+ .resume-sheet.template-engineering .item-date {
+ font-size: 11px;
+ font-weight: 700;
+ color: #0f172a;
+ }
+ .resume-sheet.template-engineering .item-desc {
+ margin-top: 1px;
+ font-size: 11px;
+ line-height: 1.42;
+ color: #1e293b;
+ white-space: normal;
+ }
+ .resume-sheet.template-engineering .item-desc-list {
+ margin: 2px 0 0 0;
+ padding-left: 18px;
+ list-style: disc;
+ font-size: 11px;
+ line-height: 1.42;
+ color: #1e293b;
+ }
+ .resume-sheet.template-engineering .item-desc-list li {
+ margin-bottom: 1px;
+ }
+ .resume-sheet.template-engineering .item-title-row {
+ margin-bottom: 0;
+ }
+ /* Skills & Languages: plain text, no chips */
+ .resume-sheet.template-engineering .chip-list {
+ display: block;
+ }
+ .resume-sheet.template-engineering .chip {
+ display: inline;
+ padding: 0;
+ margin: 0;
+ border: none;
+ border-radius: 0;
+ background: none;
+ color: #1e293b;
+ font-size: 11px;
+ font-weight: 400;
+ }
+ .resume-sheet.template-engineering .chip::after {
+ content: ", ";
+ }
+ .resume-sheet.template-engineering .chip:last-child::after {
+ content: "";
+ }
+ /* Certifications as bullet list */
+ .resume-sheet.template-engineering .timeline-item .item-title {
+ font-size: 11px;
+ }
+ .resume-sheet.template-engineering .timeline-item .item-sub {
+ font-style: normal;
+ }
+
  .resume-sheet.template-horizon.resume-section h3::before {
  content: '';
  position: absolute;
@@ -912,12 +1066,13 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="tools.html" class="nav-link">All Tools</a>
- <a href="about.html" class="nav-link">About</a>
- <a href="help.html" class="nav-link">Help</a>
- <a class="nav-link mobile-only-nav" href="history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+<a class="nav-link" href="/tools/">Tools</a>
+<a class="nav-link" href="/blog/">Blog</a>
+<a class="nav-link" href="/about/">About</a>
+<a class="nav-link" href="/help/">Help</a>
+<a class="nav-link mobile-only-nav" href="/history.html">History</a>
+<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
+</nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -949,7 +1104,7 @@
  <p class="tool-description"
  style="color:var(--text-secondary); font-size:1rem; max-width:760px; margin:0 auto; line-height:1.6;">Build
  a polished resume with live preview, thirteen templates, custom colors/fonts, drag-and-drop section
- ordering, and instant PDF/TXT/DOCX export. Everything is 100% free and private.</p>
+ ordering, and instant PDF/TXT/DOCX export. Everything </p>
  </div>
 
  <div class="builder-layout">
@@ -976,6 +1131,7 @@
  <option value="atlas">Atlas Column</option>
  <option value="zenith">Zenith Minimal</option>
  <option value="horizon">Horizon Accent</option>
+ <option value="engineering">Engineering Academic</option>
  </select>
  </div>
  <div class="control-group">
@@ -1139,7 +1295,8 @@
  { key: 'slate', title: 'Slate Sidebar', hint: 'Strong sidebar identity' },
  { key: 'atlas', title: 'Atlas Column', hint: 'Magazine-like rhythm' },
  { key: 'zenith', title: 'Zenith Minimal', hint: 'Minimal with soft hierarchy' },
- { key: 'horizon', title: 'Horizon Accent', hint: 'Accent rails and markers' }
+ { key: 'horizon', title: 'Horizon Accent', hint: 'Accent rails and markers' },
+ { key: 'engineering', title: 'Engineering Academic', hint: 'Dense, classic IIT/NIT style' }
  ];
 
  function makeDefaultAvatarDataUri() {
@@ -1553,17 +1710,18 @@
  const linkedin = String(state.linkedin || '').trim();
  const github = String(state.github || '').trim();
 
+ // For engineering template, skip location from contact (shown under name)
+ const isEng = state.template === 'engineering';
+ const sep = isEng ? '<span class="resume-contact-sep"> | </span>' : '<span class="resume-contact-sep">•</span>';
+
+ if (phone) {
+ chunks.push(isEng ? '<span>' + escapeHtml(phone) + '</span>' : buildResumeLink(phone, phone));
+ }
  if (email) {
  chunks.push(buildResumeLink(email, email));
  }
- if (phone) {
- chunks.push(buildResumeLink(phone, phone));
- }
- if (location) {
+ if (!isEng && location) {
  chunks.push('<span>' + escapeHtml(location) + '</span>');
- }
- if (website) {
- chunks.push(buildResumeLink(website, plainUrlLabel(website) || 'Website'));
  }
  if (linkedin) {
  chunks.push(buildResumeLink(linkedin, plainUrlLabel(linkedin) || 'LinkedIn'));
@@ -1571,8 +1729,11 @@
  if (github) {
  chunks.push(buildResumeLink(github, plainUrlLabel(github) || 'GitHub'));
  }
+ if (website) {
+ chunks.push(buildResumeLink(website, plainUrlLabel(website) || 'Website'));
+ }
 
- return chunks.filter(Boolean).join('<span class="resume-contact-sep">•</span>');
+ return chunks.filter(Boolean).join(sep);
  }
 
  function renderSummarySection() {
@@ -1729,11 +1890,17 @@
  const hasValidPhoto = /^data:image\//i.test(photoSrc) || /^blob:/i.test(photoSrc) || /^https?:\/\//i.test(photoSrc);
  const photoHtml = hasValidPhoto ? '<img class="resume-photo" src="' + escapeAttr(photoSrc) + '" alt="Profile photo">' : '';
 
+ // For engineering template, show location under name
+ var locationLine = '';
+ if (state.template === 'engineering' && state.location.trim()) {
+ locationLine = '<span class="resume-location-line">' + escapeHtml(state.location.trim()) + '</span>';
+ }
+
  elements.resumePreview.innerHTML = '<div id="resumeSheet" class="resume-sheet template-' + escapeHtml(state.template) + ' font-' + escapeHtml(state.font) + '" style="--accent-color:' + escapeHtml(state.accentColor) + ';">' +
- '<header class="resume-header">
-' +
+ '<header class="resume-header">' +
  '<div>' +
  '<h1 class="resume-name">' + escapeHtml(fullName) + '</h1>' +
+ locationLine +
  '<p class="resume-role">' + escapeHtml(role) + '</p>' +
  (contactHtml ? '<div class="resume-contact resume-contact-links">' + contactHtml + '</div>' : '') +
  '</div>' +
