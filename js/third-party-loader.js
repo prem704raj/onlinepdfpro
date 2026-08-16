@@ -2,7 +2,7 @@
   'use strict';
 
   var PROD_HOSTS = ['onlinepdfpro.com', 'www.onlinepdfpro.com'];
-  var GA_ID = 'G-RPDGMCZ97D';
+  var GA_ID = 'G-VMPCXTN3ES';
   var ADS_CLIENT = 'ca-pub-3541372477756449';
   var CLARITY_ID = 'vu83gydexm';
   var CONSENT_KEY = 'cookie_consent';

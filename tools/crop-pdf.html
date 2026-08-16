@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
     <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -330,7 +330,7 @@
  "@type": "ListItem",
  "position": 2,
  "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
+ "item": "https://onlinepdfpro.com/tools/"
  },
  {
  "@type": "ListItem",
@@ -359,18 +359,18 @@
  <header class="header">
 <div class="header-content">
  <a href="../index.html" class="logo">
- <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon"
+ <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-<a class="nav-link active" href="/tools.html">Tools</a>
-<a class="nav-link" href="/blog.html">Blog</a>
-<a class="nav-link" href="/about.html">About</a>
-<a class="nav-link" href="/help.html">Help</a>
-<a class="nav-link mobile-only-nav" href="/history.html">History</a>
-<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
-</nav>
+ <a href="../tools/" class="nav-link">Tools</a>
+ <a href="../blog/" class="nav-link">Blog</a>
+ <a href="../about/" class="nav-link">About</a>
+ <a href="../help/" class="nav-link">Help</a>
+ <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+ Install App</a>
+ </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -406,8 +406,6 @@
 
  <div class="upload-zone glass-card fade-in" id="dropArea"
  style="animation-delay: 0.2s; margin-bottom: 40px; text-align: center; padding: 60px 20px;">
- <span class="upload-icon"
- style="font-size: 3.5rem; margin-bottom: 16px; display: block; opacity: 0.8;"></span>
  <p class="upload-text"
  style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
  Drop your PDF here</p>
@@ -426,25 +424,23 @@
  <div class="file-info" id="fileInfo"></div>
 
  <div class="crop-container" id="cropContainer" style="max-width: 900px; padding: 20px;">
- <div class="crop-area-wrapper" id="cropAreaWrapper" style="padding: 15px;">
-    <div style="position: relative; display: inline-block; line-height: 0;">
-        <canvas class="preview-canvas" id="previewCanvas"></canvas>
-        <div class="selection-box" id="selectionBox" style="display: none;">
-            <div class="handle nw" data-dir="nw"></div>
-            <div class="handle n" data-dir="n"></div>
-            <div class="handle ne" data-dir="ne"></div>
-            <div class="handle w" data-dir="w"></div>
-            <div class="handle e" data-dir="e"></div>
-            <div class="handle sw" data-dir="sw"></div>
-            <div class="handle s" data-dir="s"></div>
-            <div class="handle se" data-dir="se"></div>
-        </div>
-    </div>
+ <div class="crop-area-wrapper" id="cropAreaWrapper">
+ <canvas class="preview-canvas" id="previewCanvas"></canvas>
+ <div class="selection-box" id="selectionBox" style="display: none;">
+ <div class="handle nw" data-dir="nw"></div>
+ <div class="handle n" data-dir="n"></div>
+ <div class="handle ne" data-dir="ne"></div>
+ <div class="handle w" data-dir="w"></div>
+ <div class="handle e" data-dir="e"></div>
+ <div class="handle sw" data-dir="sw"></div>
+ <div class="handle s" data-dir="s"></div>
+ <div class="handle se" data-dir="se"></div>
+ </div>
  </div>
 
  <div class="pdf-toolbar">
- <button onclick="changePage(-1)" class="toolbar-btn" title="Previous Page">◀ Prev</button>
- <button onclick="changePage(1)" class="toolbar-btn" title="Next Page">Next ▶</button>
+ <button onclick="changePage(-1)" class="toolbar-btn" title="Previous Page"></button>
+ <button onclick="changePage(1)" class="toolbar-btn" title="Next Page"></button>
  <div class="page-indicator">
  <input type="number" id="pageInput" value="1" min="1" onchange="goToPage(this.value)">
  <span style="color:#fff; font-weight: bold; margin:0 5px;">/ <span
@@ -454,8 +450,8 @@
 
  <div class="checkbox-row" style="margin-bottom:20px;">
  <label style="font-weight: 600; cursor: pointer;">
- <input type="checkbox" id="applyAll">
- Apply this crop to ALL pages (otherwise only current page is cropped)
+ <input type="checkbox" id="applyAll" checked>
+ Apply this crop to all pages
  </label>
  </div>
 
@@ -508,8 +504,7 @@
  if (!file) return;
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
- // Pass a copy to pdf.js so the original buffer is not detached
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+ pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
  totalPages = pdfJsDoc.numPages;
  currentPage = 1;
  pageRatios = {};
@@ -564,7 +559,7 @@
  if (document.getElementById('applyAll').checked && pageRatios[1]) {
  pageRatios[currentPage] = {...pageRatios[1] };
  } else {
- pageRatios[currentPage] = { rLeft: 0, rTop: 0, rWidth: 1, rHeight: 1 };
+ pageRatios[currentPage] = { rLeft: 0.1, rTop: 0.1, rWidth: 0.8, rHeight: 0.8 };
  }
  }
 
@@ -616,7 +611,7 @@
  height: parseFloat(canvas.style.height) || canvas.clientHeight
  };
 
- pageRatios[1] = { rLeft: 0, rTop: 0, rWidth: 1, rHeight: 1 };
+ pageRatios[1] = { rLeft: 0.1, rTop: 0.1, rWidth: 0.8, rHeight: 0.8 };
  applyRatioToBox(pageRatios[1], currentCanvasRect);
 
  boxElem.style.display = 'block';
@@ -775,7 +770,7 @@
  }
  } catch (err) {
  console.error('Crop failed:', err);
- alert('Could not crop this PDF. Error: ' + (err.message || err));
+ alert('Could not crop this PDF. Please try again or use a different file.');
  }
  }
  </script>

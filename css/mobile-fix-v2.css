@@ -657,73 +657,225 @@
 
 
     /* ══════════════════════════════════════════
-       FOOTER — Clean Mobile Layout (hp-footer)
+       FOOTER — Clean 2-Column Layout
        ══════════════════════════════════════════ */
-    .hp-footer {
-        padding: 32px 16px 24px !important;
+    footer {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 24px 16px !important;
+        margin-top: 24px !important;
+        box-sizing: border-box !important;
+        background: var(--surface-1) !important;
+        border-top: 1px solid var(--border) !important;
     }
 
-    .hp-footer-grid {
+    /* Footer grid → 2 columns */
+    footer>div>div[style*="grid-template-columns"],
+    footer>div>div:first-child {
+        display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 20px !important;
-        margin-bottom: 20px !important;
     }
 
-    .hp-footer-brand {
-        grid-column: 1 / -1;
+    /* Footer titles */
+    footer h4 {
+        font-size: 14px !important;
+        color: var(--text-primary) !important;
+        margin: 0 0 8px !important;
     }
 
-    .hp-footer-brand h4 {
-        font-size: 1rem;
-        margin-bottom: 4px;
+    /* Footer links */
+    footer li {
+        margin: 2px 0 !important;
     }
 
-    .hp-footer-brand-sub {
-        font-size: 0.72rem;
+    footer a {
+        font-size: 13px !important;
+        color: var(--text-secondary) !important;
+        padding: 2px 0 !important;
+        display: inline-block !important;
+        line-height: 1.4 !important;
+        transition: transform 0.2s ease, color 0.2s ease !important;
     }
 
-    .hp-footer-col h5 {
-        font-size: 0.55rem;
-        margin-bottom: 8px;
+    footer a:hover,
+    footer a:active {
+        color: var(--accent) !important;
+        transform: scale(1.08) !important;
+        text-decoration: underline !important;
     }
 
-    .hp-footer-col li {
-        margin-bottom: 5px;
+    footer p {
+        font-size: 11px !important;
+        color: var(--text-muted) !important;
     }
 
-    .hp-footer-col a {
-        font-size: 0.78rem;
-        min-height: 0 !important;
+    /* Divider */
+    footer div[style*="height:1px"] {
+        margin: 16px 0 !important;
+        background: var(--border) !important;
     }
 
-    .hp-footer-bottom {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 10px;
-        padding-top: 16px;
+    /* Bottom footer */
+    footer>div>div:last-child {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 10px !important;
     }
 
-    .hp-footer-copy {
-        font-size: 0.65rem;
-    }
-
-    .hp-footer-socials {
+    /* Footer trust badges */
+    footer>div>div:last-child>div {
         display: flex !important;
-        flex-direction: row !important;
-        gap: 16px !important;
-        align-items: center !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
     }
 
-    .hp-footer-socials a {
-        display: inline-flex !important;
-        align-items: center !important;
+    footer span[style*="border-radius:20px"] {
+        font-size: 10px !important;
+        padding: 4px 10px !important;
+    }
+
+
+    /* ══════════════════════════════════════════
+       AD SLOTS — Hide empty, compact loaded
+       ══════════════════════════════════════════ */
+    /* Empty ad containers create huge blank gaps */
+    ins.adsbygoogle {
+        margin: 4px 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    ins.adsbygoogle[data-ad-status="filled"] {
+        max-height: none !important;
+        margin: 12px 0 !important;
+    }
+
+    /* The wrapper div around ads */
+    div[style*="text-align:center"][style*="margin:30px"] {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+
+    /* ══════════════════════════════════════════
+       GLOBAL TYPOGRAPHY & UTILITIES
+       ══════════════════════════════════════════ */
+    h1 {
+        font-size: 24px !important;
+        line-height: 1.25 !important;
+    }
+
+    h2 {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+    }
+
+    h3 {
+        font-size: 16px !important;
+    }
+
+    h4 {
+        font-size: 14px !important;
+    }
+
+    /* Overflow prevention */
+    img,
+    video,
+    iframe,
+    svg,
+    canvas,
+    pre,
+    code {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Touch targets (except footer where we override) */
+    a,
+    button,
+    input[type="submit"],
+    select {
+        min-height: 44px !important;
+    }
+
+    /* Prevent iOS zoom on inputs */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Containers */
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Kill any lingering fixed heights */
+    section,
+    article,
+    aside {
+        height: auto !important;
         min-height: 0 !important;
     }
 
-    .hp-footer-socials svg {
-        width: 18px !important;
-        height: 18px !important;
+    /* Smooth scrolling feel */
+    * {
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+    /* main padding adjustment */
+    main {
+        padding-top: 0 !important;
+    }
+
+     /* ══════════════════════════════════════════
+         WHY I BUILT THIS — Short on mobile
+         ══════════════════════════════════════════ */
+    .why-story-section {
+        margin: 32px 0 0 !important;
+        padding: 0 16px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .why-story {
+        padding: 24px !important;
+        border-radius: 14px !important;
+    }
+
+    .why-story h2 {
+        font-size: 18px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .why-story p {
+        display: none !important;
+        font-size: 14px !important;
+        line-height: 1.7 !important;
+        margin-bottom: 12px !important;
+    }
+
+    .why-story p:first-of-type {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 4 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Add breathing room after the tools CTA on mobile */
+    div[style*="text-align:center"][style*="margin-top:40px"] > a.btn.btn-secondary[href="tools.html"] {
+        margin-bottom: 14px !important;
     }
 
     /* ══════════════════════════════════════════
@@ -784,143 +936,15 @@
         font-size: 11px !important;
     }
 
-
     /* ══════════════════════════════════════════
-       AD SLOTS — Hide empty, compact loaded
+       FOOTER — Reduce link gaps on mobile
        ══════════════════════════════════════════ */
-    ins.adsbygoogle {
+    footer li {
         margin: 4px 0 !important;
+    }
+
+    footer a {
         min-height: 0 !important;
-        max-height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    ins.adsbygoogle[data-ad-status="filled"] {
-        max-height: none !important;
-        margin: 12px 0 !important;
-    }
-
-    div[style*="text-align:center"][style*="margin:30px"] {
-        margin: 0 !important;
-        padding: 0 !important;
-        min-height: 0 !important;
-        max-height: 0 !important;
-        overflow: hidden !important;
-    }
-
-
-    /* ══════════════════════════════════════════
-       GLOBAL TYPOGRAPHY & UTILITIES
-       ══════════════════════════════════════════ */
-    h1 {
-        font-size: 24px !important;
-        line-height: 1.25 !important;
-    }
-
-    h2 {
-        font-size: 20px !important;
-        line-height: 1.3 !important;
-    }
-
-    h3 {
-        font-size: 16px !important;
-    }
-
-    h4 {
-        font-size: 14px !important;
-    }
-
-    /* Overflow prevention */
-    img,
-    video,
-    iframe,
-    svg,
-    canvas,
-    pre,
-    code {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-
-    /* Touch targets */
-    a,
-    button,
-    input[type="submit"],
-    select {
-        min-height: 44px !important;
-    }
-
-    /* Prevent iOS zoom on inputs */
-    input,
-    select,
-    textarea {
-        font-size: 16px !important;
-    }
-
-    /* Containers */
-    .container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 16px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Kill any lingering fixed heights */
-    section,
-    article,
-    aside {
-        height: auto !important;
-        min-height: 0 !important;
-    }
-
-    /* Smooth scrolling feel */
-    * {
-        -webkit-tap-highlight-color: transparent !important;
-    }
-
-    /* main padding adjustment */
-    main {
-        padding-top: 0 !important;
-    }
-
-    /* ══════════════════════════════════════════
-       WHY I BUILT THIS — Short on mobile
-       ══════════════════════════════════════════ */
-    .why-story-section {
-        margin: 32px 0 0 !important;
-        padding: 0 16px !important;
-        max-width: 100% !important;
-        width: 100% !important;
-    }
-
-    .why-story {
-        padding: 24px !important;
-        border-radius: 14px !important;
-    }
-
-    .why-story h2 {
-        font-size: 18px !important;
-        margin-bottom: 12px !important;
-    }
-
-    .why-story p {
-        display: none !important;
-        font-size: 14px !important;
-        line-height: 1.7 !important;
-        margin-bottom: 12px !important;
-    }
-
-    .why-story p:first-of-type {
-        display: -webkit-box !important;
-        -webkit-line-clamp: 4 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        margin-bottom: 10px !important;
-    }
-
-    /* Add breathing room after the tools CTA on mobile */
-    div[style*="text-align:center"][style*="margin-top:40px"] > a.btn.btn-secondary[href="tools.html"] {
-        margin-bottom: 14px !important;
     }
 }
 

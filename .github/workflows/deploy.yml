@@ -39,6 +39,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Regression sweep (console errors / broken resources)
+        run: npm run test:sweep
+
       - name: Deploy _site to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
