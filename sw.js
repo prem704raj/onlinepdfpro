@@ -1,27 +1,26 @@
 // OnlinePDFPro Service Worker
 // NOTE: the previous version imported Monetag's push-notification script
-// (5gvci.com); that has been removed. Pages are precached under their
-// canonical directory URLs (about/, blog/, tools/ …) which the njk build
-// emits — flat about.html/tools.html style URLs 404 on the static build.
+// (5gvci.com) and cached directory-style URLs (about/index.html, blog/<slug>/index.html)
+// that 404 on the live site. Both have been removed/fixed.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v87';
+const CACHE_NAME = 'onlinepdfpro-cache-v86';
 
 const STATIC_ASSETS = [
-    // Core pages (canonical directory URLs — matches the njk build)
+    // Core pages (flat URLs — matches the live site)
     'index.html',
     '404.html',
-    'about/',
-    'blog/',
-    'contact/',
-    'disclaimer/',
-    'dmca/',
-    'help/',
+    'about.html',
+    'blog.html',
+    'contact.html',
+    'disclaimer.html',
+    'dmca.html',
+    'help.html',
     'history.html',
-    'privacy/',
-    'terms/',
-    'tools/',
+    'privacy.html',
+    'terms.html',
+    'tools.html',
 
-    // Blog posts (flat .html — passthrough copies that exist in the build)
+    // Blog posts (flat .html — matches blog.html links)
     'blog/best-practices-creating-accessible-pdfs.html',
     'blog/comparing-word-vs-pdf-when-to-use-which.html',
     'blog/compress-pdf-without-losing-quality.html',
