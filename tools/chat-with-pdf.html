@@ -139,10 +139,10 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
 
-  // Groq API for text questions (fast)
+  // OpenRouter API for text questions (fast)
   const GROQ_KEY = "proxy";
-  const GROQ_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
-  const GROQ_MODEL = "llama-3.1-8b-instant";
+  const GROQ_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
+  const GROQ_MODEL = "openrouter/free";
 
   // OpenRouter API for vision/image questions (free)
   const OR_KEY = "proxy";
