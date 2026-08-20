@@ -653,13 +653,14 @@ footer a {
 footer a:hover {
     color: var(--accent) !important;
     transform: scale(1.08) !important;
-    text-decoration: underline !important;
+    text-decoration: none !important;
 }
 
 .footer-links-group a:active,
 footer a:active {
     color: var(--accent-hover) !important;
     transform: scale(1.05) !important;
+    text-decoration: none !important;
 }
 
 /* ---- Mobile-only elements (hidden on desktop) ---- */
