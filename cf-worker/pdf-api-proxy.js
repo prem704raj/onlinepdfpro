@@ -186,11 +186,12 @@ async function handleGroqChat(request, env, allowedOrigins) {
 
             const data = await groqResponse.json();
 
-            // If Groq succeeds, return. If model error, fall through to OpenRouter.
-            if (groqResponse.ok || (data.error && !['model_not_found', 'model_decommissioned'].includes(data.error.code))) {
+            // If Groq succeeds, return the response directly.
+            if (groqResponse.ok) {
                 return jsonResponse(data, groqResponse.status, corsHeaders);
             }
-            console.warn('[Proxy] Groq model unavailable, falling back to OpenRouter:', data.error?.message);
+            // Any Groq error (rate limit, model deprecated, token limit, etc.) → fall through to OpenRouter
+            console.warn('[Proxy] Groq failed (' + groqResponse.status + '), falling back to OpenRouter:', data.error?.message);
         }
 
         // Fallback: route through OpenRouter (same as /ai/vision handler)
