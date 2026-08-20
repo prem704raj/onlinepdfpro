@@ -271,9 +271,7 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
 
-  const API_KEY = "proxy";
-  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
-  const MODEL = "openrouter/free";
+  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
 
   const GRADIENTS = ['grad-0','grad-1','grad-2','grad-3','grad-4','grad-5','grad-6','grad-7','grad-8','grad-9'];
 
@@ -373,11 +371,9 @@
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + API_KEY
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: MODEL,
           messages: [
             { role: "system", content: `You are a study flashcard generator. Create exactly ${numCards} high-quality study flashcards from the document.
 
@@ -396,8 +392,7 @@ Return ONLY a valid JSON array like:
 No markdown, no code fences, just the raw JSON array.` },
             { role: "user", content: "DOCUMENT:\n" + documentText }
           ],
-          max_tokens: 4096,
-          response_format: { type: "json_object" }
+          max_tokens: 4096
         })
       });
 
@@ -457,7 +452,12 @@ No markdown, no code fences, just the raw JSON array.` },
   function updateCard(index) {
     const card = cardsData[index];
     frontText.textContent = card.front;
-    backText.innerHTML = card.back.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    // Sanitize AI output: escape HTML first, then apply safe formatting
+    const sanitizer = document.createElement('div');
+    sanitizer.textContent = card.back;
+    let safeHtml = sanitizer.innerHTML;
+    safeHtml = safeHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    backText.innerHTML = safeHtml;
     curIdx.textContent = index + 1;
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === cardsData.length - 1;

@@ -139,15 +139,12 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
 
-  // OpenRouter API for text questions (fast)
-  const GROQ_KEY = "proxy";
-  const GROQ_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
-  const GROQ_MODEL = "openrouter/free";
+  // Text-only chat via /ai/chat (Groq with OpenRouter fallback)
+  const TEXT_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
 
-  // OpenRouter API for vision/image questions (free)
-  const OR_KEY = "proxy";
-  const OR_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
-  const OR_MODEL = "google/gemma-4-31b-it:free";
+  // Vision/image analysis via /ai/vision (OpenRouter)
+  const VISION_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
+  const VISION_MODEL = "google/gemma-4-31b-it:free";
 
   let documentText = "";
   let pageImages = []; // base64 images of each page
@@ -274,18 +271,17 @@
         for(let i = 0; i < maxImgs; i++) {
           contentParts.push({ type: "image_url", image_url: { url: pageImages[i] } });
         }
-        response = await fetch(OR_URL, {
+        response = await fetch(VISION_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + OR_KEY },
-          body: JSON.stringify({ model: OR_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: VISION_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
         });
       } else {
-        // Text-only model: fast Groq
-        response = await fetch(GROQ_URL, {
+        // Text-only model: fast via /ai/chat
+        response = await fetch(TEXT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: GROQ_MODEL,
             messages: [
               { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
               { role: "user", content: question }
@@ -320,12 +316,19 @@
     chatInput.focus();
   }
 
+  function sanitizeAIResponse(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    let safe = div.innerHTML;
+    safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    return safe;
+  }
+
   function addMessage(text, type) {
     const div = document.createElement('div');
     div.className = 'chat-msg ' + type;
     if(type === 'ai') {
-      let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-      div.innerHTML = html;
+      div.innerHTML = sanitizeAIResponse(text);
     } else {
       div.textContent = text;
     }

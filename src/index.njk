@@ -43,7 +43,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-label { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-text-muted); margin-bottom: 14px; }
 .hp-section-heading { font-family: var(--hp-serif); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 400; color: var(--hp-text); line-height: 1.2; margin-bottom: 18px; letter-spacing: -0.01em; }
 .hp-section-heading em { font-style: italic; }
-.hp-section-desc { font-family: var(--hp-sans); font-size: 0.92rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 540px; }
+.hp-section-desc { font-family: var(--hp-sans); font-size: 0.92rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 900px; }
 .hp-offerings { background: var(--hp-bg); }
 .hp-offerings-header { text-align: center; margin-bottom: 56px; }
 .hp-offerings-header .hp-section-desc { margin: 0 auto; }
@@ -92,7 +92,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-stat-number { font-family: var(--hp-serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 400; color: #f0ebe2; margin-bottom: 8px; }
 .hp-stat-label { font-family: var(--hp-sans); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(240,235,226,0.35); }
 .hp-quote { background: var(--hp-bg); padding: 100px 24px; text-align: center; }
-.hp-quote-text { font-family: var(--hp-serif); font-size: clamp(1.4rem, 3.5vw, 2.1rem); font-weight: 400; font-style: italic; color: var(--hp-text); max-width: 680px; margin: 0 auto; line-height: 1.5; }
+.hp-quote-text { font-family: var(--hp-serif); font-size: clamp(1.4rem, 3.5vw, 2.1rem); font-weight: 400; font-style: italic; color: var(--hp-text); max-width: 1000px; margin: 0 auto; line-height: 1.5; }
 .hp-fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .hp-fade-up.visible { opacity: 1; transform: translateY(0); }
 @media (max-width: 768px) { .hp-section { padding: 64px 20px; } .hp-hero-ctas { flex-direction: column; align-items: center; } .hp-btn { width: 100%; max-width: 260px; text-align: center; } .hp-philosophy-art { max-width: 240px; } .hp-offering-card { padding: 28px 22px 24px; } }
@@ -104,8 +104,8 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 <section class="hp-hero">
     <div class="hp-hero-content">
         <p class="hp-hero-label">Your All-in-One PDF Platform</p>
-        <h1 class="hp-hero-heading">Everything PDF, <em>Beautifully Crafted</em></h1>
-        <p class="hp-hero-subtitle">From 30+ free fast and secure tools to curated study materials, notes, and books — everything you need, in one place.</p>
+        <h1 class="hp-hero-heading">Everything PDF <em>Beautifully Crafted</em></h1>
+        <p class="hp-hero-subtitle">From 30+ free fast and secure tools to curated study materials, notes, and books — everything you need, in one place</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools.html' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>
             <a href="#offerings" class="hp-btn">Discover More</a>
@@ -119,7 +119,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
         <div class="hp-offerings-header hp-fade-up">
             <p class="hp-label">What We Offer</p>
             <h2 class="hp-section-heading">Crafted for <em>Your Success</em></h2>
-            <p class="hp-section-desc">Whether you need to process documents, find study resources, or explore our growing ecosystem — we've got you covered.</p>
+            <p class="hp-section-desc">Whether you need to process documents, find study resources, or explore our growing ecosystem — we've got you covered</p>
         </div>
         <div class="hp-offerings-grid">
             <a href="{{ '/tools.html' | url }}" class="hp-offering-card hp-fade-up">
@@ -158,7 +158,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
         <div class="hp-tools-header hp-fade-up">
             <p class="hp-label">Popular Tools</p>
             <h2 class="hp-section-heading">100% Free – <em>No Watermarks</em></h2>
-            <p class="hp-section-desc">The essential tools that people reach for every day. Fast, reliable, and completely free.</p>
+            <p class="hp-section-desc">The essential tools that people reach for every day. Fast, reliable, and completely free</p>
         </div>
         <div class="hp-tools-grid">
             {% set popularTools = [
@@ -205,7 +205,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
             <div class="hp-fade-up">
                 <p class="hp-label">Our Philosophy</p>
                 <h2 class="hp-section-heading">Built <em>Different</em></h2>
-                <p class="hp-section-desc">Every tool on OnlinePDFPro processes your files quickly and securely. Your documents stay yours — always.</p>
+                <p class="hp-section-desc">Every tool on OnlinePDFPro processes your files quickly and securely. Your documents stay yours — always</p>
                 <ul class="hp-feature-list">
                     <li>Fast and secure processing</li>
                     <li>Complete privacy and security</li>
@@ -220,7 +220,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 
 <!-- ═══════ QUOTE ═══════ -->
 <section class="hp-quote hp-fade-up">
-    <p class="hp-quote-text">The best tools are the ones you never have to think about.</p>
+    <p class="hp-quote-text">The best tools are the ones you never have to think about</p>
 </section>
 {% endblock %}
 

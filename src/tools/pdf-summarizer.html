@@ -134,9 +134,7 @@
 (function() {
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
 
-  const API_KEY = "proxy";
-  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/vision";
-  const MODEL = "openrouter/free";
+  const API_URL = "https://onlinepdfpro-proxy.prem736raj.workers.dev/ai/chat";
 
   let currentMode = 'bullets';
 
@@ -231,11 +229,9 @@
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + API_KEY
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: MODEL,
           messages: [
             { role: "system", content: prompts[currentMode] },
             { role: "user", content: "DOCUMENT:\n" + documentText }
@@ -250,7 +246,11 @@
       if(data.choices && data.choices[0]) {
         const text = data.choices[0].message.content;
         summaryTitle.textContent = file.name.replace('.pdf','') + " — Summary";
-        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        // Sanitize AI output: escape HTML first, then apply safe formatting
+        const sanitizer = document.createElement('div');
+        sanitizer.textContent = text;
+        let html = sanitizer.innerHTML;
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
         summaryContent.innerHTML = html;
         summaryResult.style.display = 'block';
       } else if(data.error) {

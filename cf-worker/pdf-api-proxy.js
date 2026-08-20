@@ -13,11 +13,13 @@
  *   - OPENROUTER_API_KEY (secret: npx wrangler secret put OPENROUTER_API_KEY)
  */
 
-const ALLOWED_ORIGINS = [
+const PROD_ORIGINS = [
     'https://onlinepdfpro.com',
-    'https://www.onlinepdfpro.com',
-    // Local dev servers (python http.server, Vite, Live Server). Browsers cannot
-    // spoof these origins, so they are safe to allow for development.
+    'https://www.onlinepdfpro.com'
+];
+
+// Local dev origins — only included when ENVIRONMENT !== 'production'
+const DEV_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:5500',
     'http://localhost:5500',
@@ -32,9 +34,14 @@ const MAX_REQUESTS_PER_MINUTE = 50;
 // Browser POSTs always send an Origin header from an allowed domain; curl and
 // scripts do not. Requiring an allowed Origin on the paid endpoints blocks
 // direct abuse of the Groq/OpenRouter keys while keeping the site working.
-function isAllowedOrigin(request) {
+function getAllowedOrigins(env) {
+    const isProd = (env.ENVIRONMENT || 'production') === 'production';
+    return isProd ? PROD_ORIGINS : [...PROD_ORIGINS, ...DEV_ORIGINS];
+}
+
+function isAllowedOrigin(request, env) {
     const origin = request.headers.get('Origin') || '';
-    return ALLOWED_ORIGINS.includes(origin);
+    return getAllowedOrigins(env).includes(origin);
 }
 
 function checkRateLimit(ip) {
@@ -60,6 +67,8 @@ function checkRateLimit(ip) {
 
 export default {
     async fetch(request, env) {
+        const allowedOrigins = getAllowedOrigins(env);
+
         // CORS preflight
         if (request.method === 'OPTIONS') {
             return handleCORS(request);
@@ -87,32 +96,32 @@ export default {
         const url = new URL(request.url);
 
         // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
-        if (['/ai/chat', '/ai/vision'].includes(url.pathname) && !isAllowedOrigin(request)) {
+        if (['/ai/chat', '/ai/vision'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
             return new Response(JSON.stringify({ error: 'Forbidden: requests must come from the OnlinePDFPro website.' }), {
                 status: 403,
-                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
+                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
             });
         }
 
         // AI Chat proxy (Groq — text-only LLM)
         if (url.pathname === '/ai/chat' && request.method === 'POST') {
-            return handleGroqChat(request, env);
+            return handleGroqChat(request, env, allowedOrigins);
         }
 
         // AI Vision proxy (OpenRouter — multimodal)
         if (url.pathname === '/ai/vision' && request.method === 'POST') {
-            return handleOpenRouterVision(request, env);
+            return handleOpenRouterVision(request, env, allowedOrigins);
         }
 
         if (url.pathname === '/health') {
             return new Response(JSON.stringify({ status: 'ok', service: 'OnlinePDFPro API Proxy', routes: ['/ai/chat', '/ai/vision'] }), {
-                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
+                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
             });
         }
 
         return new Response('OnlinePDFPro API Proxy. Available routes: POST /ai/chat, POST /ai/vision', {
             status: 200,
-            headers: getCORSHeaders(request)
+            headers: getCORSHeaders(request, allowedOrigins)
         });
     }
 };
@@ -126,9 +135,10 @@ function jsonResponse(data, status, headers) {
     });
 }
 
-function getCORSHeaders(request) {
+function getCORSHeaders(request, allowedOrigins) {
+    allowedOrigins = allowedOrigins || PROD_ORIGINS;
     const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+    const allowedOrigin = allowedOrigins.includes(origin) ? origin : PROD_ORIGINS[0];
     return {
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -146,12 +156,8 @@ function handleCORS(request) {
 
 // ─── AI Proxy: Groq (text chat/summarize/flashcards) ──────────────────
 
-async function handleGroqChat(request, env) {
-    const corsHeaders = getCORSHeaders(request);
-
-    if (!env.GROQ_API_KEY) {
-        return jsonResponse({ error: 'GROQ_API_KEY not configured' }, 500, corsHeaders);
-    }
+async function handleGroqChat(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
 
     try {
         const body = await request.json();
@@ -161,24 +167,55 @@ async function handleGroqChat(request, env) {
             return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
         }
 
-        // Forward to Groq with server-side key
-        const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        // Try Groq first if key is available
+        if (env.GROQ_API_KEY) {
+            const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${env.GROQ_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: body.model || 'openai/gpt-oss-20b',
+                    messages: body.messages,
+                    max_tokens: Math.min(body.max_tokens || 4096, 8192),
+                    temperature: body.temperature ?? 0.7,
+                    response_format: body.response_format || undefined
+                })
+            });
+
+            const data = await groqResponse.json();
+
+            // If Groq succeeds, return. If model error, fall through to OpenRouter.
+            if (groqResponse.ok || (data.error && !['model_not_found', 'model_decommissioned'].includes(data.error.code))) {
+                return jsonResponse(data, groqResponse.status, corsHeaders);
+            }
+            console.warn('[Proxy] Groq model unavailable, falling back to OpenRouter:', data.error?.message);
+        }
+
+        // Fallback: route through OpenRouter (same as /ai/vision handler)
+        if (!env.OPENROUTER_API_KEY) {
+            return jsonResponse({ error: 'No AI backend available. Both GROQ_API_KEY and OPENROUTER_API_KEY are missing.' }, 500, corsHeaders);
+        }
+
+        const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${env.GROQ_API_KEY}`
+                'Authorization': `Bearer ${env.OPENROUTER_API_KEY}`,
+                'HTTP-Referer': 'https://onlinepdfpro.com',
+                'X-Title': 'OnlinePDFPro'
             },
             body: JSON.stringify({
-                model: body.model || 'llama-3.1-8b-instant',
+                model: 'openrouter/free',
                 messages: body.messages,
                 max_tokens: Math.min(body.max_tokens || 4096, 8192),
-                temperature: body.temperature ?? 0.7,
-                response_format: body.response_format || undefined
+                temperature: body.temperature ?? 0.7
             })
         });
 
-        const data = await groqResponse.json();
-        return jsonResponse(data, groqResponse.status, corsHeaders);
+        const orData = await orResponse.json();
+        return jsonResponse(orData, orResponse.status, corsHeaders);
 
     } catch (err) {
         return jsonResponse({ error: 'AI proxy error: ' + err.message }, 500, corsHeaders);
@@ -187,8 +224,8 @@ async function handleGroqChat(request, env) {
 
 // ─── AI Proxy: OpenRouter (vision/multimodal) ─────────────────────────
 
-async function handleOpenRouterVision(request, env) {
-    const corsHeaders = getCORSHeaders(request);
+async function handleOpenRouterVision(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
 
     if (!env.OPENROUTER_API_KEY) {
         return jsonResponse({ error: 'OPENROUTER_API_KEY not configured' }, 500, corsHeaders);
@@ -201,6 +238,8 @@ async function handleOpenRouterVision(request, env) {
             return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
         }
 
+        const requestedModel = body.model || 'openrouter/free';
+
         // Forward to OpenRouter with server-side key
         const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
@@ -211,13 +250,35 @@ async function handleOpenRouterVision(request, env) {
                 'X-Title': 'OnlinePDFPro'
             },
             body: JSON.stringify({
-                model: body.model || 'google/gemma-4-31b-it:free',
+                model: requestedModel,
                 messages: body.messages,
                 max_tokens: Math.min(body.max_tokens || 4096, 8192)
             })
         });
 
         const data = await orResponse.json();
+
+        // If the requested model is rate-limited/unavailable, auto-fallback
+        if (!orResponse.ok && requestedModel !== 'openrouter/free' && (orResponse.status === 429 || orResponse.status === 503)) {
+            console.warn(`[Proxy] Model ${requestedModel} unavailable (${orResponse.status}), retrying with openrouter/free`);
+            const fallbackResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${env.OPENROUTER_API_KEY}`,
+                    'HTTP-Referer': 'https://onlinepdfpro.com',
+                    'X-Title': 'OnlinePDFPro'
+                },
+                body: JSON.stringify({
+                    model: 'openrouter/free',
+                    messages: body.messages,
+                    max_tokens: Math.min(body.max_tokens || 4096, 8192)
+                })
+            });
+            const fallbackData = await fallbackResponse.json();
+            return jsonResponse(fallbackData, fallbackResponse.status, corsHeaders);
+        }
+
         return jsonResponse(data, orResponse.status, corsHeaders);
 
     } catch (err) {
