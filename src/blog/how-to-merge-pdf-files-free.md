@@ -4,13 +4,13 @@ description: Learn how to quickly and safely merge PDF files online for free. Co
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
 toolLink: /tools/merge-pdf.html
 ctaTitle: Ready to merge your files?
-ctaDescription: Try our secure, lightning-fast PDF merger now. No signup required.
+ctaDescription: Try our PDF merger now. No signup required.
 ctaButton: Merge PDFs Now
 ---
 
 Dealing with multiple PDF documents can be a hassle, especially when you need to share them via email or present them as a unified report. Merging PDF files into a single, cohesive document is the best way to organize your files, save time, and ensure your recipient gets exactly what they need in one click.
 
-In this guide, we'll walk you through the simplest, fastest, and most secure way to combine PDFs using our free online tool.
+In this guide, we'll walk you through a simple way to combine PDFs using our free online tool.
 
 ## Why Merge PDFs?
 
@@ -40,4 +40,4 @@ Your combined PDF is ready to download. No watermarks are added, and the origina
 
 ## Is it safe to merge PDFs online?
 
-Security is a major concern when dealing with sensitive documents like financial records or legal contracts. At OnlinePDFPro, we prioritize your privacy. All file processing happens locally securely when possible, and any files uploaded to our secure servers are automatically permanently deleted after processing. We never store, read, or share your data.
+Security is a major concern when dealing with sensitive documents like financial records or legal contracts. Before uploading, review the processing details on the tool page so you understand how the selected workflow handles your file and what happens if processing fails.

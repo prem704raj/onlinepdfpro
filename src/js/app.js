@@ -1,6 +1,6 @@
 /**
  * OnlinePDFPro - Main Application JavaScript
- * All document processing happens client-side - no server uploads
+ * Shared site behavior and upload guidance
  */
 
 // =========================================
@@ -328,8 +328,10 @@ const ProcessingInfo = {
         const formats = accept && accept !== '*/*'
             ? accept.replace(/image\//g, '').replace(/application\//g, '').replace(/,/g, ', ')
             : 'the formats listed in the upload area';
-        const maxMatch = document.body.innerText.match(/Max(?:imum)?\s*:\s*([0-9]+\s*(?:MB|GB|KB))/i);
-        const maxSize = maxMatch ? maxMatch[1] : 'the limit shown in the upload area';
+        const maxMatch = document.body.innerText.match(/(?:Max(?:imum)?(?:\s+file)?(?:\s+size)?\s*:?\s*|up to\s+)([0-9]+\s*(?:MB|GB|KB))/i);
+        const maxSize = maxMatch
+            ? maxMatch[1]
+            : (fileInput.getAttribute('data-max-size') || '100 MB');
         const note = document.createElement('aside');
         note.className = 'processing-info';
         note.setAttribute('role', 'note');
@@ -338,7 +340,7 @@ const ProcessingInfo = {
             '<span>' + (externalProcessing
                 ? 'This tool may send the file or extracted text to an external AI/OCR service. Review the tool details before uploading.'
                 : 'Processing method varies by tool. Review the details on this page before uploading.') + '</span>' +
-            '<span>Large or complex files may take longer. If processing fails, your original file is unchanged and you can try again.</span>';
+            '<span>Most standard files finish within a few seconds; AI and OCR tasks may take longer. If processing fails, your original file is unchanged and you can try again.</span>';
         const anchor = fileInput.closest('.upload-zone, .upload-area, .drop-zone, .upload-box, .file-upload, .tool-upload') || fileInput.parentElement;
         if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(note, anchor.nextSibling);
         else if (document.querySelector('main')) document.querySelector('main').prepend(note);

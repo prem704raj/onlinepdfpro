@@ -1582,6 +1582,11 @@ function setupEventListeners() {
     document.getElementById('imageFile').addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             const file = e.target.files[0];
+            if (file.size > 100 * 1024 * 1024) {
+                alert('Image is too large. Maximum size is 100 MB.');
+                e.target.value = '';
+                return;
+            }
             const reader = new FileReader();
             reader.onload = (event) => {
                 const img = new Image();

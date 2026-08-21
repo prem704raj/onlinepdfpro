@@ -4,7 +4,7 @@ description: Got a massive PDF that's too big to email? Learn how to safely and 
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
 toolLink: /tools.html
 ctaTitle: Ready to optimize your document workflow?
-ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
+ctaDescription: Try our PDF tools now. No signup required.
 ctaButton: Explore All Tools
 ---
 
@@ -20,8 +20,8 @@ Large PDF files can be a headache. They often exceed email attachment limits, ta
 
 Using a tool like OnlinePDFPro makes this incredibly simple:
 
-1. Upload your large PDF file securely.
+1. Upload your large PDF file after reviewing the tool's supported formats and processing details.
 2. Choose the specific page ranges you want to extract, or choose to split the document every X pages.
 3. Click 'Split PDF' and instantly download your new, smaller files.
 
-Don't worry about data privacy; our processing is secure and your original file remains untouched.
+If processing fails, your original file remains unchanged and you can try again.

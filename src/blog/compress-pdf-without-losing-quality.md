@@ -29,4 +29,4 @@ With [OnlinePDFPro](/tools/compress-pdf.html), you can compress PDFs in seconds:
 2. Choose compression level (low/medium/high)
 3. Download your optimized file
 
-The entire process happens securely in your browser.
+Review the processing details on the tool page before uploading so you know how the selected workflow handles the file.

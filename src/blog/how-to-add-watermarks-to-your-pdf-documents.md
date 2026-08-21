@@ -4,7 +4,7 @@ description: Protect your intellectual property and brand your documents by lear
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
 toolLink: /tools.html
 ctaTitle: Ready to optimize your document workflow?
-ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
+ctaDescription: Try our PDF tools now. No signup required.
 ctaButton: Explore All Tools
 ---
 

@@ -40,4 +40,4 @@ When you're happy with your changes, click "Apply Changes" to save the document.
 
 ## Are my edits secure?
 
-Absolutely. Your privacy and security are our top priorities. Any documents you upload to OnlinePDFPro are processed using secure connections and are automatically deleted from our servers permanently. We don't read, store, or share your files.
+Review the processing details on the tool page before uploading so you understand how the selected workflow handles your file. If editing fails, your original document remains unchanged.

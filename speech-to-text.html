@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/speech-to-text.html">
 <meta property="og:title" content="Voice to PDF Free — Convert Speech to PDF Document Online | OnlinePDFPro">
-<meta property="og:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript. Fast, works securely with speech recognition.">
+<meta property="og:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript using browser speech recognition.">
 <meta property="og:image" content="https://onlinepdfpro.com/images/og-voice-to-pdf.png">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
@@ -27,7 +27,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/speech-to-text.html">
 <meta name="twitter:title" content="Voice to PDF Free — Convert Speech to PDF Document Online | OnlinePDFPro">
-<meta name="twitter:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript. Fast, works securely with speech recognition.">
+<meta name="twitter:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript using browser speech recognition.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-voice-to-pdf.png">
 
 <!-- Favicons -->
@@ -501,13 +501,13 @@
  <div class="tool-header" style="text-align:center; margin-bottom:48px;">
  <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Document Creation</span>
  <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Speech to Text (Voice to PDF)</h1>
- <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Speak and convert your voice to a professional PDF document instantly. No typing needed.</p>
+ <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Speak and convert your voice to a professional PDF document. Browser support and microphone permission are required.</p>
  </div>
 <div class="voice-container">
 
  <div style="text-align:center; margin-bottom:30px;">
  <h2 style="font-size:28px; color:var(--text-primary); margin:0 0 10px;">🎤 Speak & Create PDF</h2>
- <p style="color:var(--text-secondary); font-size:16px;">Press the mic button, speak, and download as PDF instantly</p>
+ <p style="color:var(--text-secondary); font-size:16px;">Press the mic button, speak, and download your PDF when transcription is complete.</p>
  </div>
 
  <!-- Language Selection -->
@@ -722,7 +722,7 @@
  try { recognition.start(); } catch (e) { }
  }
  } else if (event.error === 'not-allowed') {
- alert('Microphone access denied. Please allow microphone access securely settings.');
+ alert('Microphone access denied. Please allow microphone access in your browser settings.');
  stopRecording();
  }
  };
@@ -737,7 +737,7 @@
 
  function toggleRecording() {
  if (!SpeechRecognition) {
- alert('Speech recognition is not supported securely. Please use Chrome or Edge.');
+ alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
  return;
  }
 
@@ -1064,7 +1064,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
- <script defer src="/js/app.js?v=11"></script>
+ <script defer src="/js/app.js?v=12"></script>
 </body>
 
 </html>

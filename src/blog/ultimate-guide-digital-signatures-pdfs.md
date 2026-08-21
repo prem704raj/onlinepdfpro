@@ -4,7 +4,7 @@ description: Learn everything about digital signatures in PDF documents. Are the
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
 toolLink: /tools.html
 ctaTitle: Ready to optimize your document workflow?
-ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
+ctaDescription: Try our PDF tools now. No signup required.
 ctaButton: Explore All Tools
 ---
 
