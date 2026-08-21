@@ -57,7 +57,7 @@
 
  <!-- PDF.js for client-side rendering -->
  <script src="/js/vendor/pdfjs/pdf.min.js"></script>
- <!-- Tesseract.js for securely OCR -->
+ <!-- Tesseract.js OCR engine -->
  <script src="/js/vendor/tesseract/tesseract.min.js"></script>
 
  <!-- MOBILE FIX -->
@@ -174,7 +174,7 @@
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
  <span class="privacy-icon"></span>
- <p><strong>Free OCR.</strong> Text extraction uses Tesseract.js; review the processing details before uploading. File handling depends on the selected tool; review the processing details before uploading..</p>
+ <p><strong>Free OCR.</strong> Text extraction uses Tesseract.js. Review the processing details before uploading. If extraction fails, your original image is unchanged and you can try again.</p>
  </div>
  </div>
  
@@ -183,7 +183,7 @@
 </main>
 
  <!-- Scripts -->
- <script src="../js/app.js?v=11"></script>
+ <script src="../js/app.js?v=12"></script>
  <script>
  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
  let _originalFileName = '';
@@ -239,11 +239,11 @@
  imageBlob = await compressImage(imageBlob);
  }
 
- // STEP 1: Try Tesseract.js (offline, unlimited)
+ // STEP 1: Try Tesseract.js
  const localResult = await runTesseract(imageBlob);
 
  if (localResult.confidence >= CONFIDENCE_THRESHOLD && localResult.text.trim().length > 10) {
- // Good confidence → use offline result directly
+ // Good confidence → use the result directly
  showResult(localResult.text);
  } else {
  // Low confidence (likely handwriting/complex) → try cloud API
@@ -260,11 +260,11 @@
  }
  }
 
- // ---------- Tesseract.js (securely, offline) ----------
+ // ---------- Tesseract.js ----------
  async function runTesseract(blob) {
  try {
  const imageUrl = URL.createObjectURL(blob);    const result = await Tesseract.recognize(imageUrl, 'eng', {
-      // All Tesseract assets are vendored locally so OCR works with the tool's supported processing method and
+      // Tesseract assets are bundled with the tool so OCR works with the supported processing method and
       // isn't blocked by the page CSP (worker-src 'self' blob:).
       workerPath: '/js/vendor/tesseract/worker.min.js',
       corePath: '/js/vendor/tesseract/tesseract-core.wasm.js',

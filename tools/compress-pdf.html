@@ -149,7 +149,7 @@
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
  <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop your documents here</p>
- <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Processing details</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Instant</span></p>
+ <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Processing details</span> <span>•</span> <span>Maximum size: 100 MB</span> <span>•</span> <span>Processing time varies</span></p>
  <button class="btn btn-primary upload-btn">Choose Files</button>
  </div>
 
@@ -242,7 +242,7 @@
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
  <span class="privacy-reminder-icon"></span>
- <span>Military-grade privacy. Your files never touch a server.</span>
+ <span>Review the processing details before uploading. Your original file is unchanged if compression fails.</span>
  </div>
  </div>
 
@@ -267,7 +267,7 @@
 
  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
  </script>
-<script src="../js/app.js?v=11"></script>
+<script src="../js/app.js?v=12"></script>
  <script>
  (function () {
  const { PDFDocument } = PDFLib;
@@ -752,7 +752,7 @@ resultsSection.style.display = 'block';
  "name": "How do I compress a PDF without uploading it?",
  "acceptedAnswer": {
  "@type": "Answer",
- "text": "OnlinePDFPro compresses PDFs entirely inside your browser. Your file review the processing details before uploading — just select your PDF, choose a compression level, and download the smaller version instantly."
+ "text": "Select your PDF, choose a compression level, and download the smaller version when processing is complete. Review the processing details before uploading."
  }
  },
  {
@@ -760,7 +760,7 @@ resultsSection.style.display = 'block';
  "name": "Is it safe to compress PDF files online?",
  "acceptedAnswer": {
  "@type": "Answer",
- "text": "Yes! Unlike other tools that upload your files to remote servers, OnlinePDFPro processes everything locally on your device. Your documents stay 100% free with zero data transfer."
+ "text": "File handling depends on the selected processing method. Review the processing details before uploading; your original file is unchanged if compression fails."
  }
  },
  {

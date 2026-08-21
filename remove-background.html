@@ -7,7 +7,7 @@
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Remove Background from Image Free Online | OnlinePDFPro</title>
- <meta name="description" content="Remove background from any image for free using AI. Tool-specific processing, works securely. processing details. Supports JPG, PNG, WEBP.">
+ <meta name="description" content="Remove background from JPG, PNG, and WEBP images using AI-assisted processing. Review the processing details before uploading.">
  <meta name="keywords" content="remove background, background remover, remove bg, transparent background, image background remover free">
  <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
@@ -15,7 +15,7 @@
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://onlinepdfpro.com/remove-background.html">
  <meta property="og:title" content="Remove Background from Image Free Online | OnlinePDFPro">
- <meta property="og:description" content="Remove background from any image for free using AI. Tool-specific processing, works securely.">
+ <meta property="og:description" content="Remove background from JPG, PNG, and WEBP images using AI-assisted processing. Review the processing details before uploading.">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta name="twitter:card" content="summary_large_image">
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -126,8 +126,8 @@
 <div class="container" style="max-width:900px;">
  <div class="tool-header">
  <span class="section-tag fade-in">AI Image Tool</span>
- <h1 class="tool-title fade-in">Remove Background from Image — Free & Private</h1>
- <p class="tool-description fade-in" style="animation-delay:0.1s;">AI-powered background remover. Works 100% securely — Image handling depends on the selected tool; review the processing details before uploading.. No signup, no watermark.</p>
+ <h1 class="tool-title fade-in">Remove Background from Image — Free</h1>
+ <p class="tool-description fade-in" style="animation-delay:0.1s;">AI-assisted background remover. Processing may use an external image service; review the processing details before uploading. No signup, no watermark.</p>
  </div>
 
  <!-- UPLOAD -->
@@ -149,7 +149,7 @@
  <option value="birefnet"> BiRefNet — Great Quality</option>
 
  </select>
- <div id="engineDesc" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">BEN2: The newest & best AI model with confidence-guided matting for perfect hair, fur & edge detail. Downloads once, works forever securely.</div>
+ <div id="engineDesc" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">BEN2: An AI model for hair, fur, and edge detail. Results vary by image; try another model if the first result is unsatisfactory.</div>
  </div>
 
  <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
@@ -255,7 +255,7 @@
 
  <div class="privacy-reminder fade-in" style="animation-delay:0.3s;margin-top:20px;">
  <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
- <span>AI runs securely. Image handling depends on the selected tool; review the processing details before uploading..</span>
+ <span>AI processing may use an external image service. Review the processing details before uploading.</span>
  </div>
  </div>
 
@@ -264,7 +264,7 @@
 
 </main>
 
- <script src="js/app.js?v=11"></script>
+ <script src="js/app.js?v=12"></script>
 
  <script>
  document.addEventListener('DOMContentLoaded', function() {
@@ -284,8 +284,8 @@
  var aiQualitySel = $('aiQuality'), engineDesc = $('engineDesc');
  if(aiQualitySel) aiQualitySel.addEventListener('change', function(){
  var descs = {
- ben2: 'BEN2: The newest & best AI model with confidence-guided matting for perfect hair, fur & edge detail. Downloads once, works forever securely.',
- birefnet: 'BiRefNet: State-of-the-art AI with superior hair, fur & edge detail. MIT Licensed, runs 100% securely.',
+ ben2: 'BEN2: An AI model with confidence-guided matting for hair, fur, and edge detail. Results vary by image.',
+ birefnet: 'BiRefNet: An AI model for hair, fur, and edge detail. Results vary by image.',
  isnet: 'ISNet: High-accuracy background removal. Good for general images.',
  isnet_fp16: 'ISNet FP16: Faster processing with slightly reduced accuracy. Best for quick edits.'
  };
