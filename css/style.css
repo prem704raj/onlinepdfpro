@@ -1763,3 +1763,25 @@ main#main {
 .privacy-reminder {
     display: none !important;
 }
+
+.processing-info {
+    display: grid;
+    gap: 4px;
+    max-width: 760px;
+    margin: 16px auto 24px;
+    padding: 14px 16px;
+    border: 1px solid var(--border, #d9d0c3);
+    border-radius: 12px;
+    background: var(--surface-1, #fff);
+    color: var(--text-secondary, #6b5e4f);
+    font: 0.86rem/1.5 Inter, system-ui, sans-serif;
+}
+
+.processing-info strong {
+    color: var(--text-primary, #2c2418);
+    font-weight: 700;
+}
+
+.processing-info span {
+    display: block;
+}

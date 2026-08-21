@@ -2,7 +2,7 @@
 title: How to Reduce PDF File Size for Email (Compression Guide)
 description: Are your PDFs too big to attach to an email? Learn how to compress PDF file sizes without destroying the visual quality of the document.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-toolLink: ../tools/compress-pdf.html
+toolLink: /tools/compress-pdf.html
 ctaTitle: Ready to optimize your document workflow?
 ctaDescription: Try our secure, lightning-fast PDF tools now. No signup required.
 ctaButton: Explore All Tools
@@ -20,4 +20,4 @@ PDFs usually balloon in size for a few main reasons:
 
 ## How PDF Compression Works
 
-PDF compressors analyze your file and safely optimize these elements. They downsample images (e.g., from 300 DPI print quality to 72 DPI web quality) and strip out unnecessary metadata, resulting in file size reductions of up to 90% without a noticeable difference in visual quality on a screen.
+PDF compressors analyze your file and optimize these elements. They may downsample images and remove unnecessary metadata; the result depends on the document and the selected quality setting.

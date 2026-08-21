@@ -1,6 +1,6 @@
 /**
  * Online Presentation Maker
- * Pure HTML, CSS, JavaScript - No backend, fully offline
+ * Pure HTML, CSS, JavaScript - No backend, Processing details
  */
 
 // ======================== STATE MANAGEMENT ========================

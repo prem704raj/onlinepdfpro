@@ -2,7 +2,7 @@
 title: "Convert JPG to PDF Online: A Complete 2026 Guide"
 description: Learn the quickest and most secure way to convert JPG, PNG, and other image formats into a single PDF document.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-toolLink: ../tools/jpg-to-pdf.html
+toolLink: /tools/jpg-to-pdf.html
 ctaTitle: Ready to convert your photos?
 ctaDescription: Turn your images into a neat, shareable PDF document instantly.
 ctaButton: Convert JPG to PDF Now
@@ -20,11 +20,11 @@ PDFs are universally supported, meaning your images will look the same regardles
 
 ## How to Turn JPGs into a PDF Online
 
-Using our [JPG to PDF](../tools/jpg-to-pdf.html) converter, you can stitch multiple images together in seconds. Best of all, it's 100% free.
+Using our [JPG to PDF](/tools/jpg-to-pdf.html) converter, you can stitch multiple images together in seconds. Best of all, it's 100% free.
 
 ### Step 1: Upload Your Images
 
-Go to the [JPG to PDF tool](../tools/jpg-to-pdf.html). Click to select files or drag and drop your photos directly onto the page. We support multiple file types including JPG, PNG, and more.
+Go to the [JPG to PDF tool](/tools/jpg-to-pdf.html). Click to select files or drag and drop your photos directly onto the page. We support multiple file types including JPG, PNG, and more.
 
 ### Step 2: Arrange the Order
 
@@ -40,4 +40,4 @@ Your PDF is now ready to be downloaded. You can email it, print it, or save it f
 
 ## Will my images lose quality?
 
-No! By default, our tool retains the original quality of your images when converting them into a PDF. However, if you need a smaller file size for sharing, you can run the final document through our [PDF Compressor](../tools/compress-pdf.html) tool to shrink it down without noticeable quality loss.
+No! By default, our tool retains the original quality of your images when converting them into a PDF. However, if you need a smaller file size for sharing, you can run the final document through our [PDF Compressor](/tools/compress-pdf.html) tool to shrink it down without noticeable quality loss.

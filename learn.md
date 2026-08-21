@@ -111,7 +111,7 @@ In `src/_includes/base.njk` Line 26:
 - It intercepts network requests. It can cache (save) images, CSS, and HTML so that if the user loses internet connection, the site still loads instantly!
 
 ### 3. Client-Side Tool Processing
-This site handles PDF processing entirely in the user's browser, which is why the tagline is "privacy-first".
+This site provides document tools with clear, tool-specific processing details.
 - It uses external libraries like `pdf-lib` and `pdfjs` (located in `src/js/`).
 - When a user uploads a PDF, it doesn't get sent to a server. Instead, the local JavaScript reads the file into the computer's memory, uses mathematical functions to compress or edit it, and generates a new file blob for the user to download.
 

@@ -2,7 +2,7 @@
 title: How to Edit PDF Text Online Free (2026 Guide)
 description: Discover how to easily edit text in PDF files online for free. No need to install expensive software to fix typos or update documents.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-toolLink: ../tools/edit-pdf.html
+toolLink: /tools.html
 ctaTitle: Need to fix a PDF right now?
 ctaDescription: Edit text, add images, and sign your documents for free.
 ctaButton: Edit Your PDF
@@ -20,11 +20,11 @@ Not anymore. With modern web tools, you can edit PDF text securely, for free.
 
 ## How to Edit PDF Text Online
 
-Our powerful [Edit PDF](../tools/edit-pdf.html) tool lets you modify text, add new text, and even add images or shapes to your documents.
+Our powerful [Edit PDF](/tools.html) tool lets you modify text, add new text, and even add images or shapes to your documents.
 
 ### Step 1: Open the PDF Editor
 
-Head over to our [Edit PDF](../tools/edit-pdf.html) tool and upload the document you need to modify.
+Head over to our [Edit PDF](/tools.html) tool and upload the document you need to modify.
 
 ### Step 2: Add or Modify Text
 

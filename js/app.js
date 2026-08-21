@@ -317,6 +317,34 @@ const FileUploader = {
     }
 };
 
+const ProcessingInfo = {
+    init() {
+        if (document.querySelector('.processing-info')) return;
+        const fileInput = document.querySelector('input[type="file"]');
+        if (!fileInput) return;
+        const path = window.location.pathname.toLowerCase();
+        const externalProcessing = /chat-with-pdf|pdf-summarizer|pdf-to-flashcards|image-to-text|pdf-to-word|remove-background/.test(path);
+        const accept = fileInput.getAttribute('accept');
+        const formats = accept && accept !== '*/*'
+            ? accept.replace(/image\//g, '').replace(/application\//g, '').replace(/,/g, ', ')
+            : 'the formats listed in the upload area';
+        const maxMatch = document.body.innerText.match(/Max(?:imum)?\s*:\s*([0-9]+\s*(?:MB|GB|KB))/i);
+        const maxSize = maxMatch ? maxMatch[1] : 'the limit shown in the upload area';
+        const note = document.createElement('aside');
+        note.className = 'processing-info';
+        note.setAttribute('role', 'note');
+        note.innerHTML = '<strong>Before you upload</strong>' +
+            '<span>Supported formats: ' + formats + '. Maximum size: ' + maxSize + '.</span>' +
+            '<span>' + (externalProcessing
+                ? 'This tool may send the file or extracted text to an external AI/OCR service. Review the tool details before uploading.'
+                : 'Processing method varies by tool. Review the details on this page before uploading.') + '</span>' +
+            '<span>Large or complex files may take longer. If processing fails, your original file is unchanged and you can try again.</span>';
+        const anchor = fileInput.closest('.upload-zone, .upload-area, .drop-zone, .upload-box, .file-upload, .tool-upload') || fileInput.parentElement;
+        if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(note, anchor.nextSibling);
+        else if (document.querySelector('main')) document.querySelector('main').prepend(note);
+    }
+};
+
 // =========================================
 // Progress Handler
 // =========================================
@@ -664,7 +692,7 @@ const PwaInstallManager = {
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
-        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>Install OnlinePDFPro</strong><span>Fast, private, and works offline</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
+        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>Install OnlinePDFPro</strong><span>Fast, private, and works with the tool's supported processing method</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
         document.body.appendChild(this.installBanner);
         this.injectBannerCSS();
         document.getElementById('pwaBannerInstall').addEventListener('click', () => this.triggerInstall());
@@ -750,6 +778,7 @@ const FeedbackHandler = {
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     MobileMenu.init();
+    ProcessingInfo.init();
     LanguageSelector.init();
     FeedbackHandler.init();
     RecentlyUsedUI.render();
@@ -821,7 +850,7 @@ const FileSharer = {
 // =========================================
 
 const _exports = {
-    ThemeManager, MobileMenu, LanguageSelector, FileUploader, ProgressHandler, RecentlyUsed, RecentlyUsedUI, AutoClear, Downloader, Utils, LoadingSpinner, Toast, Analytics, ToolReset, FileSharer, HistoryDB, PwaInstallManager
+    ThemeManager, MobileMenu, LanguageSelector, FileUploader, ProcessingInfo, ProgressHandler, RecentlyUsed, RecentlyUsedUI, AutoClear, Downloader, Utils, LoadingSpinner, Toast, Analytics, ToolReset, FileSharer, HistoryDB, PwaInstallManager
 };
 window.OnlinePDFPro = _exports;
 window.DocTools = _exports;

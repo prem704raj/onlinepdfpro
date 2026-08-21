@@ -1,7 +1,7 @@
 {
   "name": "doctools",
   "version": "1.0.0",
-  "description": "OnlinePDFPro — privacy-first PDF tools, powered by Eleventy.",
+  "description": "OnlinePDFPro — privacy-conscious PDF tools, powered by Eleventy.",
   "main": "counter.js",
   "dependencies": {
     "pdf-lib": "^1.17.1"

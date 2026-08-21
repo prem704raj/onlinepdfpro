@@ -30,7 +30,11 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-hero-content { position: relative; z-index: 3; text-align: center; max-width: 1200px; padding: 0 24px; padding-top: 100px; padding-bottom: 36px; }
 .hp-hero-label { font-family: var(--hp-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-accent); margin-bottom: 24px; }
 .hp-hero-heading { font-family: var(--hp-serif); font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 400; line-height: 1.15; color: var(--hp-text); margin-bottom: 24px; letter-spacing: -0.01em; white-space: nowrap; }
-@media (max-width: 768px) { .hp-hero-heading, .hp-hero-subtitle { white-space: normal; } }
+@media (max-width: 768px) {
+  .hp-hero-content { width: 100%; max-width: 100%; padding: 72px 20px 32px; box-sizing: border-box; }
+  .hp-hero-heading { width: 100%; max-width: 100%; font-size: clamp(2rem, 9vw, 2.7rem); white-space: normal; overflow-wrap: anywhere; }
+  .hp-hero-subtitle { max-width: 100%; white-space: normal; }
+}
 .hp-hero-heading em { font-style: italic; color: var(--hp-accent); }
 .hp-hero-subtitle { font-family: var(--hp-sans); font-size: 1rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 950px; margin: 0 auto 44px; white-space: nowrap; }
 .hp-hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
@@ -165,7 +169,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
               { name: 'Chat with PDF', desc: 'Ask AI questions about your document', href: 'tools/chat-with-pdf.html', color: '#d97706', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/>' },
               { name: 'PDF to Word', desc: 'Convert PDF to editable DOCX', href: 'tools/pdf-to-word.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>' },
               { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: 'tools/merge-pdf.html', color: '#7c3aed', svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
-              { name: 'Compress PDF', desc: 'Reduce file size up to 80%', href: 'tools/compress-pdf.html', color: '#ea580c', svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
+              { name: 'Compress PDF', desc: 'Reduce file size with adjustable quality settings', href: 'tools/compress-pdf.html', color: '#ea580c', svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
               { name: 'AI PDF Summarizer', desc: 'Get instant summaries of long PDFs', href: 'tools/pdf-summarizer.html', color: '#10b981', svg: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>' },
               { name: 'Sign PDF', desc: 'Add your e-signature', href: 'tools/sign-pdf.html', color: '#8b6914', svg: '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>' },
               { name: 'PDF to Flashcards', desc: 'Auto-generate study flashcards', href: 'tools/pdf-to-flashcards.html', color: '#3b82f6', svg: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>' },

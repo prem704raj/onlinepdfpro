@@ -956,7 +956,7 @@
  <section class="panel-card" aria-label="Resume form panel">
  <div class="panel-head">
  <h2>Resume Form</h2>
- <span class="privacy-pill">secure handling • Fully Local</span>
+ <span class="privacy-pill">processing details • Processing details</span>
  </div>
  <div class="panel-body" id="builderForm">
  <div class="controls-grid">
@@ -1730,8 +1730,7 @@
  const photoHtml = hasValidPhoto ? '<img class="resume-photo" src="' + escapeAttr(photoSrc) + '" alt="Profile photo">' : '';
 
  elements.resumePreview.innerHTML = '<div id="resumeSheet" class="resume-sheet template-' + escapeHtml(state.template) + ' font-' + escapeHtml(state.font) + '" style="--accent-color:' + escapeHtml(state.accentColor) + ';">' +
- '<header class="resume-header">
-' +
+ '<header class="resume-header">' +
  '<div>' +
  '<h1 class="resume-name">' + escapeHtml(fullName) + '</h1>' +
  '<p class="resume-role">' + escapeHtml(role) + '</p>' +

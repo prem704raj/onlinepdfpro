@@ -22,6 +22,7 @@
 {% endblock %}
 {% block content %}
 <div class="blog-content">
+  <h1>{{ title }}</h1>
   {{ content | safe }}
   {% if toolLink %}
   <div class="blog-cta">

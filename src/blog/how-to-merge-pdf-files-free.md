@@ -2,7 +2,7 @@
 title: How to Merge PDF Files for Free Online (2026 Guide)
 description: Learn how to quickly and safely merge PDF files online for free. Combine multiple PDFs into a single document without losing quality or privacy.
 icon: <svg fill="none" height="36" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="36"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-toolLink: ../tools/merge-pdf.html
+toolLink: /tools/merge-pdf.html
 ctaTitle: Ready to merge your files?
 ctaDescription: Try our secure, lightning-fast PDF merger now. No signup required.
 ctaButton: Merge PDFs Now
