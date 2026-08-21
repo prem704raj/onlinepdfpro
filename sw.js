@@ -114,7 +114,6 @@ const STATIC_ASSETS = [
     'js/pdf-encrypt-lite.js',
     'js/presentation-maker.js',
     'js/security-shield.js',
-    'js/third-party-loader.js',
     'js/tts-engine.js',
 
     // JS vendor (local copies of CDN scripts)

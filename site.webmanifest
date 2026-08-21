@@ -1,7 +1,7 @@
 {
     "name": "OnlinePDFPro - 100% Free Browser PDF Tools",
     "short_name": "OnlinePDFPro",
-    "description": "Privacy-first PDF tools. Merge, Compress, Sign, and Edit PDFs directly in your browser. No file uploads required.",
+    "description": "privacy-conscious PDF tools. Merge, Compress, Sign, and Edit PDFs directly in your browser. upload requirements vary by tool.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",

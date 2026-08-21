@@ -89,7 +89,6 @@
 }
  </script>
 
- <script defer src="../js/third-party-loader.js"></script>
  <script src="/js/security-shield.js"></script>
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -150,7 +149,7 @@
  <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
  <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop any size PDF or Image<br><span
- style="font-size: 0.9em; color: var(--text-muted);">(Even 50 MB file works perfectly now
+ style="font-size: 0.9em; color: var(--text-muted);">(Supports files up to the stated limit; larger files may take longer or fail
  )</span></p>
  <input type="file" id="fileInput" accept="image/*,.pdf" hidden />
  </div>
@@ -175,7 +174,7 @@
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
  <span class="privacy-icon"></span>
- <p><strong>Free OCR.</strong> Text extraction runs entirely securely using Tesseract.js. No data is sent to any server — your files never leave your device.</p>
+ <p><strong>Free OCR.</strong> Text extraction uses Tesseract.js; review the processing details before uploading. File handling depends on the selected tool; review the processing details before uploading..</p>
  </div>
  </div>
  
@@ -265,7 +264,7 @@
  async function runTesseract(blob) {
  try {
  const imageUrl = URL.createObjectURL(blob);    const result = await Tesseract.recognize(imageUrl, 'eng', {
-      // All Tesseract assets are vendored locally so OCR works offline and
+      // All Tesseract assets are vendored locally so OCR works with the tool's supported processing method and
       // isn't blocked by the page CSP (worker-src 'self' blob:).
       workerPath: '/js/vendor/tesseract/worker.min.js',
       corePath: '/js/vendor/tesseract/tesseract-core.wasm.js',
