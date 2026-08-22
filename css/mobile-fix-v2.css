@@ -466,10 +466,25 @@
        ══════════════════════════════════════════ */
     .hp-tools-grid {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 10px !important;
         padding: 0 !important;
         width: 100% !important;
+    }
+
+    .hp-tool-item,
+    .hp-tool-name,
+    .hp-tool-desc {
+        min-width: 0 !important;
+    }
+
+    .hp-tool-item > div:last-child {
+        min-width: 0 !important;
+    }
+
+    .hp-tool-name,
+    .hp-tool-desc {
+        overflow-wrap: anywhere !important;
     }
 
     .hp-tool-card {
@@ -671,7 +686,8 @@
 
     /* Footer grid → 2 columns */
     footer>div>div[style*="grid-template-columns"],
-    footer>div>div:first-child {
+    footer>div>div:first-child:not(.hp-footer-brand),
+    .hp-footer-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 20px !important;
@@ -838,6 +854,132 @@
         padding-top: 0 !important;
     }
 
+    /* Shared footer: keep the real footer grid intact on mobile. */
+    .hp-footer {
+        margin-top: 32px !important;
+        padding: 32px 16px 20px !important;
+    }
+
+    .hp-footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 24px 16px !important;
+    }
+
+    .hp-footer-brand {
+        grid-column: 1 / -1 !important;
+        text-align: center !important;
+    }
+
+    .hp-footer-brand h4,
+    .hp-footer-col h5 {
+        margin-bottom: 8px !important;
+    }
+
+    .hp-footer-brand-sub,
+    .hp-footer-copy,
+    .hp-footer a {
+        font-size: 0.8rem !important;
+    }
+
+    .hp-footer li {
+        margin: 0 !important;
+    }
+
+    .hp-footer a {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .hp-footer-bottom {
+        margin-top: 24px !important;
+        padding-top: 16px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+    }
+
+    .hp-footer-socials a {
+        width: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+    }
+
+    /* Prevent controls and notices from being clipped by narrow tool cards. */
+    aside[role="note"] {
+        width: auto !important;
+        max-width: calc(100% - 32px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+    }
+
+    .setting-group,
+    .settings-grid,
+    .settings-section {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .setting-group select,
+    .setting-group input {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .invoice-items {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 6px !important;
+    }
+
+    .invoice-table {
+        min-width: 360px !important;
+    }
+
+    #aiQuality {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 8px auto 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .page-404 main > div,
+    body.page-404 main > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 28px 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .page-404 main h1,
+    body.page-404 main h1 {
+        font-size: 2.5rem !important;
+    }
+
+    .page-qr-code-generator .tab-nav,
+    body.page-qr-code-generator .tab-nav {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .page-qr-code-generator .tab-btn,
+    body.page-qr-code-generator .tab-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 10px 8px !important;
+        white-space: normal !important;
+        line-height: 1.2 !important;
+    }
+
      /* ══════════════════════════════════════════
          WHY I BUILT THIS — Short on mobile
          ══════════════════════════════════════════ */
@@ -986,7 +1128,8 @@
     }
 
     footer>div>div[style*="grid-template-columns"],
-    footer>div>div:first-child {
+    footer>div>div:first-child:not(.hp-footer-brand),
+    .hp-footer-grid {
         grid-template-columns: 1fr !important;
     }
 }
