@@ -25,5 +25,7 @@
 <script defer src="{{ '/js/app.js' | url }}"></script>
 <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('{{ '/sw.js' | url }}'); }</script>
 {% block scripts %}{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="{{ '/js/auth.js' | url }}"></script>
 </body>
 </html>

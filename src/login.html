@@ -1,0 +1,41 @@
+---
+layout: base.njk
+title: Login / Sign Up
+---
+<div class="login-container" style="max-width: 400px; margin: 60px auto; text-align: center; font-family: sans-serif;">
+    <h1 style="margin-bottom: 20px;">Sign in to continue</h1>
+    <input id="email" type="email" placeholder="Email" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    <input id="password" type="password" placeholder="Password" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+    
+    <button onclick="login()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-bottom: 10px;">Sign In</button>
+    <button onclick="signup()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">Create Account</button>
+</div>
+
+<script>
+async function signup(){ 
+    const email = document.getElementById("email").value; 
+    const password = document.getElementById("password").value; 
+    const {error} = await supabaseClient.auth.signUp({ email, password }); 
+    if(error){ 
+        alert(error.message); 
+    } else { 
+        alert("Check email for verification"); 
+    } 
+} 
+
+async function login(){ 
+    const email = document.getElementById("email").value; 
+    const password = document.getElementById("password").value; 
+    const {error} = await supabaseClient.auth.signInWithPassword({ email, password }); 
+    if(error){ 
+        alert(error.message); 
+    } else { 
+        const product = localStorage.getItem("pendingProduct"); 
+        if(product){ 
+            window.location.href = "/" + product; // Just an assumption of routing
+        } else{ 
+            window.location.href="/"; 
+        } 
+    } 
+}
+</script>
