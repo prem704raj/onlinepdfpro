@@ -398,12 +398,19 @@
         }
 
         .profile-initial {
-            display: flex;
             align-items: center;
             justify-content: center;
             background: var(--sm-accent);
             color: white;
             font-weight: 700;
+        }
+
+        .profile-initial:not([hidden]) {
+            display: flex;
+        }
+
+        .profile-avatar[hidden] {
+            display: none !important;
         }
 
         .profile-dropdown {
