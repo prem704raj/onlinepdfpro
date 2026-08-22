@@ -13,11 +13,20 @@ function saveAuthReturnUrl(url) {
 function redirectAfterAuth() {
   const returnUrl = localStorage.getItem("authReturnUrl");
   localStorage.removeItem("authReturnUrl");
-  if (returnUrl && returnUrl.startsWith("/")) {
-    window.location.href = returnUrl;
+
+  // Never redirect back to login.
+  if (
+    returnUrl &&
+    returnUrl.startsWith("/") &&
+    !returnUrl.startsWith("/login")
+  ) {
+    window.location.replace(returnUrl);
     return;
   }
-  window.location.href = "/";
+
+  // If login was opened manually,
+  // go to homepage after authentication.
+  window.location.replace("/");
 }
 
 // -------------------------------------
@@ -27,7 +36,7 @@ async function requireLogin() {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     saveAuthReturnUrl();
-    window.location.href = "/login.html";
+    window.location.href = "/login";
     return false;
   }
   return true;
@@ -40,7 +49,7 @@ async function buyProduct(id) {
 }
 
 // -------------------------------------
-// EMAIL SIGN UP (with full name)
+// EMAIL SIGN UP
 // -------------------------------------
 async function signup(email, password, fullName) {
   if (!fullName || fullName.trim().length < 2) {
@@ -51,10 +60,12 @@ async function signup(email, password, fullName) {
     password: password,
     options: {
       data: { full_name: fullName.trim() },
-      emailRedirectTo: "https://onlinepdfpro.com/login.html"
+      emailRedirectTo: "https://onlinepdfpro.com/login"
     }
   });
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
   return data;
 }
 
@@ -63,9 +74,12 @@ async function signup(email, password, fullName) {
 // -------------------------------------
 async function login(email, password) {
   const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email, password
+    email,
+    password
   });
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
   redirectAfterAuth();
   return data;
 }
@@ -77,10 +91,12 @@ async function signInWithGoogle() {
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://onlinepdfpro.com/login.html"
+      redirectTo: "https://onlinepdfpro.com/login"
     }
   });
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 }
 
 // -------------------------------------
@@ -88,7 +104,10 @@ async function signInWithGoogle() {
 // -------------------------------------
 async function logout() {
   const { error } = await supabaseClient.auth.signOut();
-  if (error) { console.error(error); return; }
+  if (error) {
+    console.error(error);
+    return;
+  }
   window.location.href = "/";
 }
 
@@ -104,7 +123,9 @@ async function getCurrentUser() {
 // GET USER NAME
 // -------------------------------------
 function getUserDisplayName(user) {
-  if (!user) return "";
+  if (!user) {
+    return "";
+  }
   return (
     user.user_metadata?.full_name ||
     user.user_metadata?.name ||
@@ -131,10 +152,14 @@ async function updateUserHeader() {
   const user = await getCurrentUser();
   const container = document.getElementById("loggedInUser");
   if (!container) return;
-  if (!user) { container.hidden = true; container.style.display = 'none'; return; }
+  if (!user) {
+    container.hidden = true;
+    container.style.display = "none";
+    return;
+  }
 
   container.hidden = false;
-  container.style.display = 'flex';
+  container.style.display = "flex";
   document.getElementById("loggedInName").textContent = getUserDisplayName(user);
 
   const avatar = getUserAvatar(user);
