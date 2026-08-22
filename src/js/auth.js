@@ -43,9 +43,26 @@ async function requireLogin() {
 }
 
 async function buyProduct(id) {
-  const loggedIn = await requireLogin();
-  if (!loggedIn) return;
-  // next step: open Razorpay payment
+    const product = STORE_PRODUCTS[id];
+
+    if (!product) {
+        console.error("Product not found:", id);
+        return;
+    }
+
+    const loggedIn = await requireLogin();
+
+    if (!loggedIn) {
+        return;
+    }
+
+    // Save direct purchase separately
+    sessionStorage.setItem("buyNowProduct", id);
+
+    // Next stage:
+    // window.location.href = "/checkout.html";
+
+    console.log("User ready to buy:", id);
 }
 
 // -------------------------------------
