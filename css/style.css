@@ -663,6 +663,119 @@ footer a:active {
     text-decoration: none !important;
 }
 
+/* ---- Shared homepage footer ---- */
+.hp-footer {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-top: 48px;
+    background: var(--surface-2, #efe9de);
+    border-top: 1px solid var(--border, #d9d0c3);
+    padding: 56px 24px 36px;
+}
+
+[data-theme="dark"] .hp-footer {
+    background: #242019;
+    border-top-color: #3a342a;
+}
+
+.hp-footer-grid {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.35fr) repeat(4, minmax(0, 1fr));
+    gap: 32px;
+    width: min(1120px, 100%);
+    margin: 0 auto 36px;
+}
+
+.hp-footer-brand h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary, #2c2418);
+    margin-bottom: 6px;
+}
+
+.hp-footer-brand-sub {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted, #706558);
+    line-height: 1.5;
+}
+
+.hp-footer-col h5 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted, #706558);
+    margin-bottom: 14px;
+}
+
+.hp-footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.hp-footer li {
+    margin: 0 0 8px;
+}
+
+.hp-footer a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-secondary, #6b5e4f);
+    text-decoration: none;
+    font-size: 0.83rem;
+    line-height: 1.45;
+    transition: color 0.2s;
+}
+
+.hp-footer a:hover,
+.hp-footer a:focus-visible {
+    color: var(--text-primary, #2c2418) !important;
+    text-decoration: none;
+}
+
+.hp-footer-bottom {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border, #d9d0c3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.hp-footer-copy {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-muted, #706558);
+    margin: 0;
+}
+
+.hp-footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.hp-footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted, #706558);
+    transition: color 0.2s;
+}
+
+.hp-footer-socials a:hover {
+    color: var(--text-primary, #2c2418);
+}
+
+.hp-footer-socials svg {
+    width: 16px;
+    height: 16px;
+}
+
 /* ---- Mobile-only elements (hidden on desktop) ---- */
 .mobile-search-toggle {
     display: none;
