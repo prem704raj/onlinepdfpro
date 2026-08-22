@@ -5,7 +5,6 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Sign In / Sign Up | OnlinePDFPro</title>
     <meta content="Sign in or create an account to access premium study notes and tools on OnlinePDFPro." name="description"/>
-    <meta content="OnlinePDFPro" name="author"/>
     <meta content="noindex, follow" name="robots"/>
     <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
     <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
@@ -16,198 +15,113 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet"/>
     <link href="/css/mobile-fix-v2.css" rel="stylesheet"/>
+    <script>
+    (function() {
+        var theme = localStorage.getItem('doctools-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #f6f5f0;
             color: #2c2418;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
         }
-        [data-theme="dark"] body {
-            background: #1a1714;
-            color: #f0ebe2;
-        }
+        [data-theme="dark"] body { background: #1a1714; color: #f0ebe2; }
+
         .auth-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex: 1; display: flex; align-items: center; justify-content: center;
             padding: 40px 20px;
         }
         .auth-card {
-            width: 100%;
-            max-width: 440px;
-            background: #ffffff;
-            border: 1px solid #d9d0c3;
-            border-radius: 12px;
+            width: 100%; max-width: 440px;
+            background: #ffffff; border: 1px solid #d9d0c3; border-radius: 12px;
             padding: 36px 32px;
-            box-shadow: 0 10px 30px rgba(44, 36, 24, 0.08);
+            box-shadow: 0 10px 30px rgba(44,36,24,0.08);
             text-align: center;
         }
         [data-theme="dark"] .auth-card {
-            background: #242019;
-            border-color: #3a342a;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            background: #242019; border-color: #3a342a;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        .auth-logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            margin-bottom: 24px;
-        }
-        .auth-logo img {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-        }
-        .auth-logo span {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #2c2418;
-        }
-        [data-theme="dark"] .auth-logo span {
-            color: #f0ebe2;
-        }
-        .auth-title {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .auth-subtitle {
-            font-size: 0.9rem;
-            color: #6b5e4f;
-            margin-bottom: 28px;
-        }
-        [data-theme="dark"] .auth-subtitle {
-            color: #a89e8f;
-        }
-        .auth-tabs {
-            display: flex;
-            border-bottom: 2px solid #e5e0d8;
-            margin-bottom: 24px;
-        }
-        [data-theme="dark"] .auth-tabs {
-            border-color: #3a342a;
-        }
+
+        .auth-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 24px; }
+        .auth-logo img { width: 32px; height: 32px; border-radius: 6px; }
+        .auth-logo span { font-size: 1.25rem; font-weight: 700; color: #2c2418; }
+        [data-theme="dark"] .auth-logo span { color: #f0ebe2; }
+
+        .auth-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.8rem; font-weight: 600; margin-bottom: 8px; }
+        .auth-subtitle { font-size: 0.9rem; color: #6b5e4f; margin-bottom: 24px; }
+        [data-theme="dark"] .auth-subtitle { color: #a89e8f; }
+
+        /* Tabs */
+        .auth-tabs { display: flex; border-bottom: 2px solid #e5e0d8; margin-bottom: 24px; }
+        [data-theme="dark"] .auth-tabs { border-color: #3a342a; }
         .auth-tab {
-            flex: 1;
-            padding: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            background: none;
-            border: none;
-            color: #6b5e4f;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
-            transition: all 0.2s;
+            flex: 1; padding: 10px; font-size: 0.95rem; font-weight: 600;
+            background: none; border: none; color: #6b5e4f; cursor: pointer;
+            border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s;
         }
-        [data-theme="dark"] .auth-tab {
-            color: #a89e8f;
+        [data-theme="dark"] .auth-tab { color: #a89e8f; }
+        .auth-tab.active { color: #8b6914; border-bottom-color: #8b6914; }
+        [data-theme="dark"] .auth-tab.active { color: #d4a942; border-bottom-color: #d4a942; }
+
+        /* Google button */
+        .google-auth-btn {
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 12px; font-size: 0.95rem; font-weight: 600; font-family: inherit;
+            background: #fff; color: #2c2418; border: 1px solid #d9d0c3; border-radius: 6px;
+            cursor: pointer; transition: all 0.2s; margin-bottom: 20px;
         }
-        .auth-tab.active {
-            color: #8b6914;
-            border-bottom-color: #8b6914;
+        .google-auth-btn:hover { background: #f5f0e8; box-shadow: 0 2px 8px rgba(44,36,24,0.1); }
+        [data-theme="dark"] .google-auth-btn { background: #1a1714; color: #f0ebe2; border-color: #3a342a; }
+        [data-theme="dark"] .google-auth-btn:hover { background: #2a2520; }
+
+        .divider {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            font-size: 0.8rem; color: #a89e8f; text-transform: uppercase; letter-spacing: 0.1em;
         }
-        [data-theme="dark"] .auth-tab.active {
-            color: #d4a942;
-            border-bottom-color: #d4a942;
-        }
-        .form-group {
-            margin-bottom: 18px;
-            text-align: left;
-        }
-        .form-label {
-            display: block;
-            font-size: 0.82rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #2c2418;
-        }
-        [data-theme="dark"] .form-label {
-            color: #f0ebe2;
-        }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e5e0d8; }
+        [data-theme="dark"] .divider::before, [data-theme="dark"] .divider::after { background: #3a342a; }
+
+        /* Form */
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: #2c2418; }
+        [data-theme="dark"] .form-label { color: #f0ebe2; }
         .form-input {
-            width: 100%;
-            padding: 12px 14px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            border: 1px solid #d9d0c3;
-            border-radius: 6px;
-            background: #fdfcf9;
-            color: #2c2418;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
+            width: 100%; padding: 12px 14px; font-size: 0.95rem; font-family: inherit;
+            border: 1px solid #d9d0c3; border-radius: 6px; background: #fdfcf9; color: #2c2418;
+            box-sizing: border-box; outline: none; transition: border-color 0.2s;
         }
-        [data-theme="dark"] .form-input {
-            background: #1a1714;
-            border-color: #3a342a;
-            color: #f0ebe2;
-        }
-        .form-input:focus {
-            border-color: #8b6914;
-        }
+        [data-theme="dark"] .form-input { background: #1a1714; border-color: #3a342a; color: #f0ebe2; }
+        .form-input:focus { border-color: #8b6914; }
+
         .auth-btn {
-            width: 100%;
-            padding: 13px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #ffffff;
-            background: #8b6914;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 8px;
+            width: 100%; padding: 13px; font-size: 0.95rem; font-weight: 600;
+            color: #fff; background: #8b6914; border: none; border-radius: 6px;
+            cursor: pointer; transition: background 0.2s; margin-top: 8px;
         }
-        .auth-btn:hover {
-            background: #a47d1b;
-        }
-        .auth-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .auth-btn:hover { background: #a47d1b; }
+        .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Alerts */
         .alert-msg {
-            padding: 12px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            margin-bottom: 18px;
-            display: none;
-            text-align: left;
+            padding: 12px 14px; border-radius: 6px; font-size: 0.85rem;
+            margin-bottom: 18px; display: none; text-align: left;
         }
-        .alert-error {
-            background: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #f87171;
-        }
-        .alert-success {
-            background: #dcfce7;
-            color: #15803d;
-            border: 1px solid #86efac;
-        }
-        .auth-footer-link {
-            margin-top: 24px;
-            font-size: 0.85rem;
-            color: #6b5e4f;
-        }
-        [data-theme="dark"] .auth-footer-link {
-            color: #a89e8f;
-        }
-        .auth-footer-link a {
-            color: #8b6914;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        [data-theme="dark"] .auth-footer-link a {
-            color: #d4a942;
-        }
+        .alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+
+        .auth-footer-link { margin-top: 24px; font-size: 0.85rem; color: #6b5e4f; }
+        [data-theme="dark"] .auth-footer-link { color: #a89e8f; }
+        .auth-footer-link a { color: #8b6914; text-decoration: none; font-weight: 600; }
+        [data-theme="dark"] .auth-footer-link a { color: #d4a942; }
+
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
     </style>
 </head>
 <body>
@@ -229,19 +143,52 @@
             <div class="alert-msg alert-error" id="alertError"></div>
             <div class="alert-msg alert-success" id="alertSuccess"></div>
 
-            <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input class="form-input" id="email" type="email" placeholder="name@example.com" required autocomplete="email"/>
-                </div>
+            <!-- Google button (shared) -->
+            <button type="button" class="google-auth-btn" onclick="handleGoogleLogin()">
+                <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11.6 0 19.3-8.1 19.3-19.5 0-1.5-.1-2.7-.3-4.5z"/>
+                    <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 18.9 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4c-7.7 0-14.4 4.4-17.7 10.7z"/>
+                    <path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5.1l-6.2-5.2C29.3 35.2 26.8 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.5 39.5 16.2 44 24 44z"/>
+                    <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.2 5.2C41 35.6 44 30 44 24c0-1.4-.1-2.7-.4-4z"/>
+                </svg>
+                Continue with Google
+            </button>
 
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-input" id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
-                </div>
+            <div class="divider"><span>or</span></div>
 
-                <button class="auth-btn" id="submitBtn" type="submit">Sign In</button>
-            </form>
+            <!-- Sign In Panel -->
+            <div class="form-panel active" id="panelSignIn">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label" for="loginEmail">Email Address</label>
+                        <input class="form-input" id="loginEmail" type="email" placeholder="name@example.com" required autocomplete="email"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+                    </div>
+                    <button class="auth-btn" type="button" id="signinBtn" onclick="handleLogin()">Sign In</button>
+                </form>
+            </div>
+
+            <!-- Sign Up Panel -->
+            <div class="form-panel" id="panelSignUp">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label" for="signupName">Full Name</label>
+                        <input class="form-input" id="signupName" type="text" placeholder="Prem Raj" required autocomplete="name"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="signupEmail">Email Address</label>
+                        <input class="form-input" id="signupEmail" type="email" placeholder="you@example.com" required autocomplete="email"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="signupPassword">Password</label>
+                        <input class="form-input" id="signupPassword" type="password" placeholder="Create a password" required autocomplete="new-password" minlength="8"/>
+                    </div>
+                    <button class="auth-btn" type="button" id="signupBtn" onclick="handleSignup()">Create Account</button>
+                </form>
+            </div>
 
             <div class="auth-footer-link">
                 <a href="/study-materials.html">← Back to Study Materials</a>
@@ -256,87 +203,81 @@
 
         function switchTab(mode) {
             currentMode = mode;
+            hideAlerts();
+            document.getElementById('tabSignIn').classList.toggle('active', mode === 'signin');
+            document.getElementById('tabSignUp').classList.toggle('active', mode === 'signup');
+            document.getElementById('panelSignIn').classList.toggle('active', mode === 'signin');
+            document.getElementById('panelSignUp').classList.toggle('active', mode === 'signup');
+            document.getElementById('authHeading').innerText = mode === 'signin' ? 'Welcome Back' : 'Create Account';
+            document.getElementById('authSubheading').innerText = mode === 'signin'
+                ? 'Sign in to continue your purchase'
+                : 'Join to get access to premium study notes';
+        }
+
+        function hideAlerts() {
             document.getElementById('alertError').style.display = 'none';
             document.getElementById('alertSuccess').style.display = 'none';
-
-            const tabSignIn = document.getElementById('tabSignIn');
-            const tabSignUp = document.getElementById('tabSignUp');
-            const heading = document.getElementById('authHeading');
-            const subheading = document.getElementById('authSubheading');
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (mode === 'signin') {
-                tabSignIn.classList.add('active');
-                tabSignUp.classList.remove('active');
-                heading.innerText = 'Welcome Back';
-                subheading.innerText = 'Sign in to continue your purchase';
-                submitBtn.innerText = 'Sign In';
-            } else {
-                tabSignUp.classList.add('active');
-                tabSignIn.classList.remove('active');
-                heading.innerText = 'Create Account';
-                subheading.innerText = 'Join to get access to premium study notes';
-                submitBtn.innerText = 'Create Account';
-            }
         }
 
-        async function handleAuthSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const submitBtn = document.getElementById('submitBtn');
-            const alertError = document.getElementById('alertError');
-            const alertSuccess = document.getElementById('alertSuccess');
+        function showMessage(msg, type) {
+            hideAlerts();
+            var el = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
+            el.innerText = msg;
+            el.style.display = 'block';
+        }
 
-            alertError.style.display = 'none';
-            alertSuccess.style.display = 'none';
-
-            if (!email || !password) {
-                alertError.innerText = 'Please enter both email and password.';
-                alertError.style.display = 'block';
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = currentMode === 'signin' ? 'Signing In...' : 'Creating Account...';
-
+        async function handleLogin() {
+            hideAlerts();
+            var email = document.getElementById('loginEmail').value.trim();
+            var password = document.getElementById('loginPassword').value;
+            if (!email || !password) { showMessage('Please enter both email and password.', 'error'); return; }
+            var btn = document.getElementById('signinBtn');
+            btn.disabled = true; btn.innerText = 'Signing In...';
             try {
-                if (currentMode === 'signup') {
-                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
-                    if (error) {
-                        alertError.innerText = error.message;
-                        alertError.style.display = 'block';
-                    } else {
-                        alertSuccess.innerText = 'Account created! Please check your email for a confirmation link.';
-                        alertSuccess.style.display = 'block';
-                    }
-                } else {
-                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                    if (error) {
-                        alertError.innerText = error.message;
-                        alertError.style.display = 'block';
-                    } else {
-                        alertSuccess.innerText = 'Logged in successfully! Redirecting...';
-                        alertSuccess.style.display = 'block';
-                        
-                        setTimeout(() => {
-                            const pending = localStorage.getItem('pendingProduct');
-                            if (pending) {
-                                window.location.href = '/study-materials.html';
-                            } else {
-                                window.location.href = '/';
-                            }
-                        }, 800);
-                    }
-                }
+                await login(email, password);
             } catch (err) {
-                alertError.innerText = err.message || 'An unexpected error occurred.';
-                alertError.style.display = 'block';
+                showMessage(err.message, 'error');
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = currentMode === 'signin' ? 'Sign In' : 'Create Account';
+                btn.disabled = false; btn.innerText = 'Sign In';
             }
         }
+
+        async function handleSignup() {
+            hideAlerts();
+            var name = document.getElementById('signupName').value.trim();
+            var email = document.getElementById('signupEmail').value.trim();
+            var password = document.getElementById('signupPassword').value;
+            if (!name || !email || !password) { showMessage('Please fill in all fields.', 'error'); return; }
+            var btn = document.getElementById('signupBtn');
+            btn.disabled = true; btn.innerText = 'Creating Account...';
+            try {
+                await signup(email, password, name);
+                showMessage('Account created! Check your email to confirm your account.', 'success');
+            } catch (err) {
+                showMessage(err.message, 'error');
+            } finally {
+                btn.disabled = false; btn.innerText = 'Create Account';
+            }
+        }
+
+        async function handleGoogleLogin() {
+            hideAlerts();
+            try {
+                await signInWithGoogle();
+            } catch (err) {
+                showMessage(err.message, 'error');
+            }
+        }
+
+        // Auto-redirect if already logged in (e.g. returning from Google OAuth)
+        document.addEventListener("DOMContentLoaded", async function() {
+            try {
+                var result = await supabaseClient.auth.getSession();
+                if (result.data.session) {
+                    redirectAfterAuth();
+                }
+            } catch (e) { /* ignore */ }
+        });
     </script>
 </body>
 </html>
