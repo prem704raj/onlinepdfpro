@@ -1,41 +1,342 @@
----
-layout: base.njk
-title: Login / Sign Up
----
-<div class="login-container" style="max-width: 400px; margin: 60px auto; text-align: center; font-family: sans-serif;">
-    <h1 style="margin-bottom: 20px;">Sign in to continue</h1>
-    <input id="email" type="email" placeholder="Email" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-    <input id="password" type="password" placeholder="Password" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-    
-    <button onclick="login()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-bottom: 10px;">Sign In</button>
-    <button onclick="signup()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">Create Account</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sign In / Sign Up | OnlinePDFPro</title>
+    <meta content="Sign in or create an account to access premium study notes and tools on OnlinePDFPro." name="description"/>
+    <meta content="OnlinePDFPro" name="author"/>
+    <meta content="noindex, follow" name="robots"/>
+    <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link href="/css/mobile-fix-v2.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f6f5f0;
+            color: #2c2418;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        [data-theme="dark"] body {
+            background: #1a1714;
+            color: #f0ebe2;
+        }
+        .auth-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border: 1px solid #d9d0c3;
+            border-radius: 12px;
+            padding: 36px 32px;
+            box-shadow: 0 10px 30px rgba(44, 36, 24, 0.08);
+            text-align: center;
+        }
+        [data-theme="dark"] .auth-card {
+            background: #242019;
+            border-color: #3a342a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .auth-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+        .auth-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+        .auth-logo span {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c2418;
+        }
+        [data-theme="dark"] .auth-logo span {
+            color: #f0ebe2;
+        }
+        .auth-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .auth-subtitle {
+            font-size: 0.9rem;
+            color: #6b5e4f;
+            margin-bottom: 28px;
+        }
+        [data-theme="dark"] .auth-subtitle {
+            color: #a89e8f;
+        }
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e0d8;
+            margin-bottom: 24px;
+        }
+        [data-theme="dark"] .auth-tabs {
+            border-color: #3a342a;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            color: #6b5e4f;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        [data-theme="dark"] .auth-tab {
+            color: #a89e8f;
+        }
+        .auth-tab.active {
+            color: #8b6914;
+            border-bottom-color: #8b6914;
+        }
+        [data-theme="dark"] .auth-tab.active {
+            color: #d4a942;
+            border-bottom-color: #d4a942;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2c2418;
+        }
+        [data-theme="dark"] .form-label {
+            color: #f0ebe2;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            border: 1px solid #d9d0c3;
+            border-radius: 6px;
+            background: #fdfcf9;
+            color: #2c2418;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        [data-theme="dark"] .form-input {
+            background: #1a1714;
+            border-color: #3a342a;
+            color: #f0ebe2;
+        }
+        .form-input:focus {
+            border-color: #8b6914;
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: #8b6914;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+        .auth-btn:hover {
+            background: #a47d1b;
+        }
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .alert-msg {
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 18px;
+            display: none;
+            text-align: left;
+        }
+        .alert-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+        }
+        .alert-success {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
+        }
+        .auth-footer-link {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: #6b5e4f;
+        }
+        [data-theme="dark"] .auth-footer-link {
+            color: #a89e8f;
+        }
+        .auth-footer-link a {
+            color: #8b6914;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        [data-theme="dark"] .auth-footer-link a {
+            color: #d4a942;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <a class="auth-logo" href="/">
+                <img alt="OnlinePDFPro Logo" src="/logo.png"/>
+                <span>OnlinePDFPro</span>
+            </a>
 
-<script>
-async function signup(){ 
-    const email = document.getElementById("email").value; 
-    const password = document.getElementById("password").value; 
-    const {error} = await supabaseClient.auth.signUp({ email, password }); 
-    if(error){ 
-        alert(error.message); 
-    } else { 
-        alert("Check email for verification"); 
-    } 
-} 
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" id="tabSignUp" onclick="switchTab('signup')">Create Account</button>
+            </div>
 
-async function login(){ 
-    const email = document.getElementById("email").value; 
-    const password = document.getElementById("password").value; 
-    const {error} = await supabaseClient.auth.signInWithPassword({ email, password }); 
-    if(error){ 
-        alert(error.message); 
-    } else { 
-        const product = localStorage.getItem("pendingProduct"); 
-        if(product){ 
-            window.location.href = "/" + product; // Just an assumption of routing
-        } else{ 
-            window.location.href="/"; 
-        } 
-    } 
-}
-</script>
+            <h1 class="auth-title" id="authHeading">Welcome Back</h1>
+            <p class="auth-subtitle" id="authSubheading">Sign in to continue your purchase</p>
+
+            <div class="alert-msg alert-error" id="alertError"></div>
+            <div class="alert-msg alert-success" id="alertSuccess"></div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input class="form-input" id="email" type="email" placeholder="name@example.com" required autocomplete="email"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-input" id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+                </div>
+
+                <button class="auth-btn" id="submitBtn" type="submit">Sign In</button>
+            </form>
+
+            <div class="auth-footer-link">
+                <a href="/study-materials.html">← Back to Study Materials</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+        let currentMode = 'signin';
+
+        function switchTab(mode) {
+            currentMode = mode;
+            document.getElementById('alertError').style.display = 'none';
+            document.getElementById('alertSuccess').style.display = 'none';
+
+            const tabSignIn = document.getElementById('tabSignIn');
+            const tabSignUp = document.getElementById('tabSignUp');
+            const heading = document.getElementById('authHeading');
+            const subheading = document.getElementById('authSubheading');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (mode === 'signin') {
+                tabSignIn.classList.add('active');
+                tabSignUp.classList.remove('active');
+                heading.innerText = 'Welcome Back';
+                subheading.innerText = 'Sign in to continue your purchase';
+                submitBtn.innerText = 'Sign In';
+            } else {
+                tabSignUp.classList.add('active');
+                tabSignIn.classList.remove('active');
+                heading.innerText = 'Create Account';
+                subheading.innerText = 'Join to get access to premium study notes';
+                submitBtn.innerText = 'Create Account';
+            }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const alertError = document.getElementById('alertError');
+            const alertSuccess = document.getElementById('alertSuccess');
+
+            alertError.style.display = 'none';
+            alertSuccess.style.display = 'none';
+
+            if (!email || !password) {
+                alertError.innerText = 'Please enter both email and password.';
+                alertError.style.display = 'block';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = currentMode === 'signin' ? 'Signing In...' : 'Creating Account...';
+
+            try {
+                if (currentMode === 'signup') {
+                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                    if (error) {
+                        alertError.innerText = error.message;
+                        alertError.style.display = 'block';
+                    } else {
+                        alertSuccess.innerText = 'Account created! Please check your email for a confirmation link.';
+                        alertSuccess.style.display = 'block';
+                    }
+                } else {
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                    if (error) {
+                        alertError.innerText = error.message;
+                        alertError.style.display = 'block';
+                    } else {
+                        alertSuccess.innerText = 'Logged in successfully! Redirecting...';
+                        alertSuccess.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            const pending = localStorage.getItem('pendingProduct');
+                            if (pending) {
+                                window.location.href = '/study-materials.html';
+                            } else {
+                                window.location.href = '/';
+                            }
+                        }, 800);
+                    }
+                }
+            } catch (err) {
+                alertError.innerText = err.message || 'An unexpected error occurred.';
+                alertError.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = currentMode === 'signin' ? 'Sign In' : 'Create Account';
+            }
+        }
+    </script>
+</body>
+</html>
