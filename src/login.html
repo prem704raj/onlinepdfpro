@@ -269,14 +269,42 @@
             }
         }
 
-        // Auto-redirect if already logged in (e.g. returning from Google OAuth)
+        // -------------------------------------
+        // HANDLE GOOGLE / EMAIL AUTH CALLBACK
+        // -------------------------------------
+        let authRedirectStarted = false;
+
+        function finishAuthentication() {
+            if (authRedirectStarted) {
+                return;
+            }
+            authRedirectStarted = true;
+            redirectAfterAuth();
+        }
+
+        // Listen for Supabase authentication changes.
+        // This is important for Google OAuth because the session
+        // may be created AFTER DOMContentLoaded.
+        supabaseClient.auth.onAuthStateChange(function(event, session) {
+            if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
+                finishAuthentication();
+            }
+        });
+
+        // Also check an existing session when the page loads.
         document.addEventListener("DOMContentLoaded", async function() {
             try {
-                var result = await supabaseClient.auth.getSession();
-                if (result.data.session) {
-                    redirectAfterAuth();
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (error) {
+                    console.error("Session check error:", error);
+                    return;
                 }
-            } catch (e) { /* ignore */ }
+                if (session) {
+                    finishAuthentication();
+                }
+            } catch (error) {
+                console.error("Authentication callback error:", error);
+            }
         });
     </script>
 </body>
