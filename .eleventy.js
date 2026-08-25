@@ -1,8 +1,4 @@
-const { rssPlugin } = require('@11ty/eleventy-plugin-rss');
-
 module.exports = function(eleventyConfig) {
-  eleventyConfig.addPlugin(rssPlugin);
-
   // Process only njk and md templates; copy html files as-is
   eleventyConfig.setTemplateFormats(['njk', 'md']);
 
@@ -32,20 +28,10 @@ module.exports = function(eleventyConfig) {
     return typeof str === 'string' && str.startsWith(prefix);
   });
 
-  // Blog posts collection
-  eleventyConfig.addCollection('blog', function(collectionApi) {
-    return collectionApi.getFilteredByGlob('src/blog/*.md').reverse();
-  });
-
   // Safe HTML minification transform.
-  // The previous regex minifier stripped newlines/whitespace from the WHOLE
-  // document — including inline <script>/<style>/<pre>/<textarea> content —
-  // which can corrupt JavaScript string literals and rendered whitespace.
-  // This version shields those regions before minifying the rest.
   eleventyConfig.addTransform('htmlmin', function(content, outputPath) {
     if (!outputPath || !outputPath.endsWith('.html')) return content;
 
-    // Protect regions that must keep their exact whitespace/content
     const protectedBlocks = [];
     const PROTECTED_RE = /<(script|style|pre|textarea)(?:\s[^>]*)?>[\s\S]*?<\/\1>/gi;
     content = content.replace(PROTECTED_RE, (match) => {
@@ -54,7 +40,6 @@ module.exports = function(eleventyConfig) {
     });
 
     let minified = content
-      // strip comments but keep IE conditional comments
       .replace(/<!--(?!\[if\s)[\s\S]*?-->/g, '')
       .replace(/\s{2,}/g, ' ')
       .replace(/>\s+</g, '><')

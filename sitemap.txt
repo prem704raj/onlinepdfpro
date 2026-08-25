@@ -2,11 +2,8 @@ https://onlinepdfpro.com/about.html
 https://onlinepdfpro.com/blog.html
 https://onlinepdfpro.com/blog/introducing-pdf-scratchpad-online.html
 https://onlinepdfpro.com/compare-pdf.html
-https://onlinepdfpro.com/contact.html
-https://onlinepdfpro.com/disclaimer.html
 https://onlinepdfpro.com/dmca.html
 https://onlinepdfpro.com/flatten-pdf.html
-https://onlinepdfpro.com/help.html
 https://onlinepdfpro.com/history.html
 https://onlinepdfpro.com/
 https://onlinepdfpro.com/invoice-generator.html
@@ -63,3 +60,4 @@ https://onlinepdfpro.com/blog/pdf-vs-docx-which-format-should-you-use.html
 https://onlinepdfpro.com/blog/how-to-protect-pdf-from-copying.html
 https://onlinepdfpro.com/blog/why-client-side-processing-is-safer.html
 https://onlinepdfpro.com/blog/best-free-presentation-makers.html
+https://onlinepdfpro.com/support.html

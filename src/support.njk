@@ -1,0 +1,94 @@
+---
+title: "Support & FAQ — OnlinePDFPro"
+description: "Get help with your account, purchases, downloads, and PDF tools. Contact OnlinePDFPro support."
+keywords: "onlinepdfpro support, help, faq, contact, account help"
+permalink: /support.html
+bodyClass: hp-body
+---
+{% extends "base.njk" %}
+{% block head %}
+<style>
+.support-page { max-width: 800px; margin: 0 auto; padding: 120px 24px 80px; }
+.support-heading { font-family: var(--hp-serif, 'Playfair Display', Georgia, serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 400; margin-bottom: 12px; }
+.support-heading em { font-style: italic; }
+.support-subtitle { font-size: 1rem; color: var(--hp-text-secondary, #6b5e4f); line-height: 1.7; margin-bottom: 48px; }
+.support-section { margin-bottom: 48px; }
+.support-section-title { font-family: var(--hp-serif, 'Playfair Display', Georgia, serif); font-size: 1.3rem; font-weight: 500; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--hp-border, #d9d0c3); }
+.faq-item { margin-bottom: 16px; }
+.faq-q { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+.faq-a { font-size: 0.9rem; color: var(--hp-text-secondary, #6b5e4f); line-height: 1.7; }
+.support-contact { background: var(--hp-bg-alt, #efe9de); padding: 32px; margin-top: 48px; }
+.support-contact h3 { font-family: var(--hp-serif, 'Playfair Display', Georgia, serif); font-size: 1.2rem; margin-bottom: 12px; }
+.support-contact p { font-size: 0.9rem; color: var(--hp-text-secondary, #6b5e4f); line-height: 1.7; }
+.support-contact a { color: var(--hp-accent, #8b6914); font-weight: 600; text-decoration: none; }
+.support-contact a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="support-page">
+    <h1 class="support-heading">Support & <em>FAQ</em></h1>
+    <p class="support-subtitle">Find answers to common questions about your account, purchases, downloads, and our free PDF tools.</p>
+
+    <div class="support-section">
+        <h2 class="support-section-title">Account</h2>
+        <div class="faq-item">
+            <p class="faq-q">How do I sign in?</p>
+            <p class="faq-a">You can sign in with your email and password, or use Google Sign-In for one-click access. An account is only required when purchasing study materials.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">How does Google login work?</p>
+            <p class="faq-a">Click "Continue with Google" on the login page. We use Supabase Auth with Google OAuth — your name and profile photo are imported automatically. No extra password needed.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">I forgot my password</p>
+            <p class="faq-a">On the login page, click "Forgot password?" and enter your email. You'll receive a password reset link. If you signed up with Google, simply use "Continue with Google" instead.</p>
+        </div>
+    </div>
+
+    <div class="support-section">
+        <h2 class="support-section-title">Purchases</h2>
+        <div class="faq-item">
+            <p class="faq-q">How do I buy a PDF?</p>
+            <p class="faq-a">Browse our Study Materials, add items to your cart, and proceed to checkout. Payment is processed securely through Razorpay. After payment, your PDF is instantly available in My Library.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">Where are my purchased PDFs?</p>
+            <p class="faq-a">All your purchases appear in your My Library page, accessible from the profile menu. You can re-download them anytime.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">My payment failed — what now?</p>
+            <p class="faq-a">If your payment failed, no charge was made. Please try again with a different payment method, or contact your bank. If you were charged but didn't receive the PDF, email us immediately.</p>
+        </div>
+    </div>
+
+    <div class="support-section">
+        <h2 class="support-section-title">Downloads</h2>
+        <div class="faq-item">
+            <p class="faq-q">Can I download a purchased PDF again?</p>
+            <p class="faq-a">Yes. Go to My Library and click the download button next to any purchased item. Your purchases never expire.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">My download isn't working</p>
+            <p class="faq-a">Try refreshing the page and clicking the download button again. If the issue persists, try a different browser or disable any download-blocking extensions. Contact us if the problem continues.</p>
+        </div>
+    </div>
+
+    <div class="support-section">
+        <h2 class="support-section-title">PDF Tools</h2>
+        <div class="faq-item">
+            <p class="faq-q">Are the PDF tools really free?</p>
+            <p class="faq-a">Yes. All 30+ PDF tools (merge, compress, split, sign, convert, etc.) are completely free with no watermarks, no limits, and no account required.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-q">Are my files uploaded to a server?</p>
+            <p class="faq-a">Most tools process your files entirely in your browser — your documents never leave your device. Some AI-powered tools (like Chat with PDF) may send data to an API for processing, which is clearly noted on those tool pages.</p>
+        </div>
+    </div>
+
+    <div class="support-contact">
+        <h3>Still need help?</h3>
+        <p>Email us at <a href="mailto:support@onlinepdfpro.com">support@onlinepdfpro.com</a> and we'll get back to you within 24 hours.</p>
+    </div>
+</div>
+{% endblock %}

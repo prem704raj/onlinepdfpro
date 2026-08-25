@@ -1,0 +1,77 @@
+---
+title: "Refund Policy — OnlinePDFPro"
+description: "Refund policy for digital products purchased on OnlinePDFPro."
+keywords: "onlinepdfpro refund policy, digital product refund, pdf refund"
+permalink: /refund.html
+bodyClass: hp-body
+---
+{% extends "base.njk" %}
+{% block head %}
+<style>
+.legal-page { max-width: 740px; margin: 0 auto; padding: 120px 24px 80px; }
+.legal-heading { font-family: var(--hp-serif, 'Playfair Display', Georgia, serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 400; margin-bottom: 8px; }
+.legal-heading em { font-style: italic; }
+.legal-updated { font-size: 0.8rem; color: var(--hp-text-muted, #706558); margin-bottom: 40px; }
+.legal-section { margin-bottom: 32px; }
+.legal-section h2 { font-family: var(--hp-serif, 'Playfair Display', Georgia, serif); font-size: 1.2rem; font-weight: 500; margin-bottom: 12px; }
+.legal-section p, .legal-section li { font-size: 0.9rem; color: var(--hp-text-secondary, #6b5e4f); line-height: 1.7; }
+.legal-section ul { padding-left: 20px; margin: 8px 0; }
+.legal-section li { margin-bottom: 6px; }
+.legal-contact { background: var(--hp-bg-alt, #efe9de); padding: 24px; margin-top: 40px; }
+.legal-contact p { font-size: 0.9rem; color: var(--hp-text-secondary, #6b5e4f); line-height: 1.7; }
+.legal-contact a { color: var(--hp-accent, #8b6914); font-weight: 600; text-decoration: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-page">
+    <h1 class="legal-heading">Refund <em>Policy</em></h1>
+    <p class="legal-updated">Last updated: August 2026</p>
+
+    <div class="legal-section">
+        <h2>Digital Products</h2>
+        <p>All study materials sold on OnlinePDFPro are digital products (PDF files) delivered instantly upon purchase. Due to the nature of digital goods, all sales are generally final.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>When We Issue Refunds</h2>
+        <p>We will issue a full refund in the following circumstances:</p>
+        <ul>
+            <li>You were charged but did not receive the product</li>
+            <li>The product is significantly different from its description</li>
+            <li>The PDF file is corrupted or cannot be opened</li>
+            <li>You were charged multiple times for the same product</li>
+        </ul>
+    </div>
+
+    <div class="legal-section">
+        <h2>Refund Request Process</h2>
+        <p>To request a refund, email <a href="mailto:support@onlinepdfpro.com" style="color:var(--hp-accent);text-decoration:none;font-weight:600;">support@onlinepdfpro.com</a> within 7 days of purchase with:</p>
+        <ul>
+            <li>Your order ID or payment reference</li>
+            <li>The email address used for purchase</li>
+            <li>A brief description of the issue</li>
+        </ul>
+        <p>We aim to process refund requests within 3–5 business days.</p>
+    </div>
+
+    <div class="legal-section">
+        <h2>Non-Refundable Cases</h2>
+        <p>Refunds will not be issued if:</p>
+        <ul>
+            <li>You simply changed your mind after purchase</li>
+            <li>You have already downloaded and used the product</li>
+            <li>The request is made more than 7 days after purchase</li>
+        </ul>
+    </div>
+
+    <div class="legal-section">
+        <h2>Free PDF Tools</h2>
+        <p>Our free PDF tools (merge, compress, split, etc.) are provided at no cost. No payment is involved and therefore no refund applies.</p>
+    </div>
+
+    <div class="legal-contact">
+        <p>Questions about refunds? Contact us at <a href="mailto:support@onlinepdfpro.com">support@onlinepdfpro.com</a></p>
+    </div>
+</div>
+{% endblock %}

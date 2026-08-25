@@ -13,9 +13,10 @@ bodyClass: hp-body
 :root { --hp-bg: #f6f5f0; --hp-bg-alt: #efe9de; --hp-bg-dark: #1c1610; --hp-text: #2c2418; --hp-text-secondary: #6b5e4f; --hp-text-muted: #706558; --hp-accent: #8b6914; --hp-accent-hover: #a47d1b; --hp-border: #d9d0c3; --hp-card-bg: transparent; --hp-serif: 'Playfair Display', Georgia, 'Times New Roman', serif; --hp-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 [data-theme="dark"] { --hp-bg: #1a1714; --hp-bg-alt: #242019; --hp-bg-dark: #0f0d0a; --hp-text: #f0ebe2; --hp-text-secondary: #a89e8f; --hp-text-muted: #8c8273; --hp-accent: #d4a942; --hp-accent-hover: #e6be5a; --hp-border: #3a342a; --hp-card-bg: #2a2520; }
 body.hp-body { background: var(--hp-bg) !important; color: var(--hp-text) !important; }
-body.hp-body main { padding-top: 0 !important; }
-body.hp-body .header { background: #f6f5f0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; box-shadow: 0 4px 20px rgba(44,36,24,0.08) !important; }
-[data-theme="dark"] body.hp-body .header { background: #1a1714 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important; }
+body.hp-body main { padding-top: 0 !important; border: none !important; }
+body.hp-body section, body.hp-body main { border-top: none !important; border-bottom: none !important; }
+body.hp-body .header { background: #f6f5f0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; border-bottom: none !important; box-shadow: 0 4px 20px rgba(44,36,24,0.08) !important; }
+[data-theme="dark"] body.hp-body .header { background: #1a1714 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--hp-border) !important; border-bottom: none !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important; }
 body.hp-body .header .logo-text { color: var(--hp-text) !important; }
 body.hp-body .header .nav-link { color: var(--hp-text-secondary) !important; }
 body.hp-body .header .nav-link:hover { color: var(--hp-text) !important; }
@@ -23,7 +24,7 @@ body.hp-body .header .theme-toggle { color: var(--hp-text) !important; border: n
 body.hp-body .header .menu-toggle { color: var(--hp-text) !important; }
 body.hp-body .header .desktop-only-action { color: var(--hp-text) !important; border: none !important; }
 body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle { display: none !important; }
-.hp-hero { position: relative; width: 100%; min-height: auto; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: transparent; }
+.hp-hero { position: relative; width: 100%; min-height: auto; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: transparent; border: none; }
 .hp-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(139,105,20,0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 20% 75%, rgba(180,130,50,0.04) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 80% 25%, rgba(212,169,66,0.04) 0%, transparent 50%); animation: heroGlow 10s ease-in-out infinite alternate; z-index: 1; }
 @keyframes heroGlow { 0% { opacity: 0.85; } 100% { opacity: 1; } }
 .hp-hero::after { content: ''; position: absolute; inset: 0; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); z-index: 2; pointer-events: none; }
@@ -48,10 +49,10 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-section-heading { font-family: var(--hp-serif); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 400; color: var(--hp-text); line-height: 1.2; margin-bottom: 18px; letter-spacing: -0.01em; }
 .hp-section-heading em { font-style: italic; }
 .hp-section-desc { font-family: var(--hp-sans); font-size: 0.92rem; color: var(--hp-text-secondary); line-height: 1.75; max-width: 900px; }
-.hp-offerings { background: var(--hp-bg); }
+.hp-offerings { background: var(--hp-bg); border: none; }
 .hp-offerings-header { text-align: center; margin-bottom: 56px; }
 .hp-offerings-header .hp-section-desc { margin: 0 auto; }
-.hp-offerings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.hp-offerings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 @media (max-width: 1024px) { .hp-offerings-grid { grid-template-columns: 1fr; gap: 16px; } }
 .hp-offering-card { background: var(--hp-card-bg); border: 1px solid var(--hp-border); padding: 44px 32px 36px; text-align: left; text-decoration: none; color: inherit; transition: all 0.4s ease; position: relative; overflow: hidden; }
 
@@ -143,15 +144,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                 <p class="hp-offering-desc">Curated notes, handwritten PDFs, exam prep materials, and reference books — carefully selected for quality.</p>
                 <span class="hp-offering-link">Browse Materials <span>→</span></span>
             </a>
-            <a href="{{ '/blog.html' | url }}" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge" style="border-color: #0d9488; color: #0d9488;">Articles & Guides</div>
-                <div class="hp-offering-icon">
-                    <svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-                </div>
-                <h3 class="hp-offering-title">Articles & Guides</h3>
-                <p class="hp-offering-desc">Step-by-step tutorials, expert PDF tips, and comprehensive guides to help you get the most out of your documents.</p>
-                <span class="hp-offering-link">Read Articles <span>→</span></span>
-            </a>
         </div>
     </div>
 </section>
@@ -209,12 +201,13 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
             <div class="hp-fade-up">
                 <p class="hp-label">Our Philosophy</p>
                 <h2 class="hp-section-heading">Built <em>Different</em></h2>
-                <p class="hp-section-desc">Every tool on OnlinePDFPro explains its processing method, supported formats, and expected output before you start.</p>
+                <p class="hp-section-desc">OnlinePDFPro is designed to keep PDF tools simple, transparent, and accessible — while giving students a trusted place to discover useful PDF study materials.</p>
                 <ul class="hp-feature-list">
-                    <li>Clear processing information</li>
-                    <li>Complete privacy and security</li>
-                    <li>Free forever, no hidden charges</li>
-                    <li>No registration or signup required</li>
+                    <li>Free PDF tools, no hidden tool charges</li>
+                    <li>No signup required for PDF tools</li>
+                    <li>Clear processing and privacy information</li>
+                    <li>Secure accounts for purchases</li>
+                    <li>Instant access to purchased PDF materials</li>
                     <li>Works on any device, anywhere</li>
                 </ul>
             </div>
