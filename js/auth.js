@@ -1,6 +1,19 @@
 const SUPABASE_URL = "https://upwmevzyochrzskizesh.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwd21ldnp5b2Nocnpza2l6ZXNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MTA0ODYsImV4cCI6MjEwMjk4NjQ4Nn0.Cvmg9mCDihoAW8qaXBetzEQwhtwmOQSAxcTe3IaKzAE";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Safely create or retrieve Supabase client
+let supabaseClient = null;
+function getSupabaseClient() {
+  if (!supabaseClient && typeof supabase !== "undefined" && supabase.createClient) {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+  return supabaseClient;
+}
+
+// Initial setup if library already loaded
+if (typeof supabase !== "undefined" && supabase.createClient) {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
 
 // -------------------------------------
 // RETURN USER TO PRODUCT AFTER LOGIN
@@ -24,8 +37,7 @@ function redirectAfterAuth() {
     return;
   }
 
-  // If login was opened manually,
-  // go to homepage after authentication.
+  // If login was opened manually, go to homepage after authentication.
   window.location.replace("/");
 }
 
@@ -33,7 +45,13 @@ function redirectAfterAuth() {
 // CHECK LOGIN BEFORE BUYING
 // -------------------------------------
 async function requireLogin() {
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const client = getSupabaseClient();
+  if (!client) {
+    saveAuthReturnUrl();
+    window.location.href = "/login";
+    return false;
+  }
+  const { data: { session } } = await client.auth.getSession();
   if (!session) {
     saveAuthReturnUrl();
     window.location.href = "/login";
@@ -43,25 +61,18 @@ async function requireLogin() {
 }
 
 async function buyProduct(id) {
-    const product = STORE_PRODUCTS[id];
-
-    if (!product) {
+    if (typeof STORE_PRODUCTS !== "undefined" && !STORE_PRODUCTS[id]) {
         console.error("Product not found:", id);
         return;
     }
 
     const loggedIn = await requireLogin();
-
     if (!loggedIn) {
         return;
     }
 
     // Save direct purchase separately
     sessionStorage.setItem("buyNowProduct", id);
-
-    // Next stage:
-    // window.location.href = "/checkout.html";
-
     console.log("User ready to buy:", id);
 }
 
@@ -72,12 +83,17 @@ async function signup(email, password, fullName) {
   if (!fullName || fullName.trim().length < 2) {
     throw new Error("Please enter your full name.");
   }
-  const { data, error } = await supabaseClient.auth.signUp({
+  const client = getSupabaseClient();
+  if (!client) {
+    throw new Error("Authentication service is unavailable. Please check your internet connection.");
+  }
+  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login";
+  const { data, error } = await client.auth.signUp({
     email: email,
     password: password,
     options: {
       data: { full_name: fullName.trim() },
-      emailRedirectTo: "https://onlinepdfpro.com/login"
+      emailRedirectTo: redirectUrl
     }
   });
   if (error) {
@@ -90,7 +106,11 @@ async function signup(email, password, fullName) {
 // EMAIL LOGIN
 // -------------------------------------
 async function login(email, password) {
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
+  const client = getSupabaseClient();
+  if (!client) {
+    throw new Error("Authentication service is unavailable. Please check your internet connection.");
+  }
+  const { data, error } = await client.auth.signInWithPassword({
     email,
     password
   });
@@ -105,10 +125,15 @@ async function login(email, password) {
 // GOOGLE LOGIN
 // -------------------------------------
 async function signInWithGoogle() {
-  const { error } = await supabaseClient.auth.signInWithOAuth({
+  const client = getSupabaseClient();
+  if (!client) {
+    throw new Error("Authentication service is unavailable. Please check your internet connection or disable adblockers.");
+  }
+  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login";
+  const { error } = await client.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://onlinepdfpro.com/login"
+      redirectTo: redirectUrl
     }
   });
   if (error) {
@@ -120,10 +145,12 @@ async function signInWithGoogle() {
 // LOGOUT
 // -------------------------------------
 async function logout() {
-  const { error } = await supabaseClient.auth.signOut();
-  if (error) {
-    console.error(error);
-    return;
+  const client = getSupabaseClient();
+  if (client) {
+    const { error } = await client.auth.signOut();
+    if (error) {
+      console.error("Sign out error:", error);
+    }
   }
   window.location.href = "/";
 }
@@ -132,8 +159,15 @@ async function logout() {
 // CURRENT USER
 // -------------------------------------
 async function getCurrentUser() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  return user;
+  const client = getSupabaseClient();
+  if (!client) return null;
+  try {
+    const { data: { user } } = await client.auth.getUser();
+    return user;
+  } catch (err) {
+    console.warn("Could not retrieve user session:", err);
+    return null;
+  }
 }
 
 // -------------------------------------
@@ -205,7 +239,8 @@ async function updateUserHeader() {
   // Dropdown toggle
   const btn = document.getElementById("userAvatarBtn");
   const dropdown = document.getElementById("userDropdown");
-  if (btn && dropdown) {
+  if (btn && dropdown && !btn._hasDropdownHandler) {
+    btn._hasDropdownHandler = true;
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
       dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
@@ -220,12 +255,24 @@ async function updateUserHeader() {
 
   // Sign out button
   const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
+  if (logoutBtn && !logoutBtn._hasLogoutHandler) {
+    logoutBtn._hasLogoutHandler = true;
     logoutBtn.addEventListener("click", function () {
       logout();
     });
   }
 }
 
-document.addEventListener("DOMContentLoaded", updateUserHeader);
+// Expose globally on window
+window.supabaseClient = supabaseClient;
+window.getSupabaseClient = getSupabaseClient;
+window.signInWithGoogle = signInWithGoogle;
+window.login = login;
+window.signup = signup;
+window.logout = logout;
+window.getCurrentUser = getCurrentUser;
+window.getUserDisplayName = getUserDisplayName;
+window.getUserAvatar = getUserAvatar;
+window.updateUserHeader = updateUserHeader;
 
+document.addEventListener("DOMContentLoaded", updateUserHeader);
