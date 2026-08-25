@@ -116,7 +116,7 @@
 [data-theme="dark"] .header,
 [data-theme="dark"] header {
     background: rgba(26, 23, 20, 0.97) !important;
-    border: 1px solid #3a342a !important;
+    border: 1px solid #4a4238 !important;
     box-shadow: none !important;
 }
 
@@ -329,6 +329,28 @@ a {
     align-items: center;
     gap: 12px;
 }
+
+/* User Avatar Button */
+.user-avatar-btn {
+    transition: opacity 0.2s, transform 0.15s;
+}
+.user-avatar-btn:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+/* User Dropdown */
+.user-dropdown-item:hover {
+    background: var(--surface-1, #f1f5f9) !important;
+}
+[data-theme="dark"] .user-dropdown {
+    background: var(--surface-1, #1e1e2e) !important;
+    border-color: var(--border, #333) !important;
+}
+[data-theme="dark"] .user-dropdown-item:hover {
+    background: var(--surface-2, #2a2a3a) !important;
+}
+
 
 /* Theme Toggle */
 .theme-toggle,

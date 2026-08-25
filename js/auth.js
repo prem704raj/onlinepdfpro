@@ -176,17 +176,56 @@ async function updateUserHeader() {
   }
 
   container.hidden = false;
-  container.style.display = "flex";
-  document.getElementById("loggedInName").textContent = getUserDisplayName(user);
+  container.style.display = "block";
 
+  const displayName = getUserDisplayName(user);
+  const initial = displayName.charAt(0).toUpperCase();
+
+  // Set dropdown name
+  const dropdownName = document.getElementById("userDropdownName");
+  if (dropdownName) dropdownName.textContent = displayName;
+
+  // Set avatar or initial
   const avatar = getUserAvatar(user);
   const image = document.getElementById("loggedInAvatar");
-  if (avatar) {
+  const initialEl = document.getElementById("loggedInInitial");
+
+  if (avatar && image) {
     image.src = avatar;
     image.hidden = false;
+    if (initialEl) initialEl.style.display = "none";
   } else {
-    image.hidden = true;
+    if (image) image.hidden = true;
+    if (initialEl) {
+      initialEl.textContent = initial;
+      initialEl.style.display = "inline";
+    }
+  }
+
+  // Dropdown toggle
+  const btn = document.getElementById("userAvatarBtn");
+  const dropdown = document.getElementById("userDropdown");
+  if (btn && dropdown) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+    });
+    document.addEventListener("click", function () {
+      dropdown.style.display = "none";
+    });
+    dropdown.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+  }
+
+  // Sign out button
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      logout();
+    });
   }
 }
 
 document.addEventListener("DOMContentLoaded", updateUserHeader);
+
