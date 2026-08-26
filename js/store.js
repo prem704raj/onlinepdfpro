@@ -197,7 +197,7 @@ async function checkoutCart() {
 
     try {
         // Show loading state (simplistic alert for now, could be a spinner)
-        const btn = document.querySelector('.cart-checkout');
+        const btn = document.querySelector('.cart-checkout-btn');
         if (btn) btn.textContent = 'Processing...';
 
         // 1. Get auth token
@@ -289,7 +289,7 @@ async function checkoutCart() {
         console.error(err);
         alert(err.message || "An error occurred during checkout.");
     } finally {
-        const btn = document.querySelector('.cart-checkout');
+        const btn = document.querySelector('.cart-checkout-btn');
         if (btn) btn.textContent = 'Checkout';
     }
 }
