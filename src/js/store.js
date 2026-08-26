@@ -163,6 +163,20 @@ function renderCart() {
         `₹${getCartTotal()}`;
 }
 
+async function loadRazorpayScript() {
+    return new Promise((resolve) => {
+        if (window.Razorpay) {
+            resolve(true);
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
+}
+
 async function checkoutCart() {
     const cart = getCart();
 
@@ -170,17 +184,114 @@ async function checkoutCart() {
         return;
     }
 
-    const loggedIn =
-        await requireLogin();
-
+    const loggedIn = await requireLogin();
     if (!loggedIn) {
         return;
     }
 
-    // TODO: Send product IDs to backend.
-    // Backend calculates prices and creates Razorpay order.
+    const user = await getCurrentUser();
+    if (!user) return;
 
-    alert("Thank you! Checkout is coming soon. Your cart has been saved.");
+    // We only support checkout of 1 item at a time for this MVP
+    const product = cart[0];
+
+    try {
+        // Show loading state (simplistic alert for now, could be a spinner)
+        const btn = document.querySelector('.cart-checkout');
+        if (btn) btn.textContent = 'Processing...';
+
+        // 1. Get auth token
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        
+        // 2. Call backend to create order
+        const res = await fetch('https://pdf-api-proxy.prem704raj.workers.dev/store/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                product_id: product.id,
+                user_id: user.id
+            })
+        });
+
+        if (!res.ok) {
+            throw new Error('Failed to create order');
+        }
+
+        const orderData = await res.json();
+
+        // 3. Load Razorpay
+        const isLoaded = await loadRazorpayScript();
+        if (!isLoaded) {
+            throw new Error('Failed to load payment gateway');
+        }
+
+        // 4. Open Razorpay Checkout
+        const options = {
+            key: "rzp_live_TUU0msSo8hDUpP", // Need to use Live key here if on live mode, ideally should be fetched from backend or passed
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: "OnlinePDFPro",
+            description: product.title,
+            image: "/logo.png",
+            order_id: orderData.order_id,
+            handler: async function (response) {
+                try {
+                    const verifyRes = await fetch('https://pdf-api-proxy.prem704raj.workers.dev/store/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${session.access_token}`
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            product_id: product.id,
+                            user_id: user.id,
+                            amount: orderData.amount
+                        })
+                    });
+
+                    if (verifyRes.ok) {
+                        // Clear cart
+                        clearCart();
+                        closeCart();
+                        alert("Payment successful! Redirecting to your library.");
+                        window.location.href = "/library.html";
+                    } else {
+                        alert("Payment verification failed. Please contact support.");
+                    }
+                } catch (err) {
+                    console.error("Verification error", err);
+                    alert("Error verifying payment.");
+                }
+            },
+            prefill: {
+                name: getUserDisplayName(user) || "",
+                email: user.email || ""
+            },
+            theme: {
+                color: "#7c3aed"
+            }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response){
+            console.error(response.error);
+            alert("Payment failed: " + response.error.description);
+        });
+        rzp.open();
+
+    } catch (err) {
+        console.error(err);
+        alert(err.message || "An error occurred during checkout.");
+    } finally {
+        const btn = document.querySelector('.cart-checkout');
+        if (btn) btn.textContent = 'Checkout';
+    }
 }
 
 document.addEventListener(
