@@ -100,7 +100,7 @@ export default {
         const url = new URL(request.url);
 
         // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
-        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
+        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
             return new Response(JSON.stringify({ error: 'Forbidden: requests must come from the OnlinePDFPro website.' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
@@ -130,8 +130,14 @@ export default {
         if (url.pathname === '/store/verify-payment' && request.method === 'POST') {
             return handleVerifyPayment(request, env, allowedOrigins);
         }
+        if (url.pathname === '/store/download' && request.method === 'POST') {
+            return handleDownload(request, env, allowedOrigins);
+        }
+        if (url.pathname === '/store/my-purchases' && request.method === 'POST') {
+            return handleMyPurchases(request, env, allowedOrigins);
+        }
 
-        return new Response('OnlinePDFPro API Proxy. Available routes: POST /ai/chat, POST /ai/vision, POST /store/create-order, POST /store/verify-payment', {
+        return new Response('OnlinePDFPro API Proxy', {
             status: 200,
             headers: getCORSHeaders(request, allowedOrigins)
         });
@@ -166,29 +172,64 @@ function handleCORS(request) {
     });
 }
 
+// ─── Supabase Helper ──────────────────────────────────────────────────
+
+async function supabaseQuery(env, path, method, body, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'apikey': env.SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${token || env.SUPABASE_SERVICE_ROLE_KEY}`
+    };
+    const opts = { method, headers };
+    if (body && method !== 'GET') opts.body = JSON.stringify(body);
+    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`, opts);
+    const text = await res.text();
+    try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+    catch { return { ok: res.ok, status: res.status, data: text }; }
+}
+
+// Verify a Supabase JWT and extract the user_id
+async function verifySupabaseJWT(env, authHeader) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+    const token = authHeader.replace('Bearer ', '');
+    // Use Supabase auth endpoint to verify
+    const res = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'apikey': env.SUPABASE_SERVICE_ROLE_KEY
+        }
+    });
+    if (!res.ok) return null;
+    const user = await res.json();
+    return user?.id || null;
+}
+
 // ─── Store: Razorpay Payments ──────────────────────────────────────────
 
 async function handleCreateOrder(request, env, allowedOrigins) {
     const corsHeaders = getCORSHeaders(request, allowedOrigins);
     try {
         if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
-            return jsonResponse({ error: 'Razorpay keys missing in environment' }, 500, corsHeaders);
+            return jsonResponse({ error: 'Razorpay keys missing' }, 500, corsHeaders);
         }
+
+        // Verify user is logged in
+        const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
+        if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
 
         const body = await request.json();
-        const { product_id, user_id } = body;
-        if (!product_id || !user_id) {
-            return jsonResponse({ error: 'product_id and user_id required' }, 400, corsHeaders);
+        const { product_id } = body;
+        if (!product_id) return jsonResponse({ error: 'product_id required' }, 400, corsHeaders);
+
+        // Fetch product price from Supabase
+        const productRes = await supabaseQuery(env, `products?id=eq.${product_id}&select=id,price_inr,title`, 'GET');
+        if (!productRes.ok || !productRes.data?.length) {
+            return jsonResponse({ error: 'Product not found' }, 404, corsHeaders);
         }
+        const product = productRes.data[0];
+        const amount = product.price_inr;
 
-        // Hardcode prices (in paise) — must match STORE_PRODUCTS in store.js
-        const PRICES = {
-            'dbms-notes': 4900,   // ₹49
-            'css-cheat': 4900,    // ₹49
-            'js-prep': 9900       // ₹99
-        };
-        const amount = PRICES[product_id] || 4900; // default ₹49
-
+        // Create Razorpay Order
         const rzpAuth = btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`);
         const rzpResponse = await fetch('https://api.razorpay.com/v1/orders', {
             method: 'POST',
@@ -205,11 +246,21 @@ async function handleCreateOrder(request, env, allowedOrigins) {
         }
         
         const rzpOrder = await rzpResponse.json();
+
+        // Save order to Supabase with status 'created'
+        await supabaseQuery(env, 'orders', 'POST', {
+            user_id: userId,
+            product_id: product_id,
+            razorpay_order_id: rzpOrder.id,
+            amount_inr: amount,
+            status: 'created'
+        });
         
         return jsonResponse({
             order_id: rzpOrder.id,
             amount: rzpOrder.amount,
-            currency: rzpOrder.currency
+            currency: rzpOrder.currency,
+            key: env.RAZORPAY_KEY_ID  // Send the key to frontend so it doesn't need to be hardcoded
         }, 200, corsHeaders);
 
     } catch (err) {
@@ -221,14 +272,17 @@ async function handleVerifyPayment(request, env, allowedOrigins) {
     const corsHeaders = getCORSHeaders(request, allowedOrigins);
     try {
         if (!env.RAZORPAY_KEY_SECRET) {
-            return jsonResponse({ error: 'Razorpay secret missing in environment' }, 500, corsHeaders);
+            return jsonResponse({ error: 'Razorpay secret missing' }, 500, corsHeaders);
         }
 
+        const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
+        if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
+
         const body = await request.json();
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, product_id } = body;
         
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-            return jsonResponse({ error: 'Missing payment signature details' }, 400, corsHeaders);
+            return jsonResponse({ error: 'Missing payment details' }, 400, corsHeaders);
         }
 
         // Verify Signature with Web Crypto API
@@ -259,10 +313,101 @@ async function handleVerifyPayment(request, env, allowedOrigins) {
             return jsonResponse({ error: 'Invalid signature' }, 400, corsHeaders);
         }
 
+        // Update order to 'paid' in Supabase
+        await supabaseQuery(env, 
+            `orders?razorpay_order_id=eq.${razorpay_order_id}`, 
+            'PATCH', 
+            {
+                razorpay_payment_id,
+                razorpay_signature,
+                status: 'paid'
+            }
+        );
+
         return jsonResponse({ success: true, message: 'Payment verified' }, 200, corsHeaders);
 
     } catch (err) {
         return jsonResponse({ error: 'Verify payment error: ' + err.message }, 500, corsHeaders);
+    }
+}
+
+// ─── Store: Secure Download from R2 ───────────────────────────────────
+
+async function handleDownload(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
+    try {
+        const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
+        if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
+
+        const body = await request.json();
+        const { product_id } = body;
+        if (!product_id) return jsonResponse({ error: 'product_id required' }, 400, corsHeaders);
+
+        // Check if user has purchased this product
+        const orderRes = await supabaseQuery(env,
+            `orders?user_id=eq.${userId}&product_id=eq.${product_id}&status=eq.paid&select=id`,
+            'GET'
+        );
+        if (!orderRes.ok || !orderRes.data?.length) {
+            return jsonResponse({ error: 'You have not purchased this product' }, 403, corsHeaders);
+        }
+
+        // Get the R2 key from products table
+        const productRes = await supabaseQuery(env,
+            `products?id=eq.${product_id}&select=r2_key,title`,
+            'GET'
+        );
+        if (!productRes.ok || !productRes.data?.length) {
+            return jsonResponse({ error: 'Product not found' }, 404, corsHeaders);
+        }
+
+        const r2Key = productRes.data[0].r2_key;
+        const title = productRes.data[0].title;
+
+        // Fetch file from R2
+        const object = await env.PRODUCTS_BUCKET.get(r2Key);
+        if (!object) {
+            return jsonResponse({ error: 'File not found in storage' }, 404, corsHeaders);
+        }
+
+        // Stream the PDF to the user
+        const filename = r2Key.split('/').pop() || 'download.pdf';
+        return new Response(object.body, {
+            headers: {
+                ...corsHeaders,
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': `attachment; filename="${filename}"`,
+                'Cache-Control': 'no-store'
+            }
+        });
+
+    } catch (err) {
+        return jsonResponse({ error: 'Download error: ' + err.message }, 500, corsHeaders);
+    }
+}
+
+// ─── Store: My Purchases ──────────────────────────────────────────────
+
+async function handleMyPurchases(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
+    try {
+        const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
+        if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
+
+        // Fetch all paid orders for this user, joined with product info
+        const res = await supabaseQuery(env,
+            `orders?user_id=eq.${userId}&status=eq.paid&select=id,product_id,amount_inr,created_at,products(id,title,description)`,
+            'GET'
+        );
+
+        if (!res.ok) {
+            return jsonResponse({ error: 'Failed to fetch purchases' }, 500, corsHeaders);
+        }
+
+        return jsonResponse({ purchases: res.data || [] }, 200, corsHeaders);
+
+    } catch (err) {
+        return jsonResponse({ error: 'My purchases error: ' + err.message }, 500, corsHeaders);
     }
 }
 

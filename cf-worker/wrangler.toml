@@ -2,11 +2,21 @@ name = "onlinepdfpro-proxy"
 main = "pdf-api-proxy.js"
 compatibility_date = "2024-01-01"
 
+# ─── R2 Bucket Binding ───
+# This gives the Worker direct access to the private R2 bucket.
+[[r2_buckets]]
+binding = "PRODUCTS_BUCKET"
+bucket_name = "onlinepdfpro-products"
+
 # ─── Secrets (NEVER put credentials in this file — it's committed to git!) ───
 # Set them via Wrangler CLI:
 #
 #   npx wrangler secret put GROQ_API_KEY
 #   npx wrangler secret put OPENROUTER_API_KEY
+#   npx wrangler secret put RAZORPAY_KEY_ID
+#   npx wrangler secret put RAZORPAY_KEY_SECRET
+#   npx wrangler secret put SUPABASE_URL
+#   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 #
 # After setting secrets, deploy:
 #   npx wrangler deploy
