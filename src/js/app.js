@@ -66,6 +66,7 @@ const MobileMenu = {
                 const isOpen = nav.classList.toggle('active');
                 menuToggle.textContent = isOpen ? '✕' : '☰';
                 menuToggle.classList.toggle('open', isOpen);
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
             });
 
             // Close menu when clicking outside
@@ -74,6 +75,7 @@ const MobileMenu = {
                     nav.classList.remove('active');
                     menuToggle.textContent = '☰';
                     menuToggle.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
                 }
             });
 
@@ -83,6 +85,7 @@ const MobileMenu = {
                     nav.classList.remove('active');
                     menuToggle.textContent = '☰';
                     menuToggle.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
                 });
             });
         }

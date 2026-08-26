@@ -2,16 +2,17 @@
 permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.w3.org/2005/Atom" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- set staticPages = [
   { url: '/', priority: '1.0', changefreq: 'weekly' },
-  { url: '/about/', priority: '0.6', changefreq: 'yearly' },
-  { url: '/tools/', priority: '0.9', changefreq: 'weekly' },
-  { url: '/support/', priority: '0.6', changefreq: 'yearly' },
-  { url: '/dmca/', priority: '0.5', changefreq: 'yearly' },
-  { url: '/privacy/', priority: '0.5', changefreq: 'yearly' },
-  { url: '/terms/', priority: '0.5', changefreq: 'yearly' },
-  { url: '/refund/', priority: '0.5', changefreq: 'yearly' },
+  { url: '/about.html', priority: '0.6', changefreq: 'yearly' },
+  { url: '/tools.html', priority: '0.9', changefreq: 'weekly' },
+  { url: '/support.html', priority: '0.6', changefreq: 'yearly' },
+  { url: '/dmca.html', priority: '0.5', changefreq: 'yearly' },
+  { url: '/privacy.html', priority: '0.5', changefreq: 'yearly' },
+  { url: '/terms.html', priority: '0.5', changefreq: 'yearly' },
+  { url: '/refund.html', priority: '0.5', changefreq: 'yearly' },
+  { url: '/login.html', priority: '0.5', changefreq: 'yearly' },
   { url: '/study-materials.html', priority: '0.9', changefreq: 'weekly' },
   { url: '/compare-pdf.html', priority: '0.8', changefreq: 'weekly' },
   { url: '/flatten-pdf.html', priority: '0.8', changefreq: 'weekly' },
@@ -41,7 +42,6 @@ permalink: /sitemap.xml
 {%- for page in staticPages %}
   <url>
     <loc>https://onlinepdfpro.com{{ page.url }}</loc>
-    <lastmod>2026-08-23</lastmod>
     <changefreq>{{ page.changefreq }}</changefreq>
     <priority>{{ page.priority }}</priority>
   </url>
@@ -49,7 +49,6 @@ permalink: /sitemap.xml
 {%- for toolUrl in toolPages %}
   <url>
     <loc>https://onlinepdfpro.com{{ toolUrl }}</loc>
-    <lastmod>2026-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
