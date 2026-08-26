@@ -73,7 +73,7 @@ async function buyProduct(id) {
 
     // Save direct purchase separately
     sessionStorage.setItem("buyNowProduct", id);
-    console.log("User ready to buy:", id);
+    alert("Thank you for your interest! Checkout is coming soon. We\u2019ll notify you when it\u2019s ready.");
 }
 
 // -------------------------------------

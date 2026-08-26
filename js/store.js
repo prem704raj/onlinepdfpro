@@ -177,14 +177,10 @@ async function checkoutCart() {
         return;
     }
 
-    // NEXT STEP:
-    // Send product IDs to your backend.
+    // TODO: Send product IDs to backend.
     // Backend calculates prices and creates Razorpay order.
 
-    console.log(
-        "Ready for checkout:",
-        cart.map(item => item.id)
-    );
+    alert("Thank you! Checkout is coming soon. Your cart has been saved.");
 }
 
 document.addEventListener(
