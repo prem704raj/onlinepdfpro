@@ -216,7 +216,12 @@ async function checkoutCart() {
         });
 
         if (!res.ok) {
-            throw new Error('Failed to create order');
+            let errorMessage = 'Failed to create order';
+            try {
+                const errorData = await res.json();
+                errorMessage = errorData.error || errorData.message || errorMessage;
+            } catch (_) { /* response wasn't JSON */ }
+            throw new Error(errorMessage);
         }
 
         const orderData = await res.json();
@@ -445,3 +450,18 @@ document.addEventListener(
 
     }
 );
+
+// Expose globally on window
+window.STORE_PRODUCTS = STORE_PRODUCTS;
+window.getCart = getCart;
+window.saveCart = saveCart;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.clearCart = clearCart;
+window.getCartTotal = getCartTotal;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.renderCart = renderCart;
+window.checkoutCart = checkoutCart;
+window.updateCartCount = updateCartCount;
+window.loadRazorpayScript = loadRazorpayScript;
