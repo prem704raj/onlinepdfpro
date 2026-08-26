@@ -4,6 +4,8 @@
  * Routes:
  *   POST /ai/chat    — Groq LLM (text chat, summarizer, flashcards)
  *   POST /ai/vision  — OpenRouter (vision/multimodal models)
+ *   POST /store/create-order — Create Razorpay order
+ *   POST /store/verify-payment — Verify Razorpay signature
  *   GET  /health     — Health check
  * 
  * Deploy: npx wrangler deploy (from cf-worker directory)
@@ -11,6 +13,8 @@
  * Secrets (set via Wrangler CLI, never in wrangler.toml):
  *   - GROQ_API_KEY (secret: npx wrangler secret put GROQ_API_KEY)
  *   - OPENROUTER_API_KEY (secret: npx wrangler secret put OPENROUTER_API_KEY)
+ *   - RAZORPAY_KEY_ID (secret: npx wrangler secret put RAZORPAY_KEY_ID)
+ *   - RAZORPAY_KEY_SECRET (secret: npx wrangler secret put RAZORPAY_KEY_SECRET)
  */
 
 const PROD_ORIGINS = [
@@ -96,7 +100,7 @@ export default {
         const url = new URL(request.url);
 
         // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
-        if (['/ai/chat', '/ai/vision'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
+        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
             return new Response(JSON.stringify({ error: 'Forbidden: requests must come from the OnlinePDFPro website.' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
@@ -119,7 +123,15 @@ export default {
             });
         }
 
-        return new Response('OnlinePDFPro API Proxy. Available routes: POST /ai/chat, POST /ai/vision', {
+        // Store endpoints
+        if (url.pathname === '/store/create-order' && request.method === 'POST') {
+            return handleCreateOrder(request, env, allowedOrigins);
+        }
+        if (url.pathname === '/store/verify-payment' && request.method === 'POST') {
+            return handleVerifyPayment(request, env, allowedOrigins);
+        }
+
+        return new Response('OnlinePDFPro API Proxy. Available routes: POST /ai/chat, POST /ai/vision, POST /store/create-order, POST /store/verify-payment', {
             status: 200,
             headers: getCORSHeaders(request, allowedOrigins)
         });
@@ -152,6 +164,106 @@ function handleCORS(request) {
         status: 204,
         headers: getCORSHeaders(request)
     });
+}
+
+// ─── Store: Razorpay Payments ──────────────────────────────────────────
+
+async function handleCreateOrder(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
+    try {
+        if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
+            return jsonResponse({ error: 'Razorpay keys missing in environment' }, 500, corsHeaders);
+        }
+
+        const body = await request.json();
+        const { product_id, user_id } = body;
+        if (!product_id || !user_id) {
+            return jsonResponse({ error: 'product_id and user_id required' }, 400, corsHeaders);
+        }
+
+        // Hardcode prices (in paise) — must match STORE_PRODUCTS in store.js
+        const PRICES = {
+            'dbms-notes': 4900,   // ₹49
+            'css-cheat': 4900,    // ₹49
+            'js-prep': 9900       // ₹99
+        };
+        const amount = PRICES[product_id] || 4900; // default ₹49
+
+        const rzpAuth = btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`);
+        const rzpResponse = await fetch('https://api.razorpay.com/v1/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${rzpAuth}`
+            },
+            body: JSON.stringify({ amount, currency: 'INR' })
+        });
+        
+        if (!rzpResponse.ok) {
+            const err = await rzpResponse.text();
+            return jsonResponse({ error: 'Razorpay API error: ' + err }, 500, corsHeaders);
+        }
+        
+        const rzpOrder = await rzpResponse.json();
+        
+        return jsonResponse({
+            order_id: rzpOrder.id,
+            amount: rzpOrder.amount,
+            currency: rzpOrder.currency
+        }, 200, corsHeaders);
+
+    } catch (err) {
+        return jsonResponse({ error: 'Create order error: ' + err.message }, 500, corsHeaders);
+    }
+}
+
+async function handleVerifyPayment(request, env, allowedOrigins) {
+    const corsHeaders = getCORSHeaders(request, allowedOrigins);
+    try {
+        if (!env.RAZORPAY_KEY_SECRET) {
+            return jsonResponse({ error: 'Razorpay secret missing in environment' }, 500, corsHeaders);
+        }
+
+        const body = await request.json();
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
+        
+        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+            return jsonResponse({ error: 'Missing payment signature details' }, 400, corsHeaders);
+        }
+
+        // Verify Signature with Web Crypto API
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+            'raw',
+            encoder.encode(env.RAZORPAY_KEY_SECRET),
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['verify']
+        );
+        
+        const data = encoder.encode(razorpay_order_id + '|' + razorpay_payment_id);
+        
+        const hexToBuffer = (hex) => {
+            const typedArray = new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16)));
+            return typedArray.buffer;
+        };
+
+        const isValid = await crypto.subtle.verify(
+            'HMAC',
+            key,
+            hexToBuffer(razorpay_signature),
+            data
+        );
+
+        if (!isValid) {
+            return jsonResponse({ error: 'Invalid signature' }, 400, corsHeaders);
+        }
+
+        return jsonResponse({ success: true, message: 'Payment verified' }, 200, corsHeaders);
+
+    } catch (err) {
+        return jsonResponse({ error: 'Verify payment error: ' + err.message }, 500, corsHeaders);
+    }
 }
 
 // ─── AI Proxy: Groq (text chat/summarize/flashcards) ──────────────────
