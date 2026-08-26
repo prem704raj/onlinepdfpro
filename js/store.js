@@ -211,8 +211,7 @@ async function checkoutCart() {
                 'Authorization': `Bearer ${session.access_token}`
             },
             body: JSON.stringify({
-                product_id: product.id,
-                user_id: user.id
+                product_id: product.id
             })
         });
 
@@ -230,7 +229,7 @@ async function checkoutCart() {
 
         // 4. Open Razorpay Checkout
         const options = {
-            key: "rzp_live_TUU0msSo8hDUpP", // Need to use Live key here if on live mode, ideally should be fetched from backend or passed
+            key: orderData.key,  // Razorpay key from backend — not hardcoded
             amount: orderData.amount,
             currency: orderData.currency,
             name: "OnlinePDFPro",
@@ -249,9 +248,7 @@ async function checkoutCart() {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
-                            product_id: product.id,
-                            user_id: user.id,
-                            amount: orderData.amount
+                            product_id: product.id
                         })
                     });
 
