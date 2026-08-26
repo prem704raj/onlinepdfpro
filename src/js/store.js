@@ -204,7 +204,7 @@ async function checkoutCart() {
         const { data: { session } } = await supabaseClient.auth.getSession();
         
         // 2. Call backend to create order
-        const res = await fetch('https://pdf-api-proxy.prem704raj.workers.dev/store/create-order', {
+        const res = await fetch('https://onlinepdfpro-proxy.prem736raj.workers.dev/store/create-order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -239,7 +239,7 @@ async function checkoutCart() {
             order_id: orderData.order_id,
             handler: async function (response) {
                 try {
-                    const verifyRes = await fetch('https://pdf-api-proxy.prem704raj.workers.dev/store/verify-payment', {
+                    const verifyRes = await fetch('https://onlinepdfpro-proxy.prem736raj.workers.dev/store/verify-payment', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
