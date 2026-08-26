@@ -2,7 +2,7 @@
 // Dramatically reduced precache list — only essential core assets.
 // Individual tool pages and their scripts are runtime-cached on first use.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v90';
+const CACHE_NAME = 'onlinepdfpro-cache-v91';
 
 const STATIC_ASSETS = [
     // Core pages
