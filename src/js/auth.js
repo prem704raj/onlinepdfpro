@@ -71,9 +71,14 @@ async function buyProduct(id) {
         return;
     }
 
-    // Save direct purchase separately
-    sessionStorage.setItem("buyNowProduct", id);
-    alert("Thank you for your interest! Checkout is coming soon. We\u2019ll notify you when it\u2019s ready.");
+    // Add to cart and immediately checkout
+    const cart = getCart();
+    if (!cart.some(item => item.id === id)) {
+        const product = (typeof STORE_PRODUCTS !== "undefined") ? STORE_PRODUCTS[id] : { id, title: id, price: 49 };
+        cart.push(product);
+        saveCart(cart);
+    }
+    await checkoutCart();
 }
 
 // -------------------------------------
