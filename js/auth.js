@@ -48,13 +48,13 @@ async function requireLogin() {
   const client = getSupabaseClient();
   if (!client) {
     saveAuthReturnUrl();
-    window.location.href = "/login";
+    window.location.href = "/login.html";
     return false;
   }
   const { data: { session } } = await client.auth.getSession();
   if (!session) {
     saveAuthReturnUrl();
-    window.location.href = "/login";
+    window.location.href = "/login.html";
     return false;
   }
   return true;
@@ -92,7 +92,7 @@ async function signup(email, password, fullName) {
   if (!client) {
     throw new Error("Authentication service is unavailable. Please check your internet connection.");
   }
-  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login";
+  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login.html";
   const { data, error } = await client.auth.signUp({
     email: email,
     password: password,
@@ -134,7 +134,7 @@ async function signInWithGoogle() {
   if (!client) {
     throw new Error("Authentication service is unavailable. Please check your internet connection or disable adblockers.");
   }
-  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login";
+  const redirectUrl = (window.location.origin || "https://onlinepdfpro.com") + "/login.html";
   const { error } = await client.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -279,5 +279,9 @@ window.getCurrentUser = getCurrentUser;
 window.getUserDisplayName = getUserDisplayName;
 window.getUserAvatar = getUserAvatar;
 window.updateUserHeader = updateUserHeader;
+window.requireLogin = requireLogin;
+window.buyProduct = buyProduct;
+window.saveAuthReturnUrl = saveAuthReturnUrl;
+window.redirectAfterAuth = redirectAfterAuth;
 
 document.addEventListener("DOMContentLoaded", updateUserHeader);

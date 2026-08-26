@@ -1,8 +1,8 @@
-// OnlinePDFPro Service Worker v90
-// Dramatically reduced precache list — only essential core assets.
-// Individual tool pages and their scripts are runtime-cached on first use.
+// OnlinePDFPro Service Worker v92
+// Network-first for JS files to prevent stale cache issues.
+// Cache-first for images/fonts/CSS with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v91';
+const CACHE_NAME = 'onlinepdfpro-cache-v92';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -73,13 +73,18 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    if (url.protocol === 'blob:') return;
+    // Ignore blob: and chrome-extension: URLs
+    if (url.protocol === 'blob:' || url.protocol === 'chrome-extension:') return;
+
+    // Ignore non-GET requests
+    if (request.method !== 'GET') return;
 
     let cacheKey = request;
     if (url.origin === self.location.origin && url.pathname === '/') {
         cacheKey = new Request('index.html');
     }
 
+    // --- Strategy 1: Network-first for HTML ---
     if (request.headers.get('accept')?.includes('text/html')) {
         event.respondWith(
             fetch(request)
@@ -93,6 +98,27 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // --- Strategy 2: Network-first for JavaScript files ---
+    // This prevents stale JS (auth.js, store.js, app.js etc.) from being served
+    // after deployments that add new features like Razorpay checkout.
+    const isJavaScript = url.pathname.endsWith('.js') && url.origin === self.location.origin;
+    if (isJavaScript) {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+                    return response;
+                })
+                .catch(() => {
+                    // Offline fallback: serve cached JS if network is unavailable
+                    return caches.match(cacheKey, { ignoreSearch: true });
+                })
+        );
+        return;
+    }
+
+    // --- Strategy 3: Cache-first for everything else (CSS, images, fonts) ---
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
