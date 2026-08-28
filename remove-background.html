@@ -8,8 +8,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Remove Background from Image Free Online | OnlinePDFPro</title>
  <meta name="description" content="Remove background from JPG, PNG, and WEBP images using AI-assisted processing. Review the processing details before uploading.">
- <meta name="keywords" content="remove background, background remover, remove bg, transparent background, image background remover free">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
  <link rel="canonical" href="https://onlinepdfpro.com/remove-background.html">
  <meta property="og:type" content="website">
@@ -76,7 +75,7 @@
  .compare-label-before{left:10px}
  .compare-label-after{right:10px}
  @media(max-width:768px){.bg-tool-editor{grid-template-columns:1fr}.bg-tool-preview{min-height:280px}}
- 
+
  .dl-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
  #resultView{cursor:crosshair;touch-action:none;}
  #brushCursor{position:absolute;border:1px solid #fff;border-radius:50%;box-shadow:0 0 2px rgba(0,0,0,0.5);pointer-events:none;display:none;transform:translate(-50%,-50%);z-index:50;background:rgba(255,255,255,0.2);}
@@ -84,9 +83,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 <body class="fade-in">
@@ -98,13 +100,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-<a class="nav-link" href="/tools.html">Tools</a>
-
-<a class="nav-link" href="/about.html">About</a>
-<a class="nav-link" href="/support.html">Support</a>
-<a class="nav-link mobile-only-nav" href="/history.html">History</a>
-<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
-</nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <div class="header-search" style="position:relative;margin-right:8px;">
@@ -115,7 +113,7 @@
  <span class="theme-icon-light">&#127769;</span>
  <span class="theme-icon-dark">&#9728;&#65039;</span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
@@ -220,10 +218,10 @@
  <h3> Professional Finish</h3>
  <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Smoothing:</span> <span id="smoothVal">1px</span></div>
  <input type="range" id="edgeSmooth" min="0" max="10" value="1" style="width:100%;cursor:pointer;margin-bottom:12px;">
- 
+
  <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;display:flex;justify-content:space-between;"><span>Edge Contrast:</span> <span id="contrastVal">20%</span></div>
  <input type="range" id="edgeContrast" min="0" max="100" value="20" style="width:100%;cursor:pointer;margin-bottom:12px;">
- 
+
  <button class="dl-btn dl-btn-secondary" id="applyRefine" style="font-size:0.85rem;padding:8px;border-color:var(--accent);color:var(--accent);">Refine Now</button>
  </div>
  <div class="panel">
@@ -263,14 +261,14 @@
 
 </main>
 
- <script src="js/app.js?v=94"></script>
+ <script src="js/app.js?v=95"></script>
 
  <script>
  document.addEventListener('DOMContentLoaded', function() {
  console.log('[BG] Init...');
  var removeBgFn = null, libReady = false;
  var birefnetModel = null, birefnetProcessor = null, birefnetReady = false;
- 
+
  var origFile = null, resultBlob = null, curBg = 'transparent';
  var origImgObj = null, maskImgObj = null; // Stored HTMLImageElements
  var brushMode = 'restore', brushSize = 20, isDrawing = false;
@@ -312,10 +310,10 @@
  _tfModule = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1');
  }
  var tf = _tfModule;
- 
+
  // Speed up WASM fallback
  tf.env.backends.onnx.wasm.numThreads = navigator.hardwareConcurrency || 4;
- 
+
  var deviceToUse = 'wasm';
  if (navigator.gpu) {
  try {
@@ -347,9 +345,9 @@
  // --- Run BEN2 inference ---
  async function runBEN2(file, progressCb) {
  if(!ben2Pipeline) throw new Error('BEN2 not loaded');
- 
+
  if(progressCb) progressCb('Preparing image...', 62);
- 
+
  var origImg = await createImageBitmap(file);
  var origW = origImg.width, origH = origImg.height;
 
@@ -360,13 +358,13 @@
  var newW = Math.round(origW * scale);
  var newH = Math.round(origH * scale);
  if(progressCb) progressCb('Resizing image for AI...', 63);
- 
+
  var c = document.createElement('canvas');
  c.width = newW;
  c.height = newH;
  var cx = c.getContext('2d');
  cx.drawImage(origImg, 0, 0, newW, newH);
- 
+
  var blobData = await new Promise(function(res) {
  c.toBlob(function(b) { res(b); }, 'image/jpeg', 0.95);
  });
@@ -374,11 +372,11 @@
  }
 
  var url = URL.createObjectURL(processFile);
- 
+
  if(progressCb) progressCb('Running BEN2 AI segmentation...', 65);
  var result = await ben2Pipeline(url);
  URL.revokeObjectURL(url);
- 
+
  if(progressCb) progressCb('Generating output...', 90);
  // pipeline returns array of results; get the mask
  var output = result[0] || result;
@@ -388,13 +386,13 @@
  var maskImg = output.mask;
  var origImg = await createImageBitmap(file);
  var origW = origImg.width, origH = origImg.height;
- 
+
  var canvas = document.createElement('canvas');
  canvas.width = origW;
  canvas.height = origH;
  var ctx = canvas.getContext('2d');
  ctx.drawImage(origImg, 0, 0, origW, origH);
- 
+
  // Get the mask as ImageData
  var maskCanvas = document.createElement('canvas');
  var mW = maskImg.width, mH = maskImg.height;
@@ -412,7 +410,7 @@
  mImgData.data[i * 4 + 3] = 255;
  }
  mCtx.putImageData(mImgData, 0, 0);
- 
+
  // Scale mask to original size if needed
  if(mW !== origW || mH !== origH) {
  var scaledCanvas = document.createElement('canvas');
@@ -423,7 +421,7 @@
  maskCanvas = scaledCanvas;
  mCtx = sCtx;
  }
- 
+
  // Apply mask as alpha
  var origData = ctx.getImageData(0, 0, origW, origH);
  var maskPixels = mCtx.getImageData(0, 0, origW, origH);
@@ -431,7 +429,7 @@
  origData.data[i * 4 + 3] = maskPixels.data[i * 4]; // R channel of mask = alpha
  }
  ctx.putImageData(origData, 0, 0);
- 
+
  var blob = await new Promise(function(res) {
  canvas.toBlob(function(b) { res(b); }, 'image/png');
  });
@@ -481,7 +479,7 @@
  async function runBiRefNet(file, progressCb) {
  var RawImage = window._birefnetRawImage;
  if(!RawImage || !birefnetModel || !birefnetProcessor) throw new Error('BiRefNet not loaded');
- 
+
  if(progressCb) progressCb('Preparing image...', 62);
  var arrayBuf = await file.arrayBuffer();
  var image = await RawImage.fromBlob(new Blob([arrayBuf], {type: file.type}));
@@ -497,29 +495,29 @@
  if(progressCb) progressCb('Resizing image for AI (' + newW + 'x' + newH + ')...', 63);
  image = await image.resize(newW, newH);
  }
- 
+
  if(progressCb) progressCb('Running BiRefNet AI segmentation...', 65);
  var inputs = await birefnetProcessor(image);
  var output = await birefnetModel({ input_image: inputs.pixel_values });
- 
+
  if(progressCb) progressCb('Generating mask...', 85);
  // output_image → sigmoid → scale to 0-255 → resize to ORIGINAL dimensions
  var mask = await RawImage.fromTensor(
  output.output_image[0].sigmoid().mul(255).to('uint8')
  );
  mask = await mask.resize(origW, origH);
- 
+
  if(progressCb) progressCb('Compositing result...', 90);
  // Create output canvas at original resolution
  var canvas = document.createElement('canvas');
  canvas.width = origW;
  canvas.height = origH;
  var ctx = canvas.getContext('2d');
- 
+
  // Draw original image at full resolution
  var origBitmap = await createImageBitmap(file);
  ctx.drawImage(origBitmap, 0, 0, origW, origH);
- 
+
  // Apply mask as alpha channel
  var imgData = ctx.getImageData(0, 0, origW, origH);
  var pixels = imgData.data;
@@ -528,7 +526,7 @@
  pixels[i * 4 + 3] = maskData[i]; // set alpha from mask
  }
  ctx.putImageData(imgData, 0, 0);
- 
+
  // Convert to blob
  var blob = await new Promise(function(res) {
  canvas.toBlob(function(b) { res(b); }, 'image/png');
@@ -583,10 +581,10 @@
  var factor = 1 + contrast * 10;
  for (var i = 0; i < w * h; i++) {
  var a = alpha[i];
- 
+
  // Linear contrast centering around 0.5
  a = (a - 0.5) * factor + 0.5;
- 
+
  // Cleanup absolute zero/one
  if (a < threshold) a = 0;
  if (a > 1 - threshold) a = 1;
@@ -736,9 +734,9 @@
 
  // Adaptive parameters based on image resolution
  var maxDim = Math.max(rCanvas.width, rCanvas.height);
- var blurRadius = (useBiRefNet || useBEN2) ? Math.max(0, Math.round(maxDim / 1500)) : Math.max(1, Math.round(maxDim / 1000)); 
+ var blurRadius = (useBiRefNet || useBEN2) ? Math.max(0, Math.round(maxDim / 1500)) : Math.max(1, Math.round(maxDim / 1000));
  var contrastVal = (useBiRefNet || useBEN2) ? 0.15 : 0.2;
- var alphaThreshold = 0.05; 
+ var alphaThreshold = 0.05;
 
  refineEdges(rCanvas, rCtx, blurRadius, alphaThreshold, contrastVal);
 
@@ -810,19 +808,19 @@
  if(mRestore){ mRestore.onclick=function(){brushMode='restore';mRestore.classList.add('active');mErase.classList.remove('active');}; }
  if(mErase){ mErase.onclick=function(){brushMode='erase';mErase.classList.add('active');mRestore.classList.remove('active');}; }
  if(bSlider){ bSlider.oninput=function(){brushSize=parseInt(this.value); bVal.textContent=brushSize+'px'; syncCursorSize();}; }
- 
- function syncCursorSize() { 
+
+ function syncCursorSize() {
  if(!rCanvas || !cursor) return;
  var rect=rCanvas.getBoundingClientRect(); var scale = rect.width / rCanvas.width;
  var visualSize = brushSize * scale; cursor.style.width = cursor.style.height = visualSize+'px';
  }
- 
+
  function getPt(e) {
  var rect = rCanvas.getBoundingClientRect();
  var cx = e.clientX||(e.touches?e.touches[0].clientX:0); var cy = e.clientY||(e.touches?e.touches[0].clientY:0);
  return { x: (cx - rect.left) * (rCanvas.width / rect.width), y: (cy - rect.top) * (rCanvas.height / rect.height) };
  }
- 
+
  function drawLine(p1, p2) {
  if(!rCtx) return;
  rCtx.save();
@@ -833,7 +831,7 @@
  // Magic part to copy from original image:
  rCtx.globalCompositeOperation = 'source-in'; // keep only new strokes
  rCtx.drawImage(origImgObj, 0, 0); // draw orig img strictly into the stroke
- 
+
  // Now we need to blend this newly restored part back into the main image.
  // Wait! If we use source-in, we erase everything else. We need an offscreen canvas.
  } else {
@@ -842,11 +840,11 @@
  }
  rCtx.restore();
  }
- 
+
  // Simpler brush logic:
  var pathCanvas = document.createElement('canvas');
  var pathCtx = pathCanvas.getContext('2d');
- 
+
  function strokePt(p1, p2) {
  if(!rCtx) return;
  if (brushMode === 'erase') {
@@ -899,15 +897,15 @@
  if(applyRefine) applyRefine.onclick = async function() {
  if(!maskImgObj || !rCanvas) return;
  var oldText = applyRefine.textContent; applyRefine.textContent = 'Refining...';
- 
+
  // Re-draw original mask result
  rCtx.clearRect(0,0,rCanvas.width,rCanvas.height);
  rCtx.drawImage(maskImgObj, 0, 0);
- 
+
  var rad = parseInt(eSmooth.value);
  var cont = parseInt(eContrast.value) / 100;
  refineEdges(rCanvas, rCtx, rad, 0.05, cont);
- 
+
  rCanvas.toBlob(function(b){
  resultBlob = b;
  if($('compareAfter')) $('compareAfter').src = URL.createObjectURL(b);
@@ -967,7 +965,7 @@
  });
  </script>
 
- <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Remove Background","description":"Remove background from any image for free using AI. Tool-specific processing.","url":"https://onlinepdfpro.com/remove-background.html","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com"}}</script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Remove Background","description":"Remove background from any image for free using AI. Tool-specific processing.","url":"https://onlinepdfpro.com/remove-background.html","applicationCategory": "UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com"}}</script>
 
  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(e){});});}</script>
 </body>

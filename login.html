@@ -17,8 +17,10 @@
     <link href="/css/mobile-fix-v2.css" rel="stylesheet"/>
     <script>
     (function() {
-        var theme = localStorage.getItem('doctools-theme') || 'light';
-        document.documentElement.setAttribute('data-theme', theme);
+        var saved = localStorage.getItem('doctools-theme');
+        var validSaved = saved === 'light' || saved === 'dark';
+        var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', validSaved ? saved : (systemPrefersDark ? 'dark' : 'light'));
     })();
     </script>
     <style>
@@ -31,6 +33,25 @@
             display: flex; flex-direction: column;
         }
         [data-theme="dark"] body { background: #1a1714; color: #f0ebe2; }
+
+        .auth-toolbar {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            z-index: 2;
+        }
+        .auth-toolbar .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border: 1px solid #d9d0c3;
+            color: #6b5e4f;
+            background: rgba(246,245,240,.9);
+        }
+        [data-theme="dark"] .auth-toolbar .theme-toggle {
+            border-color: #3a342a;
+            color: #a89e8f;
+            background: rgba(26,23,20,.9);
+        }
 
         .auth-wrapper {
             flex: 1; display: flex; align-items: center; justify-content: center;
@@ -99,6 +120,39 @@
         [data-theme="dark"] .form-input { background: #1a1714; border-color: #3a342a; color: #f0ebe2; }
         .form-input:focus { border-color: #8b6914; }
 
+        .password-input-wrap { position: relative; }
+        .password-input-wrap .form-input { padding-right: 68px; }
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            min-width: 48px;
+            min-height: 36px;
+            border: 0;
+            background: transparent;
+            color: #8b6914;
+            font: inherit;
+            font-size: .78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        [data-theme="dark"] .password-toggle { color: #d4a942; }
+        .password-hint { display: block; margin-top: 6px; color: #6b5e4f; font-size: .78rem; }
+        [data-theme="dark"] .password-hint { color: #a89e8f; }
+        .forgot-password {
+            margin-top: 14px;
+            border: 0;
+            background: transparent;
+            color: #8b6914;
+            font: inherit;
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        [data-theme="dark"] .forgot-password { color: #d4a942; }
+        .forgot-password:disabled { opacity: .6; cursor: wait; }
+
         .auth-btn {
             width: 100%; padding: 13px; font-size: 0.95rem; font-weight: 600;
             color: #fff; background: #8b6914; border: none; border-radius: 6px;
@@ -122,9 +176,16 @@
 
         .form-panel { display: none; }
         .form-panel.active { display: block; }
+        .form-panel[hidden] { display: none; }
     </style>
 </head>
 <body>
+    <div class="auth-toolbar">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-icon-light" aria-hidden="true">☾</span>
+            <span class="theme-icon-dark" aria-hidden="true">☀</span>
+        </button>
+    </div>
     <div class="auth-wrapper">
         <div class="auth-card">
             <a class="auth-logo" href="/">
@@ -132,16 +193,16 @@
                 <span>OnlinePDFPro</span>
             </a>
 
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
-                <button class="auth-tab" id="tabSignUp" onclick="switchTab('signup')">Create Account</button>
+            <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Account access">
+                <button class="auth-tab active" id="tabSignIn" role="tab" aria-selected="true" aria-controls="panelSignIn" tabindex="0" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" id="tabSignUp" role="tab" aria-selected="false" aria-controls="panelSignUp" tabindex="-1" onclick="switchTab('signup')">Create Account</button>
             </div>
 
             <h1 class="auth-title" id="authHeading">Welcome Back</h1>
             <p class="auth-subtitle" id="authSubheading">Sign in to continue your purchase</p>
 
-            <div class="alert-msg alert-error" id="alertError"></div>
-            <div class="alert-msg alert-success" id="alertSuccess"></div>
+            <div class="alert-msg alert-error" id="alertError" role="alert" aria-live="assertive"></div>
+            <div class="alert-msg alert-success" id="alertSuccess" role="status" aria-live="polite"></div>
 
             <!-- Google button (shared) -->
             <button type="button" class="google-auth-btn" onclick="handleGoogleLogin()">
@@ -157,22 +218,26 @@
             <div class="divider"><span>or</span></div>
 
             <!-- Sign In Panel -->
-            <div class="form-panel active" id="panelSignIn">
+            <div class="form-panel active" id="panelSignIn" role="tabpanel" aria-labelledby="tabSignIn">
                 <form onsubmit="return false;">
                     <div class="form-group">
                         <label class="form-label" for="loginEmail">Email Address</label>
                         <input class="form-input" id="loginEmail" type="email" placeholder="name@example.com" required autocomplete="email"/>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group password-field">
                         <label class="form-label" for="loginPassword">Password</label>
-                        <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+                        <div class="password-input-wrap">
+                            <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+                            <button class="password-toggle" type="button" data-target="loginPassword" aria-label="Show password">Show</button>
+                        </div>
                     </div>
                     <button class="auth-btn" type="button" id="signinBtn" onclick="handleLogin()">Sign In</button>
                 </form>
+                <button class="forgot-password" type="button" id="forgotPassword" onclick="handleForgotPassword()">Forgot password?</button>
             </div>
 
             <!-- Sign Up Panel -->
-            <div class="form-panel" id="panelSignUp">
+            <div class="form-panel" id="panelSignUp" role="tabpanel" aria-labelledby="tabSignUp" hidden>
                 <form onsubmit="return false;">
                     <div class="form-group">
                         <label class="form-label" for="signupName">Full Name</label>
@@ -182,11 +247,35 @@
                         <label class="form-label" for="signupEmail">Email Address</label>
                         <input class="form-input" id="signupEmail" type="email" placeholder="you@example.com" required autocomplete="email"/>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group password-field">
                         <label class="form-label" for="signupPassword">Password</label>
-                        <input class="form-input" id="signupPassword" type="password" placeholder="Create a password" required autocomplete="new-password" minlength="8"/>
+                        <div class="password-input-wrap">
+                            <input class="form-input" id="signupPassword" type="password" placeholder="Create a password" required autocomplete="new-password" minlength="8" aria-describedby="passwordHint"/>
+                            <button class="password-toggle" type="button" data-target="signupPassword" aria-label="Show password">Show</button>
+                        </div>
+                        <small id="passwordHint" class="password-hint">Use at least 8 characters.</small>
                     </div>
                     <button class="auth-btn" type="button" id="signupBtn" onclick="handleSignup()">Create Account</button>
+                </form>
+            </div>
+
+            <div class="form-panel" id="panelReset" role="tabpanel" aria-labelledby="authHeading" hidden>
+                <form onsubmit="return false;">
+                    <div class="form-group password-field">
+                        <label class="form-label" for="resetPassword">New password</label>
+                        <div class="password-input-wrap">
+                            <input class="form-input" id="resetPassword" type="password" placeholder="Create a new password" required autocomplete="new-password" minlength="8"/>
+                            <button class="password-toggle" type="button" data-target="resetPassword" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <div class="form-group password-field">
+                        <label class="form-label" for="resetPasswordConfirm">Confirm new password</label>
+                        <div class="password-input-wrap">
+                            <input class="form-input" id="resetPasswordConfirm" type="password" placeholder="Repeat your new password" required autocomplete="new-password" minlength="8"/>
+                            <button class="password-toggle" type="button" data-target="resetPasswordConfirm" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <button class="auth-btn" type="button" id="resetBtn" onclick="handleUpdatePassword()">Update Password</button>
                 </form>
             </div>
 
@@ -197,21 +286,46 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/auth.js?v=94"></script>
+    <script defer src="/js/app.js?v=95"></script>
+    <script src="/js/auth.js?v=95"></script>
     <script>
         let currentMode = 'signin';
 
         function switchTab(mode) {
             currentMode = mode;
             hideAlerts();
+            document.getElementById('authTabs').style.display = '';
             document.getElementById('tabSignIn').classList.toggle('active', mode === 'signin');
             document.getElementById('tabSignUp').classList.toggle('active', mode === 'signup');
+            document.getElementById('tabSignIn').setAttribute('aria-selected', String(mode === 'signin'));
+            document.getElementById('tabSignUp').setAttribute('aria-selected', String(mode === 'signup'));
+            document.getElementById('tabSignIn').tabIndex = mode === 'signin' ? 0 : -1;
+            document.getElementById('tabSignUp').tabIndex = mode === 'signup' ? 0 : -1;
             document.getElementById('panelSignIn').classList.toggle('active', mode === 'signin');
             document.getElementById('panelSignUp').classList.toggle('active', mode === 'signup');
+            document.getElementById('panelReset').classList.remove('active');
+            document.getElementById('panelSignIn').hidden = mode !== 'signin';
+            document.getElementById('panelSignUp').hidden = mode !== 'signup';
+            document.getElementById('panelReset').hidden = true;
             document.getElementById('authHeading').innerText = mode === 'signin' ? 'Welcome Back' : 'Create Account';
             document.getElementById('authSubheading').innerText = mode === 'signin'
                 ? 'Sign in to continue your purchase'
                 : 'Join to get access to premium study notes';
+        }
+
+        function showResetPanel() {
+            currentMode = 'reset';
+            hideAlerts();
+            document.getElementById('authTabs').style.display = 'none';
+            document.getElementById('panelSignIn').classList.remove('active');
+            document.getElementById('panelSignUp').classList.remove('active');
+            document.getElementById('panelReset').classList.add('active');
+            document.getElementById('panelSignIn').hidden = true;
+            document.getElementById('panelSignUp').hidden = true;
+            document.getElementById('panelReset').hidden = false;
+            document.getElementById('authHeading').innerText = 'Reset Password';
+            document.getElementById('authSubheading').innerText = 'Choose a new password for your account';
+            document.getElementById('resetPassword').focus();
         }
 
         function hideAlerts() {
@@ -239,6 +353,45 @@
                 showMessage(err.message, 'error');
             } finally {
                 btn.disabled = false; btn.innerText = 'Sign In';
+            }
+        }
+
+        async function handleForgotPassword() {
+            hideAlerts();
+            var email = document.getElementById('loginEmail').value.trim();
+            if (!email) { showMessage('Enter your email address first.', 'error'); document.getElementById('loginEmail').focus(); return; }
+            var button = document.getElementById('forgotPassword');
+            button.disabled = true;
+            button.innerText = 'Sending reset link...';
+            try {
+                await requestPasswordReset(email);
+                showMessage('If an account exists for that email, a password-reset link has been sent.', 'success');
+            } catch (err) {
+                showMessage(err.message || 'Unable to send a reset link.', 'error');
+            } finally {
+                button.disabled = false;
+                button.innerText = 'Forgot password?';
+            }
+        }
+
+        async function handleUpdatePassword() {
+            hideAlerts();
+            var password = document.getElementById('resetPassword').value;
+            var confirmation = document.getElementById('resetPasswordConfirm').value;
+            if (password.length < 8) { showMessage('Use at least 8 characters for your password.', 'error'); return; }
+            if (password !== confirmation) { showMessage('The passwords do not match.', 'error'); return; }
+            var button = document.getElementById('resetBtn');
+            button.disabled = true;
+            button.innerText = 'Updating...';
+            try {
+                await updatePassword(password);
+                showMessage('Password updated. You can now sign in.', 'success');
+                setTimeout(function() { switchTab('signin'); }, 1200);
+            } catch (err) {
+                showMessage(err.message || 'Unable to update your password.', 'error');
+            } finally {
+                button.disabled = false;
+                button.innerText = 'Update Password';
             }
         }
 
@@ -288,6 +441,7 @@
         const client = (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null) || window.supabaseClient;
         if (client && client.auth) {
             client.auth.onAuthStateChange(function(event, session) {
+                if (event === 'PASSWORD_RECOVERY') showResetPanel();
                 if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
                     finishAuthentication();
                 }
@@ -296,6 +450,16 @@
 
         // Also check an existing session when the page loads.
         document.addEventListener("DOMContentLoaded", async function() {
+            if (new URLSearchParams(window.location.search).get('mode') === 'reset') showResetPanel();
+            document.querySelectorAll('.password-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var input = document.getElementById(button.dataset.target);
+                    var visible = input.type === 'text';
+                    input.type = visible ? 'password' : 'text';
+                    button.textContent = visible ? 'Show' : 'Hide';
+                    button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password');
+                });
+            });
             try {
                 const c = (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null) || window.supabaseClient;
                 if (!c || !c.auth) return;

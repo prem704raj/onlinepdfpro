@@ -7,18 +7,17 @@
  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
- 
+
  <!-- ===== MUST HAVE SEO META TAGS ===== -->
 
 <!-- Primary Meta Tags -->
-<title>Add Watermark to PDF Free — Text & Image Watermarks Online | OnlinePDFPro</title>
+<title>Add Watermark to PDF Online | OnlinePDFPro</title>
  <!-- Preconnect to CDNs for Speed -->
  <link rel="preconnect" href="https://cdn.jsdelivr.net">
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
 <meta name="description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
-<meta name="keywords" content="add watermark to pdf, pdf watermark online free, stamp pdf, watermark pdf pages, text watermark pdf">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-watermark.html">
@@ -26,18 +25,18 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-watermark.html">
-<meta property="og:title" content="Add Watermark to PDF Free — Text & Image Watermarks Online | OnlinePDFPro">
+<meta property="og:title" content="Add Watermark to PDF Online | OnlinePDFPro">
 <meta property="og:description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-watermark.png">
+<meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-watermark.html">
-<meta name="twitter:title" content="Add Watermark to PDF Free — Text & Image Watermarks Online | OnlinePDFPro">
+<meta name="twitter:title" content="Add Watermark to PDF Online | OnlinePDFPro">
 <meta name="twitter:description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-watermark.png">
+<meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -92,9 +91,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -108,12 +110,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -127,7 +126,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -140,7 +139,7 @@
  <span class="section-tag fade-in">Protection Suite</span>
  <h1 class="tool-title fade-in">Add Watermark to PDF Free Online</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Add text or image watermarks to your PDF documents. Customize the position, size, rotation, and opacity. Apply to all pages or specific ones. processing details — processed according to the tool details.
+ Add text or image watermarks to your PDF documents. Customize the position, size, rotation, and opacity. Apply to all pages or specific ones. Review the processing details before uploading.
  </p>
  </div>
 
@@ -254,7 +253,7 @@
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
  <script>
  (function () {
  const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
@@ -405,7 +404,7 @@
  "name": "Add Watermark to PDF",
  "description": "Add text or image watermarks to PDF documents for free. Customize opacity, position, and rotation. 100% free.",
  "url": "https://onlinepdfpro.com/tools/pdf-watermark.html",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",
  "offers": {
@@ -420,38 +419,8 @@
  }
 }
 </script>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How to add a watermark to a PDF?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Upload your PDF, type your watermark text (e.g., 'CONFIDENTIAL', 'DRAFT') or upload an image, adjust position and opacity, then download the watermarked PDF."
- }
- },
- {
- "@type": "Question",
- "name": "Can I use an image as a watermark?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! Upload a logo, stamp, or any image as a watermark. You can adjust its size, opacity, and position on the page."
- }
- },
- {
- "@type": "Question",
- "name": "Will the watermark appear on every page?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes, by default the watermark is applied to all pages. You can also choose to watermark only specific pages."
- }
- }
- ]
-}
-</script>
+
+
 
 <script>
 if ('serviceWorker' in navigator) {

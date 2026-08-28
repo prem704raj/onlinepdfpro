@@ -13,8 +13,7 @@
  <!-- Primary Meta Tags -->
  <title>HTML to PDF Free — Convert Web Pages to PDF Online | OnlinePDFPro</title>
 <meta name="description" content="Convert HTML to PDF free online. Transform web page content or HTML code into downloadable PDF documents. Review the processing details before starting.">
- <meta name="keywords" content="html to pdf, convert html to pdf, webpage to pdf, html to pdf converter free">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/html-to-pdf.html">
 
@@ -23,7 +22,7 @@
  <meta property="og:url" content="https://onlinepdfpro.com/tools/html-to-pdf.html">
  <meta property="og:title" content="HTML to PDF Free — Convert Web Pages to PDF Online | OnlinePDFPro">
 <meta property="og:description" content="Convert HTML to PDF free online. Transform web page content or HTML code into downloadable PDF documents. Review the processing details before starting.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-html-to-pdf.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
@@ -32,7 +31,7 @@
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/html-to-pdf.html">
  <meta name="twitter:title" content="HTML to PDF Free — Convert Web Pages to PDF Online | OnlinePDFPro">
 <meta name="twitter:description" content="Convert HTML to PDF free online. Transform web page content or HTML code into downloadable PDF documents. Review the processing details before starting.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-html-to-pdf.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -62,7 +61,7 @@
  "name": "HTML to PDF Converter",
  "url": "https://onlinepdfpro.com/html-to-pdf.html",
  "description": "Free online HTML to PDF converter.",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
  }
@@ -251,9 +250,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -268,13 +270,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
- Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -289,7 +287,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -366,7 +364,7 @@ Example:
 
 </main>
 
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
 
  <script src="/js/vendor/html2canvas/html2canvas.min.js"></script>
  <script src="/js/vendor/jspdf/jspdf.umd.min.js"></script>
