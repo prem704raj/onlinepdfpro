@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>My Library | OnlinePDFPro</title>
+    <meta content="Access your purchased study materials and downloads." name="description"/>
+    <meta content="index, follow" name="robots"/>
+    <link href="https://onlinepdfpro.com/library.html" rel="canonical"/>
+    <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <link href="/site.webmanifest" rel="manifest"/>
+    <meta content="#f6f5f0" media="(prefers-color-scheme: light)" name="theme-color"/>
+    <meta content="#1a1714" media="(prefers-color-scheme: dark)" name="theme-color"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.supabase.co https://*.workers.dev https://api.razorpay.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com; frame-ancestors 'none';">
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link href="/css/mobile-fix-v2.css" rel="stylesheet"/>
+    <link href="/css/tools-v2.css" rel="stylesheet"/>
+    <script>
+    (function() {
+        var theme = localStorage.getItem('doctools-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <style>
+        :root {
+            --lib-bg: #f6f5f0;
+            --lib-bg-alt: #efe9de;
+            --lib-text: #2c2418;
+            --lib-text-secondary: #6b5e4f;
+            --lib-text-muted: #706558;
+            --lib-accent: #8b6914;
+            --lib-accent-hover: #a47d1b;
+            --lib-border: #d9d0c3;
+            --lib-card-bg: #ffffff;
+            --lib-success: #16a34a;
+            --lib-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --lib-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        [data-theme="dark"] {
+            --lib-bg: #1a1714;
+            --lib-bg-alt: #242019;
+            --lib-text: #f0ebe2;
+            --lib-text-secondary: #a89e8f;
+            --lib-text-muted: #8c8273;
+            --lib-accent: #d4a942;
+            --lib-accent-hover: #e6be5a;
+            --lib-border: #3a342a;
+            --lib-card-bg: #2a2520;
+            --lib-success: #22c55e;
+        }
+        body.lib-body {
+            background: var(--lib-bg) !important;
+            color: var(--lib-text) !important;
+            font-family: var(--lib-sans);
+            margin: 0;
+            padding: 0;
+        }
+        body.lib-body main { padding-top: 0 !important; }
+        body.lib-body .header {
+            background: #f6f5f0 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--lib-border) !important;
+            box-shadow: 0 4px 20px rgba(44,36,24,0.08) !important;
+        }
+        [data-theme="dark"] body.lib-body .header {
+            background: #1a1714 !important;
+            border: 1px solid var(--lib-border) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+        }
+        body.lib-body .header .logo-text { color: var(--lib-text) !important; }
+        body.lib-body .header .nav-link { color: var(--lib-text-secondary) !important; }
+        body.lib-body .header .nav-link:hover { color: var(--lib-text) !important; }
+        body.lib-body .header .theme-toggle { color: var(--lib-text) !important; border: none !important; }
+        body.lib-body .header .menu-toggle { color: var(--lib-text) !important; }
+        body.lib-body .header .header-search, body.lib-body .header .mobile-search-toggle { display: none !important; }
+
+        .lib-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 140px 24px 80px;
+        }
+
+        .lib-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .lib-header-label {
+            font-family: var(--lib-sans);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--lib-accent);
+            margin-bottom: 16px;
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid var(--lib-accent);
+            border-radius: 20px;
+        }
+        .lib-heading {
+            font-family: var(--lib-serif);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--lib-text);
+            margin: 0 0 12px;
+        }
+        .lib-heading em { font-style: italic; }
+        .lib-subtitle {
+            font-size: 1rem;
+            color: var(--lib-text-secondary);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* States */
+        .lib-login-prompt, .lib-empty, .lib-loading, .lib-error {
+            text-align: center;
+            padding: 60px 24px;
+            background: var(--lib-card-bg);
+            border: 1px solid var(--lib-border);
+            border-radius: 12px;
+        }
+        .lib-login-prompt h2, .lib-empty h2 {
+            font-family: var(--lib-serif);
+            font-size: 1.5rem;
+            margin: 0 0 12px;
+            color: var(--lib-text);
+        }
+        .lib-login-prompt p, .lib-empty p {
+            color: var(--lib-text-secondary);
+            margin: 0 0 24px;
+            font-size: 0.95rem;
+        }
+        .lib-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: var(--lib-accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .lib-btn:hover { background: var(--lib-accent-hover); }
+
+        .lib-loading {
+            color: var(--lib-text-muted);
+            font-size: 0.95rem;
+        }
+        .lib-spinner {
+            width: 32px; height: 32px;
+            border: 3px solid var(--lib-border);
+            border-top-color: var(--lib-accent);
+            border-radius: 50%;
+            animation: lib-spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes lib-spin { to { transform: rotate(360deg); } }
+
+        .lib-error { color: #dc2626; }
+
+        /* Purchase cards */
+        .lib-purchases { display: flex; flex-direction: column; gap: 16px; }
+
+        .lib-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--lib-card-bg);
+            border: 1px solid var(--lib-border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .lib-card:hover {
+            box-shadow: 0 8px 24px rgba(44,36,24,0.1);
+            transform: translateY(-2px);
+        }
+
+        .lib-card-icon {
+            flex-shrink: 0;
+            width: 56px; height: 56px;
+            background: #2563eb;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lib-card-icon svg {
+            width: 28px; height: 28px;
+            stroke: #fff; fill: none;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .lib-card-info { flex: 1; min-width: 0; }
+        .lib-card-title {
+            font-family: var(--lib-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--lib-text);
+            margin: 0 0 4px;
+        }
+        .lib-card-meta {
+            font-size: 0.8rem;
+            color: var(--lib-text-muted);
+            margin: 0;
+        }
+        .lib-card-meta .lib-paid-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(22,163,74,0.1);
+            color: var(--lib-success);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 8px;
+        }
+
+        .lib-card-actions { flex-shrink: 0; }
+        .lib-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: var(--lib-accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .lib-download-btn:hover { background: var(--lib-accent-hover); transform: scale(1.02); }
+        .lib-download-btn:active { transform: scale(0.98); }
+        .lib-download-btn:disabled {
+            opacity: 0.6; cursor: not-allowed; transform: none;
+        }
+        .lib-download-btn svg {
+            width: 16px; height: 16px;
+            stroke: currentColor; fill: none;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .lib-back-link {
+            display: inline-block;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--lib-accent);
+            text-decoration: none;
+        }
+        .lib-back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .lib-card { flex-direction: column; text-align: center; gap: 16px; }
+            .lib-card-actions { width: 100%; }
+            .lib-download-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="lib-body">
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="header">
+        <div class="header-content">
+            <a class="logo" href="/">
+                <img alt="" aria-hidden="true" class="logo-icon" src="/logo.png" style="width:28px; height:28px; border-radius:6px;"/>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a class="nav-link" href="/tools.html">Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/support.html">Support</a>
+            </nav>
+            <div class="header-actions">
+                <button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle" style="background:none; border:1px solid var(--lib-border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
+                    <span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                    <span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+                </button>
+                <button aria-label="Menu" class="menu-toggle" id="menuToggle">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <div class="lib-container">
+            <div class="lib-header">
+                <span class="lib-header-label">Your Purchases</span>
+                <h1 class="lib-heading">My <em>Library</em></h1>
+                <p class="lib-subtitle">Download your purchased study materials anytime. Buy once, access forever.</p>
+            </div>
+
+            <!-- Login prompt (shown if not logged in) -->
+            <div id="libLoginPrompt" style="display:none;">
+                <div class="lib-login-prompt">
+                    <h2>Sign in to access your library</h2>
+                    <p>Log in with your account to view and download your purchased study materials.</p>
+                    <a href="/login.html" class="lib-btn">Sign In</a>
+                </div>
+            </div>
+
+            <!-- Loading state -->
+            <div id="libLoading" style="display:none;">
+                <div class="lib-loading">
+                    <div class="lib-spinner"></div>
+                    <p>Loading your purchases…</p>
+                </div>
+            </div>
+
+            <!-- Error state -->
+            <div id="libError" style="display:none;">
+                <div class="lib-error">
+                    <p id="libErrorMsg">Something went wrong. Please try again.</p>
+                    <button class="lib-btn" onclick="loadPurchases()">Retry</button>
+                </div>
+            </div>
+
+            <!-- Empty state (no purchases) -->
+            <div id="libEmpty" style="display:none;">
+                <div class="lib-empty">
+                    <h2>No purchases yet</h2>
+                    <p>You haven't bought any study materials yet. Browse our collection and grab your first notes!</p>
+                    <a href="/study-materials.html" class="lib-btn">Browse Study Materials</a>
+                </div>
+            </div>
+
+            <!-- Purchases list -->
+            <div id="libPurchases" class="lib-purchases" style="display:none;"></div>
+
+            <a href="/study-materials.html" class="lib-back-link">← Back to Study Materials</a>
+        </div>
+    </main>
+
+    <footer class="hp-footer" style="background: var(--lib-bg-alt); border-top: 1px solid var(--lib-border); padding: 40px 24px; text-align: center; color: var(--lib-text-muted); font-size: 0.85rem;">
+        <p>© 2025 OnlinePDFPro · <a href="/terms.html" style="color: var(--lib-text-muted);">Terms</a> · <a href="/privacy.html" style="color: var(--lib-text-muted);">Privacy</a> · <a href="/refund.html" style="color: var(--lib-text-muted);">Refund Policy</a></p>
+    </footer>
+
+    <script defer src="/js/app.js?v=93"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/auth.js?v=93"></script>
+    <script>
+    const WORKER_BASE = 'https://onlinepdfpro-proxy.prem736raj.workers.dev';
+
+    async function loadPurchases() {
+        const loginPrompt = document.getElementById('libLoginPrompt');
+        const loading = document.getElementById('libLoading');
+        const errorDiv = document.getElementById('libError');
+        const emptyDiv = document.getElementById('libEmpty');
+        const purchasesDiv = document.getElementById('libPurchases');
+
+        // Hide all states
+        [loginPrompt, loading, errorDiv, emptyDiv, purchasesDiv].forEach(el => el.style.display = 'none');
+
+        // Check if logged in
+        const client = getSupabaseClient();
+        if (!client) {
+            loginPrompt.style.display = 'block';
+            return;
+        }
+        const { data: { session } } = await client.auth.getSession();
+        if (!session) {
+            loginPrompt.style.display = 'block';
+            return;
+        }
+
+        // Show loading
+        loading.style.display = 'block';
+
+        try {
+            const res = await fetch(WORKER_BASE + '/store/my-purchases', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + session.access_token
+                },
+                body: JSON.stringify({})
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || 'Failed to load purchases');
+            }
+
+            const data = await res.json();
+            const purchases = data.purchases || [];
+
+            loading.style.display = 'none';
+
+            if (purchases.length === 0) {
+                emptyDiv.style.display = 'block';
+                return;
+            }
+
+            // Render purchases
+            purchasesDiv.innerHTML = '';
+            purchases.forEach(purchase => {
+                const title = purchase.products?.title || purchase.product_id;
+                const date = new Date(purchase.created_at).toLocaleDateString('en-IN', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
+                const amount = purchase.amount_inr ? '₹' + (purchase.amount_inr / 100) : '';
+
+                const card = document.createElement('div');
+                card.className = 'lib-card';
+                card.innerHTML = `
+                    <div class="lib-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                    <div class="lib-card-info">
+                        <h3 class="lib-card-title">${title}</h3>
+                        <p class="lib-card-meta">
+                            Purchased ${date}${amount ? ' · ' + amount : ''}
+                            <span class="lib-paid-badge">Paid</span>
+                        </p>
+                    </div>
+                    <div class="lib-card-actions">
+                        <button class="lib-download-btn" onclick="downloadProduct('${purchase.product_id}', this)">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download PDF
+                        </button>
+                    </div>
+                `;
+                purchasesDiv.appendChild(card);
+            });
+
+            purchasesDiv.style.display = 'flex';
+
+        } catch (err) {
+            loading.style.display = 'none';
+            document.getElementById('libErrorMsg').textContent = err.message;
+            errorDiv.style.display = 'block';
+        }
+    }
+
+    async function downloadProduct(productId, btn) {
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `
+            <svg viewBox="0 0 24 24" style="animation: lib-spin 0.8s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            Downloading…
+        `;
+
+        try {
+            const client = getSupabaseClient();
+            const { data: { session } } = await client.auth.getSession();
+            if (!session) {
+                alert('Please sign in again.');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const res = await fetch(WORKER_BASE + '/store/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + session.access_token
+                },
+                body: JSON.stringify({ product_id: productId })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || 'Download failed');
+            }
+
+            // Get the blob and trigger download
+            const blob = await res.blob();
+            const contentDisposition = res.headers.get('Content-Disposition') || '';
+            const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+            const filename = filenameMatch ? filenameMatch[1] : productId + '.pdf';
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Show success
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Downloaded!
+            `;
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+
+        } catch (err) {
+            alert(err.message);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPurchases);
+    </script>
+</body>
+</html>

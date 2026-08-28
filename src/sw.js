@@ -2,7 +2,7 @@
 // Network-first for JS files to prevent stale cache issues.
 // Cache-first for images/fonts/CSS with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v92';
+const CACHE_NAME = 'onlinepdfpro-cache-v93';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
     'tools.html',
     'study-materials.html',
     'login.html',
+    'library.html',
     'support.html',
     'refund.html',
     'dmca.html',
