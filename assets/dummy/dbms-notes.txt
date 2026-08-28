@@ -1,0 +1,1 @@
+This is a dummy PDF file (actually text) for testing the library download flow.
