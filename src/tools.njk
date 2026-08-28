@@ -1,7 +1,6 @@
 ---
-title: "Online PDF Pro - Free PDF Tools: Merge, Compress, Sign, OCR & More"
+title: "Free Online PDF Tools"
 description: "100% Free PDF tools: Merge, Split, Compress, Convert, Unlock, Watermark, Sign PDF, Image to Text (OCR) extractor. No registration, No watermark, Works on mobile."
-keywords: "free pdf tools online, pdf merge online, compress pdf free, pdf editor online, convert pdf, sign pdf free, ocr pdf, pdf tools no signup"
 permalink: /tools.html
 bodyClass: tp-body
 ---
@@ -25,6 +24,7 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 .tp-hero-subtitle { font-family: var(--tp-sans); font-size: 0.92rem; color: var(--tp-text-secondary); line-height: 1.7; max-width: 950px; margin: 0 auto 32px; position: relative; white-space: nowrap; }
 .tp-search-wrap { max-width: 440px; margin: 0 auto; position: relative; }
 .tp-search-wrap input { width: 100%; padding: 16px 20px 16px 48px; border: 1.5px solid var(--tp-border); background: var(--tp-card-bg); color: var(--tp-text); font-family: var(--tp-sans); font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+.tp-search-wrap input { min-height: 48px; }
 .tp-search-wrap input:focus { border-color: var(--tp-accent); }
 .tp-search-wrap input::placeholder { color: var(--tp-text-muted); }
 .tp-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--tp-text-muted); pointer-events: none; }
@@ -189,6 +189,40 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 (function() {
     var overlay = document.getElementById('homeDropOverlay');
     if (!overlay) return;
+    var modal = null;
+    var closeModalButton = null;
+    var lastFocusedElement = null;
+    function bindToolPickerModal() {
+        if (modal) return;
+        modal = document.getElementById('homeDropModal');
+        closeModalButton = document.getElementById('dropModalClose');
+        if (closeModalButton) closeModalButton.addEventListener('click', closeToolPicker);
+    }
+    function closeToolPicker() {
+        if (!modal) return;
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+        modal.style.display = 'none';
+        if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+    }
+    bindToolPickerModal();
+    if (!modal) document.addEventListener('DOMContentLoaded', bindToolPickerModal, { once: true });
+    document.addEventListener('keydown', function(event) {
+        if (!modal || modal.hidden) return;
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeToolPicker();
+            return;
+        }
+        if (event.key === 'Tab') {
+            var focusable = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            if (!focusable.length) return;
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        }
+    });
     var dragCounter = 0;
     var toolMap = {
         pdf: [
@@ -223,21 +257,27 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
         var ad=document.getElementById('dropModalActions');
         if(!ad) return;
         ad.innerHTML=tools.map(function(t){return '<a href="'+t.href+'" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--tp-bg-alt);border:1px solid var(--tp-border);text-decoration:none;color:var(--tp-text);font-weight:500;font-size:0.9rem;font-family:Inter,sans-serif;transition:all 0.2s;" onmouseenter="this.style.borderColor=\'var(--tp-accent)\'" onmouseleave="this.style.borderColor=\'var(--tp-border)\'"><span style="font-size:1.3rem;">'+t.svg+'</span>'+t.name+'</a>';}).join('');
-        var modal = document.getElementById('homeDropModal');
-        if(modal) modal.style.display='flex';
+        if(modal) {
+            lastFocusedElement = document.activeElement;
+            modal.hidden = false;
+            modal.setAttribute('aria-hidden', 'false');
+            modal.style.display='flex';
+            setTimeout(function() { if (closeModalButton) closeModalButton.focus(); }, 0);
+        }
     });
 })();
 </script>
 
 <!-- ═══════ TOOL PICKER MODAL ═══════ -->
-<div id="homeDropModal" style="position:fixed;inset:0;z-index:100000;background:rgba(28,22,16,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
+<div id="homeDropModal" role="dialog" aria-modal="true" aria-labelledby="dropModalTitle" aria-describedby="dropModalFileName" aria-hidden="true" hidden style="position:fixed;inset:0;z-index:100000;background:rgba(28,22,16,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
 <div style="background:var(--tp-card-bg);border:1px solid var(--tp-border);border-radius:0;padding:36px 32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
 <div style="text-align:center;margin-bottom:24px;">
+<h2 id="dropModalTitle" style="font-size:1.25rem;font-weight:600;color:var(--tp-text);margin-bottom:12px;font-family:'Playfair Display',serif;">Choose a tool</h2>
 <p style="font-size:1.1rem;font-weight:500;color:var(--tp-text);margin-bottom:4px;font-family:'Playfair Display',serif;" id="dropModalFileName">file.pdf</p>
 <p style="font-size:0.85rem;color:var(--tp-text-muted);font-family:'Inter',sans-serif;">What would you like to do?</p>
 </div>
 <div id="dropModalActions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
-<button onclick="document.getElementById('homeDropModal').style.display='none'" style="display:block;margin:20px auto 0;padding:10px 24px;background:transparent;border:1px solid var(--tp-border);border-radius:0;color:var(--tp-text-muted);cursor:pointer;font-size:0.85rem;font-family:'Inter',sans-serif;">Cancel</button>
+<button id="dropModalClose" type="button" style="display:block;margin:20px auto 0;padding:10px 24px;background:transparent;border:1px solid var(--tp-border);border-radius:0;color:var(--tp-text-muted);cursor:pointer;font-size:0.85rem;font-family:'Inter',sans-serif;">Cancel</button>
 </div>
 </div>
 {% endblock %}

@@ -7,18 +7,17 @@
  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
- 
+
  <!-- ===== MUST HAVE SEO META TAGS ===== -->
 
 <!-- Primary Meta Tags -->
-<title>Compress PDF Online Free — Fast, Reduce PDF Size by 90% | OnlinePDFPro</title>
+<title>Compress PDF Online Free – Reduce PDF Size | OnlinePDFPro</title>
  <!-- Preconnect to CDNs for Speed -->
  <link rel="preconnect" href="https://cdn.jsdelivr.net">
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<meta name="description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. 100% free, no signup, no file limits. Works on mobile & desktop.">
-<meta name="keywords" content="compress pdf, reduce pdf size, shrink pdf online free, pdf compressor, compress pdf without losing quality, reduce pdf file size">
+<meta name="description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. Free to use with per-file limits shown below; no signup required. Works on mobile & desktop.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/compress-pdf.html">
@@ -26,18 +25,18 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/tools/compress-pdf.html">
-<meta property="og:title" content="Compress PDF Online Free — Fast, Reduce PDF Size by 90% | OnlinePDFPro">
-<meta property="og:description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. 100% free, no signup, no file limits. Works on mobile & desktop.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-compress-pdf.png">
+<meta property="og:title" content="Compress PDF Online Free – Reduce PDF Size | OnlinePDFPro">
+<meta property="og:description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. Free to use with per-file limits shown below; no signup required. Works on mobile & desktop.">
+<meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/compress-pdf.html">
-<meta name="twitter:title" content="Compress PDF Online Free — Fast, Reduce PDF Size by 90% | OnlinePDFPro">
-<meta name="twitter:description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. 100% free, no signup, no file limits. Works on mobile & desktop.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-compress-pdf.png">
+<meta name="twitter:title" content="Compress PDF Online Free – Reduce PDF Size | OnlinePDFPro">
+<meta name="twitter:description" content="Compress PDF with the processing method described on this page. Reduce PDF size with adjustable quality settings. Free to use with per-file limits shown below; no signup required. Works on mobile & desktop.">
+<meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -92,9 +91,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -108,13 +110,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-<a class="nav-link active" href="/tools.html">Tools</a>
-
-<a class="nav-link" href="/about.html">About</a>
-<a class="nav-link" href="/support.html">Support</a>
-<a class="nav-link mobile-only-nav" href="/history.html">History</a>
-<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
-</nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <!-- Compact Header Search -->
@@ -128,7 +126,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -139,7 +137,7 @@
 <div class="container" style="max-width: 800px;">
  <div class="tool-header">
  <span class="section-tag fade-in">Multi-File Optimizer</span>
- <h1 class="tool-title fade-in">Compress PDF Online Free — processing details</h1>
+ <h1 class="tool-title fade-in">Compress PDF Online Free</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
  Reduce PDF size with adjustable quality settings; results depend on document contents. Review the processing details before uploading. No signup required.
  </p>
@@ -266,7 +264,7 @@
 
  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
  </script>
-<script src="../js/app.js?v=94"></script>
+<script src="../js/app.js?v=95"></script>
  <script>
  (function () {
  const { PDFDocument } = PDFLib;
@@ -309,7 +307,7 @@
  if (files.length > 0 && document.getElementById('targetSizeInput').value === "200") {
  let suggestedKB = Math.round(files[0].size / 1024 * 0.5);
  if (suggestedKB < 1) suggestedKB = 1;
- 
+
  if (suggestedKB > 1024) {
  document.getElementById('targetSizeInput').value = (suggestedKB / 1024).toFixed(1);
  document.getElementById('targetSizeUnit').value = 'MB';
@@ -353,9 +351,9 @@
  document.getElementById('cancelBtn').addEventListener('click', () => { isCancelled = true; });
  document.getElementById('compressAnother').addEventListener('click', resetTool);
 
- // 
+ //
  // PHASE 1 — Lossless structural optimization
- // 
+ //
  async function losslessCompress(arrayBuffer) {
  const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
  const newDoc = await PDFDocument.create();
@@ -376,77 +374,77 @@
  });
  }
 
- // 
+ //
  // PHASE 2 — Target-Size Binary Search Estimator
- // 
+ //
  async function findOptimalParams(arrayBuffer, targetBytes, statusText, progressFill) {
  statusText.textContent = 'Estimating compression parameters...';
  const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
  const numPages = srcDoc.getPageCount();
  const targetBytesPerPage = targetBytes / numPages;
- 
+
  const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
  const pdfDocJs = await loadingTask.promise;
  const firstPage = await pdfDocJs.getPage(1);
- 
+
  const unscaledViewport = firstPage.getViewport({ scale: 1.0 });
  const canvas = document.createElement('canvas');
  const context = canvas.getContext('2d');
- 
+
  function getParamsFromIndex(idx) {
  const t = Math.max(0, Math.min(1, idx / 100)); // 0 to 1
  const renderScale = 0.5 + (t * 2.0); // 0.5 to 2.5
  const jpegQuality = 0.1 + (t * 0.85); // 0.1 to 0.95
  return { renderScale, jpegQuality };
  }
- 
+
  async function testIndex(idx) {
  const p = getParamsFromIndex(idx);
  const viewport = firstPage.getViewport({ scale: p.renderScale });
  canvas.width = viewport.width;
  canvas.height = viewport.height;
  await firstPage.render({ canvasContext: context, viewport: viewport }).promise;
- 
+
  const imgDataUrl = canvas.toDataURL('image/jpeg', p.jpegQuality);
  const base64Data = imgDataUrl.split(',')[1];
  const approxBytes = base64Data.length * 0.75;
  return approxBytes;
  }
- 
+
  let low = 0;
  let high = 100;
  let bestIndex = 50;
  let bestDiff = Infinity;
- 
+
  for(let iter = 0; iter < 7; iter++) {
  if (isCancelled) return getParamsFromIndex(50);
  progressFill.style.width = (20 + (iter * 3)) + '%'; // 20% to 41%
- 
+
  let mid = Math.floor((low + high) / 2);
  let bytes = await testIndex(mid);
- 
+
  let diff = Math.abs(bytes - targetBytesPerPage);
  if (diff < bestDiff) {
  bestDiff = diff;
  bestIndex = mid;
  }
- 
+
  if (bytes > targetBytesPerPage) {
- high = mid - 1; 
+ high = mid - 1;
  } else {
- low = mid + 1; 
+ low = mid + 1;
  }
  }
- 
+
  canvas.width = 0;
  canvas.height = 0;
- 
+
  return getParamsFromIndex(bestIndex);
  }
 
- // 
+ //
  // PHASE 3 — High-quality rasterization fallback
- // 
+ //
  async function rasterizeCompress(arrayBuffer, optimalParams, statusText, progressFill, numPagesTotal) {
  const newPdfDoc = await PDFDocument.create();
  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
@@ -494,9 +492,9 @@
  return await newPdfDoc.save({ useObjectStreams: true });
  }
 
- // 
+ //
  // Main batch compression loop
- // 
+ //
  async function startBatchCompression() {
  if (files.length === 0) return;
 
@@ -563,7 +561,7 @@
  // ArrayBuffer". The pristine original stays untouched for the fallbacks.
  const originalSize = file.size;
 
- //  PHASE 1: Lossless structural optimization 
+ //  PHASE 1: Lossless structural optimization
  statusText.textContent = 'Phase 1: Structural optimization...';
  progressFill.style.width = '15%';
 
@@ -576,12 +574,12 @@
  bestSize = originalSize;
  }
 
- //  PHASE 2 & 3: Smart rasterization (only if lossless didn't hit target) 
+ //  PHASE 2 & 3: Smart rasterization (only if lossless didn't hit target)
  if (bestSize > targetBytes && isCancelled === false) {
- 
+
  // Binary search for optimal parameters to hit target size
  const optimalParams = await findOptimalParams(arrayBuffer.slice(0), targetBytes, statusText, progressFill);
- 
+
  if (isCancelled === false) {
  const rasterBytes = await rasterizeCompress(
  arrayBuffer.slice(0), optimalParams, statusText, progressFill
@@ -724,9 +722,9 @@ resultsSection.style.display = 'block';
  "@context": "https://schema.org",
  "@type": "WebApplication",
  "name": "Compress PDF",
- "description": "Compress PDF files online for free. Reduce PDF size with adjustable quality settings; results depend on document contents. Fast, 100% free, works on mobile. Batch compress multiple PDFs.",
+  "description": "Compress PDF files online with adjustable quality settings. Results depend on document contents; review the file limits shown on the page before processing.",
  "url": "https://onlinepdfpro.com/tools/compress-pdf.html",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",
  "offers": {
@@ -741,38 +739,8 @@ resultsSection.style.display = 'block';
  }
 }
 </script>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How do I compress a PDF without uploading it?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Select your PDF, choose a compression level, and download the smaller version when processing is complete. Review the processing details before uploading."
- }
- },
- {
- "@type": "Question",
- "name": "Is it safe to compress PDF files online?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "File handling depends on the selected processing method. Review the processing details before uploading; your original file is unchanged if compression fails."
- }
- },
- {
- "@type": "Question",
- "name": "Can I compress multiple PDF files at once?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Absolutely. You can batch compress up to 20 PDF files simultaneously. Each file is optimized independently — select all your files and compress them in one click."
- }
- }
- ]
-}
-</script>
+
+
 
 <script>
 if ('serviceWorker' in navigator) {

@@ -8,9 +8,8 @@
  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
-<title>Flatten PDF Free Online — Remove Form Fields & Annotations | OnlinePDFPro</title>
+<title>Flatten PDF Online Free | OnlinePDFPro</title>
 <meta name="description" content="Flatten PDF free online. Convert form fields, annotations, and layers into static content. Review the processing details before uploading.">
-<meta name="keywords" content="flatten pdf, remove form fields pdf, remove annotations pdf, make pdf non editable, flatten pdf online free">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/flatten-pdf.html">
@@ -18,18 +17,18 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/flatten-pdf.html">
-<meta property="og:title" content="Flatten PDF Free Online — Remove Form Fields & Annotations | OnlinePDFPro">
+<meta property="og:title" content="Flatten PDF Online Free | OnlinePDFPro">
 <meta property="og:description" content="Flatten PDF free online. Convert form fields, annotations, and layers into static content. Review the processing details before uploading.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-flatten-pdf.png">
+<meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/flatten-pdf.html">
-<meta name="twitter:title" content="Flatten PDF Free Online — Remove Form Fields & Annotations | OnlinePDFPro">
+<meta name="twitter:title" content="Flatten PDF Online Free | OnlinePDFPro">
 <meta name="twitter:description" content="Flatten PDF free online. Convert form fields, annotations, and layers into static content. Review the processing details before uploading.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-flatten-pdf.png">
+<meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,7 +42,7 @@
 <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/flatten-pdf.html">
 <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/flatten-pdf.html">
 
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=95">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
  <script type="application/ld+json">
  {
@@ -52,7 +51,7 @@
  "name": "Flatten PDF Online",
  "url": "https://onlinepdfpro.com/flatten-pdf.html",
  "description": "Free online tool to flatten PDF files and remove editable fields.",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
  }
@@ -362,7 +361,7 @@
  color: var(--text-primary) !important;
  }
  header {
- 
+
  }
  header h1, header h1 a {
  color: white !important;
@@ -379,9 +378,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -395,11 +397,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="tools.html" class="nav-link">All Tools</a>
- <a href="about.html" class="nav-link">About</a>
- <a href="support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -411,7 +411,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
@@ -703,7 +703,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
- <script defer src="/js/app.js?v=94"></script>
+ <script defer src="/js/app.js?v=95"></script>
 </body>
 
 </html>

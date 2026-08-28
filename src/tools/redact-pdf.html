@@ -8,9 +8,8 @@
  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
-<title>Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro</title>
+<title>Redact PDF Online Free | OnlinePDFPro</title>
 <meta name="description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
-<meta name="keywords" content="Redact PDF (Privacy Shield), sensitive data remover, redact pdf, hide phone number, hide email, aadhaar redaction, pan redaction">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/redact-pdf.html">
@@ -18,18 +17,18 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
-<meta property="og:title" content="Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro">
+<meta property="og:title" content="Redact PDF Online Free | OnlinePDFPro">
 <meta property="og:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-tools.png">
+<meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
-<meta name="twitter:title" content="Redact PDF (Privacy Shield) — Sensitive Data Remover | OnlinePDFPro">
+<meta name="twitter:title" content="Redact PDF Online Free | OnlinePDFPro">
 <meta name="twitter:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-tools.png">
+<meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,7 +42,7 @@
 <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/redact-pdf.html">
 <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/redact-pdf.html">
 
-<link rel="stylesheet" href="../css/style.css?v=21">
+<link rel="stylesheet" href="../css/style.css?v=95">
 <link rel="stylesheet" href="../css/mobile-fix-v2.css">
 <link rel="stylesheet" href="../css/tools-v2.css">
 
@@ -51,7 +50,7 @@
 <script src="/js/vendor/pdfjs/pdf.min.js"></script>
 <!-- Tesseract.js for OCR on images/scanned PDFs -->
 <script src="/js/vendor/tesseract/tesseract.min.js"></script>
-<!-- pdf-lib for exporting blurred PDFs -->
+<!-- pdf-lib for exporting rasterized redacted PDFs -->
 <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
 
 <style>
@@ -96,41 +95,22 @@
  "name": "Redact PDF Online",
  "url": "https://onlinepdfpro.com/tools/redact-pdf.html",
  "description": "Free PDF redaction tool to hide sensitive data like phone numbers, emails, and Aadhaar IDs. Review the processing details before uploading.",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
 </script>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How does this PDF redactor keep my data safe?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": ""
- }
- },
- {
- "@type": "Question",
- "name": "What type of data can it automatically detect?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "The tool can automatically detect and blur common sensitive information including phone numbers, email addresses, Aadhaar numbers, PAN IDs, and physical addresses."
- }
- }
- ]
-}
-</script>
+
+
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -144,13 +124,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-<a class="nav-link active" href="/tools.html">Tools</a>
-
-<a class="nav-link" href="/about.html">About</a>
-<a class="nav-link" href="/support.html">Support</a>
-<a class="nav-link mobile-only-nav" href="/history.html">History</a>
-<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
-</nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -162,7 +138,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
 </header>
@@ -174,7 +150,7 @@
  <span class="section-tag fade-in">Security</span>
  <h1 class="tool-title fade-in">Redact PDF (Privacy Shield) / Sensitive Data Remover</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. 
+ Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures.
  </p>
  </div>
 
@@ -204,16 +180,16 @@
 
  <div class="shield-panel" style="margin-bottom:16px;">
  <div class="action-row">
- <button id="scanBtn" class="btn btn-primary">Scan &amp; Blur Sensitive Data</button>
+ <button id="scanBtn" class="btn btn-primary">Scan &amp; Redact Sensitive Data</button>
  <button id="clearBtn" class="btn btn-secondary">Clear</button>
- <button id="downloadPdfBtn" class="btn btn-outline" disabled>Download Blurred PDF</button>
- <button id="downloadImageBtn" class="btn btn-outline" disabled>Download Blurred Image</button>
+ <button id="downloadPdfBtn" class="btn btn-outline" disabled>Download Redacted PDF</button>
+ <button id="downloadImageBtn" class="btn btn-outline" disabled>Download Redacted Image</button>
  </div>
  <div id="progressWrap" style="display:none; margin-top: 12px;">
  <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
  <p id="progressText" class="note">Preparing scan...</p>
  </div>
- <p class="note">Blurred output is exported without visible sensitive data.</p>
+ <p class="note">Detected regions are covered with opaque boxes and exported as a new rasterized file. Review every page before sharing.</p>
  </div>
 
  <div class="shield-panel preview-wrap" style="margin-bottom:16px;">
@@ -226,7 +202,7 @@
  </div>
  </div>
  <canvas id="previewCanvas" class="preview-canvas"></canvas>
- <p class="note">Preview shows blurred areas. Export keeps the same blur.</p>
+ <p class="note">Preview shows opaque redaction boxes. Export does not preserve the original text layer.</p>
  </div>
 
  <div class="shield-grid">
@@ -237,7 +213,7 @@
  </div>
  <div class="shield-panel" style="grid-column: span 2;">
  <h4>Export notes</h4>
- <p class="note">PDFs export as a new blurred PDF. Images export as blurred PNGs. All processing stays on-device.</p>
+ <p class="note">PDFs export as rasterized PDFs with detected regions covered by opaque boxes. Images export as redacted PNGs. All processing stays on-device; detection can miss text, so inspect the result manually.</p>
  </div>
  </div>
  </div>
@@ -249,7 +225,7 @@
 </main>
 
 <script defer src="../counter.js"></script>
-<script defer src="../js/app.js?v=94"></script>
+<script defer src="../js/app.js?v=95"></script>
 
 <script>
 const statusPill = document.getElementById('statusPill');
@@ -268,8 +244,7 @@ const progressText = document.getElementById('progressText');
 const resultsList = document.getElementById('resultsList');
 const emptyResults = document.getElementById('emptyResults');
 
-const BLUR_RADIUS = 10;
-const BLUR_TINT = 'rgba(14, 165, 233, 0.25)';
+const REDACTION_COLOR = '#111111';
 
 const state = {
  file: null,
@@ -449,25 +424,18 @@ function normalizeRect(rect, width, height) {
  return { x, y, width: w, height: h };
 }
 
-function blurRegions(canvas, regions) {
+function redactRegions(canvas, regions) {
  if (!regions.length) {
  return;
  }
  const ctx = canvas.getContext('2d');
- const source = document.createElement('canvas');
- source.width = canvas.width;
- source.height = canvas.height;
- source.getContext('2d').drawImage(canvas, 0, 0);
-
+ ctx.save();
+ ctx.fillStyle = REDACTION_COLOR;
  regions.forEach(region => {
  const rect = normalizeRect(region, canvas.width, canvas.height);
- ctx.save();
- ctx.filter = `blur(${BLUR_RADIUS}px)`;
- ctx.drawImage(source, rect.x, rect.y, rect.width, rect.height, rect.x, rect.y, rect.width, rect.height);
- ctx.restore();
- ctx.fillStyle = BLUR_TINT;
  ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
  });
+ ctx.restore();
 }
 
 function combineCounts(base, add) {
@@ -580,7 +548,7 @@ async function processPdfPage(pageNumber) {
  counts = ocrResult.counts;
  }
 
- blurRegions(canvas, regions);
+ redactRegions(canvas, regions);
  return { canvas, counts };
 }
 
@@ -604,11 +572,11 @@ async function processImageFile(file) {
  URL.revokeObjectURL(url);
 
  const ocrResult = await getOcrBoxes(canvas);
- blurRegions(canvas, ocrResult.regions);
+ redactRegions(canvas, ocrResult.regions);
  return { canvas, counts: ocrResult.counts };
 }
 
-async function scanAndBlur() {
+async function scanAndRedact() {
  if (!state.file) {
  setStatus('Upload a file first', 'warn');
  return;
@@ -676,7 +644,7 @@ fileInput.addEventListener('change', async event => {
  }
 });
 
-scanBtn.addEventListener('click', scanAndBlur);
+scanBtn.addEventListener('click', scanAndRedact);
 
 clearBtn.addEventListener('click', () => {
  resetState();
@@ -716,7 +684,7 @@ downloadImageBtn.addEventListener('click', () => {
  const url = URL.createObjectURL(blob);
  const link = document.createElement('a');
  link.href = url;
- link.download = 'privacy-shield-blurred.png';
+ link.download = 'privacy-shield-redacted.png';
  document.body.appendChild(link);
  link.click();
  link.remove();
@@ -741,7 +709,7 @@ downloadPdfBtn.addEventListener('click', async () => {
  const url = URL.createObjectURL(blob);
  const link = document.createElement('a');
  link.href = url;
- link.download = 'privacy-shield-blurred.pdf';
+ link.download = 'privacy-shield-redacted.pdf';
  document.body.appendChild(link);
  link.click();
  link.remove();

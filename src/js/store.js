@@ -335,6 +335,7 @@ async function checkoutCart() {
                         const errorData = await verifyRes.json().catch(() => ({}));
                         if (errorData.code === "ALREADY_PURCHASED") {
                             showCheckoutMessage("You already own this item. Open My Library.", true);
+                            openCart();
                         } else {
                             showCheckoutMessage(errorData.error || "Payment verification failed. Please contact support.");
                         }
@@ -364,6 +365,7 @@ async function checkoutCart() {
         console.error(err);
         if (err.code === "ALREADY_PURCHASED") {
             showCheckoutMessage("You already own this item. Open My Library.", true);
+            openCart();
         } else {
             alert(err.message || "An error occurred during checkout.");
         }
@@ -371,6 +373,27 @@ async function checkoutCart() {
         const btn = document.querySelector('.cart-checkout-btn');
         if (btn) btn.textContent = 'Continue to Checkout';
     }
+}
+
+async function buyProduct(productId) {
+    const product = STORE_PRODUCTS[productId];
+
+    if (!product) {
+        showCheckoutMessage("That product is not available.");
+        return false;
+    }
+
+    const cart = getCart();
+    if (cart.some(item => item.id !== productId)) {
+        showCheckoutMessage("Checkout currently supports one item at a time. Remove the other item before buying this one.");
+        openCart();
+        return false;
+    }
+
+    // Buy Now still records the one-item cart so success and failure follow
+    // the same safe clearing rules as the cart checkout button.
+    saveCart([product]);
+    return checkoutCart();
 }
 
 document.addEventListener(
@@ -540,6 +563,7 @@ window.openCart = openCart;
 window.closeCart = closeCart;
 window.renderCart = renderCart;
 window.checkoutCart = checkoutCart;
+window.buyProduct = buyProduct;
 window.updateCartCount = updateCartCount;
 window.loadRazorpayScript = loadRazorpayScript;
 window.showCheckoutMessage = showCheckoutMessage;

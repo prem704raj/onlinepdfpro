@@ -145,6 +145,29 @@ async function signInWithGoogle() {
 }
 
 // -------------------------------------
+// PASSWORD RESET
+// -------------------------------------
+async function requestPasswordReset(email) {
+  const client = getSupabaseClient();
+  if (!client) {
+    throw new Error("Authentication service is unavailable. Please check your internet connection.");
+  }
+  const redirectTo = (window.location.origin || "https://onlinepdfpro.com") + "/login.html?mode=reset";
+  const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) throw error;
+}
+
+async function updatePassword(password) {
+  const client = getSupabaseClient();
+  if (!client) {
+    throw new Error("Authentication service is unavailable. Please check your internet connection.");
+  }
+  const { data, error } = await client.auth.updateUser({ password });
+  if (error) throw error;
+  return data;
+}
+
+// -------------------------------------
 // LOGOUT
 // -------------------------------------
 async function logout() {
@@ -270,6 +293,8 @@ async function updateUserHeader() {
 window.supabaseClient = supabaseClient;
 window.getSupabaseClient = getSupabaseClient;
 window.signInWithGoogle = signInWithGoogle;
+window.requestPasswordReset = requestPasswordReset;
+window.updatePassword = updatePassword;
 window.login = login;
 window.signup = signup;
 window.logout = logout;

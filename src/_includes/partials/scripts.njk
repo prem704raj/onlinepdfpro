@@ -1,6 +1,8 @@
 <script>
 (function() {
-    var theme = localStorage.getItem('doctools-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    var saved = localStorage.getItem('doctools-theme');
+    var validSaved = saved === 'light' || saved === 'dark';
+    var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', validSaved ? saved : (systemPrefersDark ? 'dark' : 'light'));
 })();
 </script>

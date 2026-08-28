@@ -10,7 +10,6 @@
 <!-- Primary Meta Tags -->
 <title>QR Code Generator Free — Create QR Codes Online | OnlinePDFPro</title>
 <meta name="description" content="Generate QR codes free online. Create QR codes for URLs, text, WiFi, email, and more. Customize colors and size. Download as PNG. No signup required.">
-<meta name="keywords" content="qr code generator, free qr code, qr code maker, wifi qr code, whatsapp qr, vcard qr, custom qr code, qr code with logo">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/qr-code-generator.html">
@@ -20,7 +19,7 @@
 <meta property="og:url" content="https://onlinepdfpro.com/tools/qr-code-generator.html">
 <meta property="og:title" content="QR Code Generator Free — Create QR Codes Online | OnlinePDFPro">
 <meta property="og:description" content="Generate QR codes free online. Create QR codes for URLs, text, WiFi, email, and more. Customize colors and size. Download as PNG. No signup required.">
-<meta property="og:image" content="https://onlinepdfpro.com/images/og-qr-generator.png">
+<meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
 
@@ -29,7 +28,7 @@
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/qr-code-generator.html">
 <meta name="twitter:title" content="QR Code Generator Free — Create QR Codes Online | OnlinePDFPro">
 <meta name="twitter:description" content="Generate QR codes free online. Create QR codes for URLs, text, WiFi, email, and more. Customize colors and size. Download as PNG. No signup required.">
-<meta name="twitter:image" content="https://onlinepdfpro.com/images/og-qr-generator.png">
+<meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -42,7 +41,7 @@
 <!-- Hreflang (if you plan multilingual) -->
 <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/qr-code-generator.html">
 <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/qr-code-generator.html">
- <link rel="stylesheet" href="../css/style.css?v=21">
+ <link rel="stylesheet" href="../css/style.css?v=95">
  <link rel="stylesheet" href="../css/mobile-fix-v2.css">
  <link rel="stylesheet" href="../css/tools-v2.css">
  <script src="/js/vendor/qr-code-styling/qr-code-styling.js"></script>
@@ -111,9 +110,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -127,12 +129,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -144,11 +143,11 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu"></button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
- 
+
  <!-- Main Tool Interface -->
  <main id="main">
 
@@ -187,7 +186,7 @@
  <div class="input-area">
  <input type="file" id="imageInput" class="premium-input" accept="image/*" multiple>
  <p class="upload-hint">Images are uploaded to tmpfiles.org (60min link) or ImgBB for permanent hosting.</p>
- 
+
  <div id="imgbbSection" class="api-key-box" style="display:block;">
  <input type="text" id="imgbbKey" class="premium-input" placeholder="ImgBB API Key (Optional for permanent hosting)">
  <p class="upload-hint">Get a free key at <a href="https://imgbb.com/login" target="_blank">imgbb.com</a> → Add key.</p>
@@ -280,47 +279,47 @@
  }[tag] || tag));
  }
 
- /* 
+ /*
  50+ QR DESIGN PRESETS
   */
  const PRESETS = [
- //  Classic 
+ //  Classic
  { name:'Classic', dot:'square', csq:'square', cd:'square', fg:'#000000', bg:'#ffffff' },
  { name:'Rounded', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#000000', bg:'#ffffff' },
  { name:'Dots', dot:'dots', csq:'dot', cd:'dot', fg:'#000000', bg:'#ffffff' },
  { name:'Classy', dot:'classy', csq:'square', cd:'square', fg:'#1a1a2e', bg:'#ffffff' },
  { name:'Classy Round', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#1a1a2e', bg:'#ffffff' },
  { name:'Extra Round', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#222222', bg:'#ffffff' },
- //  Blues 
+ //  Blues
  { name:'Ocean', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#1e40af', bg:'#ffffff' },
  { name:'Royal Blue', dot:'dots', csq:'dot', cd:'dot', fg:'#2563eb', bg:'#ffffff' },
  { name:'Navy', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#1e3a5f', bg:'#f0f9ff' },
  { name:'Sky', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#0284c7', bg:'#ffffff' },
  { name:'Cobalt', dot:'square', csq:'square', cd:'square', fg:'#1d4ed8', bg:'#eff6ff' },
- //  Purples 
+ //  Purples
  { name:'Violet', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#7c3aed', bg:'#ffffff' },
  { name:'Indigo', dot:'dots', csq:'dot', cd:'dot', fg:'#6366f1', bg:'#ffffff' },
  { name:'Amethyst', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#8b5cf6', bg:'#faf5ff' },
  { name:'Grape', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#a855f7', bg:'#ffffff' },
  { name:'Plum', dot:'classy', csq:'square', cd:'square', fg:'#581c87', bg:'#fdf4ff' },
- //  Greens 
+ //  Greens
  { name:'Forest', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#166534', bg:'#ffffff' },
  { name:'Emerald', dot:'dots', csq:'dot', cd:'dot', fg:'#059669', bg:'#ffffff' },
  { name:'Mint', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#10b981', bg:'#f0fdf4' },
  { name:'Teal', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#0d9488', bg:'#ffffff' },
  { name:'Lime', dot:'rounded', csq:'dot', cd:'dot', fg:'#65a30d', bg:'#ffffff' },
- //  Reds & Oranges 
+ //  Reds & Oranges
  { name:'Crimson', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#dc2626', bg:'#ffffff' },
  { name:'Rose', dot:'dots', csq:'dot', cd:'dot', fg:'#e11d48', bg:'#ffffff' },
  { name:'Coral', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#f97316', bg:'#fff7ed' },
  { name:'Sunset', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#ea580c', bg:'#ffffff' },
  { name:'Ruby', dot:'classy', csq:'square', cd:'square', fg:'#9f1239', bg:'#fff1f2' },
  { name:'Amber', dot:'rounded', csq:'dot', cd:'dot', fg:'#d97706', bg:'#ffffff' },
- //  Warm 
+ //  Warm
  { name:'Brown', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#78350f', bg:'#fffbeb' },
  { name:'Espresso', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#44403c', bg:'#fafaf9' },
  { name:'Chocolate', dot:'dots', csq:'dot', cd:'dot', fg:'#92400e', bg:'#ffffff' },
- //  Dark Mode 
+ //  Dark Mode
  { name:'Dark Classic', dot:'square', csq:'square', cd:'square', fg:'#e2e8f0', bg:'#0f172a' },
  { name:'Dark Rounded', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#f1f5f9', bg:'#1e293b' },
  { name:'Dark Dots', dot:'dots', csq:'dot', cd:'dot', fg:'#818cf8', bg:'#0f172a' },
@@ -329,18 +328,18 @@
  { name:'Dark Green', dot:'rounded', csq:'dot', cd:'dot', fg:'#4ade80', bg:'#0f172a' },
  { name:'Dark Red', dot:'dots', csq:'dot', cd:'dot', fg:'#fb7185', bg:'#18181b' },
  { name:'Dark Orange', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#fb923c', bg:'#1c1917' },
- //  Neon 
+ //  Neon
  { name:'Neon Pink', dot:'dots', csq:'dot', cd:'dot', fg:'#ec4899', bg:'#fdf2f8' },
  { name:'Neon Cyan', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#06b6d4', bg:'#ecfeff' },
  { name:'Neon Lime', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#84cc16', bg:'#f7fee7' },
  { name:'Neon Yellow', dot:'dots', csq:'dot', cd:'dot', fg:'#ca8a04', bg:'#fefce8' },
- //  Pastel 
+ //  Pastel
  { name:'Pastel Blue', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#60a5fa', bg:'#eff6ff' },
  { name:'Pastel Pink', dot:'dots', csq:'dot', cd:'dot', fg:'#f472b6', bg:'#fdf2f8' },
  { name:'Pastel Green', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#34d399', bg:'#ecfdf5' },
  { name:'Pastel Purple', dot:'classy-rounded', csq:'extra-rounded', cd:'dot', fg:'#a78bfa', bg:'#f5f3ff' },
  { name:'Pastel Orange', dot:'rounded', csq:'dot', cd:'dot', fg:'#fb923c', bg:'#fff7ed' },
- //  Gradient 
+ //  Gradient
  { name:'Blue→Purple', dot:'rounded', csq:'extra-rounded', cd:'dot', fg:'#2563eb', fg2:'#7c3aed', bg:'#ffffff', grad:true },
  { name:'Pink→Orange', dot:'dots', csq:'dot', cd:'dot', fg:'#ec4899', fg2:'#f97316', bg:'#ffffff', grad:true },
  { name:'Green→Teal', dot:'extra-rounded', csq:'extra-rounded', cd:'dot', fg:'#22c55e', fg2:'#14b8a6', bg:'#ffffff', grad:true },
@@ -447,10 +446,10 @@
  async function doText() {
  let text = document.getElementById('textInput').value.trim();
  if (!text) return setStatus(' Please enter text or URL', 'var(--warning)');
- 
+
  // Smart URL detection: auto-prepend https:// if it looks like a URL
  text = smartURL(text);
- 
+
  const id = 'qr-text-0';
  addQRWrapper(id, text.length > 60 ? text.substring(0,57)+'...' : text, 'qrOutput');
  await makeQR(text, 'qr_code', id);
@@ -473,20 +472,20 @@
  if (/^ftp:\/\//i.test(input)) return input;
  if (/^mailto:/i.test(input)) return input;
  if (/^tel:/i.test(input)) return input;
- 
+
  // Has spaces → it's regular text, not a URL
  if (/\s/.test(input)) return input;
- 
+
  // Looks like a domain: has a dot and valid TLD pattern (e.g. google.com, site.co.in)
  if (/^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+/.test(input)) {
  return 'https://' + input;
  }
- 
+
  // Starts with www.
  if (/^www\./i.test(input)) {
  return 'https://' + input;
  }
- 
+
  return input;
  }
 
@@ -732,9 +731,9 @@
  "@context": "https://schema.org",
  "@type": "WebApplication",
  "name": "QR Code Generator",
- "description": "Generate QR codes for URLs, text, WiFi, WhatsApp, Instagram, YouTube, phone, email, vCard, location, PDF and images. Free unlimited QR Code Generator with logo, colors and download options.",
+ "description": "Generate QR codes for URLs, text, WiFi, WhatsApp, Instagram, YouTube, phone, email, vCard, location, PDF and images, with logo, color, and download options.",
  "url": "https://onlinepdfpro.com/tools/qr-code-generator.html",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",
  "offers": {
@@ -759,38 +758,8 @@
 
  <script defer src="../counter.js"></script>
 
- <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How to create a QR code for free?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Enter your URL, text, or WiFi details, customize the colors if desired, and click generate. Download the QR code as a PNG image instantly."
- }
- },
- {
- "@type": "Question",
- "name": "Can I customize the QR code colors?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! Set custom foreground and background colors to match your brand. The generated QR code works with standard QR scanners regardless of color."
- }
- },
- {
- "@type": "Question",
- "name": "What data can I encode in a QR code?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "You can encode URLs, plain text, WiFi network credentials, email addresses, phone numbers, SMS messages, and vCards."
- }
- }
- ]
-}
-</script>
+
+
 
 <script>
 if ('serviceWorker' in navigator) {
@@ -830,7 +799,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
- <script defer src="../js/app.js?v=94"></script>
+ <script defer src="../js/app.js?v=95"></script>
 </body>
 
 </html>

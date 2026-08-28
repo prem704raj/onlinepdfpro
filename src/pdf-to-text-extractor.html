@@ -11,9 +11,7 @@
  <title>PDF to Text Extractor Free Online | OnlinePDFPro</title>
  <meta name="description"
  content="Extract editable text from PDF files page by page or as a combined document. Search, find-replace, and export to TXT or Markdown.">
- <meta name="keywords"
- content="pdf to text extractor, extract text from pdf, pdf text converter, pdf to txt, pdf to markdown">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
 
@@ -23,7 +21,7 @@
  <meta property="og:title" content="PDF to Text Extractor Free Online | OnlinePDFPro">
  <meta property="og:description"
  content="Extract all text from PDF pages with preserved paragraph breaks, live search highlighting, and TXT/MD export.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
@@ -33,7 +31,7 @@
  <meta name="twitter:title" content="PDF to Text Extractor Free Online | OnlinePDFPro">
  <meta name="twitter:description"
  content="Drag a PDF, extract all text, edit it, search inside it, and export as TXT or Markdown.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -46,7 +44,7 @@
  <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
  <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-to-text-extractor.html">
 
- <link rel="stylesheet" href="css/style.css?v=7">
+ <link rel="stylesheet" href="css/style.css?v=95">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
  <link rel="stylesheet" href="css/tools-v2.css">
 
@@ -62,7 +60,7 @@
  }
 
  header {
- 
+
  }
 
  header h1,
@@ -339,9 +337,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -356,13 +357,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-<a class="nav-link" href="/tools.html">Tools</a>
-
-<a class="nav-link" href="/about.html">About</a>
-<a class="nav-link" href="/support.html">Support</a>
-<a class="nav-link mobile-only-nav" href="/history.html">History</a>
-<a class="nav-link pwa-install-link" href="#" id="pwaNavInstall" onclick="triggerPwaInstall(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Install App</a>
-</nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -376,7 +373,7 @@
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
@@ -1007,7 +1004,7 @@
  });
  }
  </script>
- <script defer src="/js/app.js?v=94"></script>
+ <script defer src="/js/app.js?v=95"></script>
 </body>
 
 </html>

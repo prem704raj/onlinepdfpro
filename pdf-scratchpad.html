@@ -11,9 +11,7 @@
  <title>PDF Scratchpad Free Online | OnlinePDFPro</title>
  <meta name="description"
  content="A browser notepad designed for drafting text and organizing content extracted from PDFs. Saves drafts while you work.">
- <meta name="keywords"
- content="pdf scratchpad, online notepad, browser notepad, text extractor pad, pdf notes">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow">
  <link rel="canonical" href="https://onlinepdfpro.com/pdf-scratchpad.html">
 
@@ -23,7 +21,7 @@
  <meta property="og:title" content="PDF Scratchpad Free Online | OnlinePDFPro">
  <meta property="og:description"
  content="Organize your extracted PDF text or draft new content with our real-time auto-saving browser notepad.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-pdf-summary.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
@@ -35,7 +33,7 @@
  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
- <link rel="stylesheet" href="css/style.css?v=7">
+ <link rel="stylesheet" href="css/style.css?v=95">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
  <link rel="stylesheet" href="css/tools-v2.css">
 
@@ -242,9 +240,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -259,16 +260,16 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="tools.html" class="nav-link">All Tools</a>
- <a href="about.html" class="nav-link">About</a>
- <a href="support.html" class="nav-link">Support</a> </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
  style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
  <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
  <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
@@ -337,7 +338,7 @@
 
  // Event Listeners
  newNoteBtn.addEventListener('click', createNewNote);
- 
+
  noteTitleInput.addEventListener('input', () => {
  triggerSave();
  updateActiveNoteInList();
@@ -351,7 +352,7 @@
  downloadBtn.addEventListener('click', () => {
  const activeNote = notes.find(n => n.id === activeNoteId);
  if (!activeNote) return;
- 
+
  const blob = new Blob([activeNote.content], { type: 'text/plain' });
  const url = URL.createObjectURL(blob);
  const a = document.createElement('a');
@@ -384,7 +385,7 @@
  event.stopPropagation();
  notes = notes.filter(n => n.id !== id);
  saveToLocalStorage();
- 
+
  if (notes.length === 0) {
  createNewNote();
  } else if (activeNoteId === id) {
@@ -414,20 +415,20 @@
 
  function saveActiveNote() {
  if (!activeNoteId) return;
- 
+
  const noteIndex = notes.findIndex(n => n.id === activeNoteId);
  if (noteIndex > -1) {
  notes[noteIndex].title = noteTitleInput.value;
  notes[noteIndex].content = noteContentInput.value;
  notes[noteIndex].updatedAt = new Date().toISOString();
- 
+
  // Move to top if updated
  const updatedNote = notes.splice(noteIndex, 1)[0];
  notes.unshift(updatedNote);
- 
+
  saveToLocalStorage();
  renderNotesList();
- 
+
  saveStatus.textContent = 'Saved';
  saveStatus.style.color = '#10b981'; // green
  }
@@ -448,7 +449,7 @@
  const li = document.createElement('li');
  li.className = `note-item ${note.id === activeNoteId ? 'active' : ''}`;
  li.onclick = () => setActiveNote(note.id);
- 
+
  li.innerHTML = `
  <div>
  <div class="note-title" title="${escapeHtml(note.title || 'Untitled Note')}">
@@ -458,10 +459,10 @@
  </div>
  <button class="btn-delete" title="Delete Note">✖</button>
  `;
- 
+
  const deleteBtn = li.querySelector('.btn-delete');
  deleteBtn.onclick = (e) => deleteNote(note.id, e);
- 
+
  notesList.appendChild(li);
  });
  }
@@ -490,6 +491,6 @@
  }
  });
  </script>
- <script defer src="js/app.js?v=94"></script>
+ <script defer src="js/app.js?v=95"></script>
 </body>
 </html>

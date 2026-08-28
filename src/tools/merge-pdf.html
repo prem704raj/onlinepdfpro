@@ -11,15 +11,13 @@
  <!-- ===== MUST HAVE SEO META TAGS ===== -->
 
  <!-- Primary Meta Tags -->
- <title>Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro</title>
+ <title>Merge PDF Online Free – Combine PDF Files | OnlinePDFPro</title>
  <!-- Preconnect to CDNs for Speed -->
  <link rel="preconnect" href="https://cdn.jsdelivr.net">
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
  <meta name="description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
- <meta name="keywords"
- content="merge pdf, combine pdf files, join pdf online free, pdf merger, merge pdf pages, combine pdf documents">
  <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf.html">
@@ -29,7 +27,7 @@
  <meta property="og:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
  <meta property="og:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta property="og:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-merge-pdf.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
@@ -38,7 +36,7 @@
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
  <meta name="twitter:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta name="twitter:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-merge-pdf.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -93,9 +91,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -109,13 +110,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242;
- Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <!-- Compact Header Search -->
@@ -130,7 +127,7 @@
  <span class="theme-icon-light">&#127769;</span>
  <span class="theme-icon-dark">&#9728;&#65039;</span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -163,8 +160,7 @@
  </div>
 
  <div id="fileSection" style="display: none;">
- <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px;">Drag items to reorder
- them in the final document</p>
+ <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px;">Use the Move Up and Move Down controls, or drag items, to set the final document order.</p>
  <div class="file-list" id="fileList"></div>
 
  <div style="text-align: center; margin: 32px 0;">
@@ -225,7 +221,7 @@
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
  <script>
 
  function escapeHTML(str) {
@@ -292,7 +288,11 @@
  <div class="file-name">${escapeHTML(file.name)}</div>
  <div class="file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
  </div>
- <button class="file-remove" data-index="${index}" aria-label="Remove">✕</button>
+ <div class="file-item-actions" style="display:flex;gap:6px;margin-left:auto;align-items:center;">
+ <button class="file-move-up" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} up">↑</button>
+ <button class="file-move-down" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} down">↓</button>
+ <button class="file-remove" data-index="${index}" type="button" aria-label="Remove ${escapeHTML(file.name)}">✕</button>
+ </div>
  `;
 
  item.addEventListener('dragstart', handleDragStart);
@@ -309,6 +309,28 @@
  files.splice(idx, 1);
  if (files.length === 0) resetTool();
  else renderFileList();
+ });
+
+ fileList.querySelectorAll('.file-move-up').forEach(btn => {
+ btn.addEventListener('click', (e) => {
+ const idx = parseInt(e.currentTarget.dataset.index);
+ if (idx > 0) {
+ const item = files.splice(idx, 1)[0];
+ files.splice(idx - 1, 0, item);
+ renderFileList();
+ }
+ });
+ });
+
+ fileList.querySelectorAll('.file-move-down').forEach(btn => {
+ btn.addEventListener('click', (e) => {
+ const idx = parseInt(e.currentTarget.dataset.index);
+ if (idx < files.length - 1) {
+ const item = files.splice(idx, 1)[0];
+ files.splice(idx + 1, 0, item);
+ renderFileList();
+ }
+ });
  });
  });
  }
@@ -439,7 +461,7 @@
  "name": "Merge PDF",
  "description": "Merge multiple PDF files into one document for free. Drag and drop to reorder pages. Fast, 100% free, works on mobile.",
  "url": "https://onlinepdfpro.com/tools/merge-pdf.html",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",
  "offers": {
@@ -454,39 +476,6 @@
  }
 }
 </script>
- <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How do I merge PDF files for free without signup?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Simply drag and drop your PDF files into OnlinePDFPro's merge tool. Reorder them by dragging, then click 'Combine.' No account creation needed — it's completely free."
- }
- },
- {
- "@type": "Question",
- "name": "Can I reorder pages when merging PDFs?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! Drag and drop files to arrange them in any order before merging. The final PDF will follow your custom page arrangement."
- }
- },
- {
- "@type": "Question",
- "name": "Is there a limit on how many PDFs I can merge?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "No. You can merge unlimited PDF files at once. There are no restrictions."
- }
- }
- ]
-}
-</script>
-
  <script>
  if ('serviceWorker' in navigator) {
  window.addEventListener('load', () => {

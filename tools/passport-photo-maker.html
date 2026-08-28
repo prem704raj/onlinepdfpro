@@ -9,33 +9,31 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
  <!-- Primary Meta Tags -->
- <title>Passport Photo Maker — Free Online Passport Size Photo Tool | OnlinePDFPro</title>
+ <title>Passport Photo Maker Online | OnlinePDFPro</title>
  <link rel="preconnect" href="https://cdn.jsdelivr.net">
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
  <meta name="description" content="Make passport size photos online for free. Create 2x2, 35x45mm passport photos for US, India, UK, EU, Canada & more. Print-ready layout on 4x6 or A4 paper. 100% free.">
- <meta name="keywords"
- content="passport photo maker, passport size photo online, 2x2 photo maker, passport photo free, id photo maker, visa photo maker, passport photo print layout, passport photo 4x6 sheet, 35x45mm photo maker">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/passport-photo-maker.html">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://onlinepdfpro.com/tools/passport-photo-maker.html">
- <meta property="og:title" content="Passport Photo Maker — Free Online Passport Size Photo Tool | OnlinePDFPro">
+ <meta property="og:title" content="Passport Photo Maker Online | OnlinePDFPro">
  <meta property="og:description" content="Make passport size photos online for free. Create 2x2, 35x45mm photos for any country. Print-ready sheets. 100% free.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-passport-photo.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/passport-photo-maker.html">
- <meta name="twitter:title" content="Passport Photo Maker — Free Online Passport Size Photo Tool | OnlinePDFPro">
+ <meta name="twitter:title" content="Passport Photo Maker Online | OnlinePDFPro">
  <meta name="twitter:description" content="Make passport size photos online for free. 2x2, 35x45mm passport photos. Print-ready layout. 100% free.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-passport-photo.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -96,46 +94,8 @@
  </script>
 
  <!-- FAQ Schema -->
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How to make a passport size photo online for free?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Upload your photo, select your country or document type, position your face in the crop area, choose a background color, and click Generate. You can download a single photo or a printable sheet with multiple copies. "
- }
- },
- {
- "@type": "Question",
- "name": "What size is a US passport photo?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "A US passport photo must be exactly 2x2 inches (51x51mm). The head must be between 1 inch to 1-3/8 inches from the bottom of the chin to the top of the head."
- }
- },
- {
- "@type": "Question",
- "name": "Can I print passport photos at home?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! This tool generates a print-ready 4x6 inch or A4 photo sheet with multiple copies of your passport photo arranged perfectly. Just print it on glossy photo paper at any home printer or photo printing kiosk for under $0.50."
- }
- },
- {
- "@type": "Question",
- "name": "Is this tool free?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes, this tool is free. Review the processing details before uploading; processing time depends on the selected image workflow."
- }
- }
- ]
- }
- </script>
+
+
 
  <style>
  .pp-editor { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
@@ -188,9 +148,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -204,12 +167,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242; Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <div class="header-search" style="position: relative; margin-right: 8px;">
@@ -222,7 +182,7 @@
  <span class="theme-icon-light">&#127769;</span>
  <span class="theme-icon-dark">&#9728;&#65039;</span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
  </div>
  </header>
@@ -244,7 +204,7 @@
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> ⚡ Fast</span>
  <span>•</span> <span>JPG, PNG, WebP</span>
- <span>•</span> <span>processing details</span>
+ <span>•</span> <span>Review file guidance</span>
  </p>
  <button class="btn btn-primary upload-btn">Choose Photo</button>
  </div>
@@ -420,7 +380,7 @@
 
 </main>
 
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
 
  <script>
  (function() {

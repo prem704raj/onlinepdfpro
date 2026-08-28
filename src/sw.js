@@ -1,8 +1,8 @@
-// OnlinePDFPro Service Worker v94
+// OnlinePDFPro Service Worker v95
 // Network-first for JS files to prevent stale cache issues.
 // Cache-first for images/fonts/CSS with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v94';
+const CACHE_NAME = 'onlinepdfpro-cache-v95';
 
 const STATIC_ASSETS = [
     // Core pages

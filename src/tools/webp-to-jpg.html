@@ -11,34 +11,32 @@
  <!-- ===== MUST HAVE SEO META TAGS ===== -->
 
  <!-- Primary Meta Tags -->
- <title>WebP to JPG Converter — Convert WebP to JPEG Free Online | OnlinePDFPro</title>
+ <title>WebP to JPG Converter Online | OnlinePDFPro</title>
  <!-- Preconnect to CDNs for Speed -->
  <link rel="preconnect" href="https://cdn.jsdelivr.net">
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
  <meta name="description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format. Batch convert multiple WebP files.">
- <meta name="keywords"
- content="webp to jpg, webp to jpeg, convert webp to jpg, webp converter, webp to jpg online free, webp file converter, webp to png, convert webp image, bulk webp to jpg">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/webp-to-jpg.html">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://onlinepdfpro.com/tools/webp-to-jpg.html">
- <meta property="og:title" content="WebP to JPG Converter — Convert WebP to JPEG Free Online | OnlinePDFPro">
+ <meta property="og:title" content="WebP to JPG Converter Online | OnlinePDFPro">
  <meta property="og:description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format. Batch convert multiple files.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-webp-to-jpg.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/webp-to-jpg.html">
- <meta name="twitter:title" content="WebP to JPG Converter — Convert WebP to JPEG Free Online | OnlinePDFPro">
+ <meta name="twitter:title" content="WebP to JPG Converter Online | OnlinePDFPro">
  <meta name="twitter:description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-webp-to-jpg.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -118,61 +116,18 @@
  </script>
 
  <!-- FAQ Schema -->
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "What is a WebP file?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "WebP is a modern image format developed by Google that provides superior compression for images on the web. It supports both lossy and lossless compression, transparency, and animation. Many websites use WebP to load images faster, but not all software and devices can open WebP files."
- }
- },
- {
- "@type": "Question",
- "name": "How to convert WebP to JPG online?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Simply open this tool, drag and drop your WebP files (or click to browse), adjust quality if needed, and click Convert. Your JPG files will be ready to download instantly. No software installation needed."
- }
- },
- {
- "@type": "Question",
- "name": "Can I convert multiple WebP files at once?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! You can batch convert up to 30 WebP files simultaneously. Select multiple files or drag and drop a batch. Download all converted JPGs as a single ZIP file."
- }
- },
- {
- "@type": "Question",
- "name": "Is it safe to convert my WebP files here?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Review the processing details before uploading. If conversion fails, your original images are unchanged and you can try again."
- }
- },
- {
- "@type": "Question",
- "name": "Why can't I open WebP files?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "WebP is a newer format that isn't supported by all image viewers, editors, and applications. Older versions of Windows Photo Viewer, some email clients, and many websites for uploading documents don't accept WebP. Converting to JPG ensures universal compatibility."
- }
- }
- ]
- }
- </script>
+
+
 
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -186,13 +141,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242;
- Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <!-- Compact Header Search -->
@@ -207,7 +158,7 @@
  <span class="theme-icon-light">&#127769;</span>
  <span class="theme-icon-dark">&#9728;&#65039;</span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -361,7 +312,7 @@
 
 </main>
 
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
 
  <!-- No external library needed! WebP is natively supported by modern browsers via Canvas -->
 

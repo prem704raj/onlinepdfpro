@@ -1,7 +1,7 @@
 /* =============================================
    ONLINEPDFPRO — MOBILE REDESIGN V5
    Premium app-like mobile experience
-   
+
    ✅ ONLY inside @media (max-width: 768px)
    ✅ Desktop is NEVER touched
    ✅ Uses CSS vars for dark/light mode
@@ -28,8 +28,8 @@
     }
 
     body {
-        padding-top: 104px !important;
-        /* space for fixed navbar (52px) + visible search bar (52px) */
+        padding-top: 52px !important;
+        /* space for the fixed 52px navbar; the shared shell has no global search row */
         top: 0 !important;
         /* prevent Google Translate from pushing body down */
     }
@@ -222,9 +222,9 @@
     .theme-toggle,
     .lang-btn,
     .menu-toggle {
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
         padding: 0 !important;
         display: flex !important;
         align-items: center !important;
@@ -357,7 +357,11 @@
        TOOL PAGES
        ══════════════════════════════════════════ */
     .tool-description {
-        display: none !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        max-width: 100% !important;
     }
 
 
@@ -870,8 +874,8 @@
         text-align: center !important;
     }
 
-    .hp-footer-brand h4,
-    .hp-footer-col h5 {
+    .hp-footer-brand-title,
+    .hp-footer-column-title {
         margin-bottom: 8px !important;
     }
 
@@ -1086,7 +1090,18 @@
     }
 
     footer a {
-        min-height: 0 !important;
+        min-height: 44px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
 

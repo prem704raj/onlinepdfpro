@@ -18,9 +18,7 @@
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
  <meta name="description" content="Compress your images (JPEG, PNG, WebP) without losing quality. Free online image compressor.">
- <meta name="keywords"
- content="compress image, reduce image size, image compressor online free, compress jpg, compress png, shrink image">
- <meta name="author" content="OnlinePDFPro">
+<meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/image-compressor.html">
 
@@ -29,7 +27,7 @@
  <meta property="og:url" content="https://onlinepdfpro.com/tools/image-compressor.html">
  <meta property="og:title" content="Compress Images Free Online — Reduce JPG/PNG Size Without Quality Loss | OnlinePDFPro">
  <meta property="og:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes without losing quality. Batch compress multiple images. 100% free.">
- <meta property="og:image" content="https://onlinepdfpro.com/images/og-image-compress.png">
+ <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
 
@@ -38,7 +36,7 @@
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-compressor.html">
  <meta name="twitter:title" content="Compress Images Free Online — Reduce JPG/PNG Size Without Quality Loss | OnlinePDFPro">
  <meta name="twitter:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes without losing quality. Batch compress multiple images. 100% free.">
- <meta name="twitter:image" content="https://onlinepdfpro.com/images/og-image-compress.png">
+ <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -93,9 +91,12 @@
  <!-- Theme Prevention (FOIT) -->
  <script>
  (function() {
- var theme = localStorage.getItem('doctools-theme') || 'light';
- document.documentElement.setAttribute('data-theme', theme);
- })();
+  var savedTheme = localStorage.getItem('doctools-theme');
+  var theme = savedTheme === 'light' || savedTheme === 'dark'
+    ? savedTheme
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
  </script>
 </head>
 
@@ -109,13 +110,9 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
- <a href="../tools.html" class="nav-link">Tools</a>
- <a href="../blog.html" class="nav-link">Blog</a>
- <a href="../about.html" class="nav-link">About</a>
- <a href="../support.html" class="nav-link">Support</a>
- <a class="nav-link mobile-only-nav" href="../history.html">History</a> <a href="#" class="nav-link pwa-install-link" id="pwaNavInstall" onclick="triggerPwaInstall(event)">&#128242;
- Install App</a>
- </nav>
+                <a class="nav-link" href="/tools.html">PDF Tools</a>
+                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+            </nav>
  <div class="header-actions">
  <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools">&#128269;</button>
  <!-- Compact Header Search -->
@@ -130,7 +127,7 @@
  <span class="theme-icon-light">&#127769;</span>
  <span class="theme-icon-dark">&#9728;&#65039;</span>
  </button>
- <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+ <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
  </div>
  </div>
@@ -258,7 +255,7 @@
 
 </main>
 
- <script src="../js/app.js?v=94"></script>
+ <script src="../js/app.js?v=95"></script>
  <script>
 
  function escapeHTML(str) {
@@ -546,7 +543,7 @@
  "name": "Compress Images",
  "description": "Compress JPG, PNG, and WEBP images for free. Reduce file size with adjustable quality settings without losing quality. 100% free.",
  "url": "https://onlinepdfpro.com/tools/image-compressor.html",
- "applicationCategory": "UtilityApplication",
+ "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",
  "offers": {
@@ -561,38 +558,8 @@
  }
 }
 </script>
- <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
- {
- "@type": "Question",
- "name": "How to compress images without losing quality?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Upload your images, choose a compression level, and click compress. Our smart algorithm reduces file size while preserving visual quality."
- }
- },
- {
- "@type": "Question",
- "name": "What image formats are supported?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "JPG/JPEG, PNG, and WEBP image formats are supported. Upload any of these and get optimized versions instantly."
- }
- },
- {
- "@type": "Question",
- "name": "Can I compress multiple images at once?",
- "acceptedAnswer": {
- "@type": "Answer",
- "text": "Yes! Batch upload multiple images and compress them all simultaneously. Download them individually or as a ZIP file."
- }
- }
- ]
-}
-</script>
+
+
 
  <script>
  if ('serviceWorker' in navigator) {

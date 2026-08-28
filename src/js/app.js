@@ -25,12 +25,19 @@ function smartEmail(e) {
 const ThemeManager = {
     init() {
         const savedTheme = localStorage.getItem('doctools-theme');
+        const hasExplicitTheme = savedTheme === 'light' || savedTheme === 'dark';
+        const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+        const initialTheme = hasExplicitTheme ? savedTheme : (mediaQuery && mediaQuery.matches ? 'dark' : 'light');
+        this.setTheme(initialTheme, hasExplicitTheme);
 
-        // Default to light mode. Only use dark if user explicitly chose it before.
-        if (savedTheme) {
-            this.setTheme(savedTheme);
-        } else {
-            this.setTheme('light');
+        if (!hasExplicitTheme && mediaQuery) {
+            const applySystemTheme = (event) => {
+                if (!localStorage.getItem('doctools-theme')) {
+                    this.setTheme(event.matches ? 'dark' : 'light', false);
+                }
+            };
+            if (mediaQuery.addEventListener) mediaQuery.addEventListener('change', applySystemTheme);
+            else if (mediaQuery.addListener) mediaQuery.addListener(applySystemTheme);
         }
 
         // Theme toggle button
@@ -40,9 +47,10 @@ const ThemeManager = {
         }
     },
 
-    setTheme(theme) {
+    setTheme(theme, persist = true) {
+        if (theme !== 'light' && theme !== 'dark') theme = 'light';
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('doctools-theme', theme);
+        if (persist) localStorage.setItem('doctools-theme', theme);
     },
 
     toggle() {
@@ -60,6 +68,16 @@ const MobileMenu = {
         const menuToggle = document.getElementById('menuToggle');
         const nav = document.getElementById('nav');
 
+        document.querySelectorAll('.menu-toggle').forEach((button) => {
+            if (!button.textContent.trim()) button.textContent = '☰';
+            if (!button.getAttribute('aria-label') || button.getAttribute('aria-label') === 'Menu') {
+                button.setAttribute('aria-label', 'Open menu');
+            }
+            button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') || 'false');
+            button.setAttribute('aria-controls', button.getAttribute('aria-controls') || 'nav');
+            button.setAttribute('type', 'button');
+        });
+
         if (menuToggle && nav) {
             menuToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -67,6 +85,7 @@ const MobileMenu = {
                 menuToggle.textContent = isOpen ? '✕' : '☰';
                 menuToggle.classList.toggle('open', isOpen);
                 menuToggle.setAttribute('aria-expanded', String(isOpen));
+                menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
             });
 
             // Close menu when clicking outside
@@ -76,6 +95,7 @@ const MobileMenu = {
                     menuToggle.textContent = '☰';
                     menuToggle.classList.remove('open');
                     menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.setAttribute('aria-label', 'Open menu');
                 }
             });
 
@@ -88,6 +108,13 @@ const MobileMenu = {
                     menuToggle.setAttribute('aria-expanded', 'false');
                 });
             });
+        }
+
+        const directorySearch = document.getElementById('toolSearch');
+        const query = new URLSearchParams(window.location.search).get('q');
+        if (directorySearch && query) {
+            directorySearch.value = query;
+            directorySearch.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
 
@@ -788,11 +815,11 @@ document.addEventListener('DOMContentLoaded', () => {
     FeedbackHandler.init();
     RecentlyUsedUI.render();
     ToolReset.init();
-    
+
     // Set page body class based on path for CSS overrides
     const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
     document.body.classList.add('page-' + filename);
-    
+
     // Auto-track tool
     const toolPage = document.querySelector('.tool-page');
     if (toolPage) {
