@@ -8,22 +8,41 @@ const STORE_PRODUCTS = {
     }
 };
 
+const STORE_CART_KEY = "onlinepdfpro_cart";
+const STORE_WORKER_BASE = "https://onlinepdfpro-proxy.prem736raj.workers.dev";
+
+function normalizeCart(cart) {
+    if (!Array.isArray(cart)) return [];
+
+    const seen = new Set();
+    return cart.reduce((items, item) => {
+        const productId = item && typeof item.id === "string" ? item.id : "";
+        const product = STORE_PRODUCTS[productId];
+        if (!product || seen.has(productId)) return items;
+        seen.add(productId);
+        items.push(product);
+        return items;
+    }, []);
+}
+
 function getCart() {
     try {
-        return JSON.parse(localStorage.getItem("onlinepdfpro_cart")) || [];
+        return normalizeCart(JSON.parse(localStorage.getItem(STORE_CART_KEY)));
     } catch {
         return [];
     }
 }
 
 function saveCart(cart) {
+    const normalizedCart = normalizeCart(cart);
     localStorage.setItem(
-        "onlinepdfpro_cart",
-        JSON.stringify(cart)
+        STORE_CART_KEY,
+        JSON.stringify(normalizedCart)
     );
 
     updateCartCount();
     renderCart();
+    return normalizedCart;
 }
 
 function addToCart(productId) {
@@ -36,6 +55,12 @@ function addToCart(productId) {
 
     const cart = getCart();
 
+    if (cart.some(item => item.id !== productId)) {
+        showCheckoutMessage("Checkout currently supports one item at a time. Remove the other item before buying this one.");
+        openCart();
+        return false;
+    }
+
     const alreadyExists = cart.some(
         item => item.id === productId
     );
@@ -46,6 +71,7 @@ function addToCart(productId) {
     }
 
     openCart();
+    return true;
 }
 
 function removeFromCart(productId) {
@@ -163,6 +189,34 @@ function renderCart() {
         `₹${getCartTotal()}`;
 }
 
+function showCheckoutMessage(message, showLibraryLink = false) {
+    const messageElement = document.getElementById("cartCheckoutMessage");
+    const textElement = document.getElementById("cartCheckoutMessageText");
+    const libraryLink = document.getElementById("cartCheckoutLibraryLink");
+
+    if (!messageElement || !textElement) {
+        alert(message);
+        return;
+    }
+
+    textElement.textContent = message;
+    if (libraryLink) {
+        libraryLink.hidden = !showLibraryLink;
+        libraryLink.href = "/library.html";
+    }
+    messageElement.hidden = false;
+}
+
+function clearCheckoutMessage() {
+    const messageElement = document.getElementById("cartCheckoutMessage");
+    const textElement = document.getElementById("cartCheckoutMessageText");
+    const libraryLink = document.getElementById("cartCheckoutLibraryLink");
+
+    if (messageElement) messageElement.hidden = true;
+    if (textElement) textElement.textContent = "";
+    if (libraryLink) libraryLink.hidden = true;
+}
+
 async function loadRazorpayScript() {
     return new Promise((resolve) => {
         if (window.Razorpay) {
@@ -184,11 +238,22 @@ async function checkoutCart() {
         return;
     }
 
+    if (cart.length > 1) {
+        showCheckoutMessage("Checkout currently supports one item at a time. Remove other items before checkout.");
+        openCart();
+        return;
+    }
+
     const loggedIn = await requireLogin();
     if (!loggedIn) {
         return;
     }
 
+    const client = getSupabaseClient();
+    if (!client) {
+        showCheckoutMessage('Authentication service is unavailable. Please try again.');
+        return;
+    }
     const user = await getCurrentUser();
     if (!user) return;
 
@@ -196,15 +261,19 @@ async function checkoutCart() {
     const product = cart[0];
 
     try {
+        clearCheckoutMessage();
         // Show loading state (simplistic alert for now, could be a spinner)
         const btn = document.querySelector('.cart-checkout-btn');
         if (btn) btn.textContent = 'Processing...';
 
         // 1. Get auth token
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const { data: { session } } = await client.auth.getSession();
+        if (!session?.access_token) {
+            throw new Error('Your session has expired. Please sign in again.');
+        }
         
         // 2. Call backend to create order
-        const res = await fetch('https://onlinepdfpro-proxy.prem736raj.workers.dev/store/create-order', {
+        const res = await fetch(`${STORE_WORKER_BASE}/store/create-order`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -217,11 +286,11 @@ async function checkoutCart() {
 
         if (!res.ok) {
             let errorMessage = 'Failed to create order';
-            try {
-                const errorData = await res.json();
-                errorMessage = errorData.error || errorData.message || errorMessage;
-            } catch (_) { /* response wasn't JSON */ }
-            throw new Error(errorMessage);
+            const errorData = await res.json().catch(() => ({}));
+            errorMessage = errorData.error || errorData.message || errorMessage;
+            const error = new Error(errorMessage);
+            error.code = errorData.code || '';
+            throw error;
         }
 
         const orderData = await res.json();
@@ -243,7 +312,7 @@ async function checkoutCart() {
             order_id: orderData.order_id,
             handler: async function (response) {
                 try {
-                    const verifyRes = await fetch('https://onlinepdfpro-proxy.prem736raj.workers.dev/store/verify-payment', {
+                    const verifyRes = await fetch(`${STORE_WORKER_BASE}/store/verify-payment`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -252,8 +321,7 @@ async function checkoutCart() {
                         body: JSON.stringify({
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature,
-                            product_id: product.id
+                            razorpay_signature: response.razorpay_signature
                         })
                     });
 
@@ -264,7 +332,12 @@ async function checkoutCart() {
                         alert("Payment successful! Redirecting to your library.");
                         window.location.href = "/library.html";
                     } else {
-                        alert("Payment verification failed. Please contact support.");
+                        const errorData = await verifyRes.json().catch(() => ({}));
+                        if (errorData.code === "ALREADY_PURCHASED") {
+                            showCheckoutMessage("You already own this item. Open My Library.", true);
+                        } else {
+                            showCheckoutMessage(errorData.error || "Payment verification failed. Please contact support.");
+                        }
                     }
                 } catch (err) {
                     console.error("Verification error", err);
@@ -289,10 +362,14 @@ async function checkoutCart() {
 
     } catch (err) {
         console.error(err);
-        alert(err.message || "An error occurred during checkout.");
+        if (err.code === "ALREADY_PURCHASED") {
+            showCheckoutMessage("You already own this item. Open My Library.", true);
+        } else {
+            alert(err.message || "An error occurred during checkout.");
+        }
     } finally {
         const btn = document.querySelector('.cart-checkout-btn');
-        if (btn) btn.textContent = 'Checkout';
+        if (btn) btn.textContent = 'Continue to Checkout';
     }
 }
 
@@ -465,3 +542,5 @@ window.renderCart = renderCart;
 window.checkoutCart = checkoutCart;
 window.updateCartCount = updateCartCount;
 window.loadRazorpayScript = loadRazorpayScript;
+window.showCheckoutMessage = showCheckoutMessage;
+window.clearCheckoutMessage = clearCheckoutMessage;
