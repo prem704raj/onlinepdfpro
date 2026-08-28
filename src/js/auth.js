@@ -74,7 +74,7 @@ async function buyProduct(id) {
     // Add to cart and immediately checkout
     const cart = getCart();
     if (!cart.some(item => item.id === id)) {
-        const product = (typeof STORE_PRODUCTS !== "undefined") ? STORE_PRODUCTS[id] : { id, title: id, price: 49 };
+        const product = (typeof STORE_PRODUCTS !== "undefined") ? STORE_PRODUCTS[id] : { id, title: id, price: 9 };
         cart.push(product);
         saveCart(cart);
     }
