@@ -2,7 +2,7 @@ const STORE_PRODUCTS = {
     "dbms-notes": {
         id: "dbms-notes",
         title: "DBMS Complete Notes",
-        price: 49,
+        price: 9,
         image: "/logo.png",
         url: "/study-materials.html"
     }
