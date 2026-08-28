@@ -39,6 +39,7 @@ __pycache__/
 # Temp files
 .tmp_*
 .env
+.dev.vars
 .pytest_cache/
 *.pyo
 *.pyd

@@ -71,12 +71,10 @@ async function buyProduct(id) {
         return;
     }
 
-    // Add to cart and immediately checkout
-    const cart = getCart();
-    if (!cart.some(item => item.id === id)) {
-        const product = (typeof STORE_PRODUCTS !== "undefined") ? STORE_PRODUCTS[id] : { id, title: id, price: 9 };
-        cart.push(product);
-        saveCart(cart);
+    // Add to cart and immediately checkout. addToCart enforces the current
+    // single-item cart policy for every Buy Now entry point.
+    if (typeof addToCart !== "function" || !addToCart(id)) {
+        return;
     }
     await checkoutCart();
 }

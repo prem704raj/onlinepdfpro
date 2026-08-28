@@ -643,6 +643,23 @@
             cursor: pointer;
         }
 
+        .cart-checkout-message {
+            margin: 0 0 16px;
+            padding: 12px 14px;
+            border: 1px solid #d4a942;
+            background: rgba(212, 169, 66, 0.12);
+            color: var(--sm-text);
+            font-size: .85rem;
+            line-height: 1.5;
+        }
+
+        .cart-checkout-message a {
+            display: inline-block;
+            margin-top: 6px;
+            color: var(--sm-accent);
+            font-weight: 700;
+        }
+
         .cart-secure-text {
             text-align: center;
             margin: 12px 0 0;
@@ -887,7 +904,7 @@
         </div>
     </footer>
 
-    <script defer src="/js/app.js?v=93"></script>
+    <script defer src="/js/app.js?v=94"></script>
     <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js');
@@ -957,6 +974,11 @@
                 </strong>
             </div>
 
+            <div id="cartCheckoutMessage" class="cart-checkout-message" role="alert" hidden>
+                <span id="cartCheckoutMessageText"></span>
+                <a id="cartCheckoutLibraryLink" href="/library.html" hidden>Open My Library</a>
+            </div>
+
             <button
                 class="cart-checkout-btn"
                 type="button"
@@ -973,7 +995,7 @@
     </aside>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/auth.js?v=93"></script>
-    <script src="/js/store.js?v=93"></script>
+    <script src="/js/auth.js?v=94"></script>
+    <script src="/js/store.js?v=94"></script>
 </body>
 </html>
