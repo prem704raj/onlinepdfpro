@@ -113,9 +113,9 @@
 /* Header — warm translucent in both modes */
 [data-theme="light"] .header,
 [data-theme="light"] header {
-    background: rgba(246, 245, 240, 0.97) !important;
-    border: 1px solid #d9d0c3 !important;
-    box-shadow: 0 1px 12px rgba(44, 36, 24, 0.04) !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
 }
 
 [data-theme="dark"] .header,
