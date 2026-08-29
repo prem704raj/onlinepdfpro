@@ -98,7 +98,7 @@
     --text-muted: #706558;
     --border: #d9d0c3;
     --border-hover: #c4b9a9;
-    --bg-primary: transparent;
+    --bg-primary: #f6f5f0;
     --bg-secondary: #efe9de;
     --btn-primary-text: #ffffff; /* White text on dark gold button */
     --success-text: #087a50;
@@ -337,9 +337,9 @@ a {
 
 /* User Avatar Button */
 .user-avatar-btn {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     padding: 0;
     border: none;
     border-radius: 50%;
@@ -1160,9 +1160,9 @@ footer a:active {
 
 /* Keep legacy/static tool pages on the same accessible control sizing. */
 .user-avatar-btn {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
     padding: 0 !important;
     border: none !important;
     border-radius: 50% !important;
