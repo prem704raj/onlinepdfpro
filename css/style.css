@@ -337,11 +337,51 @@ a {
 
 /* User Avatar Button */
 .user-avatar-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--btn-primary-text, #fff);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+
     transition: opacity 0.2s, transform 0.15s;
 }
+
 .user-avatar-btn:hover {
     opacity: 0.85;
     transform: scale(1.05);
+}
+
+.logged-in-avatar {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#loggedInInitial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
 }
 
 /* User Dropdown */
@@ -1124,16 +1164,31 @@ footer a:active {
     height: 44px !important;
     min-width: 44px !important;
     padding: 0 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    color: var(--btn-primary-text, #fff) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
 }
 
 .user-avatar-btn .logged-in-avatar,
 .user-avatar-btn img {
-    width: 44px !important;
-    height: 44px !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
 }
 
 .user-avatar-btn span {
-    line-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
 }
 
 .theme-toggle,
