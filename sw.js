@@ -1,8 +1,9 @@
-// OnlinePDFPro Service Worker v95
-// Network-first for JS files to prevent stale cache issues.
-// Cache-first for images/fonts/CSS with offline fallback.
+// OnlinePDFPro Service Worker v96
+// Network-first for HTML and JS files to prevent stale cache issues.
+// Stale-while-revalidate for CSS so UI fixes propagate quickly.
+// Cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v95';
+const CACHE_NAME = 'onlinepdfpro-cache-v96';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -40,6 +41,9 @@ const STATIC_ASSETS = [
     'og-image.jpg',
     'site.webmanifest'
 ];
+
+// CSS files that should use stale-while-revalidate
+const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -119,7 +123,28 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 3: Cache-first for everything else (CSS, images, fonts) ---
+    // --- Strategy 3: Stale-while-revalidate for CSS ---
+    // Serve cached CSS immediately for speed, but always fetch a fresh copy
+    // in the background so the next page load gets any UI fixes.
+    const isCoreCss = url.origin === self.location.origin &&
+        SWR_CSS_FILES.some(f => url.pathname === f || url.pathname.endsWith(f));
+    if (isCoreCss) {
+        event.respondWith(
+            caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
+                const networkFetch = fetch(request).then((response) => {
+                    if (response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    }
+                    return response;
+                });
+                return cached || networkFetch;
+            })
+        );
+        return;
+    }
+
+    // --- Strategy 4: Cache-first for everything else (images, fonts) ---
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
