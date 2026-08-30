@@ -1,159 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
-    <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Page Not Found | OnlinePDFPro</title>
- <meta name="robots" content="noindex, nofollow">
-
- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
- <link rel="stylesheet" href="css/style.css?v=96">
- <link rel="stylesheet" href="css/mobile-fix-v2.css">
- <link rel="stylesheet" href="css/tools-v2.css">
-
- <!-- Theme Prevention (FOIT) -->
- <script>
- (function() {
-  var savedTheme = localStorage.getItem('doctools-theme');
-  var theme = savedTheme === 'light' || savedTheme === 'dark'
-    ? savedTheme
-    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', theme);
-})();
- </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Page Not Found | OnlinePDFPro</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+    <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <link href="/site.webmanifest" rel="manifest"/>
+    <meta content="#f6f5f0" media="(prefers-color-scheme: light)" name="theme-color"/>
+    <meta content="#1a1714" media="(prefers-color-scheme: dark)" name="theme-color"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="/css/style.css?v=96" rel="stylesheet"/>
+    <link href="/css/mobile-fix-v2.css?v=96" rel="stylesheet"/>
+    <link href="/css/tools-v2.css?v=96" rel="stylesheet"/>
+    <script>
+    (function() {
+        var saved = localStorage.getItem('doctools-theme');
+        var validSaved = saved === 'light' || saved === 'dark';
+        var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', validSaved ? saved : (systemPrefersDark ? 'dark' : 'light'));
+    })();
+    </script>
+    <style>
+        :root {
+            --e404-bg: #f6f5f0;
+            --e404-text: #2c2418;
+            --e404-text-secondary: #6b5e4f;
+            --e404-text-muted: #706558;
+            --e404-accent: #8b6914;
+            --e404-accent-hover: #a47d1b;
+            --e404-border: #d9d0c3;
+            --e404-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --e404-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        [data-theme="dark"] {
+            --e404-bg: #1a1714;
+            --e404-text: #f0ebe2;
+            --e404-text-secondary: #a89e8f;
+            --e404-text-muted: #8c8273;
+            --e404-accent: #d4a942;
+            --e404-accent-hover: #e6be5a;
+            --e404-border: #3a342a;
+        }
+        body.e404-body {
+            background: var(--e404-bg) !important;
+            color: var(--e404-text) !important;
+        }
+        body.e404-body main { padding-top: 0 !important; }
+        .e404-main {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 24px 80px;
+        }
+        .e404-content {
+            text-align: center;
+            max-width: 520px;
+        }
+        .e404-number {
+            font-family: var(--e404-serif);
+            font-size: clamp(5rem, 15vw, 8rem);
+            font-weight: 400;
+            color: var(--e404-accent);
+            line-height: 1;
+            margin-bottom: 16px;
+            opacity: 0.85;
+        }
+        .e404-heading {
+            font-family: var(--e404-serif);
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 400;
+            color: var(--e404-text);
+            margin-bottom: 12px;
+        }
+        .e404-heading em { font-style: italic; }
+        .e404-desc {
+            font-family: var(--e404-sans);
+            font-size: 0.92rem;
+            color: var(--e404-text-secondary);
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+        .e404-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+        .e404-btn {
+            font-family: var(--e404-sans);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 14px 36px;
+            border: 1.5px solid var(--e404-text);
+            background: transparent;
+            color: var(--e404-text);
+            text-decoration: none;
+            transition: all 0.35s ease;
+            display: inline-block;
+        }
+        .e404-btn:hover { opacity: 0.8; }
+        .e404-btn-filled {
+            background: var(--e404-accent);
+            color: #fff;
+            border-color: var(--e404-accent);
+        }
+        .e404-btn-filled:hover {
+            background: var(--e404-accent-hover);
+            border-color: var(--e404-accent-hover);
+        }
+        .e404-divider {
+            width: 48px;
+            height: 1px;
+            background: var(--e404-border);
+            margin: 0 auto 24px;
+        }
+        .e404-popular-label {
+            font-family: var(--e404-sans);
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--e404-text-muted);
+            margin-bottom: 14px;
+        }
+        .e404-links {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .e404-links a {
+            font-family: var(--e404-sans);
+            font-size: 0.82rem;
+            color: var(--e404-accent);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 14px;
+            border: 1px solid var(--e404-border);
+            transition: all 0.2s;
+        }
+        .e404-links a:hover {
+            border-color: var(--e404-accent);
+            color: var(--e404-text);
+        }
+        @media (max-width: 768px) {
+            .e404-main { padding: 100px 20px 60px; }
+            .e404-actions { flex-direction: column; align-items: center; }
+            .e404-btn { width: 100%; max-width: 240px; text-align: center; }
+        }
+    </style>
 </head>
-
-<body class="page-404">
- <header class="header">
- <div class="header-content">
- <a href="index.html" class="logo">
- <img src="logo.png" alt="" aria-hidden="true" class="logo-icon"
- style="width:28px; height:28px; border-radius:6px;">
- <span class="logo-text">OnlinePDFPro</span>
- </a>
- <nav class="nav" id="nav">
+<body class="e404-body">
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="header">
+        <div class="header-content">
+            <a class="logo" href="/">
+                <img alt="" aria-hidden="true" class="logo-icon" src="/logo.png" style="width:28px; height:28px; border-radius:6px;"/>
+                <span class="logo-text">OnlinePDFPro</span>
+            </a>
+            <nav class="nav" id="nav">
                 <a class="nav-link" href="/tools.html">PDF Tools</a>
                 <a class="nav-link" href="/study-materials.html">Study Materials</a>
             </nav>
- <div class="header-actions">
- <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Search tools"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
- <div class="header-search" style="position: relative; margin-right: 8px;">
- <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
- <input type="text" id="globalToolSearch" placeholder="Search tools..."
- style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; outline: none;">
- </div>
- <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
- style="font-size:20px; background:none; border:1px solid var(--border, #e2e8f0); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
- <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
- <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
- </button>
- <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
- </div>
- </div>
- </header>
+            <div class="header-actions">
+                <button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle" type="button">
+                    <span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                    <span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+                </button>
+                <div id="loggedInUser" class="logged-in-user" hidden style="display:none; position:relative;">
+                    <button id="userAvatarBtn" class="user-avatar-btn" aria-label="Account menu" type="button">
+                        <img id="loggedInAvatar" class="logged-in-avatar" alt="" hidden>
+                        <span id="loggedInInitial"></span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown" style="display:none; position:absolute; top:calc(100% + 8px); right:0; min-width:180px; background:var(--bg-primary, #fff); border:1px solid var(--border, #e2e8f0); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.15); padding:8px 0; z-index:9999;">
+                        <div id="userDropdownName" style="padding:10px 16px; font-size:0.85rem; font-weight:600; color:var(--text-primary, #1a1a2e); border-bottom:1px solid var(--border, #e2e8f0); margin-bottom:4px;"></div>
+                        <button id="logoutBtn" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:#dc2626; background:none; border:none; cursor:pointer; transition:background 0.15s;">Sign Out</button>
+                    </div>
+                </div>
+                <button aria-label="Open menu" aria-expanded="false" aria-controls="nav" class="menu-toggle" id="menuToggle" type="button">☰</button>
+            </div>
+        </div>
+    </header>
 
- <main id="main" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <main id="main" class="e404-main">
+        <div class="e404-content">
+            <div class="e404-number">404</div>
+            <h1 class="e404-heading">This page <em>wandered off</em></h1>
+            <p class="e404-desc">The page you're looking for doesn't exist or has been moved. Search our PDF tools or head back home.</p>
+            <div class="e404-actions">
+                <a href="/tools.html" class="e404-btn e404-btn-filled">Search PDF Tools</a>
+                <a href="/" class="e404-btn">Go Home</a>
+            </div>
+            <div class="e404-divider"></div>
+            <p class="e404-popular-label">Popular</p>
+            <div class="e404-links">
+                <a href="/tools/merge-pdf.html">Merge PDF</a>
+                <a href="/tools/compress-pdf.html">Compress PDF</a>
+                <a href="/tools/pdf-to-word.html">PDF to Word</a>
+                <a href="/tools/sign-pdf.html">Sign PDF</a>
+                <a href="/tools/split-pdf.html">Split PDF</a>
+            </div>
+        </div>
+    </main>
 
-<div style="text-align: center; padding: 40px 20px; max-width: 560px;">
- <div style="font-size: 6rem; margin-bottom: 16px; line-height: 1;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
- <h1
- style="font-size: 3rem; font-weight: 800; margin-bottom: 8px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
- 404</h1>
- <h2 style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 16px;">Page Not Found</h2>
- <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 32px; font-size: 1.05rem;">
- Oops! The page you're looking for doesn't exist or has been moved. Don't worry — you can still use all
- our free PDF tools.
- </p>
- <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
- <a href="/" class="btn btn-primary btn-lg" style="min-width: 44px; min-height: 44px;">
- 🏠 Go Home
- </a>
- <a href="/tools.html" class="btn btn-secondary btn-lg" style="min-width: 44px; min-height: 44px;">
- All Tools
- </a>
- </div>
+    <footer class="hp-footer">
+        <div class="hp-footer-grid">
+            <div class="hp-footer-brand">
+                <p class="hp-footer-brand-title">OnlinePDFPro</p>
+                <p class="hp-footer-brand-sub">Free PDF Tools & Study Materials</p>
+            </div>
+            <div class="hp-footer-col">
+                <p class="hp-footer-column-title">PDF Tools</p>
+                <ul>
+                    <li><a href="/tools/merge-pdf.html">Merge PDF</a></li>
+                    <li><a href="/tools/compress-pdf.html">Compress PDF</a></li>
+                    <li><a href="/tools/split-pdf.html">Split PDF</a></li>
+                    <li><a href="/tools/sign-pdf.html">Sign PDF</a></li>
+                    <li><a href="/tools/pdf-to-word.html">PDF to Word</a></li>
+                    <li><a href="/tools.html">All Tools</a></li>
+                </ul>
+            </div>
+            <div class="hp-footer-col">
+                <p class="hp-footer-column-title">Study Materials</p>
+                <ul>
+                    <li><a href="/study-materials.html">Browse PDFs</a></li>
+                </ul>
+            </div>
+            <div class="hp-footer-col">
+                <p class="hp-footer-column-title">Support</p>
+                <ul>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/support.html">Support & FAQ</a></li>
+                </ul>
+            </div>
+            <div class="hp-footer-col">
+                <p class="hp-footer-column-title">Legal</p>
+                <ul>
+                    <li><a href="/terms.html">Terms</a></li>
+                    <li><a href="/privacy.html">Privacy</a></li>
+                    <li><a href="/refund.html">Refund Policy</a></li>
+                    <li><a href="/dmca.html">Copyright & DMCA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="hp-footer-bottom">
+            <p class="hp-footer-copy">&copy; 2026 OnlinePDFPro. All rights reserved.</p>
+        </div>
+    </footer>
 
- <div class="glass-card" style="margin-top: 40px; padding: 24px; text-align: left;">
- <h3 style="margin-bottom: 12px; font-size: 1rem;">Popular Tools</h3>
- <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
- <a href="tools/merge-pdf.html"
- style="color: var(--primary); text-decoration: none; font-size: 0.9rem; padding: 8px 0;">📎
- Merge PDF</a>
- <a href="tools/compress-pdf.html"
- style="color: var(--primary); text-decoration: none; font-size: 0.9rem; padding: 8px 0;">📦
- Compress PDF</a>
- <a href="tools/split-pdf.html"
- style="color: var(--primary); text-decoration: none; font-size: 0.9rem; padding: 8px 0;">✂️
- Split PDF</a>
- <a href="tools/sign-pdf.html"
- style="color: var(--primary); text-decoration: none; font-size: 0.9rem; padding: 8px 0;">✍️ Sign
- PDF</a>
- <a href="tools/pdf-to-word.html"
- style="color: var(--primary); text-decoration: none; font-size: 0.9rem; padding: 8px 0;">📝 PDF
- to Word</a>
-
- </div>
- </div>
-
- <div style="margin-top: 24px; text-align: center;">
- <input type="text" id="search404" placeholder="Search for a tool..."
- style="padding: 14px 24px; border-radius: 14px; border: 2px solid var(--border); background: var(--surface-1); color: var(--text-primary); font-size: 1rem; width: 100%; max-width: 400px; outline: none; transition: border-color 0.2s;"
- onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
- onkeydown="if(event.key==='Enter'){const q=this.value.trim();if(q)window.location.href='/tools.html?q='+encodeURIComponent(q)}">
- </div>
-
- <p class="file-limit-note" style="margin-top: 24px; text-align: center;"> All our tools process files
- with the processing method shown on the tool page. Works best with files under 50 MB.</p>
- </div>
-
-
-
-
-
-
-
-
-
-</main>
-
- <script defer src="js/app.js?v=96"></script>
-
- <footer style="background:var(--surface-1); border-top:1px solid var(--border); padding:40px 20px; margin-top:0;">
- <div style="max-width:1200px; margin:0 auto;">
- <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
- <p style="color:var(--text-muted); font-size:13px; margin:0;">© 2026 Online PDF Pro. All rights
- reserved.</p>
- <div style="display:flex; gap:15px;">
- <span
- style="padding:6px 14px; background:rgba(37,99,235,0.15); border-radius:20px; font-size:12px; color:#60a5fa; font-weight:bold;">
- Processing details available</span>
- <span
- style="padding:6px 14px; background:rgba(16,185,129,0.15); border-radius:20px; font-size:12px; color:#4ade80; font-weight:bold;">
- ⚡ Fast & Free</span>
- </div>
- </div>
- </div>
- </footer>
-
- <script>
- if ('serviceWorker' in navigator) {
- window.addEventListener('load', () => {
- navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Failed', err));
- });
- }
- </script>
+    <script defer src="/js/app.js?v=96"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/auth.js?v=96"></script>
 </body>
-
 </html>
-
