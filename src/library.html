@@ -289,6 +289,17 @@
                     <span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
                     <span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
                 </button>
+                <div id="loggedInUser" class="logged-in-user" hidden style="display:none; position:relative;">
+                    <button id="userAvatarBtn" class="user-avatar-btn" aria-label="Account menu" type="button">
+                        <img id="loggedInAvatar" class="logged-in-avatar" alt="" hidden>
+                        <span id="loggedInInitial"></span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown" style="display:none; position:absolute; top:calc(100% + 8px); right:0; min-width:180px; background:var(--bg-primary, #fff); border:1px solid var(--border, #e2e8f0); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.15); padding:8px 0; z-index:9999;">
+                        <div id="userDropdownName" style="padding:10px 16px; font-size:0.85rem; font-weight:600; color:var(--text-primary, #1a1a2e); border-bottom:1px solid var(--border, #e2e8f0); margin-bottom:4px;"></div>
+                        <a href="/library.html" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:var(--text-primary, #1a1a2e); background:none; border:none; cursor:pointer; text-decoration:none; transition:background 0.15s;">My Library</a>
+                        <button id="logoutBtn" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:#dc2626; background:none; border:none; cursor:pointer; transition:background 0.15s;">Sign Out</button>
+                    </div>
+                </div>
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
             </div>
         </div>
@@ -299,7 +310,7 @@
             <div class="lib-header">
                 <span class="lib-header-label">Your Purchases</span>
                 <h1 class="lib-heading">My <em>Library</em></h1>
-                <p class="lib-subtitle">Download your purchased study materials anytime. Buy once, access forever.</p>
+                <p class="lib-subtitle">Access and re-download your purchased study materials from My Library.</p>
             </div>
 
             <!-- Login prompt (shown if not logged in) -->
