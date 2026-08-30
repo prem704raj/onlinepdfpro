@@ -114,6 +114,9 @@ export default {
 
         // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
         if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
+
+        // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
+        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
             return new Response(JSON.stringify({ error: 'Forbidden: requests must come from the OnlinePDFPro website.' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
@@ -122,11 +125,21 @@ export default {
 
         // AI Chat proxy (Groq — text-only LLM)
         if (url.pathname === '/ai/chat' && request.method === 'POST') {
+            const turnstileToken = request.headers.get('x-turnstile-token') || request.headers.get('cf-turnstile-response');
+            const isHuman = await verifyTurnstile(turnstileToken, ip, env);
+            if (!isHuman) {
+                return jsonResponse({ error: 'Security verification failed. Please refresh the page and try again.' }, 403, getCORSHeaders(request, allowedOrigins));
+            }
             return handleGroqChat(request, env, allowedOrigins);
         }
 
         // AI Vision proxy (OpenRouter — multimodal)
         if (url.pathname === '/ai/vision' && request.method === 'POST') {
+            const turnstileToken = request.headers.get('x-turnstile-token') || request.headers.get('cf-turnstile-response');
+            const isHuman = await verifyTurnstile(turnstileToken, ip, env);
+            if (!isHuman) {
+                return jsonResponse({ error: 'Security verification failed. Please refresh the page and try again.' }, 403, getCORSHeaders(request, allowedOrigins));
+            }
             return handleOpenRouterVision(request, env, allowedOrigins);
         }
 
@@ -177,9 +190,31 @@ function getCORSHeaders(request, allowedOrigins) {
     return {
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Turnstile-Token, cf-turnstile-response',
         'Access-Control-Max-Age': '86400'
     };
+}
+
+async function verifyTurnstile(token, ip, env) {
+    const secret = env.TURNSTILE_SECRET_KEY || '0x4AAAAAAEh3z0I-mC0cDwyN2QldJYVyVhg';
+    if (!secret) return true;
+    if (!token) return false;
+    try {
+        const formData = new FormData();
+        formData.append('secret', secret);
+        formData.append('response', token);
+        if (ip && ip !== 'unknown') formData.append('remoteip', ip);
+
+        const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            method: 'POST',
+            body: formData
+        });
+        const outcome = await res.json();
+        return outcome.success === true;
+    } catch (err) {
+        console.error('Turnstile verification error:', err);
+        return false;
+    }
 }
 
 function handleCORS(request, allowedOrigins) {

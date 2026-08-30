@@ -3,7 +3,7 @@
 
 <head>
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -61,6 +61,7 @@
    @keyframes dotPulse { 0%,80%,100%{opacity:0.3;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
    @media(max-width:768px) { .chat-container { height: 55vh; min-height: 350px; } .chat-msg { max-width: 90%; } }
  </style>
+ <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="fade-in">
@@ -119,7 +120,7 @@
    </div>
    <div class="chat-input-area">
      <input type="text" id="chatInput" placeholder="Ask a question about your PDF..." autocomplete="off">
-     <button id="sendBtn">Send</button>
+     <div class="cf-turnstile" data-sitekey="0x4AAAAAAEh3z6dQZ138ae8E" data-callback="onTurnstileSuccess" data-size="compact" style="margin-bottom:8px;"></div><button id="sendBtn">Send</button>
    </div>
  </div>
 
@@ -270,14 +271,14 @@
         }
         response = await fetch(VISION_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': getTurnstileToken() },
           body: JSON.stringify({ model: VISION_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
         });
       } else {
         // Text-only model: fast via /ai/chat
         response = await fetch(TEXT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': getTurnstileToken() },
           body: JSON.stringify({
             messages: [
               { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
@@ -333,6 +334,19 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 })();
+
+  // Cloudflare Turnstile token helper
+  let turnstileToken = '';
+  window.onTurnstileSuccess = function(token) { turnstileToken = token; };
+  function getTurnstileToken() {
+    if (window.turnstile) {
+      try {
+        const token = window.turnstile.getResponse();
+        if (token) return token;
+      } catch(e){}
+    }
+    return turnstileToken;
+  }
 </script>
 </body>
 </html>
