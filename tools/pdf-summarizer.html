@@ -3,7 +3,7 @@
 
 <head>
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'none';">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -53,6 +53,7 @@
    .summary-actions button { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
    .summary-actions button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
  </style>
+ <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="fade-in">
@@ -225,9 +226,7 @@
 
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': getTurnstileToken() },
         body: JSON.stringify({
           messages: [
             { role: "system", content: prompts[currentMode] },
@@ -276,6 +275,19 @@
     });
   };
 })();
+
+  // Cloudflare Turnstile token helper
+  let turnstileToken = '';
+  window.onTurnstileSuccess = function(token) { turnstileToken = token; };
+  function getTurnstileToken() {
+    if (window.turnstile) {
+      try {
+        const token = window.turnstile.getResponse();
+        if (token) return token;
+      } catch(e){}
+    }
+    return turnstileToken;
+  }
 </script>
 </body>
 </html>
