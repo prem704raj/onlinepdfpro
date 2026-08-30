@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   {% include "partials/meta.njk" %}
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://pl29768747.effectivecpmnetwork.com https://5gvci.com https://n6wxm.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; connect-src 'self' https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
   <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
   <link href="https://unpkg.com" rel="preconnect"/>
   <link href="https://cdn.jsdelivr.net" rel="dns-prefetch"/>
@@ -21,10 +21,10 @@
 {% block footer %}
   {% include "partials/footer.njk" %}
 {% endblock %}
-<script defer src="{{ '/js/app.js?v=95' | url }}"></script>
+<script defer src="{{ '/js/app.js?v=96' | url }}"></script>
 <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('{{ '/sw.js' | url }}'); }</script>
 {% block scripts %}{% endblock %}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="{{ '/js/auth.js?v=95' | url }}"></script>
+<script src="{{ '/js/auth.js?v=96' | url }}"></script>
 </body>
 </html>
