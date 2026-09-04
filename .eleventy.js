@@ -45,6 +45,9 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter('startsWith', function(str, prefix) {
     return typeof str === 'string' && str.startsWith(prefix);
   });
+  eleventyConfig.addFilter('json', function(value) {
+    return JSON.stringify(value);
+  });
 
   // Safe HTML minification transform.
   eleventyConfig.addTransform('htmlmin', function(content, outputPath) {

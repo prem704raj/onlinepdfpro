@@ -108,6 +108,8 @@ check(exists('fonts/NotoSansDevanagari-Regular.ttf'), 'Unicode font asset is pre
 const registry = read('src/_data/tools.js');
 check(/module\.exports/.test(registry) && /pdf-bookmark/.test(registry), 'Tool registry is the source for public tools');
 check(/toolRegistry\.tools/.test(read('src/sitemap.njk')) && /toolRegistry\.categories/.test(read('src/tools.njk')), 'Sitemap and directory consume the tool registry');
+const appSource = read('src/js/app.js');
+check(/ToolRegistryUI/.test(appSource) && /tool-registry\.json/.test(appSource) && /renderRelated/.test(appSource), 'Shared UI consumes the tool registry for navigation and related tools');
 const registryHrefs = [...registry.matchAll(/href:\s*'([^']+)'/g)].map(match => match[1]);
 const missingRegistryPages = registryHrefs.filter(href => !exists(href.replace(/^\//, '')));
 check(registryHrefs.length >= 40 && missingRegistryPages.length === 0, `Registry pages exist (${registryHrefs.length} public tools)`);
@@ -115,6 +117,8 @@ check(new Set(registryHrefs).size === registryHrefs.length, 'Registry has no dup
 if (exists('_site/tools.html')) {
     const renderedTools = read('_site/tools.html');
     const renderedSitemap = read('_site/sitemap.xml');
+    const renderedRegistry = JSON.parse(read('_site/tool-registry.json'));
+    check(renderedRegistry.tools.length === registryHrefs.length, 'Rendered registry JSON matches source tools');
     check(!/0 Free Tools/.test(renderedTools) && renderedTools.includes('Compress PDF'), 'Rendered directory contains registry tools');
     const sitemapUrls = [...renderedSitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
     const expectedToolUrls = registryHrefs.map(href => `https://onlinepdfpro.com${href}`);
@@ -191,6 +195,10 @@ async function browserSmoke() {
             javascriptLinks: Array.from(document.querySelectorAll('#previewArea [href]')).some(node => /^javascript:/i.test(node.getAttribute('href') || ''))
         }));
         check(!htmlResult.xss && htmlResult.scripts === 0 && !htmlResult.handlers && !htmlResult.javascriptLinks, 'HTML-to-PDF blocks malicious scripts, handlers and javascript URLs in the browser');
+
+        await page.goto(`${base}/tools/merge-pdf.html`, { waitUntil: 'domcontentloaded' });
+        await page.waitForFunction(() => document.querySelectorAll('[data-generated-related-tools] .related-tool-card').length === 3, { timeout: 5000 });
+        check(await page.$eval('[data-generated-related-tools]', node => node.querySelector('h2')?.textContent === 'Related tools'), 'Registry renders related tools on tool pages');
 
         await page.goto(`${base}/tools/qr-code-generator.html`, { waitUntil: 'domcontentloaded' });
         await page.evaluate(() => {

@@ -872,6 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
     LanguageSelector.init();
     FeedbackHandler.init();
     RecentlyUsedUI.render();
+    ToolRegistryUI.init();
     ToolReset.init();
 
     // Set page body class based on path for CSS overrides
@@ -893,6 +894,83 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================
 // UI Renderers & Tools
 // =========================================
+
+// The directory and sitemap are rendered from the same registry exposed at
+// /tool-registry.json. Tool pages use that registry for related-tool links so
+// additions do not require editing dozens of duplicated HTML files.
+const ToolRegistryUI = {
+    async init() {
+        try {
+            const response = await fetch('/tool-registry.json', { credentials: 'same-origin', cache: 'default' });
+            if (!response.ok) return;
+            const registry = await response.json();
+            if (!registry || !Array.isArray(registry.tools)) return;
+            this.registry = registry;
+            this.renderNavigation(registry);
+            this.renderRelated(registry);
+        } catch (error) {
+            // Related links are progressive enhancement; a blocked/offline
+            // registry must never prevent a tool from working.
+            console.warn('[ToolRegistry] unavailable', error);
+        }
+    },
+
+    currentPath() {
+        const pathname = window.location.pathname.replace(/\\/g, '/');
+        const normalized = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname;
+        return normalized || '/';
+    },
+
+    renderNavigation(registry) {
+        const count = registry.tools.length;
+        document.querySelectorAll('a.nav-link').forEach(link => {
+            const href = link.getAttribute('href') || '';
+            if (!/tools\.html(?:[?#]|$)/.test(href)) return;
+            link.dataset.toolCount = String(count);
+            link.setAttribute('aria-label', `PDF Tools directory (${count} tools)`);
+        });
+    },
+
+    renderRelated(registry) {
+        const currentPath = this.currentPath();
+        const current = registry.tools.find(tool => tool && tool.href === currentPath);
+        if (!current) return;
+
+        const target = document.querySelector('[data-related-tools]') || document.querySelector('main.tool-page') || document.querySelector('main#main');
+        if (!target || target.querySelector('[data-generated-related-tools]')) return;
+
+        const sameCategory = registry.tools.filter(tool => tool && tool.href !== current.href && tool.category === current.category);
+        const fallback = registry.tools.filter(tool => tool && tool.href !== current.href && tool.category !== current.category);
+        const related = [...sameCategory, ...fallback].slice(0, 3);
+        if (!related.length) return;
+
+        const section = document.createElement('section');
+        section.className = 'related-tools';
+        section.dataset.generatedRelatedTools = 'true';
+        section.setAttribute('aria-labelledby', 'relatedToolsHeading');
+
+        const heading = document.createElement('h2');
+        heading.id = 'relatedToolsHeading';
+        heading.textContent = 'Related tools';
+        section.appendChild(heading);
+
+        const grid = document.createElement('div');
+        grid.className = 'related-tools-grid';
+        related.forEach(tool => {
+            const link = document.createElement('a');
+            link.className = 'related-tool-card';
+            link.href = tool.href;
+            const title = document.createElement('h3');
+            title.textContent = String(tool.name || 'Tool');
+            const description = document.createElement('p');
+            description.textContent = String(tool.desc || 'Open this tool');
+            link.append(title, description);
+            grid.appendChild(link);
+        });
+        section.appendChild(grid);
+        target.appendChild(section);
+    }
+};
 
 const RecentlyUsedUI = {
     render() {
