@@ -1,4 +1,9 @@
 module.exports = function(eleventyConfig) {
+  // Expose the single public tool registry under an explicit, collision-free
+  // template name. The data file remains the source of truth; this alias keeps
+  // directory, sitemap, search, and navigation templates on the same object.
+  eleventyConfig.addGlobalData('toolRegistry', require('./src/_data/tools.js'));
+
   // Process only njk and md templates; copy html files as-is
   eleventyConfig.setTemplateFormats(['njk', 'md']);
 

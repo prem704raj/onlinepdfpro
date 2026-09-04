@@ -112,6 +112,15 @@ const registryHrefs = [...registry.matchAll(/href:\s*'([^']+)'/g)].map(match => 
 const missingRegistryPages = registryHrefs.filter(href => !exists(href.replace(/^\//, '')));
 check(registryHrefs.length >= 40 && missingRegistryPages.length === 0, `Registry pages exist (${registryHrefs.length} public tools)`);
 check(new Set(registryHrefs).size === registryHrefs.length, 'Registry has no duplicate tool URLs');
+if (exists('_site/tools.html')) {
+    const renderedTools = read('_site/tools.html');
+    const renderedSitemap = read('_site/sitemap.xml');
+    check(!/0 Free Tools/.test(renderedTools) && renderedTools.includes('Compress PDF'), 'Rendered directory contains registry tools');
+    const sitemapUrls = [...renderedSitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+    const expectedToolUrls = registryHrefs.map(href => `https://onlinepdfpro.com${href}`);
+    check(expectedToolUrls.every(url => sitemapUrls.includes(url)), 'Rendered sitemap contains every registry tool');
+    check(new Set(sitemapUrls).size === sitemapUrls.length, 'Rendered sitemap has no duplicate URLs');
+}
 check(/onlinepdfpro-cache-__BUILD_ID__/.test(read('src/sw.js')) && /version-sw\.js/.test(read('package.json')), 'Service-worker cache is build-versioned');
 check(/\.wrangler\//.test(read('.gitignore')), 'Wrangler runtime files are ignored');
 check(exists('src/_redirects') && /about-us/.test(read('src/_redirects')), 'Legacy About URLs have redirects');
