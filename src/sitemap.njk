@@ -27,19 +27,6 @@ permalink: /sitemap.xml
   { url: '/pdf-to-text-extractor.html', priority: '0.8', changefreq: 'weekly' },
   { url: '/remove-background.html', priority: '0.8', changefreq: 'weekly' }
 ] -%}
-{%- set toolPages = [
-  '/tools/pdf-to-word.html', '/tools/word-to-pdf.html',
-  '/tools/merge-pdf.html', '/tools/compress-pdf.html', '/tools/split-pdf.html',
-  '/tools/sign-pdf.html', '/tools/jpg-to-pdf.html', '/tools/image-to-text.html',
-  '/tools/image-compressor.html', '/tools/image-resize.html', '/tools/image-crop.html',
-  '/tools/heic-to-jpg.html', '/tools/webp-to-jpg.html', '/tools/image-format-converter.html',
-  '/tools/passport-photo-maker.html', '/tools/crop-pdf.html', '/tools/delete-pdf-pages.html',
-  '/tools/rotate-pdf.html', '/tools/add-page-numbers-to-pdf.html',
-  '/tools/pdf-watermark.html', '/tools/password-protect-pdf.html',
-  '/tools/pdf-unlock.html', '/tools/redact-pdf.html', '/tools/html-to-pdf.html',
-  '/tools/chat-with-pdf.html', '/tools/pdf-summarizer.html', '/tools/pdf-to-flashcards.html',
-  '/tools/pdf-page-counter.html'
-] -%}
 {%- for page in staticPages %}
   <url>
     <loc>https://onlinepdfpro.com{{ page.url }}</loc>
@@ -47,9 +34,9 @@ permalink: /sitemap.xml
     <priority>{{ page.priority }}</priority>
   </url>
 {%- endfor %}
-{%- for toolUrl in toolPages %}
+{%- for tool in toolRegistry.tools %}
   <url>
-    <loc>https://onlinepdfpro.com{{ toolUrl }}</loc>
+    <loc>https://onlinepdfpro.com{{ tool.href }}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

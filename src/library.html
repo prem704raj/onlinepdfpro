@@ -420,7 +420,7 @@
             }
 
             // Render purchases
-            purchasesDiv.innerHTML = '';
+            purchasesDiv.replaceChildren();
             purchases.forEach(purchase => {
                 const title = purchase.products?.title || purchase.product_id;
                 const date = new Date(purchase.created_at).toLocaleDateString('en-IN', {
@@ -430,24 +430,31 @@
 
                 const card = document.createElement('div');
                 card.className = 'lib-card';
-                card.innerHTML = `
-                    <div class="lib-card-icon">
-                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                    </div>
-                    <div class="lib-card-info">
-                        <h3 class="lib-card-title">${title}</h3>
-                        <p class="lib-card-meta">
-                            Purchased ${date}${amount ? ' · ' + amount : ''}
-                            <span class="lib-paid-badge">Paid</span>
-                        </p>
-                    </div>
-                    <div class="lib-card-actions">
-                        <button class="lib-download-btn" onclick="downloadProduct('${purchase.product_id}', this)">
-                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            Download PDF
-                        </button>
-                    </div>
-                `;
+                const icon = document.createElement('div');
+                icon.className = 'lib-card-icon';
+                icon.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+                const info = document.createElement('div');
+                info.className = 'lib-card-info';
+                const titleEl = document.createElement('h3');
+                titleEl.className = 'lib-card-title';
+                titleEl.textContent = String(title);
+                const meta = document.createElement('p');
+                meta.className = 'lib-card-meta';
+                meta.append(`Purchased ${date}${amount ? ' · ' + amount : ''} `);
+                const paid = document.createElement('span');
+                paid.className = 'lib-paid-badge';
+                paid.textContent = 'Paid';
+                meta.appendChild(paid);
+                info.append(titleEl, meta);
+                const actions = document.createElement('div');
+                actions.className = 'lib-card-actions';
+                const downloadButton = document.createElement('button');
+                downloadButton.type = 'button';
+                downloadButton.className = 'lib-download-btn';
+                downloadButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
+                downloadButton.addEventListener('click', () => downloadProduct(purchase.product_id, downloadButton));
+                actions.appendChild(downloadButton);
+                card.append(icon, info, actions);
                 purchasesDiv.appendChild(card);
             });
 

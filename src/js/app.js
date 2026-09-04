@@ -365,12 +365,17 @@ const ProcessingInfo = {
         const note = document.createElement('aside');
         note.className = 'processing-info';
         note.setAttribute('role', 'note');
-        note.innerHTML = '<strong>Before you upload</strong>' +
-            '<span>Supported formats: ' + formats + '. Maximum size: ' + maxSize + '.</span>' +
-            '<span>' + (externalProcessing
-                ? 'This tool may send the file or extracted text to an external AI/OCR service. Review the tool details before uploading.'
-                : 'Processing method varies by tool. Review the details on this page before uploading.') + '</span>' +
-            '<span>Most standard files finish within a few seconds; AI and OCR tasks may take longer. If processing fails, your original file is unchanged and you can try again.</span>';
+        const heading = document.createElement('strong');
+        heading.textContent = 'Before you upload';
+        const formatLine = document.createElement('span');
+        formatLine.textContent = `Supported formats: ${formats}. Maximum size: ${maxSize}.`;
+        const processingLine = document.createElement('span');
+        processingLine.textContent = externalProcessing
+            ? 'This tool may send the file or extracted text to an external AI/OCR service. Review the tool details before uploading.'
+            : 'Processing method varies by tool. Review the details on this page before uploading.';
+        const timingLine = document.createElement('span');
+        timingLine.textContent = 'Most standard files finish within a few seconds; AI and OCR tasks may take longer. If processing fails, your original file is unchanged and you can try again.';
+        note.append(heading, formatLine, processingLine, timingLine);
         const anchor = fileInput.closest('.upload-zone, .upload-area, .drop-zone, .upload-box, .file-upload, .tool-upload') || fileInput.parentElement;
         if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(note, anchor.nextSibling);
         else if (document.querySelector('main')) document.querySelector('main').prepend(note);
@@ -594,11 +599,40 @@ const Downloader = {
         const ext = dotIdx > 0 ? filename.substring(dotIdx) : '';
         const overlay = document.createElement('div');
         overlay.className = 'rename-overlay';
-        overlay.innerHTML = `<div class="rename-sheet"><div class="rename-sheet-title"><span>📄</span> Save File</div><div class="rename-input-wrap"><input type="text" class="rename-input-name" id="renameInputName" value="${baseName.replace(/"/g, '&quot;')}" spellcheck="false" autocomplete="off"><span class="rename-input-ext">${ext}</span></div><div class="rename-actions"><button class="rename-cancel-btn" id="renameCancelBtn">Cancel</button><button class="rename-dl-btn" id="renameDlBtn">⬇ Download</button></div></div>`;
+        const sheet = document.createElement('div');
+        sheet.className = 'rename-sheet';
+        const title = document.createElement('div');
+        title.className = 'rename-sheet-title';
+        title.textContent = '📄  Save File';
+        const inputWrap = document.createElement('div');
+        inputWrap.className = 'rename-input-wrap';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'rename-input-name';
+        nameInput.id = 'renameInputName';
+        nameInput.value = baseName;
+        nameInput.spellcheck = false;
+        nameInput.autocomplete = 'off';
+        const extLabel = document.createElement('span');
+        extLabel.className = 'rename-input-ext';
+        extLabel.textContent = ext;
+        inputWrap.append(nameInput, extLabel);
+        const actions = document.createElement('div');
+        actions.className = 'rename-actions';
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'rename-cancel-btn';
+        cancelBtn.id = 'renameCancelBtn';
+        cancelBtn.textContent = 'Cancel';
+        const dlBtn = document.createElement('button');
+        dlBtn.type = 'button';
+        dlBtn.className = 'rename-dl-btn';
+        dlBtn.id = 'renameDlBtn';
+        dlBtn.textContent = '⬇ Download';
+        actions.append(cancelBtn, dlBtn);
+        sheet.append(title, inputWrap, actions);
+        overlay.appendChild(sheet);
         document.body.appendChild(overlay);
-        const nameInput = overlay.querySelector('#renameInputName');
-        const dlBtn = overlay.querySelector('#renameDlBtn');
-        const cancelBtn = overlay.querySelector('#renameCancelBtn');
         requestAnimationFrame(() => overlay.classList.add('active'));
         setTimeout(() => { nameInput.focus(); nameInput.select(); }, 350);
         const doDownload = () => {
@@ -796,9 +830,33 @@ const FeedbackHandler = {
     open() {
         const target = 'support@onlinepdfpro.com';
         const div = document.createElement('div'); div.className = 'feedback-overlay active';
-        div.innerHTML = `<div class="feedback-modal"><button class="feedback-close">&times;</button><h3>Send Feedback</h3><form action="https://formsubmit.co/${target}" method="POST"><input type="hidden" name="_next" value="${window.location.href}"><input type="text" name="name" placeholder="Name"><input type="email" name="email" placeholder="Email"><textarea name="message" placeholder="Message" required></textarea><button type="submit" class="feedback-submit">Send</button></form></div>`;
+        const modal = document.createElement('div');
+        modal.className = 'feedback-modal';
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'feedback-close';
+        close.setAttribute('aria-label', 'Close feedback form');
+        close.textContent = '×';
+        const heading = document.createElement('h3');
+        heading.textContent = 'Send Feedback';
+        const form = document.createElement('form');
+        form.action = `https://formsubmit.co/${target}`;
+        form.method = 'POST';
+        const next = document.createElement('input');
+        next.type = 'hidden'; next.name = '_next'; next.value = window.location.href;
+        const name = document.createElement('input');
+        name.type = 'text'; name.name = 'name'; name.placeholder = 'Name';
+        const email = document.createElement('input');
+        email.type = 'email'; email.name = 'email'; email.placeholder = 'Email';
+        const message = document.createElement('textarea');
+        message.name = 'message'; message.placeholder = 'Message'; message.required = true;
+        const submit = document.createElement('button');
+        submit.type = 'submit'; submit.className = 'feedback-submit'; submit.textContent = 'Send';
+        form.append(next, name, email, message, submit);
+        modal.append(close, heading, form);
+        div.appendChild(modal);
         document.body.appendChild(div);
-        div.querySelector('.feedback-close').onclick = () => div.remove();
+        close.onclick = () => div.remove();
         div.onclick = (e) => { if (e.target === div) div.remove(); };
     }
 };
@@ -843,7 +901,18 @@ const RecentlyUsedUI = {
         const recent = RecentlyUsed.get();
         if (recent.length === 0) return;
         const prefix = window.location.pathname.includes('/tools/') ? '../' : '';
-        target.innerHTML = `<div style="display:flex;gap:10px;flex-wrap:wrap;">${recent.map(r => `<a href="${prefix}tools/${r.id}.html" style="padding:10px 15px;background:var(--surface-1);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;">${r.name}</a>`).join('')}</div>`;
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
+        recent.forEach(item => {
+            const id = typeof item?.id === 'string' && /^[a-z0-9-]+$/i.test(item.id) ? item.id : null;
+            if (!id) return;
+            const link = document.createElement('a');
+            link.href = `${prefix}tools/${id}.html`;
+            link.style.cssText = 'padding:10px 15px;background:var(--surface-1);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;';
+            link.textContent = String(item.name || id);
+            wrap.appendChild(link);
+        });
+        target.replaceChildren(wrap);
     }
 };
 

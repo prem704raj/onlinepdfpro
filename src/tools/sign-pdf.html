@@ -548,7 +548,7 @@
 
  const del = document.createElement('div');
  del.className = 'delete-btn';
- del.innerHTML = '&#215;';
+ del.textContent = '×';
  del.onclick = (e) => { e.stopPropagation(); sig.remove(); };
 
  sig.appendChild(resize);
@@ -600,7 +600,7 @@
 
  const del = document.createElement('div');
  del.className = 'delete-btn';
- del.innerHTML = '&#215;';
+ del.textContent = '×';
  del.onclick = (e) => { e.stopPropagation(); newSig.remove(); };
 
  newSig.appendChild(resize);
@@ -759,7 +759,7 @@
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Are e-signatures legally valid?</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">In many jurisdictions, electronic signatures carry the same legal weight as handwritten ones under laws like the U.S. ESIGN Act and the EU eIDAS Regulation. Some documents (wills, notarized contracts) may still require wet ink.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">The entire signing process happens in your browser. Your document and signature never leave your device.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">The signing process runs in your browser and this tool does not upload the document. The result is an electronic annotation, not a certificate-backed digital signature; confirm that it meets the requirements for your document.</p>
 </section>
 
  <script defer src="../counter.js"></script>
