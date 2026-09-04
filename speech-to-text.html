@@ -9,7 +9,7 @@
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
 <title>Speech to Text (Voice to PDF) - Free Online Converter</title>
-<meta name="description" content="Convert your speech and voice to text and download as PDF or TXT. Free online dictation tool.">
+<meta name="description" content="Convert English or Hindi speech to text and download a Unicode PDF, Word, or TXT transcript in your browser.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/speech-to-text.html">
@@ -17,8 +17,8 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/speech-to-text.html">
-<meta property="og:title" content="Voice to PDF Free — Convert Speech to PDF Document Online | OnlinePDFPro">
-<meta property="og:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript using browser speech recognition.">
+<meta property="og:title" content="Voice to PDF Free — English and Hindi Speech Transcripts | OnlinePDFPro">
+<meta property="og:description" content="Convert English or Hindi speech to a Unicode PDF transcript in your browser.">
 <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
@@ -26,8 +26,8 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/speech-to-text.html">
-<meta name="twitter:title" content="Voice to PDF Free — Convert Speech to PDF Document Online | OnlinePDFPro">
-<meta name="twitter:description" content="Convert voice recordings to PDF documents free. Speak and get a downloadable PDF transcript using browser speech recognition.">
+<meta name="twitter:title" content="Voice to PDF Free — English and Hindi Speech Transcripts | OnlinePDFPro">
+<meta name="twitter:description" content="Convert English or Hindi speech to a Unicode PDF transcript in your browser.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
@@ -50,7 +50,7 @@
  "@type": "WebApplication",
  "name": "Voice to PDF Converter",
  "url": "https://onlinepdfpro.com/speech-to-text.html",
- "description": "Free online voice to PDF converter. Speak and create PDF documents.",
+ "description": "Free online voice to Unicode PDF converter for English and Hindi speech.",
  "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -512,32 +512,14 @@
 
  <!-- Language Selection -->
  <div class="lang-section">
- <label>🌐 Language:</label>
+ <label for="langSelect">🌐 Language:</label>
  <select id="langSelect">
  <option value="en-US">English (US)</option>
  <option value="en-GB">English (UK)</option>
  <option value="en-IN">English (India)</option>
  <option value="hi-IN">Hindi (हिन्दी)</option>
- <option value="bn-IN">Bengali (বাংলা)</option>
- <option value="ta-IN">Tamil (தமிழ்)</option>
- <option value="te-IN">Telugu (తెలుగు)</option>
- <option value="mr-IN">Marathi (मराठी)</option>
- <option value="gu-IN">Gujarati (ગુજરાતી)</option>
- <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
- <option value="ml-IN">Malayalam (മലയാളം)</option>
- <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ)</option>
- <option value="ur-PK">Urdu (اردو)</option>
- <option value="es-ES">Spanish (Español)</option>
- <option value="fr-FR">French (Français)</option>
- <option value="de-DE">German (Deutsch)</option>
- <option value="it-IT">Italian (Italiano)</option>
- <option value="pt-BR">Portuguese (Português)</option>
- <option value="ru-RU">Russian (Русский)</option>
- <option value="ja-JP">Japanese (日本語)</option>
- <option value="ko-KR">Korean (한국어)</option>
- <option value="zh-CN">Chinese (中文)</option>
- <option value="ar-SA">Arabic (العربية)</option>
  </select>
+ <p style="font-size:.82rem; color:var(--text-secondary); margin:8px 0 0;">PDF export embeds a Unicode Noto Sans font for English and Devanagari (Hindi). Other scripts are not advertised until a matching font is bundled.</p>
  </div>
 
  <!-- Mic Button -->
@@ -584,11 +566,9 @@
  <input type="text" id="docTitle" value="My Document" placeholder="Enter title">
  </div>
  <div class="format-group">
- <label>Font</label>
+ <label for="pdfFont">PDF font</label>
  <select id="pdfFont">
- <option value="Helvetica">Helvetica</option>
- <option value="Times-Roman">Times Roman</option>
- <option value="Courier">Courier</option>
+ <option value="NotoSansDevanagari">Noto Sans Unicode (English + Hindi)</option>
  </select>
  </div>
  <div class="format-group">
@@ -657,6 +637,8 @@
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
+ <script src="/js/vendor/fontkit/regenerator-runtime.js"></script>
+ <script src="/js/vendor/fontkit/fontkit.umd.min.js"></script>
  <script defer src="/js/vendor/download/download.min.js"></script>
 
  <script>
@@ -665,6 +647,18 @@
  let fullTranscript = '';
  let startTime = null;
  let timerInterval = null;
+ const UNICODE_FONT_URL = '/fonts/NotoSansDevanagari-Regular.ttf';
+ let unicodeFontBytesPromise = null;
+
+ async function loadUnicodeFontBytes() {
+ if (!unicodeFontBytesPromise) {
+ unicodeFontBytesPromise = fetch(UNICODE_FONT_URL, { credentials: 'same-origin' }).then(response => {
+ if (!response.ok) throw new Error('Unicode PDF font could not be loaded.');
+ return response.arrayBuffer();
+ });
+ }
+ return unicodeFontBytesPromise;
+ }
 
  // Check browser support
  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -815,7 +809,6 @@
  if (!text.trim()) return alert('No text to convert! Speak or type something first.');
 
  const title = document.getElementById('docTitle').value || 'My Document';
- const fontName = document.getElementById('pdfFont').value;
  const fontSize = parseInt(document.getElementById('pdfFontSize').value);
  const pageSize = document.getElementById('pdfPageSize').value;
  const lineSpacing = parseFloat(document.getElementById('lineSpacing').value);
@@ -823,12 +816,11 @@
 
  const pdfDoc = await PDFLib.PDFDocument.create();
 
- let fontObj;
- switch (fontName) {
- case 'Times-Roman': fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.TimesRoman); break;
- case 'Courier': fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.Courier); break;
- default: fontObj = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+ if (!window.fontkit || typeof pdfDoc.registerFontkit !== 'function') {
+ throw new Error('Unicode PDF support is unavailable in this browser.');
  }
+ pdfDoc.registerFontkit(window.fontkit);
+ const fontObj = await pdfDoc.embedFont(await loadUnicodeFontBytes(), { subset: true });
 
  const pageSizes = {
  a4: [595.28, 841.89],

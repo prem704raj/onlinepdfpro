@@ -7,7 +7,21 @@ let isPaused = false;
 let currentSpeed = 1.0;
 let progressInterval = null;
 let startTime = 0;
-let ttsHistory = JSON.parse(localStorage.getItem('ttsHistory') || '[]');
+let ttsHistory = [];
+try {
+    const storedHistory = JSON.parse(localStorage.getItem('ttsHistory') || '[]');
+    ttsHistory = Array.isArray(storedHistory)
+        ? storedHistory.filter(item => item && typeof item.text === 'string' && item.text.length <= 100000)
+            .slice(0, 10)
+            .map(item => ({
+                text: item.text,
+                preview: typeof item.preview === 'string' ? item.preview.slice(0, 100) : item.text.slice(0, 80),
+                time: typeof item.time === 'string' ? item.time : ''
+            }))
+        : [];
+} catch (error) {
+    ttsHistory = [];
+}
 
 // Load voices
 function loadVoices() {
@@ -461,16 +475,29 @@ function renderHistory() {
     const list = document.getElementById('historyList');
 
     if (ttsHistory.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:20px">No history yet.</p>';
+        const empty = document.createElement('p');
+        empty.style.cssText = 'text-align:center;color:#94a3b8;padding:20px';
+        empty.textContent = 'No history yet.';
+        list.replaceChildren(empty);
         return;
     }
 
-    list.innerHTML = ttsHistory.map((item, i) => `
-        <div class="history-item">
-            <span class="history-text">${item.preview}</span>
-            <button class="history-play" onclick="playFromHistory(${i})">▶️ Play</button>
-        </div>
-    `).join('');
+    const fragment = document.createDocumentFragment();
+    ttsHistory.forEach((item, i) => {
+        const row = document.createElement('div');
+        row.className = 'history-item';
+        const preview = document.createElement('span');
+        preview.className = 'history-text';
+        preview.textContent = String(item.preview || '');
+        const play = document.createElement('button');
+        play.type = 'button';
+        play.className = 'history-play';
+        play.textContent = '▶️ Play';
+        play.addEventListener('click', () => playFromHistory(i));
+        row.append(preview, play);
+        fragment.appendChild(row);
+    });
+    list.replaceChildren(fragment);
 }
 
 function playFromHistory(index) {

@@ -332,6 +332,7 @@ Example:
  <li>Item 1</li>
  <li>Item 2</li>
 </ul>"></textarea>
+ <p class="upload-hint" style="margin:10px 0 0; color:var(--text-secondary);">For your safety, scripts, event handlers, forms, embeds and unsafe URLs are removed before preview and PDF rendering. Pasted HTML is never executed on this site.</p>
 
  <div class="preview-area" id="previewArea"></div>
 
@@ -369,6 +370,59 @@ Example:
  <script src="/js/vendor/html2canvas/html2canvas.min.js"></script>
  <script src="/js/vendor/jspdf/jspdf.umd.min.js"></script>
  <script>
+ const BLOCKED_HTML_TAGS = new Set([
+ 'base', 'button', 'canvas', 'embed', 'form', 'frame', 'frameset', 'iframe',
+ 'input', 'link', 'meta', 'object', 'option', 'portal', 'script', 'select',
+ 'source', 'style', 'textarea', 'track', 'video', 'audio', 'svg'
+ ]);
+ const URL_ATTRIBUTES = new Set(['action', 'cite', 'formaction', 'href', 'poster', 'src', 'xlink:href']);
+
+ /**
+  * Parse pasted markup without inserting it into the live document, then keep
+ * only presentational elements/attributes that are safe for an off-screen
+ * canvas render. This deliberately does not allow script-capable elements,
+ * event-handler attributes, forms, embeds, or external URLs that could leak
+ * the document contents.
+  */
+ function sanitizeHTML(markup) {
+ const parsed = new DOMParser().parseFromString(String(markup || ''), 'text/html');
+ const fragment = document.createDocumentFragment();
+ const visit = node => {
+ if (node.nodeType === Node.TEXT_NODE) return document.createTextNode(node.nodeValue || '');
+ if (node.nodeType !== Node.ELEMENT_NODE) return null;
+ const source = node;
+ if (BLOCKED_HTML_TAGS.has(source.tagName.toLowerCase())) return null;
+ const target = document.createElement(source.tagName.toLowerCase());
+ for (const attr of Array.from(source.attributes)) {
+ const name = attr.name.toLowerCase();
+ if (name.startsWith('on') || name === 'srcdoc' || name === 'style' && /(?:url\s*\(|expression\s*\(|@import|javascript:)/i.test(attr.value)) {
+ continue;
+ }
+ if (URL_ATTRIBUTES.has(name)) {
+ const value = attr.value.trim();
+ if (/^(?:javascript|vbscript):/i.test(value) || /^data:(?!image\/(?:png|jpe?g|gif|webp);?)/i.test(value)) continue;
+ // Keep links and local assets same-origin. External URLs are intentionally
+ // dropped so pasted markup cannot make requests from the OnlinePDFPro origin.
+ if (/^(?:#|\/|\.{1,2}\/)/.test(value)) target.setAttribute(attr.name, value);
+ continue;
+ }
+ if (name === 'style' || name === 'class' || name === 'id' || name === 'title' || name === 'alt' || name === 'width' || name === 'height' || name === 'align' || name === 'colspan' || name === 'rowspan') {
+ target.setAttribute(attr.name, attr.value);
+ }
+ }
+ for (const child of Array.from(source.childNodes)) {
+ const clean = visit(child);
+ if (clean) target.appendChild(clean);
+ }
+ return target;
+ };
+ for (const child of Array.from(parsed.body.childNodes)) {
+ const clean = visit(child);
+ if (clean) fragment.appendChild(clean);
+ }
+ return fragment;
+ }
+
  function showTab(tab) {
  document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
 
@@ -379,20 +433,21 @@ Example:
  } else {
  document.getElementById('codeArea').style.display = 'none';
  document.getElementById('previewArea').style.display = 'block';
- document.getElementById('previewArea').innerHTML = document.getElementById('codeArea').value;
+ const preview = document.getElementById('previewArea');
+ preview.replaceChildren(sanitizeHTML(document.getElementById('codeArea').value));
  document.querySelectorAll('.editor-tab')[1].classList.add('active');
  }
  }
 
  function loadTemplate(type) {
  const templates = {
- resume: '<h1 style="color:#2563eb; border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\n<p style="color:#666;">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\n\n<h2 style="color:#333;">Education</h2>\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\n\n<h2 style="color:#333;">Skills</h2>\n<ul>\n<li>HTML, CSS, JavaScript</li>\n<li>Python, Java</li>\n<li>React, Node.js</li>\n</ul>\n\n<h2 style="color:#333;">Projects</h2>\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 20+ tools</p>',
+ resume: '<h1 style="color:#2563eb; border-bottom:3px solid #2563eb; padding-bottom:10px;">Your Name</h1>\n<p style="color:#666;">Email: your@email.com | Phone: +91 XXXXX XXXXX</p>\n\n<h2 style="color:#333;">Education</h2>\n<p><strong>B.Tech Computer Science</strong> — Chandigarh University (2023-2027)</p>\n\n<h2 style="color:#333;">Skills</h2>\n<ul>\n<li>HTML, CSS, JavaScript</li>\n<li>Python, Java</li>\n<li>React, Node.js</li>\n</ul>\n\n<h2 style="color:#333;">Projects</h2>\n<p><strong>Online PDF Pro</strong> — Built a free PDF tools website with 45+ tools</p>',
 
  invoice: '<div style="text-align:center;">\n<h1 style="color:#ef4444;">INVOICE</h1>\n<p>Invoice #001 | Date: ' + new Date().toLocaleDateString() + '</p>\n</div>\n\n<table style="width:100%; border-collapse:collapse; margin:20px 0;">\n<tr style="background:#333; color:white;">\n<th style="padding:12px; text-align:left;">Item</th>\n<th style="padding:12px;">Qty</th>\n<th style="padding:12px;">Price</th>\n<th style="padding:12px;">Total</th>\n</tr>\n<tr>\n<td style="padding:12px; border-bottom:1px solid #eee;">Web Development</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\n<td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">₹50,000</td>\n</tr>\n</table>\n\n<h3 style="text-align:right;">Total: ₹50,000</h3>',
 
  letter: '<div style="text-align:right; margin-bottom:30px;">\n<p>Date: ' + new Date().toLocaleDateString() + '</p>\n</div>\n\n<p>Dear Sir/Madam,</p>\n\n<p>I am writing to express my interest in the position of Software Developer at your esteemed company.</p>\n\n<p>I am a 2nd year B.Tech CSE student with strong skills in web development. I have built Online PDF Pro, a free PDF tools website used by thousands of people.</p>\n\n<p>I would be grateful for the opportunity to discuss how I can contribute to your team.</p>\n\n<p>Yours sincerely,<br><strong>Your Name</strong></p>',
 
- report: '<h1 style="text-align:center; color:#2563eb;">Project Report</h1>\n<p style="text-align:center; color:#666;">Online PDF Pro — Free PDF Tools Platform</p>\n\n<h2>1. Introduction</h2>\n<p>Online PDF Pro is a web-based platform providing free PDF tools including merge, compress, sign, OCR, and 15+ more utilities.</p>\n\n<h2>2. Technologies Used</h2>\n<ul>\n<li>HTML5, CSS3, JavaScript</li>\n<li>pdf-lib, pdfjs, Tesseract.js</li>\n<li>Client-side processing (zero server cost)</li>\n</ul>\n\n<h2>3. Features</h2>\n<ol>\n<li>Merge PDF</li>\n<li>Compress PDF</li>\n<li>Sign PDF</li>\n<li>Image to Text (OCR) Extraction</li>\n<li>And 15+ more tools</li>\n</ol>\n\n<h2>4. Conclusion</h2>\n<p>The platform serves thousands of users with zero hosting cost, demonstrating the power of client-side web applications.</p>'
+ report: '<h1 style="text-align:center; color:#2563eb;">Project Report</h1>\n<p style="text-align:center; color:#666;">Online PDF Pro — Free PDF Tools Platform</p>\n\n<h2>1. Introduction</h2>\n<p>Online PDF Pro is a web-based platform providing 45+ PDF, image, OCR, conversion, and productivity tools.</p>\n\n<h2>2. Technologies Used</h2>\n<ul>\n<li>HTML5, CSS3, JavaScript</li>\n<li>pdf-lib, pdfjs, Tesseract.js</li>\n<li>Browser processing for local tools plus protected services for selected cloud tools</li>\n</ul>\n\n<h2>3. Features</h2>\n<ol>\n<li>Merge PDF</li>\n<li>Compress PDF</li>\n<li>Sign PDF</li>\n<li>Image to Text (OCR) Extraction</li>\n<li>And 40+ more tools</li>\n</ol>\n\n<h2>4. Conclusion</h2>\n<p>The platform combines privacy-conscious browser tools with clearly disclosed external processing where a cloud service is required.</p>'
  };
 
  document.getElementById('codeArea').value = templates[type];
@@ -406,6 +461,8 @@ Example:
  const btn = document.querySelector('.dl-btn');
  btn.textContent = ' Generating PDF...';
  btn.disabled = true;
+ let renderContainer = null;
+ let renderText = '';
 
  try {
  // Page size dimensions in mm
@@ -427,10 +484,11 @@ Example:
  const scale = 2;
  const containerWidthPx = Math.round(contentW * 3.7795 * scale);
 
- // Create a rendering container that is VISIBLE on-page
- const container = document.createElement('div');
- container.innerHTML = html;
- container.style.cssText = `
+ // Render only the sanitized fragment. The original markup is never inserted
+ // into the OnlinePDFPro document, so scripts and event handlers cannot run.
+ renderContainer = document.createElement('div');
+ renderContainer.appendChild(sanitizeHTML(html));
+ renderContainer.style.cssText = `
  position: absolute; top: -9999px; left: -9999px;
  width: ${containerWidthPx / scale}px;
  padding: 0; margin: 0;
@@ -439,19 +497,21 @@ Example:
  background: #fff;
  z-index: -1;
  `;
- document.body.appendChild(container);
+ document.body.appendChild(renderContainer);
+ renderText = renderContainer.textContent || '';
 
  // Wait for browser to paint
  await new Promise(r => setTimeout(r, 300));
 
- const canvas = await html2canvas(container, {
+ const canvas = await html2canvas(renderContainer, {
  scale: 3,
  useCORS: true,
  backgroundColor: '#ffffff',
  logging: false
  });
 
- document.body.removeChild(container);
+ renderContainer.remove();
+ renderContainer = null;
 
  const { jsPDF } = window.jspdf;
  const pdf = new jsPDF({ orientation, unit: 'mm', format: pageSize });
@@ -488,7 +548,7 @@ Example:
  }
 
  const pdfBlob = pdf.output('blob');
- const htmlSnippet = html.trim().substring(0, 50).replace(/<[^>]*>/g, '') + '...';
+ const htmlSnippet = renderText.trim().substring(0, 50) + '...';
  const originalFiles = [{
  name: 'HTML: ' + (htmlSnippet || 'Web Content'),
  size: html.length,
@@ -497,6 +557,10 @@ Example:
  OnlinePDFPro.Downloader.saveBlob(pdfBlob, 'document.pdf', originalFiles);
 
  } catch (err) {
+ if (renderContainer) {
+ renderContainer.remove();
+ renderContainer = null;
+ }
  console.error('PDF generation error:', err);
  alert('Error generating PDF: ' + err.message);
  } finally {

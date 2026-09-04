@@ -1,8 +1,10 @@
-// OnlinePDFPro Service Worker v95
-// Network-first for JS files to prevent stale cache issues.
-// Cache-first for images/fonts/CSS with offline fallback.
+// OnlinePDFPro Service Worker (__BUILD_ID__)
+// The build step replaces __BUILD_ID__ with a content hash of the generated
+// site. This invalidates the entire cache whenever a static asset changes.
+// Network-first for HTML/JS, stale-while-revalidate for core CSS, and
+// cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v95';
+const CACHE_NAME = 'onlinepdfpro-cache-__BUILD_ID__';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -119,7 +121,27 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 3: Cache-first for everything else (CSS, images, fonts) ---
+    // --- Strategy 3: Stale-while-revalidate for core CSS ---
+    const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
+    const isCoreCss = url.origin === self.location.origin &&
+        SWR_CSS_FILES.some(file => url.pathname === file || url.pathname.endsWith(file));
+    if (isCoreCss) {
+        event.respondWith(
+            caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
+                const networkFetch = fetch(request).then((response) => {
+                    if (response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+                    }
+                    return response;
+                });
+                return cached || networkFetch;
+            })
+        );
+        return;
+    }
+
+    // --- Strategy 4: Cache-first for everything else (images, fonts) ---
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {

@@ -19,22 +19,34 @@ if (typeof supabase !== "undefined" && supabase.createClient) {
 // RETURN USER TO PRODUCT AFTER LOGIN
 // -------------------------------------
 function saveAuthReturnUrl(url) {
-  if (!url) url = window.location.pathname + window.location.search;
-  localStorage.setItem("authReturnUrl", url);
+  const candidate = url || window.location.pathname + window.location.search;
+  try {
+    const parsed = new URL(candidate, window.location.origin);
+    // Keep post-login navigation same-origin. In particular, reject
+    // protocol-relative values such as //evil.example that start with '/'.
+    if (parsed.origin !== window.location.origin || !parsed.pathname.startsWith("/") || parsed.pathname.startsWith("/login")) {
+      localStorage.removeItem("authReturnUrl");
+      return;
+    }
+    localStorage.setItem("authReturnUrl", parsed.pathname + parsed.search + parsed.hash);
+  } catch {
+    localStorage.removeItem("authReturnUrl");
+  }
 }
 
 function redirectAfterAuth() {
   const returnUrl = localStorage.getItem("authReturnUrl");
   localStorage.removeItem("authReturnUrl");
 
-  // Never redirect back to login.
-  if (
-    returnUrl &&
-    returnUrl.startsWith("/") &&
-    !returnUrl.startsWith("/login")
-  ) {
-    window.location.replace(returnUrl);
-    return;
+  // Never redirect back to login or to another origin.
+  try {
+    const parsed = returnUrl ? new URL(returnUrl, window.location.origin) : null;
+    if (parsed && parsed.origin === window.location.origin && parsed.pathname.startsWith("/") && !parsed.pathname.startsWith("/login")) {
+      window.location.replace(parsed.pathname + parsed.search + parsed.hash);
+      return;
+    }
+  } catch {
+    // Fall through to the home page for malformed return URLs.
   }
 
   // If login was opened manually, go to homepage after authentication.
@@ -203,23 +215,26 @@ function getUserDisplayName(user) {
   if (!user) {
     return "";
   }
-  return (
-    user.user_metadata?.full_name ||
-    user.user_metadata?.name ||
-    user.email?.split("@")[0] ||
-    "User"
-  );
+  const metadata = user.user_metadata || {};
+  const candidate = [metadata.full_name, metadata.name, user.email?.split("@")[0]]
+    .find(value => typeof value === "string" && value.trim());
+  return (candidate || "User").trim().slice(0, 120);
 }
 
 // -------------------------------------
 // GET PROFILE PHOTO
 // -------------------------------------
 function getUserAvatar(user) {
-  return (
-    user?.user_metadata?.avatar_url ||
-    user?.user_metadata?.picture ||
-    null
-  );
+  const candidate = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  if (typeof candidate !== "string" || candidate.length > 2048) return null;
+  try {
+    const parsed = new URL(candidate, window.location.origin);
+    return (parsed.origin === window.location.origin || parsed.protocol === "https:")
+      ? parsed.href
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 // -------------------------------------

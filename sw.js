@@ -1,9 +1,10 @@
-// OnlinePDFPro Service Worker v96
-// Network-first for HTML and JS files to prevent stale cache issues.
-// Stale-while-revalidate for CSS so UI fixes propagate quickly.
-// Cache-first for images/fonts with offline fallback.
+// OnlinePDFPro Service Worker (2a56c68a92986b67)
+// The build step replaces 2a56c68a92986b67 with a content hash of the generated
+// site. This invalidates the entire cache whenever a static asset changes.
+// Network-first for HTML/JS, stale-while-revalidate for core CSS, and
+// cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v96';
+const CACHE_NAME = 'onlinepdfpro-cache-2a56c68a92986b67';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -41,9 +42,6 @@ const STATIC_ASSETS = [
     'og-image.jpg',
     'site.webmanifest'
 ];
-
-// CSS files that should use stale-while-revalidate
-const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -123,18 +121,17 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 3: Stale-while-revalidate for CSS ---
-    // Serve cached CSS immediately for speed, but always fetch a fresh copy
-    // in the background so the next page load gets any UI fixes.
+    // --- Strategy 3: Stale-while-revalidate for core CSS ---
+    const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
     const isCoreCss = url.origin === self.location.origin &&
-        SWR_CSS_FILES.some(f => url.pathname === f || url.pathname.endsWith(f));
+        SWR_CSS_FILES.some(file => url.pathname === file || url.pathname.endsWith(file));
     if (isCoreCss) {
         event.respondWith(
             caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
                 const networkFetch = fetch(request).then((response) => {
                     if (response.status === 200) {
                         const clone = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                        caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
                     }
                     return response;
                 });
