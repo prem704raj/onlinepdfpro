@@ -3,7 +3,7 @@
 
 <head>
    
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://*.modal.run https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://challenges.cloudflare.com https://onlinepdfpro-proxy.prem736raj.workers.dev; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; frame-ancestors 'none';">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/mobile-fix-v2.css">
     <link rel="stylesheet" href="../css/tools-v2.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
     <style>
         .spinner {
@@ -111,9 +112,12 @@
                 <span class="section-tag fade-in">High-Fidelity Converter</span>
                 <h1 class="tool-title fade-in">Convert Word (.docx) to PDF Online Free</h1>
                 <p class="tool-description fade-in" style="animation-delay: 0.1s;">
-                    Convert Microsoft Word documents (.docx) into professional, publication-ready PDF files. Preserves your exact layouts, fonts, margins, tables, and images using LibreOffice rendering engine.
+                    Convert Microsoft Word and compatible office documents into PDF using an isolated LibreOffice rendering service. Layout, fonts, tables, and images are preserved as closely as the installed fonts and source format allow.
                 </p>
             </div>
+
+            <div id="turnstileWidget" style="display:flex; justify-content:center; margin:0 auto 20px;"></div>
+            <p style="text-align:center; color:var(--text-secondary); font-size:.82rem; margin:0 auto 18px; max-width:560px;">This server conversion sends the selected document to our isolated LibreOffice provider. Complete the security check before uploading.</p>
 
             <!-- Upload Zone -->
             <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s; text-align: center; padding: 60px 20px; border: 2px dashed var(--border, #cbd5e1); border-radius: 20px; cursor: pointer;">
@@ -167,7 +171,7 @@
                 <div class="glass-card" style="padding: 24px; border-radius: 16px;">
                     <h3 style="font-size: 1.1rem; margin-bottom: 8px;">🎯 Exact Formatting</h3>
                     <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                        Powered by LibreOffice rendering engine — the same engine used by professional document suites. Pixel-perfect margins, page breaks, and layouts.
+                        Powered by an isolated LibreOffice rendering engine with bounded processing time and input size. Review the resulting PDF for font substitutions and layout differences.
                     </p>
                 </div>
                 <div class="glass-card" style="padding: 24px; border-radius: 16px;">
@@ -190,7 +194,7 @@
                 <div class="glass-card" style="padding: 24px; border-radius: 16px; margin-bottom: 16px;">
                     <h4 style="margin-bottom: 8px;">Will my Word fonts and images be preserved?</h4>
                     <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                        Yes, all embedded fonts, tables, shapes, and images in your .docx file are rendered identically in the resulting PDF using LibreOffice's document rendering engine.
+                        LibreOffice preserves most common fonts, tables, shapes, and images. Exact output can vary when a source uses unavailable fonts, macros, unsupported features, or a legacy format.
                     </p>
                 </div>
                 <div class="glass-card" style="padding: 24px; border-radius: 16px; margin-bottom: 16px;">
@@ -216,8 +220,45 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const resultFilename = document.getElementById('resultFilename');
 
-            // Modal.com deployed endpoint for DOCX→PDF (LibreOffice)
-            const API_URL = 'https://prem736raj--docx2pdf-convert.modal.run';
+            const API_BASE = 'https://onlinepdfpro-proxy.prem736raj.workers.dev';
+            let turnstileToken = '';
+            let turnstileWidgetId = null;
+            window.onTurnstileSuccess = token => { turnstileToken = token; };
+            window.onTurnstileExpired = () => { turnstileToken = ''; };
+            function initTurnstile() {
+                if (!window.turnstile || turnstileWidgetId !== null) return;
+                const container = document.getElementById('turnstileWidget');
+                if (!container) return;
+                turnstileWidgetId = window.turnstile.render(container, {
+                    sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+                    callback: window.onTurnstileSuccess,
+                    'expired-callback': window.onTurnstileExpired,
+                    'error-callback': window.onTurnstileExpired,
+                    size: 'compact'
+                });
+            }
+            window.addEventListener('load', initTurnstile, { once: true });
+            if (window.turnstile) initTurnstile();
+
+            async function getConversionTicket() {
+                if (!turnstileToken) throw new Error('Please complete the security check first.');
+                const response = await fetch(`${API_BASE}/convert/token`, {
+                    method: 'POST',
+                    headers: { 'X-Turnstile-Token': turnstileToken }
+                });
+                const body = await response.json().catch(() => ({}));
+                if (!response.ok || !body.token) throw new Error(body.error || 'Security verification failed.');
+                return body.token;
+            }
+
+            async function hasSupportedDocumentSignature(file) {
+                const bytes = new Uint8Array(await file.slice(0, 128).arrayBuffer());
+                const prefix = (...values) => values.every((value, index) => bytes[index] === value);
+                const isZip = prefix(0x50, 0x4B, 0x03, 0x04) || prefix(0x50, 0x4B, 0x05, 0x06) || prefix(0x50, 0x4B, 0x07, 0x08);
+                const isOle = prefix(0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1);
+                const sample = new TextDecoder('ascii').decode(bytes).replace(/^\uFEFF/, '').trimStart();
+                return isZip || isOle || /^\{\\rtf[0-9]/i.test(sample);
+            }
 
             const ALLOWED_EXT = ['.docx', '.doc', '.odt', '.rtf'];
 
@@ -265,6 +306,10 @@
                     alert('File is too large. Maximum size is 50 MB.');
                     return;
                 }
+                if (!(await hasSupportedDocumentSignature(file))) {
+                    alert('The selected file contents do not match a supported DOCX, DOC, ODT, or RTF document.');
+                    return;
+                }
 
                 // Show processing UI
                 uploadZone.style.display = 'none';
@@ -285,10 +330,12 @@
                     else if (ext === '.odt') contentType = 'application/vnd.oasis.opendocument.text';
                     else if (ext === '.rtf') contentType = 'application/rtf';
 
-                    const response = await fetch(API_URL, {
+                    const conversionTicket = await getConversionTicket();
+                    const response = await fetch(`${API_BASE}/convert/word-to-pdf`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': contentType,
+                            'X-Conversion-Token': conversionTicket,
                         },
                         body: arrayBuffer,
                     });
@@ -327,6 +374,8 @@
                     alert('Error: ' + err.message);
                     uploadZone.style.display = 'block';
                     processingSection.style.display = 'none';
+                    turnstileToken = '';
+                    if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
                 }
             }
         })();

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://tmpfiles.org https://api.imgbb.com; worker-src 'self' blob:; frame-ancestors 'none';">
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
 <title>QR Code Generator Free — Create QR Codes Online | OnlinePDFPro</title>
@@ -170,7 +170,7 @@
 
  <!-- Privacy Disclosure for Upload Modes -->
  <div id="qrPrivacyNotice" style="display:none; padding:12px 18px; margin-bottom:20px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:12px; font-size:0.85rem; color:var(--text-secondary); line-height:1.6;">
- <span style="font-weight:700; color:#d97706;"> Upload note:</span> This mode uploads your content to a third-party hosting service (<strong>tmpfiles.org</strong> or <strong>ImgBB</strong>) to generate a shareable link for the QR code. Files are temporary and auto-deleted. For text or URLs, use the <strong>Text / URL</strong> tab so no file upload is needed.
+ <span style="font-weight:700; color:#d97706;"> Upload note:</span> This mode uploads your content to a third-party hosting service to create the QR destination. tmpfiles.org links are designed to expire after about 60 minutes; ImgBB links are hosted according to ImgBB's retention policy and may be permanent. For text or URLs, use the <strong>Text / URL</strong> tab so no file upload is needed.
  </div>
 
  <!-- Text Tab -->
@@ -185,7 +185,7 @@
  <div id="tab-image" class="tab-pane">
  <div class="input-area">
  <input type="file" id="imageInput" class="premium-input" accept="image/*" multiple>
- <p class="upload-hint">Images are uploaded to tmpfiles.org (60min link) or ImgBB for permanent hosting.</p>
+ <p class="upload-hint">Images are uploaded to tmpfiles.org (about 60-minute link) or, when you provide an ImgBB key, ImgBB (retention is controlled by ImgBB).</p>
 
  <div id="imgbbSection" class="api-key-box" style="display:block;">
  <input type="text" id="imgbbKey" class="premium-input" placeholder="ImgBB API Key (Optional for permanent hosting)">
@@ -198,7 +198,7 @@
  <div id="tab-file" class="tab-pane">
  <div class="input-area">
  <input type="file" id="fileInput" class="premium-input" multiple>
- <p class="upload-hint">Files are uploaded to tmpfiles.org (link expires after 60 minutes, max 100MB). Perfect for quick sharing.</p>
+ <p class="upload-hint">Files are uploaded to tmpfiles.org (link expires after about 60 minutes; max 100MB).</p>
  </div>
  </div>
 
@@ -214,7 +214,7 @@
  <div id="tab-video" class="tab-pane">
  <div class="input-area">
  <input type="file" id="videoInput" class="premium-input" accept="video/*" multiple>
- <p class="upload-hint">Videos are uploaded to tmpfiles.org (60min link, max 100MB), creating a scan-to-watch QR link.</p>
+ <p class="upload-hint">Videos are uploaded to tmpfiles.org (about 60-minute link, max 100MB), creating a scan-to-watch QR link.</p>
  </div>
  </div>
 
@@ -268,16 +268,6 @@
  </div>
 
  <script>
-
- function escapeHTML(str) {
- return String(str).replace(/[&<>'"]/g, tag => ({
- '&': '&amp;',
- '<': '&lt;',
- '>': '&gt;',
- "'": '&#39;',
- '"': '&quot;'
- }[tag] || tag));
- }
 
  /*
  50+ QR DESIGN PRESETS
@@ -350,10 +340,12 @@
  { name:'Gold', dot:'classy', csq:'square', cd:'square', fg:'#b45309', fg2:'#eab308', bg:'#fffbeb', grad:true },
  ];
 
- const CONFIG = {
+const CONFIG = {
  tmpfiles_url: 'https://tmpfiles.org/api/v1/upload',
  imgbb_url : 'https://api.imgbb.com/1/upload'
  };
+ const MAX_QR_UPLOAD_SIZE = 100 * 1024 * 1024;
+ const MAX_QR_FILES = 20;
 
  const State = {
  tab: 'text',
@@ -376,26 +368,41 @@
 
  function renderDesignGrid() {
  const grid = document.getElementById('designGrid');
- grid.innerHTML = PRESETS.map((p, i) => {
- const dots = buildPreviewDots(p);
- return `<div class="design-tile${i===0?' active':''}" onclick="selectPreset(${i})" title="${p.name}">
- <div class="design-tile-preview" style="background:${p.bg};">${dots}</div>
- <div class="design-tile-name">${p.name}</div>
- </div>`;
- }).join('');
+ grid.replaceChildren();
+ PRESETS.forEach((p, i) => {
+ const tile = document.createElement('button');
+ tile.type = 'button';
+ tile.className = `design-tile${i === 0 ? ' active' : ''}`;
+ tile.title = p.name;
+ tile.setAttribute('aria-label', `Use ${p.name} QR style`);
+ tile.addEventListener('click', () => selectPreset(i));
+ const preview = document.createElement('span');
+ preview.className = 'design-tile-preview';
+ preview.style.backgroundColor = p.bg;
+ buildPreviewDots(p).forEach(dot => preview.appendChild(dot));
+ const name = document.createElement('span');
+ name.className = 'design-tile-name';
+ name.textContent = p.name;
+ tile.append(preview, name);
+ grid.appendChild(tile);
+ });
  }
 
  function buildPreviewDots(p) {
  const c = p.grad ? p.fg : p.fg;
  const shapes = { square:'0', dots:'50%', rounded:'25%', 'extra-rounded':'35%', classy:'0 50% 0 0', 'classy-rounded':'30%' };
  const r = shapes[p.dot] || '0';
- let html = '';
+ const dots = [];
  const pattern = [1,0,1, 0,1,0, 1,0,1]; // checkerboard
  for (let k = 0; k < 9; k++) {
  const col = pattern[k] ? (p.grad && p.fg2 ? (k < 5 ? p.fg : p.fg2) : c) : 'transparent';
- html += `<div class="dp" style="background:${col};border-radius:${r};"></div>`;
+ const dot = document.createElement('span');
+ dot.className = 'dp';
+ dot.style.backgroundColor = col;
+ dot.style.borderRadius = r;
+ dots.push(dot);
  }
- return html;
+ return dots;
  }
 
  function selectPreset(i) {
@@ -421,7 +428,22 @@
  function setupFileInput(id, callback) {
  const el = document.getElementById(id);
  if (!el) return;
- el.addEventListener('change', e => callback(Array.from(e.target.files)));
+ el.addEventListener('change', e => callback(validateQRFiles(Array.from(e.target.files))));
+ }
+
+ function validateQRFiles(files) {
+ if (files.length > MAX_QR_FILES) {
+  setStatus(`Maximum ${MAX_QR_FILES} files per QR batch.`, 'var(--warning)');
+  return [];
+ }
+ const valid = files.filter(file => {
+  if (file.size > MAX_QR_UPLOAD_SIZE) {
+   setStatus(`${file.name} exceeds the 100 MB upload limit.`, 'var(--warning)');
+   return false;
+  }
+  return true;
+ });
+ return valid;
  }
 
  /*  GENERATE  */
@@ -438,7 +460,7 @@
  case 'video': await doVideos(); break;
  }
  } catch(err) {
- setStatus('&times; Error: ' + err.message, 'var(--error)');
+ setStatus('× Error: ' + err.message, 'var(--error)');
  console.error(err);
  }
  }
@@ -496,7 +518,7 @@
  let ok = 0;
  for (let i = 0; i < files.length; i++) {
  const file = files[i];
- setProgress((i/files.length)*100, `Processing: ${escapeHTML(file.name)}`);
+ setProgress((i/files.length)*100, `Processing: ${file.name}`);
  try {
  const imgbbKey = document.getElementById('imgbbKey')?.value.trim();
  const url = imgbbKey
@@ -506,10 +528,10 @@
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(` Skipped ${escapeHTML(file.name)}: ${err.message}`, 'var(--warning)'); }
+ } catch(err) { setStatus(`Skipped ${file.name}: ${err.message}`, 'var(--warning)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus('&times; All uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('× All uploads failed.', 'var(--error)');
  }
 
  async function doFiles() {
@@ -520,37 +542,40 @@
  for (let i = 0; i < files.length; i++) {
  const file = files[i];
  try {
- setProgress((i/files.length)*100, `Uploading ${escapeHTML(file.name)}...`);
- const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${escapeHTML(file.name)}: ${Math.round(pct)}%`));
+ setProgress((i/files.length)*100, `Uploading ${file.name}...`);
+ const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${file.name}: ${Math.round(pct)}%`));
  const id = 'qr-file-'+i;
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(`&times; ${escapeHTML(file.name)} failed: ${err.message}`, 'var(--error)'); }
+ } catch(err) { setStatus(`× ${file.name} failed: ${err.message}`, 'var(--error)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus('&times; All uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('× All uploads failed.', 'var(--error)');
  }
 
  async function doFolder() {
  const files = State.folderFiles;
  if (!files.length) return setStatus(' Select folder', 'var(--warning)');
+ if (files.reduce((sum, file) => sum + file.size, 0) > MAX_QR_UPLOAD_SIZE) return setStatus('Folder contents exceed the 100 MB upload limit.', 'var(--warning)');
  showProgress(true);
  try {
  setProgress(10, 'Zipping folder...');
  const zip = new JSZip();
  for (let i = 0; i < files.length; i++) {
- zip.file(files[i].webkitRelativePath || files[i].name, await files[i].arrayBuffer());
+ const relativePath = files[i].webkitRelativePath || files[i].name;
+ const safePath = relativePath.split(/[\\/]+/).filter(part => part && part !== '.' && part !== '..').map(safeDownloadStem).join('/') || `file-${i + 1}`;
+ zip.file(safePath, await files[i].arrayBuffer());
  setProgress(10+(i/files.length)*40, `Adding: ${files[i].name}`);
  }
  const zipBlob = await zip.generateAsync({type:'blob',compression:'DEFLATE'}, m => setProgress(50+m.percent*0.2, `Compressing: ${Math.round(m.percent)}%`));
- const folderName = files[0].webkitRelativePath.split('/')[0] || 'folder';
+ const folderName = (files[0].webkitRelativePath || files[0].name || 'folder').split('/')[0] || 'folder';
  setProgress(70, 'Uploading ZIP...');
  const url = await uploadToTmpFiles(new File([zipBlob], `${folderName}.zip`), pct => setProgress(70+pct*0.28, `Upload: ${Math.round(pct)}%`));
- addQRWrapper('qr-folder-0', ` ${folderName}`, 'qrOutput');
+ addQRWrapper('qr-folder-0', folderName, 'qrOutput');
  await makeQR(url, folderName, 'qr-folder-0');
  finalizeResults();
- } catch(err) { setStatus('&times; Folder upload failed: '+err.message, 'var(--error)'); }
+ } catch(err) { setStatus('× Folder upload failed: '+err.message, 'var(--error)'); }
  showProgress(false);
  }
 
@@ -561,25 +586,25 @@
  let ok = 0;
  for (let i = 0; i < files.length; i++) {
  const file = files[i];
- if (file.size > 100*1024*1024) { setStatus(` ${escapeHTML(file.name)} exceeds 100MB`, 'var(--warning)'); continue; }
+ if (file.size > 100*1024*1024) { setStatus(` ${file.name} exceeds 100MB`, 'var(--warning)'); continue; }
  try {
- setProgress((i/files.length)*100, `Uploading: ${escapeHTML(file.name)}...`);
- const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${escapeHTML(file.name)}: ${Math.round(pct)}%`));
+ setProgress((i/files.length)*100, `Uploading: ${file.name}...`);
+ const url = await uploadToTmpFiles(file, pct => setProgress((i/files.length)*100+pct/files.length, `${file.name}: ${Math.round(pct)}%`));
  const id = 'qr-video-'+i;
  addQRWrapper(id, file.name, 'qrOutput');
  await makeQR(url, noExt(file.name), id);
  ok++;
- } catch(err) { setStatus(`&times; ${escapeHTML(file.name)} failed`, 'var(--error)'); }
+ } catch(err) { setStatus(`× ${file.name} failed`, 'var(--error)'); }
  }
  showProgress(false);
- ok > 0 ? finalizeResults() : setStatus('&times; All video uploads failed.', 'var(--error)');
+ ok > 0 ? finalizeResults() : setStatus('× All video uploads failed.', 'var(--error)');
  }
 
  /*  QR CODE GENERATION (qr-code-styling)  */
  async function makeQR(content, filename, containerId) {
  const container = document.getElementById(containerId);
  if (!container) return;
- container.innerHTML = '';
+ container.replaceChildren();
 
  const size = parseInt(document.getElementById('qrSize').value) || 300;
  const errVal = document.getElementById('errorLevel').value;
@@ -631,6 +656,7 @@
  const xhr = new XMLHttpRequest();
  xhr.upload.onprogress = e => { if (e.lengthComputable) onProgress(e.loaded/e.total*100); };
  xhr.onload = () => {
+ if (xhr.status < 200 || xhr.status >= 300) { reject(new Error(`Upload failed (${xhr.status})`)); return; }
  try {
  const r = JSON.parse(xhr.responseText);
  if (r.status === 'success' && r.data?.url) {
@@ -650,7 +676,16 @@
  const form = new FormData();
  form.append('key', apiKey);
  form.append('image', await fileToBase64(file));
- const r = await fetch(CONFIG.imgbb_url, { method:'POST', body:form }).then(res => res.json());
+ const controller = new AbortController();
+ const timeout = setTimeout(() => controller.abort(), 120000);
+ let response;
+ try {
+ response = await fetch(CONFIG.imgbb_url, { method:'POST', body:form, signal: controller.signal });
+ } finally {
+ clearTimeout(timeout);
+ }
+ if (!response.ok) throw new Error(`ImgBB upload failed (${response.status})`);
+ const r = await response.json();
  if (!r.success) throw new Error(r.error?.message || 'ImgBB upload failed');
  return r.data.url;
  }
@@ -660,20 +695,33 @@
  const out = document.getElementById(outputId);
  const card = document.createElement('div');
  card.className = 'qr-result-card';
- card.innerHTML = `
- <span class="qr-label">${label}</span>
- <div class="qr-canvas-wrap" id="${id}"></div>
- <div class="qr-actions">
- <button class="btn btn-primary" onclick="downloadPNG('${id}')">&darr; PNG</button>
- <button class="btn btn-secondary" onclick="downloadSVG('${id}')">&darr; SVG</button>
- </div>`;
+ const labelEl = document.createElement('span');
+ labelEl.className = 'qr-label';
+ labelEl.textContent = label;
+ const canvasWrap = document.createElement('div');
+ canvasWrap.className = 'qr-canvas-wrap';
+ canvasWrap.id = id;
+ const actions = document.createElement('div');
+ actions.className = 'qr-actions';
+ const pngButton = document.createElement('button');
+ pngButton.type = 'button';
+ pngButton.className = 'btn btn-primary';
+ pngButton.textContent = '↓ PNG';
+ pngButton.addEventListener('click', () => downloadPNG(id));
+ const svgButton = document.createElement('button');
+ svgButton.type = 'button';
+ svgButton.className = 'btn btn-secondary';
+ svgButton.textContent = '↓ SVG';
+ svgButton.addEventListener('click', () => downloadSVG(id));
+ actions.append(pngButton, svgButton);
+ card.append(labelEl, canvasWrap, actions);
  out.appendChild(card);
  }
 
  function downloadPNG(id) {
  const item = State.qrList.find(q => q.containerId === id);
  if (!item?.qrInstance) { alert('Generate a QR code first.'); return; }
- item.qrInstance.download({ name: `QR_${item.filename || 'code'}`, extension: 'png' });
+ item.qrInstance.download({ name: `QR_${safeDownloadStem(item.filename, 'code')}`, extension: 'png' });
  }
 
  function downloadSVG(id) {
@@ -681,7 +729,7 @@
  if (!item) { alert('Generate a QR code first.'); return; }
  // Re-create as SVG for download
  const svgQr = new QRCodeStyling({...item.opts, type: 'svg' });
- svgQr.download({ name: `QR_${item.filename || 'code'}`, extension: 'svg' });
+ svgQr.download({ name: `QR_${safeDownloadStem(item.filename, 'code')}`, extension: 'svg' });
  }
 
  async function downloadAllAsZip() {
@@ -690,7 +738,7 @@
  const item = State.qrList[i];
  try {
  const blob = await item.qrInstance.getRawData('png');
- zip.file(`${item.filename || 'qr_'+i}.png`, blob);
+ zip.file(`${safeDownloadStem(item.filename, `qr-${i + 1}`)}.png`, blob);
  } catch(e) { console.warn('Skip', e); }
  }
  const b = await zip.generateAsync({ type: 'blob' });
@@ -700,12 +748,18 @@
  function showFiles(files) {
  const el = document.getElementById('fileListShow');
  el.style.display = files.length ? 'block' : 'none';
- el.innerHTML = files.map(f => `<div class="file-item"> ${escapeHTML(f.name)} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
+ el.replaceChildren();
+ files.forEach(file => {
+ const item = document.createElement('div');
+ item.className = 'file-item';
+ item.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+ el.appendChild(item);
+ });
  }
 
  function clearAll() {
  document.querySelectorAll('textarea.premium-input, input[type="text"].premium-input, input[type="file"].premium-input').forEach(i => i.value = '');
- document.getElementById('qrOutput').innerHTML = '';
+ document.getElementById('qrOutput').replaceChildren();
  document.getElementById('fileListShow').style.display = 'none';
  document.getElementById('downloadAllBtn').style.display = 'none';
  State.qrList = []; State.files = []; State.imageFiles = []; State.videoFiles = []; State.folderFiles = [];
@@ -720,9 +774,13 @@
  function setStatus(m, c) { const s = document.getElementById('statusMsg'); s.textContent = m; s.style.color = c; }
  function showProgress(s) { document.getElementById('progressWrap').style.display = s ? 'block' : 'none'; }
  function setProgress(p, t) { document.getElementById('progressFill').style.width = Math.min(p,100)+'%'; document.getElementById('progressText').textContent = t; }
- function fileToBase64(f) { return new Promise(r => { const rd = new FileReader(); rd.onload = e => r(e.target.result.split(',')[1]); rd.readAsDataURL(f); }); }
+ function fileToBase64(f) { return new Promise((resolve, reject) => { const rd = new FileReader(); rd.onload = e => resolve(String(e.target.result || '').split(',')[1] || ''); rd.onerror = () => reject(new Error('Could not read image')); rd.readAsDataURL(f); }); }
  function noExt(f) { return f.replace(/\.[^/.]+$/, ''); }
- function clearOutput() { document.getElementById('qrOutput').innerHTML = ''; }
+ function safeDownloadStem(value, fallback = 'file') {
+ const cleaned = String(value || '').normalize('NFKC').replace(/[\u0000-\u001F\u007F"\\/:*?<>|]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 100);
+ return cleaned || fallback;
+ }
+ function clearOutput() { document.getElementById('qrOutput').replaceChildren(); }
  </script>
 
 <!-- Schema.org Structured Data -->

@@ -4,6 +4,9 @@
  * Routes:
  *   POST /ai/chat    — Groq LLM (text chat, summarizer, flashcards)
  *   POST /ai/vision  — OpenRouter (vision/multimodal models)
+ *   POST /convert/token — Turnstile-gated short-lived conversion ticket
+ *   POST /convert/pdf-to-word — Controlled PDF→DOCX gateway
+ *   POST /convert/word-to-pdf — Controlled DOC/DOCX/ODT/RTF→PDF gateway
  *   POST /store/create-order — Create Razorpay order
  *   POST /store/verify-payment — Verify Razorpay payment and signature
  *   POST /store/razorpay-webhook — Fulfil captured Razorpay payments
@@ -21,6 +24,9 @@
  *   - RAZORPAY_WEBHOOK_SECRET (secret: npx wrangler secret put RAZORPAY_WEBHOOK_SECRET)
  *   - SUPABASE_URL (secret: npx wrangler secret put SUPABASE_URL)
  *   - SUPABASE_SERVICE_ROLE_KEY (secret: npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY)
+ *   - TURNSTILE_SECRET_KEY (secret: npx wrangler secret put TURNSTILE_SECRET_KEY)
+ *   - CONVERSION_SIGNING_SECRET (secret: npx wrangler secret put CONVERSION_SIGNING_SECRET)
+ *   - MODAL_API_TOKEN (required in production for protected Modal endpoints)
  */
 
 const PROD_ORIGINS = [
@@ -37,9 +43,18 @@ const DEV_ORIGINS = [
     'http://127.0.0.1:8080'
 ];
 
-const MAX_UPLOAD_SIZE = 20 * 1024 * 1024; // 20 MB
-const RATE_LIMIT_CACHE = new Map();
-const MAX_REQUESTS_PER_MINUTE = 50;
+const MAX_UPLOAD_SIZE = 20 * 1024 * 1024; // store/general request limit; vision has a separate limit
+const MAX_CONVERSION_SIZE = 50 * 1024 * 1024;
+const MAX_JSON_SIZE = 256 * 1024;
+const MAX_VISION_JSON_SIZE = 40 * 1024 * 1024;
+const MAX_AI_MESSAGES = 40;
+const MAX_AI_MESSAGE_CHARS = 120_000;
+const MAX_AI_IMAGE_CHARS = 32 * 1024 * 1024;
+const CONVERSION_PATHS = new Set(['/convert/pdf-to-word', '/convert/word-to-pdf']);
+const PROTECTED_PATHS = new Set([
+    '/ai/chat', '/ai/vision', '/convert/token', ...CONVERSION_PATHS,
+    '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases', '/store/razorpay-webhook'
+]);
 
 // Browser POSTs always send an Origin header from an allowed domain; curl and
 // scripts do not. Requiring an allowed Origin on the paid endpoints blocks
@@ -49,61 +64,64 @@ function getAllowedOrigins(env) {
     return isProd ? PROD_ORIGINS : [...PROD_ORIGINS, ...DEV_ORIGINS];
 }
 
-function isAllowedOrigin(request, env) {
-    const origin = request.headers.get('Origin') || '';
-    return getAllowedOrigins(env).includes(origin);
+function requestIp(request) {
+    return request.headers.get('cf-connecting-ip') || 'unknown';
 }
 
-function checkRateLimit(ip) {
-    if (!ip || ip === 'unknown') return true;
-    const now = Date.now();
-    let data = RATE_LIMIT_CACHE.get(ip);
-    
-    // Clear old entries occasionally to prevent memory leaks
-    if (RATE_LIMIT_CACHE.size > 10000) {
-        RATE_LIMIT_CACHE.clear();
+async function enforceRateLimit(request, env, pathname) {
+    // Cloudflare's binding is backed by distributed state. Missing production
+    // configuration is a deployment error, not a reason to silently fall back
+    // to an in-memory map that disappears between Worker isolates.
+    if (!env.API_RATE_LIMITER || typeof env.API_RATE_LIMITER.limit !== 'function') {
+        const production = (env.ENVIRONMENT || 'production') === 'production';
+        return { allowed: !production, unavailable: production };
     }
-
-    if (!data || now - data.windowStart > 60000) {
-        RATE_LIMIT_CACHE.set(ip, { windowStart: now, count: 1 });
-        return true;
+    try {
+        const key = `${requestIp(request)}:${pathname}`;
+        const result = await env.API_RATE_LIMITER.limit({ key });
+        return { allowed: result?.success === true, unavailable: false };
+    } catch (err) {
+        console.error('[RateLimit] binding failed', err);
+        return { allowed: false, unavailable: true };
     }
-    if (data.count >= MAX_REQUESTS_PER_MINUTE) {
-        return false;
-    }
-    data.count++;
-    return true;
 }
 
 export default {
     async fetch(request, env) {
         const allowedOrigins = getAllowedOrigins(env);
+        const url = new URL(request.url);
+        const corsHeaders = getCORSHeaders(request, allowedOrigins);
 
         // CORS preflight
         if (request.method === 'OPTIONS') {
             return handleCORS(request, allowedOrigins);
         }
 
-        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
-        if (!checkRateLimit(ip)) {
-            return new Response(JSON.stringify({ error: 'Rate limit exceeded. Try again in a minute.' }), {
-                status: 429,
-                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
-            });
+        const origin = request.headers.get('Origin') || '';
+        if (origin && !allowedOrigins.includes(origin)) {
+            return jsonResponse({ error: 'Origin not allowed.' }, 403, corsHeaders);
         }
 
-        // Check file size for POST requests
-        if (request.method === 'POST') {
-            const contentLength = request.headers.get('content-length');
-            if (contentLength && parseInt(contentLength) > MAX_UPLOAD_SIZE) {
-                return new Response(JSON.stringify({ error: 'Payload too large. Maximum size is 20MB.' }), {
-                    status: 413,
-                    headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request) }
-                });
+        if (url.pathname !== '/health' && PROTECTED_PATHS.has(url.pathname)) {
+            const rate = await enforceRateLimit(request, env, url.pathname);
+            if (!rate.allowed) {
+                return jsonResponse(
+                    { error: rate.unavailable ? 'Service protection is temporarily unavailable.' : 'Rate limit exceeded. Try again shortly.' },
+                    rate.unavailable ? 503 : 429,
+                    corsHeaders
+                );
             }
         }
 
-        const url = new URL(request.url);
+        if (request.method === 'POST') {
+            const contentLength = Number(request.headers.get('content-length') || 0);
+            const limit = CONVERSION_PATHS.has(url.pathname) ? MAX_CONVERSION_SIZE :
+                (url.pathname === '/ai/vision' ? MAX_VISION_JSON_SIZE :
+                    (url.pathname === '/store/razorpay-webhook' ? 256 * 1024 : MAX_UPLOAD_SIZE));
+            if (Number.isFinite(contentLength) && contentLength > limit) {
+                return jsonResponse({ error: `Payload too large. Maximum size is ${Math.round(limit / 1024 / 1024)}MB.` }, 413, corsHeaders);
+            }
+        }
 
         // Razorpay webhooks are server-to-server requests and intentionally do
         // not carry a browser Origin header. Authenticate them with the
@@ -112,15 +130,26 @@ export default {
             return handleRazorpayWebhook(request, env, allowedOrigins);
         }
 
-        // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
-        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
+        // Origin is only a CORS/defence-in-depth signal; it is never treated as
+        // authentication. AI and conversion routes also require Turnstile and,
+        // for conversion, a short-lived server-signed ticket.
+        const ip = requestIp(request);
 
-        // Protect paid endpoints from scripted/bot access (no allowed Origin = not a browser)
-        if (['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases'].includes(url.pathname) && !isAllowedOrigin(request, env)) {
-            return new Response(JSON.stringify({ error: 'Forbidden: requests must come from the OnlinePDFPro website.' }), {
-                status: 403,
-                headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
-            });
+        if (url.pathname === '/convert/token' && request.method === 'POST') {
+            const token = request.headers.get('x-turnstile-token') || request.headers.get('cf-turnstile-response');
+            if (!await verifyTurnstile(token, ip, env)) {
+                return jsonResponse({ error: 'Security verification failed. Please complete the verification and try again.' }, 403, corsHeaders);
+            }
+            const ticket = await issueConversionTicket(request, env);
+            if (!ticket) return jsonResponse({ error: 'Conversion service is not configured.' }, 503, corsHeaders);
+            return jsonResponse({ token: ticket, expires_in: 300 }, 200, corsHeaders);
+        }
+
+        if (CONVERSION_PATHS.has(url.pathname) && request.method === 'POST') {
+            if (!await verifyConversionTicket(request, env, url.pathname)) {
+                return jsonResponse({ error: 'Conversion authorization expired. Please retry the verification.' }, 403, corsHeaders);
+            }
+            return handleConversion(request, env, url.pathname, corsHeaders);
         }
 
         // AI Chat proxy (Groq — text-only LLM)
@@ -147,7 +176,7 @@ export default {
             return new Response(JSON.stringify({
                 status: 'ok',
                 service: 'OnlinePDFPro API Proxy',
-                routes: ['/ai/chat', '/ai/vision', '/store/create-order', '/store/verify-payment', '/store/razorpay-webhook', '/store/download', '/store/my-purchases']
+                routes: ['/ai/chat', '/ai/vision', '/convert/token', '/convert/pdf-to-word', '/convert/word-to-pdf', '/store/create-order', '/store/verify-payment', '/store/razorpay-webhook', '/store/download', '/store/my-purchases']
             }), {
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
             });
@@ -167,10 +196,7 @@ export default {
             return handleMyPurchases(request, env, allowedOrigins);
         }
 
-        return new Response('OnlinePDFPro API Proxy', {
-            status: 200,
-            headers: getCORSHeaders(request, allowedOrigins)
-        });
+        return jsonResponse({ error: 'Not found.' }, 404, corsHeaders);
     }
 };
 
@@ -186,31 +212,45 @@ function jsonResponse(data, status, headers) {
 function getCORSHeaders(request, allowedOrigins) {
     allowedOrigins = allowedOrigins || PROD_ORIGINS;
     const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = allowedOrigins.includes(origin) ? origin : PROD_ORIGINS[0];
-    return {
-        'Access-Control-Allow-Origin': allowedOrigin,
+    const headers = {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Turnstile-Token, cf-turnstile-response',
-        'Access-Control-Max-Age': '86400'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Turnstile-Token, cf-turnstile-response, X-Conversion-Token',
+        'Access-Control-Max-Age': '86400',
+        'Vary': 'Origin'
     };
+    if (allowedOrigins.includes(origin)) headers['Access-Control-Allow-Origin'] = origin;
+    return headers;
 }
 
 async function verifyTurnstile(token, ip, env) {
-    const secret = env.TURNSTILE_SECRET_KEY || '0x4AAAAAAEh3z0I-mC0cDwyN2QldJYVyVhg';
-    if (!secret) return true;
-    if (!token) return false;
+    const secret = env.TURNSTILE_SECRET_KEY;
+    if (!secret || typeof token !== 'string' || token.length === 0 || token.length > 2048) return false;
     try {
         const formData = new FormData();
         formData.append('secret', secret);
         formData.append('response', token);
         if (ip && ip !== 'unknown') formData.append('remoteip', ip);
-
-        const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        let res;
+        try {
+            res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
-            body: formData
-        });
+                body: formData,
+                signal: controller.signal
+            });
+        } finally {
+            clearTimeout(timeout);
+        }
+        if (!res.ok) return false;
         const outcome = await res.json();
-        return outcome.success === true;
+        const hostname = String(outcome.hostname || '').toLowerCase();
+        const allowedHostnames = String(env.TURNSTILE_ALLOWED_HOSTNAMES || 'onlinepdfpro.com,www.onlinepdfpro.com')
+            .split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
+        const hostnameValid = (env.ENVIRONMENT || 'production') !== 'production' && !hostname
+            ? true
+            : allowedHostnames.includes(hostname);
+        return outcome.success === true && hostnameValid;
     } catch (err) {
         console.error('Turnstile verification error:', err);
         return false;
@@ -218,10 +258,232 @@ async function verifyTurnstile(token, ip, env) {
 }
 
 function handleCORS(request, allowedOrigins) {
+    const origin = request.headers.get('Origin') || '';
+    if (origin && !allowedOrigins.includes(origin)) {
+        return jsonResponse({ error: 'Origin not allowed.' }, 403, getCORSHeaders(request, allowedOrigins));
+    }
     return new Response(null, {
         status: 204,
         headers: getCORSHeaders(request, allowedOrigins)
     });
+}
+
+function base64UrlEncode(bytes) {
+    let binary = '';
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function base64UrlDecode(value) {
+    if (typeof value !== 'string' || !/^[A-Za-z0-9_-]+$/.test(value)) return null;
+    try {
+        const padded = value.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((value.length + 3) % 4);
+        const binary = atob(padded);
+        return Uint8Array.from(binary, char => char.charCodeAt(0));
+    } catch { return null; }
+}
+
+function hasPrefix(bytes, prefix) {
+    if (!(bytes instanceof Uint8Array) || bytes.length < prefix.length) return false;
+    return prefix.every((value, index) => bytes[index] === value);
+}
+
+function isPdfBytes(bytes) {
+    return hasPrefix(bytes, [0x25, 0x50, 0x44, 0x46, 0x2D]); // %PDF-
+}
+
+function isZipBytes(bytes) {
+    // DOCX and ODT are ZIP containers. Accept normal, empty, and spanned ZIP
+    // signatures, but do not accept a MIME label without a container header.
+    return hasPrefix(bytes, [0x50, 0x4B, 0x03, 0x04]) ||
+        hasPrefix(bytes, [0x50, 0x4B, 0x05, 0x06]) ||
+        hasPrefix(bytes, [0x50, 0x4B, 0x07, 0x08]);
+}
+
+function readLe16(bytes, offset) {
+    return (bytes[offset] || 0) | ((bytes[offset + 1] || 0) << 8);
+}
+
+function readLe32(bytes, offset) {
+    return ((bytes[offset] || 0) |
+        ((bytes[offset + 1] || 0) << 8) |
+        ((bytes[offset + 2] || 0) << 16) |
+        ((bytes[offset + 3] || 0) << 24)) >>> 0;
+}
+
+// Read ZIP central-directory metadata without inflating untrusted entries.
+// This is enough to distinguish DOCX/ODT containers from arbitrary ZIP files
+// while keeping the Worker bounded for the 50 MB conversion limit.
+function readZipEntries(bytes) {
+    if (!isZipBytes(bytes) || bytes.length > MAX_CONVERSION_SIZE) return null;
+    const start = Math.max(0, bytes.length - 65_557);
+    let eocd = -1;
+    for (let offset = bytes.length - 22; offset >= start; offset -= 1) {
+        if (readLe32(bytes, offset) === 0x06054b50) { eocd = offset; break; }
+    }
+    if (eocd < 0) return null;
+    const total = readLe16(bytes, eocd + 10);
+    const centralSize = readLe32(bytes, eocd + 12);
+    const centralOffset = readLe32(bytes, eocd + 16);
+    if (!total || total > 10_000 || centralOffset + centralSize > bytes.length) return null;
+    const entries = [];
+    let offset = centralOffset;
+    for (let index = 0; index < total; index += 1) {
+        if (readLe32(bytes, offset) !== 0x02014b50) return null;
+        const nameLength = readLe16(bytes, offset + 28);
+        const extraLength = readLe16(bytes, offset + 30);
+        const commentLength = readLe16(bytes, offset + 32);
+        const end = offset + 46 + nameLength + extraLength + commentLength;
+        if (end > bytes.length) return null;
+        const name = new TextDecoder().decode(bytes.slice(offset + 46, offset + 46 + nameLength));
+        entries.push({
+            name,
+            method: readLe16(bytes, offset + 10),
+            compressedSize: readLe32(bytes, offset + 20),
+            uncompressedSize: readLe32(bytes, offset + 24),
+            localOffset: readLe32(bytes, offset + 42)
+        });
+        offset = end;
+    }
+    return entries;
+}
+
+function isDocxBytes(bytes) {
+    const entries = readZipEntries(bytes);
+    if (!entries) return false;
+    const names = new Set(entries.map(entry => entry.name));
+    return names.has('[Content_Types].xml') && names.has('word/document.xml');
+}
+
+function isOdtBytes(bytes) {
+    const entries = readZipEntries(bytes);
+    const mimetype = entries?.find(entry => entry.name === 'mimetype');
+    if (!mimetype || !entries.some(entry => entry.name === 'content.xml') || mimetype.method !== 0 || mimetype.uncompressedSize > 128) return false;
+    const localOffset = mimetype.localOffset;
+    if (readLe32(bytes, localOffset) !== 0x04034b50) return false;
+    const nameLength = readLe16(bytes, localOffset + 26);
+    const extraLength = readLe16(bytes, localOffset + 28);
+    const start = localOffset + 30 + nameLength + extraLength;
+    const end = start + mimetype.compressedSize;
+    if (end > bytes.length) return false;
+    return new TextDecoder().decode(bytes.slice(start, end)).startsWith('application/vnd.oasis.opendocument.text');
+}
+
+function isOleBytes(bytes) {
+    return hasPrefix(bytes, [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]);
+}
+
+function isRtfBytes(bytes) {
+    const sample = new TextDecoder('ascii').decode(bytes.slice(0, 64)).replace(/^\uFEFF/, '').trimStart();
+    return /^\{\\rtf[0-9]/i.test(sample);
+}
+
+function isValidConversionDocument(pathname, bytes) {
+    if (pathname === '/convert/pdf-to-word') return isPdfBytes(bytes);
+    if (pathname === '/convert/word-to-pdf') return isDocxBytes(bytes) || isOdtBytes(bytes) || isOleBytes(bytes) || isRtfBytes(bytes);
+    return false;
+}
+
+function isValidConversionOutput(pathname, bytes) {
+    // Never hand a successful HTTP response to the browser merely because an
+    // upstream returned 200. Validate the actual container before labelling it
+    // as a DOCX or PDF download.
+    return pathname === '/convert/pdf-to-word' ? isDocxBytes(bytes) : isPdfBytes(bytes);
+}
+
+async function signTicket(secret, message) {
+    if (!secret) return null;
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const signature = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+    return base64UrlEncode(new Uint8Array(signature));
+}
+
+async function verifyTicketSignature(secret, message, signature) {
+    const signatureBytes = base64UrlDecode(signature);
+    if (!secret || !signatureBytes) return false;
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+    return crypto.subtle.verify('HMAC', key, signatureBytes, new TextEncoder().encode(message));
+}
+
+async function issueConversionTicket(request, env) {
+    const secret = env.CONVERSION_SIGNING_SECRET;
+    if (!secret) return null;
+    const payload = {
+        path: '/convert/*',
+        exp: Math.floor(Date.now() / 1000) + 300,
+        ip: requestIp(request)
+    };
+    const encoded = base64UrlEncode(new TextEncoder().encode(JSON.stringify(payload)));
+    const signature = await signTicket(secret, encoded);
+    return signature ? `${encoded}.${signature}` : null;
+}
+
+async function verifyConversionTicket(request, env, pathname) {
+    const token = request.headers.get('x-conversion-token') || '';
+    const [encoded, signature] = token.split('.');
+    const bytes = base64UrlDecode(encoded);
+    if (!bytes || !signature) return false;
+    try {
+        const payload = JSON.parse(new TextDecoder().decode(bytes));
+        if (payload.path !== '/convert/*' || payload.exp < Math.floor(Date.now() / 1000) || payload.ip !== requestIp(request)) return false;
+        if (!CONVERSION_PATHS.has(pathname)) return false;
+        return await verifyTicketSignature(env.CONVERSION_SIGNING_SECRET, encoded, signature);
+    } catch { return false; }
+}
+
+async function handleConversion(request, env, pathname, corsHeaders) {
+    const upstream = pathname === '/convert/pdf-to-word'
+        ? (env.PDF_TO_WORD_URL || 'https://prem736raj--pdf2docx-convert.modal.run')
+        : (env.WORD_TO_PDF_URL || 'https://prem736raj--docx2pdf-convert.modal.run');
+    const production = (env.ENVIRONMENT || 'production') === 'production';
+    // Modal endpoints must be protected independently. Requiring the Worker
+    // secret in production prevents a silent fallback to a public conversion
+    // URL; configure Modal to enforce the same bearer token as well.
+    if (production && !env.MODAL_API_TOKEN) {
+        console.error('[Conversion] MODAL_API_TOKEN is not configured');
+        return jsonResponse({ error: 'Conversion service is temporarily unavailable.' }, 503, corsHeaders);
+    }
+    const contentType = request.headers.get('content-type') || 'application/octet-stream';
+    if (contentType.length > 200 || !/^(application\/pdf|application\/octet-stream|application\/vnd\.|application\/msword|application\/rtf|application\/zip|text\/rtf)/i.test(contentType)) {
+        return jsonResponse({ error: 'Unsupported document type.' }, 415, corsHeaders);
+    }
+    try {
+        const body = await request.arrayBuffer();
+        if (!body.byteLength || body.byteLength > MAX_CONVERSION_SIZE) return jsonResponse({ error: 'File is empty or exceeds the 50MB limit.' }, 413, corsHeaders);
+        if (!isValidConversionDocument(pathname, new Uint8Array(body))) {
+            return jsonResponse({ error: 'The file contents do not match a supported document format.' }, 415, corsHeaders);
+        }
+        const headers = { 'Content-Type': contentType, 'Accept': 'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/json' };
+        if (env.MODAL_API_TOKEN) headers.Authorization = `Bearer ${env.MODAL_API_TOKEN}`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 120000);
+        let response;
+        try {
+            response = await fetch(upstream, { method: 'POST', headers, body, signal: controller.signal });
+        } finally {
+            clearTimeout(timeout);
+        }
+        if (!response.ok) {
+            const message = (await response.text()).slice(0, 1000);
+            console.error('[Conversion] upstream failure', pathname, response.status, message);
+            return jsonResponse({ error: 'Conversion failed. Please verify the document and try again.' }, response.status >= 500 ? 502 : 400, corsHeaders);
+        }
+        const output = await response.arrayBuffer();
+        if (!output.byteLength || output.byteLength > 100 * 1024 * 1024) return jsonResponse({ error: 'Conversion returned an invalid or oversized file.' }, 502, corsHeaders);
+        if (!isValidConversionOutput(pathname, new Uint8Array(output))) {
+            console.error('[Conversion] upstream returned an invalid output signature', pathname);
+            return jsonResponse({ error: 'Conversion returned an invalid document.' }, 502, corsHeaders);
+        }
+        const responseHeaders = new Headers(corsHeaders);
+        responseHeaders.set('Content-Type', pathname.endsWith('pdf-to-word') ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf');
+        responseHeaders.set('Content-Disposition', 'attachment');
+        responseHeaders.set('Cache-Control', 'no-store');
+        responseHeaders.set('X-Content-Type-Options', 'nosniff');
+        return new Response(output, { status: 200, headers: responseHeaders });
+    } catch (err) {
+        console.error('[Conversion] request failed', pathname, err);
+        return jsonResponse({ error: 'Conversion service is temporarily unavailable.' }, 502, corsHeaders);
+    }
 }
 
 // ─── Supabase Helper ──────────────────────────────────────────────────
@@ -235,10 +497,17 @@ async function supabaseQuery(env, path, method, body, token, extraHeaders = {}) 
     };
     const opts = { method, headers };
     if (body && method !== 'GET') opts.body = JSON.stringify(body);
-    const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`, opts);
-    const text = await res.text();
-    try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
-    catch { return { ok: res.ok, status: res.status, data: text }; }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    opts.signal = controller.signal;
+    try {
+        const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`, opts);
+        const text = await res.text();
+        try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+        catch { return { ok: res.ok, status: res.status, data: text }; }
+    } finally {
+        clearTimeout(timeout);
+    }
 }
 
 function isValidProductId(productId) {
@@ -344,18 +613,31 @@ function safeDownloadFilename(r2Key) {
 
 // Verify a Supabase JWT and extract the user_id
 async function verifySupabaseJWT(env, authHeader) {
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
-    const token = authHeader.replace('Bearer ', '');
-    // Use Supabase auth endpoint to verify
-    const res = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'apikey': env.SUPABASE_SERVICE_ROLE_KEY
-        }
-    });
-    if (!res.ok) return null;
-    const user = await res.json();
-    return user?.id || null;
+    const match = typeof authHeader === 'string'
+        ? /^Bearer\s+([A-Za-z0-9._~-]{20,4096})$/.exec(authHeader.trim())
+        : null;
+    if (!match || !env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return null;
+    const token = match[1];
+    // Use Supabase's auth endpoint to verify the signed token server-side.
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+        const res = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'apikey': env.SUPABASE_SERVICE_ROLE_KEY
+            },
+            signal: controller.signal
+        });
+        if (!res.ok) return null;
+        const user = await res.json();
+        return typeof user?.id === 'string' && user.id.length <= 100 ? user.id : null;
+    } catch (err) {
+        console.error('[Store] Supabase JWT verification failed', err);
+        return null;
+    } finally {
+        clearTimeout(timeout);
+    }
 }
 
 // ─── Store: Razorpay Payments ──────────────────────────────────────────
@@ -839,22 +1121,102 @@ async function handleMyPurchases(request, env, allowedOrigins) {
     }
 }
 
+async function readJsonRequest(request, maxBytes = MAX_JSON_SIZE) {
+    const declaredLength = Number(request.headers.get('content-length') || 0);
+    if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+        return { error: 'Request is too large.' };
+    }
+    try {
+        const text = await request.text();
+        if (new TextEncoder().encode(text).byteLength > maxBytes) return { error: 'Request is too large.' };
+        const data = JSON.parse(text);
+        return { data };
+    } catch {
+        return { error: 'Invalid request body.' };
+    }
+}
+
+function validateAIRequest(body) {
+    if (!body || typeof body !== 'object' || !Array.isArray(body.messages) || body.messages.length === 0 || body.messages.length > MAX_AI_MESSAGES) {
+        return { error: 'messages must be a non-empty array with at most 40 items.' };
+    }
+    let totalTextChars = 0;
+    let totalImageChars = 0;
+    let imageCount = 0;
+    const messages = [];
+    for (const message of body.messages) {
+        if (!message || !['system', 'user', 'assistant'].includes(message.role)) return { error: 'Each message must have a valid role.' };
+        const content = message.content;
+        if (typeof content === 'string') {
+            if (content.length > MAX_AI_MESSAGE_CHARS) return { error: 'Message content is too large.' };
+            totalTextChars += content.length;
+            messages.push({ role: message.role, content });
+        } else if (Array.isArray(content)) {
+            const parts = [];
+            for (const part of content) {
+                if (!part || typeof part !== 'object' || !['text', 'image_url'].includes(part.type)) return { error: 'Unsupported message content.' };
+                if (part.type === 'text') {
+                    if (typeof part.text !== 'string' || part.text.length > MAX_AI_MESSAGE_CHARS) return { error: 'Message content is too large.' };
+                    totalTextChars += part.text.length;
+                    parts.push({ type: 'text', text: part.text });
+                } else {
+                    const imageUrl = part.image_url && typeof part.image_url.url === 'string' ? part.image_url.url : '';
+                    imageCount += 1;
+                    if (imageCount > 5 || !imageUrl || imageUrl.length > 12 * 1024 * 1024 || !/^(?:https?:\/\/|data:image\/)/i.test(imageUrl)) return { error: 'Unsupported image input.' };
+                    totalImageChars += imageUrl.length;
+                    parts.push({ type: 'image_url', image_url: { url: imageUrl } });
+                }
+            }
+            messages.push({ role: message.role, content: parts });
+        } else {
+            return { error: 'Message content must be text or structured content.' };
+        }
+    }
+    if (totalTextChars > MAX_AI_MESSAGE_CHARS || totalImageChars > MAX_AI_IMAGE_CHARS) return { error: 'Request content is too large.' };
+    const model = typeof body.model === 'string' && /^[A-Za-z0-9._:/-]{1,100}$/.test(body.model) ? body.model : undefined;
+    const maxTokens = Number(body.max_tokens);
+    const temperature = Number(body.temperature);
+    const options = {
+        messages,
+        model,
+        max_tokens: Number.isFinite(maxTokens) ? Math.max(1, Math.min(Math.floor(maxTokens), 8192)) : 4096,
+        temperature: Number.isFinite(temperature) ? Math.max(0, Math.min(temperature, 2)) : 0.7
+    };
+    if (body.response_format && typeof body.response_format === 'object' && body.response_format.type === 'json_object') {
+        options.response_format = { type: 'json_object' };
+    }
+    return { data: options };
+}
+
+async function fetchJsonUpstream(url, options, timeoutMs = 60_000) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const response = await fetch(url, { ...options, signal: controller.signal });
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch { data = { error: { message: 'Invalid upstream response.' } }; }
+        return { ok: response.ok, status: response.status, data };
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
 // ─── AI Proxy: Groq (text chat/summarize/flashcards) ──────────────────
 
 async function handleGroqChat(request, env, allowedOrigins) {
     const corsHeaders = getCORSHeaders(request, allowedOrigins);
 
     try {
-        const body = await request.json();
-
-        // Validate required fields
-        if (!body.messages || !Array.isArray(body.messages)) {
-            return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
-        }
+        const parsed = await readJsonRequest(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+        const validated = validateAIRequest(parsed.data);
+        if (validated.error) return jsonResponse({ error: validated.error }, 400, corsHeaders);
+        const body = validated.data;
 
         // Try Groq first if key is available
         if (env.GROQ_API_KEY) {
-            const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            const groqResponse = await fetchJsonUpstream('https://api.groq.com/openai/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -863,20 +1225,18 @@ async function handleGroqChat(request, env, allowedOrigins) {
                 body: JSON.stringify({
                     model: body.model || 'openai/gpt-oss-20b',
                     messages: body.messages,
-                    max_tokens: Math.min(body.max_tokens || 4096, 8192),
-                    temperature: body.temperature ?? 0.7,
-                    response_format: body.response_format || undefined
+                    max_tokens: body.max_tokens,
+                    temperature: body.temperature,
+                    ...(body.response_format ? { response_format: body.response_format } : {})
                 })
             });
 
-            const data = await groqResponse.json();
-
             // If Groq succeeds, return the response directly.
             if (groqResponse.ok) {
-                return jsonResponse(data, groqResponse.status, corsHeaders);
+                return jsonResponse(groqResponse.data, groqResponse.status, corsHeaders);
             }
             // Any Groq error (rate limit, model deprecated, token limit, etc.) → fall through to OpenRouter
-            console.warn('[Proxy] Groq failed (' + groqResponse.status + '), falling back to OpenRouter:', data.error?.message);
+            console.warn('[Proxy] Groq failed (' + groqResponse.status + '), falling back to OpenRouter');
         }
 
         // Fallback: route through OpenRouter (same as /ai/vision handler)
@@ -884,7 +1244,7 @@ async function handleGroqChat(request, env, allowedOrigins) {
             return jsonResponse({ error: 'No AI backend available. Both GROQ_API_KEY and OPENROUTER_API_KEY are missing.' }, 500, corsHeaders);
         }
 
-        const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const orResponse = await fetchJsonUpstream('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -895,16 +1255,15 @@ async function handleGroqChat(request, env, allowedOrigins) {
             body: JSON.stringify({
                 model: 'openrouter/free',
                 messages: body.messages,
-                max_tokens: Math.min(body.max_tokens || 4096, 8192),
-                temperature: body.temperature ?? 0.7
+                max_tokens: body.max_tokens,
+                temperature: body.temperature
             })
         });
-
-        const orData = await orResponse.json();
-        return jsonResponse(orData, orResponse.status, corsHeaders);
+        return jsonResponse(orResponse.data, orResponse.status, corsHeaders);
 
     } catch (err) {
-        return jsonResponse({ error: 'AI proxy error: ' + err.message }, 500, corsHeaders);
+        console.error('[Proxy] Groq/OpenRouter request failed', err);
+        return jsonResponse({ error: 'AI service is temporarily unavailable.' }, 502, corsHeaders);
     }
 }
 
@@ -918,16 +1277,16 @@ async function handleOpenRouterVision(request, env, allowedOrigins) {
     }
 
     try {
-        const body = await request.json();
-
-        if (!body.messages || !Array.isArray(body.messages)) {
-            return jsonResponse({ error: 'messages array is required' }, 400, corsHeaders);
-        }
+        const parsed = await readJsonRequest(request, MAX_VISION_JSON_SIZE);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+        const validated = validateAIRequest(parsed.data);
+        if (validated.error) return jsonResponse({ error: validated.error }, 400, corsHeaders);
+        const body = validated.data;
 
         const requestedModel = body.model || 'openrouter/free';
 
         // Forward to OpenRouter with server-side key
-        const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const orResponse = await fetchJsonUpstream('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -938,16 +1297,14 @@ async function handleOpenRouterVision(request, env, allowedOrigins) {
             body: JSON.stringify({
                 model: requestedModel,
                 messages: body.messages,
-                max_tokens: Math.min(body.max_tokens || 4096, 8192)
+                max_tokens: body.max_tokens
             })
         });
-
-        const data = await orResponse.json();
 
         // If the requested model is rate-limited/unavailable, auto-fallback
         if (!orResponse.ok && requestedModel !== 'openrouter/free' && (orResponse.status === 429 || orResponse.status === 503)) {
             console.warn(`[Proxy] Model ${requestedModel} unavailable (${orResponse.status}), retrying with openrouter/free`);
-            const fallbackResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            const fallbackResponse = await fetchJsonUpstream('https://openrouter.ai/api/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -958,16 +1315,16 @@ async function handleOpenRouterVision(request, env, allowedOrigins) {
                 body: JSON.stringify({
                     model: 'openrouter/free',
                     messages: body.messages,
-                    max_tokens: Math.min(body.max_tokens || 4096, 8192)
+                    max_tokens: body.max_tokens
                 })
             });
-            const fallbackData = await fallbackResponse.json();
-            return jsonResponse(fallbackData, fallbackResponse.status, corsHeaders);
+            return jsonResponse(fallbackResponse.data, fallbackResponse.status, corsHeaders);
         }
 
-        return jsonResponse(data, orResponse.status, corsHeaders);
+        return jsonResponse(orResponse.data, orResponse.status, corsHeaders);
 
     } catch (err) {
-        return jsonResponse({ error: 'Vision proxy error: ' + err.message }, 500, corsHeaders);
+        console.error('[Proxy] Vision request failed', err);
+        return jsonResponse({ error: 'AI service is temporarily unavailable.' }, 502, corsHeaders);
     }
 }

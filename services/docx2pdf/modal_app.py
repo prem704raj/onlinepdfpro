@@ -6,13 +6,17 @@ Includes Microsoft-compatible fonts (Carlito=Calibri, Caladea=Cambria,
 Liberation=Arial/Times New Roman) to prevent layout shifts.
 """
 
+import hmac
+import io
 import json
 import logging
 import os
+import re
 import subprocess
 import tempfile
 import time
 import uuid
+import zipfile
 from pathlib import Path
 
 import modal
@@ -22,6 +26,12 @@ from fastapi import Request
 # Modal infrastructure
 # ---------------------------------------------------------------------------
 app = modal.App("docx2pdf-converter")
+
+# The public *.modal.run URL is not an authentication boundary. The Worker
+# forwards this bearer token, and the Modal function verifies it again so the
+# conversion service cannot be called directly when its URL is discovered.
+CONVERSION_SECRET_NAME = os.getenv("MODAL_AUTH_SECRET_NAME", "onlinepdfpro-conversion")
+conversion_secret = modal.Secret.from_name(CONVERSION_SECRET_NAME)
 
 # Install LibreOffice Writer + all Microsoft-compatible fonts
 # Carlito = metric-compatible with Calibri (default MS Word font)
@@ -55,6 +65,29 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("docx2pdf")
 
 CONVERT_TIMEOUT = 60
+MAX_OUTPUT_SIZE = 100 * 1024 * 1024
+
+
+def _validate_document(body: bytes, ext: str) -> bool:
+    """Validate the container before handing it to LibreOffice."""
+    if ext in {".docx", ".odt"}:
+        try:
+            with zipfile.ZipFile(io.BytesIO(body)) as archive:
+                names = set(archive.namelist())
+                if ext == ".docx":
+                    return "[Content_Types].xml" in names and "word/document.xml" in names
+                return (
+                    "mimetype" in names
+                    and "content.xml" in names
+                    and archive.read("mimetype").startswith(b"application/vnd.oasis.opendocument.text")
+                )
+        except (OSError, ValueError, KeyError, RuntimeError, zipfile.BadZipFile):
+            return False
+    if ext == ".doc":
+        return body.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
+    if ext == ".rtf":
+        return bool(re.match(br"^\s*\{\\rtf[0-9]", body[:64], re.IGNORECASE))
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -105,12 +138,23 @@ def _convert_to_pdf(input_path: str, output_dir: str) -> str:
     memory=2048,
     timeout=120,
     scaledown_window=180,   # Keep warm 3 min to avoid cold starts
+    secrets=[conversion_secret],
 )
 @modal.fastapi_endpoint(method="POST", label="docx2pdf-convert")
 async def convert_endpoint(request: Request):
     """POST: raw DOCX bytes → PDF bytes"""
     import shutil
     from starlette.responses import Response as StarletteResponse
+
+    expected_token = os.getenv("MODAL_API_TOKEN", "")
+    authorization = request.headers.get("authorization", "")
+    provided_token = authorization[7:].strip() if authorization.lower().startswith("bearer ") else ""
+    if not expected_token or not provided_token or not hmac.compare_digest(provided_token, expected_token):
+        return StarletteResponse(
+            content=json.dumps({"error": "Unauthorized"}),
+            status_code=401, media_type="application/json",
+            headers={"Cache-Control": "no-store"},
+        )
 
     cors_headers = {
         "Access-Control-Allow-Origin": "*",
@@ -137,6 +181,11 @@ async def convert_endpoint(request: Request):
     if "msword" in content_type: ext = ".doc"
     elif "opendocument" in content_type: ext = ".odt"
     elif "rtf" in content_type: ext = ".rtf"
+    if not _validate_document(body, ext):
+        return StarletteResponse(
+            content=json.dumps({"error": "The file contents do not match a supported document type."}),
+            status_code=415, media_type="application/json", headers=cors_headers,
+        )
 
     request_id = uuid.uuid4().hex[:12]
     work_dir = tempfile.mkdtemp(prefix="d2p_")
@@ -155,6 +204,8 @@ async def convert_endpoint(request: Request):
 
         logger.info("[%s] Converted in %.2fs", request_id, elapsed)
         pdf_bytes = Path(pdf_path).read_bytes()
+        if not pdf_bytes.startswith(b"%PDF-") or len(pdf_bytes) > MAX_OUTPUT_SIZE:
+            raise RuntimeError("LibreOffice produced an invalid or oversized PDF")
 
         return StarletteResponse(
             content=pdf_bytes, status_code=200, media_type="application/pdf",

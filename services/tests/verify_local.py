@@ -180,6 +180,9 @@ supconf = (SERVICES_DIR / "docx2pdf" / "supervisord.conf").read_text(encoding="u
 check("supervisord.conf has unoserver", "unoserver" in supconf)
 check("supervisord.conf has uvicorn", "uvicorn" in supconf)
 check("supervisord.conf has autorestart", "autorestart=true" in supconf)
+docx2pdf_code = (SERVICES_DIR / "docx2pdf" / "app.py").read_text(encoding="utf-8")
+check("Service A authenticates gateway requests", "_authorize" in docx2pdf_code and "DOCX2PDF_API_TOKEN" in docx2pdf_code)
+check("Service A validates document signatures", "_validate_document" in docx2pdf_code and "contents.startswith" in docx2pdf_code)
 
 
 # ===========================================================================
@@ -201,6 +204,10 @@ check("Gateway has request ID", "request_id" in gateway_code)
 check("Gateway has JSON logging", "JsonFormatter" in gateway_code)
 check("Gateway handles encrypted PDF", "encrypted" in gateway_code.lower() or "password" in gateway_code.lower())
 check("Gateway handles timeout", "timeout" in gateway_code.lower())
+check("Gateway validates document signatures", "_validate_document_early" in gateway_code and "contents.startswith" in gateway_code)
+check("Gateway protects production with API key", "ENVIRONMENT == \"production\"" in gateway_code and "hmac.compare_digest" in gateway_code)
+check("Gateway authenticates Modal upstream", "MODAL_API_TOKEN" in gateway_code and "Authorization" in gateway_code)
+check("Gateway preserves multipart contract for self-hosted Service A", 'files={"file": (filename, contents)}' in gateway_code)
 
 
 # ===========================================================================
@@ -215,14 +222,12 @@ except py_compile.PyCompileError as e:
     check("modal_app.py compiles", False, str(e))
 
 modal_code = (SERVICES_DIR / "pdf2docx" / "modal_app.py").read_text(encoding="utf-8")
-check("Modal app has MarkerCPU class", "class MarkerCPU" in modal_code)
-check("Modal app has MarkerGPU class", "class MarkerGPU" in modal_code)
-check("Modal app has @modal.enter()", "@modal.enter()" in modal_code)
-check("Modal app has GPU assertion", "torch.cuda.is_available()" in modal_code)
-check("Modal app has Volume", "modal.Volume" in modal_code)
-check("Modal app has pandoc conversion", "pandoc" in modal_code)
+check("Modal app has pdf2docx conversion", "from pdf2docx import Converter" in modal_code)
+check("Modal app validates PDF bytes", "_validate_pdf" in modal_code)
+check("Modal app cleans annotations/widgets", "_clean_pdf" in modal_code and "delete_widget" in modal_code)
+check("Modal app enforces bearer auth", "hmac.compare_digest" in modal_code and "MODAL_API_TOKEN" in modal_code)
+check("Modal app injects conversion secret", "secrets=[conversion_secret]" in modal_code)
 check("Modal app has /warm endpoint", "warm" in modal_code)
-check("Modal app detects scanned vs text", "CHARS_PER_PAGE_THRESHOLD" in modal_code)
 check("Modal app validates encrypted PDF", "encrypted" in modal_code.lower())
 
 
@@ -249,6 +254,9 @@ check(".env.example has PDF2DOCX_MODAL_URL", "PDF2DOCX_MODAL_URL" in envex)
 check(".env.example has RATE_LIMIT_PER_MINUTE", "RATE_LIMIT_PER_MINUTE" in envex)
 check(".env.example has MAX_FILE_SIZE_MB", "MAX_FILE_SIZE_MB" in envex)
 check(".env.example has API_KEY", "API_KEY" in envex)
+check(".env.example has ENVIRONMENT", "ENVIRONMENT" in envex)
+check(".env.example has MODAL_API_TOKEN", "MODAL_API_TOKEN" in envex)
+check(".env.example has DOCX2PDF_API_TOKEN", "DOCX2PDF_API_TOKEN" in envex)
 
 
 # ===========================================================================
@@ -289,8 +297,8 @@ section("9. README")
 
 readme = (SERVICES_DIR / "README.md").read_text(encoding="utf-8")
 check("README has architecture diagram", "Gateway" in readme and "Service A" in readme)
-check("README has cost estimates", "Conversions/month" in readme)
-check("README has license section", "PERMITTED" in readme)
+check("README documents operating costs", "operating costs" in readme)
+check("README documents licensing", "open-source" in readme and "pdf2docx" in readme)
 check("README has API reference", "/api/convert" in readme)
 check("README has env vars table", "DOCX2PDF_URL" in readme)
 
@@ -305,8 +313,8 @@ print(f"  Failed:        {failed}")
 print(f"  Pass rate:     {passed/total*100:.1f}%")
 
 if failed == 0:
-    print("\n  ✅ ALL LOCAL CHECKS PASSED")
+    print("\n  ALL LOCAL CHECKS PASSED")
 else:
-    print(f"\n  ⚠️  {failed} CHECK(S) FAILED")
+    print(f"\n  {failed} CHECK(S) FAILED")
 
 sys.exit(0 if failed == 0 else 1)

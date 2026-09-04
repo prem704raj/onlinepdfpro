@@ -5,6 +5,7 @@ Uses pdf2docx with pre-processing to clean up artifacts.
 Optimized for fast cold starts with minimal dependencies.
 """
 
+import hmac
 import io
 import json
 import logging
@@ -13,6 +14,7 @@ import shutil
 import tempfile
 import time
 import uuid
+import zipfile
 from pathlib import Path
 
 import modal
@@ -22,6 +24,12 @@ from fastapi import Request
 # Modal infrastructure — minimal image for fastest cold start
 # ---------------------------------------------------------------------------
 app = modal.App("pdf2docx-converter")
+
+# The public *.modal.run URL is not an authentication boundary. The Worker
+# forwards this bearer token, and the Modal function verifies it again so the
+# conversion service cannot be called directly when its URL is discovered.
+CONVERSION_SECRET_NAME = os.getenv("MODAL_AUTH_SECRET_NAME", "onlinepdfpro-conversion")
+conversion_secret = modal.Secret.from_name(CONVERSION_SECRET_NAME)
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
@@ -100,13 +108,27 @@ def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
 
         # Convert with optimized settings
         cv = Converter(pdf_path)
-        cv.convert(docx_path)
-        cv.close()
+        try:
+            cv.convert(docx_path)
+        finally:
+            cv.close()
 
         if not os.path.exists(docx_path) or os.path.getsize(docx_path) == 0:
             raise RuntimeError("Conversion produced empty output")
 
-        return Path(docx_path).read_bytes()
+        output = Path(docx_path).read_bytes()
+        if len(output) > 100 * 1024 * 1024:
+            raise RuntimeError("Conversion produced an oversized DOCX")
+        try:
+            with zipfile.ZipFile(io.BytesIO(output)) as archive:
+                names = set(archive.namelist())
+                if "[Content_Types].xml" not in names or "word/document.xml" not in names:
+                    raise RuntimeError("Conversion produced an invalid DOCX")
+        except (OSError, ValueError, RuntimeError, zipfile.BadZipFile) as exc:
+            if isinstance(exc, RuntimeError) and str(exc) == "Conversion produced an invalid DOCX":
+                raise
+            raise RuntimeError("Conversion produced an invalid DOCX") from exc
+        return output
     finally:
         shutil.rmtree(work_dir, ignore_errors=True)
 
@@ -120,10 +142,21 @@ def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
     memory=2048,
     timeout=120,
     scaledown_window=180,   # Keep warm for 3 min after last request (reduces cold starts)
+    secrets=[conversion_secret],
 )
 @modal.fastapi_endpoint(method="POST", label="pdf2docx-convert")
 async def convert_endpoint(request: Request):
     from starlette.responses import Response as StarletteResponse
+
+    expected_token = os.getenv("MODAL_API_TOKEN", "")
+    authorization = request.headers.get("authorization", "")
+    provided_token = authorization[7:].strip() if authorization.lower().startswith("bearer ") else ""
+    if not expected_token or not provided_token or not hmac.compare_digest(provided_token, expected_token):
+        return StarletteResponse(
+            content=json.dumps({"error": "Unauthorized"}),
+            status_code=401, media_type="application/json",
+            headers={"Cache-Control": "no-store"},
+        )
 
     cors_headers = {
         "Access-Control-Allow-Origin": "*",

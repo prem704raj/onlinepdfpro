@@ -2,9 +2,12 @@ version: "3.9"
 
 services:
   docx2pdf:
-    build: ./services/docx2pdf
-    ports:
-      - "8001:8000"
+    build: ./docx2pdf
+    # Keep the LibreOffice service on the private compose network; only the
+    # authenticated gateway is published to the host.
+    expose:
+      - "8000"
+    env_file: .env
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -18,7 +21,7 @@ services:
           memory: 2G
 
   gateway:
-    build: ./services/gateway
+    build: ./gateway
     ports:
       - "8080:8000"
     restart: unless-stopped

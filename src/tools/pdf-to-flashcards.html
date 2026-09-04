@@ -148,7 +148,7 @@
      .fc-nav-btn { width: 44px; height: 44px; border-radius: 12px; }
    }
  </style>
- <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+ <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
 
 <body class="fade-in">
@@ -190,6 +190,8 @@
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span>AI Assisted</span> <span>&bull;</span> <span>Max: 50 MB</span> <span>&bull;</span> <span>Processing time varies</span></p>
  <button class="btn btn-primary upload-btn" id="uploadBtn">Choose PDF</button>
  <input type="file" id="fileInput" accept=".pdf" style="display:none">
+ <div id="turnstileWidget" style="display:flex; justify-content:center; margin:20px auto 0;"></div>
+ <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); margin-top:10px;"><input type="checkbox" id="cloudOcrConsent"> If scanned, allow an OCR.space upload (optional)</label>
  <div class="fc-count-selector">
    <label for="cardCount">📝 How many flashcards?</label>
    <select id="cardCount">
@@ -294,6 +296,7 @@
   const progressBar = document.getElementById('progressBar');
   const cardWrap = document.getElementById('cardWrap');
   const cardCountSelect = document.getElementById('cardCount');
+  const cloudOcrConsent = document.getElementById('cloudOcrConsent');
 
   uploadBtn.addEventListener('click', () => fileInput.click());
   uploadZone.addEventListener('click', (e) => { if(e.target === uploadZone || e.target.classList.contains('upload-text') || e.target.classList.contains('upload-hint')) fileInput.click(); });
@@ -304,7 +307,10 @@
   fileInput.addEventListener('change', e => { if(e.target.files.length) handleFile(e.target.files[0]); });
 
   async function handleFile(file) {
-    if(file.type !== 'application/pdf') { alert("Please upload a PDF file."); return; }
+    if(file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)) { alert("Please upload a PDF file."); return; }
+    if(!file.size || file.size > 50 * 1024 * 1024) { alert("Please choose a non-empty PDF up to 50 MB."); return; }
+    const signature = new TextDecoder().decode(new Uint8Array(await file.slice(0, 5).arrayBuffer()));
+    if(signature !== '%PDF-') { alert("This file does not contain a valid PDF header."); return; }
     uploadZone.style.display = 'none';
     loadingState.style.display = 'block';
     deckTitle.textContent = file.name.replace('.pdf','') + ' — Deck';
@@ -323,6 +329,9 @@
 
       // OCR fallback for scanned/image PDFs
       if (documentText.trim().length < 50) {
+        if (!cloudOcrConsent.checked) {
+          throw new Error('This PDF appears to be scanned. Enable the optional OCR.space consent below to upload page images for text extraction.');
+        }
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
         documentText = "";
         const maxOcrPages = Math.min(pdf.numPages, 5);
@@ -345,7 +354,15 @@
           formData.append('isOverlayRequired', 'false');
           formData.append('OCREngine', '2');
 
-          const ocrResp = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
+          const ocrController = new AbortController();
+          const ocrTimeout = setTimeout(() => ocrController.abort(), 30000);
+          let ocrResp;
+          try {
+            ocrResp = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData, signal: ocrController.signal });
+          } finally {
+            clearTimeout(ocrTimeout);
+          }
+          if (!ocrResp.ok) continue;
           const ocrData = await ocrResp.json();
           if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
             documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
@@ -361,10 +378,11 @@
       loadingText.textContent = "AI is generating flashcards...";
 
       const numCards = parseInt(cardCountSelect.value) || 10;
+      const aiToken = requireTurnstileToken();
 
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': getTurnstileToken() },
+        headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
         body: JSON.stringify({
           messages: [
             { role: "system", content: `You are a study flashcard generator. Create exactly ${numCards} high-quality study flashcards from the document.
@@ -418,6 +436,7 @@ No markdown, no code fences, just the raw JSON array.` },
       loadingText.textContent = "Error: " + (err.message || "Please try again.");
       loadingText.style.color = "var(--error, red)";
     }
+    resetTurnstile();
   }
 
   flashcard.addEventListener('click', () => flashcard.classList.toggle('flipped'));
@@ -565,15 +584,42 @@ No markdown, no code fences, just the raw JSON array.` },
 
   // Cloudflare Turnstile token helper
   let turnstileToken = '';
+  let turnstileWidgetId = null;
   window.onTurnstileSuccess = function(token) { turnstileToken = token; };
+  window.onTurnstileExpired = function() { turnstileToken = ''; };
+  function initTurnstile() {
+    if (!window.turnstile || turnstileWidgetId !== null) return;
+    const container = document.getElementById('turnstileWidget');
+    if (!container) return;
+    turnstileWidgetId = window.turnstile.render(container, {
+      sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+      callback: window.onTurnstileSuccess,
+      'expired-callback': window.onTurnstileExpired,
+      'error-callback': window.onTurnstileExpired,
+      size: 'compact'
+    });
+  }
+  window.addEventListener('load', initTurnstile, { once: true });
+  if (window.turnstile) initTurnstile();
   function getTurnstileToken() {
     if (window.turnstile) {
       try {
-        const token = window.turnstile.getResponse();
+        const token = turnstileWidgetId !== null ? window.turnstile.getResponse(turnstileWidgetId) : '';
         if (token) return token;
       } catch(e){}
     }
     return turnstileToken;
+  }
+  function requireTurnstileToken() {
+    const token = getTurnstileToken();
+    if (!token) throw new Error('Please complete the security check before generating flashcards.');
+    return token;
+  }
+  function resetTurnstile() {
+    turnstileToken = '';
+    try {
+      if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
+    } catch (e) { /* widget may not be ready */ }
   }
 </script>
 </body>

@@ -5,7 +5,7 @@ Self-hosted backend for [onlinepdfpro.com](https://onlinepdfpro.com) providing t
 | Direction | Service | Stack |
 |-----------|---------|-------|
 | DOCX → PDF | Service A (`docx2pdf`) | FastAPI + LibreOffice/unoserver (Docker) |
-| PDF → DOCX | Service B (`pdf2docx`) | Marker (Datalab) on Modal + pandoc |
+| PDF → DOCX | Service B (`pdf2docx`) | PyMuPDF validation/cleanup + `pdf2docx` on Modal |
 
 ## Architecture
 
@@ -20,7 +20,7 @@ Self-hosted backend for [onlinepdfpro.com](https://onlinepdfpro.com) providing t
                         │                  │     ┌─────────────────┐
                         │                  │────▶│  Service B      │
                         │                  │     │  pdf2docx       │
-                        └──────────────────┘     │  Marker + Modal │
+                        └──────────────────┘     │  pdf2docx + Modal│
                                                  │  (serverless)   │
                                                  └─────────────────┘
 ```
@@ -67,6 +67,12 @@ modal deploy modal_app.py
 # Add it to your .env file as PDF2DOCX_MODAL_URL
 ```
 
+Before deploying either Modal conversion app, create a Modal Secret named
+`onlinepdfpro-conversion` containing `MODAL_API_TOKEN`. Use the same random
+value for the Cloudflare Worker `MODAL_API_TOKEN` secret. The conversion
+functions reject requests without this bearer token; the public Modal URL is
+not intended to be called directly.
+
 ### 3. Run Test Suite
 
 ```bash
@@ -87,11 +93,18 @@ pytest tests/test_quality.py -v --tb=short
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DOCX2PDF_URL` | `http://docx2pdf:8000` | Internal URL for Service A |
+| `DOCX2PDF_API_TOKEN` | _(required in production)_ | Bearer token shared by the gateway and Service A |
 | `PDF2DOCX_MODAL_URL` | _(required)_ | Modal endpoint for Service B |
+| `MODAL_API_TOKEN` | _(required in production)_ | Bearer token shared with both Modal functions |
+| `ENVIRONMENT` | `development` | Set to `production` to require `API_KEY` on the gateway |
 | `RATE_LIMIT_PER_MINUTE` | `10` | Max requests per IP per minute |
 | `MAX_FILE_SIZE_MB` | `50` | Maximum upload file size |
 | `API_KEY` | _(empty)_ | Optional API key for authentication |
-| `ALLOWED_ORIGINS` | `*` | CORS allowed origins (comma-separated) |
+| `ALLOWED_ORIGINS` | `https://onlinepdfpro.com,https://www.onlinepdfpro.com` | CORS allowed origins (comma-separated) |
+
+The production Worker additionally requires `TURNSTILE_SECRET_KEY`,
+`CONVERSION_SIGNING_SECRET`, and `MODAL_API_TOKEN` as Cloudflare secrets. Keep
+all three out of source control and rotate them if they have ever been exposed.
 
 ## API Reference
 
@@ -125,25 +138,12 @@ Returns gateway + Service A health status.
 **DOCX → PDF**: `.docx`, `.doc`, `.odt`, `.rtf`, `.txt` (max 50 MB)
 **PDF → DOCX**: `.pdf` (max 50 MB)
 
-## License — Marker Model Weights
+## Licensing and operating costs
 
-> **✅ License Status — PERMITTED**
->
-> Marker is licensed under GPLv3 (source code). The model weights are free for research, personal use, and startups with under $2M in funding or revenue. **onlinepdfpro.com has $0 revenue and no funding — usage is fully permitted under the free tier.**
->
-> If your revenue/funding situation changes and exceeds $2M, you must obtain a commercial license from [Datalab](https://datalab.to).
-
-## Cost Estimates (Modal — Service B)
-
-Assumes T4 GPU at $0.000164/sec, ~100s average per conversion:
-
-| Conversions/month | GPU time | Estimated cost | vs $30 free credit |
-|---|---|---|---|
-| 100 | ~2.8 hrs | **~$1.64** | ✅ Well within |
-| 1,000 | ~27.8 hrs | **~$16.40** | ✅ Within |
-| 10,000 | ~277.8 hrs | **~$164.00** | ⚠️ Exceeds free tier |
-
-Born-digital PDFs use the CPU path (no GPU cost), so real costs will be lower if most uploads are born-digital.
+Service B uses the open-source `pdf2docx` and PyMuPDF packages; no Marker
+model weights or Datalab service are part of this deployment. Modal billing,
+container duration and account limits vary over time, so measure them in the
+Modal dashboard instead of relying on estimates in this repository.
 
 ## Service Details
 
@@ -154,11 +154,12 @@ Born-digital PDFs use the CPU path (no GPU cost), so real costs will be lower if
 - Health endpoint performs a real probe conversion
 
 ### Service B — PDF → DOCX
-- **Text path** (CPU): Born-digital PDFs (>100 chars/page avg), OCR disabled
-- **OCR path** (GPU/T4): Scanned PDFs, OCR enabled
-- Model weights cached in Modal Volume (fast warm starts)
-- Scale to zero when idle (`min_containers=0`)
-- Marker → HTML → pandoc → DOCX pipeline (HTML preserves tables better than markdown)
+- PyMuPDF validates the PDF and removes annotations/widgets before conversion
+- `pdf2docx==0.5.8` performs the conversion in a 2 vCPU/2 GB Modal container
+- Password-protected, corrupt, empty and oversized PDFs are rejected before work
+- Temporary files are removed after every request; the container scales down
+- Forms, annotations and some complex layout may not survive conversion because
+  the cleanup step deliberately removes them; this is disclosed in the UI
 
 ### Gateway
 - Per-IP rate limiting (sliding window)

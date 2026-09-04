@@ -3,6 +3,12 @@ main = "pdf-api-proxy.js"
 compatibility_date = "2026-08-28"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+ENVIRONMENT = "production"
+TURNSTILE_ALLOWED_HOSTNAMES = "onlinepdfpro.com,www.onlinepdfpro.com"
+PDF_TO_WORD_URL = "https://prem736raj--pdf2docx-convert.modal.run"
+WORD_TO_PDF_URL = "https://prem736raj--docx2pdf-convert.modal.run"
+
 [observability]
 enabled = true
 head_sampling_rate = 1
@@ -12,6 +18,16 @@ head_sampling_rate = 1
 [[r2_buckets]]
 binding = "PRODUCTS_BUCKET"
 bucket_name = "onlinepdfpro-products"
+
+# Distributed rate limiting. The Worker fails closed if this binding is not
+# present in production; do not replace it with process-local memory.
+[[ratelimits]]
+name = "API_RATE_LIMITER"
+namespace_id = "20260904"
+
+  [ratelimits.simple]
+  limit = 50
+  period = 60
 
 # ─── Secrets (NEVER put credentials in this file — it's committed to git!) ───
 # Set them via Wrangler CLI:
@@ -23,6 +39,9 @@ bucket_name = "onlinepdfpro-products"
 #   npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
 #   npx wrangler secret put SUPABASE_URL
 #   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+#   npx wrangler secret put TURNSTILE_SECRET_KEY
+#   npx wrangler secret put CONVERSION_SIGNING_SECRET
+#   npx wrangler secret put MODAL_API_TOKEN  # required for production conversions
 #
 # After setting secrets, deploy:
 #   npx wrangler deploy

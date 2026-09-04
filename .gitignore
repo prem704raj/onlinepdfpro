@@ -5,6 +5,11 @@ _site
 # Dependencies
 node_modules/
 
+# Cloudflare Wrangler local state/cache
+.wrangler/
+**/.wrangler/
+**/.wrangler-dry-run/
+
 # OS files
 .DS_Store
 Thumbs.db

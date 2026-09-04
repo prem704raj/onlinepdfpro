@@ -6,13 +6,17 @@ GET  /health               → 200 only if unoserver probe succeeds
 """
 
 import asyncio
+import hmac
+import io
 import logging
 import os
+import re
 import signal
 import subprocess
 import tempfile
 import time
 import uuid
+import zipfile
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
@@ -22,10 +26,13 @@ from fastapi.responses import Response
 # Config
 # ---------------------------------------------------------------------------
 MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE_MB", "50")) * 1024 * 1024  # bytes
+MAX_OUTPUT_SIZE = int(os.getenv("MAX_OUTPUT_SIZE_MB", "100")) * 1024 * 1024
 CONVERT_TIMEOUT = int(os.getenv("CONVERT_TIMEOUT_SECS", "120"))
 UNO_HOST = os.getenv("UNO_HOST", "127.0.0.1")
 UNO_PORT = os.getenv("UNO_PORT", "2003")
-ALLOWED_EXTENSIONS = {".docx", ".doc", ".odt", ".rtf", ".txt"}
+ALLOWED_EXTENSIONS = {".docx", ".doc", ".odt", ".rtf"}
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
+DOCX2PDF_API_TOKEN = os.getenv("DOCX2PDF_API_TOKEN", "")
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -51,6 +58,54 @@ def _validate_extension(filename: str) -> str:
             detail=f"Unsupported file type '{ext}'. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}",
         )
     return ext
+
+
+def _authorize(request: Request) -> None:
+    """Require the gateway's bearer token before accepting conversion work."""
+    if not DOCX2PDF_API_TOKEN:
+        if ENVIRONMENT == "production":
+            raise HTTPException(
+                status_code=503,
+                detail="DOCX→PDF service authentication is not configured.",
+            )
+        return
+
+    authorization = request.headers.get("authorization", "")
+    provided = authorization[7:].strip() if authorization.lower().startswith("bearer ") else ""
+    if not provided or not hmac.compare_digest(provided, DOCX2PDF_API_TOKEN):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+def _validate_document(contents: bytes, ext: str) -> None:
+    """Validate the actual container instead of trusting a filename/MIME label."""
+    if ext in {".docx", ".odt"}:
+        valid = False
+        try:
+            with zipfile.ZipFile(io.BytesIO(contents)) as archive:
+                names = set(archive.namelist())
+                if ext == ".docx":
+                    valid = "[Content_Types].xml" in names and "word/document.xml" in names
+                else:
+                    valid = "mimetype" in names and "content.xml" in names and archive.read("mimetype", pwd=None).startswith(b"application/vnd.oasis.opendocument.text")
+        except (OSError, ValueError, KeyError, RuntimeError, zipfile.BadZipFile):
+            valid = False
+    elif ext == ".doc":
+        valid = contents.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
+    elif ext == ".rtf":
+        valid = bool(re.match(br"^\s*\{\\rtf[0-9]", contents[:64], re.IGNORECASE))
+    if not valid:
+        raise HTTPException(
+            status_code=415,
+            detail="The file contents do not match the selected document type.",
+        )
+
+
+def _safe_output_stem(filename: str) -> str:
+    """Keep user filenames out of response-header control characters."""
+    stem = Path(os.path.basename(filename or "output")).stem
+    stem = re.sub(r'[\x00-\x1f\x7f"\\/:*?<>|]+', "_", stem)
+    stem = re.sub(r"[^A-Za-z0-9._() -]", "_", stem).strip(" .")[:120]
+    return stem or "output"
 
 
 def _kill_unoserver() -> None:
@@ -81,6 +136,7 @@ async def _convert(input_path: str, output_path: str) -> None:
     ]
 
     use_soffice = False
+    proc = None
     try:
         proc = await asyncio.create_subprocess_exec(
             *cmd,
@@ -92,8 +148,16 @@ async def _convert(input_path: str, output_path: str) -> None:
         )
         if proc.returncode != 0:
             use_soffice = True
-    except (FileNotFoundError, Exception):
+    except FileNotFoundError:
         use_soffice = True
+    except asyncio.TimeoutError:
+        if proc and proc.returncode is None:
+            try:
+                proc.kill()
+            except ProcessLookupError:
+                pass
+            await proc.wait()
+        raise TimeoutError(f"Conversion timed out after {CONVERT_TIMEOUT}s")
 
     if use_soffice:
         soffice_bin = os.getenv("SOFFICE_PATH", "soffice")
@@ -138,13 +202,22 @@ async def _convert(input_path: str, output_path: str) -> None:
 # Routes
 # ---------------------------------------------------------------------------
 @app.post("/convert/docx-to-pdf")
-async def convert_docx_to_pdf(file: UploadFile = File(...)):
+async def convert_docx_to_pdf(request: Request, file: UploadFile = File(...)):
     """Convert an uploaded document to PDF via LibreOffice/unoserver."""
     request_id = uuid.uuid4().hex[:12]
+    _authorize(request)
     logger.info("[%s] Convert request: %s", request_id, file.filename)
 
     # Validate extension
     ext = _validate_extension(file.filename or "upload.bin")
+
+    # Reject obviously oversized multipart requests before reading the body.
+    declared_length = request.headers.get("content-length")
+    try:
+        if declared_length and int(declared_length) > MAX_FILE_SIZE + 1024 * 1024:
+            raise HTTPException(status_code=413, detail="File is too large.")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid Content-Length header.")
 
     # Read file with size check
     contents = await file.read()
@@ -156,6 +229,8 @@ async def convert_docx_to_pdf(file: UploadFile = File(...)):
 
     if len(contents) == 0:
         raise HTTPException(status_code=400, detail="Empty file uploaded.")
+
+    _validate_document(contents, ext)
 
     # Work in temp files
     input_path = None
@@ -179,12 +254,18 @@ async def convert_docx_to_pdf(file: UploadFile = File(...)):
         pdf_bytes = Path(output_path).read_bytes()
         if len(pdf_bytes) == 0:
             raise RuntimeError("Conversion produced an empty PDF")
+        if len(pdf_bytes) > MAX_OUTPUT_SIZE:
+            raise RuntimeError("Conversion produced an oversized PDF")
+        if not pdf_bytes.startswith(b"%PDF-"):
+            raise RuntimeError("Conversion did not produce a valid PDF")
+
+        output_stem = _safe_output_stem(file.filename or "output")
 
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",
             headers={
-                "Content-Disposition": f'attachment; filename="{Path(file.filename or "output").stem}.pdf"',
+                "Content-Disposition": f'attachment; filename="{output_stem}.pdf"',
                 "X-Request-ID": request_id,
                 "X-Convert-Time": f"{elapsed:.2f}",
             },
