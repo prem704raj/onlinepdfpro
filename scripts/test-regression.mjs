@@ -194,6 +194,9 @@ async function browserSmoke() {
     const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     try {
         const page = await browser.newPage();
+        // Keep the smoke suite deterministic: a service worker can otherwise
+        // serve a stale cached stylesheet or script while a page is reloaded.
+        await page.setBypassServiceWorker(true);
         const pageErrors = [];
         page.on('pageerror', error => pageErrors.push(String(error)));
 
@@ -285,24 +288,40 @@ async function browserSmoke() {
             '/tools/word-to-pdf.html'
         ]) {
             await page.goto(`${base}${uploadPage}`, { waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
+            await page.waitForFunction(() => {
+                const zone = document.querySelector('.upload-zone');
+                if (!zone) return false;
+                const rootStyle = getComputedStyle(document.documentElement);
+                const probe = document.createElement('span');
+                probe.style.backgroundColor = rootStyle.getPropertyValue('--surface-1').trim();
+                probe.style.color = rootStyle.getPropertyValue('--text-primary').trim();
+                document.body.appendChild(probe);
+                const expected = getComputedStyle(probe).backgroundColor;
+                const expectedText = getComputedStyle(probe).color;
+                probe.remove();
+                const zoneStyle = getComputedStyle(zone);
+                return zoneStyle.backgroundColor === expected && zoneStyle.color === expectedText;
+            }, { timeout: 5000 });
             const uploadTheme = await page.evaluate(() => {
-                document.documentElement.setAttribute('data-theme', 'dark');
                 const zone = document.querySelector('.upload-zone');
                 if (!zone) return null;
                 const rootStyle = getComputedStyle(document.documentElement);
                 const probe = document.createElement('span');
                 probe.style.backgroundColor = rootStyle.getPropertyValue('--surface-1').trim();
+                probe.style.color = rootStyle.getPropertyValue('--text-primary').trim();
                 document.body.appendChild(probe);
                 const expected = getComputedStyle(probe).backgroundColor;
+                const expectedText = getComputedStyle(probe).color;
                 probe.remove();
                 return {
                     background: getComputedStyle(zone).backgroundColor,
                     expected,
                     text: getComputedStyle(zone).color,
-                    expectedText: rootStyle.getPropertyValue('--text-primary').trim()
+                    expectedText
                 };
             });
-            check(uploadTheme && uploadTheme.background === uploadTheme.expected && uploadTheme.background !== 'rgb(243, 239, 229)' && uploadTheme.background !== 'rgb(255, 255, 255)', `Dark upload surface is theme-aware on ${uploadPage}`);
+            check(uploadTheme && uploadTheme.background === uploadTheme.expected && uploadTheme.text === uploadTheme.expectedText && uploadTheme.background !== 'rgb(243, 239, 229)' && uploadTheme.background !== 'rgb(255, 255, 255)', `Dark upload surface and text are theme-aware on ${uploadPage}`);
         }
 
         await page.goto(`${base}/tools/qr-code-generator.html`, { waitUntil: 'domcontentloaded' });
@@ -429,17 +448,19 @@ async function browserSmoke() {
             const formats = [
                 { button: '[data-format="jpeg"]', signature: [0xff, 0xd8, 0xff], label: 'JPEG' },
                 { button: '[data-format="png"]', signature: [0x89, 0x50, 0x4e, 0x47], label: 'PNG' },
-                { button: '[data-format="webp"]', signature: [0x52, 0x49, 0x46, 0x46], label: 'WebP' }
+            { button: '[data-format="webp"]', signature: [0x52, 0x49, 0x46, 0x46], label: 'WebP' }
             ];
             for (const format of formats) {
                 if (format.button !== '[data-format="jpeg"]') {
                     await page.reload({ waitUntil: 'domcontentloaded' });
+                    await page.waitForSelector('.file-input', { timeout: 5000 });
                     await page.evaluate(() => {
                         window.__downloadedBlob = null;
                         const originalSaveBlob = OnlinePDFPro.Downloader.saveBlob;
                         OnlinePDFPro.Downloader.saveBlob = (blob, name) => { window.__downloadedBlob = { blob, name }; };
                     });
                 }
+                await page.waitForSelector('.file-input', { timeout: 5000 });
                 await page.$eval('.file-input', (input, filePath) => {
                     // Puppeteer supplies the path through uploadFile; this callback
                     // exists only to make the selector failure explicit.
@@ -447,6 +468,7 @@ async function browserSmoke() {
                 }, tinyPng);
                 await (await page.$('.file-input')).uploadFile(tinyPng);
                 await page.waitForFunction(() => document.querySelector('#fileSection')?.style.display === 'block', { timeout: 10000 });
+                await page.waitForSelector('#convertBtn', { visible: true, timeout: 5000 });
                 await page.click(format.button);
                 await page.click('#convertBtn');
                 try {
