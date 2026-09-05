@@ -111,6 +111,7 @@ check(exists('fonts/NotoSansDevanagari-Regular.ttf'), 'Unicode font asset is pre
 
 const registry = read('src/_data/tools.js');
 check(/module\.exports/.test(registry) && /pdf-bookmark/.test(registry), 'Tool registry is the source for public tools');
+check(/canonicalUrls/.test(registry) && /canonicalUrls/.test(read('src/_includes/partials/meta.njk')), 'Canonical metadata resolves tool URLs through the registry');
 check(/toolRegistry\.tools/.test(read('src/sitemap.njk')) && /toolRegistry\.categories/.test(read('src/tools.njk')), 'Sitemap and directory consume the tool registry');
 check(/featured:\s*true/.test(registry) && /toolRegistry\.tools/.test(read('src/index.njk')), 'Homepage featured tools consume the registry');
 check(/registryTools/.test(read('src/tools.njk')) && /toolsForFile/.test(read('src/tools.njk')) && !/var toolMap/.test(read('src/tools.njk')), 'Drag-and-drop picker consumes the registry');

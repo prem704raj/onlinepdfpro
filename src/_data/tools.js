@@ -84,5 +84,8 @@ const categories = [
 ];
 
 const tools = categories.flatMap(category => category.tools.map(tool => ({ ...tool, category: category.name })));
+// Canonical URLs are derived from the same public registry so templates do not
+// grow a second list of tool routes.
+const canonicalUrls = Object.fromEntries(tools.map(tool => [tool.href, tool.href]));
 
-module.exports = { version: '2026-09-04', categories, tools };
+module.exports = { version: '2026-09-04', categories, tools, canonicalUrls };
