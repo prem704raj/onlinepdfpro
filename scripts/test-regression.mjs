@@ -90,6 +90,10 @@ for (const page of ['src/tools/pdf-to-word.html', 'src/tools/word-to-pdf.html'])
     const source = read(page);
     check(/render\(container/.test(source) && /reset\(turnstileWidgetId\)/.test(source), `${page} explicitly renders and resets Turnstile by widget ID`);
 }
+const authSource = read('src/js/auth.js');
+check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChange/.test(authSource), 'Authentication session flow is wired to Supabase');
+const storeSource = read('src/js/store.js');
+check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
 
 const protect = read('src/tools/password-protect-pdf.html');
 const unlock = read('src/tools/pdf-unlock.html');
@@ -108,6 +112,8 @@ check(exists('fonts/NotoSansDevanagari-Regular.ttf'), 'Unicode font asset is pre
 const registry = read('src/_data/tools.js');
 check(/module\.exports/.test(registry) && /pdf-bookmark/.test(registry), 'Tool registry is the source for public tools');
 check(/toolRegistry\.tools/.test(read('src/sitemap.njk')) && /toolRegistry\.categories/.test(read('src/tools.njk')), 'Sitemap and directory consume the tool registry');
+check(/featured:\s*true/.test(registry) && /toolRegistry\.tools/.test(read('src/index.njk')), 'Homepage featured tools consume the registry');
+check(/registryTools/.test(read('src/tools.njk')) && /toolsForFile/.test(read('src/tools.njk')) && !/var toolMap/.test(read('src/tools.njk')), 'Drag-and-drop picker consumes the registry');
 const appSource = read('src/js/app.js');
 check(/ToolRegistryUI/.test(appSource) && /tool-registry\.json/.test(appSource) && /renderRelated/.test(appSource), 'Shared UI consumes the tool registry for navigation and related tools');
 const registryHrefs = [...registry.matchAll(/href:\s*'([^']+)'/g)].map(match => match[1]);
@@ -195,6 +201,64 @@ async function browserSmoke() {
             javascriptLinks: Array.from(document.querySelectorAll('#previewArea [href]')).some(node => /^javascript:/i.test(node.getAttribute('href') || ''))
         }));
         check(!htmlResult.xss && htmlResult.scripts === 0 && !htmlResult.handlers && !htmlResult.javascriptLinks, 'HTML-to-PDF blocks malicious scripts, handlers and javascript URLs in the browser');
+
+        // Exercise both OCR privacy branches with a tiny fixture and browser
+        // stubs. The real Tesseract/OCR.space services are deliberately not
+        // contacted by CI: local OCR must finish without a network call, and
+        // the cloud branch must run only after the consent checkbox is checked.
+        const ocrFixture = path.join(root, '.tmp-ocr-regression.png');
+        fs.writeFileSync(ocrFixture, Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64'));
+        try {
+            await page.goto(`${base}/tools/image-to-text.html`, { waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => {
+                window.Tesseract = window.Tesseract || {};
+                window.Tesseract.recognize = async () => ({ data: { text: 'local OCR text', confidence: 96 } });
+            });
+            await (await page.$('#fileInput')).uploadFile(ocrFixture);
+            await page.waitForFunction(() => document.querySelector('#result')?.style.display === 'block', { timeout: 10000 });
+            check(await page.$eval('#textOutput', node => node.value === 'local OCR text'), 'OCR local flow completes without cloud processing');
+
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => {
+                window.Tesseract = window.Tesseract || {};
+                window.Tesseract.recognize = async () => ({ data: { text: 'weak local', confidence: 10 } });
+                window.__ocrCloudCalls = 0;
+                const originalFetch = window.fetch.bind(window);
+                window.fetch = async (url, options) => {
+                    if (String(url).includes('api.ocr.space')) {
+                        window.__ocrCloudCalls += 1;
+                        return new Response(JSON.stringify({ ParsedResults: [{ ParsedText: 'cloud OCR text' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                    }
+                    return originalFetch(url, options);
+                };
+            });
+            await (await page.$('#fileInput')).uploadFile(ocrFixture);
+            await page.waitForFunction(() => document.querySelector('#result')?.style.display === 'block', { timeout: 10000 });
+            const noConsent = await page.evaluate(() => ({ calls: window.__ocrCloudCalls, text: document.querySelector('#textOutput')?.value }));
+            check(noConsent.calls === 0 && noConsent.text === 'weak local', 'OCR cloud fallback is not called without consent');
+
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await page.evaluate(() => {
+                window.Tesseract = window.Tesseract || {};
+                window.Tesseract.recognize = async () => ({ data: { text: 'weak local', confidence: 10 } });
+                window.__ocrCloudCalls = 0;
+                const originalFetch = window.fetch.bind(window);
+                window.fetch = async (url, options) => {
+                    if (String(url).includes('api.ocr.space')) {
+                        window.__ocrCloudCalls += 1;
+                        return new Response(JSON.stringify({ ParsedResults: [{ ParsedText: 'cloud OCR text' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                    }
+                    return originalFetch(url, options);
+                };
+                document.querySelector('#cloudOcrConsent').checked = true;
+            });
+            await (await page.$('#fileInput')).uploadFile(ocrFixture);
+            await page.waitForFunction(() => document.querySelector('#result')?.style.display === 'block', { timeout: 10000 });
+            const withConsent = await page.evaluate(() => ({ calls: window.__ocrCloudCalls, text: document.querySelector('#textOutput')?.value }));
+            check(withConsent.calls === 1 && withConsent.text === 'cloud OCR text', 'OCR cloud-consent flow sends data only after explicit consent');
+        } finally {
+            fs.rmSync(ocrFixture, { force: true });
+        }
 
         await page.goto(`${base}/tools/merge-pdf.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => document.querySelectorAll('[data-generated-related-tools] .related-tool-card').length === 3, { timeout: 5000 });
@@ -394,10 +458,24 @@ async function browserSmoke() {
 
         check(pageErrors.length === 0, `Browser smoke has no uncaught page errors${pageErrors.length ? `: ${pageErrors.join(' | ')}` : ''}`);
     } finally {
-        await browser.close();
-        await new Promise(resolve => server.close(resolve));
+        // A browser page can leave an intercepted third-party request or a
+        // service-worker handle open on constrained CI runners. Bound cleanup
+        // so a successful regression run cannot hang the deployment job.
+        const browserProcess = typeof browser.process === 'function' ? browser.process() : null;
+        await Promise.race([
+            browser.close(),
+            new Promise(resolve => setTimeout(resolve, 5000))
+        ]);
+        if (browserProcess && !browserProcess.killed) browserProcess.kill();
+        await Promise.race([
+            new Promise(resolve => server.close(resolve)),
+            new Promise(resolve => setTimeout(resolve, 5000))
+        ]);
     }
 }
 
 await browserSmoke();
 console.log('All regression checks passed.');
+// Puppeteer and Chromium can leave non-critical handles open on Windows CI;
+// all assertions are complete at this point, so terminate deterministically.
+process.exit(0);

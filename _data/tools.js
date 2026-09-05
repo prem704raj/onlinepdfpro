@@ -4,8 +4,8 @@ const categories = [
   {
     name: 'Essential PDF Tools',
     tools: [
-      { name: 'Compress PDF', desc: 'Reduce file size with adjustable quality settings', href: '/tools/compress-pdf.html', color: '#ea580c', svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
-      { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: '/tools/merge-pdf.html', color: '#7c3aed', svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
+      { name: 'Compress PDF', desc: 'Reduce file size with adjustable quality settings', href: '/tools/compress-pdf.html', color: '#ea580c', featured: true, svg: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>' },
+      { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: '/tools/merge-pdf.html', color: '#7c3aed', featured: true, svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
       { name: 'Split PDF', desc: 'Extract pages or split into files', href: '/tools/split-pdf.html', color: '#6366f1', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="4" y1="14" x2="20" y2="14" stroke-dasharray="2 2"/>' },
       { name: 'PDF Reader', desc: 'Fast in-browser viewer with search', href: '/pdf-reader.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="3"/><line x1="13.1" y1="16.1" x2="16" y2="19"/>' },
       { name: 'PDF Presentation', desc: 'Fullscreen slides with timer and draw', href: '/pdf-presentation-mode.html', color: '#2563eb', svg: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>' }
@@ -14,7 +14,7 @@ const categories = [
   {
     name: 'Document Converters',
     tools: [
-      { name: 'PDF to Word', desc: 'Convert PDF to editable DOCX through a protected gateway', href: '/tools/pdf-to-word.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>' },
+      { name: 'PDF to Word', desc: 'Convert PDF to editable DOCX through a protected gateway', href: '/tools/pdf-to-word.html', color: '#2563eb', featured: true, svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>' },
       { name: 'Word to PDF', desc: 'Convert supported Word documents through an isolated gateway', href: '/tools/word-to-pdf.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/>' },
       { name: 'PDF to Text', desc: 'Extract and export as TXT/MD', href: '/pdf-to-text-extractor.html', color: '#16a34a', svg: '<path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h5"/><polyline points="12 2 12 8 18 8"/><line x1="16" y1="13" x2="22" y2="13"/><line x1="16" y1="16" x2="21" y2="16"/><line x1="16" y1="19" x2="20" y2="19"/>' },
       { name: 'HTML to PDF', desc: 'Sanitized code editor with live preview', href: '/tools/html-to-pdf.html', color: '#16a34a', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="8 12 6 14 8 16"/><polyline points="12 12 14 14 12 16"/>' },
@@ -26,7 +26,7 @@ const categories = [
     tools: [
       { name: 'JPG to PDF', desc: 'Create PDF from your photos', href: '/tools/jpg-to-pdf.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
       { name: 'PDF to JPG', desc: 'Export pages as high-resolution images', href: '/pdf-to-jpg.html', color: '#16a34a', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
-      { name: 'Image to Text (OCR)', desc: 'Read text from scanned docs locally, with optional consent-gated cloud retry', href: '/tools/image-to-text.html', color: '#d97706', svg: '<rect x="2" y="3" width="12" height="12" rx="2"/><circle cx="6" cy="7" r="1.5"/><polyline points="14 12 11 9 2 15"/><line x1="17" y1="6" x2="22" y2="6"/><line x1="17" y1="10" x2="22" y2="10"/><line x1="17" y1="14" x2="22" y2="14"/>' },
+      { name: 'Image to Text (OCR)', desc: 'Read text from scanned docs locally, with optional consent-gated cloud retry', href: '/tools/image-to-text.html', color: '#d97706', featured: true, svg: '<rect x="2" y="3" width="12" height="12" rx="2"/><circle cx="6" cy="7" r="1.5"/><polyline points="14 12 11 9 2 15"/><line x1="17" y1="6" x2="22" y2="6"/><line x1="17" y1="10" x2="22" y2="10"/><line x1="17" y1="14" x2="22" y2="14"/>' },
       { name: 'HEIC to JPG', desc: 'Convert iPhone photos locally in your browser', href: '/tools/heic-to-jpg.html', color: '#0d9488', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
       { name: 'Image Compressor', desc: 'Compress JPG, PNG and WebP images', href: '/tools/image-compressor.html', color: '#0d9488', svg: '<path d="M4 7V4h3M20 7V4h-3M4 17v3h3M20 17v3h-3"/><path d="M8 12h8M12 8v8"/>' },
       { name: 'Image Crop', desc: 'Trim photos to an exact crop area', href: '/tools/image-crop.html', color: '#0d9488', svg: '<path d="M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2"/>' },
@@ -53,7 +53,7 @@ const categories = [
   {
     name: 'Security and Safety',
     tools: [
-      { name: 'Sign PDF', desc: 'Draw or type your e-signature', href: '/tools/sign-pdf.html', color: '#8b6914', svg: '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>' },
+      { name: 'Sign PDF', desc: 'Draw or type your e-signature', href: '/tools/sign-pdf.html', color: '#8b6914', featured: true, svg: '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>' },
       { name: 'Password Protect', desc: 'Encrypt PDFs with AES-256', href: '/tools/password-protect-pdf.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="9" y="14" width="6" height="5" rx="1"/><path d="M10 14v-3a2 2 0 0 1 4 0v3"/>' },
       { name: 'PDF Unlock', desc: 'Remove password protection while preserving document structure', href: '/tools/pdf-unlock.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M10 15v-4a2 2 0 0 1 4 0"/>' },
       { name: 'Redact PDF', desc: 'Hide sensitive data', href: '/tools/redact-pdf.html', color: '#dc2626', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' },
@@ -63,9 +63,9 @@ const categories = [
   {
     name: 'AI and Smart Tools',
     tools: [
-      { name: 'Chat with PDF', desc: 'Ask AI questions about your document', href: '/tools/chat-with-pdf.html', color: '#d97706', svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/>' },
-      { name: 'AI PDF Summarizer', desc: 'Create summaries of long PDFs', href: '/tools/pdf-summarizer.html', color: '#10b981', svg: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>' },
-      { name: 'PDF to Flashcards', desc: 'Auto-generate study flashcards', href: '/tools/pdf-to-flashcards.html', color: '#3b82f6', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>' }
+      { name: 'Chat with PDF', desc: 'Ask AI questions about your document', href: '/tools/chat-with-pdf.html', color: '#d97706', featured: true, svg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/>' },
+      { name: 'AI PDF Summarizer', desc: 'Create summaries of long PDFs', href: '/tools/pdf-summarizer.html', color: '#10b981', featured: true, svg: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>' },
+      { name: 'PDF to Flashcards', desc: 'Auto-generate study flashcards', href: '/tools/pdf-to-flashcards.html', color: '#3b82f6', featured: true, svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>' }
     ]
   },
   {

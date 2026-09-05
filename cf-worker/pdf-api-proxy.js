@@ -56,9 +56,10 @@ const PROTECTED_PATHS = new Set([
     '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases', '/store/razorpay-webhook'
 ]);
 
-// Browser POSTs always send an Origin header from an allowed domain; curl and
-// scripts do not. Requiring an allowed Origin on the paid endpoints blocks
-// direct abuse of the Groq/OpenRouter keys while keeping the site working.
+// Browser POSTs send an Origin header from an allowed domain. Requests without
+// an Origin are still handled for health checks, server webhooks, and clients
+// that do not expose the header; the value is defence-in-depth only and never
+// substitutes for Turnstile, signed tickets, JWTs, or HMAC verification.
 function getAllowedOrigins(env) {
     const isProd = (env.ENVIRONMENT || 'production') === 'production';
     return isProd ? PROD_ORIGINS : [...PROD_ORIGINS, ...DEV_ORIGINS];

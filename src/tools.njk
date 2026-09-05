@@ -178,33 +178,28 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
         }
     });
     var dragCounter = 0;
-    var toolMap = {
-        pdf: [
-            { name: 'To Word', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>', href: 'tools/pdf-to-word.html' },
-            { name: 'Compress', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>', href: 'tools/compress-pdf.html' },
-            { name: 'Merge', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', href: 'tools/merge-pdf.html' },
-            { name: 'Split', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.47" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>', href: 'tools/split-pdf.html' },
-            { name: 'Read', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>', href: 'pdf-reader.html' },
-            { name: 'Sign', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>', href: 'tools/sign-pdf.html' }
-        ],
-        image: [
-            { name: 'To PDF', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', href: 'tools/jpg-to-pdf.html' },
-            { name: 'Extract Text', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>', href: 'tools/image-to-text.html' }
-        ],
-        word: [
-            { name: 'To PDF', svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>', href: 'tools/word-to-pdf.html' }
-        ]
-    };
+    // The drop picker uses the same registry as the directory, sitemap,
+    // global search, and related-tool links. This keeps new tools discoverable
+    // without maintaining a second hand-written navigation list.
+    var registryTools = {{ toolRegistry.tools | json | safe }};
+    function toolsForFile(file) {
+        var name = (file.name || '').toLowerCase();
+        var isPDF = file.type === 'application/pdf' || name.endsWith('.pdf');
+        var isImage = file.type.indexOf('image/') === 0;
+        var isWord = /\.(?:docx?|odt|rtf)$/.test(name);
+        if (isWord) return registryTools.filter(function(t) { return t.name === 'Word to PDF' || t.name === 'PDF to Word'; }).slice(0, 4);
+        if (isImage) return registryTools.filter(function(t) { return t.category === 'Image and PDF'; }).slice(0, 6);
+        if (isPDF) return registryTools.filter(function(t) { return /PDF|Document Converters/.test(t.category) || /PDF/.test(t.name); }).slice(0, 6);
+        return registryTools.filter(function(t) { return /PDF/.test(t.category) || /PDF/.test(t.name); }).slice(0, 6);
+    }
     document.addEventListener('dragenter', function(e) { e.preventDefault(); dragCounter++; overlay.style.opacity='1'; overlay.style.visibility='visible'; overlay.style.pointerEvents='auto'; });
     document.addEventListener('dragleave', function(e) { e.preventDefault(); dragCounter--; if(dragCounter<=0){dragCounter=0; overlay.style.opacity='0'; overlay.style.visibility='hidden'; overlay.style.pointerEvents='none';} });
     document.addEventListener('dragover', function(e) { e.preventDefault(); });
     overlay.addEventListener('drop', function(e) {
         e.preventDefault(); dragCounter=0; overlay.style.opacity='0'; overlay.style.visibility='hidden'; overlay.style.pointerEvents='none';
         var files=e.dataTransfer.files; if(!files||files.length===0) return;
-        var file=files[0]; var isPDF=file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf');
-        var isImage=file.type.startsWith('image/');
-        var isWord=file.name.toLowerCase().endsWith('.docx')||file.name.toLowerCase().endsWith('.doc');
-        var tools=isPDF?toolMap.pdf:(isImage?toolMap.image:(isWord?toolMap.word:toolMap.pdf));
+        var file=files[0];
+        var tools=toolsForFile(file);
         var fileName=document.getElementById('dropModalFileName');
         if(!fileName) return;
         fileName.textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+' MB)';
