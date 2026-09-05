@@ -2006,6 +2006,31 @@ main#main {
 .upload-zone:hover, .upload-zone.dragover {
     background-color: #e8e2d4 !important;
 }
+
+/* The legacy universal upload treatment above is intentionally warm in
+   light mode, but it must never leak its cream surface or brown text into
+   dark mode. Keep the shared component tied to the active theme tokens. */
+html[data-theme="dark"] .upload-zone {
+    background-color: var(--surface-1) !important;
+    border-color: var(--accent) !important;
+    color: var(--text-primary) !important;
+}
+html[data-theme="dark"] .upload-zone .upload-text {
+    color: var(--text-primary) !important;
+}
+html[data-theme="dark"] .upload-zone .upload-hint {
+    color: var(--text-secondary) !important;
+}
+html[data-theme="dark"] .upload-zone svg,
+html[data-theme="dark"] .upload-zone .upload-icon,
+html[data-theme="dark"] .upload-zone > svg {
+    color: var(--accent) !important;
+    stroke: currentColor !important;
+}
+html[data-theme="dark"] .upload-zone:hover,
+html[data-theme="dark"] .upload-zone.dragover {
+    background-color: var(--accent-subtle) !important;
+}
 .privacy-reminder {
     display: none !important;
 }

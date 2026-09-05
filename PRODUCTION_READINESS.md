@@ -41,6 +41,7 @@ configuration are still missing; the exact actions are listed under
 | 25 | Service-worker invalidation — High | `src/sw.js`, `scripts/version-sw.js`, generated `sw.js` | Build generates a content-derived version stamp; HTML/JS use network-first updates while CSS/media use controlled cache strategies. | Fixed locally. Verify one post-deploy browser receives the new stamp and no stale asset remains. |
 | 26 | CSS/JS stale-cache behavior — High | service worker/build pipeline/generated assets | Build/sync and the revised cache strategy prevent indefinite stale CSS/JS; deployment gates rebuild before publishing. | Fixed in code/pipeline. CDN/browser verification is still required after release. |
 | 27 | Regression/adversarial QA — High | `scripts/test-regression.mjs`, `services/tests/*` | Automated coverage includes QR XSS/text/file/all modes, HTML XSS, password protect/unlock, image signatures, OCR privacy branches, registry/links, responsive 390/910px layouts, page errors, authentication/entitlement wiring, duplicate-bundle guards, and service conversion fixtures. | Local gates pass. External AI/auth/purchase, live Modal, Razorpay Test Mode, and production performance measurements still require configured services. |
+| 28 | Dark-mode light upload surfaces — Medium | `src/css/style.css`, affected generated pages, `scripts/test-regression.mjs` | Replaced the hard-coded cream upload treatment in dark mode with the active surface/accent/text tokens; corrected descendant theme selectors for QR result cards, PDF comparison canvases, and the background checker. | Fixed locally. Five representative upload tools and the QR result card are covered by browser checks; final live verification belongs after deployment. |
 
 ## Local validation completed
 
@@ -48,6 +49,7 @@ configuration are still missing; the exact actions are listed under
 - `npm run sync:root` — PASS; synchronized 138 generated files.
 - `npm run perf:budget` — PASS; homepage 33,134 bytes, core CSS 107,788 bytes, core JS 75,405 bytes, total artifact 28,364,785 bytes (all below checked-in budgets).
 - `npm test` — PASS; browser/static regression suite completed and exited with code 0.
+- Dark-mode browser checks — PASS; delete pages, compress PDF, bookmark editor, PDF-to-Word, Word-to-PDF, and QR output were verified against the dark theme surface token.
 - `python -m compileall -q services` — PASS.
 - `python services/tests/verify_local.py` — PASS, 105/105 checks.
 - Worker ESM syntax validation — PASS.

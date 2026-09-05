@@ -52,6 +52,12 @@ check(!/escapeHTML|&times;/.test(qr), 'QR generator has no legacy HTML escaping/
 check(/textContent\s*=/.test(qr) && /createElement\(/.test(qr), 'QR generator builds user-visible output with DOM APIs');
 check(/tmpfiles\.org/.test(qr) && /api\.imgbb\.com/.test(qr), 'QR upload providers are present in CSP and implementation');
 check(/MAX_QR_UPLOAD_SIZE\s*=\s*100\s*\*/.test(qr), 'QR uploads enforce a 100 MB limit');
+const sharedStyles = read('src/css/style.css');
+check(/html\[data-theme="dark"\] \.upload-zone/.test(sharedStyles), 'Dark mode overrides the shared upload surface');
+check(/html\[data-theme="dark"\] \.upload-zone \.upload-text/.test(sharedStyles), 'Dark mode keeps upload text readable');
+check(!/\[data-theme="dark"\]\.qr-result-card/.test(qr), 'QR result card uses a descendant dark-mode selector');
+check(!/\[data-theme="dark"\]\.canvas-wrapper/.test(read('src/compare-pdf.html')), 'PDF comparison canvas uses a descendant dark-mode selector');
+check(!/\[data-theme="dark"\]\.checker-bg/.test(read('src/remove-background.html')), 'Background checker uses a descendant dark-mode selector');
 
 const htmlToPdf = read('src/tools/html-to-pdf.html');
 check(/function sanitizeHTML\s*\(/.test(htmlToPdf), 'HTML-to-PDF has an explicit sanitizer');
@@ -268,18 +274,52 @@ async function browserSmoke() {
         await page.waitForFunction(() => document.querySelectorAll('[data-generated-related-tools] .related-tool-card').length === 3, { timeout: 5000 });
         check(await page.$eval('[data-generated-related-tools]', node => node.querySelector('h2')?.textContent === 'Related tools'), 'Registry renders related tools on tool pages');
 
+        // The shared upload component is present on many legacy tool pages.
+        // Force dark mode and compare its computed surface to the active theme
+        // token so a hard-coded light/cream panel cannot regress unnoticed.
+        for (const uploadPage of [
+            '/tools/delete-pdf-pages.html',
+            '/tools/compress-pdf.html',
+            '/pdf-bookmark.html',
+            '/tools/pdf-to-word.html',
+            '/tools/word-to-pdf.html'
+        ]) {
+            await page.goto(`${base}${uploadPage}`, { waitUntil: 'domcontentloaded' });
+            const uploadTheme = await page.evaluate(() => {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                const zone = document.querySelector('.upload-zone');
+                if (!zone) return null;
+                const rootStyle = getComputedStyle(document.documentElement);
+                const probe = document.createElement('span');
+                probe.style.backgroundColor = rootStyle.getPropertyValue('--surface-1').trim();
+                document.body.appendChild(probe);
+                const expected = getComputedStyle(probe).backgroundColor;
+                probe.remove();
+                return {
+                    background: getComputedStyle(zone).backgroundColor,
+                    expected,
+                    text: getComputedStyle(zone).color,
+                    expectedText: rootStyle.getPropertyValue('--text-primary').trim()
+                };
+            });
+            check(uploadTheme && uploadTheme.background === uploadTheme.expected && uploadTheme.background !== 'rgb(243, 239, 229)' && uploadTheme.background !== 'rgb(255, 255, 255)', `Dark upload surface is theme-aware on ${uploadPage}`);
+        }
+
         await page.goto(`${base}/tools/qr-code-generator.html`, { waitUntil: 'domcontentloaded' });
         await page.evaluate(() => {
             window.__onlinePdfProXss = false;
+            document.documentElement.setAttribute('data-theme', 'dark');
             document.querySelector('#textInput').value = '<img src=x onerror="window.__onlinePdfProXss=true">';
             return window.generateQR();
         });
         await page.waitForFunction(() => document.querySelectorAll('#qrOutput canvas').length > 0, { timeout: 10000 });
         const qrResult = await page.evaluate(() => ({
             xss: window.__onlinePdfProXss,
-            labels: Array.from(document.querySelectorAll('#qrOutput .qr-label')).map(node => node.textContent)
+            labels: Array.from(document.querySelectorAll('#qrOutput .qr-label')).map(node => node.textContent),
+            cardBackground: getComputedStyle(document.querySelector('#qrOutput .qr-result-card')).backgroundColor
         }));
         check(!qrResult.xss && qrResult.labels.some(label => label.includes('<img')), 'QR text payload remains text and cannot execute');
+        check(qrResult.cardBackground !== 'rgb(255, 255, 255)', 'QR result cards use a dark surface in dark mode');
 
         await page.setRequestInterception(true);
         page.on('request', request => {
