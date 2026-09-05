@@ -40,7 +40,7 @@ configuration are still missing; the exact actions are listed under
 | 24 | Discoverability/link/canonical audit — Medium | registry/templates/generated pages/redirects | PDF Bookmark is present, broken PDF Editor link is absent, literal internal-link audit reports zero missing targets, and canonical variants are intentional/noindex where required. | Fixed locally. Final live crawl belongs after deployment. |
 | 25 | Service-worker invalidation — High | `src/sw.js`, `scripts/version-sw.js`, generated `sw.js` | Build generates a content-derived version stamp; HTML/JS use network-first updates while CSS/media use controlled cache strategies. | Fixed locally. Verify one post-deploy browser receives the new stamp and no stale asset remains. |
 | 26 | CSS/JS stale-cache behavior — High | service worker/build pipeline/generated assets | Build/sync and the revised cache strategy prevent indefinite stale CSS/JS; deployment gates rebuild before publishing. | Fixed in code/pipeline. CDN/browser verification is still required after release. |
-| 27 | Regression/adversarial QA — High | `scripts/test-regression.mjs`, `services/tests/*` | Automated coverage includes QR XSS/text/file/all modes, HTML XSS, password protect/unlock, image signatures, OCR privacy branches, registry/links, responsive 390/910px layouts, page errors, authentication/entitlement wiring, and service conversion fixtures. | Local gates pass. External AI/auth/purchase, live Modal, Razorpay Test Mode, and production performance measurements still require configured services. |
+| 27 | Regression/adversarial QA — High | `scripts/test-regression.mjs`, `services/tests/*` | Automated coverage includes QR XSS/text/file/all modes, HTML XSS, password protect/unlock, image signatures, OCR privacy branches, registry/links, responsive 390/910px layouts, page errors, authentication/entitlement wiring, duplicate-bundle guards, and service conversion fixtures. | Local gates pass. External AI/auth/purchase, live Modal, Razorpay Test Mode, and production performance measurements still require configured services. |
 
 ## Local validation completed
 
@@ -52,8 +52,9 @@ configuration are still missing; the exact actions are listed under
 - Worker ESM syntax validation — PASS.
 - `npx wrangler deploy --config cf-worker/wrangler.toml --dry-run --outdir .wrangler-dry-run` — PASS.
 - `npm audit --omit=dev` — PASS, 0 vulnerabilities.
-- `git diff --check` — PASS; checkout clean at `29241ee`.
+- `git diff --check` — PASS after the build/sync cycle.
 - Static encoding, literal-link, canonical, `innerHTML`, and generated-site audits — PASS (with the documented legacy emoji/layout debt).
+- Generated-site asset audit — 138 files / 28,364,785 bytes after removing unused duplicate library copies (146 files / 31,797,634 bytes before; 3,432,849 bytes removed). The largest remaining asset is the local OCR language model, which is lazy-loaded by the OCR tool rather than the homepage.
 
 ## External production actions / blockers
 

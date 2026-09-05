@@ -100,6 +100,9 @@ const unlock = read('src/tools/pdf-unlock.html');
 check(/pdf-encrypt\.umd\.js/.test(protect) && /AES-256/i.test(protect), 'Password protection uses the maintained AES-256 bundle');
 check(/pdf-decrypt\.umd\.js/.test(unlock) && !/html2canvas|toDataURL\(/.test(unlock), 'PDF unlock preserves structure instead of rasterizing pages');
 check(exists('js/vendor/pdf-encrypt/pdf-encrypt.umd.js') && exists('js/vendor/pdf-decrypt/pdf-decrypt.umd.js'), 'PDF encryption/decryption browser bundles are vendored');
+for (const legacyLibrary of ['docx', 'html2canvas', 'jspdf', 'jszip', 'pdfjs', 'pdflib', 'pptxgenjs']) {
+    check(!exists(`src/js/${legacyLibrary}`) && !exists(`js/${legacyLibrary}`), `Legacy duplicate ${legacyLibrary} bundle is removed`);
+}
 
 const imageConverter = read('src/tools/image-format-converter.html');
 check(/canvas\.toDataURL\(['"]image\/(?:jpeg|png|webp)/.test(imageConverter), 'Image converter emits genuine Canvas formats');
