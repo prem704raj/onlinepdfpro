@@ -18,6 +18,7 @@
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/version-sw.js",
     "test": "node scripts/test-regression.mjs",
+    "perf:budget": "node scripts/check-performance-budget.mjs",
     "dev": "npx @11ty/eleventy --serve",
     "start": "npm run dev",
     "sync:root": "node scripts/sync-to-root.js"

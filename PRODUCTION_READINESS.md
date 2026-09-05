@@ -45,7 +45,8 @@ configuration are still missing; the exact actions are listed under
 ## Local validation completed
 
 - `npm run build` — PASS; generated 10 files and refreshed the content-hashed service-worker stamp.
-- `npm run sync:root` — PASS; synchronized 146 generated files.
+- `npm run sync:root` — PASS; synchronized 138 generated files.
+- `npm run perf:budget` — PASS; homepage 33,134 bytes, core CSS 107,788 bytes, core JS 75,405 bytes, total artifact 28,364,785 bytes (all below checked-in budgets).
 - `npm test` — PASS; browser/static regression suite completed and exited with code 0.
 - `python -m compileall -q services` — PASS.
 - `python services/tests/verify_local.py` — PASS, 105/105 checks.
@@ -54,7 +55,7 @@ configuration are still missing; the exact actions are listed under
 - `npm audit --omit=dev` — PASS, 0 vulnerabilities.
 - `git diff --check` — PASS after the build/sync cycle.
 - Static encoding, literal-link, canonical, `innerHTML`, and generated-site audits — PASS (with the documented legacy emoji/layout debt).
-- Generated-site asset audit — 138 files / 28,364,785 bytes after removing unused duplicate library copies (146 files / 31,797,634 bytes before; 3,432,849 bytes removed). The largest remaining asset is the local OCR language model, which is lazy-loaded by the OCR tool rather than the homepage.
+- Generated-site asset audit — 138 files / 28,364,785 bytes after removing unused duplicate library copies (146 files / 31,797,634 bytes before; 3,432,849 bytes removed). The largest remaining asset is the local OCR language model, which is lazy-loaded by the OCR tool rather than the homepage. A static budget now guards homepage, core CSS/JS, and total artifact size in CI.
 
 ## External production actions / blockers
 
