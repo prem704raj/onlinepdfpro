@@ -2,7 +2,7 @@
 
 Date: 2026-09-05  
 Repository: `prem704raj/onlinepdfpro`  
-Validated checkout: `main` at `29241ee`
+Validated code commit: `df5a139` on `main`
 
 The remediation work below is implemented in the checkout and covered by the
 local build/regression gates listed at the end. The live site and live Worker
