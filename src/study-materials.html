@@ -212,6 +212,687 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* PREMIUM PRODUCT SHOWCASE */
+        .sm-grid {
+            display: block;
+        }
+
+        .product-showcase {
+            display: grid;
+            grid-template-columns: minmax(0, 1.12fr) minmax(320px, .88fr);
+            gap: clamp(24px, 4vw, 56px);
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: clamp(20px, 4vw, 38px);
+            border: 1px solid var(--sm-border);
+            background: linear-gradient(135deg, rgba(255,255,255,.46), rgba(255,255,255,.12)), var(--sm-card-bg);
+            box-shadow: 0 24px 80px rgba(44,36,24,.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .product-showcase {
+            background: linear-gradient(135deg, rgba(255,255,255,.035), rgba(255,255,255,0)), var(--sm-card-bg);
+            box-shadow: 0 24px 80px rgba(0,0,0,.28);
+        }
+
+        .product-showcase::before {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            right: -130px;
+            top: -150px;
+            border-radius: 50%;
+            background: var(--sm-accent);
+            opacity: .07;
+            pointer-events: none;
+        }
+
+        .product-preview,
+        .product-info {
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .preview-kicker,
+        .product-eyebrow,
+        .product-section-label {
+            display: block;
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            line-height: 1.4;
+            text-transform: uppercase;
+            color: var(--sm-accent);
+        }
+
+        .preview-header h3 {
+            margin: 5px 0 0;
+            font-family: var(--sm-serif);
+            font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+            font-weight: 500;
+            line-height: 1.2;
+            color: var(--sm-text);
+        }
+
+        .preview-count-badge,
+        .product-stock {
+            flex: 0 0 auto;
+            padding: 7px 10px;
+            border: 1px solid var(--sm-border);
+            color: var(--sm-text-secondary);
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .preview-stage {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-height: 420px;
+            padding: clamp(18px, 3vw, 30px);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 18px;
+            background: #172235;
+            box-shadow: 0 18px 44px rgba(20,31,49,.2);
+        }
+
+        .preview-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 15%, rgba(212,169,66,.22), transparent 35%),
+                radial-gradient(circle at 90% 85%, rgba(70,153,185,.22), transparent 38%);
+            pointer-events: none;
+        }
+
+        .preview-stage img {
+            position: relative;
+            z-index: 1;
+            display: block;
+            width: min(100%, 430px);
+            max-height: 540px;
+            aspect-ratio: 612 / 792;
+            object-fit: contain;
+            border-radius: 3px;
+            background: #fff;
+            box-shadow: 0 18px 34px rgba(0,0,0,.28);
+            transition: opacity .18s ease, transform .18s ease;
+        }
+
+        .preview-stage.is-changing img {
+            opacity: .42;
+            transform: scale(.985);
+        }
+
+        .preview-stage-label {
+            position: absolute;
+            z-index: 2;
+            top: 14px;
+            left: 14px;
+            padding: 6px 9px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 999px;
+            background: rgba(10,17,29,.68);
+            color: #fff;
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .preview-watermark {
+            position: absolute;
+            z-index: 2;
+            right: -42px;
+            bottom: 72px;
+            padding: 8px 58px;
+            transform: rotate(-30deg);
+            border-top: 1px solid rgba(255,255,255,.2);
+            border-bottom: 1px solid rgba(255,255,255,.2);
+            color: rgba(255,255,255,.56);
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        .preview-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 14px 0 12px;
+        }
+
+        .preview-arrow,
+        .preview-open-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            border: 1px solid var(--sm-border);
+            background: transparent;
+            color: var(--sm-text);
+            cursor: pointer;
+            transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+        }
+
+        .preview-arrow {
+            width: 40px;
+            border-radius: 50%;
+            font-size: 1.15rem;
+        }
+
+        .preview-arrow svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .preview-arrow:hover:not(:disabled),
+        .preview-open-btn:hover {
+            border-color: var(--sm-accent);
+            background: rgba(212,169,66,.1);
+            color: var(--sm-accent);
+            transform: translateY(-1px);
+        }
+
+        .preview-arrow:disabled {
+            cursor: not-allowed;
+            opacity: .35;
+        }
+
+        .preview-page-count {
+            color: var(--sm-text-secondary);
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: .04em;
+        }
+
+        .preview-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .preview-thumb {
+            display: block;
+            padding: 4px;
+            border: 1px solid var(--sm-border);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+        }
+
+        .preview-thumb:hover {
+            border-color: var(--sm-accent);
+            transform: translateY(-2px);
+        }
+
+        .preview-thumb[aria-current="true"] {
+            border-color: var(--sm-accent);
+            box-shadow: 0 0 0 2px rgba(212,169,66,.2);
+        }
+
+        .preview-thumb img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 612 / 792;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .preview-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 13px 0 0;
+            color: var(--sm-text-muted);
+            font-size: .75rem;
+            line-height: 1.55;
+        }
+
+        .preview-note svg {
+            flex: 0 0 auto;
+            width: 16px;
+            height: 16px;
+            margin-top: 1px;
+            color: var(--sm-accent);
+        }
+
+        .preview-open-btn {
+            width: 100%;
+            margin-top: 14px;
+            border-radius: 10px;
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 8px 0 4px;
+        }
+
+        .product-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .product-icon-large {
+            display: grid;
+            place-items: center;
+            width: 58px;
+            height: 58px;
+            margin-bottom: 18px;
+            border-radius: 16px;
+            background: #2563eb;
+            color: #fff;
+            box-shadow: 0 12px 24px rgba(37,99,235,.22);
+        }
+
+        .product-icon-large svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .product-title-large {
+            max-width: 540px;
+            margin: 0 0 14px;
+            font-family: var(--sm-serif);
+            font-size: clamp(2rem, 3.7vw, 3.15rem);
+            font-weight: 500;
+            line-height: 1.06;
+            letter-spacing: -.025em;
+            color: var(--sm-text);
+        }
+
+        .product-description-large {
+            max-width: 560px;
+            margin: 0 0 24px;
+            color: var(--sm-text-secondary);
+            font-size: .95rem;
+            line-height: 1.75;
+        }
+
+        .product-quickfacts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 100%;
+            margin-bottom: 25px;
+            border-top: 1px solid var(--sm-border);
+            border-bottom: 1px solid var(--sm-border);
+        }
+
+        .product-quickfact {
+            padding: 14px 10px;
+            border-right: 1px solid var(--sm-border);
+            color: var(--sm-text-muted);
+            font-size: .68rem;
+            line-height: 1.4;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .product-quickfact:last-child { border-right: 0; }
+        .product-quickfact strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--sm-text);
+            font-family: var(--sm-serif);
+            font-size: 1.35rem;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .product-includes {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .product-includes ul {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px 18px;
+            margin: 12px 0 0;
+            padding: 0;
+            list-style: none;
+            color: var(--sm-text-secondary);
+            font-size: .82rem;
+            line-height: 1.45;
+        }
+
+        .product-includes li {
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .product-includes li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--sm-accent);
+            font-weight: 700;
+        }
+
+        .product-disclosure {
+            width: 100%;
+            margin: 0 0 22px;
+            padding: 13px 14px;
+            border-left: 2px solid var(--sm-accent);
+            background: rgba(212,169,66,.08);
+            color: var(--sm-text-secondary);
+            font-size: .75rem;
+            line-height: 1.55;
+        }
+
+        .product-disclosure strong { color: var(--sm-text); }
+
+        .product-purchase-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+            gap: 18px;
+            margin-top: auto;
+            padding-top: 18px;
+            border-top: 1px solid var(--sm-border);
+        }
+
+        .product-price-large {
+            display: block;
+            color: var(--sm-text);
+            font-family: var(--sm-serif);
+            font-size: 2.25rem;
+            line-height: 1;
+        }
+
+        .product-format-large {
+            display: block;
+            margin-top: 7px;
+            color: var(--sm-text-muted);
+            font-size: .73rem;
+        }
+
+        .product-access-note {
+            max-width: 150px;
+            color: var(--sm-text-muted);
+            font-size: .7rem;
+            line-height: 1.45;
+            text-align: right;
+        }
+
+        .product-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .product-cart-btn,
+        .product-buy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            font-family: var(--sm-sans);
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+        }
+
+        .product-cart-btn {
+            border: 1px solid var(--sm-accent);
+            background: transparent;
+            color: var(--sm-accent);
+        }
+
+        .product-buy-btn {
+            border: 1px solid var(--sm-accent);
+            background: var(--sm-accent);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(139,105,20,.2);
+        }
+
+        .product-cart-btn:hover,
+        .product-buy-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .product-cart-btn svg,
+        .product-buy-btn svg {
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .product-cart-btn svg { margin-left: 0; margin-right: 8px; }
+
+        .product-cart-btn:hover {
+            background: rgba(212,169,66,.1);
+        }
+
+        .product-buy-btn:hover {
+            background: var(--sm-accent-hover);
+            box-shadow: 0 13px 26px rgba(139,105,20,.25);
+        }
+
+        .product-trust-line {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            width: 100%;
+            margin: 13px 0 0;
+            color: var(--sm-text-muted);
+            font-size: .7rem;
+            line-height: 1.45;
+        }
+
+        .product-trust-line svg {
+            flex: 0 0 auto;
+            width: 15px;
+            height: 15px;
+            color: var(--sm-accent);
+        }
+
+        /* PREVIEW DIALOG */
+        .preview-dialog {
+            margin: auto;
+            width: min(980px, calc(100% - 28px));
+            max-width: 980px;
+            max-height: calc(100% - 28px);
+            padding: 0;
+            border: 1px solid var(--sm-border);
+            background: var(--sm-bg);
+            color: var(--sm-text);
+            box-shadow: 0 24px 90px rgba(0,0,0,.45);
+        }
+
+        .preview-dialog::backdrop {
+            background: rgba(11,13,18,.82);
+            backdrop-filter: blur(8px);
+        }
+
+        .preview-dialog-inner {
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 28px);
+        }
+
+        .preview-dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--sm-border);
+        }
+
+        .preview-dialog-header h2 {
+            margin: 0;
+            font-family: var(--sm-serif);
+            font-size: 1.35rem;
+            font-weight: 500;
+        }
+
+        .preview-dialog-close {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--sm-border);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--sm-text);
+            cursor: pointer;
+            font-size: 1.45rem;
+            line-height: 1;
+        }
+
+        .preview-dialog-close svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .preview-dialog button:focus-visible,
+        .product-actions button:focus-visible,
+        .preview-thumb:focus-visible {
+            outline: 3px solid color-mix(in srgb, var(--sm-accent) 55%, transparent);
+            outline-offset: 3px;
+        }
+
+        .preview-dialog-close:hover {
+            border-color: var(--sm-accent);
+            color: var(--sm-accent);
+        }
+
+        .preview-dialog-body {
+            display: grid;
+            place-items: center;
+            min-height: 0;
+            overflow: auto;
+            padding: 24px;
+            background: var(--sm-bg-alt);
+        }
+
+        .preview-dialog-body img {
+            display: block;
+            width: min(100%, 640px);
+            height: auto;
+            border-radius: 3px;
+            background: #fff;
+            box-shadow: 0 18px 44px rgba(0,0,0,.25);
+        }
+
+        .preview-dialog-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 22px;
+            border-top: 1px solid var(--sm-border);
+        }
+
+        .preview-dialog-footer .preview-controls {
+            flex: 1;
+            margin: 0;
+        }
+
+        @media (max-width: 900px) {
+            .product-showcase {
+                grid-template-columns: 1fr;
+                max-width: 680px;
+            }
+            .product-info { padding-top: 4px; }
+            .preview-stage { min-height: 0; }
+            .preview-stage img { max-height: 620px; }
+        }
+
+        @media (max-width: 600px) {
+            .product-showcase {
+                padding: 18px;
+            }
+            .preview-header {
+                display: block;
+            }
+            .preview-count-badge {
+                display: inline-block;
+                margin-top: 10px;
+            }
+            .product-topline {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 18px;
+            }
+            .product-title-large { font-size: 2.15rem; }
+            .product-description-large { font-size: .88rem; }
+            .product-includes ul { grid-template-columns: 1fr; }
+            .product-purchase-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+            .product-access-note { max-width: none; text-align: left; }
+            .product-actions { grid-template-columns: 1fr; }
+            .preview-dialog-header,
+            .preview-dialog-footer { padding-left: 16px; padding-right: 16px; }
+            .preview-dialog-body { padding: 14px; }
+            .preview-dialog-footer .preview-controls { gap: 8px; }
+        }
+
         .sm-card {
             background: var(--sm-card-bg);
             border: 1px solid var(--sm-border);
@@ -751,50 +1432,139 @@
                     <h2 class="sm-section-title"><em>Computer Science</em> <em>Notes</em></h2>
                 </div>
                 <div class="sm-grid">
-                    <div class="sm-card sm-fade-up" style="display:flex; flex-direction:column; justify-content:space-between;">
-                        <div>
-                            <div class="sm-card-icon" style="background:#2563eb;"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                            <h3 class="sm-card-title">DBMS Complete Notes</h3>
-                            <p class="sm-card-desc">Complete Database Management System notes covering ER diagrams, relational models, normalization, SQL queries, transactions, indexing, and exam revision. 51 pages; AI-assisted preparation is disclosed below.</p>
-                            <div class="product-details" aria-label="DBMS notes details">
-                                <strong>What's included</strong>
+                    <article class="product-showcase sm-fade-up" aria-labelledby="dbmsProductTitle">
+                        <div class="product-preview" aria-labelledby="dbmsPreviewHeading">
+                            <div class="preview-header">
+                                <div>
+                                    <span class="preview-kicker">Inside the notes</span>
+                                    <h3 id="dbmsPreviewHeading">Preview the first five pages</h3>
+                                </div>
+                                <span class="preview-count-badge">5 of 51 pages</span>
+                            </div>
+
+                            <div class="preview-stage" id="dbmsPreviewStage">
+                                <span class="preview-stage-label">Sample preview</span>
+                                <img id="dbmsPreviewImage" src="/assets/previews/dbms/page-01.webp" alt="DBMS Complete Notes preview, page 1 of 5" width="612" height="792" fetchpriority="high">
+                                <span class="preview-watermark" aria-hidden="true">OnlinePDFPro · Sample</span>
+                            </div>
+
+                            <div class="preview-controls" aria-label="Preview page controls">
+                                <button type="button" class="preview-arrow" id="dbmsPreviewPrev" aria-label="Previous preview page" disabled>
+                                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                                </button>
+                                <span class="preview-page-count" id="dbmsPreviewPage" aria-live="polite">Page 1 of 5</span>
+                                <button type="button" class="preview-arrow" id="dbmsPreviewNext" aria-label="Next preview page">
+                                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                                </button>
+                            </div>
+
+                            <div class="preview-thumbnails" id="dbmsPreviewThumbs" role="list" aria-label="DBMS preview pages">
+                                <button type="button" class="preview-thumb" data-preview-index="0" aria-label="Show preview page 1" aria-current="true">
+                                    <img src="/assets/previews/dbms/page-01.webp" alt="Page 1 thumbnail" width="612" height="792">
+                                </button>
+                                <button type="button" class="preview-thumb" data-preview-index="1" aria-label="Show preview page 2" aria-current="false">
+                                    <img src="/assets/previews/dbms/page-02.webp" alt="Page 2 thumbnail" width="612" height="792" loading="lazy">
+                                </button>
+                                <button type="button" class="preview-thumb" data-preview-index="2" aria-label="Show preview page 3" aria-current="false">
+                                    <img src="/assets/previews/dbms/page-03.webp" alt="Page 3 thumbnail" width="612" height="792" loading="lazy">
+                                </button>
+                                <button type="button" class="preview-thumb" data-preview-index="3" aria-label="Show preview page 4" aria-current="false">
+                                    <img src="/assets/previews/dbms/page-04.webp" alt="Page 4 thumbnail" width="612" height="792" loading="lazy">
+                                </button>
+                                <button type="button" class="preview-thumb" data-preview-index="4" aria-label="Show preview page 5" aria-current="false">
+                                    <img src="/assets/previews/dbms/page-05.webp" alt="Page 5 thumbnail" width="612" height="792" loading="lazy">
+                                </button>
+                            </div>
+
+                            <p class="preview-note">
+                                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg>
+                                <span>Only the first 5 pages are shown. The complete 51-page PDF is delivered after purchase.</span>
+                            </p>
+                            <button type="button" class="preview-open-btn" id="dbmsPreviewOpen">Open larger preview</button>
+                        </div>
+
+                        <div class="product-info">
+                            <div class="product-topline">
+                                <span class="product-eyebrow">Study guide · DBMS</span>
+                                <span class="product-stock">Instant access</span>
+                            </div>
+                            <div class="product-icon-large" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <h2 class="product-title-large" id="dbmsProductTitle">DBMS Complete Notes</h2>
+                            <p class="product-description-large">A focused 51-page guide to database fundamentals, relational models, ER diagrams, normalization, SQL, transactions, indexing, and exam revision.</p>
+
+                            <div class="product-quickfacts" aria-label="Product facts">
+                                <div class="product-quickfact"><strong>51</strong>pages</div>
+                                <div class="product-quickfact"><strong>PDF</strong>format</div>
+                                <div class="product-quickfact"><strong>₹9</strong>one-time</div>
+                            </div>
+
+                            <div class="product-includes">
+                                <span class="product-section-label">What's included</span>
                                 <ul>
                                     <li>Core DBMS concepts and architecture</li>
                                     <li>ER diagrams, normalization, and SQL</li>
                                     <li>Transactions, concurrency, and indexing</li>
+                                    <li>Compact revision-ready explanations</li>
                                 </ul>
-                                <p><strong>Format:</strong> PDF · 51 pages · ₹9 · instant access</p>
-                                <p><strong>Preparation:</strong> AI-assisted draft; review the material before relying on it for exams.</p>
                             </div>
-                        </div>
-                        <div class="product-price-row">
-                            <div>
-                                <span class="product-price">₹9</span>
-                                <span class="product-format">PDF · 51 pages</span>
+
+                            <p class="product-disclosure"><strong>Preparation note:</strong> This is an AI-assisted draft. Review and verify the material before relying on it for exams or professional decisions.</p>
+
+                            <div class="product-purchase-row">
+                                <div>
+                                    <span class="product-price-large">₹9</span>
+                                    <span class="product-format-large">PDF · 51 pages</span>
+                                </div>
+                                <span class="product-access-note">Secure checkout<br>Download again from My Library</span>
                             </div>
-                        </div>
 
-                        <div class="product-actions">
-                            <button
-                                type="button"
-                                class="product-cart-btn"
-                                onclick="addToCart('dbms-notes')"
-                            >
-                                Add to Cart
-                            </button>
-
-                            <button
-                                type="button"
-                                class="product-buy-btn"
-                                onclick="buyProduct('dbms-notes')"
-                            >
-                                Buy Now
-                            </button>
+                            <div class="product-actions">
+                                <button type="button" class="product-cart-btn" onclick="addToCart('dbms-notes')">
+                                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6"/></svg>
+                                    Add to Cart
+                                </button>
+                                <button type="button" class="product-buy-btn" onclick="buyProduct('dbms-notes')">
+                                    Buy Now
+                                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+                                </button>
+                            </div>
+                            <p class="product-trust-line"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Protected payment · Immediate access after successful verification</p>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
+
+        <dialog class="preview-dialog" id="dbmsPreviewDialog" aria-labelledby="dbmsPreviewDialogTitle">
+            <div class="preview-dialog-inner">
+                <div class="preview-dialog-header">
+                    <div>
+                        <span class="preview-kicker">DBMS Complete Notes</span>
+                        <h2 id="dbmsPreviewDialogTitle">Five-page preview</h2>
+                    </div>
+                    <button type="button" class="preview-dialog-close" id="dbmsPreviewClose" aria-label="Close larger preview">
+                        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></svg>
+                    </button>
+                </div>
+                <div class="preview-dialog-body">
+                    <img id="dbmsPreviewDialogImage" src="/assets/previews/dbms/page-01.webp" alt="DBMS Complete Notes larger preview, page 1 of 5" width="612" height="792">
+                </div>
+                <div class="preview-dialog-footer">
+                    <div class="preview-controls" aria-label="Larger preview page controls">
+                        <button type="button" class="preview-arrow" id="dbmsPreviewDialogPrev" aria-label="Previous preview page" disabled>
+                            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                        </button>
+                        <span class="preview-page-count" id="dbmsPreviewDialogPage" aria-live="polite">Page 1 of 5</span>
+                        <button type="button" class="preview-arrow" id="dbmsPreviewDialogNext" aria-label="Next preview page">
+                            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                    <span class="preview-page-count">Preview only</span>
+                </div>
+            </div>
+        </dialog>
     </main>
 
     <footer class="hp-footer">
@@ -944,5 +1714,118 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/auth.js?v=96"></script>
     <script src="/js/store.js?v=96"></script>
+    <script>
+    (function () {
+        var product = window.STORE_PRODUCTS && window.STORE_PRODUCTS['dbms-notes'];
+        var fallbackPages = [
+            '/assets/previews/dbms/page-01.webp',
+            '/assets/previews/dbms/page-02.webp',
+            '/assets/previews/dbms/page-03.webp',
+            '/assets/previews/dbms/page-04.webp',
+            '/assets/previews/dbms/page-05.webp'
+        ];
+        var pages = product && Array.isArray(product.previewPages) && product.previewPages.length === 5
+            ? product.previewPages
+            : fallbackPages;
+        var previewCount = pages.length;
+        var index = 0;
+        var image = document.getElementById('dbmsPreviewImage');
+        var stage = document.getElementById('dbmsPreviewStage');
+        var pageLabel = document.getElementById('dbmsPreviewPage');
+        var prev = document.getElementById('dbmsPreviewPrev');
+        var next = document.getElementById('dbmsPreviewNext');
+        var thumbs = Array.prototype.slice.call(document.querySelectorAll('#dbmsPreviewThumbs [data-preview-index]'));
+        var dialog = document.getElementById('dbmsPreviewDialog');
+        var dialogImage = document.getElementById('dbmsPreviewDialogImage');
+        var dialogPageLabel = document.getElementById('dbmsPreviewDialogPage');
+        var dialogPrev = document.getElementById('dbmsPreviewDialogPrev');
+        var dialogNext = document.getElementById('dbmsPreviewDialogNext');
+        var openButton = document.getElementById('dbmsPreviewOpen');
+        var closeButton = document.getElementById('dbmsPreviewClose');
+        var returnFocus = null;
+
+        if (!image || !stage || !pageLabel || !prev || !next || !dialog) return;
+
+        function setImage(target, source, alt) {
+            if (!target) return;
+            target.alt = alt;
+            target.src = source;
+        }
+
+        function render(nextIndex) {
+            index = Math.max(0, Math.min(previewCount - 1, nextIndex));
+            var source = pages[index];
+            var pageText = 'Page ' + (index + 1) + ' of ' + previewCount;
+            var mainAlt = 'DBMS Complete Notes preview, page ' + (index + 1) + ' of ' + previewCount;
+            var dialogAlt = 'DBMS Complete Notes larger preview, page ' + (index + 1) + ' of ' + previewCount;
+
+            stage.classList.add('is-changing');
+            image.onload = function () { stage.classList.remove('is-changing'); };
+            image.onerror = function () { stage.classList.remove('is-changing'); };
+            setImage(image, source, mainAlt);
+            if (image.complete && image.naturalWidth) stage.classList.remove('is-changing');
+            setImage(dialogImage, source, dialogAlt);
+
+            pageLabel.textContent = pageText;
+            if (dialogPageLabel) dialogPageLabel.textContent = pageText;
+            prev.disabled = index === 0;
+            next.disabled = index === previewCount - 1;
+            if (dialogPrev) dialogPrev.disabled = prev.disabled;
+            if (dialogNext) dialogNext.disabled = next.disabled;
+            thumbs.forEach(function (thumb, thumbIndex) {
+                thumb.setAttribute('aria-current', String(thumbIndex === index));
+            });
+        }
+
+        function closeDialog() {
+            if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+            else dialog.removeAttribute('open');
+            if (returnFocus && typeof returnFocus.focus === 'function') returnFocus.focus();
+        }
+
+        prev.addEventListener('click', function () { render(index - 1); });
+        next.addEventListener('click', function () { render(index + 1); });
+        if (dialogPrev) dialogPrev.addEventListener('click', function () { render(index - 1); });
+        if (dialogNext) dialogNext.addEventListener('click', function () { render(index + 1); });
+        thumbs.forEach(function (thumb) {
+            thumb.addEventListener('click', function () {
+                render(Number(thumb.getAttribute('data-preview-index')) || 0);
+            });
+        });
+
+        if (openButton) {
+            openButton.addEventListener('click', function () {
+                returnFocus = openButton;
+                render(index);
+                if (typeof dialog.showModal === 'function') {
+                    if (!dialog.open) dialog.showModal();
+                } else {
+                    dialog.setAttribute('open', '');
+                }
+                if (closeButton) closeButton.focus();
+            });
+        }
+        if (closeButton) closeButton.addEventListener('click', closeDialog);
+        dialog.addEventListener('click', function (event) {
+            if (event.target === dialog) closeDialog();
+        });
+        dialog.addEventListener('close', function () {
+            if (returnFocus && typeof returnFocus.focus === 'function') returnFocus.focus();
+        });
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowLeft') {
+                render(index - 1);
+                event.preventDefault();
+            } else if (event.key === 'ArrowRight') {
+                render(index + 1);
+                event.preventDefault();
+            } else if (event.key === 'Escape' && dialog.hasAttribute('open')) {
+                closeDialog();
+            }
+        });
+
+        render(0);
+    })();
+    </script>
 </body>
 </html>

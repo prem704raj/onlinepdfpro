@@ -4,7 +4,15 @@ const STORE_PRODUCTS = {
         title: "DBMS Complete Notes",
         price: 9,
         image: "/logo.png",
-        url: "/study-materials.html"
+        url: "/study-materials.html",
+        pageCount: 51,
+        previewPages: [
+            "/assets/previews/dbms/page-01.webp",
+            "/assets/previews/dbms/page-02.webp",
+            "/assets/previews/dbms/page-03.webp",
+            "/assets/previews/dbms/page-04.webp",
+            "/assets/previews/dbms/page-05.webp"
+        ]
     }
 };
 

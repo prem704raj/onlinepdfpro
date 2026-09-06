@@ -100,6 +100,14 @@ const authSource = read('src/js/auth.js');
 check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChange/.test(authSource), 'Authentication session flow is wired to Supabase');
 const storeSource = read('src/js/store.js');
 check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
+const studySource = read('src/study-materials.html');
+check(/dbmsPreviewImage/.test(studySource) && /dbmsPreviewDialog/.test(studySource) && /showModal\(\)/.test(studySource), 'DBMS study material includes an accessible larger preview dialog');
+check(/data-preview-index="0"/.test(studySource) && /data-preview-index="4"/.test(studySource) && /previewPages/.test(storeSource), 'DBMS study material exposes five preview pages through product metadata');
+const previewAssetPaths = Array.from({ length: 5 }, (_, index) => `src/assets/previews/dbms/page-0${index + 1}.webp`);
+previewAssetPaths.forEach((assetPath, index) => {
+    const assetData = exists(assetPath) ? fs.readFileSync(path.join(root, assetPath)) : Buffer.alloc(0);
+    check(assetData.length > 12 && filePrefix(assetPath, [0x52, 0x49, 0x46, 0x46]) && assetData.subarray(8, 12).toString('ascii') === 'WEBP', `DBMS preview page ${index + 1} is a valid WebP asset`);
+});
 
 const protect = read('src/tools/password-protect-pdf.html');
 const unlock = read('src/tools/pdf-unlock.html');
@@ -184,7 +192,7 @@ async function browserSmoke() {
             response.writeHead(404); response.end('Not found'); return;
         }
         const ext = path.extname(target).toLowerCase();
-        const contentTypes = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.ttf': 'font/ttf' };
+        const contentTypes = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.ttf': 'font/ttf', '.webp': 'image/webp' };
         response.writeHead(200, { 'Content-Type': contentTypes[ext] || 'application/octet-stream' });
         fs.createReadStream(target).pipe(response);
     });
@@ -276,6 +284,33 @@ async function browserSmoke() {
         await page.goto(`${base}/tools/merge-pdf.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => document.querySelectorAll('[data-generated-related-tools] .related-tool-card').length === 3, { timeout: 5000 });
         check(await page.$eval('[data-generated-related-tools]', node => node.querySelector('h2')?.textContent === 'Related tools'), 'Registry renders related tools on tool pages');
+
+        await page.setViewport({ width: 1280, height: 900 });
+        await page.goto(`${base}/study-materials.html`, { waitUntil: 'domcontentloaded' });
+        await page.waitForSelector('#dbmsPreviewImage', { timeout: 5000 });
+        await page.waitForFunction(() => {
+            const image = document.querySelector('#dbmsPreviewImage');
+            return image && image.complete && image.naturalWidth > 0;
+        }, { timeout: 10000 });
+        const previewInitial = await page.evaluate(() => ({
+            thumbnails: document.querySelectorAll('#dbmsPreviewThumbs [data-preview-index]').length,
+            page: document.querySelector('#dbmsPreviewPage')?.textContent.trim(),
+            alt: document.querySelector('#dbmsPreviewImage')?.alt,
+            nextDisabled: document.querySelector('#dbmsPreviewNext')?.disabled
+        }));
+        check(previewInitial.thumbnails === 5 && previewInitial.page === 'Page 1 of 5' && /page 1 of 5/i.test(previewInitial.alt || '') && !previewInitial.nextDisabled, 'DBMS preview loads five pages and starts on page one');
+        await page.click('#dbmsPreviewNext');
+        await page.waitForFunction(() => /Page 2 of 5/.test(document.querySelector('#dbmsPreviewPage')?.textContent || ''), { timeout: 5000 });
+        check(await page.$eval('#dbmsPreviewImage', image => /page 2 of 5/i.test(image.alt) && image.src.endsWith('/assets/previews/dbms/page-02.webp')), 'DBMS preview next control changes the rendered page');
+        await page.click('#dbmsPreviewOpen');
+        await page.waitForFunction(() => document.querySelector('#dbmsPreviewDialog')?.open === true, { timeout: 5000 });
+        check(await page.$eval('#dbmsPreviewDialogImage', image => /page 2 of 5/i.test(image.alt)), 'DBMS larger preview opens on the selected page');
+        await page.click('#dbmsPreviewDialogNext');
+        await page.waitForFunction(() => /Page 3 of 5/.test(document.querySelector('#dbmsPreviewDialogPage')?.textContent || ''), { timeout: 5000 });
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => !document.querySelector('#dbmsPreviewDialog')?.open, { timeout: 5000 });
+        await page.click('[data-preview-index="4"]');
+        check(await page.$eval('#dbmsPreviewImage', image => /page 5 of 5/i.test(image.alt)), 'DBMS preview thumbnails select the fifth page');
 
         // The shared upload component is present on many legacy tool pages.
         // Force dark mode and compare its computed surface to the active theme
@@ -452,7 +487,9 @@ async function browserSmoke() {
             ];
             for (const format of formats) {
                 if (format.button !== '[data-format="jpeg"]') {
-                    await page.reload({ waitUntil: 'domcontentloaded' });
+                    // A fresh navigation resets the converter state without
+                    // racing a service-worker reload or a stale DOM snapshot.
+                    await page.goto(`${base}/tools/image-format-converter.html`, { waitUntil: 'domcontentloaded' });
                     await page.waitForSelector('.file-input', { timeout: 5000 });
                     await page.evaluate(() => {
                         window.__downloadedBlob = null;
@@ -505,7 +542,9 @@ async function browserSmoke() {
             { path: '/index.html', width: 390, height: 844, heading: 'h1' },
             { path: '/index.html', width: 910, height: 768, heading: 'h1' },
             { path: '/tools.html', width: 390, height: 844, heading: '.tp-hero-heading' },
-            { path: '/tools.html', width: 910, height: 768, heading: '.tp-hero-heading' }
+            { path: '/tools.html', width: 910, height: 768, heading: '.tp-hero-heading' },
+            { path: '/study-materials.html', width: 390, height: 844, heading: '.product-title-large' },
+            { path: '/study-materials.html', width: 1280, height: 900, heading: '.product-title-large' }
         ]) {
             await page.setViewport({ width: layout.width, height: layout.height });
             await page.goto(`${base}${layout.path}`, { waitUntil: 'domcontentloaded' });
