@@ -758,7 +758,7 @@ const PwaInstallManager = {
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
-        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>Install OnlinePDFPro</strong><span>Fast, private, and works with the tool's supported processing method</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
+        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>OnlinePDFPro</strong><span>Fast & works offline</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
         document.body.appendChild(this.installBanner);
         this.injectBannerCSS();
         document.getElementById('pwaBannerInstall').addEventListener('click', () => this.triggerInstall());
@@ -769,16 +769,18 @@ const PwaInstallManager = {
         if (document.getElementById('pwaStyles')) return;
         const s = document.createElement('style'); s.id = 'pwaStyles';
         s.textContent = `
-            #pwaInstallBanner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 450px; z-index: 9999; background: var(--surface-1, #fff); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); border: 1px solid var(--border); animation: pwaUp 0.5s ease; padding: 12px 16px; }
+            #pwaInstallBanner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 400px; z-index: 9999; background: rgba(255,255,255,0.72); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.35); animation: pwaUp 0.5s ease; padding: 10px 14px; }
+            [data-theme="dark"] #pwaInstallBanner { background: rgba(30,27,22,0.78); border: 1px solid rgba(255,255,255,0.1); }
             #pwaInstallBanner.hiding { animation: pwaDown 0.4s forwards; }
             .pwa-banner-content { display: flex; align-items: center; justify-content: space-between; }
-            .pwa-banner-info { display: flex; align-items: center; gap: 12px; }
-            .pwa-banner-icon { width: 44px; height: 44px; border-radius: 10px; }
+            .pwa-banner-info { display: flex; align-items: center; gap: 10px; }
+            .pwa-banner-icon { width: 40px; height: 40px; border-radius: 10px; }
             .pwa-banner-text { display: flex; flex-direction: column; }
-            .pwa-banner-text strong { font-size: 0.95rem; color: var(--text-primary); }
-            .pwa-banner-text span { font-size: 0.8rem; color: var(--text-secondary); }
-            .pwa-install-btn { background: var(--accent, #2563eb); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-            .pwa-close-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px; font-size: 1.2rem; }
+            .pwa-banner-text strong { font-size: 0.9rem; color: var(--text-primary); }
+            .pwa-banner-text span { font-size: 0.75rem; color: var(--text-secondary); }
+            .pwa-banner-actions { display: flex; align-items: center; gap: 6px; }
+            .pwa-install-btn { background: var(--accent, #2563eb); color: white; border: none; padding: 7px 16px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+            .pwa-close-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px; font-size: 1.1rem; }
             @keyframes pwaUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
             @keyframes pwaDown { to { transform: translateX(-50%) translateY(100px); opacity: 0; } }
         `;

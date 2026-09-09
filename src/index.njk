@@ -24,15 +24,17 @@ body.hp-body .header .menu-toggle { color: var(--hp-text) !important; }
 body.hp-body .header .desktop-only-action { color: var(--hp-text) !important; border: none !important; }
 body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle { display: none !important; }
 .hp-hero { position: relative; width: 100%; min-height: auto; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: transparent; border: none; }
-.hp-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(139,105,20,0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 20% 75%, rgba(180,130,50,0.04) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 80% 25%, rgba(212,169,66,0.04) 0%, transparent 50%); animation: heroGlow 10s ease-in-out infinite alternate; z-index: 1; }
-@keyframes heroGlow { 0% { opacity: 0.85; } 100% { opacity: 1; } }
-.hp-hero::after { content: ''; position: absolute; inset: 0; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); z-index: 2; pointer-events: none; }
+.hp-hero::before { display: none !important; }
+.hp-hero::after { display: none !important; }
 .hp-hero-content { position: relative; z-index: 3; text-align: center; max-width: 1200px; padding: 0 24px; padding-top: 100px; padding-bottom: 36px; }
 .hp-hero-label { font-family: var(--hp-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-accent); margin-bottom: 24px; }
-.hp-hero-heading { font-family: var(--hp-serif); font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 400; line-height: 1.15; color: var(--hp-text); max-width: 1100px; margin: 0 auto 24px; letter-spacing: -0.01em; white-space: normal; text-wrap: balance; }
+.hp-hero-heading { font-family: var(--hp-serif); font-size: clamp(1.8rem, 3.2vw, 3rem); font-weight: 400; font-style: italic; line-height: 1.25; color: var(--hp-accent); max-width: 1200px; margin: 0 auto 24px; letter-spacing: -0.01em; white-space: nowrap; }
+@media (max-width: 850px) {
+  .hp-hero-heading { white-space: normal; overflow-wrap: anywhere; font-size: clamp(1.8rem, 6vw, 2.5rem); }
+}
 @media (max-width: 768px) {
   .hp-hero-content { width: 100%; max-width: 100%; padding: 72px 20px 32px; box-sizing: border-box; }
-  .hp-hero-heading { width: 100%; max-width: 100%; font-size: clamp(2rem, 9vw, 2.7rem); white-space: normal; overflow-wrap: anywhere; }
+  .hp-hero-heading { width: 100%; max-width: 100%; font-size: clamp(1.6rem, 8vw, 2.2rem); white-space: normal; overflow-wrap: anywhere; }
   .hp-hero-subtitle { max-width: 100%; white-space: normal; }
 }
 .hp-hero-heading em { font-style: italic; color: var(--hp-accent); }
@@ -122,7 +124,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 <section class="hp-hero">
     <div class="hp-hero-content">
         <p class="hp-hero-label">Your All-in-One PDF Platform</p>
-        <h1 class="hp-hero-heading">Free Online PDF Tools <em>Beautifully Crafted</em></h1>
+        <h1 class="hp-hero-heading"><em>Free Online PDF Tools Beautifully Crafted</em></h1>
         <p class="hp-hero-subtitle">From 45+ free document tools to curated study materials, notes, and books — everything you need, in one place</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools.html' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>

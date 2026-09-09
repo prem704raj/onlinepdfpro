@@ -3,9 +3,20 @@ const STORE_PRODUCTS = {
         id: "dbms-notes",
         title: "DBMS Complete Notes",
         price: 9,
-        image: "/logo.png",
-        url: "/study-materials.html",
+        image: "/assets/previews/dbms/page-01.webp",
+        url: "/viewstudymaterials.html?product=dbms-notes",
         pageCount: 51,
+        format: "PDF",
+        description: "A focused guide to database fundamentals, relational models, ER diagrams, normalization, SQL, transactions, indexing, and exam revision.",
+        includes: [
+            "Database fundamentals and architecture",
+            "ER diagrams and relational models",
+            "Normalization and SQL essentials",
+            "Transactions, concurrency, and indexing",
+            "Compact explanations for revision"
+        ],
+        deliveryNote: "Instant PDF access after secure checkout. Find it again anytime in My Library.",
+        disclosure: "This is an AI-assisted study draft. Review and verify the material before relying on it for exams or professional decisions.",
         previewPages: [
             "/assets/previews/dbms/page-01.webp",
             "/assets/previews/dbms/page-02.webp",

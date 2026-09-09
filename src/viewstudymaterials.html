@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Study Material | OnlinePDFPro</title>
+    <meta name="description" content="View study material details and a five-page preview before purchase on OnlinePDFPro.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://onlinepdfpro.com/viewstudymaterials.html">
+    <meta name="theme-color" content="#171512">
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-fix-v2.css">
+    <style>
+        :root {
+            --sm-bg: #f7f5f0;
+            --sm-surface: #fffdf9;
+            --sm-surface-soft: #f1ece3;
+            --sm-text: #211d18;
+            --sm-muted: #786f64;
+            --sm-border: #e5ded3;
+            --sm-accent: #a97822;
+            --sm-accent-dark: #8f641b;
+            --sm-serif: "Playfair Display", Georgia, serif;
+            --sm-sans: "DM Sans", Inter, sans-serif;
+        }
+        [data-theme="dark"] {
+            --sm-bg: #171512;
+            --sm-surface: #211e1a;
+            --sm-surface-soft: #29241e;
+            --sm-text: #f6f0e7;
+            --sm-muted: #aea397;
+            --sm-border: #3a342c;
+            --sm-accent: #d5a943;
+            --sm-accent-dark: #e1b650;
+        }
+        html { background: var(--sm-bg); }
+        body.sm-body { min-height: 100vh; margin: 0; background: var(--sm-bg) !important; color: var(--sm-text) !important; font-family: var(--sm-sans); }
+        body.sm-body main { padding-top: 0 !important; }
+        body.sm-body .header { position: relative; background: var(--sm-bg) !important; border-bottom: 1px solid var(--sm-border) !important; box-shadow: none !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        body.sm-body .header .logo-text, body.sm-body .header .nav-link, body.sm-body .header .theme-toggle, body.sm-body .header .menu-toggle { color: var(--sm-text) !important; }
+        body.sm-body .header .nav-link:hover { color: var(--sm-accent) !important; }
+        .detail-main { padding: 54px 24px 100px; }
+        .detail-shell { width: min(100%, 1120px); margin: 0 auto; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 28px; color: var(--sm-muted); font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-decoration: none; }
+        .back-link:hover { color: var(--sm-accent); }
+        .detail-layout { display: grid; grid-template-columns: minmax(0, .92fr) minmax(340px, 1.08fr); gap: clamp(30px, 5vw, 72px); align-items: start; }
+        .preview-card, .info-card { border: 1px solid var(--sm-border); background: var(--sm-surface); box-shadow: 0 20px 70px rgba(53, 42, 28, .08); }
+        .preview-card { padding: clamp(18px, 3vw, 30px); }
+        .preview-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+        .eyebrow { margin: 0 0 7px; color: var(--sm-accent); font-size: .67rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+        .preview-heading h2 { margin: 0; color: var(--sm-text); font: 500 clamp(1.35rem, 3vw, 1.8rem) var(--sm-serif); line-height: 1.15; }
+        .preview-count { flex: 0 0 auto; padding: 7px 9px; border: 1px solid var(--sm-border); color: var(--sm-muted); font-size: .66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+        .preview-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+        .preview-thumb { position: relative; display: block; padding: 5px; border: 1px solid var(--sm-border); background: var(--sm-surface-soft); cursor: pointer; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+        .preview-thumb:hover, .preview-thumb:focus-visible { border-color: var(--sm-accent); box-shadow: 0 7px 18px rgba(53,42,28,.15); outline: none; transform: translateY(-4px); }
+        .preview-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 612 / 792; object-fit: cover; object-position: top; background: #fff; }
+        .preview-thumb span { display: block; padding: 7px 2px 2px; color: var(--sm-muted); font-size: .65rem; font-weight: 700; text-align: center; }
+        .preview-help { margin: 17px 0 0; color: var(--sm-muted); font-size: .76rem; line-height: 1.6; }
+        .preview-help strong { color: var(--sm-text); }
+        .info-card { padding: clamp(24px, 4vw, 42px); }
+        .info-card h1 { margin: 0 0 16px; color: var(--sm-text); font: 500 clamp(2.3rem, 5vw, 4.3rem) var(--sm-serif); letter-spacing: -.035em; line-height: 1.02; }
+        .product-description { margin: 0 0 28px; color: var(--sm-muted); font-size: .96rem; line-height: 1.75; }
+        .facts { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 30px; border-top: 1px solid var(--sm-border); border-bottom: 1px solid var(--sm-border); }
+        .fact { padding: 15px 10px; border-right: 1px solid var(--sm-border); text-align: center; }
+        .fact:last-child { border-right: 0; }
+        .fact strong { display: block; margin-bottom: 4px; color: var(--sm-text); font: 500 1.25rem var(--sm-serif); }
+        .fact span { color: var(--sm-muted); font-size: .65rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+        .included-heading { margin: 0 0 13px; color: var(--sm-text); font-size: .68rem; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; }
+        .included-list { display: grid; grid-template-columns: 1fr 1fr; gap: 11px 20px; margin: 0 0 26px; padding: 0; list-style: none; }
+        .included-list li { position: relative; padding-left: 20px; color: var(--sm-muted); font-size: .83rem; line-height: 1.45; }
+        .included-list li::before { content: "✓"; position: absolute; left: 0; color: var(--sm-accent); font-weight: 700; }
+        .delivery-note { margin: 0 0 24px; padding: 13px 15px; border-left: 2px solid var(--sm-accent); background: var(--sm-surface-soft); color: var(--sm-muted); font-size: .78rem; line-height: 1.55; }
+        .purchase-box { padding-top: 24px; border-top: 1px solid var(--sm-border); }
+        .purchase-top { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 16px; }
+        .price { color: var(--sm-text); font: 500 2.35rem var(--sm-serif); }
+        .price-meta { display: block; margin-top: 2px; color: var(--sm-muted); font-size: .7rem; }
+        .security { color: var(--sm-muted); font-size: .68rem; text-align: right; line-height: 1.45; }
+        .purchase-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .purchase-actions button { min-height: 48px; padding: 12px; border: 1px solid var(--sm-accent); font: 700 .7rem var(--sm-sans); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: transform .2s ease, background .2s ease; }
+        .purchase-actions button:hover, .purchase-actions button:focus-visible { outline: none; transform: translateY(-2px); }
+        .detail-cart { background: transparent; color: var(--sm-accent); }
+        .detail-cart:hover, .detail-cart:focus-visible { background: rgba(169,120,34,.1); }
+        .detail-buy { background: var(--sm-accent); color: #fff; }
+        .detail-buy:hover, .detail-buy:focus-visible { background: var(--sm-accent-dark); }
+        .disclosure { margin: 18px 0 0; color: var(--sm-muted); font-size: .7rem; line-height: 1.55; }
+        .disclosure strong { color: var(--sm-text); }
+        .preview-dialog { width: min(92vw, 760px); max-height: 92vh; padding: 0; border: 1px solid var(--sm-border); background: var(--sm-surface); color: var(--sm-text); box-shadow: 0 30px 100px rgba(0,0,0,.35); }
+        .preview-dialog::backdrop { background: rgba(20,17,13,.72); backdrop-filter: blur(4px); }
+        .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 20px; border-bottom: 1px solid var(--sm-border); }
+        .dialog-head h2 { margin: 0; font: 500 1.25rem var(--sm-serif); }
+        .dialog-close { width: 34px; height: 34px; border: 1px solid var(--sm-border); background: transparent; color: var(--sm-text); font-size: 1.2rem; cursor: pointer; }
+        .dialog-body { display: grid; place-items: center; padding: 22px; background: var(--sm-surface-soft); }
+        .dialog-body img { display: block; width: auto; max-width: 100%; max-height: 68vh; background: #fff; box-shadow: 0 15px 40px rgba(0,0,0,.22); }
+        .dialog-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 20px; border-top: 1px solid var(--sm-border); color: var(--sm-muted); font-size: .76rem; }
+        .dialog-nav { display: flex; gap: 8px; }
+        .dialog-nav button { min-width: 34px; min-height: 32px; border: 1px solid var(--sm-border); background: transparent; color: var(--sm-text); cursor: pointer; }
+        .dialog-nav button:disabled { opacity: .35; cursor: not-allowed; }
+        .store-header-btn { position: relative; width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--sm-border); border-radius: 50%; background: transparent; color: var(--sm-text); cursor: pointer; }
+        .cart-count { position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; display: none; align-items: center; justify-content: center; padding: 0 4px; border-radius: 999px; background: var(--sm-accent); color: #fff; font-size: 10px; font-weight: 700; }
+        .cart-count:not([hidden]) { display: flex; }
+        .profile-menu-wrap { position: relative; }
+        .profile-menu-wrap:not([hidden]) { display: block; }
+        .profile-avatar, .profile-initial { width: 42px; height: 42px; border-radius: 50%; }
+        .profile-avatar { object-fit: cover; }
+        .profile-initial { display: flex; align-items: center; justify-content: center; background: var(--sm-accent); color: #fff; font-weight: 700; }
+        .profile-avatar[hidden], .profile-initial[hidden] { display: none !important; }
+        .profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; z-index: 20; width: 220px; padding: 8px; border: 1px solid var(--sm-border); background: var(--sm-surface); box-shadow: 0 18px 50px rgba(0,0,0,.16); }
+        .profile-dropdown-user { padding: 10px 12px; }
+        .profile-dropdown-user strong, .profile-dropdown-user span { display: block; }
+        .profile-dropdown-user span { margin-top: 4px; color: var(--sm-muted); font-size: .75rem; overflow: hidden; text-overflow: ellipsis; }
+        .profile-divider { height: 1px; margin: 4px 0; background: var(--sm-border); }
+        .profile-dropdown a, .profile-dropdown button { display: block; width: 100%; padding: 10px 12px; border: 0; background: transparent; color: var(--sm-text); font: .84rem var(--sm-sans); text-align: left; text-decoration: none; cursor: pointer; }
+        .profile-dropdown a:hover, .profile-dropdown button:hover { background: rgba(120,111,100,.12); }
+        .cart-overlay { position: fixed; inset: 0; z-index: 2998; background: rgba(0,0,0,.45); opacity: 0; visibility: hidden; transition: .2s; }
+        .cart-overlay.open { opacity: 1; visibility: visible; }
+        .cart-drawer { position: fixed; top: 0; right: 0; z-index: 2999; width: min(420px, 100%); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; transform: translateX(100%); border-left: 1px solid var(--sm-border); background: var(--sm-bg); transition: transform .25s ease; }
+        .cart-drawer.open { transform: translateX(0); }
+        .cart-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--sm-border); }
+        .cart-drawer-header h2 { margin: 4px 0 0; font: 500 1.45rem var(--sm-serif); }
+        .cart-small-label { color: var(--sm-accent); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; }
+        .cart-close { border: 0; background: transparent; color: var(--sm-text); font-size: 1.7rem; cursor: pointer; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px 24px; }
+        .cart-item { display: flex; justify-content: space-between; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--sm-border); }
+        .cart-item-info strong, .cart-item-info span { display: block; }
+        .cart-item-info span { margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
+        .cart-remove { border: 0; background: none; color: #b91c1c; cursor: pointer; }
+        .cart-empty { padding: 60px 20px; color: var(--sm-muted); text-align: center; }
+        .cart-footer { padding: 22px 24px; border-top: 1px solid var(--sm-border); }
+        .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 18px; }
+        .cart-checkout-btn { width: 100%; padding: 15px; border: 0; background: var(--sm-accent); color: #fff; font-weight: 700; cursor: pointer; }
+        .cart-checkout-message { margin-bottom: 16px; padding: 12px 14px; border: 1px solid var(--sm-accent); color: var(--sm-text); font-size: .85rem; line-height: 1.5; }
+        .cart-checkout-message a { display: inline-block; margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
+        .cart-secure-text { margin: 12px 0 0; color: var(--sm-muted); font-size: .7rem; text-align: center; }
+        .detail-error { max-width: 560px; margin: 120px auto; padding: 40px; border: 1px solid var(--sm-border); background: var(--sm-surface); text-align: center; }
+        .detail-error h1 { margin-top: 0; font: 500 2rem var(--sm-serif); }
+        .detail-error a { color: var(--sm-accent); font-weight: 700; }
+        @media (max-width: 860px) {
+            .detail-layout { grid-template-columns: 1fr; max-width: 680px; margin: 0 auto; }
+        }
+        @media (max-width: 560px) {
+            .detail-main { padding: 36px 16px 72px; }
+            .preview-heading { display: block; }
+            .preview-count { display: inline-block; margin-top: 12px; }
+            .preview-grid { gap: 6px; }
+            .preview-thumb { padding: 3px; }
+            .preview-thumb span { font-size: .57rem; }
+            .info-card { padding: 24px 20px; }
+            .info-card h1 { font-size: 2.5rem; }
+            .included-list { grid-template-columns: 1fr; }
+            .purchase-top { align-items: flex-start; flex-direction: column; gap: 8px; }
+            .security { text-align: left; }
+            .purchase-actions { grid-template-columns: 1fr; }
+            .dialog-body { padding: 12px; }
+        }
+    </style>
+    <script>
+        (function () {
+            var savedTheme = localStorage.getItem('doctools-theme');
+            var theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        }());
+    </script>
+</head>
+<body class="sm-body">
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="header">
+        <div class="header-content">
+            <a class="logo" href="/"><img class="logo-icon" src="/logo.png" alt="" aria-hidden="true"><span class="logo-text">OnlinePDFPro</span></a>
+            <nav class="nav" id="nav"><a class="nav-link" href="/tools.html">PDF Tools</a><a class="nav-link active" href="/study-materials.html">Study Materials</a></nav>
+            <div class="header-actions">
+                <button class="store-header-btn" type="button" onclick="openCart()" aria-label="Shopping cart" title="Cart"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg><span class="cart-count" hidden>0</span></button>
+                <div class="profile-menu-wrap" id="profileMenuWrap" hidden><button class="store-header-btn profile-trigger" id="profileTrigger" type="button" aria-label="My account" aria-expanded="false"><img id="profileAvatar" class="profile-avatar" alt="" hidden><span id="profileInitial" class="profile-initial">U</span></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-dropdown-user"><strong id="profileName">User</strong><span id="profileEmail"></span></div><div class="profile-divider"></div><a href="/library.html">My Library</a><button type="button" onclick="logout()">Sign Out</button></div></div>
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="theme-icon-light">☾</span><span class="theme-icon-dark">☀</span></button><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="detail-main">
+        <div id="detailContent" class="detail-shell">
+            <a class="back-link" href="/study-materials.html"><span aria-hidden="true">←</span> Back to study materials</a>
+            <div class="detail-layout">
+                <section class="preview-card" aria-labelledby="previewHeading"><div class="preview-heading"><div><p class="eyebrow">Inside the notes</p><h2 id="previewHeading">Preview five pages</h2></div><span class="preview-count" id="previewCount">5-page preview</span></div><div id="previewGrid" class="preview-grid" aria-label="Five-page preview"></div><p class="preview-help"><strong>Preview only.</strong> Select any page to view it clearly. The complete PDF is delivered after purchase.</p></section>
+                <section class="info-card" aria-labelledby="productTitle"><p class="eyebrow" id="productEyebrow">Study guide</p><h1 id="productTitle">Study Material</h1><p class="product-description" id="productDescription"></p><div class="facts" aria-label="Product facts"><div class="fact"><strong id="pageCount">—</strong><span>Pages</span></div><div class="fact"><strong id="format">PDF</strong><span>Format</span></div><div class="fact"><strong id="factPrice">—</strong><span>One-time</span></div></div><section aria-labelledby="includedHeading"><h2 class="included-heading" id="includedHeading">What's included</h2><ul class="included-list" id="includedList"></ul></section><p class="delivery-note" id="deliveryNote"></p><div class="purchase-box"><div class="purchase-top"><div><span class="price" id="productPrice">—</span><span class="price-meta" id="priceMeta">Digital PDF</span></div><span class="security">Secure checkout<br>Immediate access after verification</span></div><div class="purchase-actions"><button class="detail-cart" id="addCartButton" type="button">Add to cart</button><button class="detail-buy" id="buyButton" type="button">Buy now</button></div><p class="disclosure" id="disclosure"></p></div></section>
+            </div>
+        </div>
+        <div id="detailError" class="detail-error" hidden><h1>Study material not found</h1><p>That PDF is not available right now.</p><a href="/study-materials.html">Browse study materials</a></div>
+    </main>
+
+    <dialog class="preview-dialog" id="previewDialog" aria-labelledby="dialogTitle"><div class="dialog-head"><h2 id="dialogTitle">Preview page</h2><button class="dialog-close" id="dialogClose" type="button" aria-label="Close preview">×</button></div><div class="dialog-body"><img id="dialogImage" src="" alt=""></div><div class="dialog-footer"><span id="dialogPage">Page 1 of 5</span><div class="dialog-nav"><button id="dialogPrev" type="button" aria-label="Previous page">←</button><button id="dialogNext" type="button" aria-label="Next page">→</button></div></div></dialog>
+
+    <footer class="hp-footer"><div class="hp-footer-grid"><div class="hp-footer-brand"><p class="hp-footer-brand-title">OnlinePDFPro</p><p class="hp-footer-brand-sub">Free PDF Tools &amp; Study Materials</p></div><div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf.html">Merge PDF</a></li><li><a href="/tools/compress-pdf.html">Compress PDF</a></li><li><a href="/tools/split-pdf.html">Split PDF</a></li><li><a href="/tools.html">All Tools</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about.html">About</a></li><li><a href="/support.html">Support &amp; FAQ</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms.html">Terms</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refund.html">Refund Policy</a></li></ul></div></div><div class="hp-footer-bottom"><p class="hp-footer-copy">© 2026 OnlinePDFPro. All rights reserved.</p></div></footer>
+
+    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+    <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart"><div class="cart-drawer-header"><div><span class="cart-small-label">Your cart</span><h2>Study Materials</h2></div><button type="button" class="cart-close" onclick="closeCart()" aria-label="Close cart">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-footer"><div class="cart-total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div><div id="cartCheckoutMessage" class="cart-checkout-message" role="alert" hidden><span id="cartCheckoutMessageText"></span><a id="cartCheckoutLibraryLink" href="/library.html" hidden>Open My Library</a></div><button class="cart-checkout-btn" type="button" onclick="checkoutCart()">Continue to checkout</button><p class="cart-secure-text">Secure checkout · Instant PDF access</p></div></aside>
+
+    <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
+    <script defer src="/js/app.js?v=96"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/auth.js?v=96"></script>
+    <script src="/js/store.js?v=96"></script>
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var productId = params.get('product') || 'dbms-notes';
+            var product = (window.STORE_PRODUCTS || {})[productId];
+            var content = document.getElementById('detailContent');
+            var error = document.getElementById('detailError');
+            if (!product) { content.hidden = true; error.hidden = false; return; }
+
+            var money = '₹' + Number(product.price || 0);
+            var previews = Array.isArray(product.previewPages) ? product.previewPages.slice(0, 5) : [];
+            document.title = product.title + ' | OnlinePDFPro';
+            document.getElementById('productTitle').textContent = product.title;
+            document.getElementById('productDescription').textContent = product.description || 'A carefully prepared digital study guide for focused revision.';
+            document.getElementById('pageCount').textContent = product.pageCount || '—';
+            document.getElementById('format').textContent = product.format || 'PDF';
+            document.getElementById('factPrice').textContent = money;
+            document.getElementById('productPrice').textContent = money;
+            document.getElementById('priceMeta').textContent = (product.format || 'PDF') + ' · ' + (product.pageCount || '—') + ' pages';
+            document.getElementById('previewCount').textContent = previews.length + '-page preview';
+            document.getElementById('deliveryNote').textContent = product.deliveryNote || 'Instant digital access after secure checkout.';
+            document.getElementById('disclosure').innerHTML = '<strong>Good to know:</strong> ' + (product.disclosure || 'Review the material before relying on it for important decisions.');
+
+            var list = document.getElementById('includedList');
+            (product.includes || []).forEach(function (item) { var li = document.createElement('li'); li.textContent = item; list.appendChild(li); });
+
+            var grid = document.getElementById('previewGrid');
+            var dialog = document.getElementById('previewDialog');
+            var dialogImage = document.getElementById('dialogImage');
+            var dialogPage = document.getElementById('dialogPage');
+            var currentIndex = 0;
+            function renderDialog(index) {
+                currentIndex = Math.max(0, Math.min(previews.length - 1, index));
+                dialogImage.src = previews[currentIndex];
+                dialogImage.alt = product.title + ' preview, page ' + (currentIndex + 1) + ' of ' + previews.length;
+                dialogPage.textContent = 'Page ' + (currentIndex + 1) + ' of ' + previews.length;
+                document.getElementById('dialogPrev').disabled = currentIndex === 0;
+                document.getElementById('dialogNext').disabled = currentIndex === previews.length - 1;
+            }
+            previews.forEach(function (source, index) {
+                var button = document.createElement('button');
+                button.type = 'button'; button.className = 'preview-thumb'; button.setAttribute('aria-label', 'Open preview page ' + (index + 1));
+                var image = document.createElement('img'); image.src = source; image.alt = 'Preview page ' + (index + 1); image.width = 612; image.height = 792; image.loading = index === 0 ? 'eager' : 'lazy';
+                var label = document.createElement('span'); label.textContent = 'Page ' + (index + 1);
+                button.appendChild(image); button.appendChild(label);
+                button.addEventListener('click', function () { renderDialog(index); if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', ''); });
+                grid.appendChild(button);
+            });
+            document.getElementById('addCartButton').addEventListener('click', function () { addToCart(product.id); });
+            document.getElementById('buyButton').addEventListener('click', function () { buyProduct(product.id); });
+            document.getElementById('dialogClose').addEventListener('click', function () { dialog.close(); });
+            document.getElementById('dialogPrev').addEventListener('click', function () { renderDialog(currentIndex - 1); });
+            document.getElementById('dialogNext').addEventListener('click', function () { renderDialog(currentIndex + 1); });
+            dialog.addEventListener('click', function (event) { if (event.target === dialog) dialog.close(); });
+            document.addEventListener('keydown', function (event) { if (!dialog.open) return; if (event.key === 'ArrowLeft') renderDialog(currentIndex - 1); if (event.key === 'ArrowRight') renderDialog(currentIndex + 1); });
+        }());
+    </script>
+</body>
+</html>

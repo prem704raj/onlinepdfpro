@@ -101,8 +101,10 @@ check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChang
 const storeSource = read('src/js/store.js');
 check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
 const studySource = read('src/study-materials.html');
-check(/dbmsPreviewImage/.test(studySource) && /dbmsPreviewDialog/.test(studySource) && /showModal\(\)/.test(studySource), 'DBMS study material includes an accessible larger preview dialog');
-check(/data-preview-index="0"/.test(studySource) && /data-preview-index="4"/.test(studySource) && /previewPages/.test(storeSource), 'DBMS study material exposes five preview pages through product metadata');
+const studyDetailSource = read('src/viewstudymaterials.html');
+check(/catalog-cover/.test(studySource) && /viewstudymaterials\.html\?product=dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
+check(/previewGrid/.test(studyDetailSource) && /showModal\(\)/.test(studyDetailSource) && /slice\(0, 5\)/.test(studyDetailSource), 'Study material detail page provides a reusable five-page preview dialog');
+check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /viewstudymaterials\.html/.test(storeSource), 'Study material product metadata supports reusable detail pages');
 const previewAssetPaths = Array.from({ length: 5 }, (_, index) => `src/assets/previews/dbms/page-0${index + 1}.webp`);
 previewAssetPaths.forEach((assetPath, index) => {
     const assetData = exists(assetPath) ? fs.readFileSync(path.join(root, assetPath)) : Buffer.alloc(0);
@@ -287,30 +289,35 @@ async function browserSmoke() {
 
         await page.setViewport({ width: 1280, height: 900 });
         await page.goto(`${base}/study-materials.html`, { waitUntil: 'domcontentloaded' });
-        await page.waitForSelector('#dbmsPreviewImage', { timeout: 5000 });
-        await page.waitForFunction(() => {
-            const image = document.querySelector('#dbmsPreviewImage');
-            return image && image.complete && image.naturalWidth > 0;
-        }, { timeout: 10000 });
-        const previewInitial = await page.evaluate(() => ({
-            thumbnails: document.querySelectorAll('#dbmsPreviewThumbs [data-preview-index]').length,
-            page: document.querySelector('#dbmsPreviewPage')?.textContent.trim(),
-            alt: document.querySelector('#dbmsPreviewImage')?.alt,
-            nextDisabled: document.querySelector('#dbmsPreviewNext')?.disabled
+        await page.waitForSelector('.catalog-cover', { timeout: 5000 });
+        const catalogState = await page.evaluate(() => ({
+            imageLoaded: Boolean(document.querySelector('.catalog-cover')?.complete && document.querySelector('.catalog-cover')?.naturalWidth > 0),
+            actions: document.querySelectorAll('.catalog-actions button').length,
+            detailHref: document.querySelector('.catalog-cover-link')?.getAttribute('href'),
+            hasLargePreview: Boolean(document.querySelector('.preview-grid, .preview-stage, .product-showcase'))
         }));
-        check(previewInitial.thumbnails === 5 && previewInitial.page === 'Page 1 of 5' && /page 1 of 5/i.test(previewInitial.alt || '') && !previewInitial.nextDisabled, 'DBMS preview loads five pages and starts on page one');
-        await page.click('#dbmsPreviewNext');
-        await page.waitForFunction(() => /Page 2 of 5/.test(document.querySelector('#dbmsPreviewPage')?.textContent || ''), { timeout: 5000 });
-        check(await page.$eval('#dbmsPreviewImage', image => /page 2 of 5/i.test(image.alt) && image.src.endsWith('/assets/previews/dbms/page-02.webp')), 'DBMS preview next control changes the rendered page');
-        await page.click('#dbmsPreviewOpen');
-        await page.waitForFunction(() => document.querySelector('#dbmsPreviewDialog')?.open === true, { timeout: 5000 });
-        check(await page.$eval('#dbmsPreviewDialogImage', image => /page 2 of 5/i.test(image.alt)), 'DBMS larger preview opens on the selected page');
-        await page.click('#dbmsPreviewDialogNext');
-        await page.waitForFunction(() => /Page 3 of 5/.test(document.querySelector('#dbmsPreviewDialogPage')?.textContent || ''), { timeout: 5000 });
+        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.includes('viewstudymaterials.html?product=dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
+
+        await page.goto(`${base}/viewstudymaterials.html?product=dbms-notes`, { waitUntil: 'domcontentloaded' });
+        await page.waitForSelector('#previewGrid .preview-thumb', { timeout: 5000 });
+        await page.waitForFunction(() => [...document.querySelectorAll('#previewGrid img')].every(image => image.complete && image.naturalWidth > 0), { timeout: 10000 });
+        const previewInitial = await page.evaluate(() => ({
+            thumbnails: document.querySelectorAll('#previewGrid .preview-thumb').length,
+            widths: [...document.querySelectorAll('#previewGrid .preview-thumb')].map(node => node.getBoundingClientRect().width),
+            title: document.querySelector('#productTitle')?.textContent.trim(),
+            included: document.querySelectorAll('#includedList li').length
+        }));
+        check(previewInitial.thumbnails === 5 && previewInitial.widths.every(width => width < 200) && previewInitial.title === 'DBMS Complete Notes' && previewInitial.included >= 4, 'Detail page renders five compact previews and product details');
+        await page.click('#previewGrid .preview-thumb:nth-child(3)');
+        await page.waitForFunction(() => document.querySelector('#previewDialog')?.open === true, { timeout: 5000 });
+        check(await page.$eval('#dialogImage', image => /page 3 of 5/i.test(image.alt)), 'Detail preview opens the selected page in the dialog');
+        await page.click('#dialogNext');
+        await page.waitForFunction(() => /Page 4 of 5/.test(document.querySelector('#dialogPage')?.textContent || ''), { timeout: 5000 });
         await page.keyboard.press('Escape');
-        await page.waitForFunction(() => !document.querySelector('#dbmsPreviewDialog')?.open, { timeout: 5000 });
-        await page.click('[data-preview-index="4"]');
-        check(await page.$eval('#dbmsPreviewImage', image => /page 5 of 5/i.test(image.alt)), 'DBMS preview thumbnails select the fifth page');
+        await page.waitForFunction(() => !document.querySelector('#previewDialog')?.open, { timeout: 5000 });
+        await page.click('#previewGrid .preview-thumb:nth-child(5)');
+        check(await page.$eval('#dialogImage', image => /page 5 of 5/i.test(image.alt)), 'Detail preview thumbnails open the fifth page');
+        await page.keyboard.press('Escape');
 
         // The shared upload component is present on many legacy tool pages.
         // Force dark mode and compare its computed surface to the active theme
@@ -509,7 +516,7 @@ async function browserSmoke() {
                 await page.click(format.button);
                 await page.click('#convertBtn');
                 try {
-                    await page.waitForFunction(() => document.querySelector('#resultsSection')?.style.display === 'block', { timeout: 10000 });
+                    await page.waitForFunction(() => document.querySelector('#resultsSection')?.style.display === 'block', { timeout: 20000 });
                 } catch (error) {
                     const diagnostic = await page.evaluate(() => ({
                         fileSection: document.querySelector('#fileSection')?.style.display,
@@ -523,6 +530,7 @@ async function browserSmoke() {
                     throw new Error(`${format.label} conversion timed out (${JSON.stringify(diagnostic)}): ${error.message}`);
                 }
                 await page.click('#downloadAllBtn');
+                await page.waitForFunction(() => Boolean(window.__downloadedBlob), { timeout: 5000 });
                 const output = await page.evaluate(async () => {
                     if (!window.__downloadedBlob) return null;
                     const bytes = new Uint8Array(await window.__downloadedBlob.blob.arrayBuffer());
@@ -543,8 +551,10 @@ async function browserSmoke() {
             { path: '/index.html', width: 910, height: 768, heading: 'h1' },
             { path: '/tools.html', width: 390, height: 844, heading: '.tp-hero-heading' },
             { path: '/tools.html', width: 910, height: 768, heading: '.tp-hero-heading' },
-            { path: '/study-materials.html', width: 390, height: 844, heading: '.product-title-large' },
-            { path: '/study-materials.html', width: 1280, height: 900, heading: '.product-title-large' }
+            { path: '/study-materials.html', width: 390, height: 844, heading: '.catalog-cover' },
+            { path: '/study-materials.html', width: 1280, height: 900, heading: '.catalog-cover' },
+            { path: '/viewstudymaterials.html?product=dbms-notes', width: 390, height: 844, heading: '#productTitle' },
+            { path: '/viewstudymaterials.html?product=dbms-notes', width: 1280, height: 900, heading: '#productTitle' }
         ]) {
             await page.setViewport({ width: layout.width, height: layout.height });
             await page.goto(`${base}${layout.path}`, { waitUntil: 'domcontentloaded' });

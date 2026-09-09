@@ -28,14 +28,14 @@ body.tp-body .header .logo-text { color: var(--tp-text) !important; }
 body.tp-body .header .nav-link { color: var(--tp-text-secondary) !important; }
 body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 .tp-hero { background: transparent; padding: 20px 24px 80px; text-align: center; position: relative; overflow: hidden; border-bottom: none; }
-.tp-hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(139,105,20,0.06) 0%, transparent 70%); pointer-events: none; }
+.tp-hero::before { display: none !important; }
 .tp-hero-label { font-family: var(--tp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 16px; position: relative; }
 .tp-hero-heading { font-family: var(--tp-serif); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.15; color: var(--tp-text); margin-bottom: 16px; letter-spacing: -0.01em; position: relative; white-space: normal; text-wrap: balance; }
 @media (max-width: 768px) { .tp-hero-heading, .tp-hero-subtitle { white-space: normal; } }
 .tp-hero-heading em { font-style: italic; }
 .tp-hero-subtitle { font-family: var(--tp-sans); font-size: 0.92rem; color: var(--tp-text-secondary); line-height: 1.7; max-width: 950px; margin: 0 auto 32px; position: relative; white-space: normal; text-wrap: balance; }
-.tp-search-wrap { max-width: 440px; margin: 0 auto; position: relative; }
-.tp-search-wrap input { width: 100%; padding: 16px 20px 16px 48px; border: 1.5px solid var(--tp-border); background: var(--tp-card-bg); color: var(--tp-text); font-family: var(--tp-sans); font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
+.tp-search-wrap { max-width: 440px; margin: 0 auto; position: relative; background: transparent; }
+.tp-search-wrap input { width: 100%; padding: 16px 20px 16px 48px; border: 1.5px solid var(--tp-border); background: transparent !important; color: var(--tp-text); font-family: var(--tp-sans); font-size: 0.9rem; outline: none; transition: border-color 0.3s; }
 .tp-search-wrap input { min-height: 48px; }
 .tp-search-wrap input:focus { border-color: var(--tp-accent); }
 .tp-search-wrap input::placeholder { color: var(--tp-text-muted); }
