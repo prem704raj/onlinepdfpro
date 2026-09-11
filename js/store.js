@@ -3,7 +3,7 @@ const STORE_PRODUCTS = {
         id: "dbms-notes",
         title: "DBMS Complete Notes",
         price: 9,
-        image: "/assets/previews/dbms/cover.jpg",
+        image: "/assets/previews/dbms/page-01.webp",
         url: "/viewstudymaterials.html?product=dbms-notes",
         pageCount: 51,
         format: "PDF",

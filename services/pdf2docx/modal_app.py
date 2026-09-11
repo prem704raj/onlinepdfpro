@@ -142,6 +142,7 @@ def _convert_pdf_to_docx(pdf_bytes: bytes) -> bytes:
     memory=2048,
     timeout=120,
     scaledown_window=180,   # Keep warm for 3 min after last request (reduces cold starts)
+    max_containers=4,       # Concurrency and parallel cost ceiling
     secrets=[conversion_secret],
 )
 @modal.fastapi_endpoint(method="POST", label="pdf2docx-convert")
@@ -195,8 +196,13 @@ async def convert_endpoint(request: Request):
     except Exception as exc:
         logger.exception("[%s] Conversion failed", request_id)
         return StarletteResponse(
-            content=json.dumps({"error": f"Conversion failed: {str(exc)}"}),
-            status_code=500, media_type="application/json", headers=cors_headers,
+            content=json.dumps({
+                "error": "Conversion failed. Please check the document and try again.",
+                "request_id": request_id,
+            }),
+            status_code=500,
+            media_type="application/json",
+            headers=cors_headers,
         )
 
     elapsed = time.monotonic() - t0

@@ -67,8 +67,13 @@ check(/replaceChildren\(sanitizeHTML/.test(htmlToPdf) && /appendChild\(sanitizeH
 const worker = read('cf-worker/pdf-api-proxy.js');
 check(/TURNSTILE_SECRET_KEY/.test(worker) && /siteverify/.test(worker), 'Worker validates Turnstile server-side');
 check(/CONVERSION_SIGNING_SECRET/.test(worker) && /x-conversion-token/i.test(worker), 'Conversions require a signed short-lived ticket');
+check(/payload\.path\s*!==\s*pathname/.test(worker), 'Worker strictly binds conversion ticket to target route');
 check(/MODAL_API_TOKEN/.test(worker) && /temporarily unavailable/.test(worker), 'Worker fails closed when Modal authentication is not configured');
 check(/API_RATE_LIMITER/.test(worker) && /\.limit\(\{ key \}\)/.test(worker), 'Worker uses the durable rate-limit binding');
+check(/AI_CHAT_LIMITER/.test(worker) && /AI_VISION_LIMITER/.test(worker) && /CONVERSION_LIMITER/.test(worker), 'Worker uses per-route rate limit bindings');
+check(/ALLOWED_CHAT_MODELS/.test(worker) && /ALLOWED_VISION_MODELS/.test(worker), 'Worker restricts AI models to strict allowlists');
+check(/release:\s*env\.RELEASE_ID/.test(worker), 'Worker health endpoint exposes release attribution');
+check(/payment\.refunded/.test(worker) && /status:\s*'refunded'/.test(worker), 'Worker handles refund and dispute webhooks');
 check(/isValidConversionDocument/.test(worker) && /isValidConversionOutput/.test(worker), 'Worker validates conversion input and output signatures');
 const syntax = spawnSync(process.execPath, ['--input-type=module', '--check'], {
     cwd: root,
@@ -78,11 +83,38 @@ const syntax = spawnSync(process.execPath, ['--input-type=module', '--check'], {
 if (syntax.status !== 0) throw new Error(`Worker syntax check failed: ${(syntax.stderr || syntax.stdout || '').trim()}`);
 console.log('PASS Worker module syntax');
 
+const wranglerConfig = read('cf-worker/wrangler.toml');
+check(/name\s*=\s*"API_RATE_LIMITER"/.test(wranglerConfig) && /name\s*=\s*"CONVERSION_LIMITER"/.test(wranglerConfig), 'Wrangler configures per-route rate-limit bindings');
+check(!/period\s*=\s*300/.test(wranglerConfig) && /period\s*=\s*60/.test(wranglerConfig), 'Wrangler uses valid Cloudflare rate-limit periods');
+
 for (const service of ['services/pdf2docx/modal_app.py', 'services/docx2pdf/modal_app.py']) {
     const modalSource = read(service);
     check(/hmac\.compare_digest/.test(modalSource) && /MODAL_API_TOKEN/.test(modalSource), `${service} enforces the Modal bearer token`);
     check(/secrets=\[conversion_secret\]/.test(modalSource), `${service} injects the named Modal secret`);
+    check(/max_containers=4/.test(modalSource), `${service} enforces container concurrency ceiling`);
+    check(/request_id/.test(modalSource) && /Conversion failed/.test(modalSource), `${service} sanitizes internal conversion error responses`);
 }
+
+const headersContent = read('_headers');
+check(/Content-Security-Policy-Report-Only/.test(headersContent), 'HTTP headers serve Content-Security-Policy-Report-Only');
+check(/Permissions-Policy:.*geolocation=\(\)/.test(headersContent) && !/microphone=\(\)/.test(headersContent) && !/payment=\(\)/.test(headersContent), 'Permissions-Policy preserves microphone and payment access');
+
+const manifestContent = read('site.webmanifest');
+check(!/100%\s*Free/i.test(manifestContent) && !/hero_centered\.png/.test(manifestContent), 'Webmanifest avoids misleading 100% Free claim and broken screenshot assets');
+
+const swContent = read('src/sw.js');
+check(/response\.status\s*===\s*200/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
+
+const initialMigration = read('supabase/migrations/20260815000000_initial_schema.sql');
+const hideR2Migration = read('supabase/migrations/20260910120000_hide_r2_key_from_public.sql');
+check(/CREATE TABLE IF NOT EXISTS public\.orders/i.test(initialMigration) && /auth\.uid\(\).*user_id/i.test(initialMigration), 'Supabase initial schema migration versions reproducible schema and RLS policies');
+check(/revoke select on table public\.products/i.test(hideR2Migration) && /grant select \([^)]*title[^)]*\)/i.test(hideR2Migration), 'Supabase migration restricts public access to r2_key');
+
+const packageJson = JSON.parse(read('package.json'));
+check(packageJson.engines && packageJson.engines.node === '>=22.12.0', 'package.json specifies Node >=22.12.0 engine');
+
+const workflowDeploy = read('.github/workflows/deploy.yml');
+check(/node-version:\s*22/.test(workflowDeploy), 'GitHub Actions workflow specifies Node 22');
 
 const ocr = read('src/tools/image-to-text.html');
 check(/cloudOcrConsent/.test(ocr) && /only when you consent|explicitly enable/i.test(ocr), 'OCR cloud fallback requires explicit consent');

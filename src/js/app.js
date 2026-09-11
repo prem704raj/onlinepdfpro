@@ -222,6 +222,7 @@ const FileUploader = {
         input.className = 'file-input';
         input.accept = config.accept;
         input.multiple = config.multiple;
+        input.setAttribute('aria-label', options.ariaLabel || 'Choose files to upload');
         input.style.cssText = 'position:absolute;width:0;height:0;opacity:0;pointer-events:none;';
         zone.style.position = 'relative';
         zone.appendChild(input);

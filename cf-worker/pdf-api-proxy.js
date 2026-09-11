@@ -56,6 +56,20 @@ const PROTECTED_PATHS = new Set([
     '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases', '/store/razorpay-webhook'
 ]);
 
+const ALLOWED_CHAT_MODELS = new Set([
+    'openai/gpt-oss-20b',
+    'llama-3.3-70b-versatile',
+    'llama-3.1-8b-instant'
+]);
+
+const ALLOWED_VISION_MODELS = new Set([
+    'openrouter/free',
+    'google/gemma-4-31b-it:free',
+    'openai/gpt-4o-mini',
+    'anthropic/claude-3.5-haiku',
+    'meta-llama/llama-3.2-11b-vision-instruct:free'
+]);
+
 // Browser POSTs send an Origin header from an allowed domain. Requests without
 // an Origin are still handled for health checks, server webhooks, and clients
 // that do not expose the header; the value is defence-in-depth only and never
@@ -69,20 +83,30 @@ function requestIp(request) {
     return request.headers.get('cf-connecting-ip') || 'unknown';
 }
 
+function rateLimiterFor(env, pathname) {
+    if (pathname === '/ai/chat') return env.AI_CHAT_LIMITER || env.API_RATE_LIMITER;
+    if (pathname === '/ai/vision') return env.AI_VISION_LIMITER || env.API_RATE_LIMITER;
+    if (CONVERSION_PATHS.has(pathname) || pathname === '/convert/token') {
+        return env.CONVERSION_LIMITER || env.API_RATE_LIMITER;
+    }
+    return env.API_RATE_LIMITER;
+}
+
 async function enforceRateLimit(request, env, pathname) {
-    // Cloudflare's binding is backed by distributed state. Missing production
+    // Cloudflare's bindings are backed by distributed state. Missing production
     // configuration is a deployment error, not a reason to silently fall back
     // to an in-memory map that disappears between Worker isolates.
-    if (!env.API_RATE_LIMITER || typeof env.API_RATE_LIMITER.limit !== 'function') {
+    const limiter = rateLimiterFor(env, pathname);
+    if (!limiter || typeof limiter.limit !== 'function') {
         const production = (env.ENVIRONMENT || 'production') === 'production';
         return { allowed: !production, unavailable: production };
     }
     try {
         const key = `${requestIp(request)}:${pathname}`;
-        const result = await env.API_RATE_LIMITER.limit({ key });
+        const result = await limiter.limit({ key });
         return { allowed: result?.success === true, unavailable: false };
     } catch (err) {
-        console.error('[RateLimit] binding failed', err);
+        console.error('[RateLimit] binding failed', pathname, err);
         return { allowed: false, unavailable: true };
     }
 }
@@ -141,14 +165,28 @@ export default {
             if (!await verifyTurnstile(token, ip, env)) {
                 return jsonResponse({ error: 'Security verification failed. Please complete the verification and try again.' }, 403, corsHeaders);
             }
-            const ticket = await issueConversionTicket(request, env);
+            let targetPath = '';
+            const contentType = request.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                try {
+                    const parsed = await request.clone().json();
+                    if (typeof parsed?.target === 'string') targetPath = parsed.target;
+                } catch {}
+            }
+            if (!targetPath) {
+                targetPath = url.searchParams.get('target') || request.headers.get('x-target-path') || '';
+            }
+            if (!targetPath || !CONVERSION_PATHS.has(targetPath)) {
+                return jsonResponse({ error: 'A valid conversion target route is required (/convert/pdf-to-word or /convert/word-to-pdf).' }, 400, corsHeaders);
+            }
+            const ticket = await issueConversionTicket(request, env, targetPath);
             if (!ticket) return jsonResponse({ error: 'Conversion service is not configured.' }, 503, corsHeaders);
-            return jsonResponse({ token: ticket, expires_in: 300 }, 200, corsHeaders);
+            return jsonResponse({ token: ticket, expires_in: 300, target: targetPath }, 200, corsHeaders);
         }
 
         if (CONVERSION_PATHS.has(url.pathname) && request.method === 'POST') {
             if (!await verifyConversionTicket(request, env, url.pathname)) {
-                return jsonResponse({ error: 'Conversion authorization expired. Please retry the verification.' }, 403, corsHeaders);
+                return jsonResponse({ error: 'Conversion authorization expired or invalid for this route. Please retry the verification.' }, 403, corsHeaders);
             }
             return handleConversion(request, env, url.pathname, corsHeaders);
         }
@@ -177,6 +215,8 @@ export default {
             return new Response(JSON.stringify({
                 status: 'ok',
                 service: 'OnlinePDFPro API Proxy',
+                version: '1.0.0',
+                release: env.RELEASE_ID || '6e9ff18841b0e0d810df05860a12558f6fc4da25',
                 routes: ['/ai/chat', '/ai/vision', '/convert/token', '/convert/pdf-to-word', '/convert/word-to-pdf', '/store/create-order', '/store/verify-payment', '/store/razorpay-webhook', '/store/download', '/store/my-purchases']
             }), {
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
@@ -197,10 +237,10 @@ export default {
             return handleMyPurchases(request, env, allowedOrigins);
         }
 
+
         return jsonResponse({ error: 'Not found.' }, 404, corsHeaders);
     }
 };
-
 // ─── Utilities ────────────────────────────────────────────────────────
 
 function jsonResponse(data, status, headers) {
@@ -406,13 +446,15 @@ async function verifyTicketSignature(secret, message, signature) {
     return crypto.subtle.verify('HMAC', key, signatureBytes, new TextEncoder().encode(message));
 }
 
-async function issueConversionTicket(request, env) {
+async function issueConversionTicket(request, env, targetPath) {
     const secret = env.CONVERSION_SIGNING_SECRET;
-    if (!secret) return null;
+    if (!secret || !targetPath) return null;
+    const nonceBytes = crypto.getRandomValues(new Uint8Array(16));
     const payload = {
-        path: '/convert/*',
+        path: targetPath,
         exp: Math.floor(Date.now() / 1000) + 300,
-        ip: requestIp(request)
+        ip: requestIp(request),
+        jti: base64UrlEncode(nonceBytes)
     };
     const encoded = base64UrlEncode(new TextEncoder().encode(JSON.stringify(payload)));
     const signature = await signTicket(secret, encoded);
@@ -426,8 +468,10 @@ async function verifyConversionTicket(request, env, pathname) {
     if (!bytes || !signature) return false;
     try {
         const payload = JSON.parse(new TextDecoder().decode(bytes));
-        if (payload.path !== '/convert/*' || payload.exp < Math.floor(Date.now() / 1000) || payload.ip !== requestIp(request)) return false;
+        if (payload.path !== pathname) return false;
         if (!CONVERSION_PATHS.has(pathname)) return false;
+        if (payload.exp < Math.floor(Date.now() / 1000)) return false;
+        if (payload.ip !== requestIp(request)) return false;
         return await verifyTicketSignature(env.CONVERSION_SIGNING_SECRET, encoded, signature);
     } catch { return false; }
 }
@@ -913,9 +957,43 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
         }
 
         const event = body?.event;
-        if (event !== 'payment.captured' && event !== 'order.paid') {
+        const refundEvents = new Set(['payment.refunded', 'refund.processed', 'refund.created', 'payment.dispute.created']);
+        if (event !== 'payment.captured' && event !== 'order.paid' && !refundEvents.has(event)) {
             return jsonResponse({ received: true, ignored: true }, 200, corsHeaders);
         }
+
+        if (refundEvents.has(event)) {
+            const refundPayment = body?.payload?.payment?.entity;
+            const refundOrder = body?.payload?.order?.entity;
+            const refundOrderId = refundPayment?.order_id || refundOrder?.id;
+            const refundPaymentId = refundPayment?.id;
+
+            let targetOrderId = refundOrderId;
+            if (!targetOrderId && refundPaymentId) {
+                const lookupRes = await supabaseQuery(
+                    env,
+                    `orders?razorpay_payment_id=eq.${encodeURIComponent(refundPaymentId)}&select=razorpay_order_id&limit=1`,
+                    'GET'
+                );
+                if (lookupRes.ok && Array.isArray(lookupRes.data) && lookupRes.data.length) {
+                    targetOrderId = lookupRes.data[0].razorpay_order_id;
+                }
+            }
+
+            if (targetOrderId) {
+                await supabaseQuery(
+                    env,
+                    `orders?razorpay_order_id=eq.${encodeURIComponent(targetOrderId)}`,
+                    'PATCH',
+                    { status: 'refunded' },
+                    undefined,
+                    { 'Prefer': 'return=representation' }
+                );
+                console.info('[Store] processed refund/dispute event for order', targetOrderId);
+            }
+            return jsonResponse({ received: true, processed: true, status: 'refunded' }, 200, corsHeaders);
+        }
+
 
         const payment = body?.payload?.payment?.entity;
         const rzpOrder = body?.payload?.order?.entity;
@@ -1215,6 +1293,10 @@ async function handleGroqChat(request, env, allowedOrigins) {
         if (validated.error) return jsonResponse({ error: validated.error }, 400, corsHeaders);
         const body = validated.data;
 
+        const requestedModel = typeof body.model === 'string' && ALLOWED_CHAT_MODELS.has(body.model)
+            ? body.model
+            : 'openai/gpt-oss-20b';
+
         // Try Groq first if key is available
         if (env.GROQ_API_KEY) {
             const groqResponse = await fetchJsonUpstream('https://api.groq.com/openai/v1/chat/completions', {
@@ -1224,7 +1306,7 @@ async function handleGroqChat(request, env, allowedOrigins) {
                     'Authorization': `Bearer ${env.GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: body.model || 'openai/gpt-oss-20b',
+                    model: requestedModel,
                     messages: body.messages,
                     max_tokens: body.max_tokens,
                     temperature: body.temperature,

@@ -141,12 +141,18 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 4: Cache-first for everything else (images, fonts) ---
+    // --- Strategy 4: Cache-first for same-origin static assets (images, fonts) ---
+    // Restrict caching to known same-origin assets with valid 200 responses.
+    if (url.origin !== self.location.origin) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
-                const clone = response.clone();
-                if (response.status === 200 || response.type === 'opaque' || response.type === 'cors') {
+                if (response.status === 200) {
+                    const clone = response.clone();
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                 }
                 return response;

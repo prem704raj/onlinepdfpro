@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Study Materials | OnlinePDFPro</title>
-    <meta name="description" content="Browse downloadable study material PDFs from OnlinePDFPro. Carefully prepared notes for Computer Science students.">
+    <meta name="description" content="Browse downloadable study material PDFs from OnlinePDFPro.">
     <link rel="canonical" href="https://onlinepdfpro.com/study-materials.html">
     <meta name="theme-color" content="#171512">
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
@@ -14,49 +14,26 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/mobile-fix-v2.css">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "DBMS From Zero to Advanced",
-      "description": "A 51-page DBMS study PDF covering database fundamentals, relational models, SQL, normalization, transactions, indexing, and exam revision topics.",
-      "image": "https://onlinepdfpro.com/og-image.jpg",
-      "brand": { "@type": "Brand", "name": "OnlinePDFPro" },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://onlinepdfpro.com/study-materials.html",
-        "priceCurrency": "INR",
-        "price": "9",
-        "availability": "https://schema.org/InStock"
-      }
-    }
-    </script>
     <style>
         :root {
             --sm-bg: #f7f5f0;
-            --sm-bg-alt: #efe9de;
             --sm-surface: #fffdf9;
             --sm-text: #211d18;
-            --sm-text-secondary: #6b5e4f;
             --sm-muted: #786f64;
             --sm-border: #e5ded3;
             --sm-accent: #a97822;
             --sm-accent-dark: #8f641b;
-            --sm-card-bg: #1a2230;
             --sm-serif: "Playfair Display", Georgia, serif;
             --sm-sans: "DM Sans", Inter, sans-serif;
         }
         [data-theme="dark"] {
             --sm-bg: #171512;
-            --sm-bg-alt: #1e1b16;
             --sm-surface: #211e1a;
             --sm-text: #f6f0e7;
-            --sm-text-secondary: #a89e8f;
             --sm-muted: #aea397;
             --sm-border: #3a342c;
             --sm-accent: #d5a943;
             --sm-accent-dark: #e1b650;
-            --sm-card-bg: #2a2520;
         }
         html { background: var(--sm-bg); }
         body.sm-body {
@@ -81,217 +58,95 @@
         body.sm-body .header .menu-toggle { color: var(--sm-text) !important; }
         body.sm-body .header .nav-link:hover { color: var(--sm-accent) !important; }
         body.sm-body .header .logo-icon { object-fit: cover; }
-
-        /* ─── Hero ─── */
-        .sm-hero {
-            position: relative;
-            width: 100%;
-            padding: 120px 24px 50px;
-            text-align: center;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .sm-hero-label {
-            font-family: var(--sm-sans);
-            font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--sm-accent);
-            margin-bottom: 20px;
-            display: inline-block;
-            padding: 6px 14px;
-            border: 1px solid var(--sm-accent);
-            border-radius: 20px;
-        }
-        .sm-hero-heading {
-            font-family: var(--sm-serif);
-            font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-            font-weight: 500;
-            line-height: 1.15;
-            color: var(--sm-text);
-            margin: 0 0 24px;
-            letter-spacing: -0.01em;
-        }
-        .sm-hero-heading em {
-            font-style: italic;
-            color: var(--sm-accent);
-        }
-        .sm-hero-subtitle {
-            font-family: var(--sm-sans);
-            font-size: 1.02rem;
-            color: var(--sm-text-secondary);
-            line-height: 1.75;
-            max-width: 720px;
-            margin: 0 auto 0;
-        }
-
-        /* ─── Products Section ─── */
-        .sm-section {
-            padding: 70px 24px 100px;
-            background: var(--sm-bg-alt);
-        }
-        .sm-container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .sm-section-header {
-            margin-bottom: 44px;
-        }
-        .sm-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--sm-muted);
-            margin: 0 0 10px;
-        }
-        .sm-section-title {
-            font-family: var(--sm-serif);
-            font-size: clamp(1.6rem, 4vw, 2.4rem);
-            font-weight: 500;
-            color: var(--sm-text);
-            margin: 0 0 8px;
-        }
-        .sm-section-title em {
-            font-style: italic;
-            color: var(--sm-accent);
-        }
-        .sm-section-subtitle {
-            color: var(--sm-text-secondary);
-            font-size: .88rem;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        /* ─── Card Grid (4 columns, left-aligned) ─── */
-        .sm-grid {
+        .catalog-main {
+            min-height: calc(100vh - 86px);
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            place-items: center;
+            padding: 70px 24px 96px;
+            box-sizing: border-box;
         }
-        @media (max-width: 1000px) {
-            .sm-grid { grid-template-columns: repeat(3, 1fr); }
+        .catalog-shell { width: min(100%, 360px); text-align: center; }
+        .catalog-kicker {
+            margin: 0 0 14px;
+            color: var(--sm-accent);
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .2em;
+            text-transform: uppercase;
         }
-        @media (max-width: 760px) {
-            .sm-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 480px) {
-            .sm-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-        }
-
-        /* ─── Product Card (compact) ─── */
-        .sm-card {
-            background: var(--sm-card-bg);
-            border: none;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-            position: relative;
+        .catalog-title {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
             overflow: hidden;
-            border-radius: 6px;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
-        .sm-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 14px 40px rgba(0,0,0,0.3);
-        }
-        .sm-card-cover-link {
+        .catalog-card { margin: 0; }
+        .catalog-cover-link {
             display: block;
-            text-decoration: none;
-            color: inherit;
+            padding: 14px;
+            border: 1px solid var(--sm-border);
+            background: var(--sm-surface);
+            box-shadow: 0 24px 70px rgba(53, 42, 28, .12);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
         }
-        .sm-card-cover {
+        .catalog-cover-link:hover,
+        .catalog-cover-link:focus-visible {
+            border-color: var(--sm-accent);
+            box-shadow: 0 28px 80px rgba(53, 42, 28, .2);
+            outline: none;
+            transform: translateY(-5px);
+        }
+        .catalog-cover {
             display: block;
             width: 100%;
             height: auto;
-            aspect-ratio: 3 / 2;
+            aspect-ratio: 612 / 792;
             object-fit: cover;
-            object-position: top;
-            background: #1a2744;
+            background: #fff;
         }
-        .sm-card-body {
-            padding: 14px 14px 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--sm-card-bg);
-        }
-        .sm-card-title {
-            font-family: var(--sm-serif);
-            font-size: .95rem;
-            font-weight: 500;
-            color: #f6f0e7;
-            margin: 0 0 6px;
-            line-height: 1.25;
-        }
-        .sm-card-meta {
-            font-size: .72rem;
-            color: #a89e8f;
-            margin: 0 0 10px;
-        }
-        .sm-card-price-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .sm-card-price {
-            font-family: var(--sm-serif);
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #f6f0e7;
-        }
-        .sm-card-format {
-            font-size: .62rem;
-            font-weight: 600;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color: #a89e8f;
-        }
-        .sm-card-actions {
+        .catalog-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            padding: 0 14px 14px;
-            background: var(--sm-card-bg);
+            gap: 10px;
+            margin-top: 18px;
         }
-        .sm-card-actions button {
-            min-height: 36px;
-            padding: 8px 6px;
+        .catalog-actions button {
+            min-height: 46px;
+            padding: 12px 10px;
             border: 1px solid var(--sm-accent);
             border-radius: 2px;
-            font: 700 .6rem var(--sm-sans);
-            letter-spacing: .06em;
+            font: 700 .7rem var(--sm-sans);
+            letter-spacing: .08em;
             text-transform: uppercase;
             cursor: pointer;
             transition: transform .2s ease, background .2s ease, color .2s ease;
         }
-        .sm-card-actions button:hover,
-        .sm-card-actions button:focus-visible { transform: translateY(-2px); outline: none; }
-        .sm-card-cart { background: transparent; color: var(--sm-accent); }
-        .sm-card-cart:hover, .sm-card-cart:focus-visible { background: rgba(169,120,34,.1); }
-        .sm-card-buy { background: var(--sm-accent); color: #fff; }
-        .sm-card-buy:hover, .sm-card-buy:focus-visible { background: var(--sm-accent-dark); }
-
-        /* ─── Fade-up animation ─── */
-        .sm-fade-up {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+        .catalog-actions button:hover,
+        .catalog-actions button:focus-visible { transform: translateY(-2px); outline: none; }
+        .catalog-cart { background: transparent; color: var(--sm-accent); }
+        .catalog-cart:hover, .catalog-cart:focus-visible { background: rgba(169, 120, 34, .1); }
+        .catalog-buy { background: var(--sm-accent); color: #fff; }
+        .catalog-buy:hover, .catalog-buy:focus-visible { background: var(--sm-accent-dark); }
+        .catalog-screen-reader {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
-        .sm-fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ─── Cart & Profile (shared) ─── */
         .store-header-btn {
             position: relative;
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -320,7 +175,7 @@
         .cart-count:not([hidden]) { display: flex; }
         .profile-menu-wrap { position: relative; }
         .profile-menu-wrap:not([hidden]) { display: block; }
-        .profile-avatar, .profile-initial { width: 36px; height: 36px; border-radius: 50%; }
+        .profile-avatar, .profile-initial { width: 42px; height: 42px; border-radius: 50%; }
         .profile-avatar { object-fit: cover; }
         .profile-initial { display: flex; align-items: center; justify-content: center; background: var(--sm-accent); color: #fff; font-weight: 700; }
         .profile-avatar[hidden], .profile-initial[hidden] { display: none !important; }
@@ -372,11 +227,9 @@
         .cart-checkout-message { margin-bottom: 16px; padding: 12px 14px; border: 1px solid var(--sm-accent); color: var(--sm-text); font-size: .85rem; line-height: 1.5; }
         .cart-checkout-message a { display: inline-block; margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
         .cart-secure-text { margin: 12px 0 0; color: var(--sm-muted); font-size: .7rem; text-align: center; }
-
         @media (max-width: 600px) {
-            .sm-hero { padding: 90px 18px 36px; }
-            .sm-section { padding: 48px 18px 72px; }
-            .sm-card-actions { grid-template-columns: 1fr; }
+            .catalog-main { padding: 52px 18px 72px; }
+            .catalog-actions { grid-template-columns: 1fr; }
         }
     </style>
     <script>
@@ -399,52 +252,26 @@
             <div class="header-actions">
                 <button class="store-header-btn" type="button" onclick="openCart()" aria-label="Shopping cart" title="Cart"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg><span class="cart-count" hidden>0</span></button>
                 <div class="profile-menu-wrap" id="profileMenuWrap" hidden><button class="store-header-btn profile-trigger" id="profileTrigger" type="button" aria-label="My account" aria-expanded="false"><img id="profileAvatar" class="profile-avatar" alt="" hidden><span id="profileInitial" class="profile-initial">U</span></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-dropdown-user"><strong id="profileName">User</strong><span id="profileEmail"></span></div><div class="profile-divider"></div><a href="/library.html">My Library</a><button type="button" onclick="logout()">Sign Out</button></div></div>
-                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span></button>
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="theme-icon-light">☾</span><span class="theme-icon-dark">☀</span></button>
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
             </div>
         </div>
     </header>
 
-    <main id="main">
-        <!-- Hero Section -->
-        <section class="sm-hero">
-            <span class="sm-hero-label">Available now · Instant PDF access</span>
-            <h1 class="sm-hero-heading"><em>Study Materials</em> <em>for Computer Science Students</em></h1>
-            <p class="sm-hero-subtitle">Carefully prepared PDF notes and revision material. Review the topics and product details before purchasing, then access paid files again from My Library.</p>
-        </section>
-
-        <!-- Products Section -->
-        <section class="sm-section">
-            <div class="sm-container">
-                <div class="sm-section-header sm-fade-up">
-                    <p class="sm-label">Available now</p>
-                    <h2 class="sm-section-title"><em>Computer Science</em> <em>Notes</em></h2>
-                    <p class="sm-section-subtitle">Browse our collection of focused study guides. Click any cover to see a 5-page preview and full details.</p>
+    <main id="main" class="catalog-main">
+        <div class="catalog-shell">
+            <h1 class="catalog-title">DBMS Complete Notes</h1>
+            <article class="catalog-card" aria-label="DBMS Complete Notes">
+                <a class="catalog-cover-link" href="/viewstudymaterials.html?product=dbms-notes" aria-label="View DBMS Complete Notes details and preview">
+                    <img class="catalog-cover" src="/assets/previews/dbms/page-01.webp" alt="DBMS Complete Notes cover" width="612" height="792" fetchpriority="high">
+                </a>
+                <div class="catalog-actions">
+                    <button class="catalog-cart" type="button" onclick="addToCart('dbms-notes')">Add to cart</button>
+                    <button class="catalog-buy" type="button" onclick="buyProduct('dbms-notes')">Buy now · ₹9</button>
                 </div>
-                <div class="sm-grid">
-                    <!-- DBMS Notes Card -->
-                    <article class="sm-card sm-fade-up" aria-label="DBMS Complete Notes">
-                        <a class="sm-card-cover-link" href="/viewstudymaterials.html?product=dbms-notes" aria-label="View DBMS Complete Notes details and preview">
-                            <img class="sm-card-cover" src="/assets/previews/dbms/cover.jpg" alt="DBMS Notes – From Basics to Advanced" width="480" height="640" loading="eager">
-                        </a>
-                        <div class="sm-card-body">
-                            <h3 class="sm-card-title">DBMS Complete Notes</h3>
-                            <p class="sm-card-meta">PDF · 51 pages</p>
-                            <div class="sm-card-price-row">
-                                <span class="sm-card-price">₹9</span>
-                                <span class="sm-card-format">One-time</span>
-                            </div>
-                        </div>
-                        <div class="sm-card-actions">
-                            <button class="sm-card-cart" type="button" onclick="addToCart('dbms-notes')">Add to cart</button>
-                            <button class="sm-card-buy" type="button" onclick="buyProduct('dbms-notes')">Buy now</button>
-                        </div>
-                    </article>
-
-                    <!-- Placeholder cards for layout preview (hidden, ready for future products) -->
-                </div>
-            </div>
-        </section>
+                <span class="catalog-screen-reader">51-page PDF. Select the cover to view what's included and preview five pages.</span>
+            </article>
+        </div>
     </main>
 
     <footer class="hp-footer">
@@ -466,21 +293,6 @@
 
     <script>
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
-        (function() {
-            if (!('IntersectionObserver' in window)) {
-                document.querySelectorAll('.sm-fade-up').forEach(function(el) { el.classList.add('visible'); });
-                return;
-            }
-            var observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-            document.querySelectorAll('.sm-fade-up').forEach(function(el) { observer.observe(el); });
-        })();
     </script>
     <script defer src="/js/app.js?v=96"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

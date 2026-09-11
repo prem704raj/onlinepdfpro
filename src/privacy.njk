@@ -11,6 +11,8 @@ description: OnlinePDFPro privacy policy. What data our browser tools and extern
 <h2>1. Information we collect</h2>
 <h3>Accounts and purchases</h3>
 <p>If you create an account, Supabase Auth receives and stores your email address, account profile, authentication data, and (if you use Google sign-in) the name, email address, and profile photo supplied by Google. For study-material purchases, we store order identifiers, product identifiers, payment references, entitlement status, and the account connected to the purchase. Razorpay processes your payment details; OnlinePDFPro does not receive or store your card, UPI, bank, or wallet credentials.</p>
+<h3>Purchased study materials</h3>
+<p>Purchased files are stored in a private Cloudflare R2 bucket. When you request a download, the server verifies your authenticated account and purchase entitlement before streaming the file.</p>
 <h3>Usage and technical data</h3>
 <p>Our hosting, CDN, security, and analytics providers may process IP address, browser/device information, request timestamps, and basic usage events. We use this information for security, reliability, measurement, and support. We do not sell personal information.</p>
 
@@ -26,7 +28,7 @@ description: OnlinePDFPro privacy policy. What data our browser tools and extern
 
 <h2>3. Third-party services</h2>
 <ul>
-    <li><strong>Cloudflare</strong> — DNS/CDN, static hosting, Worker API gateway, Turnstile anti-abuse verification, rate limiting, and security telemetry.</li>
+    <li><strong>Cloudflare</strong> — DNS/CDN, static hosting, Worker API gateway, Turnstile anti-abuse verification, rate limiting, R2 private storage for purchased study materials, and security telemetry.</li>
     <li><strong>GitHub / GitHub Pages</strong> — source control and static website delivery. Public repository content is visible according to GitHub settings.</li>
     <li><strong>Supabase</strong> — authentication, account sessions, database records, and purchase entitlements.</li>
     <li><strong>Razorpay</strong> — checkout and payment processing. Razorpay may process payment and fraud-prevention data under its terms.</li>

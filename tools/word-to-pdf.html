@@ -244,7 +244,11 @@
                 if (!turnstileToken) throw new Error('Please complete the security check first.');
                 const response = await fetch(`${API_BASE}/convert/token`, {
                     method: 'POST',
-                    headers: { 'X-Turnstile-Token': turnstileToken }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Turnstile-Token': turnstileToken
+                    },
+                    body: JSON.stringify({ target: '/convert/word-to-pdf' })
                 });
                 const body = await response.json().catch(() => ({}));
                 if (!response.ok || !body.token) throw new Error(body.error || 'Security verification failed.');

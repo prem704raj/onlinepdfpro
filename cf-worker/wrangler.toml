@@ -19,14 +19,33 @@ head_sampling_rate = 1
 binding = "PRODUCTS_BUCKET"
 bucket_name = "onlinepdfpro-products"
 
-# Distributed rate limiting. The Worker fails closed if this binding is not
-# present in production; do not replace it with process-local memory.
+# Distributed rate limiting per route profile using Cloudflare-supported periods.
 [[ratelimits]]
 name = "API_RATE_LIMITER"
 namespace_id = "20260904"
-
   [ratelimits.simple]
   limit = 50
+  period = 60
+
+[[ratelimits]]
+name = "AI_CHAT_LIMITER"
+namespace_id = "20260905"
+  [ratelimits.simple]
+  limit = 12
+  period = 60
+
+[[ratelimits]]
+name = "AI_VISION_LIMITER"
+namespace_id = "20260906"
+  [ratelimits.simple]
+  limit = 6
+  period = 60
+
+[[ratelimits]]
+name = "CONVERSION_LIMITER"
+namespace_id = "20260907"
+  [ratelimits.simple]
+  limit = 5
   period = 60
 
 # ─── Secrets (NEVER put credentials in this file — it's committed to git!) ───

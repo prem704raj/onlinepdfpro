@@ -1,10 +1,10 @@
-// OnlinePDFPro Service Worker (d2a0e349af7a6e0a)
-// The build step replaces d2a0e349af7a6e0a with a content hash of the generated
+// OnlinePDFPro Service Worker (2693c4772aa401e5)
+// The build step replaces 2693c4772aa401e5 with a content hash of the generated
 // site. This invalidates the entire cache whenever a static asset changes.
 // Network-first for HTML/JS, stale-while-revalidate for core CSS, and
 // cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-d2a0e349af7a6e0a';
+const CACHE_NAME = 'onlinepdfpro-cache-2693c4772aa401e5';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -141,12 +141,18 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 4: Cache-first for everything else (images, fonts) ---
+    // --- Strategy 4: Cache-first for same-origin static assets (images, fonts) ---
+    // Restrict caching to known same-origin assets with valid 200 responses.
+    if (url.origin !== self.location.origin) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
-                const clone = response.clone();
-                if (response.status === 200 || response.type === 'opaque' || response.type === 'cors') {
+                if (response.status === 200) {
+                    const clone = response.clone();
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                 }
                 return response;

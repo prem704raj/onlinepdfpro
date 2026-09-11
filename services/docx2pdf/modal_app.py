@@ -138,6 +138,7 @@ def _convert_to_pdf(input_path: str, output_dir: str) -> str:
     memory=2048,
     timeout=120,
     scaledown_window=180,   # Keep warm 3 min to avoid cold starts
+    max_containers=4,       # Concurrency and parallel cost ceiling
     secrets=[conversion_secret],
 )
 @modal.fastapi_endpoint(method="POST", label="docx2pdf-convert")
@@ -217,14 +218,21 @@ async def convert_endpoint(request: Request):
             },
         )
     except subprocess.TimeoutExpired:
+        logger.warning("[%s] Conversion timed out", request_id)
         return StarletteResponse(
-            content=json.dumps({"error": "Conversion timed out"}),
+            content=json.dumps({
+                "error": "Conversion timed out. Please verify document complexity and try again.",
+                "request_id": request_id,
+            }),
             status_code=504, media_type="application/json", headers=cors_headers,
         )
     except Exception as exc:
         logger.exception("[%s] Failed", request_id)
         return StarletteResponse(
-            content=json.dumps({"error": f"Conversion failed: {str(exc)}"}),
+            content=json.dumps({
+                "error": "Conversion failed. Please check the document and try again.",
+                "request_id": request_id,
+            }),
             status_code=500, media_type="application/json", headers=cors_headers,
         )
     finally:

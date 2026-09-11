@@ -255,6 +255,7 @@
  addMoreInput.type = 'file';
  addMoreInput.accept = '.pdf,application/pdf';
  addMoreInput.multiple = true;
+ addMoreInput.setAttribute('aria-label', 'Add more PDF files');
  addMoreInput.style.display = 'none';
  document.body.appendChild(addMoreInput);
 
@@ -262,6 +263,7 @@
  accept: '.pdf,application/pdf',
  multiple: true,
  maxFiles: 100,
+ ariaLabel: 'Choose PDF files to merge',
  onFilesSelected: handleFilesSelected
  });
 
