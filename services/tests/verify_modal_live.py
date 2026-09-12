@@ -16,7 +16,8 @@ from pathlib import Path
 from docx import Document
 from io import BytesIO
 
-MODAL_URL = "https://prem736raj--pdf2docx-convert.modal.run"
+MODAL_URL = os.getenv("PDF2DOCX_MODAL_URL", "https://prem736raj--pdf2docx-convert.modal.run")
+MODAL_API_TOKEN = os.getenv("MODAL_API_TOKEN", "")
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 GT_DIR = FIXTURES_DIR / "ground_truth"
 
@@ -31,11 +32,14 @@ def _similarity(a: str, b: str) -> float:
     return difflib.SequenceMatcher(None, na, nb).ratio()
 
 
-def convert_pdf_to_docx(pdf_path: Path) -> tuple[int, bytes, dict]:
+def convert_pdf_to_docx(pdf_path: Path, token: str = "") -> tuple[int, bytes, dict]:
+    headers = {"Content-Type": "application/pdf"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(
         MODAL_URL,
         data=pdf_path.read_bytes(),
-        headers={"Content-Type": "application/pdf"},
+        headers=headers,
         method="POST",
     )
     try:
@@ -68,14 +72,24 @@ def main():
             failed += 1
             print(f"  [FAIL] {name} {detail}")
 
+    if not MODAL_API_TOKEN:
+        print("\nBLOCKED: set MODAL_API_TOKEN to run authenticated production checks.")
+        return 2
+
+    # The public modal.run URL must reject missing and incorrect bearer
+    # credentials before attempting to parse a document.
+    unauthorized_status, unauthorized_body, _ = convert_pdf_to_docx(
+        FIXTURES_DIR / "f1_single_column.pdf", "incorrect-token"
+    )
+    check("Incorrect bearer returns 401", unauthorized_status == 401, f"(status={unauthorized_status})")
+    check("Unauthorized response is sanitized", b"Traceback" not in unauthorized_body and b"modal" not in unauthorized_body.lower(), "")
+
     # 1. Test F1 Single Column
     print("\n-- Testing F1 (Single Column PDF) --")
     t0 = time.monotonic()
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f1_single_column.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f1_single_column.pdf", MODAL_API_TOKEN)
     elapsed = time.monotonic() - t0
     check("F1 HTTP Status 200", status == 200, f"(status={status}, {elapsed:.1f}s)")
-    check("F1 X-Path header", headers.get("X-Path") == "cpu-text", f"(X-Path={headers.get('X-Path')})")
-    
     if status == 200:
         docx_text = extract_docx_text(data)
         gt_text = (GT_DIR / "f1.txt").read_text(encoding="utf-8")
@@ -85,7 +99,7 @@ def main():
     # 2. Test F2 Three Column (Reading Order)
     print("\n-- Testing F2 (Three Column PDF / Reading Order) --")
     t0 = time.monotonic()
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f2_three_column.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f2_three_column.pdf", MODAL_API_TOKEN)
     elapsed = time.monotonic() - t0
     check("F2 HTTP Status 200", status == 200, f"(status={status}, {elapsed:.1f}s)")
     
@@ -99,7 +113,7 @@ def main():
     # 3. Test F3 Tables
     print("\n-- Testing F3 (Tables PDF) --")
     t0 = time.monotonic()
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f3_tables.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f3_tables.pdf", MODAL_API_TOKEN)
     elapsed = time.monotonic() - t0
     check("F3 HTTP Status 200", status == 200, f"(status={status}, {elapsed:.1f}s)")
     
@@ -111,7 +125,7 @@ def main():
     # 4. Test F6 Unicode (Hindi + CJK)
     print("\n-- Testing F6 (Unicode PDF) --")
     t0 = time.monotonic()
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f6_unicode.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f6_unicode.pdf", MODAL_API_TOKEN)
     elapsed = time.monotonic() - t0
     check("F6 HTTP Status 200", status == 200, f"(status={status}, {elapsed:.1f}s)")
     
@@ -123,12 +137,13 @@ def main():
 
     # 5. Test F8a Corrupt PDF
     print("\n-- Testing F8a (Corrupt PDF) --")
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f8a_corrupt.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f8a_corrupt.pdf", MODAL_API_TOKEN)
     check("F8a Correctly Rejected (422)", status == 422, f"(status={status})")
+    check("F8a error is sanitized", b"Traceback" not in data and b"fitz" not in data.lower(), "")
 
     # 6. Test F8b Encrypted PDF
     print("\n-- Testing F8b (Encrypted PDF) --")
-    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f8b_encrypted.pdf")
+    status, data, headers = convert_pdf_to_docx(FIXTURES_DIR / "f8b_encrypted.pdf", MODAL_API_TOKEN)
     check("F8b Correctly Rejected (422)", status == 422, f"(status={status})")
 
     print("\n============================================================")

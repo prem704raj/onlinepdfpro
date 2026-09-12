@@ -150,7 +150,8 @@ Modal dashboard instead of relying on estimates in this repository.
 ### Service A — DOCX → PDF
 - LibreOffice runs persistently via unoserver (no cold start per request)
 - Supervisor auto-restarts unoserver if it crashes
-- 120s hard timeout per conversion; returns 503 on timeout
+- 120s Modal function ceiling with a 60s LibreOffice subprocess timeout; returns
+  an explicit 504 timeout response and request ID without exposing stderr
 - Health endpoint performs a real probe conversion
 
 ### Service B — PDF → DOCX

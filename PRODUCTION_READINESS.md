@@ -2,7 +2,8 @@
 
 Date: 2026-09-12
 Repository: `prem704raj/onlinepdfpro`  
-Validated code through remediation commit: `6541570` on `main`
+Validated code through the current local remediation changes after `6541570`;
+these follow-up changes are not yet committed or deployed.
 
 The remediation work below is implemented in the checkout and covered by the
 local build/regression gates listed at the end. The live site and live Worker
@@ -90,3 +91,29 @@ Read-only production checks completed without exposing secret values:
 Validation for this update: `npm run build`, `npm run sync:root`, `npm test`, `npm run perf:budget`, `npm audit`, `python -m compileall -q services`, `python services/tests/verify_local.py`, Worker ESM syntax validation, and Wrangler dry-runs all pass locally. The browser suite includes the new CSP/model/release/cache/deferred-script/refund/ZIP guardrails.
 
 The remaining production gates are external and intentionally not guessed: provision the three missing Worker secrets, deploy both Modal apps with the shared secret, configure the GitHub Actions Cloudflare secrets and required checks/branch protection, enable Supabase leaked-password protection, rotate the historical Razorpay credential identified in the earlier history audit, and run live Worker/Modal/frontend/payment smoke tests. Exact accessibility selector fixes, duplicate-root cleanup, and measured Core Web Vitals still require the live host/browser and an explicit Pages-source decision.
+
+## V2 execution update — follow-up
+
+The next source-side pass tightened the remaining controls that can be verified
+without dashboard credentials:
+
+- Costly AI and conversion routes now fail closed when their route-specific
+  Cloudflare limiter binding is missing instead of silently falling back to the
+  generic API bucket. Razorpay webhooks remain HMAC-protected but are excluded
+  from end-user IP buckets so fulfilment is not throttled by browser traffic.
+- `window.supabaseClient` is now a live getter backed by `getSupabaseClient()`;
+  deferred SDK loading cannot leave legacy consumers with a permanently stale
+  `null` snapshot.
+- CI pins Node to `22.12.0`, compiles the conversion services, and pins the
+  checkout/setup/Worker/Pages actions to immutable release SHAs.
+- The initial Supabase migration now provisions `pgcrypto` explicitly for
+  `gen_random_uuid()` on clean recovery databases.
+- Shared tool JavaScript adds accessible labels for legacy file inputs,
+  keyboard activation for upload cards, and fallback labels for canvases.
+
+These changes pass the same build, sync, regression/browser, performance,
+production-audit, Python compilation, Worker syntax, Wrangler dry-run, and
+diff gates. They do not close the external P0/P1 gates: GitHub Cloudflare
+secrets, protected `main`, Worker/Modal deployment and release matching,
+Supabase leaked-password protection/advisors, R2 privacy confirmation, DNS
+redirects, Razorpay Test Mode E2E, or measured production Web Vitals/latency.

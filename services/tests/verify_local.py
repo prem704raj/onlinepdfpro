@@ -229,6 +229,9 @@ check("Modal app enforces bearer auth", "hmac.compare_digest" in modal_code and 
 check("Modal app injects conversion secret", "secrets=[conversion_secret]" in modal_code)
 check("Modal app has /warm endpoint", "warm" in modal_code)
 check("Modal app validates encrypted PDF", "encrypted" in modal_code.lower())
+live_modal_code = (SERVICES_DIR / "tests" / "verify_modal_live.py").read_text(encoding="utf-8")
+check("Live Modal verifier requires an explicit token", "MODAL_API_TOKEN" in live_modal_code and "Incorrect bearer returns 401" in live_modal_code)
+check("Live Modal verifier supports configurable endpoint", "PDF2DOCX_MODAL_URL" in live_modal_code)
 
 
 # ===========================================================================

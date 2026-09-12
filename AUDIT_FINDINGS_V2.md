@@ -1757,6 +1757,29 @@ The first operational step is:
 
 ---
 
+## Execution status after the first remediation pass
+
+This document remains an active backlog. The following source-side controls
+have now been implemented and locally verified after the original V2 audit:
+
+- costly AI/conversion routes fail closed when their route-specific rate-limit
+  binding is absent; Razorpay webhooks remain HMAC-protected and are excluded
+  from end-user IP buckets;
+- CI uses Node `22.12.0`, compiles the conversion services, and pins the
+  third-party GitHub Actions used by the deployment workflow to immutable SHAs;
+- the initial Supabase migration provisions `pgcrypto` for UUID generation;
+- the deferred Supabase client is exposed through a live getter rather than a
+  stale `window.supabaseClient` snapshot;
+- shared upload surfaces add file-input labels, keyboard activation, and
+  fallback canvas labels for legacy tool pages.
+
+These are not production-deployment proof. The release is still blocked until
+the external checklist is completed and verified: GitHub Cloudflare secrets,
+protected `main`, current Worker deployment, both Modal deployments with the
+shared bearer secret, live Worker/Modal/frontend smoke tests, Supabase
+leaked-password protection and advisor checks, private R2 confirmation, DNS
+redirects, Razorpay Test Mode E2E, and measured production performance.
+
 ## 24. Reference Documentation for Corrected Guidance
 
 Cloudflare Workers Rate Limiting bindings:  
