@@ -71,6 +71,8 @@ check(/payload\.path\s*!==\s*pathname/.test(worker), 'Worker strictly binds conv
 check(/MODAL_API_TOKEN/.test(worker) && /temporarily unavailable/.test(worker), 'Worker fails closed when Modal authentication is not configured');
 check(/API_RATE_LIMITER/.test(worker) && /\.limit\(\{ key \}\)/.test(worker), 'Worker uses the durable rate-limit binding');
 check(/AI_CHAT_LIMITER/.test(worker) && /AI_VISION_LIMITER/.test(worker) && /CONVERSION_LIMITER/.test(worker), 'Worker uses per-route rate limit bindings');
+check(!/AI_CHAT_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker) && !/AI_VISION_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker) && !/CONVERSION_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker), 'Worker does not silently downgrade costly routes to the generic limiter');
+check(/WEBHOOK_PATHS/.test(worker) && /!WEBHOOK_PATHS\.has\(url\.pathname\)/.test(worker), 'Worker keeps Razorpay webhooks out of end-user rate-limit buckets');
 check(/ALLOWED_CHAT_MODELS/.test(worker) && /ALLOWED_VISION_MODELS/.test(worker), 'Worker restricts AI models to strict allowlists');
 check(/ALLOWED_VISION_MODELS\.has\(body\.model\)/.test(worker), 'Worker applies the vision model allowlist before forwarding requests');
 check(/release:\s*env\.RELEASE_ID\s*\|\|\s*'local'/.test(worker) && !/6e9ff18841b0e0d810df05860a12558f6fc4da25/.test(worker), 'Worker health endpoint exposes current release attribution without a stale fallback');
@@ -117,6 +119,7 @@ const initialMigration = read('supabase/migrations/20260815000000_initial_schema
 const hideR2Migration = read('supabase/migrations/20260910120000_hide_r2_key_from_public.sql');
 const updatedAtMigration = read('supabase/migrations/20260912100000_orders_updated_at_trigger.sql');
 check(/CREATE TABLE IF NOT EXISTS public\.orders/i.test(initialMigration) && /auth\.uid\(\).*user_id/i.test(initialMigration), 'Supabase initial schema migration versions reproducible schema and RLS policies');
+check(/create extension if not exists pgcrypto/i.test(initialMigration), 'Supabase initial schema provisions pgcrypto for UUID generation');
 check(/revoke select on table public\.products/i.test(hideR2Migration) && /grant select \([^)]*title[^)]*\)/i.test(hideR2Migration), 'Supabase migration restricts public access to r2_key');
 check(/create trigger orders_set_updated_at/i.test(updatedAtMigration) && /new\.updated_at\s*=\s*now\(\)/i.test(updatedAtMigration), 'Supabase schema keeps order updated_at accurate for every transition');
 
@@ -125,7 +128,9 @@ check(packageJson.engines && packageJson.engines.node === '>=22.12.0', 'package.
 check(!packageJson.dependencies?.['crypto-js'] && /js-yaml/.test(read('package-lock.json')), 'Unused discontinued CryptoJS dependency is removed and lockfile remains explicit');
 
 const workflowDeploy = read('.github/workflows/deploy.yml');
-check(/node-version:\s*22/.test(workflowDeploy), 'GitHub Actions workflow specifies Node 22');
+check(/node-version:\s*22\.12\.0/.test(workflowDeploy), 'GitHub Actions workflow specifies the supported Node 22.12 baseline');
+check(/python -m compileall -q services/.test(workflowDeploy), 'GitHub Actions validates conversion service Python syntax');
+check(/actions\/checkout@[0-9a-f]{40}/.test(workflowDeploy) && /actions\/setup-node@[0-9a-f]{40}/.test(workflowDeploy) && /cloudflare\/wrangler-action@[0-9a-f]{40}/.test(workflowDeploy) && /peaceiris\/actions-gh-pages@[0-9a-f]{40}/.test(workflowDeploy), 'GitHub Actions third-party refs are pinned to immutable commit SHAs');
 check(/command:\s*deploy\s+--var\s+RELEASE_ID:\$\{\{\s*github\.sha\s*\}\}/.test(workflowDeploy) && /Verify frontend release attribution/.test(workflowDeploy), 'Deployment pipeline carries one release ID through Worker and frontend');
 
 check(/write-release\.js/.test(packageJson.scripts.build) && exists('scripts/write-release.js'), 'Build writes deterministic release metadata before stamping the service-worker cache');
@@ -144,6 +149,7 @@ for (const page of ['src/tools/pdf-to-word.html', 'src/tools/word-to-pdf.html'])
 }
 const authSource = read('src/js/auth.js');
 check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChange/.test(authSource), 'Authentication session flow is wired to Supabase');
+check(/Object\.defineProperty\(window,\s*["']supabaseClient/.test(authSource) && /get:\s*getSupabaseClient/.test(authSource), 'Authentication exposes a live Supabase client getter');
 const storeSource = read('src/js/store.js');
 check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
 const studySource = read('src/study-materials.html');
@@ -151,6 +157,9 @@ const studyDetailSource = read('src/viewstudymaterials.html');
 check(/catalog-cover/.test(studySource) && /viewstudymaterials\.html\?product=dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
 check(/previewGrid/.test(studyDetailSource) && /showModal\(\)/.test(studyDetailSource) && /slice\(0, 5\)/.test(studyDetailSource), 'Study material detail page provides a reusable five-page preview dialog');
 check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /viewstudymaterials\.html/.test(storeSource), 'Study material product metadata supports reusable detail pages');
+check(/disclosure\.replaceChildren\(\)/.test(studyDetailSource) && !/getElementById\('disclosure'\)\.innerHTML/.test(studyDetailSource), 'Study material disclosures use text nodes instead of interpolated markup');
+const pageNumbers = read('src/tools/add-page-numbers-to-pdf.html');
+check(/textContent\s*=\s*`\s*\$\{file\.name\}/.test(pageNumbers) && !/textContent\s*=\s*`[^`]*escapeHTML\(file\.name\)/.test(pageNumbers), 'File names assigned through textContent are not double-escaped');
 const previewAssetPaths = Array.from({ length: 5 }, (_, index) => `src/assets/previews/dbms/page-0${index + 1}.webp`);
 previewAssetPaths.forEach((assetPath, index) => {
     const assetData = exists(assetPath) ? fs.readFileSync(path.join(root, assetPath)) : Buffer.alloc(0);
@@ -211,6 +220,8 @@ for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/lo
 }
 check(/@2\.49\.1/.test(read('src/_includes/base.njk')) && /<script defer[^>]+supabase-js/.test(read('src/_includes/base.njk')), 'Shared base layout pins and defers Supabase JS');
 check(/note-item\.active \.note-title/.test(read('src/pdf-scratchpad.html')), 'Scratchpad updates the active note title selector');
+const sharedApp = read('src/js/app.js');
+check(/AccessibilityEnhancements/.test(sharedApp) && /aria-label/.test(sharedApp) && /role', 'button'/.test(sharedApp), 'Shared UI adds accessible file-input labels and keyboard upload targets');
 
 // Cryptographic/unit checks: use the same maintained packages as the browser
 // bundles and independently parse the resulting files when possible.

@@ -55,6 +55,11 @@ const PROTECTED_PATHS = new Set([
     '/ai/chat', '/ai/vision', '/convert/token', ...CONVERSION_PATHS,
     '/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases', '/store/razorpay-webhook'
 ]);
+// Razorpay delivers authenticated server-to-server webhooks. Do not place
+// them in an end-user IP bucket where a burst of unrelated browser traffic
+// could delay payment fulfilment; HMAC verification and idempotent handling
+// remain the primary controls for this route.
+const WEBHOOK_PATHS = new Set(['/store/razorpay-webhook']);
 
 const ALLOWED_CHAT_MODELS = new Set([
     'openai/gpt-oss-20b',
@@ -84,10 +89,14 @@ function requestIp(request) {
 }
 
 function rateLimiterFor(env, pathname) {
-    if (pathname === '/ai/chat') return env.AI_CHAT_LIMITER || env.API_RATE_LIMITER;
-    if (pathname === '/ai/vision') return env.AI_VISION_LIMITER || env.API_RATE_LIMITER;
+    // Costly routes must never silently fall back to the generic bucket. A
+    // missing route-specific binding is a deployment/configuration error in
+    // production; using the generic limiter would make the protection weaker
+    // while still appearing healthy.
+    if (pathname === '/ai/chat') return env.AI_CHAT_LIMITER;
+    if (pathname === '/ai/vision') return env.AI_VISION_LIMITER;
     if (CONVERSION_PATHS.has(pathname) || pathname === '/convert/token') {
-        return env.CONVERSION_LIMITER || env.API_RATE_LIMITER;
+        return env.CONVERSION_LIMITER;
     }
     return env.API_RATE_LIMITER;
 }
@@ -127,7 +136,7 @@ export default {
             return jsonResponse({ error: 'Origin not allowed.' }, 403, corsHeaders);
         }
 
-        if (url.pathname !== '/health' && PROTECTED_PATHS.has(url.pathname)) {
+        if (url.pathname !== '/health' && PROTECTED_PATHS.has(url.pathname) && !WEBHOOK_PATHS.has(url.pathname)) {
             const rate = await enforceRateLimit(request, env, url.pathname);
             if (!rate.allowed) {
                 return jsonResponse(

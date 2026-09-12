@@ -1,6 +1,12 @@
 -- OnlinePDFPro: Initial reproducible database schema
 -- Reproduces tables, constraints, RLS enablement, policies, and indexes.
 
+-- `orders.id` uses gen_random_uuid(). Keep the extension in the migration
+-- history so a clean recovery database does not depend on a dashboard-only
+-- default. Supabase exposes pgcrypto in the normal extensions schema; the
+-- unqualified form remains portable to local Postgres as well.
+create extension if not exists pgcrypto;
+
 -- 1. Products table
 create table if not exists public.products (
     id text primary key,

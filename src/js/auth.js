@@ -304,8 +304,20 @@ async function updateUserHeader() {
   }
 }
 
-// Expose globally on window
-window.supabaseClient = supabaseClient;
+// Expose globally on window. Keep the legacy property as a live getter so
+// pages that still read `window.supabaseClient` never receive the null value
+// captured before the deferred Supabase SDK finished loading. New consumers
+// should call `getSupabaseClient()` directly.
+try {
+  Object.defineProperty(window, "supabaseClient", {
+    configurable: true,
+    get: getSupabaseClient
+  });
+} catch {
+  // Older embedded browsers may reject defineProperty on window; the
+  // function API remains the authoritative path in that case.
+  window.supabaseClient = supabaseClient;
+}
 window.getSupabaseClient = getSupabaseClient;
 window.signInWithGoogle = signInWithGoogle;
 window.requestPasswordReset = requestPasswordReset;

@@ -225,7 +225,11 @@
             document.getElementById('priceMeta').textContent = (product.format || 'PDF') + ' · ' + (product.pageCount || '—') + ' pages';
             document.getElementById('previewCount').textContent = previews.length + '-page preview';
             document.getElementById('deliveryNote').textContent = product.deliveryNote || 'Instant digital access after secure checkout.';
-            document.getElementById('disclosure').innerHTML = '<strong>Good to know:</strong> ' + (product.disclosure || 'Review the material before relying on it for important decisions.');
+            var disclosure = document.getElementById('disclosure');
+            disclosure.replaceChildren();
+            var disclosureLabel = document.createElement('strong');
+            disclosureLabel.textContent = 'Good to know:';
+            disclosure.append(disclosureLabel, document.createTextNode(' ' + (product.disclosure || 'Review the material before relying on it for important decisions.')));
 
             var list = document.getElementById('includedList');
             (product.includes || []).forEach(function (item) { var li = document.createElement('li'); li.textContent = item; list.appendChild(li); });

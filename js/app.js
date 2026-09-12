@@ -384,6 +384,51 @@ const ProcessingInfo = {
 };
 
 // =========================================
+// Accessibility enhancements for legacy tool shells
+// =========================================
+
+const AccessibilityEnhancements = {
+    init() {
+        document.querySelectorAll('input[type="file"]').forEach((input) => {
+            if (!input.getAttribute('aria-label') && !input.getAttribute('aria-labelledby')) {
+                const explicitLabel = input.id
+                    ? Array.from(document.querySelectorAll('label')).find((label) => label.htmlFor === input.id)
+                    : null;
+                const zone = input.closest('.upload-zone, .upload-area, .drop-zone, .upload-box, .file-upload, .tool-upload');
+                const visibleText = explicitLabel?.textContent?.trim() ||
+                    zone?.querySelector('h2, h3, .upload-text, .upload-title, p')?.textContent?.trim() || '';
+                const compactText = visibleText.replace(/\s+/g, ' ').slice(0, 80);
+                input.setAttribute('aria-label', compactText || 'Choose a file to upload');
+            }
+
+            // A number of older pages make the entire upload card clickable
+            // without exposing a keyboard target. Add a semantic button role
+            // only when there is no nested button/link that would create
+            // conflicting interactive controls.
+            const zone = input.closest('.upload-zone, .upload-area, .drop-zone, .upload-box, .file-upload, .tool-upload');
+            if (zone && !zone.hasAttribute('tabindex') && !zone.querySelector('button, a')) {
+                zone.setAttribute('role', 'button');
+                zone.setAttribute('tabindex', '0');
+                zone.setAttribute('aria-label', zone.getAttribute('aria-label') || input.getAttribute('aria-label'));
+                zone.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        input.click();
+                    }
+                });
+            }
+        });
+
+        document.querySelectorAll('canvas').forEach((canvas) => {
+            if (!canvas.getAttribute('aria-label') && !canvas.getAttribute('aria-labelledby')) {
+                canvas.setAttribute('role', 'img');
+                canvas.setAttribute('aria-label', 'Interactive document preview canvas');
+            }
+        });
+    }
+};
+
+// =========================================
 // Progress Handler
 // =========================================
 
@@ -872,6 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     MobileMenu.init();
     ProcessingInfo.init();
+    AccessibilityEnhancements.init();
     LanguageSelector.init();
     FeedbackHandler.init();
     RecentlyUsedUI.render();
@@ -1032,7 +1078,7 @@ const FileSharer = {
 // =========================================
 
 const _exports = {
-    ThemeManager, MobileMenu, LanguageSelector, FileUploader, ProcessingInfo, ProgressHandler, RecentlyUsed, RecentlyUsedUI, AutoClear, Downloader, Utils, LoadingSpinner, Toast, Analytics, ToolReset, FileSharer, HistoryDB, PwaInstallManager
+    ThemeManager, MobileMenu, LanguageSelector, FileUploader, ProcessingInfo, AccessibilityEnhancements, ProgressHandler, RecentlyUsed, RecentlyUsedUI, AutoClear, Downloader, Utils, LoadingSpinner, Toast, Analytics, ToolReset, FileSharer, HistoryDB, PwaInstallManager
 };
 window.OnlinePDFPro = _exports;
 window.DocTools = _exports;
