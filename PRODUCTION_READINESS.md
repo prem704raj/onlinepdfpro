@@ -1,8 +1,8 @@
 # OnlinePDFPro production-readiness report
 
-Date: 2026-09-05  
+Date: 2026-09-12
 Repository: `prem704raj/onlinepdfpro`  
-Validated code through remediation commit: `ecde593` on `main`
+Validated code through remediation commit: `6541570` on `main`
 
 The remediation work below is implemented in the checkout and covered by the
 local build/regression gates listed at the end. The live site and live Worker
@@ -69,3 +69,24 @@ configuration are still missing; the exact actions are listed under
 6. Push the commits and run the workflow. Then verify the live Worker (`/health`, unknown route, AI without Turnstile, hostile CORS), representative browser/mobile flows, and Razorpay Test Mode journeys (buyer, second user, duplicate, failure, webhook/browser-close).
 
 The live domain was intentionally not represented as fixed in this report: before deployment it still served the older homepage/Worker behavior. Core Web Vitals (LCP/CLS/INP), conversion cold/warm latency, and backend p50/p95 were not invented or marked complete because no DevTools performance run or production conversion environment was available in this checkout.
+
+## V2 implementation update — 2026-09-12
+
+The V2 audit backlog was re-checked against the current checkout and the following additional fixes are now implemented:
+
+- The Worker applies the reviewed vision-model allowlist, reports `local` rather than a stale historical release when no deployment ID is injected, and the workflow passes the current commit SHA to the Worker and generated frontend. The post-deploy smoke job compares the two values.
+- The service worker now cache-firsts only an explicit static-asset set/directories; arbitrary same-origin responses and all cross-origin responses are network-only. Build output includes deterministic `release.json` metadata and the cache remains content-hashed.
+- Supabase JS is pinned to `2.49.1` and deferred on direct legacy pages, with login and study-detail initialization ordered after deferred dependencies. Legacy client-side aliases now also have forced edge 301 rules.
+- Word-to-PDF rejects oversized/path-traversal ZIP containers before LibreOffice, kills the complete process group on timeout, and removes the temporary LibreOffice profile. Refund/dispute entitlement suspension is documented in the public refund policy and represented by the Worker webhook transition. A database migration now maintains `orders.updated_at` on every update.
+- The site now serves an enforcing HTTP CSP while retaining report-only telemetry, including the actual Worker, OCR, QR upload, analytics, and WASM origins. The unused discontinued `crypto-js` package was removed and the vulnerable `js-yaml` transitive dependency is overridden to `4.3.2`.
+
+Read-only production checks completed without exposing secret values:
+
+- Wrangler dry-run and release-variable injection pass.
+- R2 bucket exists; `r2.dev` public access is disabled and no custom R2 domains are connected.
+- The current Worker secret inventory is missing `TURNSTILE_SECRET_KEY`, `CONVERSION_SIGNING_SECRET`, and `MODAL_API_TOKEN`; no local values are available to provision them.
+- Live verification still shows the old deployment: `/health` omits `/convert/*` and release attribution, the live site sends only the report-only CSP, and the public Modal conversion URLs do not consistently reject an invalid bearer. This is why the P0 deployment items remain open despite source-side fixes.
+
+Validation for this update: `npm run build`, `npm run sync:root`, `npm test`, `npm run perf:budget`, `npm audit`, `python -m compileall -q services`, `python services/tests/verify_local.py`, Worker ESM syntax validation, and Wrangler dry-runs all pass locally. The browser suite includes the new CSP/model/release/cache/deferred-script/refund/ZIP guardrails.
+
+The remaining production gates are external and intentionally not guessed: provision the three missing Worker secrets, deploy both Modal apps with the shared secret, configure the GitHub Actions Cloudflare secrets and required checks/branch protection, enable Supabase leaked-password protection, rotate the historical Razorpay credential identified in the earlier history audit, and run live Worker/Modal/frontend/payment smoke tests. Exact accessibility selector fixes, duplicate-root cleanup, and measured Core Web Vitals still require the live host/browser and an explicit Pages-source decision.
