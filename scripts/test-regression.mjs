@@ -63,6 +63,8 @@ const htmlToPdf = read('src/tools/html-to-pdf.html');
 check(/function sanitizeHTML\s*\(/.test(htmlToPdf), 'HTML-to-PDF has an explicit sanitizer');
 check(/BLOCKED_HTML_TAGS/.test(htmlToPdf) && /name\.startsWith\('on'\)/.test(htmlToPdf), 'HTML-to-PDF strips active tags and event handlers');
 check(/replaceChildren\(sanitizeHTML/.test(htmlToPdf) && /appendChild\(sanitizeHTML/.test(htmlToPdf), 'HTML-to-PDF only previews/renders sanitized fragments');
+const textExtractor = read('src/pdf-to-text-extractor.html');
+check(/matchAll\(regex\)/.test(textExtractor) && /matchView\.replaceChildren\(fragment\)/.test(textExtractor) && !/matchView\.innerHTML/.test(textExtractor), 'Text extractor highlights user text with DOM nodes without double-escaping');
 
 const worker = read('cf-worker/pdf-api-proxy.js');
 check(/TURNSTILE_SECRET_KEY/.test(worker) && /siteverify/.test(worker), 'Worker validates Turnstile server-side');
