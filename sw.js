@@ -1,10 +1,10 @@
-// OnlinePDFPro Service Worker (2693c4772aa401e5)
-// The build step replaces 2693c4772aa401e5 with a content hash of the generated
+// OnlinePDFPro Service Worker (fc0c79832eee27c0)
+// The build step replaces fc0c79832eee27c0 with a content hash of the generated
 // site. This invalidates the entire cache whenever a static asset changes.
 // Network-first for HTML/JS, stale-while-revalidate for core CSS, and
 // cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-2693c4772aa401e5';
+const CACHE_NAME = 'onlinepdfpro-cache-fc0c79832eee27c0';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -30,6 +30,7 @@ const STATIC_ASSETS = [
     'js/app.js',
     'js/auth.js',
     'js/store.js',
+    'release.json',
 
     // Images & manifest
     'apple-touch-icon.png',
@@ -42,6 +43,27 @@ const STATIC_ASSETS = [
     'og-image.jpg',
     'site.webmanifest'
 ];
+
+const STATIC_ASSET_PATHS = new Set(
+    STATIC_ASSETS.map((asset) => new URL(asset, self.location.origin).pathname)
+);
+const STATIC_ASSET_PREFIXES = ['/assets/', '/css/', '/fonts/', '/icons/'];
+const STATIC_ASSET_EXTENSIONS = /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|webp|woff2?|ttf|otf)$/i;
+
+function isKnownStaticAsset(url) {
+    if (url.origin !== self.location.origin) {
+        return false;
+    }
+    if (STATIC_ASSET_PATHS.has(url.pathname)) return true;
+    return STATIC_ASSET_EXTENSIONS.test(url.pathname) &&
+        STATIC_ASSET_PREFIXES.some((prefix) => url.pathname.startsWith(prefix));
+}
+
+function cacheSuccessfulResponse(cacheKey, response) {
+    if (response.status !== 200) return;
+    const clone = response.clone();
+    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+}
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -92,8 +114,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    cacheSuccessfulResponse(request, response);
                     return response;
                 })
                 .catch(() => caches.match(cacheKey, { ignoreSearch: true }))
@@ -109,8 +130,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+                    cacheSuccessfulResponse(cacheKey, response);
                     return response;
                 })
                 .catch(() => {
@@ -148,13 +168,19 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Never turn arbitrary same-origin GET responses (API payloads, user
+    // documents, error pages, or future dynamic routes) into long-lived cache
+    // entries. Only the known static asset set and static asset directories
+    // use the cache-first strategy below.
+    if (!isKnownStaticAsset(url)) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
-                if (response.status === 200) {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                }
+                cacheSuccessfulResponse(request, response);
                 return response;
             });
         })

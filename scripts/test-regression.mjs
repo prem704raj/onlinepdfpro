@@ -72,8 +72,10 @@ check(/MODAL_API_TOKEN/.test(worker) && /temporarily unavailable/.test(worker), 
 check(/API_RATE_LIMITER/.test(worker) && /\.limit\(\{ key \}\)/.test(worker), 'Worker uses the durable rate-limit binding');
 check(/AI_CHAT_LIMITER/.test(worker) && /AI_VISION_LIMITER/.test(worker) && /CONVERSION_LIMITER/.test(worker), 'Worker uses per-route rate limit bindings');
 check(/ALLOWED_CHAT_MODELS/.test(worker) && /ALLOWED_VISION_MODELS/.test(worker), 'Worker restricts AI models to strict allowlists');
-check(/release:\s*env\.RELEASE_ID/.test(worker), 'Worker health endpoint exposes release attribution');
+check(/ALLOWED_VISION_MODELS\.has\(body\.model\)/.test(worker), 'Worker applies the vision model allowlist before forwarding requests');
+check(/release:\s*env\.RELEASE_ID\s*\|\|\s*'local'/.test(worker) && !/6e9ff18841b0e0d810df05860a12558f6fc4da25/.test(worker), 'Worker health endpoint exposes current release attribution without a stale fallback');
 check(/payment\.refunded/.test(worker) && /status:\s*'refunded'/.test(worker), 'Worker handles refund and dispute webhooks');
+check(/refunds, disputes, and access/i.test(read('src/refund.njk')) && /partial refund/i.test(read('src/refund.njk')), 'Refund policy documents entitlement suspension for refunds and disputes');
 check(/isValidConversionDocument/.test(worker) && /isValidConversionOutput/.test(worker), 'Worker validates conversion input and output signatures');
 const syntax = spawnSync(process.execPath, ['--input-type=module', '--check'], {
     cwd: root,
@@ -94,9 +96,14 @@ for (const service of ['services/pdf2docx/modal_app.py', 'services/docx2pdf/moda
     check(/max_containers=4/.test(modalSource), `${service} enforces container concurrency ceiling`);
     check(/request_id/.test(modalSource) && /Conversion failed/.test(modalSource), `${service} sanitizes internal conversion error responses`);
 }
+const wordToPdfModal = read('services/docx2pdf/modal_app.py');
+check(/MAX_ARCHIVE_UNCOMPRESSED_SIZE/.test(wordToPdfModal) && /MAX_ARCHIVE_ENTRIES/.test(wordToPdfModal), 'Word-to-PDF bounds ZIP expansion before LibreOffice');
+check(/communicate\(timeout=CONVERT_TIMEOUT\)/.test(wordToPdfModal) && /killpg/.test(wordToPdfModal) && /rmtree\(user_dir/.test(wordToPdfModal), 'Word-to-PDF cleans timed-out LibreOffice process groups and profiles');
+check(/annotations and interactive form widgets are intentionally omitted/.test(read('src/tools/pdf-to-word.html')), 'PDF-to-Word clearly discloses annotation and form-field omission');
 
 const headersContent = read('_headers');
-check(/Content-Security-Policy-Report-Only/.test(headersContent), 'HTTP headers serve Content-Security-Policy-Report-Only');
+check(/Content-Security-Policy:/.test(headersContent) && /Content-Security-Policy-Report-Only:/.test(headersContent), 'HTTP headers enforce CSP while retaining report-only telemetry');
+check(/https:\/\/onlinepdfpro-proxy\.prem736raj\.workers\.dev/.test(headersContent) && /https:\/\/tmpfiles\.org/.test(headersContent), 'Enforced CSP permits the Worker gateway and QR upload provider');
 check(/Permissions-Policy:.*geolocation=\(\)/.test(headersContent) && !/microphone=\(\)/.test(headersContent) && !/payment=\(\)/.test(headersContent), 'Permissions-Policy preserves microphone and payment access');
 
 const manifestContent = read('site.webmanifest');
@@ -104,17 +111,24 @@ check(!/100%\s*Free/i.test(manifestContent) && !/hero_centered\.png/.test(manife
 
 const swContent = read('src/sw.js');
 check(/response\.status\s*===\s*200/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
+check(/isKnownStaticAsset/.test(swContent) && /Never turn arbitrary same-origin GET responses/.test(swContent), 'Service Worker avoids caching arbitrary dynamic same-origin responses');
 
 const initialMigration = read('supabase/migrations/20260815000000_initial_schema.sql');
 const hideR2Migration = read('supabase/migrations/20260910120000_hide_r2_key_from_public.sql');
+const updatedAtMigration = read('supabase/migrations/20260912100000_orders_updated_at_trigger.sql');
 check(/CREATE TABLE IF NOT EXISTS public\.orders/i.test(initialMigration) && /auth\.uid\(\).*user_id/i.test(initialMigration), 'Supabase initial schema migration versions reproducible schema and RLS policies');
 check(/revoke select on table public\.products/i.test(hideR2Migration) && /grant select \([^)]*title[^)]*\)/i.test(hideR2Migration), 'Supabase migration restricts public access to r2_key');
+check(/create trigger orders_set_updated_at/i.test(updatedAtMigration) && /new\.updated_at\s*=\s*now\(\)/i.test(updatedAtMigration), 'Supabase schema keeps order updated_at accurate for every transition');
 
 const packageJson = JSON.parse(read('package.json'));
 check(packageJson.engines && packageJson.engines.node === '>=22.12.0', 'package.json specifies Node >=22.12.0 engine');
+check(!packageJson.dependencies?.['crypto-js'] && /js-yaml/.test(read('package-lock.json')), 'Unused discontinued CryptoJS dependency is removed and lockfile remains explicit');
 
 const workflowDeploy = read('.github/workflows/deploy.yml');
 check(/node-version:\s*22/.test(workflowDeploy), 'GitHub Actions workflow specifies Node 22');
+check(/command:\s*deploy\s+--var\s+RELEASE_ID:\$\{\{\s*github\.sha\s*\}\}/.test(workflowDeploy) && /Verify frontend release attribution/.test(workflowDeploy), 'Deployment pipeline carries one release ID through Worker and frontend');
+
+check(/write-release\.js/.test(packageJson.scripts.build) && exists('scripts/write-release.js'), 'Build writes deterministic release metadata before stamping the service-worker cache');
 
 const ocr = read('src/tools/image-to-text.html');
 check(/cloudOcrConsent/.test(ocr) && /only when you consent|explicitly enable/i.test(ocr), 'OCR cloud fallback requires explicit consent');
@@ -184,8 +198,18 @@ if (exists('_site/tools.html')) {
     check(new Set(sitemapUrls).size === sitemapUrls.length, 'Rendered sitemap has no duplicate URLs');
 }
 check(/onlinepdfpro-cache-__BUILD_ID__/.test(read('src/sw.js')) && /version-sw\.js/.test(read('package.json')), 'Service-worker cache is build-versioned');
+if (exists('_site/release.json')) {
+    const releaseMetadata = JSON.parse(read('_site/release.json'));
+    check(typeof releaseMetadata.release === 'string' && releaseMetadata.release.length > 0, 'Generated frontend release metadata is valid JSON');
+}
 check(/\.wrangler\//.test(read('.gitignore')), 'Wrangler runtime files are ignored');
 check(exists('src/_redirects') && /about-us/.test(read('src/_redirects')), 'Legacy About URLs have redirects');
+check(/tools\/qr-generator\.html\s+\/tools\/qr-code-generator\.html\s+301!/.test(read('src/_redirects')) && /text-to-audio\.html\s+\/text-to-speech\.html\s+301!/.test(read('src/_redirects')), 'Legacy tool aliases use edge redirects instead of client-side meta refreshes');
+for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/viewstudymaterials.html']) {
+    const source = read(page);
+    check(/@supabase\/supabase-js@2\.49\.1/.test(source) && /<script defer[^>]+supabase-js/.test(source), `${page} pins and defers Supabase JS`);
+}
+check(/@2\.49\.1/.test(read('src/_includes/base.njk')) && /<script defer[^>]+supabase-js/.test(read('src/_includes/base.njk')), 'Shared base layout pins and defers Supabase JS');
 check(/note-item\.active \.note-title/.test(read('src/pdf-scratchpad.html')), 'Scratchpad updates the active note title selector');
 
 // Cryptographic/unit checks: use the same maintained packages as the browser

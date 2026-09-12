@@ -200,10 +200,11 @@
 
     <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
     <script defer src="/js/app.js?v=96"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/auth.js?v=96"></script>
-    <script src="/js/store.js?v=96"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1"></script>
+    <script defer src="/js/auth.js?v=96"></script>
+    <script defer src="/js/store.js?v=96"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
         (function () {
             var params = new URLSearchParams(window.location.search);
             var productId = params.get('product') || 'dbms-notes';
@@ -259,6 +260,7 @@
             dialog.addEventListener('click', function (event) { if (event.target === dialog) dialog.close(); });
             document.addEventListener('keydown', function (event) { if (!dialog.open) return; if (event.key === 'ArrowLeft') renderDialog(currentIndex - 1); if (event.key === 'ArrowRight') renderDialog(currentIndex + 1); });
         }());
+        });
     </script>
 </body>
 </html>

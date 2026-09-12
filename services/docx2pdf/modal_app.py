@@ -12,6 +12,8 @@ import json
 import logging
 import os
 import re
+import signal
+import shutil
 import subprocess
 import tempfile
 import time
@@ -66,6 +68,29 @@ logger = logging.getLogger("docx2pdf")
 
 CONVERT_TIMEOUT = 60
 MAX_OUTPUT_SIZE = 100 * 1024 * 1024
+MAX_ARCHIVE_ENTRIES = 10_000
+MAX_ARCHIVE_UNCOMPRESSED_SIZE = 200 * 1024 * 1024
+
+
+def _safe_archive(archive: zipfile.ZipFile) -> bool:
+    """Reject zip bombs and path traversal before LibreOffice opens a file."""
+    infos = archive.infolist()
+    if len(infos) > MAX_ARCHIVE_ENTRIES:
+        return False
+
+    expanded_size = 0
+    for info in infos:
+        # Office containers are extracted by LibreOffice. Bound the expanded
+        # size and reject names that could escape the conversion directory.
+        if info.file_size < 0:
+            return False
+        expanded_size += info.file_size
+        if expanded_size > MAX_ARCHIVE_UNCOMPRESSED_SIZE:
+            return False
+        normalized = info.filename.replace("\\", "/")
+        if normalized.startswith("/") or any(part == ".." for part in normalized.split("/")):
+            return False
+    return True
 
 
 def _validate_document(body: bytes, ext: str) -> bool:
@@ -73,6 +98,8 @@ def _validate_document(body: bytes, ext: str) -> bool:
     if ext in {".docx", ".odt"}:
         try:
             with zipfile.ZipFile(io.BytesIO(body)) as archive:
+                if not _safe_archive(archive):
+                    return False
                 names = set(archive.namelist())
                 if ext == ".docx":
                     return "[Content_Types].xml" in names and "word/document.xml" in names
@@ -108,25 +135,45 @@ def _convert_to_pdf(input_path: str, output_dir: str) -> str:
         input_path,
     ]
 
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=CONVERT_TIMEOUT)
+    try:
+        # Run LibreOffice in its own process group so a timeout cannot leave a
+        # child renderer behind consuming CPU or memory after the request ends.
+        process = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        )
+        try:
+            stdout, stderr = process.communicate(timeout=CONVERT_TIMEOUT)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            process.communicate()
+            raise
 
-    if result.returncode != 0:
-        raise RuntimeError(f"LibreOffice failed: {result.stderr[:200]}")
+        if process.returncode != 0:
+            raise RuntimeError(f"LibreOffice failed: {stderr[:200]}")
 
-    stem = Path(input_path).stem
-    pdf_path = os.path.join(output_dir, f"{stem}.pdf")
+        stem = Path(input_path).stem
+        pdf_path = os.path.join(output_dir, f"{stem}.pdf")
 
-    if not os.path.exists(pdf_path):
-        pdfs = list(Path(output_dir).glob("*.pdf"))
-        if pdfs:
-            pdf_path = str(pdfs[0])
-        else:
-            raise RuntimeError("LibreOffice produced no PDF output")
+        if not os.path.exists(pdf_path):
+            pdfs = list(Path(output_dir).glob("*.pdf"))
+            if pdfs:
+                pdf_path = str(pdfs[0])
+            else:
+                raise RuntimeError("LibreOffice produced no PDF output")
 
-    if os.path.getsize(pdf_path) == 0:
-        raise RuntimeError("LibreOffice produced an empty PDF")
+        if os.path.getsize(pdf_path) == 0:
+            raise RuntimeError("LibreOffice produced an empty PDF")
 
-    return pdf_path
+        return pdf_path
+    finally:
+        shutil.rmtree(user_dir, ignore_errors=True)
 
 
 # ---------------------------------------------------------------------------
@@ -144,7 +191,6 @@ def _convert_to_pdf(input_path: str, output_dir: str) -> str:
 @modal.fastapi_endpoint(method="POST", label="docx2pdf-convert")
 async def convert_endpoint(request: Request):
     """POST: raw DOCX bytes → PDF bytes"""
-    import shutil
     from starlette.responses import Response as StarletteResponse
 
     expected_token = os.getenv("MODAL_API_TOKEN", "")

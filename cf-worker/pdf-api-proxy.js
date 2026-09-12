@@ -216,7 +216,11 @@ export default {
                 status: 'ok',
                 service: 'OnlinePDFPro API Proxy',
                 version: '1.0.0',
-                release: env.RELEASE_ID || '6e9ff18841b0e0d810df05860a12558f6fc4da25',
+                // The deploy pipeline injects the commit SHA. Never keep a
+                // hard-coded historical release here: a stale value makes a
+                // healthy-but-old Worker indistinguishable from the current
+                // deployment.
+                release: env.RELEASE_ID || 'local',
                 routes: ['/ai/chat', '/ai/vision', '/convert/token', '/convert/pdf-to-word', '/convert/word-to-pdf', '/store/create-order', '/store/verify-payment', '/store/razorpay-webhook', '/store/download', '/store/my-purchases']
             }), {
                 headers: { 'Content-Type': 'application/json', ...getCORSHeaders(request, allowedOrigins) }
@@ -981,6 +985,9 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
             }
 
             if (targetOrderId) {
+                // The product policy is conservative: any refund or dispute
+                // signal suspends the entitlement, including partial refunds,
+                // until support confirms the final payment state.
                 await supabaseQuery(
                     env,
                     `orders?razorpay_order_id=eq.${encodeURIComponent(targetOrderId)}`,
@@ -1366,7 +1373,13 @@ async function handleOpenRouterVision(request, env, allowedOrigins) {
         if (validated.error) return jsonResponse({ error: validated.error }, 400, corsHeaders);
         const body = validated.data;
 
-        const requestedModel = body.model || 'openrouter/free';
+        // Keep the upstream model surface deliberately small. The client can
+        // request a model name, but it must be one of the models we have
+        // reviewed for capability, cost, and data handling. Unknown values
+        // use the free fallback instead of being forwarded to OpenRouter.
+        const requestedModel = ALLOWED_VISION_MODELS.has(body.model)
+            ? body.model
+            : 'openrouter/free';
 
         // Forward to OpenRouter with server-side key
         const orResponse = await fetchJsonUpstream('https://openrouter.ai/api/v1/chat/completions', {

@@ -96,7 +96,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: cf-worker
-          command: deploy
+          command: deploy --var RELEASE_ID:${{ github.sha }}
 
   smoke-worker:
     needs: deploy-worker
@@ -109,7 +109,7 @@ jobs:
           API="https://onlinepdfpro-proxy.prem736raj.workers.dev"
           health="$(curl --fail --silent --show-error "$API/health")"
           echo "$health" | grep -q '"status":"ok"'
-          echo "$health" | grep -q '"release"'
+          echo "$health" | grep -q '"release":"'"$GITHUB_SHA"'"'
 
           unknown_code="$(curl --silent --output /tmp/onlinepdfpro-unknown.json --write-out '%{http_code}' "$API/not-a-real-route")"
           test "$unknown_code" = "404"
@@ -146,6 +146,12 @@ jobs:
 
       - name: Build site
         run: npm run build
+
+      - name: Verify frontend release attribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(node -p "require('./_site/release.json').release")" = "$GITHUB_SHA"
 
       - name: Deploy _site to gh-pages
         uses: peaceiris/actions-gh-pages@v4

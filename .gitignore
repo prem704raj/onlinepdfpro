@@ -9,6 +9,7 @@ node_modules/
 .wrangler/
 **/.wrangler/
 **/.wrangler-dry-run/
+**/.wrangler-dry-run*/
 
 # OS files
 .DS_Store
