@@ -620,7 +620,7 @@
  <div class="batch-file-header">
  <span style="font-size: 1.5rem;"></span>
  <div class="batch-file-info">
- <div class="batch-file-name">${result.name}</div>
+ <div class="batch-file-name">${escapeHTML(result.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.outputSize)}</div>
  </div>
  <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem;" data-index="${index}">Download</button>

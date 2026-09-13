@@ -564,15 +564,6 @@
  elements.charCount.textContent = String(text.length);
  }
 
- function escapeHtml(text) {
- return String(text || '')
- .replace(/&/g, '&amp;')
- .replace(/</g, '&lt;')
- .replace(/>/g, '&gt;')
- .replace(/"/g, '&quot;')
- .replace(/'/g, '&#39;');
- }
-
  function escapeRegExp(text) {
  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
  }
@@ -596,10 +587,18 @@
  return;
  }
 
- const html = escapeHtml(text).replace(regex, function (m) {
- return '<mark>' + escapeHtml(m) + '</mark>';
- });
- elements.matchView.innerHTML = html;
+ const fragment = document.createDocumentFragment();
+ let cursor = 0;
+ for (const match of text.matchAll(regex)) {
+ const start = match.index ?? cursor;
+ if (start > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, start)));
+ const mark = document.createElement('mark');
+ mark.textContent = match[0];
+ fragment.appendChild(mark);
+ cursor = start + match[0].length;
+ }
+ if (cursor < text.length) fragment.appendChild(document.createTextNode(text.slice(cursor)));
+ elements.matchView.replaceChildren(fragment);
  elements.statusNote.textContent = 'Highlighted ' + count + ' match(es) for "' + query + '".';
  }
 

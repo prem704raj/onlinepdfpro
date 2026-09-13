@@ -606,7 +606,7 @@
 
  item.classList.add('success');
  statusText.textContent = 'Done!';
- statusResult.innerHTML = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} &rarr; ${OnlinePDFPro.Utils.formatFileSize(bestSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
+ statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(bestSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
 
  results.push({
  name: file.name.replace('.pdf', '-compressed.pdf'),
@@ -651,8 +651,8 @@
  <div class="batch-file-header">
  <span class="file-icon" style="font-size: 2rem;"></span>
  <div class="batch-file-info">
- <div class="batch-file-name">${result.name}</div>
- <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} &rarr; ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
+ <div class="batch-file-name">${escapeHTML(result.name)}</div>
+ <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
  </div>
  <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" data-index="${index}">Download</button>
  </div>

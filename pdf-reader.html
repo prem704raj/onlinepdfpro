@@ -668,7 +668,10 @@
  const thumb = document.createElement('div');
  thumb.className = 'thumb-item' + (i === 1 ? ' active' : '');
  thumb.appendChild(canvas);
- thumb.innerHTML += '<div class="thumb-label">Page ' + i + '</div>';
+ const thumbLabel = document.createElement('div');
+ thumbLabel.className = 'thumb-label';
+ thumbLabel.textContent = 'Page ' + i;
+ thumb.appendChild(thumbLabel);
  thumb.onclick = () => renderPage(i);
  panel.appendChild(thumb);
  }
@@ -722,7 +725,7 @@
  function searchPDF() {
  const query = document.getElementById('searchInput').value.toLowerCase().trim();
  const resultsDiv = document.getElementById('searchResults');
- resultsDiv.innerHTML = '';
+ resultsDiv.replaceChildren();
 
  if (query.length < 2) return;
 
@@ -734,17 +737,36 @@
  const pos = text.toLowerCase().indexOf(query);
  const start = Math.max(0, pos - 30);
  const end = Math.min(text.length, pos + query.length + 30);
- let snippet = '...' + text.substring(start, end) + '...';
- snippet = snippet.replace(new RegExp(query, 'gi'), '<span class="search-highlight">$&</span>');
-
- item.innerHTML = '<strong>Page ' + (index + 1) + ':</strong> ' + snippet;
+ const snippet = '...' + text.substring(start, end) + '...';
+ const heading = document.createElement('strong');
+ heading.textContent = 'Page ' + (index + 1) + ': ';
+ item.appendChild(heading);
+ const snippetWrap = document.createElement('span');
+ const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+ const matcher = new RegExp(safeQuery, 'gi');
+ let cursor = 0;
+ snippet.replace(matcher, (match, offset) => {
+ const before = snippet.slice(cursor, offset);
+ if (before) snippetWrap.appendChild(document.createTextNode(before));
+ const mark = document.createElement('span');
+ mark.className = 'search-highlight';
+ mark.textContent = match;
+ snippetWrap.appendChild(mark);
+ cursor = offset + match.length;
+ return match;
+ });
+ if (cursor < snippet.length) snippetWrap.appendChild(document.createTextNode(snippet.slice(cursor)));
+ item.appendChild(snippetWrap);
  item.onclick = () => renderPage(index + 1);
  resultsDiv.appendChild(item);
  }
  });
 
  if (resultsDiv.children.length === 0) {
- resultsDiv.innerHTML = '<p style="padding:10px; color:var(--text-secondary);">No results found</p>';
+ const empty = document.createElement('p');
+ empty.style.cssText = 'padding:10px;color:var(--text-secondary);';
+ empty.textContent = 'No results found';
+ resultsDiv.appendChild(empty);
  }
  }
 

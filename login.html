@@ -285,9 +285,9 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1"></script>
     <script defer src="/js/app.js?v=96"></script>
-    <script src="/js/auth.js?v=96"></script>
+    <script defer src="/js/auth.js?v=96"></script>
     <script>
         let currentMode = 'signin';
 
@@ -435,21 +435,24 @@
             redirectAfterAuth();
         }
 
-        // Listen for Supabase authentication changes.
-        // This is important for Google OAuth because the session
+        // Listen for Supabase authentication changes after deferred scripts
+        // have loaded. This is important for Google OAuth because the session
         // may be created AFTER DOMContentLoaded.
-        const client = (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null) || window.supabaseClient;
-        if (client && client.auth) {
-            client.auth.onAuthStateChange(function(event, session) {
-                if (event === 'PASSWORD_RECOVERY') showResetPanel();
-                if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
-                    finishAuthentication();
-                }
-            });
+        function bindAuthStateListener() {
+            const client = (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null) || window.supabaseClient;
+            if (client && client.auth) {
+                client.auth.onAuthStateChange(function(event, session) {
+                    if (event === 'PASSWORD_RECOVERY') showResetPanel();
+                    if (session && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) {
+                        finishAuthentication();
+                    }
+                });
+            }
         }
 
         // Also check an existing session when the page loads.
         document.addEventListener("DOMContentLoaded", async function() {
+            bindAuthStateListener();
             if (new URLSearchParams(window.location.search).get('mode') === 'reset') showResetPanel();
             document.querySelectorAll('.password-toggle').forEach(function(button) {
                 button.addEventListener('click', function() {

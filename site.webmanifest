@@ -1,7 +1,7 @@
 {
-    "name": "OnlinePDFPro - 100% Free Browser PDF Tools",
+    "name": "OnlinePDFPro — Document Tools & Study Materials",
     "short_name": "OnlinePDFPro",
-    "description": "privacy-conscious PDF tools. Merge, Compress, Sign, and Edit PDFs directly in your browser. upload requirements vary by tool.",
+    "description": "Privacy-conscious browser document tools and curated study materials. Merge, compress, convert, and edit documents with local and cloud processing options.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -23,14 +23,6 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
-        }
-    ],
-    "screenshots": [
-        {
-            "src": "/design-specs/mockups/hero_centered.png",
-            "sizes": "1280x720",
-            "type": "image/png",
-            "label": "Desktop Home"
         }
     ]
 }

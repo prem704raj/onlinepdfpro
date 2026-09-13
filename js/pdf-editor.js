@@ -64,7 +64,15 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 const toolHeader = document.getElementById('toolHeader');
                 toolHeader.style.marginBottom = '0';
                 toolHeader.style.padding = '12px 20px';
-                toolHeader.innerHTML = '<h1 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0; display:flex; align-items:center; gap:8px; justify-content:center;">✍️ PDF Editor <span style="font-size:0.85rem; font-weight:500; color:var(--text-secondary);">— ' + file.name + '</span></h1>';
+                toolHeader.replaceChildren();
+                const compactTitle = document.createElement('h1');
+                compactTitle.style.cssText = 'font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:0;display:flex;align-items:center;gap:8px;justify-content:center;';
+                compactTitle.append('✍️ PDF Editor ');
+                const compactFilename = document.createElement('span');
+                compactFilename.style.cssText = 'font-size:0.85rem;font-weight:500;color:var(--text-secondary);';
+                compactFilename.textContent = `— ${file.name}`;
+                compactTitle.appendChild(compactFilename);
+                toolHeader.appendChild(compactTitle);
                 document.getElementById('editorLayout').style.display = 'flex';
 
                 await renderPage();
@@ -559,7 +567,23 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 if (options.height && options.height > 0) {
                     div.style.height = options.height + 'px';
                 }
-                div.innerHTML = '<img loading="lazy" src="' + src + '"><div class="img-resize"></div><button class="img-delete" onclick="this.parentElement.remove(); updateLayers();">×</button>';
+                if (!/^data:image\/(?:png|jpe?g);base64,/i.test(String(src || ''))) return;
+                const image = document.createElement('img');
+                image.loading = 'lazy';
+                image.alt = 'Inserted image';
+                image.src = src;
+                const resizeHandle = document.createElement('div');
+                resizeHandle.className = 'img-resize';
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'img-delete';
+                deleteButton.textContent = '×';
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    div.remove();
+                    updateLayers();
+                });
+                div.append(image, resizeHandle, deleteButton);
                 pageWrapper.appendChild(div);
                 makeDraggable(div);
                 makeImgResizable(div);
@@ -852,7 +876,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 note.className = 'sticky-note';
                 note.style.left = x + 'px';
                 note.style.top = y + 'px';
-                note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note..."></textarea>';
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'sticky-delete';
+                deleteButton.textContent = '×';
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    note.remove();
+                    updateLayers();
+                });
+                const textarea = document.createElement('textarea');
+                textarea.placeholder = 'Write your note...';
+                note.append(deleteButton, textarea);
                 pageWrapper.appendChild(note);
                 makeDraggable(note);
                 note.querySelector('textarea').focus();
@@ -967,25 +1002,45 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 const modifiedCount = pageWrapper.querySelectorAll('.extracted-text.modified').length;
                 const drawCount = layers[currentPage] ? layers[currentPage].drawings.length : 0;
 
-                let html = '';
+                const fragment = document.createDocumentFragment();
+                const addLayer = (label, target, onDelete) => {
+                    const item = document.createElement('div');
+                    item.className = 'layer-item';
+                    const text = document.createElement('span');
+                    text.textContent = label;
+                    item.appendChild(text);
+                    if (onDelete) {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = 'layer-delete';
+                        button.textContent = '×';
+                        button.addEventListener('click', () => { target.remove(); onDelete(); });
+                        item.appendChild(button);
+                    }
+                    fragment.appendChild(item);
+                };
                 if (modifiedCount > 0) {
-                    html += '<div class="layer-item"><span>✍️ ' + modifiedCount + ' Text Edit(s)</span></div>';
+                    addLayer(`✍️ ${modifiedCount} Text Edit(s)`);
                 }
                 textEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>🔤 Text ' + (i + 1) + '</span><button class="layer-delete" onclick="this.closest(\'.layer-item\').remove(); document.querySelectorAll(\'.text-element\')[' + i + '].remove();">×</button></div>';
+                    addLayer(`🔤 Text ${i + 1}`, el, updateLayers);
                 });
                 imgEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>🖼️ Image ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.image-element\')[' + i + '].remove(); updateLayers();">×</button></div>';
+                    addLayer(`🖼️ Image ${i + 1}`, el, updateLayers);
                 });
                 noteEls.forEach((el, i) => {
-                    html += '<div class="layer-item"><span>📝 Note ' + (i + 1) + '</span><button class="layer-delete" onclick="document.querySelectorAll(\'.sticky-note\')[' + i + '].remove(); updateLayers();">×</button></div>';
+                    addLayer(`📝 Note ${i + 1}`, el, updateLayers);
                 });
                 if (drawCount > 0) {
-                    html += '<div class="layer-item"><span>✏️ ' + drawCount + ' Drawing(s)</span></div>';
+                    addLayer(`✏️ ${drawCount} Drawing(s)`);
                 }
-
-                if (html === '') html = '<p style="color:#94a3b8; font-size:13px; text-align:center;">No edits yet</p>';
-                list.innerHTML = html;
+                if (!fragment.childNodes.length) {
+                    const empty = document.createElement('p');
+                    empty.style.cssText = 'color:#94a3b8;font-size:13px;text-align:center;';
+                    empty.textContent = 'No edits yet';
+                    fragment.appendChild(empty);
+                }
+                list.replaceChildren(fragment);
             }
 
             // Undo/Redo — now saves both canvas drawings AND DOM elements
@@ -1005,7 +1060,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                         fontFamily: el.style.fontFamily,
                         fontSize: el.style.fontSize,
                         color: el.style.color,
-                        html: el.innerHTML,
                         text: getElementTextValue(el),
                         fontWeight: el.style.fontWeight,
                         fontStyle: el.style.fontStyle,
@@ -1063,7 +1117,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                         if (el.textAlign) div.style.textAlign = el.textAlign;
                         if (el.lineHeight) div.style.lineHeight = el.lineHeight;
                         if (el.letterSpacing) div.style.letterSpacing = el.letterSpacing;
-                        div.innerHTML = el.html;
+                        div.textContent = typeof el.text === 'string' ? el.text : '';
+                        const deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.className = 'text-delete';
+                        deleteButton.textContent = '×';
+                        deleteButton.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            div.remove();
+                            if (selectedTextElement === div) selectedTextElement = null;
+                            updateLayers();
+                        });
+                        div.appendChild(deleteButton);
                         pageWrapper.appendChild(div);
                         makeDraggable(div);
                         div.ondblclick = (e) => { e.stopPropagation(); div.focus(); document.execCommand('selectAll'); };
@@ -1083,7 +1148,19 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                         note.className = 'sticky-note';
                         note.style.left = el.left;
                         note.style.top = el.top;
-                        note.innerHTML = '<button class="sticky-delete" onclick="this.parentElement.remove(); updateLayers();">×</button><textarea placeholder="Write your note...">' + (el.text || '') + '</textarea>';
+                        const deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.className = 'sticky-delete';
+                        deleteButton.textContent = '×';
+                        deleteButton.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            note.remove();
+                            updateLayers();
+                        });
+                        const textarea = document.createElement('textarea');
+                        textarea.placeholder = 'Write your note...';
+                        textarea.value = typeof el.text === 'string' ? el.text : '';
+                        note.append(deleteButton, textarea);
                         pageWrapper.appendChild(note);
                         makeDraggable(note);
                     }
@@ -1169,10 +1246,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                     return serializedTextEl.text.trim();
                 }
                 if (typeof serializedTextEl.html === 'string') {
-                    const temp = document.createElement('div');
-                    temp.innerHTML = serializedTextEl.html;
-                    temp.querySelectorAll('.text-delete').forEach(btn => btn.remove());
-                    return (temp.textContent || '').trim();
+                    const parsed = new DOMParser().parseFromString(serializedTextEl.html, 'text/html');
+                    parsed.querySelectorAll('.text-delete').forEach(btn => btn.remove());
+                    return (parsed.body.textContent || '').trim();
                 }
                 return '';
             }
@@ -1854,15 +1930,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             }
 
-            function escapeHtml(str) {
-                return String(str)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#39;');
-            }
-
             async function extractPDFText(doc) {
                 if (!doc) return;
                 const index = [];
@@ -1885,14 +1952,32 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 resultCount.textContent = searchResults.length + ' result(s) found';
 
                 if (searchResults.length === 0) {
-                    resultList.innerHTML = '<div style="padding:8px;color:var(--text-secondary);font-size:13px;">No matches found.</div>';
+                    const empty = document.createElement('div');
+                    empty.style.cssText = 'padding:8px;color:var(--text-secondary);font-size:13px;';
+                    empty.textContent = 'No matches found.';
+                    resultList.replaceChildren(empty);
                     return;
                 }
 
-                resultList.innerHTML = searchResults.map((result, idx) => {
-                    const activeStyle = idx === currentSearchResultIndex ? 'background:rgba(59,130,246,0.12);border-color:var(--accent);' : '';
-                    return '<button type="button" onclick="jumpToResult(' + idx + ')" style="width:100%;text-align:left;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text-primary);margin-bottom:8px;cursor:pointer;' + activeStyle + '"><strong>Page ' + result.page + '</strong><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">' + escapeHtml(result.snippet) + '</div></button>';
-                }).join('');
+                const fragment = document.createDocumentFragment();
+                searchResults.forEach((result, idx) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.style.cssText = 'width:100%;text-align:left;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text-primary);margin-bottom:8px;cursor:pointer;';
+                    if (idx === currentSearchResultIndex) {
+                        button.style.background = 'rgba(59,130,246,0.12)';
+                        button.style.borderColor = 'var(--accent)';
+                    }
+                    const page = document.createElement('strong');
+                    page.textContent = `Page ${result.page}`;
+                    const snippet = document.createElement('div');
+                    snippet.style.cssText = 'font-size:12px;color:var(--text-secondary);margin-top:4px;';
+                    snippet.textContent = String(result.snippet || '');
+                    button.append(page, snippet);
+                    button.addEventListener('click', () => jumpToResult(idx));
+                    fragment.appendChild(button);
+                });
+                resultList.replaceChildren(fragment);
             }
 
             async function jumpToResult(index) {

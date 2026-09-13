@@ -544,7 +544,7 @@
  <div class="batch-file-header" style="margin-bottom: 0;">
  <span style="font-size: 1.5rem;"></span>
  <div class="batch-file-info">
- <div class="batch-file-name">${result.name}</div>
+ <div class="batch-file-name">${escapeHTML(result.name)}</div>
  <div class="batch-file-size">${result.newWidth}px wide</div>
  </div>
  <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 0.8125rem;" onclick="window.downloadSingle(${index})">Get File</button>

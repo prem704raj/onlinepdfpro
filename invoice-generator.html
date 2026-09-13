@@ -1133,6 +1133,10 @@
  const parsed = JSON.parse(raw);
  const base = getDefaultState();
  state = Object.assign(base, parsed);
+ const allowedTemplates = new Set(['classic', 'modern', 'minimal']);
+ if (!allowedTemplates.has(state.template)) state.template = 'classic';
+ if (!/^#[0-9a-f]{6}$/i.test(String(state.accentColor || ''))) state.accentColor = '#2563eb';
+ if (typeof state.senderLogo !== 'string' || state.senderLogo.length > 5 * 1024 * 1024 || !/^data:image\/(?:png|jpe?g|webp);base64,/i.test(state.senderLogo)) state.senderLogo = '';
  if (!Array.isArray(state.items) || !state.items.length) {
  state.items = [defaultItem()];
  }

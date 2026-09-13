@@ -369,7 +369,7 @@ async function loadFile(file) {
 
  document.getElementById('dropArea').style.display = 'none';
  document.getElementById('fileInfo').style.display = 'block';
- document.getElementById('fileInfo').textContent = ` ${escapeHTML(file.name)} — ${totalPages} pages`;
+ document.getElementById('fileInfo').textContent = ` ${file.name} — ${totalPages} pages`;
  document.getElementById('optionsBox').style.display = 'block';
 }
 

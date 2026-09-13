@@ -468,9 +468,9 @@
  }
 
  function updateActiveNoteInList() {
- const activeLi = notesList.querySelector('.note-item.active.note-title');
- if (activeLi) {
- activeLi.textContent = noteTitleInput.value || 'Untitled Note';
+ const activeTitle = notesList.querySelector('.note-item.active .note-title');
+ if (activeTitle) {
+ activeTitle.textContent = noteTitleInput.value || 'Untitled Note';
  }
  }
 

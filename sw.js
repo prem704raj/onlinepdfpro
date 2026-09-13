@@ -1,8 +1,10 @@
-// OnlinePDFPro Service Worker v95
-// Network-first for JS files to prevent stale cache issues.
-// Cache-first for images/fonts/CSS with offline fallback.
+// OnlinePDFPro Service Worker (7dab1ce76fefc3b5)
+// The build step replaces 7dab1ce76fefc3b5 with a content hash of the generated
+// site. This invalidates the entire cache whenever a static asset changes.
+// Network-first for HTML/JS, stale-while-revalidate for core CSS, and
+// cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-v95';
+const CACHE_NAME = 'onlinepdfpro-cache-7dab1ce76fefc3b5';
 
 const STATIC_ASSETS = [
     // Core pages
@@ -28,6 +30,7 @@ const STATIC_ASSETS = [
     'js/app.js',
     'js/auth.js',
     'js/store.js',
+    'release.json',
 
     // Images & manifest
     'apple-touch-icon.png',
@@ -40,6 +43,27 @@ const STATIC_ASSETS = [
     'og-image.jpg',
     'site.webmanifest'
 ];
+
+const STATIC_ASSET_PATHS = new Set(
+    STATIC_ASSETS.map((asset) => new URL(asset, self.location.origin).pathname)
+);
+const STATIC_ASSET_PREFIXES = ['/assets/', '/css/', '/fonts/', '/icons/'];
+const STATIC_ASSET_EXTENSIONS = /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|webp|woff2?|ttf|otf)$/i;
+
+function isKnownStaticAsset(url) {
+    if (url.origin !== self.location.origin) {
+        return false;
+    }
+    if (STATIC_ASSET_PATHS.has(url.pathname)) return true;
+    return STATIC_ASSET_EXTENSIONS.test(url.pathname) &&
+        STATIC_ASSET_PREFIXES.some((prefix) => url.pathname.startsWith(prefix));
+}
+
+function cacheSuccessfulResponse(cacheKey, response) {
+    if (response.status !== 200) return;
+    const clone = response.clone();
+    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+}
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -90,8 +114,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    cacheSuccessfulResponse(request, response);
                     return response;
                 })
                 .catch(() => caches.match(cacheKey, { ignoreSearch: true }))
@@ -107,8 +130,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+                    cacheSuccessfulResponse(cacheKey, response);
                     return response;
                 })
                 .catch(() => {
@@ -119,14 +141,46 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 3: Cache-first for everything else (CSS, images, fonts) ---
+    // --- Strategy 3: Stale-while-revalidate for core CSS ---
+    const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
+    const isCoreCss = url.origin === self.location.origin &&
+        SWR_CSS_FILES.some(file => url.pathname === file || url.pathname.endsWith(file));
+    if (isCoreCss) {
+        event.respondWith(
+            caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
+                const networkFetch = fetch(request).then((response) => {
+                    if (response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+                    }
+                    return response;
+                });
+                return cached || networkFetch;
+            })
+        );
+        return;
+    }
+
+    // --- Strategy 4: Cache-first for same-origin static assets (images, fonts) ---
+    // Restrict caching to known same-origin assets with valid 200 responses.
+    if (url.origin !== self.location.origin) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
+    // Never turn arbitrary same-origin GET responses (API payloads, user
+    // documents, error pages, or future dynamic routes) into long-lived cache
+    // entries. Only the known static asset set and static asset directories
+    // use the cache-first strategy below.
+    if (!isKnownStaticAsset(url)) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
-                const clone = response.clone();
-                if (response.status === 200 || response.type === 'opaque' || response.type === 'cors') {
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                }
+                cacheSuccessfulResponse(request, response);
                 return response;
             });
         })

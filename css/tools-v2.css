@@ -1255,10 +1255,25 @@
     stroke: #8a6d3b !important;
     color: #8a6d3b !important;
 }
-.upload-zone .upload-btn, .upload-zone .btn-primary {
-    background-color: #8a6d3b !important;
+.upload-zone .upload-btn,
+.upload-zone .btn-primary,
+.upload-zone button,
+.upload-btn {
+    background: #8a6d3b !important;
+    background-image: none !important;
     color: #ffffff !important;
-    border-color: #8a6d3b !important;
+    border: 1px solid #8a6d3b !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 4px 14px rgba(138, 109, 59, 0.25) !important;
+}
+.upload-zone .upload-btn:hover,
+.upload-zone .btn-primary:hover,
+.upload-zone button:hover,
+.upload-btn:hover {
+    background: #a47d1b !important;
+    background-image: none !important;
+    border-color: #a47d1b !important;
+    color: #ffffff !important;
 }
 .upload-zone:hover,
 .upload-zone.dragover {

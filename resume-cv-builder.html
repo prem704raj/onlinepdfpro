@@ -1374,6 +1374,14 @@
  const parsed = JSON.parse(raw);
  state = Object.assign(getDefaultState(), parsed);
 
+ // Constrain values that are later used in class/style attributes even when
+ // localStorage was edited outside the form.
+ const allowedTemplates = new Set(TEMPLATE_CARDS.map(card => card.key));
+ const allowedFonts = new Set(['sans', 'serif', 'modern']);
+ if (!allowedTemplates.has(state.template)) state.template = 'classic';
+ if (!allowedFonts.has(state.font)) state.font = 'sans';
+ if (!/^#[0-9a-f]{6}$/i.test(String(state.accentColor || ''))) state.accentColor = '#2563eb';
+
  // Keep section order robust against old/invalid values.
  const validSections = new Set(Object.keys(SECTION_LABELS));
  const cleanOrder = (Array.isArray(state.sectionOrder) ? state.sectionOrder : [])

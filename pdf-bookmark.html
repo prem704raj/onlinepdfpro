@@ -421,10 +421,20 @@
  document.getElementById('dropArea').ondragover = e => e.preventDefault();
  document.getElementById('dropArea').ondrop = e => { e.preventDefault(); loadPDF(e.dataTransfer.files[0]); };
  async function loadPDF(file) {
- if (!file) return; _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
+ if (!file) return;
+ if (file.size > 50 * 1024 * 1024) return alert('Please choose a PDF smaller than 50 MB.');
+ const header = new TextDecoder().decode(new Uint8Array(await file.slice(0, 5).arrayBuffer()));
+ if (header !== '%PDF-') return alert('That file is not a valid PDF.');
+ try {
+ _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
+ pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
  document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
  document.getElementById('bookmarkEditor').style.display = 'block'; document.getElementById('dropArea').style.display = 'none'; await renderPage(currentPage);
+ } catch (error) {
+ console.error('Unable to open PDF:', error);
+ pdfBytes = null; pdfJsDoc = null; totalPages = 0;
+ alert('Unable to open this PDF. It may be damaged or password-protected.');
+ }
  }
  async function renderPage(num) {
  currentPage = num; const page = await pdfJsDoc.getPage(num); const vp = page.getViewport({ scale: 1.2 });
@@ -434,38 +444,67 @@
  }
  function prevPage() { if (currentPage > 1) renderPage(currentPage - 1); }
  function nextPage() { if (currentPage < totalPages) renderPage(currentPage + 1); }
- function addBookmark() { bookmarkCounter++; const id = 'bm_' + bookmarkCounter; bookmarks.push({ id, title: 'Chapter ' + bookmarkCounter, page: currentPage }); renderBookmarks(); }
+ function addBookmark() { if (bookmarks.length >= 200) return alert('You can add up to 200 bookmarks per PDF.'); bookmarkCounter++; const id = 'bm_' + bookmarkCounter; bookmarks.push({ id, title: 'Chapter ' + bookmarkCounter, page: currentPage }); renderBookmarks(); }
  function deleteBookmark(id) { bookmarks = bookmarks.filter(b => b.id !== id); renderBookmarks(); }
- function updateBookmark(id, field, value) { const bm = bookmarks.find(b => b.id === id); if (bm) bm[field] = field === 'page' ? parseInt(value) : value; }
+ function updateBookmark(id, field, value) { const bm = bookmarks.find(b => b.id === id); if (bm) bm[field] = field === 'page' ? Math.max(1, Math.min(totalPages, parseInt(value, 10) || 1)) : String(value || '').slice(0, 200); }
  function goToPage(p) { if (p >= 1 && p <= totalPages) renderPage(p); }
  function renderBookmarks() {
  const list = document.getElementById('bookmarkList'), empty = document.getElementById('emptyState');
- if (bookmarks.length === 0) { list.innerHTML = ''; list.appendChild(empty); empty.style.display = 'block'; return; }
- empty.style.display = 'none'; let h = '';
+ list.replaceChildren();
+ if (bookmarks.length === 0) { empty.style.display = 'block'; list.appendChild(empty); return; }
+ empty.style.display = 'none';
  bookmarks.forEach(bm => {
- let opts = ''; for (let i = 1; i <= totalPages; i++)opts += '<option value="' + i + '"' + (bm.page === i ? ' selected' : '') + '>Page ' + i + '</option>';
- h += '<div class="bookmark-item" draggable="true" data-id="' + bm.id + '"><input type="text" value="' + bm.title + '" placeholder="Bookmark title" onchange="updateBookmark(\'' + bm.id + '\',\'title\',this.value)"><div class="bookmark-row"><select onchange="updateBookmark(\'' + bm.id + '\',\'page\',this.value)">' + opts + '</select><button onclick="goToPage(' + bm.page + ')" style="padding:8px 12px;background:var(--surface-2);border:none;border-radius:8px;cursor:pointer;font-size:14px">👁️</button><button class="delete-bookmark" onclick="deleteBookmark(\'' + bm.id + '\')">🗑️</button></div></div>';
+  const item = document.createElement('div');
+  item.className = 'bookmark-item'; item.draggable = true; item.dataset.id = bm.id;
+  const title = document.createElement('input');
+  title.type = 'text'; title.value = String(bm.title || ''); title.placeholder = 'Bookmark title';
+  title.addEventListener('change', () => updateBookmark(bm.id, 'title', title.value));
+  const row = document.createElement('div'); row.className = 'bookmark-row';
+  const pageSelect = document.createElement('select');
+  for (let i = 1; i <= totalPages; i++) {
+   const option = document.createElement('option'); option.value = String(i); option.textContent = `Page ${i}`; option.selected = bm.page === i; pageSelect.appendChild(option);
+  }
+  pageSelect.addEventListener('change', () => updateBookmark(bm.id, 'page', pageSelect.value));
+  const view = document.createElement('button'); view.type = 'button'; view.textContent = '👁️'; view.setAttribute('aria-label', `Go to ${title.value || 'bookmark'}`); view.style.cssText = 'padding:8px 12px;background:var(--surface-2);border:none;border-radius:8px;cursor:pointer;font-size:14px'; view.addEventListener('click', () => goToPage(bm.page));
+  const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'delete-bookmark'; remove.textContent = '🗑️'; remove.setAttribute('aria-label', `Delete ${title.value || 'bookmark'}`); remove.addEventListener('click', () => deleteBookmark(bm.id));
+  row.append(pageSelect, view, remove); item.append(title, row);
+  item.addEventListener('dragstart', () => item.classList.add('dragging')); item.addEventListener('dragend', () => item.classList.remove('dragging')); item.addEventListener('dragover', e => e.preventDefault());
+  item.addEventListener('drop', e => { e.preventDefault(); const dragged = list.querySelector('.dragging'); if (dragged && dragged !== item) { const from = bookmarks.findIndex(b => b.id === dragged.dataset.id), to = bookmarks.findIndex(b => b.id === item.dataset.id); if (from >= 0 && to >= 0) { const [moved] = bookmarks.splice(from, 1); bookmarks.splice(to, 0, moved); renderBookmarks(); } } });
+  list.appendChild(item);
  });
- list.innerHTML = h;
- const items = list.querySelectorAll('.bookmark-item'); items.forEach(item => {
- item.ondragstart = () => item.classList.add('dragging'); item.ondragend = () => item.classList.remove('dragging');
- item.ondragover = e => e.preventDefault(); item.ondrop = e => {
- e.preventDefault(); const d = list.querySelector('.dragging');
- if (d && d !== item) {
- const fi = bookmarks.findIndex(b => b.id === d.dataset.id), ti = bookmarks.findIndex(b => b.id === item.dataset.id);
- const [r] = bookmarks.splice(fi, 1); bookmarks.splice(ti, 0, r); renderBookmarks();
  }
- };
- });
+ function addPdfOutlines(doc) {
+  if (!bookmarks.length) return;
+  const { PDFName, PDFNumber, PDFHexString } = PDFLib;
+  if (!PDFName || !PDFNumber || !PDFHexString) throw new Error('PDF outline support is unavailable.');
+  const context = doc.context;
+  const root = context.obj({ Type: PDFName.of('Outlines'), Count: PDFNumber.of(bookmarks.length) });
+  const rootRef = context.register(root);
+  const itemDicts = bookmarks.map(() => context.obj({}));
+  const itemRefs = itemDicts.map(item => context.register(item));
+  bookmarks.forEach((bm, index) => {
+   const pageIndex = Math.max(0, Math.min(totalPages - 1, Number(bm.page) - 1));
+   const page = doc.getPage(pageIndex);
+   const item = itemDicts[index];
+   item.set(PDFName.of('Title'), PDFHexString.fromText(String(bm.title || `Page ${pageIndex + 1}`)));
+   item.set(PDFName.of('Parent'), rootRef);
+   item.set(PDFName.of('Dest'), context.obj([page.ref, PDFName.of('Fit')]));
+   if (index > 0) item.set(PDFName.of('Prev'), itemRefs[index - 1]);
+   if (index < itemRefs.length - 1) item.set(PDFName.of('Next'), itemRefs[index + 1]);
+  });
+  root.set(PDFName.of('First'), itemRefs[0]);
+  root.set(PDFName.of('Last'), itemRefs[itemRefs.length - 1]);
+  doc.catalog.set(PDFName.of('Outlines'), rootRef);
  }
  async function savePDFWithBookmarks() {
  if (!pdfBytes || bookmarks.length === 0) return alert('Add at least one bookmark!');
  const doc = await PDFLib.PDFDocument.load(pdfBytes); doc.setTitle('PDF with Bookmarks - OnlinePDFPro');
  doc.setSubject('Bookmarks: ' + bookmarks.map(b => b.title + ' (Page ' + b.page + ')').join(', '));
+ addPdfOutlines(doc);
  const bytes = await doc.save(); const blob = new Blob([bytes], { type: 'application/pdf' }); OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName);
  if (typeof incrementCounter === 'function') { incrementCounter('pdfBookmark'); incrementTodayCount(); }
  let msg = 'PDF saved!\\n\\nYour bookmarks:\\n'; bookmarks.forEach((b, i) => { msg += (i + 1) + '. ' + b.title + ' → Page ' + b.page + '\\n'; });
- msg += '\\nBookmarks are saved in PDF metadata.'; alert(msg);
+ msg += '\\nBookmarks are saved as a clickable PDF outline.'; alert(msg);
  }
  </script>
  <script defer src="counter.js"></script>
