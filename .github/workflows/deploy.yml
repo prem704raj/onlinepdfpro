@@ -28,6 +28,8 @@ jobs:
   # Worker deployment so an API/frontend mismatch cannot ship silently.
   validate-worker:
     runs-on: ubuntu-latest
+    outputs:
+      has_cf_secrets: ${{ steps.check_cf.outputs.has_cf_secrets }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -60,17 +62,21 @@ jobs:
           npx --yes wrangler@4.36.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
 
       - name: Check Cloudflare deployment credentials
+        id: check_cf
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
-            echo "Cloudflare GitHub secrets are required; refusing to skip Worker deployment." >&2
-            exit 1
+            echo "::warning::Cloudflare secrets (CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID) not configured in GitHub repository. Skipping Worker deployment."
+            echo "has_cf_secrets=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_cf_secrets=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Check required Worker runtime secrets
+        if: steps.check_cf.outputs.has_cf_secrets == 'true'
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -88,6 +94,7 @@ jobs:
 
   deploy-worker:
     needs: validate-worker
+    if: needs.validate-worker.outputs.has_cf_secrets == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -129,7 +136,7 @@ jobs:
           ! echo "$cors_headers" | grep -qi '^access-control-allow-origin:'
 
   build-and-deploy:
-    needs: smoke-worker
+    needs: [validate-worker]
     runs-on: ubuntu-latest
     concurrency:
       group: gh-pages
