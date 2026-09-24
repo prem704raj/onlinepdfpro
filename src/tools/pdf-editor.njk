@@ -1,0 +1,302 @@
+---
+title: "Edit PDF Online Free - Edit Existing PDF Text"
+description: "Edit existing PDF text online while preserving the original font, size, color and position whenever supported. Free, no watermark, and processed in your browser."
+permalink: /tools/pdf-editor.html
+bodyClass: pdf-editor-body
+---
+{% extends "base.njk" %}
+{% block head %}
+<link rel="stylesheet" href="{{ '/css/pdf-editor.css' | url }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "OnlinePDFPro PDF Editor",
+  "url": "https://onlinepdfpro.com/tools/pdf-editor.html",
+  "description": "Edit existing PDF text locally in your browser, with best-effort font and style matching.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "browserRequirements": "Requires a modern browser with JavaScript enabled."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="pdf-editor-app">
+  <header class="pdf-editor-heading">
+    <div>
+      <p class="pdf-editor-eyebrow">OnlinePDFPro PDF Editor</p>
+      <h1>Edit PDF Online Free</h1>
+      <p class="pdf-editor-lede">Select existing text, make your change, and export a searchable PDF. Style matching depends on the fonts and page content in the source file.</p>
+    </div>
+    <div class="pdf-local-badge" role="status">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg>
+      <span><strong>Local Mode</strong><small>Your PDF stays on this device</small></span>
+    </div>
+  </header>
+
+  <section class="pdf-upload-card" id="pdf-upload-card" aria-labelledby="pdf-upload-title">
+    <div class="pdf-upload-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 16.5v2A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-2"/></svg>
+    </div>
+    <h2 id="pdf-upload-title">Choose a PDF to edit</h2>
+    <p>It is opened and processed locally in this browser. Your file is not sent to OnlinePDFPro.</p>
+    <label class="pdf-file-picker">
+      <span>Choose PDF</span>
+      <input id="pdf-file-input" type="file" accept="application/pdf,.pdf" aria-label="Choose a PDF file">
+    </label>
+    <p class="pdf-drop-hint">or drag a PDF into this area</p>
+    <div id="pdf-load-status" class="pdf-load-status" role="status" aria-live="polite" hidden></div>
+    <div id="pdf-upload-error" class="pdf-error-message" role="alert" hidden></div>
+    <p class="pdf-format-note">Large files may take longer to analyze. Pages render as you scroll.</p>
+  </section>
+
+  <section class="pdf-editor-workspace" id="pdf-editor-workspace" hidden aria-label="PDF editor workspace">
+    <div class="pdf-editor-document-bar">
+      <div class="pdf-document-name" id="pdf-document-name" title="Opened PDF"></div>
+      <div class="pdf-document-actions">
+        <button class="pdf-button pdf-button-quiet" id="open-another-button" type="button">Open another</button>
+        <button class="pdf-button pdf-button-primary" id="download-pdf-button" type="button" disabled>Download PDF</button>
+      </div>
+    </div>
+
+    <div class="pdf-editor-toolbar" role="toolbar" aria-label="PDF editor controls">
+      <div class="pdf-toolbar-group pdf-page-navigation" aria-label="Page navigation">
+        <button class="pdf-icon-button" id="pages-drawer-button" type="button" aria-label="Show pages" aria-expanded="false" title="Show pages">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/><rect x="14" y="16" width="7" height="5" rx="1"/></svg>
+        </button>
+        <button class="pdf-icon-button" id="previous-page-button" type="button" aria-label="Previous page" title="Previous page">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <label class="pdf-page-number">
+          <input id="current-page-input" type="number" min="1" value="1" aria-label="Current page">
+          <span id="total-page-count">/ 1</span>
+        </label>
+        <button class="pdf-icon-button" id="next-page-button" type="button" aria-label="Next page" title="Next page">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="pdf-toolbar-group pdf-zoom-controls" aria-label="Zoom controls">
+        <button class="pdf-icon-button" id="zoom-out-button" type="button" aria-label="Zoom out" title="Zoom out">−</button>
+        <span id="zoom-level" class="pdf-zoom-level">100%</span>
+        <button class="pdf-icon-button" id="zoom-in-button" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+        <button class="pdf-button pdf-button-quiet pdf-fit-button" id="fit-width-button" type="button">Fit width</button>
+        <button class="pdf-button pdf-button-quiet pdf-fit-button" id="fit-page-button" type="button">Fit page</button>
+      </div>
+
+      <div class="pdf-toolbar-group pdf-edit-controls">
+        <button class="pdf-button pdf-button-quiet" id="find-toggle-button" type="button" aria-expanded="false">Find &amp; replace</button>
+        <button class="pdf-icon-button" id="undo-button" type="button" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg>
+        </button>
+        <button class="pdf-icon-button" id="redo-button" type="button" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/></svg>
+        </button>
+        <button class="pdf-button pdf-button-quiet pdf-properties-toggle" id="properties-drawer-button" type="button" aria-expanded="false">Text settings</button>
+      </div>
+
+      <div class="pdf-toolbar-group pdf-content-tools" aria-label="Add PDF content">
+        <button class="pdf-button pdf-button-quiet is-active" id="mode-select-button" type="button" aria-pressed="true">Select</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-text-button" type="button" aria-pressed="false">Text</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-image-button" type="button">Image</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-draw-button" type="button" aria-pressed="false">Draw</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-highlight-button" type="button" aria-pressed="false">Highlight</button>
+        <label class="pdf-shape-picker">Shape
+          <select id="shape-type-select" aria-label="Shape type">
+            <option value="rectangle">Rectangle</option>
+            <option value="ellipse">Ellipse</option>
+            <option value="line">Line</option>
+            <option value="arrow">Arrow</option>
+          </select>
+        </label>
+        <button class="pdf-button pdf-button-quiet" id="mode-shape-button" type="button" aria-pressed="false">Shape</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-whiteout-button" type="button" aria-pressed="false">Whiteout</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-signature-button" type="button">Signature</button>
+        <input id="image-file-input" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose an image" hidden>
+      </div>
+    </div>
+
+    <div class="pdf-find-panel" id="pdf-find-panel" hidden>
+      <label>Find <input id="find-text-input" type="search" autocomplete="off" placeholder="Text in this PDF"></label>
+      <label>Replace with <input id="replace-text-input" type="text" autocomplete="off" placeholder="Replacement text"></label>
+      <button class="pdf-button pdf-button-quiet" id="find-previous-button" type="button" disabled>Previous</button>
+      <button class="pdf-button pdf-button-quiet" id="find-next-button" type="button" disabled>Next</button>
+      <button class="pdf-button pdf-button-primary" id="replace-all-button" type="button" disabled>Replace all</button>
+      <span id="find-result-status" role="status" aria-live="polite"></span>
+    </div>
+
+    <div class="pdf-editor-layout">
+      <aside class="pdf-pages-panel" id="pdf-pages-panel" aria-label="PDF pages">
+        <div class="pdf-panel-heading"><h2>Pages</h2><span id="pages-panel-count"></span></div>
+        <div class="pdf-page-actions" role="group" aria-label="Manage current page">
+          <button class="pdf-button pdf-button-quiet" id="rotate-page-button" type="button" aria-label="Rotate current page clockwise" title="Rotate current page clockwise">Rotate</button>
+          <button class="pdf-button pdf-button-quiet" id="move-page-up-button" type="button" aria-label="Move current page earlier" title="Move current page earlier">Move up</button>
+          <button class="pdf-button pdf-button-quiet" id="move-page-down-button" type="button" aria-label="Move current page later" title="Move current page later">Move down</button>
+          <button class="pdf-button pdf-button-quiet" id="duplicate-page-button" type="button" aria-label="Duplicate current page" title="Duplicate current page">Duplicate</button>
+          <button class="pdf-button pdf-button-quiet" id="insert-blank-page-button" type="button" aria-label="Insert blank page after current page" title="Insert blank page after current page">Blank after</button>
+          <button class="pdf-button pdf-button-quiet" id="delete-page-button" type="button" aria-label="Delete current page" title="Delete current page">Delete</button>
+        </div>
+        <div class="pdf-thumbnails" id="pdf-thumbnails"></div>
+      </aside>
+
+      <section class="pdf-stage" aria-label="PDF page view">
+        <div class="pdf-stage-status" id="pdf-stage-status" role="status" aria-live="polite"></div>
+        <button class="pdf-button pdf-button-quiet pdf-run-ocr-button" id="run-page-ocr-button" type="button" hidden>Run OCR locally</button>
+        <div class="pdf-page-scroll" id="pdf-page-scroll" tabindex="0" aria-label="PDF pages, scroll to navigate">
+          <div class="pdf-pages-container" id="pdf-pages-container"></div>
+        </div>
+        <div class="pdf-mobile-status">
+          <span id="mobile-page-count">Page 1 of 1</span>
+          <span>Click text to select · double-click to edit</span>
+        </div>
+      </section>
+
+      <aside class="pdf-properties-panel" id="pdf-properties-panel" aria-label="Selected text properties">
+        <div class="pdf-properties-heading">
+          <h2>Text properties</h2>
+          <button class="pdf-icon-button pdf-properties-close" id="close-properties-button" type="button" aria-label="Close text settings">×</button>
+        </div>
+        <p class="pdf-selection-empty" id="pdf-selection-empty">Click existing PDF text to select it. Double-click text to edit.</p>
+        <form class="pdf-text-properties" id="pdf-text-properties" hidden>
+          <label class="pdf-field-label" for="selected-text-value">Text</label>
+          <textarea id="selected-text-value" rows="3" spellcheck="false" aria-label="Selected PDF text"></textarea>
+          <div class="pdf-original-text" id="original-text-display"></div>
+          <button class="pdf-button pdf-button-quiet pdf-highlight-selected" id="highlight-selected-button" type="button">Highlight selected text</button>
+          <div class="pdf-properties-grid">
+            <label class="pdf-field-label" for="font-family-input">Font
+              <select id="font-family-input">
+                <option>Arial</option>
+                <option>Calibri</option>
+                <option>Cambria</option>
+                <option>Courier New</option>
+                <option>Helvetica</option>
+                <option>Montserrat</option>
+                <option>Roboto</option>
+                <option>Times New Roman</option>
+                <option>Noto Sans Devanagari</option>
+              </select>
+            </label>
+            <label class="pdf-field-label" for="font-size-input">Size
+              <span class="pdf-number-suffix"><input id="font-size-input" type="number" min="1" max="200" step="0.5" inputmode="decimal"><span>pt</span></span>
+            </label>
+          </div>
+          <div class="pdf-properties-grid pdf-color-row">
+            <label class="pdf-field-label" for="text-color-input">Color
+              <span class="pdf-color-input-wrap"><input id="text-color-input" type="color" value="#1f1f1f"><span id="text-color-value">#1F1F1F</span></span>
+            </label>
+            <label class="pdf-field-label" for="text-rotation-input">Rotation
+              <span class="pdf-number-suffix"><input id="text-rotation-input" type="number" min="-360" max="360" step="1" inputmode="numeric"><span>°</span></span>
+            </label>
+          </div>
+          <div class="pdf-properties-grid">
+            <label class="pdf-field-label" for="text-alignment-input">Alignment
+              <select id="text-alignment-input">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </label>
+            <label class="pdf-field-label" for="text-letter-spacing-input">Letter spacing
+              <span class="pdf-number-suffix"><input id="text-letter-spacing-input" type="number" min="-4" max="24" step="0.1"><span>pt</span></span>
+            </label>
+          </div>
+          <label class="pdf-field-label" for="text-opacity-input">Opacity
+            <input id="text-opacity-input" type="range" min="0" max="1" step="0.05" value="1">
+          </label>
+          <div class="pdf-text-style-toggles">
+            <label><input id="text-bold-input" type="checkbox"> Bold</label>
+            <label><input id="text-italic-input" type="checkbox"> Italic</label>
+          </div>
+          <div class="pdf-font-match" id="pdf-font-match"></div>
+          <p class="pdf-color-match" id="pdf-color-match"></p>
+          <p class="pdf-background-warning" id="pdf-background-warning" hidden>Complex background detected. Text replacement may not perfectly match the original background.</p>
+          <button class="pdf-button pdf-button-primary pdf-apply-text-button" id="apply-text-button" type="submit">Apply change</button>
+          <p class="pdf-coordinate-note">Position is stored in PDF page coordinates and does not change when you zoom.</p>
+        </form>
+        <form class="pdf-object-properties" id="pdf-object-properties" hidden>
+          <p class="pdf-object-kind" id="pdf-object-kind"></p>
+          <div class="pdf-properties-grid">
+            <label class="pdf-field-label" for="object-width-input">Width
+              <span class="pdf-number-suffix"><input id="object-width-input" type="number" min="1" max="1200" step="1"><span>pt</span></span>
+            </label>
+            <label class="pdf-field-label" for="object-height-input">Height
+              <span class="pdf-number-suffix"><input id="object-height-input" type="number" min="1" max="1200" step="1"><span>pt</span></span>
+            </label>
+          </div>
+          <div class="pdf-properties-grid">
+            <label class="pdf-field-label" for="object-rotation-input">Rotation
+              <span class="pdf-number-suffix"><input id="object-rotation-input" type="number" min="-360" max="360" step="1"><span>°</span></span>
+            </label>
+            <label class="pdf-field-label" for="object-opacity-input">Opacity
+              <input id="object-opacity-input" type="range" min="0" max="1" step="0.05" value="1">
+            </label>
+          </div>
+          <label class="pdf-aspect-lock"><input id="object-lock-aspect-input" type="checkbox" checked> Keep image proportions</label>
+          <div class="pdf-properties-grid" id="object-stroke-row">
+            <label class="pdf-field-label" for="object-stroke-input">Border
+              <input id="object-stroke-input" type="color" value="#2563eb">
+            </label>
+            <label class="pdf-field-label" for="object-fill-input">Fill
+              <input id="object-fill-input" type="color" value="#ffffff">
+            </label>
+          </div>
+          <label class="pdf-aspect-lock"><input id="object-no-fill-input" type="checkbox"> No fill</label>
+          <label class="pdf-field-label" for="object-stroke-width-input">Border width
+            <span class="pdf-number-suffix"><input id="object-stroke-width-input" type="number" min="0" max="40" step="0.5"><span>pt</span></span>
+          </label>
+          <p class="pdf-whiteout-warning" id="pdf-whiteout-warning" hidden>Whiteout only visually covers content. It does not remove hidden text or underlying PDF data and is not secure redaction.</p>
+          <button class="pdf-button pdf-button-primary" id="apply-object-properties-button" type="submit">Apply object settings</button>
+          <div class="pdf-object-actions">
+            <button class="pdf-button pdf-button-quiet" id="duplicate-object-button" type="button">Duplicate</button>
+            <button class="pdf-button pdf-button-quiet" id="delete-object-button" type="button">Delete</button>
+          </div>
+        </form>
+      </aside>
+    </div>
+    <p class="pdf-editor-shortcuts">Tip: Ctrl/Cmd + Z to undo, Ctrl/Cmd + Shift + Z to redo. Drag selected text to move it.</p>
+    <p class="pdf-export-notice" id="pdf-export-notice" role="status" aria-live="polite" hidden></p>
+  </section>
+
+  <dialog class="pdf-password-dialog" id="pdf-password-dialog" aria-labelledby="pdf-password-title">
+    <form method="dialog" id="pdf-password-form">
+      <h2 id="pdf-password-title">This PDF is protected</h2>
+      <p>Enter its password to open the file locally in your browser.</p>
+      <label for="pdf-password-input">PDF password</label>
+      <input id="pdf-password-input" type="password" autocomplete="current-password" required>
+      <p class="pdf-password-error" id="pdf-password-error" hidden>That password did not work. Try again.</p>
+      <div class="pdf-password-actions">
+        <button class="pdf-button pdf-button-quiet" id="cancel-password-button" type="button">Cancel</button>
+        <button class="pdf-button pdf-button-primary" type="submit">Open PDF</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog class="pdf-signature-dialog" id="pdf-signature-dialog" aria-labelledby="pdf-signature-title">
+    <form method="dialog" id="pdf-signature-form">
+      <h2 id="pdf-signature-title">Create a signature</h2>
+      <p>Draw, type, or choose an image for your signature. The finished mark is placed in this PDF locally.</p>
+      <label class="pdf-field-label" for="signature-text-input">Type a name
+        <input id="signature-text-input" type="text" maxlength="120" autocomplete="off">
+      </label>
+      <canvas id="signature-canvas" width="600" height="180" aria-label="Draw signature with mouse or touch"></canvas>
+      <div class="pdf-signature-actions">
+        <button class="pdf-button pdf-button-quiet" id="clear-signature-button" type="button">Clear drawing</button>
+        <label class="pdf-button pdf-button-quiet pdf-signature-upload">Upload image
+          <input id="signature-file-input" type="file" accept="image/png,image/jpeg,image/webp">
+        </label>
+        <button class="pdf-button pdf-button-primary" id="use-signature-button" type="button">Use signature</button>
+      </div>
+      <button class="pdf-button pdf-button-quiet" id="close-signature-button" type="button">Cancel</button>
+    </form>
+  </dialog>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ '/js/vendor/pdfjs/pdf.min.js' | url }}"></script>
+<script defer src="{{ '/js/vendor/pdflib/pdf-lib.min.js' | url }}"></script>
+<script defer src="{{ '/js/vendor/fontkit/fontkit.umd.min.js' | url }}"></script>
+<script defer src="{{ '/js/vendor/tesseract/tesseract.min.js' | url }}"></script>
+<script type="module" src="{{ '/js/pdf-editor/editor.js' | url }}"></script>
+{% endblock %}
