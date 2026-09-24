@@ -8,6 +8,7 @@ const categories = [
       { name: 'Merge PDF', desc: 'Combine multiple PDFs into one', href: '/tools/merge-pdf.html', color: '#7c3aed', featured: true, svg: '<rect x="2" y="3" width="8" height="18" rx="1"/><rect x="14" y="3" width="8" height="18" rx="1"/><polyline points="10 10 12 12 10 14"/><polyline points="14 10 12 12 14 14"/>' },
       { name: 'Split PDF', desc: 'Extract pages or split into files', href: '/tools/split-pdf.html', color: '#6366f1', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="4" y1="14" x2="20" y2="14" stroke-dasharray="2 2"/>' },
       { name: 'PDF Reader', desc: 'Fast in-browser viewer with search', href: '/pdf-reader.html', color: '#2563eb', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="3"/><line x1="13.1" y1="16.1" x2="16" y2="19"/>' },
+      { name: 'PDF Editor', desc: 'Edit existing PDF text in your browser while preserving its styling where supported', href: '/tools/pdf-editor.html', color: '#8b6914', featured: true, svg: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/><path d="M4 4h7"/><path d="M4 8h5"/>' },
       { name: 'PDF Presentation', desc: 'Fullscreen slides with timer and draw', href: '/pdf-presentation-mode.html', color: '#2563eb', svg: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>' }
     ]
   },
@@ -88,4 +89,4 @@ const tools = categories.flatMap(category => category.tools.map(tool => ({ ...to
 // grow a second list of tool routes.
 const canonicalUrls = Object.fromEntries(tools.map(tool => [tool.href, tool.href]));
 
-module.exports = { version: '2026-09-04', categories, tools, canonicalUrls };
+module.exports = { version: '2026-09-24', categories, tools, canonicalUrls };

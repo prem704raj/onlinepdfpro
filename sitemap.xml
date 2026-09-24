@@ -71,6 +71,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://onlinepdfpro.com/tools/pdf-editor.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://onlinepdfpro.com/pdf-presentation-mode.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
