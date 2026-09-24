@@ -194,7 +194,12 @@ check(/registryTools/.test(read('src/tools.njk')) && /toolsForFile/.test(read('s
 const appSource = read('src/js/app.js');
 check(/ToolRegistryUI/.test(appSource) && /tool-registry\.json/.test(appSource) && /renderRelated/.test(appSource), 'Shared UI consumes the tool registry for navigation and related tools');
 const registryHrefs = [...registry.matchAll(/href:\s*'([^']+)'/g)].map(match => match[1]);
-const missingRegistryPages = registryHrefs.filter(href => !exists(href.replace(/^\//, '')));
+// Eleventy templates (including new /tools/*.html entries) are generated in _site;
+// older hand-authored pages may still live at the repository root.
+const missingRegistryPages = registryHrefs.filter(href => {
+    const outputPath = href.replace(/^\//, '');
+    return !exists(outputPath) && !exists(path.join('_site', outputPath));
+});
 check(registryHrefs.length >= 40 && missingRegistryPages.length === 0, `Registry pages exist (${registryHrefs.length} public tools)`);
 check(new Set(registryHrefs).size === registryHrefs.length, 'Registry has no duplicate tool URLs');
 if (exists('_site/tools.html')) {
