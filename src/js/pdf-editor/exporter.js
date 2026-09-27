@@ -1,7 +1,10 @@
 import { editorState } from './state.js';
 import { getTextScreenBox } from './page-renderer.js';
-import { resolveStandardFont } from './font-resolver.js';
+import { getBundledFontSource, resolveStandardFont } from './font-resolver.js';
 import { sampleBackgroundFromCanvas } from './color-extractor.js';
+import { attemptTrueTextReplacement } from './content-stream-replacer.js';
+import { ensureFontkit } from './vendor-loader.js';
+import { checkGlyphCoverage, loadLocalFontBytes } from './font-runtime.js';
 
 const fontCache = new Map();
 let devanagariFontBytes = null;
@@ -27,14 +30,14 @@ function hasDevanagari(text) {
 }
 
 async function getDevanagariFont(pdfDocument) {
-  if (!window.fontkit) return null;
   try {
+    const fontkit = await ensureFontkit();
     if (!devanagariFontBytes) {
       const response = await fetch('/fonts/NotoSansDevanagari-Regular.ttf', { credentials: 'same-origin' });
       if (!response.ok) return null;
       devanagariFontBytes = new Uint8Array(await response.arrayBuffer());
     }
-    if (typeof pdfDocument.registerFontkit === 'function') pdfDocument.registerFontkit(window.fontkit);
+    if (typeof pdfDocument.registerFontkit === 'function') pdfDocument.registerFontkit(fontkit);
     const cacheKey = 'noto-devanagari';
     if (!fontCache.has(cacheKey)) {
       const embedded = await pdfDocument.embedFont(devanagariFontBytes, { subset: true });
@@ -48,6 +51,17 @@ async function getDevanagariFont(pdfDocument) {
 }
 
 async function getEditableFont(pdfDocument, PDFLib, object) {
+  const bundledSource = getBundledFontSource(object.fontDescriptor, object.bold, object.italic);
+  if (bundledSource) {
+    const fontkit = await ensureFontkit();
+    const cacheKey = 'bundled:' + bundledSource;
+    if (!fontCache.has(cacheKey)) {
+      const bytes = await loadLocalFontBytes(bundledSource);
+      if (typeof pdfDocument.registerFontkit === 'function') pdfDocument.registerFontkit(fontkit);
+      fontCache.set(cacheKey, await pdfDocument.embedFont(bytes, { subset: true }));
+    }
+    return fontCache.get(cacheKey);
+  }
   if (String(object.fontFamily || '').toLowerCase() === 'noto sans devanagari') {
     const embedded = await getDevanagariFont(pdfDocument);
     if (embedded) return embedded;
@@ -68,7 +82,14 @@ async function renderBackgroundSamples(pdfPage, objects) {
   try {
     await pdfPage.render({ canvasContext: context, viewport }).promise;
     const backgrounds = objects.map((object) => {
-      const sampleObject = { ...object, x: object.originalX, y: object.originalY, rotation: object.originalRotation };
+      const sampleObject = {
+        ...object,
+        x: object.originalX,
+        y: object.originalY,
+        width: object.originalWidth || object.width,
+        height: object.originalHeight || object.height,
+        rotation: object.originalRotation
+      };
       return sampleBackgroundFromCanvas(canvas, getTextScreenBox(sampleObject, viewport));
     });
     canvas.width = 0;
@@ -82,17 +103,16 @@ async function renderBackgroundSamples(pdfPage, objects) {
   }
 }
 
-function getOriginalCoverBox(object, replacementWidth) {
+function getOriginalCoverBox(object) {
   const size = Math.max(1, object.fontSize);
   const pad = Math.max(0.8, size * 0.055);
-  const originalWidth = Math.max(object.width, size * 0.35);
-  const width = Math.max(originalWidth, replacementWidth || 0) + pad * 2;
-  const height = Math.max(object.height, size * (object.ascent - object.descent), size * 1.1) + pad * 2;
+  const originalWidth = Math.max(object.originalWidth || object.width, size * 0.35);
+  const originalHeight = Math.max(object.originalHeight || object.height, size * (object.ascent - object.descent), size);
   return {
     x: object.originalX - pad,
     y: object.originalY - size * Math.max(0.2, Math.abs(object.descent)) - pad,
-    width,
-    height,
+    width: originalWidth + pad * 2,
+    height: originalHeight + pad * 2,
     rotation: object.originalRotation,
     pad
   };
@@ -264,6 +284,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
     grouped.get(object.page).push(object);
   });
   const pdfjsDocument = editorState.pdfDocument;
+  const trueReplacementChecks = [];
   let completedPages = 0;
 
   for (const [pageNumber, objects] of grouped) {
@@ -272,7 +293,22 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
     const sourcePage = pageMetadata && pageMetadata.sourcePageNumber
       ? await pdfjsDocument.getPage(pageMetadata.sourcePageNumber)
       : null;
-    const textToCover = objects.filter((object) => ['text', 'ocr-text'].includes(object.type) && object.modified);
+    const trueReplaced = new Set();
+    if (!editorState.pageStructureChanged) {
+      objects.forEach((object) => {
+        if (object.type !== 'text' || !object.modified) return;
+        const result = attemptTrueTextReplacement(pdfDocument, page, object, PDFLib);
+        if (result.success) {
+          object.replacementMode = 'true-text-replacement';
+          trueReplaced.add(object.id);
+          trueReplacementChecks.push({ pageNumber, objectId: object.id, oldText: object.originalText, newText: object.text });
+        } else {
+          object.replacementMode = 'visual-overlay-fallback';
+          object.replacementFallbackReason = result.reason;
+        }
+      });
+    }
+    const textToCover = objects.filter((object) => ['text', 'ocr-text'].includes(object.type) && object.modified && !trueReplaced.has(object.id));
     const pageSamples = sourcePage && textToCover.length ? await renderBackgroundSamples(sourcePage, textToCover) : [];
     const backgrounds = new Map(textToCover.map((object, index) => [object.id, object.background || pageSamples[index]]));
     for (const object of objects) {
@@ -280,11 +316,18 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
         await exportOverlayObject(page, pdfDocument, PDFLib, object);
         continue;
       }
+      if (trueReplaced.has(object.id)) continue;
+      if (object.type === 'ocr-text') object.replacementMode = 'OCR-overlay';
+      else if (object.type === 'text') object.replacementMode = 'visual-overlay-fallback';
       const sampledBackground = backgrounds.get(object.id) || { rgb: [255, 255, 255], quality: 'estimated', complex: false };
       if (sampledBackground.complex) {
         addWarning(warnings, 'Complex background detected. Text replacement may not perfectly match the original background.');
       }
       const font = await getEditableFont(pdfDocument, PDFLib, object);
+      const glyphCoverage = await checkGlyphCoverage(object, object.text);
+      if (!glyphCoverage.supported) {
+        throw new Error('The selected font does not contain every character in this edit. Choose a replacement font before downloading.');
+      }
       let encodedText;
       try {
         encodedText = object.text;
@@ -299,7 +342,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
               // Use the fallback only for the text in this object.
               if (object.type === 'text' || object.type === 'ocr-text') {
                 const fallbackWidth = devanagari.widthOfTextAtSize(object.text, object.fontSize);
-                const fallbackCover = getOriginalCoverBox(object, fallbackWidth);
+                const fallbackCover = getOriginalCoverBox(object);
                 const back = sampledBackground.rgb || [255, 255, 255];
                 page.drawRectangle({
                   x: fallbackCover.x,
@@ -331,7 +374,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
 
       const replacementWidth = object.text ? font.widthOfTextAtSize(object.text, object.fontSize) : 0;
       if (object.type === 'text' || object.type === 'ocr-text') {
-        const cover = getOriginalCoverBox(object, replacementWidth);
+        const cover = getOriginalCoverBox(object);
         const backgroundRgb = sampledBackground.rgb || [255, 255, 255];
         page.drawRectangle({
           x: cover.x,
@@ -380,6 +423,16 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
     const validationTask = window.pdfjsLib.getDocument({ data: savedBytes.slice() });
     const checkPdfJs = await validationTask.promise;
     if (checkPdfJs.numPages !== editorState.pages.length) throw new Error('The exported PDF has a different page count.');
+    for (const check of trueReplacementChecks) {
+      const page = await checkPdfJs.getPage(check.pageNumber);
+      const content = await page.getTextContent();
+      const extracted = (content.items || []).map((item) => item.str || '').join(' ');
+      if (check.newText && !extracted.includes(check.newText)) throw new Error('A true text replacement was not extractable after export.');
+      const sameOldTextOnPage = editorState.objects.filter((object) => object.page === check.pageNumber && object.id !== check.objectId && object.originalText === check.oldText).length;
+      if (!sameOldTextOnPage && check.oldText && check.oldText !== check.newText && extracted.includes(check.oldText)) {
+        throw new Error('The original text remained extractable after a true replacement.');
+      }
+    }
     await checkPdfJs.destroy();
   } catch (error) {
     throw new Error('The exported PDF did not pass a local integrity check, so it was not downloaded.');

@@ -46,6 +46,7 @@ bodyClass: pdf-editor-body
       <span>Choose PDF</span>
       <input id="pdf-file-input" type="file" accept="application/pdf,.pdf" aria-label="Choose a PDF file">
     </label>
+    <button class="pdf-button pdf-button-quiet" id="pdf-editor-sample-button" type="button">Try sample PDF</button>
     <p class="pdf-drop-hint">or drag a PDF into this area</p>
     <div id="pdf-load-status" class="pdf-load-status" role="status" aria-live="polite" hidden></div>
     <div id="pdf-upload-error" class="pdf-error-message" role="alert" hidden></div>
@@ -118,6 +119,49 @@ bodyClass: pdf-editor-body
       </div>
     </div>
 
+    <div class="pdf-text-context-toolbar" id="pdf-text-context-toolbar" role="toolbar" aria-label="Selected text formatting" hidden>
+      <label class="pdf-context-font" for="context-font-family-input"><span class="sr-only">Font</span>
+        <select id="context-font-family-input" aria-label="Font family">
+          <option>Arial</option>
+          <option>Arimo</option>
+          <option>Calibri</option>
+          <option>Carlito</option>
+          <option>Cambria</option>
+          <option>Caladea</option>
+          <option>Courier New</option>
+          <option>Helvetica</option>
+          <option>Montserrat</option>
+          <option>Roboto</option>
+          <option>Times New Roman</option>
+          <option>Noto Sans Devanagari</option>
+        </select>
+      </label>
+      <label class="pdf-context-size" for="context-font-size-input"><span class="sr-only">Font size</span>
+        <input id="context-font-size-input" type="number" min="1" max="200" step="0.5" inputmode="decimal" aria-label="Font size">
+        <span>pt</span>
+      </label>
+      <button class="pdf-context-toggle" id="context-bold-button" type="button" aria-label="Bold" aria-pressed="false" title="Bold"><strong>B</strong></button>
+      <button class="pdf-context-toggle" id="context-italic-button" type="button" aria-label="Italic" aria-pressed="false" title="Italic"><em>I</em></button>
+      <label class="pdf-context-color" for="context-text-color-input" title="Text color">
+        <span class="sr-only">Text color</span>
+        <input id="context-text-color-input" type="color" value="#1f1f1f" aria-label="Text color">
+      </label>
+      <button class="pdf-button pdf-button-quiet" id="context-more-button" type="button" aria-expanded="false">More</button>
+      <span class="pdf-context-font-status" id="context-font-status" aria-live="polite"></span>
+    </div>
+    <div class="pdf-text-context-advanced" id="pdf-text-context-advanced" hidden>
+      <label>Rotation <span class="pdf-number-suffix"><input id="context-text-rotation-input" type="number" min="-360" max="360" step="1"><span>°</span></span></label>
+      <label>Letter spacing <span class="pdf-number-suffix"><input id="context-letter-spacing-input" type="number" min="-4" max="24" step="0.1"><span>pt</span></span></label>
+      <label>Opacity <input id="context-opacity-input" type="range" min="0" max="1" step="0.05"></label>
+      <label>Alignment
+        <select id="context-alignment-input">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+      </label>
+    </div>
+
     <div class="pdf-find-panel" id="pdf-find-panel" hidden>
       <label>Find <input id="find-text-input" type="search" autocomplete="off" placeholder="Text in this PDF"></label>
       <label>Replace with <input id="replace-text-input" type="text" autocomplete="off" placeholder="Replacement text"></label>
@@ -163,7 +207,6 @@ bodyClass: pdf-editor-body
           <label class="pdf-field-label" for="selected-text-value">Text</label>
           <textarea id="selected-text-value" rows="3" spellcheck="false" aria-label="Selected PDF text"></textarea>
           <div class="pdf-original-text" id="original-text-display"></div>
-          <button class="pdf-button pdf-button-quiet pdf-highlight-selected" id="highlight-selected-button" type="button">Highlight selected text</button>
           <div class="pdf-properties-grid">
             <label class="pdf-field-label" for="font-family-input">Font
               <select id="font-family-input">
@@ -272,6 +315,26 @@ bodyClass: pdf-editor-body
       </div>
     </form>
   </dialog>
+  <dialog class="pdf-password-dialog pdf-font-replacement-dialog" id="pdf-font-replacement-dialog" aria-labelledby="pdf-font-replacement-title">
+    <form id="pdf-font-replacement-form">
+      <h2 id="pdf-font-replacement-title">Choose a replacement font</h2>
+      <p id="pdf-font-replacement-message">The current font does not contain every character in this edit.</p>
+      <label class="pdf-field-label" for="pdf-font-replacement-select">Replacement font
+        <select id="pdf-font-replacement-select">
+          <option value="Arimo">Arimo — Arial compatible</option>
+          <option value="Carlito">Carlito — Calibri compatible</option>
+          <option value="Caladea">Caladea — Cambria compatible</option>
+          <option value="Noto Sans Devanagari">Noto Sans Devanagari</option>
+        </select>
+      </label>
+      <label class="pdf-font-replacement-remember"><input id="pdf-font-replacement-remember" type="checkbox"> Always use this replacement for this font in this editing session</label>
+      <p class="pdf-password-error" id="pdf-font-replacement-error" hidden></p>
+      <div class="pdf-password-actions">
+        <button class="pdf-button pdf-button-quiet" id="pdf-font-replacement-cancel" type="button">Cancel edit</button>
+        <button class="pdf-button pdf-button-primary" type="submit">Use replacement</button>
+      </div>
+    </form>
+  </dialog>
   <dialog class="pdf-signature-dialog" id="pdf-signature-dialog" aria-labelledby="pdf-signature-title">
     <form method="dialog" id="pdf-signature-form">
       <h2 id="pdf-signature-title">Create a signature</h2>
@@ -296,7 +359,5 @@ bodyClass: pdf-editor-body
 {% block scripts %}
 <script defer src="{{ '/js/vendor/pdfjs/pdf.min.js' | url }}"></script>
 <script defer src="{{ '/js/vendor/pdflib/pdf-lib.min.js' | url }}"></script>
-<script defer src="{{ '/js/vendor/fontkit/fontkit.umd.min.js' | url }}"></script>
-<script defer src="{{ '/js/vendor/tesseract/tesseract.min.js' | url }}"></script>
 <script type="module" src="{{ '/js/pdf-editor/editor.js' | url }}"></script>
 {% endblock %}
