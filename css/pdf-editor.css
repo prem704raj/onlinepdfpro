@@ -1,3 +1,99 @@
+@font-face {
+  font-family: 'Arimo';
+  src: url('/fonts/pdf-editor/Arimo-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arimo';
+  src: url('/fonts/pdf-editor/Arimo-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arimo';
+  src: url('/fonts/pdf-editor/Arimo-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arimo';
+  src: url('/fonts/pdf-editor/Arimo-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Carlito';
+  src: url('/fonts/pdf-editor/Carlito-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Carlito';
+  src: url('/fonts/pdf-editor/Carlito-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Carlito';
+  src: url('/fonts/pdf-editor/Carlito-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Carlito';
+  src: url('/fonts/pdf-editor/Carlito-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caladea';
+  src: url('/fonts/pdf-editor/Caladea-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caladea';
+  src: url('/fonts/pdf-editor/Caladea-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caladea';
+  src: url('/fonts/pdf-editor/Caladea-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caladea';
+  src: url('/fonts/pdf-editor/Caladea-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
 body.pdf-editor-body {
   background: var(--bg) !important;
   color: var(--text-primary);
@@ -212,6 +308,7 @@ body.pdf-editor-body {
 }
 
 .pdf-editor-workspace {
+  position: relative;
   overflow: hidden;
   border: 1px solid var(--pdf-border);
   background: var(--pdf-card);
@@ -233,6 +330,138 @@ body.pdf-editor-body {
   justify-content: flex-start;
   overflow-x: auto;
   scrollbar-width: thin;
+}
+
+.pdf-text-context-toolbar,
+.pdf-text-context-advanced {
+  position: absolute;
+  z-index: 12;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--pdf-border);
+  border-radius: 7px;
+  background: var(--surface-2, var(--pdf-card));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+}
+
+.pdf-text-context-toolbar[hidden],
+.pdf-text-context-advanced[hidden] {
+  display: none !important;
+}
+
+.pdf-text-context-toolbar {
+  top: 116px;
+  min-height: 48px;
+  max-width: calc(100% - 24px);
+  overflow-x: auto;
+}
+
+.pdf-text-context-toolbar select,
+.pdf-text-context-toolbar input[type="number"],
+.pdf-text-context-advanced select,
+.pdf-text-context-advanced input[type="number"] {
+  min-height: 34px;
+  border: 1px solid var(--pdf-border);
+  border-radius: 5px;
+  background: var(--pdf-card);
+  color: var(--text-primary);
+}
+
+.pdf-context-font select {
+  min-width: 160px;
+  max-width: 220px;
+  padding: 0 28px 0 8px;
+}
+
+.pdf-context-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--pdf-muted);
+  font-size: .72rem;
+}
+
+.pdf-context-size input {
+  width: 70px;
+  padding: 0 7px;
+}
+
+.pdf-context-toggle {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: 1px solid var(--pdf-border);
+  border-radius: 5px;
+  background: var(--pdf-card);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.pdf-context-toggle[aria-pressed="true"] {
+  border-color: var(--pdf-accent);
+  background: var(--accent-subtle, rgba(139, 105, 20, .12));
+}
+
+.pdf-context-color {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--pdf-border);
+  border-radius: 5px;
+  background: var(--pdf-card);
+  cursor: pointer;
+}
+
+.pdf-context-color input {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pdf-context-font-status {
+  max-width: 360px;
+  color: var(--pdf-muted);
+  font-size: .72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdf-text-context-advanced {
+  top: 170px;
+  flex-wrap: wrap;
+  max-width: calc(100% - 24px);
+  color: var(--pdf-muted);
+  font-size: .74rem;
+}
+
+.pdf-text-context-advanced label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pdf-text-context-advanced input[type="number"] {
+  width: 78px;
+  padding: 0 7px;
+}
+
+.pdf-text-context-advanced input[type="range"] {
+  width: 120px;
+}
+
+.pdf-text-context-advanced select {
+  padding: 0 24px 0 7px;
 }
 
 .pdf-document-name {
@@ -812,13 +1041,45 @@ body.pdf-editor-body {
   outline-offset: 1px;
 }
 
-.pdf-text-preview {
+.pdf-text-preview-mask,
+.pdf-text-preview-glyph,
+.pdf-inline-text-mask,
+.pdf-inline-text-input {
   position: absolute;
   z-index: 1;
   overflow: visible;
-  padding: 0 1px;
   transform-origin: left top;
   pointer-events: none;
+}
+
+.pdf-text-preview-mask,
+.pdf-inline-text-mask {
+  z-index: 2;
+  opacity: 1 !important;
+  pointer-events: none;
+}
+
+.pdf-text-preview-glyph {
+  z-index: 3;
+  padding: 0;
+  white-space: pre;
+  background: transparent;
+}
+
+.pdf-inline-text-input {
+  z-index: 5;
+  width: auto;
+  max-width: none;
+  padding: 0;
+  border: 1px solid #2563eb;
+  border-radius: 2px;
+  outline: 2px solid rgba(37, 99, 235, .18);
+  background: transparent;
+  white-space: pre;
+  caret-color: currentColor;
+  cursor: text;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .pdf-properties-panel {
@@ -1094,12 +1355,28 @@ body.pdf-editor-body {
   line-height: 1.5;
 }
 
-.pdf-password-dialog input {
+.pdf-password-dialog input,
+.pdf-password-dialog select {
   min-height: 40px;
   padding: 8px 10px;
   border: 1px solid var(--pdf-border);
   background: var(--pdf-card);
   color: var(--text-primary);
+}
+
+.pdf-font-replacement-dialog select {
+  width: 100%;
+}
+
+.pdf-font-replacement-remember {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pdf-font-replacement-remember input {
+  width: auto;
+  margin-top: 3px;
 }
 
 .pdf-password-actions {
