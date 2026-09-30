@@ -4,6 +4,24 @@ import { extractTextColors, getEstimatedTextColor } from './color-extractor.js';
 
 let measureCanvas = null;
 
+function getResolvedFontMetadata(pdfPage, item, style) {
+  let fontObject = null;
+  try {
+    fontObject = pdfPage.commonObjs && item.fontName ? pdfPage.commonObjs.get(item.fontName) : null;
+  } catch (error) {}
+  const resolvedName = String((fontObject && (fontObject.name || fontObject.fallbackName)) || item.fontName || style.fontFamily || '');
+  return {
+    pdfFontName: resolvedName,
+    style: {
+      ...style,
+      fontFamily: (fontObject && (fontObject.name || fontObject.fallbackName)) || style.fontFamily,
+      fontWeight: fontObject && fontObject.bold ? 700 : style.fontWeight,
+      italic: fontObject && typeof fontObject.italic === 'boolean' ? fontObject.italic : style.italic,
+      embedded: Boolean(fontObject && fontObject.data && Number(fontObject.data.length || fontObject.data.byteLength || 0) > 0)
+    }
+  };
+}
+
 function splitTextItem(item, fontFamily, fontSize) {
   const text = item.str;
   if (item.dir === 'rtl' || !/\s/.test(text)) return [{ text, offset: 0, width: Math.abs(Number(item.width) || 0) }];
@@ -93,7 +111,8 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
       const [a, b, c, d, baseX, baseY] = transform;
       const fontSize = Math.max(1, Math.hypot(a, b) || item.height || 10);
       const style = styles[item.fontName] || {};
-      const font = resolveFont(style, item.fontName);
+      const resolvedFont = getResolvedFontMetadata(pdfPage, item, style);
+      const font = resolveFont(resolvedFont.style, resolvedFont.pdfFontName);
       const detectedColor = colorMap.get(itemIndex) || getEstimatedTextColor();
       const segments = splitTextItem(item, font.family, fontSize);
       segments.forEach((segment, segmentIndex) => {
@@ -119,12 +138,23 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
           width: Math.max(0.1, segment.width),
           originalWidth: Math.max(0.1, segment.width),
           height: Math.max(0.1, Math.abs(Number(item.height) || fontSize)),
-          fontName: item.fontName || '',
+          originalHeight: Math.max(0.1, Math.abs(Number(item.height) || fontSize)),
+          editedWidth: Math.max(0.1, segment.width),
+          editedHeight: Math.max(0.1, Math.abs(Number(item.height) || fontSize)),
+          fontName: resolvedFont.pdfFontName || item.fontName || '',
+          pdfJsFontId: item.fontName || '',
           fontFamily: font.family,
+          originalFontFamily: font.family,
+          detectedFontFamily: font.detectedFamily,
+          fontDescriptor: font.descriptor,
+          originalFontDescriptor: font.descriptor,
+          fontRestyled: false,
           fontQuality: font.quality,
           fontSize,
+          originalFontSize: fontSize,
           color: detectedColor,
           colorHex: detectedColor.hex,
+          originalColorHex: detectedColor.hex,
           colorQuality: detectedColor.quality,
           rotation: Math.atan2(b, a) * 180 / Math.PI,
           originalRotation: Math.atan2(b, a) * 180 / Math.PI,
@@ -132,10 +162,15 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
           ascent: Number.isFinite(style.ascent) ? style.ascent : 0.8,
           descent: Number.isFinite(style.descent) ? style.descent : -0.2,
           bold: font.bold,
+          originalBold: font.bold,
           italic: font.italic,
+          originalItalic: font.italic,
           alignment: 'left',
           letterSpacing: 0,
+          originalLetterSpacing: 0,
           opacity: 1,
+          originalOpacity: 1,
+          replacementMode: 'visual-overlay-fallback',
           modified: false,
           moved: false,
           background: null,

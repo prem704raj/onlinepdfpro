@@ -1,17 +1,17 @@
 import { editorState, getPageState } from './state.js';
+import { ensureTesseract } from './vendor-loader.js';
+import { descriptorForFamily } from './font-resolver.js';
 
 function makeId(pageNumber, index) {
   return 'p' + pageNumber + '-ocr-' + index + '-' + Date.now().toString(36);
 }
 
 export async function recognizePageText(pageNumber, canvas, onProgress = () => {}) {
-  if (!window.Tesseract || typeof window.Tesseract.recognize !== 'function') {
-    throw new Error('The bundled local OCR engine did not load. Refresh this page and try again.');
-  }
+  const Tesseract = await ensureTesseract();
   const pageState = getPageState(pageNumber);
   if (!pageState || !pageState.viewport || !canvas) throw new Error('Render this page before running OCR.');
   onProgress('Starting local OCR…');
-  const result = await window.Tesseract.recognize(canvas, 'eng', {
+  const result = await Tesseract.recognize(canvas, 'eng', {
     workerPath: '/js/vendor/tesseract/worker.min.js',
     corePath: '/js/vendor/tesseract/tesseract-core.wasm.js',
     langPath: '/js/vendor/tesseract/',
@@ -36,6 +36,7 @@ export async function recognizePageText(pageNumber, canvas, onProgress = () => {
     const lowerLeft = viewport.convertToPdfPoint(left, bottom);
     const upperRight = viewport.convertToPdfPoint(right, top);
     const fontSize = Math.max(1, Math.abs(upperRight[1] - lowerLeft[1]));
+    const descriptor = descriptorForFamily('Arimo');
     objects.push({
       id: makeId(pageNumber, index),
       type: 'ocr-text',
@@ -51,12 +52,22 @@ export async function recognizePageText(pageNumber, canvas, onProgress = () => {
       width: Math.max(1, Math.abs(upperRight[0] - lowerLeft[0])),
       originalWidth: Math.max(1, Math.abs(upperRight[0] - lowerLeft[0])),
       height: fontSize,
+      originalHeight: fontSize,
+      editedWidth: Math.max(1, Math.abs(upperRight[0] - lowerLeft[0])),
+      editedHeight: fontSize,
       fontName: '',
-      fontFamily: 'Helvetica',
-      fontQuality: 'fallback',
+      fontFamily: descriptor.previewFont.family,
+      originalFontFamily: descriptor.previewFont.family,
+      detectedFontFamily: descriptor.detectedFamily,
+      fontDescriptor: descriptor,
+      originalFontDescriptor: descriptor,
+      fontRestyled: false,
+      fontQuality: descriptor.matchQuality,
       fontSize,
+      originalFontSize: fontSize,
       color: { rgb: [31, 31, 31], hex: '#1F1F1F', quality: 'estimated' },
       colorHex: '#1F1F1F',
+      originalColorHex: '#1F1F1F',
       colorQuality: 'estimated',
       rotation: 0,
       originalRotation: 0,
@@ -64,10 +75,15 @@ export async function recognizePageText(pageNumber, canvas, onProgress = () => {
       ascent: 0.8,
       descent: -0.2,
       bold: false,
+      originalBold: false,
       italic: false,
+      originalItalic: false,
       alignment: 'left',
       letterSpacing: 0,
+      originalLetterSpacing: 0,
       opacity: 1,
+      originalOpacity: 1,
+      replacementMode: 'OCR-overlay',
       modified: false,
       isNew: false,
       ocrAssisted: true,

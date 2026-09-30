@@ -1,4 +1,5 @@
 import { editorState, markDirty } from './state.js';
+import { descriptorForFamily } from './font-resolver.js';
 
 function makeId() {
   if (window.crypto && typeof window.crypto.randomUUID === 'function') return 'obj-' + window.crypto.randomUUID();
@@ -31,25 +32,41 @@ export function pagePointFromClient(viewport, layer, clientX, clientY) {
 
 export function createTextObject(page, point, values = {}) {
   const object = baseObject('new-text', page, point);
+  const descriptor = descriptorForFamily(values.fontFamily || 'Arimo');
   Object.assign(object, {
     text: values.text || 'New text',
     originalText: '',
     transform: [values.fontSize || 18, 0, 0, values.fontSize || 18, point[0], point[1]],
     fontName: '',
-    fontFamily: values.fontFamily || 'Helvetica',
-    fontQuality: 'matched',
+    fontFamily: descriptor.previewFont.family,
+    originalFontFamily: descriptor.previewFont.family,
+    detectedFontFamily: descriptor.detectedFamily,
+    fontDescriptor: descriptor,
+    originalFontDescriptor: descriptor,
+    fontRestyled: false,
+    fontQuality: descriptor.matchQuality,
     fontSize: values.fontSize || 18,
+    originalFontSize: values.fontSize || 18,
     colorHex: values.colorHex || '#1F1F1F',
+    originalColorHex: values.colorHex || '#1F1F1F',
     color: { rgb: [31, 31, 31], hex: values.colorHex || '#1F1F1F', quality: 'user' },
     colorQuality: 'user',
     bold: false,
+    originalBold: false,
     italic: false,
+    originalItalic: false,
     alignment: 'left',
     ascent: 0.8,
     descent: -0.2,
     height: 22,
+    originalHeight: 22,
+    editedHeight: 22,
     width: 120,
-    originalWidth: 120
+    originalWidth: 120,
+    editedWidth: 120,
+    originalLetterSpacing: 0,
+    originalOpacity: 1,
+    replacementMode: 'visual-overlay-fallback'
   });
   editorState.objects.push(object);
   markDirty();
