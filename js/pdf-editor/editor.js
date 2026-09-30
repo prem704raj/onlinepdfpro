@@ -6,15 +6,18 @@ import { sampleBackgroundFromCanvas } from './color-extractor.js';
 import { applyTextProperties, moveTextObject, setObjectBackground } from './text-editor.js';
 import { resetHistory, recordHistory, undo, redo, canUndo, canRedo, rememberObjectsForHistory } from './history.js';
 import { exportEditedPdf } from './exporter.js';
-import { getFontMatchLabel, getFontMatchDescription } from './font-resolver.js';
+import { descriptorForFamily, getFontMatchLabel, getFontMatchDescription } from './font-resolver.js';
+import { checkGlyphCoverage, formatUnsupportedGlyphs } from './font-runtime.js';
 import { pagePointFromClient, createTextObject, createShapeObject, createImageObject, createDrawObject, createHighlightFromText, createObjectCopy } from './object-editor.js';
 import { recognizePageText } from './ocr-editor.js';
 import { rotatePage as rotatePdfPage, movePage as reorderPdfPage, duplicatePage as duplicatePdfPage, insertBlankPageAfter, deletePage as removePdfPage } from './page-manager.js';
+import { InlineTextEditor } from './inline-text-editor.js';
 
 const byId = (id) => document.getElementById(id);
 const refs = {
   uploadCard: byId('pdf-upload-card'),
   fileInput: byId('pdf-file-input'),
+  samplePdf: byId('pdf-editor-sample-button'),
   uploadStatus: byId('pdf-load-status'),
   uploadError: byId('pdf-upload-error'),
   workspace: byId('pdf-editor-workspace'),
@@ -53,7 +56,6 @@ const refs = {
   applyObjectProperties: byId('apply-object-properties-button'),
   duplicateObject: byId('duplicate-object-button'),
   deleteObject: byId('delete-object-button'),
-  highlightSelected: byId('highlight-selected-button'),
   imageInput: byId('image-file-input'),
   shapeType: byId('shape-type-select'),
   signatureDialog: byId('pdf-signature-dialog'),
@@ -93,6 +95,13 @@ const refs = {
   passwordInput: byId('pdf-password-input'),
   passwordError: byId('pdf-password-error'),
   passwordCancel: byId('cancel-password-button'),
+  fontReplacementDialog: byId('pdf-font-replacement-dialog'),
+  fontReplacementForm: byId('pdf-font-replacement-form'),
+  fontReplacementMessage: byId('pdf-font-replacement-message'),
+  fontReplacementSelect: byId('pdf-font-replacement-select'),
+  fontReplacementRemember: byId('pdf-font-replacement-remember'),
+  fontReplacementError: byId('pdf-font-replacement-error'),
+  fontReplacementCancel: byId('pdf-font-replacement-cancel'),
   pagesDrawer: byId('pages-drawer-button'),
   rotatePage: byId('rotate-page-button'),
   movePageUp: byId('move-page-up-button'),
@@ -101,10 +110,24 @@ const refs = {
   insertBlankPage: byId('insert-blank-page-button'),
   deletePage: byId('delete-page-button'),
   propertiesDrawer: byId('properties-drawer-button'),
-  closeProperties: byId('close-properties-button')
+  closeProperties: byId('close-properties-button'),
+  textContextToolbar: byId('pdf-text-context-toolbar'),
+  textContextAdvanced: byId('pdf-text-context-advanced'),
+  contextFontFamily: byId('context-font-family-input'),
+  contextFontSize: byId('context-font-size-input'),
+  contextBold: byId('context-bold-button'),
+  contextItalic: byId('context-italic-button'),
+  contextColor: byId('context-text-color-input'),
+  contextMore: byId('context-more-button'),
+  contextFontStatus: byId('context-font-status'),
+  contextRotation: byId('context-text-rotation-input'),
+  contextLetterSpacing: byId('context-letter-spacing-input'),
+  contextOpacity: byId('context-opacity-input'),
+  contextAlignment: byId('context-alignment-input')
 };
 
 let renderer = null;
+let inlineTextEditor = null;
 let thumbnailObserver = null;
 let currentFindMatches = [];
 let currentFindIndex = -1;
@@ -119,9 +142,120 @@ let passwordWasCancelled = false;
 let loading = false;
 let rendererLayoutRevision = -1;
 let pageJumpTimer = 0;
+const fontReplacementPreferences = new Map();
+let pendingFontReplacement = null;
+
+function trackEditorEvent(name) {
+  const analytics = window.OnlinePDFPro && window.OnlinePDFPro.Analytics;
+  if (analytics && typeof analytics.track === 'function') analytics.track(name, { tool_name: 'pdf_editor' });
+  else if (typeof window.gtag === 'function') window.gtag('event', name, { tool_name: 'pdf_editor' });
+}
 
 function isTextObject(object) {
   return Boolean(object && ['text', 'new-text', 'ocr-text'].includes(object.type));
+}
+
+function fontPreferenceKey(object) {
+  const descriptor = object && object.fontDescriptor;
+  return String((descriptor && descriptor.rawPdfFontName) || (descriptor && descriptor.detectedFamily) || object.detectedFontFamily || object.fontFamily || 'default');
+}
+
+function makeFontCandidate(object, family, bold = object.bold, italic = object.italic) {
+  const descriptor = descriptorForFamily(family, { bold: Boolean(bold), italic: Boolean(italic) });
+  return {
+    ...object,
+    fontDescriptor: descriptor,
+    detectedFontFamily: descriptor.detectedFamily,
+    fontFamily: descriptor.previewFont.family,
+    fontQuality: descriptor.matchQuality,
+    fontRestyled: true,
+    bold: Boolean(bold),
+    italic: Boolean(italic)
+  };
+}
+
+function suggestedReplacementFamily(object, text) {
+  if (/[\u0900-\u097F]/.test(String(text || ''))) return 'Noto Sans Devanagari';
+  const family = String((object.fontDescriptor && object.fontDescriptor.detectedFamily) || object.detectedFontFamily || '').toLowerCase();
+  if (family.includes('calibri')) return 'Carlito';
+  if (family.includes('cambria') || family.includes('times')) return 'Caladea';
+  return 'Arimo';
+}
+
+async function requestFontReplacement(object, draft, initialCoverage) {
+  const key = fontPreferenceKey(object);
+  const remembered = fontReplacementPreferences.get(key);
+  if (remembered) {
+    const candidate = makeFontCandidate(object, remembered);
+    const coverage = await checkGlyphCoverage(candidate, draft);
+    if (coverage.supported) return descriptorForFamily(remembered, { bold: object.bold, italic: object.italic });
+    fontReplacementPreferences.delete(key);
+  }
+
+  if (pendingFontReplacement) {
+    pendingFontReplacement.resolve(null);
+    pendingFontReplacement = null;
+  }
+  const glyphs = formatUnsupportedGlyphs(initialCoverage.unsupported);
+  const sourceFamily = (object.fontDescriptor && object.fontDescriptor.detectedFamily) || object.detectedFontFamily || object.fontFamily || 'current font';
+  refs.fontReplacementMessage.textContent = sourceFamily + ' does not contain ' + (glyphs || 'one or more characters') + '. Choose a local font that supports the new text.';
+  refs.fontReplacementSelect.value = suggestedReplacementFamily(object, draft);
+  refs.fontReplacementRemember.checked = false;
+  refs.fontReplacementError.hidden = true;
+  refs.fontReplacementError.textContent = '';
+  if (!refs.fontReplacementDialog.open) {
+    refs.fontReplacementDialog.showModal();
+    trackEditorEvent('font_replacement_shown');
+  }
+
+  return new Promise((resolve) => {
+    pendingFontReplacement = { resolve, object, draft, key };
+  });
+}
+
+async function ensureEditFontCoverage(object, draft, { family = null, bold = object.bold, italic = object.italic } = {}) {
+  const candidate = family ? makeFontCandidate(object, family, bold, italic) : { ...object, bold: Boolean(bold), italic: Boolean(italic) };
+  const coverage = await checkGlyphCoverage(candidate, draft);
+  if (coverage.supported) return { cancelled: false, descriptor: family ? candidate.fontDescriptor : null };
+  const replacement = await requestFontReplacement(candidate, draft, coverage);
+  return replacement
+    ? { cancelled: false, descriptor: replacement }
+    : { cancelled: true, descriptor: null };
+}
+
+async function submitFontReplacement(event) {
+  event.preventDefault();
+  if (!pendingFontReplacement) return;
+  const family = refs.fontReplacementSelect.value;
+  const candidate = makeFontCandidate(pendingFontReplacement.object, family);
+  refs.fontReplacementError.hidden = true;
+  try {
+    const coverage = await checkGlyphCoverage(candidate, pendingFontReplacement.draft);
+    if (!coverage.supported) {
+      refs.fontReplacementError.textContent = family + ' still does not contain: ' + formatUnsupportedGlyphs(coverage.unsupported);
+      refs.fontReplacementError.hidden = false;
+      return;
+    }
+    if (refs.fontReplacementRemember.checked) fontReplacementPreferences.set(pendingFontReplacement.key, family);
+    const resolve = pendingFontReplacement.resolve;
+    pendingFontReplacement = null;
+    refs.fontReplacementDialog.close();
+    resolve(candidate.fontDescriptor);
+  } catch (error) {
+    refs.fontReplacementError.textContent = error.message || 'This replacement font could not be checked.';
+    refs.fontReplacementError.hidden = false;
+  }
+}
+
+function cancelFontReplacement() {
+  if (!pendingFontReplacement) {
+    if (refs.fontReplacementDialog.open) refs.fontReplacementDialog.close();
+    return;
+  }
+  const resolve = pendingFontReplacement.resolve;
+  pendingFontReplacement = null;
+  if (refs.fontReplacementDialog.open) refs.fontReplacementDialog.close();
+  resolve(null);
 }
 
 if (window.pdfjsLib && window.pdfjsLib.GlobalWorkerOptions) {
@@ -241,11 +375,93 @@ function closePropertiesPanel() {
   refs.propertiesDrawer.setAttribute('aria-expanded', 'false');
 }
 
+function ensureSelectValue(select, value, suffix = '') {
+  if (!select || !value) return;
+  let option = Array.from(select.options).find((entry) => entry.value === value);
+  if (!option) {
+    option = document.createElement('option');
+    option.value = value;
+    option.textContent = value + suffix;
+    select.add(option);
+  }
+  select.value = value;
+}
+
+function syncContextToolbar(object) {
+  if (!isTextObject(object)) {
+    refs.textContextToolbar.hidden = true;
+    refs.textContextAdvanced.hidden = true;
+    refs.contextMore.setAttribute('aria-expanded', 'false');
+    return;
+  }
+  const descriptor = object.fontDescriptor || {};
+  const detectedFamily = descriptor.detectedFamily || object.detectedFontFamily || object.fontFamily || 'Arimo';
+  refs.textContextToolbar.hidden = false;
+  ensureSelectValue(refs.contextFontFamily, detectedFamily, ' (detected)');
+  refs.contextFontSize.value = String(Math.round(Number(object.fontSize || 12) * 100) / 100);
+  refs.contextBold.setAttribute('aria-pressed', String(Boolean(object.bold)));
+  refs.contextItalic.setAttribute('aria-pressed', String(Boolean(object.italic)));
+  refs.contextColor.value = /^#[0-9a-f]{6}$/i.test(object.colorHex || '') ? object.colorHex : '#1f1f1f';
+  refs.contextRotation.value = String(Math.round(Number(object.rotation || 0) * 100) / 100);
+  refs.contextLetterSpacing.value = String(Number(object.letterSpacing || 0));
+  refs.contextOpacity.value = String(Number(object.opacity ?? 1));
+  refs.contextAlignment.value = object.alignment || 'left';
+  if (descriptor.matchQuality === 'fallback') {
+    refs.contextFontStatus.textContent = 'Using ' + (descriptor.previewFont && descriptor.previewFont.family ? descriptor.previewFont.family : object.fontFamily) + ' fallback';
+  } else if (object.modified && object.replacementMode === 'visual-overlay-fallback' && object.background && object.background.complex) {
+    refs.contextFontStatus.textContent = 'Complex background: this edit may require an overlay';
+  } else {
+    refs.contextFontStatus.textContent = '';
+  }
+}
+
+async function applyContextTextChange(values) {
+  const object = getTextObject(editorState.selectedObjectId);
+  if (!isTextObject(object) || editorState.busy) return;
+  const requestedFamily = typeof values.fontFamily === 'string' ? values.fontFamily : null;
+  let fontResult;
+  try {
+    fontResult = await ensureEditFontCoverage(object, object.text, {
+      family: requestedFamily,
+      bold: typeof values.bold === 'boolean' ? values.bold : object.bold,
+      italic: typeof values.italic === 'boolean' ? values.italic : object.italic
+    });
+  } catch (error) {
+    showExportNotice(error.message || 'The selected font could not be checked.', true);
+    syncContextToolbar(object);
+    return;
+  }
+  if (fontResult.cancelled) {
+    syncContextToolbar(object);
+    return;
+  }
+  const nextValues = { ...values };
+  delete nextValues.fontFamily;
+  if (fontResult.descriptor) nextValues.fontDescriptor = fontResult.descriptor;
+  rememberObjectsForHistory([object]);
+  if (applyTextProperties(object, nextValues)) {
+    recordHistory();
+    renderer && renderer.refreshTextLayers();
+    selectTextObject(object.id);
+    updateDirtyUi();
+  } else {
+    syncContextToolbar(object);
+  }
+}
+
+function toggleContextAdvanced(force) {
+  const show = typeof force === 'boolean' ? force : refs.textContextAdvanced.hidden;
+  refs.textContextAdvanced.hidden = !show;
+  refs.contextMore.setAttribute('aria-expanded', String(show));
+}
+
 function selectTextObject(id) {
   const object = getTextObject(id);
   if (!object) return;
+  const previousSelectedId = editorState.selectedObjectId;
   editorState.selectedObjectId = id;
   if (!isTextObject(object)) {
+    syncContextToolbar(null);
     refs.selectionEmpty.hidden = true;
     refs.propertiesForm.hidden = true;
     refs.objectProperties.hidden = false;
@@ -278,7 +494,7 @@ function selectTextObject(id) {
   }
 
   refs.selectionEmpty.hidden = true;
-  refs.propertiesForm.hidden = false;
+  refs.propertiesForm.hidden = true;
   refs.textValue.value = object.text;
   refs.originalText.textContent = object.ocrAssisted
     ? 'OCR-assisted editing · confidence ' + Math.round(object.ocrConfidence || 0) + '% · font and position are approximate.'
@@ -312,24 +528,102 @@ function selectTextObject(id) {
     : 'Original text color is estimated; verify this color in the page preview.';
   refs.backgroundWarning.hidden = !(object.background && object.background.complex);
   refs.applyText.textContent = object.modified ? 'Update change' : 'Apply change';
-  openPropertiesPanel();
+  syncContextToolbar(object);
+  closePropertiesPanel();
   if (renderer) renderer.setSelectedText(id);
+  if (object.type === 'text' && previousSelectedId !== id) trackEditorEvent('existing_text_selected');
 }
 
 function beginInlineTextEdit(id) {
   selectTextObject(id);
-  refs.textValue.focus();
-  refs.textValue.select();
+  const object = getTextObject(id);
+  if (!object || !renderer) return;
+  const layer = renderer.getTextLayer(object.page);
+  const viewport = renderer.getPageViewport(object.page);
+  if (!layer || !viewport) return;
+  if (!inlineTextEditor) {
+    inlineTextEditor = new InlineTextEditor({
+      getObject: getTextObject,
+      onDraftChange: (_object, draft) => {
+        refs.textValue.value = draft;
+      },
+      onCommit: async ({ objectId, draft }) => {
+        const current = getTextObject(objectId);
+        if (!current || editorState.busy) return;
+        let fontResult;
+        try {
+          fontResult = await ensureEditFontCoverage(current, draft);
+        } catch (error) {
+          showExportNotice(error.message || 'The selected font could not be checked.', true);
+          renderer && renderer.refreshTextLayers();
+          selectTextObject(current.id);
+          return;
+        }
+        if (fontResult.cancelled) {
+          refs.textValue.value = current.text;
+          renderer && renderer.refreshTextLayers();
+          selectTextObject(current.id);
+          return;
+        }
+        rememberObjectsForHistory([current]);
+        const values = { text: draft };
+        if (fontResult.descriptor) values.fontDescriptor = fontResult.descriptor;
+        if (applyTextProperties(current, values)) {
+          recordHistory();
+          refs.textValue.value = current.text;
+          renderer && renderer.refreshTextLayers();
+          selectTextObject(current.id);
+          updateDirtyUi();
+        } else {
+          renderer && renderer.refreshTextLayers();
+        }
+      },
+      onCancel: ({ objectId }) => {
+        const current = getTextObject(objectId);
+        if (current) refs.textValue.value = current.text;
+        renderer && renderer.refreshTextLayers();
+        if (current) selectTextObject(current.id);
+      }
+    });
+  }
+  if (inlineTextEditor.start(object, layer, viewport)) trackEditorEvent('inline_edit_started');
 }
 
-function commitSelectedText(event) {
+async function createSamplePdfFile() {
+  const PDFLib = window.PDFLib;
+  if (!PDFLib) throw new Error('The local PDF library is still loading. Try again in a moment.');
+  const pdfDocument = await PDFLib.PDFDocument.create();
+  const page = pdfDocument.addPage([612, 792]);
+  const regular = await pdfDocument.embedFont(PDFLib.StandardFonts.Helvetica);
+  const bold = await pdfDocument.embedFont(PDFLib.StandardFonts.HelveticaBold);
+  page.drawText('OnlinePDFPro editable sample', { x: 72, y: 710, size: 24, font: bold, color: PDFLib.rgb(0.12, 0.12, 0.12) });
+  page.drawText('Invoice Number:', { x: 72, y: 650, size: 18, font: regular, color: PDFLib.rgb(0.12, 0.12, 0.12) });
+  page.drawText('1234', { x: 215, y: 650, size: 18, font: bold, color: PDFLib.rgb(0.08, 0.08, 0.08) });
+  page.drawText('Double-click existing text to edit it directly on the page.', { x: 72, y: 610, size: 12, font: regular, color: PDFLib.rgb(0.28, 0.28, 0.28) });
+  const bytes = await pdfDocument.save({ useObjectStreams: false });
+  return new File([bytes], 'onlinepdfpro-sample.pdf', { type: 'application/pdf' });
+}
+
+async function commitSelectedText(event) {
   if (event) event.preventDefault();
   const object = getTextObject(editorState.selectedObjectId);
   if (!object || editorState.busy) return;
+  const requestedFamily = refs.fontFamily.value && refs.fontFamily.value !== object.fontFamily ? refs.fontFamily.value : null;
+  let fontResult;
+  try {
+    fontResult = await ensureEditFontCoverage(object, refs.textValue.value, {
+      family: requestedFamily,
+      bold: refs.bold.checked,
+      italic: refs.italic.checked
+    });
+  } catch (error) {
+    showExportNotice(error.message || 'The selected font could not be checked.', true);
+    return;
+  }
+  if (fontResult.cancelled) return;
   rememberObjectsForHistory([object]);
-  const changed = applyTextProperties(object, {
+  const values = {
     text: refs.textValue.value,
-    fontFamily: refs.fontFamily.value,
     fontSize: Number(refs.fontSize.value),
     colorHex: refs.textColor.value,
     rotation: Number(refs.textRotation.value),
@@ -338,7 +632,9 @@ function commitSelectedText(event) {
     opacity: Number(refs.textOpacity.value),
     bold: refs.bold.checked,
     italic: refs.italic.checked
-  });
+  };
+  if (fontResult.descriptor) values.fontDescriptor = fontResult.descriptor;
+  const changed = applyTextProperties(object, values);
   if (changed) {
     recordHistory();
     refs.applyText.textContent = 'Update change';
@@ -676,7 +972,15 @@ function createPageRenderer() {
   return new PageRenderer({
     container: refs.pagesContainer,
     scrollRoot: refs.pageScroll,
-    onPageReady: updatePageTextStatus,
+    onPageReady: (pageNumber, objects, canvas) => {
+      updatePageTextStatus(pageNumber, objects, canvas);
+      if (inlineTextEditor && inlineTextEditor.active) {
+        const active = getTextObject(inlineTextEditor.activeObjectId);
+        if (active && active.page === pageNumber) {
+          inlineTextEditor.reattach(renderer.getTextLayer(pageNumber), renderer.getPageViewport(pageNumber));
+        }
+      }
+    },
     onPageChange: updatePageIndicators,
     onSelectText: selectTextObject,
     onDoubleClickText: beginInlineTextEdit,
@@ -696,7 +1000,7 @@ function rebuildPageView(pageNumber = editorState.currentPage) {
   renderer.createPageShells();
   createThumbnails();
   rendererLayoutRevision = editorState.pageLayoutRevision;
-  renderer.goToPage(pageNumber);
+  renderer.goToPage(pageNumber, { behavior: 'instant' });
   updatePageIndicators(pageNumber);
 }
 
@@ -713,7 +1017,6 @@ function startTextDrag(event, id) {
   const object = getTextObject(id);
   const pageState = object && editorState.pages[object.page - 1];
   if (!object || !pageState || !pageState.viewport || event.button !== 0) return;
-  event.preventDefault();
   rememberObjectsForHistory([object]);
   const layer = event.currentTarget.closest('.pdf-text-layer');
   const rect = layer.getBoundingClientRect();
@@ -846,7 +1149,7 @@ function scheduleFind() {
   findTimer = window.setTimeout(runFind, 320);
 }
 
-function replaceAllMatches() {
+async function replaceAllMatches() {
   if (!currentFindMatches.length || editorState.busy) return;
   const needle = refs.findText.value;
   const replacement = refs.replaceText.value;
@@ -854,16 +1157,34 @@ function replaceAllMatches() {
   const uniqueObjects = Array.from(new Set(currentFindMatches.map((match) => match.objectId)))
     .map((id) => getTextObject(id))
     .filter(Boolean);
-  rememberObjectsForHistory(uniqueObjects);
   const expression = new RegExp(escapeRegExp(needle), 'gi');
+  const pending = [];
   let replaced = 0;
-  uniqueObjects.forEach((object) => {
+  for (const object of uniqueObjects) {
     const matches = object.text.match(expression);
-    if (!matches) return;
+    if (!matches) continue;
+    const nextText = object.text.replace(expression, replacement);
+    let fontResult;
+    try {
+      fontResult = await ensureEditFontCoverage(object, nextText);
+    } catch (error) {
+      refs.findStatus.textContent = error.message || 'A replacement font could not be checked.';
+      return;
+    }
+    if (fontResult.cancelled) {
+      refs.findStatus.textContent = 'Replace all was cancelled before changing the PDF.';
+      return;
+    }
     replaced += matches.length;
-    applyTextProperties(object, { text: object.text.replace(expression, replacement) });
-  });
+    pending.push({ object, nextText, descriptor: fontResult.descriptor });
+  }
   if (replaced) {
+    rememberObjectsForHistory(pending.map((entry) => entry.object));
+    pending.forEach(({ object, nextText, descriptor }) => {
+      const values = { text: nextText };
+      if (descriptor) values.fontDescriptor = descriptor;
+      applyTextProperties(object, values);
+    });
     recordHistory();
     renderer.refreshTextLayers();
     if (editorState.selectedObjectId) selectTextObject(editorState.selectedObjectId);
@@ -1042,6 +1363,12 @@ function askForPassword(reason) {
 }
 
 async function clearCurrentDocument() {
+  fontReplacementPreferences.clear();
+  cancelFontReplacement();
+  if (inlineTextEditor) {
+    inlineTextEditor.destroy();
+    inlineTextEditor = null;
+  }
   if (renderer) {
     renderer.destroy();
     renderer = null;
@@ -1113,6 +1440,7 @@ async function loadFile(file) {
     refs.stageStatus.hidden = false;
     resetHistory();
     updateDirtyUi();
+    trackEditorEvent('editor_open_success');
     if (loaded.pdfDocument.numPages > 120 || file.size > 50 * 1024 * 1024) {
       refs.stageStatus.textContent = 'Large PDF — pages render as you scroll to keep memory use lower.';
     }
@@ -1159,7 +1487,9 @@ async function exportPdf() {
       refs.exportNotice.textContent = 'Your edited PDF was downloaded and passed a local integrity check.';
       refs.exportNotice.hidden = false;
     }
+    trackEditorEvent('export_success');
   } catch (error) {
+    trackEditorEvent('export_failure');
     refs.exportNotice.textContent = (error && error.message) || 'The PDF could not be exported.';
     refs.exportNotice.hidden = false;
   } finally {
@@ -1208,6 +1538,10 @@ function onKeyDown(event) {
     return;
   }
   if (event.key === 'Escape') {
+    if (inlineTextEditor && inlineTextEditor.active) {
+      inlineTextEditor.cancel('escape');
+      return;
+    }
     editorState.selectedObjectId = null;
     refs.selectionEmpty.hidden = false;
     refs.propertiesForm.hidden = true;
@@ -1250,6 +1584,15 @@ function onKeyDown(event) {
 }
 
 refs.fileInput.addEventListener('change', (event) => loadFile(event.target.files && event.target.files[0]));
+refs.samplePdf.addEventListener('click', async () => {
+  if (loading) return;
+  try {
+    setUploadStatus('Preparing sample PDF locally…');
+    await loadFile(await createSamplePdfFile());
+  } catch (error) {
+    showUploadError((error && error.message) || 'The sample PDF could not be created.');
+  }
+});
 refs.uploadCard.addEventListener('dragover', (event) => {
   event.preventDefault();
   refs.uploadCard.classList.add('is-dragging');
@@ -1306,9 +1649,24 @@ refs.redoButton.addEventListener('click', () => {
 });
 refs.propertiesForm.addEventListener('submit', commitSelectedText);
 refs.objectProperties.addEventListener('submit', commitObjectProperties);
+refs.contextFontFamily.addEventListener('change', () => applyContextTextChange({ fontFamily: refs.contextFontFamily.value }));
+refs.contextFontSize.addEventListener('change', () => applyContextTextChange({ fontSize: Number(refs.contextFontSize.value) }));
+refs.contextBold.addEventListener('click', () => {
+  const object = getTextObject(editorState.selectedObjectId);
+  if (isTextObject(object)) applyContextTextChange({ bold: !object.bold });
+});
+refs.contextItalic.addEventListener('click', () => {
+  const object = getTextObject(editorState.selectedObjectId);
+  if (isTextObject(object)) applyContextTextChange({ italic: !object.italic });
+});
+refs.contextColor.addEventListener('change', () => applyContextTextChange({ colorHex: refs.contextColor.value }));
+refs.contextMore.addEventListener('click', () => toggleContextAdvanced());
+refs.contextRotation.addEventListener('change', () => applyContextTextChange({ rotation: Number(refs.contextRotation.value) }));
+refs.contextLetterSpacing.addEventListener('change', () => applyContextTextChange({ letterSpacing: Number(refs.contextLetterSpacing.value) }));
+refs.contextOpacity.addEventListener('change', () => applyContextTextChange({ opacity: Number(refs.contextOpacity.value) }));
+refs.contextAlignment.addEventListener('change', () => applyContextTextChange({ alignment: refs.contextAlignment.value }));
 refs.deleteObject.addEventListener('click', deleteSelectedObject);
 refs.duplicateObject.addEventListener('click', duplicateSelectedObject);
-refs.highlightSelected.addEventListener('click', highlightSelectedText);
 refs.runOcr.addEventListener('click', runOcrOnCurrentPage);
 refs.textColor.addEventListener('input', () => { refs.textColorValue.textContent = refs.textColor.value.toUpperCase(); });
 byId('mode-select-button').addEventListener('click', () => setMode('select'));
@@ -1397,6 +1755,11 @@ refs.pagesDrawer.addEventListener('click', () => {
   refs.pagesDrawer.setAttribute('aria-expanded', String(open));
 });
 refs.propertiesDrawer.addEventListener('click', () => {
+  const object = getTextObject(editorState.selectedObjectId);
+  if (isTextObject(object)) {
+    toggleContextAdvanced();
+    return;
+  }
   if (refs.propertiesPanel.classList.contains('is-open')) closePropertiesPanel();
   else openPropertiesPanel();
 });
@@ -1404,6 +1767,12 @@ refs.closeProperties.addEventListener('click', closePropertiesPanel);
 refs.passwordForm.addEventListener('submit', (event) => event.preventDefault());
 refs.passwordCancel.addEventListener('click', () => {
   if (refs.passwordDialog.open) refs.passwordDialog.close();
+});
+refs.fontReplacementForm.addEventListener('submit', submitFontReplacement);
+refs.fontReplacementCancel.addEventListener('click', cancelFontReplacement);
+refs.fontReplacementDialog.addEventListener('cancel', (event) => {
+  event.preventDefault();
+  cancelFontReplacement();
 });
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('resize', () => {

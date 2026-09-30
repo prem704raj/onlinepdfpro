@@ -1,5 +1,6 @@
 import { editorState, getPageState } from './state.js';
 import { extractTextForPage } from './text-extractor.js';
+import { getPreviewFontFamily } from './font-resolver.js';
 
 function createBlankViewport(metadata, scale) {
   const baseWidth = metadata.baseWidth || metadata.width;
@@ -100,35 +101,48 @@ function makeTextButton(object, box, selectedId, onSelect, onDoubleClick, onDrag
 }
 
 function makePreview(object, viewport) {
-  const preview = document.createElement('div');
-  preview.className = 'pdf-text-preview';
-  const x = object.originalX;
-  const y = object.originalY;
-  const originalState = {
-    ...object,
-    x,
-    y,
-    rotation: object.originalRotation
-  };
-  const cover = getTextScreenBox(originalState, viewport);
-  preview.style.left = cover.left + 'px';
-  preview.style.top = cover.top + 'px';
-  preview.style.width = Math.max(cover.width, object.fontSize * 0.4) + 'px';
-  preview.style.height = cover.height + 'px';
-  preview.style.transform = 'rotate(' + cover.angle + 'deg)';
-  preview.style.backgroundColor = ['text', 'ocr-text'].includes(object.type) && object.background && object.background.hex ? object.background.hex : 'transparent';
-  preview.style.color = object.colorHex || '#1F1F1F';
-  preview.style.fontFamily = '"' + String(object.fontFamily || 'Helvetica').replace(/["\\]/g, '') + '", Arial, sans-serif';
-  preview.style.fontSize = cover.fontSize + 'px';
-  preview.style.fontWeight = object.bold ? '700' : '400';
-  preview.style.fontStyle = object.italic ? 'italic' : 'normal';
-  preview.style.opacity = String(Number(object.opacity ?? 1));
-  preview.style.textAlign = object.alignment || 'left';
-  preview.style.letterSpacing = (Number(object.letterSpacing || 0) * viewport.scale) + 'px';
-  preview.style.lineHeight = cover.height + 'px';
-  preview.style.whiteSpace = 'pre';
-  preview.textContent = object.text;
-  return preview;
+  const fragment = document.createDocumentFragment();
+  if (object.type !== 'new-text') {
+    const originalState = {
+      ...object,
+      x: object.originalX,
+      y: object.originalY,
+      width: object.originalWidth || object.width,
+      height: object.originalHeight || object.height,
+      rotation: object.originalRotation
+    };
+    const cover = getTextScreenBox(originalState, viewport);
+    const mask = document.createElement('div');
+    mask.className = 'pdf-text-preview-mask';
+    mask.style.left = cover.left + 'px';
+    mask.style.top = cover.top + 'px';
+    mask.style.width = Math.max(cover.width, cover.fontSize * 0.35) + 'px';
+    mask.style.height = cover.height + 'px';
+    mask.style.transform = 'rotate(' + cover.angle + 'deg)';
+    mask.style.backgroundColor = object.background && object.background.hex ? object.background.hex : '#FFFFFF';
+    fragment.appendChild(mask);
+  }
+
+  const glyphBox = getTextScreenBox(object, viewport);
+  const glyph = document.createElement('div');
+  glyph.className = 'pdf-text-preview-glyph';
+  glyph.style.left = glyphBox.left + 'px';
+  glyph.style.top = glyphBox.top + 'px';
+  glyph.style.minWidth = Math.max(glyphBox.width, object.fontSize * 0.35) + 'px';
+  glyph.style.height = glyphBox.height + 'px';
+  glyph.style.transform = 'rotate(' + glyphBox.angle + 'deg)';
+  glyph.style.color = object.colorHex || '#1F1F1F';
+  glyph.style.fontFamily = '"' + String(getPreviewFontFamily(object)).replace(/["\\]/g, '') + '", sans-serif';
+  glyph.style.fontSize = glyphBox.fontSize + 'px';
+  glyph.style.fontWeight = object.bold ? '700' : '400';
+  glyph.style.fontStyle = object.italic ? 'italic' : 'normal';
+  glyph.style.opacity = String(Number(object.opacity ?? 1));
+  glyph.style.textAlign = object.alignment || 'left';
+  glyph.style.letterSpacing = (Number(object.letterSpacing || 0) * viewport.scale) + 'px';
+  glyph.style.lineHeight = glyphBox.height + 'px';
+  glyph.textContent = object.text;
+  fragment.appendChild(glyph);
+  return fragment;
 }
 
 function viewportBox(object, viewport) {
@@ -473,14 +487,14 @@ export class PageRenderer {
     this.observePages();
   }
 
-  goToPage(pageNumber) {
+  goToPage(pageNumber, { behavior = 'smooth' } = {}) {
     const clamped = Math.max(1, Math.min(editorState.pageCount, pageNumber));
     const entry = this.shells.get(clamped);
     if (!entry) return;
     const jumpDistance = Math.abs(clamped - editorState.currentPage);
     editorState.currentPage = clamped;
     this.releaseDistantPages();
-    if (jumpDistance > 2) {
+    if (behavior === 'instant' || jumpDistance > 2) {
       const rootRect = this.scrollRoot.getBoundingClientRect();
       const shellRect = entry.shell.getBoundingClientRect();
       const previousBehavior = this.scrollRoot.style.scrollBehavior;
@@ -497,6 +511,16 @@ export class PageRenderer {
   getPageCanvas(pageNumber) {
     const entry = this.shells.get(pageNumber);
     return entry ? entry.canvas : null;
+  }
+
+  getTextLayer(pageNumber) {
+    const entry = this.shells.get(pageNumber);
+    return entry ? entry.textLayer : null;
+  }
+
+  getPageViewport(pageNumber) {
+    const metadata = getPageState(pageNumber);
+    return metadata ? metadata.viewport : null;
   }
 
   destroy() {

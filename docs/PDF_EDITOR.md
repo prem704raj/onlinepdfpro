@@ -2,24 +2,50 @@
 
 ## Route and site integration
 
-`/tools/pdf-editor.html` is generated from `src/tools/pdf-editor.njk`. It uses the site's base layout, navigation, theme controls, CSS variables, and shared tool discovery data. `src/_data/tools.js` supplies the featured PDF Editor registry entry.
+`/tools/pdf-editor.html` is generated from `src/tools/pdf-editor.njk`. It uses the site's base layout, navigation, theme controls, CSS variables, and shared tool discovery data. `src/_data/tools.js` supplies the featured PDF Editor registry entry. `/tools/pdf-editor` and `/tools/pdf-editor/` permanently redirect to the `.html` canonical route. The upload screen also provides a locally generated sample PDF so visitors can try existing-text editing without choosing a file.
 
-The editor is implemented as small vanilla JavaScript modules in `src/js/pdf-editor/`. PDF.js, its worker, pdf-lib, fontkit, Tesseract.js, and the Devanagari fallback font are local site assets. The selected PDF, extracted text, OCR results, and edit state remain in browser memory. This editor does not upload a document or send its text, filename, or metadata to a service.
+The editor is implemented as small vanilla JavaScript modules in `src/js/pdf-editor/`. PDF.js, its worker, pdf-lib, fontkit, Tesseract.js, and local fallback fonts are site assets. Fontkit (plus its regenerator runtime) is loaded only when custom-font work requires it, and Tesseract is loaded only for OCR. The selected PDF, extracted text, OCR results, and edit state remain in browser memory. This editor does not upload a document or send its text, filename, or metadata to a service. Analytics events contain only product event names and `tool_name: pdf_editor`.
+
+## Existing-text editing pipeline and invariants
+
+The source PDF is rendered by PDF.js. `text-extractor.js` turns `getTextContent()` items into editor objects and stores the source transform, baseline, rotation, dimensions, and immutable source geometry (`originalX`, `originalY`, `originalWidth`, `originalHeight`). Screen placement is always derived from that document-space data through the active PDF.js viewport. Internal zoom may change viewport pixels, but it must never rewrite the source geometry used for export.
+
+Existing-text edits have three distinct representations:
+
+- **Source geometry** is the immutable position and size of the original PDF text run. It is used to locate the original operation and, for overlay fallback, the area that must be hidden.
+- **Edited geometry** is the current text width/height after typing or restyling. Longer replacement text may grow this geometry without changing the source geometry.
+- **Viewport geometry** is derived at render time from source/edited document coordinates and the active zoom. It is disposable display state.
+
+The previous implementation blurred these layers in several places. `page-renderer.js` rendered the replacement background and replacement glyphs inside one DOM node, so setting text opacity also made the mask translucent and exposed the original glyphs. `text-editor.js` expanded `object.width` for replacement text while `page-renderer.js` positioned the replacement from the original location, which made it unclear whether a width described source content or reflowed display content. `font-resolver.js` could display families such as Arial, Calibri, Roboto, Montserrat, or Cambria while `exporter.js` silently wrote Helvetica or Times, so preview and export did not share one font choice. `editor.js` called the sidebar textarea an inline editor even though page-level editing did not exist. `exporter.js` always painted a cover rectangle and then drew new text, leaving the original text operator in the PDF content stream.
+
+The repaired pipeline treats editing mode as explicit state on each existing-text object:
+
+- `true-text-replacement` means the exporter can identify and replace a bounded, supported source text operator safely.
+- `visual-overlay-fallback` means the source operator is preserved and the editor uses an opaque mask plus replacement text. This is a visual edit and may leave old text extractable.
+- `OCR-overlay` means the source page is image based and OCR created an editable overlay rather than original PDF text.
+
+Preview masking and preview glyph rendering are separate layers. A fallback mask stays fully opaque; text opacity affects replacement glyphs only. Complex backgrounds are classified instead of averaged into a misleading flat color. A contextual warning is shown only when an edit actually needs the visual-overlay fallback on a non-uniform background.
+
+Font resolution also has one source of truth. Each text object owns a font descriptor containing the raw PDF name, normalized family, style, subset/embedded hints, preview font, export font, match quality, glyph coverage information when available, and a fallback reason. The browser preview and exported PDF should use the same chosen bytes whenever a bundled/custom font is selected. If newly typed characters are not encodable by the active font, the edit must stop at the font-replacement workflow instead of silently dropping or substituting glyphs.
 
 ## Modules
 
 - `state.js` owns the PDF bytes and handles, page layout, document-space objects, selection, mode, zoom, dirty state, and page-layout change tracking.
 - `pdf-loader.js` checks the PDF header and opens files with the local PDF.js worker. Password prompts stay in the page.
 - `text-extractor.js` reads PDF.js text items and style/color hints. It creates word-level hit targets while retaining their source transforms and baselines.
-- `font-resolver.js` normalizes PDF and subset font names and maps recognized families to the closest available standard face.
+- `font-resolver.js` normalizes PDF and subset font names and produces one preview/export descriptor, including bundled metric-compatible substitutions where needed.
+- `font-runtime.js` lazy-loads local font bytes, Fontkit, and glyph-coverage checks.
+- `vendor-loader.js` lazy-loads Fontkit, its regenerator runtime, and Tesseract when the relevant workflow needs them.
 - `color-extractor.js` associates supported PDF fill-color operators with text, samples page pixels, and labels uncertain colors as estimated.
-- `page-renderer.js` builds the lazy page canvas, thumbnails, selectable text layer, object previews, and blank-page viewport.
+- `page-renderer.js` builds the lazy page canvas, thumbnails, selectable text layer, independent mask/glyph previews, and blank-page viewport.
+- `inline-text-editor.js` mounts the page-level contenteditable editor with caret, Enter/blur commit, and Escape cancel behavior.
+- `content-stream-replacer.js` performs bounded source-stream replacement for supported standard-font text runs and declines unsafe cases.
 - `text-editor.js` updates text and object properties in PDF page coordinates.
 - `object-editor.js` creates editable text, image, drawing, highlight, shape, whiteout, and copied objects.
 - `page-manager.js` rotates, reorders, duplicates, deletes, and inserts pages while keeping page identity and associated edits together.
 - `history.js` holds bounded undo/redo snapshots for objects and page layout.
 - `ocr-editor.js` runs the bundled English OCR engine locally and creates approximate OCR word objects.
-- `exporter.js` covers changed source text with a sampled-color overlay, draws searchable replacement text and vector overlays with pdf-lib, and validates the saved file locally with both PDF libraries.
+- `exporter.js` attempts true text replacement first, falls back to an opaque sampled-color overlay plus searchable replacement text when required, exports other vector/image edits, and validates the saved file locally with both PDF libraries.
 - `editor.js` wires UI actions, keyboard shortcuts, page rendering, object selection, history, and export together.
 
 ## Coordinates and text hit targets
@@ -32,13 +58,15 @@ PDF text runs can contain multiple words. The editor divides runs into word-leve
 
 Internal names such as `g_d0_f1` are not treated as browser font names. The font resolver uses PDF.js style metadata when it provides a family name, strips subset prefixes, and maps common families to a close pdf-lib standard face.
 
-The editor does not extract arbitrary embedded font programs from the source content stream. Helvetica, Times, and Courier map to pdf-lib's standard faces; common system and web fonts such as Arial, Calibri, Cambria, Roboto, and Montserrat are mapped to a substitute and reported that way. Noto Sans Devanagari is bundled for Devanagari text when fontkit can embed it. Unsupported characters stop export with an error instead of being silently replaced. Devanagari fallback was checked for PDF validity; complex script shaping still needs a visual check, and unsupported emoji are rejected when no usable font is available.
+The editor does not extract arbitrary embedded font programs from the source content stream. Supported PDF standard-font runs can keep their existing resource during true replacement. Arimo, Carlito, and Caladea are bundled for Arial-, Calibri-, and Cambria-like fallback workflows, and Noto Sans Devanagari is bundled for Devanagari. Preview and overlay export use the same chosen local font bytes when possible. Unsupported characters stop the edit/export path instead of being silently dropped. Complex scripts rely on Fontkit shaping and still need visual review; unsupported emoji are rejected when no usable font is available.
 
 Text fill color is read from supported PDF.js operator-list color state when it can be aligned with text runs. Otherwise the UI labels the value as estimated. Original text alpha and all non-RGB PDF color spaces are not guaranteed to be retained exactly.
 
 ## Existing-text export and background handling
 
-Simple edits preserve the original PDF pages and draw a cover rectangle plus real PDF text at the saved baseline, position, size, color, and rotation. Unchanged page content stays vector; the page is not rasterized. The original text stream is not removed, so a visual replacement is not secure redaction and hidden text may remain searchable or extractable.
+For supported straightforward standard-font runs, the exporter rewrites the matching text-show operand inside the existing content stream and leaves the surrounding graphics operators and original font resource intact. This is recorded as `true-text-replacement`, and extraction checks verify that the old string is gone. The engine deliberately refuses ambiguous, non-ASCII, restyled, moved, or structurally unsupported runs.
+
+When a safe source-stream rewrite is unavailable, the editor uses `visual-overlay-fallback`: an opaque background mask hides the original glyphs and pdf-lib writes searchable replacement text at the saved baseline, position, size, color, rotation, and text opacity. The page is not rasterized. In this fallback mode the original text stream may remain searchable or extractable, so the operation is not secure redaction.
 
 Before covering a changed text item, the editor renders the source page locally and samples the pixels around its bounds. Similar samples are used as a likely solid background. Varied samples produce a complex-background warning. Gradients, nearby graphics, images, transparency, textures, and long replacement text can still leave a seam or overlap nearby content. Inspect the downloaded PDF before relying on the visual edit.
 

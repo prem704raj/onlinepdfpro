@@ -13,6 +13,8 @@ https://www.onlinepdfpro.com/* https://onlinepdfpro.com/:splat 301!
 /tools/image-compress.html /tools/image-compressor.html 301!
 /tools/ocr /tools/image-to-text.html 301!
 /tools/ocr.html /tools/image-to-text.html 301!
+/tools/pdf-editor /tools/pdf-editor.html 301!
+/tools/pdf-editor/ /tools/pdf-editor.html 301!
 /tools/qr-generator /tools/qr-code-generator.html 301!
 /tools/qr-generator.html /tools/qr-code-generator.html 301!
 /tools/xlsx-to-csv /tools.html 301!

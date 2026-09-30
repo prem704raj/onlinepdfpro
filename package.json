@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/write-release.js && node scripts/version-sw.js",
-    "test": "node scripts/test-regression.mjs",
+    "test": "node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs",
     "perf:budget": "node scripts/check-performance-budget.mjs",
     "dev": "npx @11ty/eleventy --serve",
     "start": "npm run dev",
