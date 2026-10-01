@@ -179,6 +179,33 @@ try {
       console.log(`PASS mobile interactions ${width}×${height}: menu, signed-in header, preview, cart, loaded PDF editor`);
     }
     await page.close();
+    const returning = await browser.newPage();
+    await isolate(returning);
+    await returning.setBypassServiceWorker(false);
+    await returning.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await returning.goto(base + '/products/dbms-notes', { waitUntil: 'load' });
+    await returning.evaluate(async () => { await navigator.serviceWorker.ready; });
+    await returning.waitForFunction(() => Boolean(navigator.serviceWorker.controller), { timeout: 10000 });
+    await returning.evaluate(async () => {
+      const name = (await caches.keys()).find(name => name.startsWith('onlinepdfpro-cache-'));
+      const cache = await caches.open(name);
+      await cache.put('/css/mobile-fix-v2.css', new Response('body { --mobile-cache-fixture: stale; }', { headers: { 'Content-Type': 'text/css' } }));
+    });
+    await returning.reload({ waitUntil: 'load' });
+    assert.equal(await returning.evaluate(() => getComputedStyle(document.body).getPropertyValue('--mobile-cache-fixture').trim()), '', 'Returning visitors must receive current CSS rather than a stale cached layout');
+    await returning.tap('.store-header-btn[aria-label="Shopping cart"]');
+    assert.ok(await returning.$eval('#cartDrawer', el => Math.abs(el.getBoundingClientRect().height - innerHeight) <= 1));
+    await returning.keyboard.press('Escape');
+    await returning.waitForFunction(async () => {
+      const response = await caches.match('/css/mobile-fix-v2.css');
+      return response && !(await response.text()).includes('--mobile-cache-fixture');
+    });
+    await returning.setOfflineMode(true);
+    await returning.reload({ waitUntil: 'load' });
+    assert.equal(await returning.evaluate(() => getComputedStyle(document.body).getPropertyValue('--mobile-cache-fixture').trim()), '', 'Current CSS must remain available offline after an update');
+    assert.ok(await reachable(returning, '#menuToggle', 44), 'Cached offline page must retain usable mobile navigation');
+    await returning.close();
+    console.log('PASS returning-visitor CSS refresh and offline mobile fallback');
   }
 } finally {
   await browser.close();

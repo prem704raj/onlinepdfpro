@@ -15,6 +15,7 @@ Date: 2026-10-01. Implemented on `codex/production-foundation`, draft PR #5.
 - Enlarge small editor controls on phones. Exempt PDF text hit regions from generic button sizing and the rendered PDF canvas from generic image resizing, preserving document geometry and zoom alignment.
 - Add an explicit `Edit text` control to the selected-text toolbar, enabling editing with a single tap instead of requiring a double-click gesture. Keep the editor free of the automatic installation banner; manual installation remains in navigation.
 - Give the blog landing page a proper primary heading.
+- The deployed preview reproduced old mobile CSS alongside updated HTML/JavaScript in a returning browser. Serve same-origin CSS from the network when available, fall back to cache offline, and keep cache writes and activation within the service worker's event lifetime. Precache fetches refresh their HTTP cache, and cleanup only removes this app's old cache namespaces.
 
 ## Validation
 
@@ -24,6 +25,7 @@ Date: 2026-10-01. Implemented on `codex/production-foundation`, draft PR #5.
 - Check actual visible element bounds, viewport metadata, primary headings and page overflow. Intentional local horizontal scroll regions, such as PDF canvases and toolbars, may scroll; hiding overflow does not excuse off-screen elements.
 - Exercise touch navigation, a synthetic signed-in header, five-page preview controls, adding the public sample product to an isolated browser cart, cart focus/background isolation, and a loaded sample PDF editor at 320×740, 390×844, 768×1024 and 844×390.
 - Check drawer height, control hit testing, editor page/settings panels, single-tap text editing and enabling export, and canvas/text-layer alignment after zoom.
+- With the real service worker enabled, seed stale CSS in an isolated cache, reload and verify current styles and full-height cart, then go offline and verify those current styles and navigation remain available.
 
 All external provider requests are blocked in this mobile test. The sample document and account are synthetic; no customer files, real purchases or paid AI requests are involved. Optional evidence screenshots can be captured with `MOBILE_CAPTURE_DIR` set to a local directory. The full existing suite separately verifies exported PDF content, form/link retention, AI request boundaries, analytics privacy, canonical metadata and Worker gates.
 

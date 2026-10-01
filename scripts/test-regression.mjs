@@ -115,7 +115,7 @@ const manifestContent = read('site.webmanifest');
 check(!/100%\s*Free/i.test(manifestContent) && !/hero_centered\.png/.test(manifestContent), 'Webmanifest avoids misleading 100% Free claim and broken screenshot assets');
 
 const swContent = read('src/sw.js');
-check(/response\.status\s*===\s*200/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
+check(/if \(response\.status !== 200\) return Promise\.resolve\(\)/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
 check(/isKnownStaticAsset/.test(swContent) && /Never turn arbitrary same-origin GET responses/.test(swContent), 'Service Worker avoids caching arbitrary dynamic same-origin responses');
 
 const initialMigration = read('supabase/migrations/20260815000000_initial_schema.sql');
