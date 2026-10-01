@@ -64,10 +64,10 @@ Before enabling the new production workflow:
 
 `www` → apex must be a Cloudflare zone redirect. A host-based source rule in Pages `_redirects` is unsupported and has been removed. Preserve path and query when configuring the zone rule, then verify it on the live domain.
 
-## Next implementation batches
+## Subsequent implementation batches
 
-1. Correct compression, flattening, and PDF editor behavior/disclosures; make destructive output choices explicit and test exported documents.
-2. Publish a static product route with accurate DBMS content, price, sample pages, AI assistance disclosure, and product metadata. Keep legacy access working.
-3. Improve AI document scope reporting, consistent errors, and conversation context; test scanned and long PDFs.
-4. Complete keyboard/mobile task flows, payment/support recovery, and production monitoring.
-5. Build useful study workflows and original guides, then measure acquisition → tool completion → return usage. Notes expansion needs human content review and demand evidence; avoid fabricated expertise, testimonials, or sales claims.
+1. Completed on the review branch: explicit compression/image choices and form-only flattening, with exported-document tests. See `IMPLEMENTATION_BATCH_2.md`.
+2. Completed on the review branch: static DBMS product route using the existing price, sample pages and AI-assisted draft disclosure. See `IMPLEMENTATION_BATCH_3.md`.
+3. Completed on the review branch: AI document scope, error recovery and bounded conversation context, with synthetic long/scanned PDF tests. See `IMPLEMENTATION_BATCH_4.md`.
+4. Remaining acceptance work: real provider/conversion tests, test-mode payment fulfilment and recovery, keyboard task reviews, alerts, backup restoration and rollback validation.
+5. Remaining acquisition work: reviewed study material, original guides and measured acquisition → tool completion → return usage. Notes expansion needs human content review and demand evidence; avoid fabricated expertise, testimonials, or sales claims.
