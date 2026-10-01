@@ -41,13 +41,15 @@ try {
     await page.waitForFunction(() => document.querySelector('script[src*="googletagmanager.com/gtag/js"]'));
     await page.evaluate(() => {
         window.gtag('event', 'tool_error', { error_code: 'invalid_file', email: 'private@example.test', file_name: 'private-medical.pdf' });
+        window.gtag('event', 'export_success', { tool_name: 'pdf_editor', document_text: 'private-document-content' });
     });
     const queue = await page.evaluate(() => window.dataLayer.map(item => Array.from(item)));
     const serialized = JSON.stringify(queue);
-    assert.ok(!/private@example|auth-secret|private-token|private-medical/.test(serialized), 'Sensitive data must be absent from event parameters');
+    assert.ok(!/private@example|auth-secret|private-token|private-medical|private-document-content/.test(serialized), 'Sensitive data must be absent from event parameters');
     assert.equal(queue.filter(item => item[0] === 'event' && item[1] === 'page_view').length, 1, 'Exactly one initial pageview');
     assert.equal(queue.find(item => item[0] === 'event' && item[1] === 'page_view')[2].page_location, 'https://onlinepdfpro.com/');
     assert.ok(queue.some(item => item[1] === 'tool_error' && item[2].error_code === 'invalid_file'));
+    assert.ok(queue.some(item => item[1] === 'export_success'), 'Known editor completion events are retained');
     await page.evaluate(() => { document.cookie = '_ga=test-value; path=/'; });
     await page.click('#analyticsPreferences');
     await page.click('#analyticsConsent button:first-of-type');

@@ -285,6 +285,7 @@ async function run() {
     check(firstText.text.includes('AMRIT') && !firstText.text.includes('PREM'), 'True replacement removes the old bold PREM run from extracted PDF text');
     check(firstText.text.includes('changed') && !firstText.text.includes('complex'), 'True replacement preserves a complex page background by replacing the text operator');
     check(firstText.text.includes('नमस्ते'), 'Fallback overlay text remains extractable after export');
+    check((await page.$eval('#pdf-export-notice', node => node.textContent)).includes('Original text or image data may remain recoverable'), 'Overlay fallback warns that original document data may remain recoverable');
     check(trueReplacementUsesBaseFont(reopened, 0, 'AMRIT RAJ', 'Helvetica-Bold'), 'The true-replaced AMRIT text retains the bold source font resource');
 
     await page.click('.pdf-text-hit[aria-label*="used"]');

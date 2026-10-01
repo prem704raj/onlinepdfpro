@@ -19,7 +19,9 @@
     const raw = function () { window.dataLayer.push(arguments); };
     window.dataLayer = window.dataLayer || [];
     const permittedEvents = new Set(['tool_use', 'tool_interaction', 'file_download', 'download',
-        'pwa_installed', 'tool_start', 'tool_complete', 'tool_error', 'tool_download', 'file_selected']);
+        'pwa_installed', 'tool_start', 'tool_complete', 'tool_error', 'tool_download', 'file_selected',
+        'editor_open_success', 'existing_text_selected', 'inline_edit_started',
+        'font_replacement_shown', 'export_success', 'export_failure']);
     const actions = new Set(['convert', 'download_all', 'download', 'upload', 'process', 'merge',
         'compress', 'split', 'start', 'complete', 'open', 'click']);
     function track(event, parameters = {}) {

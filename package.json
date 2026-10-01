@@ -24,7 +24,7 @@
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/write-release.js && node scripts/version-sw.js",
     "build:production": "node scripts/preflight-production.mjs && npm run build",
-    "test": "node scripts/test-site.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs",
+    "test": "node scripts/test-site.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs && node scripts/test-pdf-output.mjs",
     "test:analytics": "node scripts/test-analytics.mjs",
     "test:site": "node scripts/test-site.mjs",
     "test:worker": "node scripts/test-worker.mjs",
@@ -32,7 +32,8 @@
     "perf:budget": "node scripts/check-performance-budget.mjs",
     "dev": "npx @11ty/eleventy --serve",
     "start": "npm run dev",
-    "sync:root": "node scripts/sync-to-root.js"
+    "sync:root": "node scripts/sync-to-root.js",
+    "test:pdf-output": "node scripts/test-pdf-output.mjs"
   },
   "repository": {
     "type": "git",

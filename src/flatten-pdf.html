@@ -423,11 +423,11 @@
  <div class="tool-header" style="text-align:center; margin-bottom:48px;">
  <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Processing</span>
  <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Flatten PDF</h1>
- <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Flatten PDF form fields and annotations into a clean, non-editable document. Review the processing details before uploading.</p>
+ <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Make filled form fields static while keeping searchable text, or explicitly choose image-based output. Processing happens locally in your browser.</p>
  </div>
 <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
  <p class="upload-text">Drop your PDF here or Click to Upload</p>
- <p class="upload-hint">Remove all editable fields and make PDF flat</p>
+ <p class="upload-hint">Choose form-only or image-based output after uploading</p>
  <button class="btn btn-primary upload-btn">Choose PDF File</button>
  <input type="file" id="fileInput" accept=".pdf" hidden />
  </div>
@@ -436,8 +436,7 @@
 
  <div class="info-section" id="infoSection">
  <h2>What Does "Flatten PDF" Mean?</h2>
- <p style="text-align:center; color:var(--text-secondary); margin-bottom:25px;">Flattening converts all interactive elements
- into static content. The PDF becomes non-editable and looks the same on every device.</p>
+ <p style="text-align:center; color:var(--text-secondary); margin-bottom:25px;">Form flattening makes field appearances part of the page. Image mode instead renders pages as pictures. Both outputs can still be edited with suitable software.</p>
  <div class="info-cards">
  <div class="info-card card-form">
  <div class="icon">📝</div>
@@ -447,17 +446,17 @@
  <div class="info-card card-anno">
  <div class="icon">📌</div>
  <h3>Annotations</h3>
- <p>Highlights, stamps, markups merge into the page</p>
+ <p>Kept in form mode; rendered as visible appearances in image mode</p>
  </div>
  <div class="info-card card-comment">
  <div class="icon">💬</div>
  <h3>Comments</h3>
- <p>Sticky notes and comments get removed or embedded</p>
+ <p>Kept in form mode; interactive comment data is lost in image mode</p>
  </div>
  <div class="info-card card-layer">
  <div class="icon">📄</div>
  <h3>Layers</h3>
- <p>All layers merge into single flat layer</p>
+ <p>Kept in form mode; only the rendered appearance survives image mode</p>
  </div>
  </div>
  </div>
@@ -465,48 +464,19 @@
  <div class="options-box" id="optionsBox">
  <h2> Flatten Options</h2>
 
- <label class="option-item" for="opt1">
- <input type="checkbox" id="opt1" checked>
- <div class="option-icon">📝</div>
- <div class="option-text">
- <h3>Flatten Form Fields</h3>
- <p>Convert text inputs, checkboxes, radio buttons to static content</p>
- </div>
- </label>
-
- <label class="option-item" for="opt2">
- <input type="checkbox" id="opt2" checked>
- <div class="option-icon">📌</div>
- <div class="option-text">
- <h3>Flatten Annotations</h3>
- <p>Merge highlights, stamps, underlines into page content</p>
- </div>
- </label>
-
- <label class="option-item" for="opt3">
- <input type="checkbox" id="opt3" checked>
- <div class="option-icon">💬</div>
- <div class="option-text">
- <h3>Remove Comments</h3>
- <p>Remove all sticky notes and comment threads</p>
- </div>
- </label>
-
- <label class="option-item" for="opt4">
- <input type="checkbox" id="opt4" checked>
- <div class="option-icon">🔗</div>
- <div class="option-text">
- <h3>Remove Hyperlinks</h3>
- <p>Remove all clickable links from the document</p>
- </div>
- </label>
-
+ <label for="flattenMode">Output mode</label>
+ <select id="flattenMode" style="display:block; padding:12px; margin:12px 0; max-width:100%;">
+ <option value="forms">Flatten form fields, keep searchable text</option>
+ <option value="images">Render all pages as images</option>
+ </select>
+ <p style="line-height:1.6;">Form mode makes filled fields static and keeps other annotations and links. It does not flatten comments or layers. Image mode creates JPEG pages: visible appearances are rendered, while searchable text, links, form fields, attachments, bookmarks and accessibility tags are lost. Neither mode makes a PDF impossible to edit. Saving can invalidate digital signatures; keep your original.</p>
+ <label for="acceptImageOutput" style="display:block; margin:16px 0; line-height:1.6;"><input type="checkbox" id="acceptImageOutput"> I accept the loss of document features if I choose image mode.</label>
  <label class="option-item" for="opt5">
  <input type="checkbox" id="opt5">
  <div class="option-icon">📊</div>
  <div class="option-text">
  <h3>Remove Metadata</h3>
- <p>Strip author, title, creation date and other hidden info</p>
+ <p>Remove standard document info (title, author and dates). This does not remove XMP metadata or hidden content.</p>
  </div>
  </label>
 
@@ -523,7 +493,7 @@
 
  <div class="result-box" id="resultBox">
  <h2> PDF Flattened Successfully!</h2>
- <p style="color:var(--text-secondary);">All interactive elements have been removed</p>
+ <p id="resultSummary" style="color:var(--text-secondary);"></p>
 
  <div class="result-stats" id="resultStats"></div>
 
@@ -541,6 +511,7 @@
 
  <script src="/js/vendor/pdfjs/pdf.min.js"></script>
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
+ <script src="/js/pdf-flatten.js"></script>
  <script defer src="/js/vendor/download/download.min.js"></script>
 
  <script>
@@ -563,7 +534,10 @@
  async function loadFile(file) {
  if (!file) return;
  _originalFileName = file.name;
+ if (file.size > 100 * 1024 * 1024) { alert('Maximum file size is 100 MB.'); return; }
  originalBytes = await file.arrayBuffer();
+ flattenedBytes = null;
+ document.getElementById('acceptImageOutput').checked = false;
  originalSize = file.size;
 
  document.getElementById('fileInfo').style.display = 'block';
@@ -575,108 +549,40 @@
 
  async function flattenPDF() {
  if (!originalBytes) return;
-
+ const mode = document.getElementById('flattenMode').value;
+ if (mode === 'images' && !document.getElementById('acceptImageOutput').checked) {
+ alert('Please accept the loss of document features before choosing image mode.');
+ return;
+ }
+ flattenedBytes = null;
+ document.getElementById('resultBox').style.display = 'none';
  document.getElementById('optionsBox').style.display = 'none';
  document.getElementById('progressSection').style.display = 'block';
- document.getElementById('progressFill').style.width = '20%';
- document.getElementById('progressText').textContent = 'Reading PDF...';
-
- const flattenForms = document.getElementById('opt1').checked;
- const flattenAnnotations = document.getElementById('opt2').checked;
- const removeComments = document.getElementById('opt3').checked;
- const removeLinks = document.getElementById('opt4').checked;
- const removeMetadata = document.getElementById('opt5').checked;
-
- let fieldsRemoved = 0;
- let annotationsRemoved = 0;
- let linksRemoved = 0;
-
  try {
- // Method 1: Render each page as image (guaranteed flatten)
- document.getElementById('progressText').textContent = 'Rendering pages...';
- document.getElementById('progressFill').style.width = '40%';
-
- const pdfJsDoc = await pdfjsLib.getDocument({ data: originalBytes }).promise;
- const newPdfDoc = await PDFLib.PDFDocument.create();
-
- for (let i = 1; i <= pdfJsDoc.numPages; i++) {
- document.getElementById('progressText').textContent = 'Flattening page ' + i + ' of ' + pdfJsDoc.numPages + '...';
- document.getElementById('progressFill').style.width = Math.round(40 + (i / pdfJsDoc.numPages) * 50) + '%';
-
- const page = await pdfJsDoc.getPage(i);
- const viewport = page.getViewport({ scale: 3.0 });
- const canvas = document.createElement('canvas');
- canvas.width = viewport.width;
- canvas.height = viewport.height;
- const ctx = canvas.getContext('2d');
-
- await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
- // Count annotations
- const annotations = await page.getAnnotations();
- annotations.forEach(ann => {
- if (ann.fieldType) fieldsRemoved++;
- if (ann.subtype === 'Link') linksRemoved++;
- if (ann.subtype === 'Text' || ann.subtype === 'Popup') annotationsRemoved++;
- if (ann.subtype === 'Highlight' || ann.subtype === 'Underline' || ann.subtype === 'StrikeOut') annotationsRemoved++;
- });
-
- // Convert canvas to image and add to new PDF
- const imgDataURL = canvas.toDataURL('image/jpeg', 1.0);
- const imgBytes = Uint8Array.from(atob(imgDataURL.split(',')[1]), c => c.charCodeAt(0));
- const img = await newPdfDoc.embedJpg(imgBytes);
-
- // Use original page dimensions
- const origViewport = page.getViewport({ scale: 1.0 });
- const newPage = newPdfDoc.addPage([origViewport.width, origViewport.height]);
- newPage.drawImage(img, {
- x: 0,
- y: 0,
- width: origViewport.width,
- height: origViewport.height
- });
+ const result = await flattenLocalPdf(originalBytes, {
+ mode,
+ removeMetadata: document.getElementById('opt5').checked,
+ onProgress: (percent, message) => {
+ document.getElementById('progressFill').style.width = Math.round(percent) + '%';
+ document.getElementById('progressText').textContent = message;
  }
-
- // Remove metadata if selected
- if (removeMetadata) {
- newPdfDoc.setTitle('');
- newPdfDoc.setAuthor('');
- newPdfDoc.setSubject('');
- newPdfDoc.setKeywords([]);
- newPdfDoc.setCreator('Online PDF Pro');
- }
-
- document.getElementById('progressText').textContent = 'Saving flattened PDF...';
- document.getElementById('progressFill').style.width = '95%';
-
- flattenedBytes = await newPdfDoc.save();
-
- document.getElementById('progressFill').style.width = '100%';
-
- // Show results
- const newSize = flattenedBytes.length;
- const reduction = Math.round((1 - newSize / originalSize) * 100);
-
+ });
+ flattenedBytes = result.bytes;
+ document.getElementById('resultSummary').textContent = mode === 'forms'
+ ? 'Form fields are static. Searchable text, other annotations and links remain.'
+ : 'Image-based output: searchable text and interactive document features were removed. Review every page before sharing.';
  document.getElementById('resultStats').innerHTML =
- '<div class="stat-item"><span class="number">' + fieldsRemoved + '</span><span class="label">Form Fields Removed</span></div>' +
- '<div class="stat-item"><span class="number">' + annotationsRemoved + '</span><span class="label">Annotations Flattened</span></div>' +
- '<div class="stat-item"><span class="number">' + linksRemoved + '</span><span class="label">Links Removed</span></div>' +
- '<div class="stat-item"><span class="number">' + pdfJsDoc.numPages + '</span><span class="label">Pages Processed</span></div>';
-
- document.getElementById('beforeAfter').innerHTML =
- '<div class="file-size size-before">Before: ' + formatSize(originalSize) + '</div>' +
- '<div class="size-arrow">→</div>' +
- '<div class="file-size size-after">After: ' + formatSize(newSize) + '</div>';
-
- document.getElementById('progressSection').style.display = 'none';
+ '<div class="stat-item"><span class="number">' + result.pageCount + '</span><span class="label">Pages Processed</span></div>' +
+ (mode === 'forms' ? '<div class="stat-item"><span class="number">' + result.fieldsFlattened + '</span><span class="label">Form Fields Flattened</span></div>' : '');
+ document.getElementById('beforeAfter').textContent = 'Before: ' + formatSize(originalSize) + ' → After: ' + formatSize(flattenedBytes.length);
+ document.getElementById('resultBox').style.display = 'block';
  incrementCounter('flattenPDF');
-incrementTodayCount();
-document.getElementById('resultBox').style.display = 'block';
-
+ incrementTodayCount();
  } catch (err) {
  alert('Error flattening PDF: ' + err.message);
- document.getElementById('progressSection').style.display = 'none';
  document.getElementById('optionsBox').style.display = 'block';
+ } finally {
+ document.getElementById('progressSection').style.display = 'none';
  }
  }
 

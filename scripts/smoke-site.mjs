@@ -7,7 +7,8 @@ import { attribute, walk } from './prepare-site.mjs';
 const args = process.argv.slice(2);
 const release = args.includes('--release') ? args[args.indexOf('--release') + 1] : process.env.GITHUB_SHA;
 assert.ok(release && release !== 'local', 'Specify an immutable production release ID');
-const origin = 'https://onlinepdfpro.com';
+const canonicalOrigin = 'https://onlinepdfpro.com';
+const origin = process.env.SITE_BASE_URL || canonicalOrigin;
 const get = url => fetch(url, { redirect: 'error', signal: AbortSignal.timeout(15_000) });
 
 // Allow a short propagation window; never turn a failed check into a warning.
@@ -32,7 +33,7 @@ for (const route of ['/', '/about', '/tools', '/blog', '/blog/how-to-extract-tex
         if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') canonical = attribute(node, 'href');
         if (node.tagName === 'script' && attribute(node, 'src') === '/js/analytics.js') analyticsCount++;
     });
-    assert.equal(canonical, `${origin}${route}`, `${route}: final canonical URL`);
+    assert.equal(canonical, `${canonicalOrigin}${route}`, `${route}: final canonical URL`);
     assert.equal(analyticsCount, 1, `${route}: one analytics entry point`);
 }
 const sitemap = await get(`${origin}/sitemap.xml`);
