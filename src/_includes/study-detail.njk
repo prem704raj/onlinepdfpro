@@ -3,10 +3,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Study Material | OnlinePDFPro</title>
-    <meta name="description" content="View study material details and a five-page preview before purchase on OnlinePDFPro.">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://onlinepdfpro.com/viewstudymaterials.html">
+    <title>{% if detailProduct %}{{ detailProduct.title }} — {{ detailProduct.pageCount }}-page PDF Study Draft{% else %}View Study Material{% endif %} | OnlinePDFPro</title>
+    <meta name="description" content="{% if detailProduct %}{{ detailProduct.description }} AI-assisted draft. Preview five pages before purchase.{% else %}View study material details and a five-page preview before purchase on OnlinePDFPro.{% endif %}">
+    <meta name="robots" content="{% if detailProduct %}index, follow{% else %}noindex, follow{% endif %}">
+    <link rel="canonical" href="https://onlinepdfpro.com{% if detailProduct %}{{ detailProduct.url }}{% else %}/viewstudymaterials.html{% endif %}">
+    {% if detailProduct %}
+    <meta property="og:title" content="{{ detailProduct.title }}">
+    <meta property="og:description" content="{{ detailProduct.disclosure }}">
+    <meta property="og:image" content="https://onlinepdfpro.com{{ detailProduct.image }}">
+    <script type="application/ld+json">{
+      "@context": "https://schema.org", "@type": "Product",
+      "name": {{ detailProduct.title | json | safe }},
+      "description": {{ (detailProduct.description + ' ' + detailProduct.disclosure) | json | safe }},
+      "image": "https://onlinepdfpro.com{{ detailProduct.image }}",
+      "url": "https://onlinepdfpro.com{{ detailProduct.url }}",
+      "offers": { "@type": "Offer", "price": {{ detailProduct.price | json | safe }}, "priceCurrency": "INR", "url": "https://onlinepdfpro.com{{ detailProduct.url }}" }
+    }</script>
+    {% endif %}
     <meta name="theme-color" content="#171512">
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
@@ -183,8 +196,8 @@
     <main id="main" class="detail-main">
         <div id="detailContent" class="detail-shell">
             <div class="detail-layout">
-                <section class="preview-card" aria-labelledby="previewHeading"><div class="preview-heading"><div><p class="eyebrow">Inside the notes</p><h2 id="previewHeading">Preview five pages</h2></div><span class="preview-count" id="previewCount">5-page preview</span></div><div id="previewGrid" class="preview-grid" aria-label="Five-page preview"></div><p class="preview-help"><strong>Preview only.</strong> Select any page to view it clearly. The complete PDF is delivered after purchase.</p></section>
-                <section class="info-card" aria-labelledby="productTitle"><p class="eyebrow" id="productEyebrow">Study guide</p><h1 id="productTitle">Study Material</h1><p class="product-description" id="productDescription"></p><div class="facts" aria-label="Product facts"><div class="fact"><strong id="pageCount">—</strong><span>Pages</span></div><div class="fact"><strong id="format">PDF</strong><span>Format</span></div><div class="fact"><strong id="factPrice">—</strong><span>One-time</span></div></div><section aria-labelledby="includedHeading"><h2 class="included-heading" id="includedHeading">What's included</h2><ul class="included-list" id="includedList"></ul></section><p class="delivery-note" id="deliveryNote"></p><div class="purchase-box"><div class="purchase-top"><div><span class="price" id="productPrice">—</span><span class="price-meta" id="priceMeta">Digital PDF</span></div><span class="security">Secure checkout<br>Immediate access after verification</span></div><div class="purchase-actions"><button class="detail-cart" id="addCartButton" type="button">Add to cart</button><button class="detail-buy" id="buyButton" type="button">Buy now</button></div><p class="disclosure" id="disclosure"></p></div></section>
+                <section class="preview-card" aria-labelledby="previewHeading"><div class="preview-heading"><div><p class="eyebrow">Inside the notes</p><h2 id="previewHeading">Preview five pages</h2></div><span class="preview-count" id="previewCount">5-page preview</span></div><div id="previewGrid" class="preview-grid" aria-label="Five-page preview">{% if detailProduct %}{% for preview in detailProduct.previewPages %}<a class="preview-thumb" href="{{ preview }}"><img src="{{ preview }}" width="612" height="792" alt="{{ detailProduct.title }} preview page {{ loop.index }}" loading="lazy"><span>Page {{ loop.index }}</span></a>{% endfor %}{% endif %}</div><p class="preview-help"><strong>Preview only.</strong> Select any page to view it clearly. The complete PDF is delivered after purchase.</p></section>
+                <section class="info-card" aria-labelledby="productTitle"><p class="eyebrow" id="productEyebrow">Study guide</p><h1 id="productTitle">{% if detailProduct %}{{ detailProduct.title }}{% else %}Study Material{% endif %}</h1><p class="product-description" id="productDescription">{% if detailProduct %}{{ detailProduct.description }}{% endif %}</p><div class="facts" aria-label="Product facts"><div class="fact"><strong id="pageCount">{% if detailProduct %}{{ detailProduct.pageCount }}{% else %}—{% endif %}</strong><span>Pages</span></div><div class="fact"><strong id="format">PDF</strong><span>Format</span></div><div class="fact"><strong id="factPrice">{% if detailProduct %}₹{{ detailProduct.price }}{% else %}—{% endif %}</strong><span>One-time</span></div></div><section aria-labelledby="includedHeading"><h2 class="included-heading" id="includedHeading">What's included</h2><ul class="included-list" id="includedList">{% if detailProduct %}{% for item in detailProduct.includes %}<li>{{ item }}</li>{% endfor %}{% endif %}</ul></section><p class="delivery-note" id="deliveryNote">{% if detailProduct %}{{ detailProduct.deliveryNote }}{% endif %}</p><div class="purchase-box"><div class="purchase-top"><div><span class="price" id="productPrice">{% if detailProduct %}₹{{ detailProduct.price }}{% else %}—{% endif %}</span><span class="price-meta" id="priceMeta">{% if detailProduct %}{{ detailProduct.format }} · {{ detailProduct.pageCount }} pages{% else %}Digital PDF{% endif %}</span></div><span class="security">Secure checkout<br>Immediate access after verification</span></div><div class="purchase-actions"><button class="detail-cart" id="addCartButton" type="button">Add to cart</button><button class="detail-buy" id="buyButton" type="button">Buy now</button></div><p class="disclosure" id="disclosure">{% if detailProduct %}<strong>Content disclosure.</strong> {{ detailProduct.disclosure }}{% endif %}</p></div></section>
             </div>
         </div>
         <div id="detailError" class="detail-error" hidden><h1>Study material not found</h1><p>That PDF is not available right now.</p><a href="/study-materials.html">Browse study materials</a></div>
@@ -206,7 +219,7 @@
         document.addEventListener('DOMContentLoaded', function () {
         (function () {
             var params = new URLSearchParams(window.location.search);
-            var productId = params.get('product') || 'dbms-notes';
+            var productId = {% if detailProduct %}{{ detailProduct.id | json | safe }}{% else %}params.get('product') || 'dbms-notes'{% endif %};
             var product = (window.STORE_PRODUCTS || {})[productId];
             var content = document.getElementById('detailContent');
             var error = document.getElementById('detailError');
@@ -234,6 +247,7 @@
             (product.includes || []).forEach(function (item) { var li = document.createElement('li'); li.textContent = item; list.appendChild(li); });
 
             var grid = document.getElementById('previewGrid');
+            grid.replaceChildren();
             var dialog = document.getElementById('previewDialog');
             var dialogImage = document.getElementById('dialogImage');
             var dialogPage = document.getElementById('dialogPage');

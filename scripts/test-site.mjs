@@ -67,6 +67,7 @@ test('the clean sitemap contains real canonical pages, all 19 preserved blog pos
     const urls = [...fs.readFileSync(path.join(site, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
     assert.equal(new Set(urls).size, urls.length);
     assert.ok(!urls.some(url => url.includes('.html') || url.includes('viewstudymaterials')));
+    assert.ok(urls.includes('https://onlinepdfpro.com/products/dbms-notes'));
     const posts = files.filter(file => file.startsWith('blog/') && file.endsWith('/index.html'));
     assert.equal(posts.length, 19);
     for (const file of posts) assert.ok(urls.includes(`https://onlinepdfpro.com${cleanPath(file)}`), file);
@@ -75,6 +76,26 @@ test('the clean sitemap contains real canonical pages, all 19 preserved blog pos
         const file = pathname.endsWith('/') ? `${pathname}index.html` : `${pathname}.html`;
         assert.ok(fs.existsSync(path.join(site, file.slice(1))), `Sitemap target missing: ${url}`);
     }
+});
+
+test('product facts and disclosure are present without JavaScript and legacy access remains available', () => {
+    const html = fs.readFileSync(path.join(site, 'products/dbms-notes.html'), 'utf8');
+    assert.match(html, /DBMS Complete Notes/);
+    assert.match(html, /AI-assisted study draft/);
+    assert.match(html, /id="pageCount">51/);
+    assert.match(html, /id="productPrice">₹9/);
+    const schemas = [];
+    let previews = 0;
+    walk(parse(html), node => {
+        if (node.tagName === 'script' && attribute(node, 'type') === 'application/ld+json') schemas.push(JSON.parse(node.childNodes[0].value));
+        if (node.tagName === 'img' && attribute(node, 'src')?.startsWith('/assets/previews/dbms/')) previews++;
+    });
+    const product = schemas.find(schema => schema['@type'] === 'Product');
+    assert.equal(product.offers.price, 9);
+    assert.equal(product.offers.priceCurrency, 'INR');
+    assert.equal(product.url, 'https://onlinepdfpro.com/products/dbms-notes');
+    assert.equal(previews, 5);
+    assert.match(fs.readFileSync(path.join(site, 'viewstudymaterials.html'), 'utf8'), /noindex, follow/);
 });
 
 test('HTML preparation preserves executable scripts and user-facing content while fixing URLs', () => {

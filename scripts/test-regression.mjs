@@ -159,10 +159,10 @@ check(/Object\.defineProperty\(window,\s*["']supabaseClient/.test(authSource) &&
 const storeSource = read('src/js/store.js');
 check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
 const studySource = read('src/study-materials.html');
-const studyDetailSource = read('src/viewstudymaterials.html');
-check(/catalog-cover/.test(studySource) && /viewstudymaterials\.html\?product=dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
+const studyDetailSource = read('src/_includes/study-detail.njk');
+check(/catalog-cover/.test(studySource) && /products\/dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
 check(/previewGrid/.test(studyDetailSource) && /showModal\(\)/.test(studyDetailSource) && /slice\(0, 5\)/.test(studyDetailSource), 'Study material detail page provides a reusable five-page preview dialog');
-check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /viewstudymaterials\.html/.test(storeSource), 'Study material product metadata supports reusable detail pages');
+check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /products\/dbms-notes/.test(storeSource), 'Study material product metadata supports reusable static detail pages');
 check(/disclosure\.replaceChildren\(\)/.test(studyDetailSource) && !/getElementById\('disclosure'\)\.innerHTML/.test(studyDetailSource), 'Study material disclosures use text nodes instead of interpolated markup');
 const pageNumbers = read('src/tools/add-page-numbers-to-pdf.html');
 check(/textContent\s*=\s*`\s*\$\{file\.name\}/.test(pageNumbers) && !/textContent\s*=\s*`[^`]*escapeHTML\(file\.name\)/.test(pageNumbers), 'File names assigned through textContent are not double-escaped');
@@ -223,7 +223,7 @@ if (exists('_site/release.json')) {
 check(/\.wrangler\//.test(read('.gitignore')), 'Wrangler runtime files are ignored');
 check(exists('src/_redirects') && /about-us/.test(read('src/_redirects')), 'Legacy About URLs have redirects');
 check(/tools\/qr-generator\.html\s+\/tools\/qr-code-generator\s+301/.test(read('src/_redirects')) && /text-to-audio\.html\s+\/text-to-speech\s+301/.test(read('src/_redirects')), 'Legacy tool aliases redirect to final clean URLs');
-for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/viewstudymaterials.html']) {
+for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/_includes/study-detail.njk']) {
     const source = read(page);
     check(/@supabase\/supabase-js@2\.49\.1/.test(source) && /<script defer[^>]+supabase-js/.test(source), `${page} pins and defers Supabase JS`);
 }
@@ -372,9 +372,9 @@ async function browserSmoke() {
             detailHref: document.querySelector('.catalog-cover-link')?.getAttribute('href'),
             hasLargePreview: Boolean(document.querySelector('.preview-grid, .preview-stage, .product-showcase'))
         }));
-        check(catalogState.imageLoaded && catalogState.actions === 2 && /\/viewstudymaterials(?:\.html)?\?product=dbms-notes$/.test(catalogState.detailHref || '') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
+        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.endsWith('/products/dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
 
-        await page.goto(`${base}/viewstudymaterials.html?product=dbms-notes`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`${base}/products/dbms-notes.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#previewGrid .preview-thumb', { timeout: 5000 });
         await page.waitForFunction(() => [...document.querySelectorAll('#previewGrid img')].every(image => image.complete && image.naturalWidth > 0), { timeout: 10000 });
         const previewInitial = await page.evaluate(() => ({
@@ -629,8 +629,8 @@ async function browserSmoke() {
             { path: '/tools.html', width: 910, height: 768, heading: '.tp-hero-heading' },
             { path: '/study-materials.html', width: 390, height: 844, heading: '.catalog-cover' },
             { path: '/study-materials.html', width: 1280, height: 900, heading: '.catalog-cover' },
-            { path: '/viewstudymaterials.html?product=dbms-notes', width: 390, height: 844, heading: '#productTitle' },
-            { path: '/viewstudymaterials.html?product=dbms-notes', width: 1280, height: 900, heading: '#productTitle' }
+            { path: '/products/dbms-notes.html', width: 390, height: 844, heading: '#productTitle' },
+            { path: '/products/dbms-notes.html', width: 1280, height: 900, heading: '#productTitle' }
         ]) {
             await page.setViewport({ width: layout.width, height: layout.height });
             await page.goto(`${base}${layout.path}`, { waitUntil: 'domcontentloaded' });

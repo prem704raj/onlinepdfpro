@@ -36,4 +36,11 @@ permalink: /sitemap.xml
     <priority>0.6</priority>
   </url>
 {%- endfor %}
+{%- for id, product in storeProducts %}
+  <url>
+    <loc>https://onlinepdfpro.com{{ product.url }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+{%- endfor %}
 </urlset>

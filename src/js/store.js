@@ -4,7 +4,7 @@ const STORE_PRODUCTS = {
         title: "DBMS Complete Notes",
         price: 9,
         image: "/assets/previews/dbms/page-01.webp",
-        url: "/viewstudymaterials.html?product=dbms-notes",
+        url: "/products/dbms-notes",
         pageCount: 51,
         format: "PDF",
         description: "A focused guide to database fundamentals, relational models, ER diagrams, normalization, SQL, transactions, indexing, and exam revision.",
