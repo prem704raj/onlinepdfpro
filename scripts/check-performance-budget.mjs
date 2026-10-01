@@ -35,14 +35,14 @@ function sumFiles(relativeDir) {
 
 if (!fs.existsSync(site)) throw new Error('Generated site not found; run npm run build first.');
 
-// Optional editor font families are fetched on demand. Budget their installed
-// bytes separately while retaining the existing limits for all other assets.
-const editorFonts = sumFiles('_site/fonts/pdf-editor');
+// Preserve the separate budget for optional editor fonts already used by the
+// current repository. Older local copies may not have those font assets yet.
+const editorFonts = fs.existsSync(path.join(site, 'fonts/pdf-editor')) ? sumFiles('_site/fonts/pdf-editor') : 0;
 const measured = {
     homepage: size('_site/index.html'),
-    coreCss: ['_site/css/style.css', '_site/css/mobile-fix-v2.css', '_site/css/tools-v2.css']
+    coreCss: ['_site/css/style.css', '_site/css/mobile-fix-v2.css', '_site/css/tools-v2.css', '_site/css/analytics.css']
         .reduce((total, file) => total + size(file), 0),
-    coreJs: ['_site/js/app.js', '_site/js/auth.js', '_site/js/store.js']
+    coreJs: ['_site/js/app.js', '_site/js/auth.js', '_site/js/store.js', '_site/js/analytics.js']
         .reduce((total, file) => total + size(file), 0),
     site: sumFiles('_site') - editorFonts,
     editorFonts

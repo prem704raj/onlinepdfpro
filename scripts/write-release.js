@@ -15,7 +15,11 @@ if (!fs.existsSync(siteDir)) {
     process.exit(1);
 }
 
-const release = process.env.RELEASE_ID || process.env.GITHUB_SHA || 'local';
+const release = process.env.RELEASE_ID || process.env.GITHUB_SHA || process.env.CF_PAGES_COMMIT_SHA || 'local';
+if (release === 'local' && (process.env.CI === 'true' || process.env.CF_PAGES === '1')) {
+    console.error('Production/CI builds require an explicit source revision.');
+    process.exit(1);
+}
 if (!/^[A-Za-z0-9._-]{1,128}$/.test(release)) {
     console.error('RELEASE_ID contains unsupported characters.');
     process.exit(1);

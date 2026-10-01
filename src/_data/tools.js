@@ -84,9 +84,15 @@ const categories = [
   }
 ];
 
+// The production host redirects .html requests to these clean public URLs.
+// Keep the file names above readable while every registry consumer gets the
+// same final destination, including navigation generated at runtime.
+categories.forEach(category => category.tools.forEach(tool => {
+  tool.href = tool.href.replace(/\.html$/, '');
+}));
 const tools = categories.flatMap(category => category.tools.map(tool => ({ ...tool, category: category.name })));
 // Canonical URLs are derived from the same public registry so templates do not
 // grow a second list of tool routes.
-const canonicalUrls = Object.fromEntries(tools.map(tool => [tool.href, tool.href]));
+const canonicalUrls = Object.fromEntries(tools.flatMap(tool => [[tool.href, tool.href], [`${tool.href}.html`, tool.href]]));
 
-module.exports = { version: '2026-09-24', categories, tools, canonicalUrls };
+module.exports = { version: '2026-10-01', categories, tools, canonicalUrls };

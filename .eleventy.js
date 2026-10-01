@@ -1,4 +1,10 @@
 module.exports = function(eleventyConfig) {
+  // Shared metadata applies to rendered layouts AND copied standalone tools.
+  // Running after every build keeps --serve/watch previews consistent too.
+  eleventyConfig.on('eleventy.after', async () => {
+    const { prepareSite } = await import('./scripts/prepare-site.mjs');
+    await prepareSite();
+  });
   // Expose the single public tool registry under an explicit, collision-free
   // template name. The data file remains the source of truth; this alias keeps
   // directory, sitemap, search, and navigation templates on the same object.

@@ -200,7 +200,8 @@ async function run() {
   check(fs.existsSync(path.join(siteRoot, 'tools/pdf-editor.html')), 'Built PDF editor exists');
   check(fs.existsSync(path.join(siteRoot, 'fonts/pdf-editor/Arimo-Regular.ttf')), 'Bundled editor fonts are present in the built site');
   const redirectRules = fs.readFileSync(path.join(root, 'src/_redirects'), 'utf8');
-  check(redirectRules.includes('/tools/pdf-editor /tools/pdf-editor.html 301!'), 'Extensionless PDF editor URL permanently redirects to the canonical .html route');
+  const editorHtml = fs.readFileSync(path.join(siteRoot, 'tools/pdf-editor.html'), 'utf8');
+  check(/<link[^>]*href="https:\/\/onlinepdfpro.com\/tools\/pdf-editor"[^>]*rel="canonical"/.test(editorHtml) && !/^\/tools\/pdf-editor\s+\/tools\/pdf-editor\.html/m.test(redirectRules), 'PDF editor uses the clean canonical URL without a redirect back to .html');
   const editorSource = fs.readFileSync(path.join(root, 'src/js/pdf-editor/editor.js'), 'utf8');
   check(editorSource.includes("trackEditorEvent('export_failure')"), 'PDF editor records privacy-safe export failure events');
   await createFixture();

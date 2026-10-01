@@ -146,8 +146,7 @@ const MobileMenu = {
                 if (e.key === 'Enter') {
                     const q = e.target.value.trim();
                     if (q) {
-                        const isToolsDir = window.location.pathname.includes('/tools/');
-                        const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+const targetUrl = `/tools?q=${encodeURIComponent(q)}`;
                         window.location.href = targetUrl;
                     }
                 }
@@ -180,8 +179,7 @@ const MobileMenu = {
                     if (e.key === 'Enter') {
                         const q = e.target.value.trim();
                         if (q) {
-                            const isToolsDir = window.location.pathname.includes('/tools/');
-                            const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+const targetUrl = `/tools?q=${encodeURIComponent(q)}`;
                             window.location.href = targetUrl;
                         }
                     }
@@ -966,7 +964,7 @@ const ToolRegistryUI = {
 
     currentPath() {
         const pathname = window.location.pathname.replace(/\\/g, '/');
-        const normalized = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname;
+        const normalized = pathname.length > 1 ? pathname.replace(/\.html$/, '').replace(/\/$/, '') : pathname;
         return normalized || '/';
     },
 
@@ -974,7 +972,7 @@ const ToolRegistryUI = {
         const count = registry.tools.length;
         document.querySelectorAll('a.nav-link').forEach(link => {
             const href = link.getAttribute('href') || '';
-            if (!/tools\.html(?:[?#]|$)/.test(href)) return;
+            if (!/\/tools(?:\.html)?(?:[?#]|$)/.test(href)) return;
             link.dataset.toolCount = String(count);
             link.setAttribute('aria-label', `PDF Tools directory (${count} tools)`);
         });
@@ -1027,14 +1025,13 @@ const RecentlyUsedUI = {
         if (!target) return;
         const recent = RecentlyUsed.get();
         if (recent.length === 0) return;
-        const prefix = window.location.pathname.includes('/tools/') ? '../' : '';
         const wrap = document.createElement('div');
         wrap.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
         recent.forEach(item => {
             const id = typeof item?.id === 'string' && /^[a-z0-9-]+$/i.test(item.id) ? item.id : null;
             if (!id) return;
             const link = document.createElement('a');
-            link.href = `${prefix}tools/${id}.html`;
+            link.href = `/tools/${id}`;
             link.style.cssText = 'padding:10px 15px;background:var(--surface-1);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;';
             link.textContent = String(item.name || id);
             wrap.appendChild(link);
