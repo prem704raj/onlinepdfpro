@@ -227,7 +227,7 @@
 
             var money = '₹' + Number(product.price || 0);
             var previews = Array.isArray(product.previewPages) ? product.previewPages.slice(0, 5) : [];
-            document.title = product.title + ' | OnlinePDFPro';
+            document.title = product.title + ' — ' + product.pageCount + '-page PDF Study Draft | OnlinePDFPro';
             document.getElementById('productTitle').textContent = product.title;
             document.getElementById('productDescription').textContent = product.description || 'A carefully prepared digital study guide for focused revision.';
             document.getElementById('pageCount').textContent = product.pageCount || '—';
@@ -244,6 +244,7 @@
             disclosure.append(disclosureLabel, document.createTextNode(' ' + (product.disclosure || 'Review the material before relying on it for important decisions.')));
 
             var list = document.getElementById('includedList');
+            list.replaceChildren();
             (product.includes || []).forEach(function (item) { var li = document.createElement('li'); li.textContent = item; list.appendChild(li); });
 
             var grid = document.getElementById('previewGrid');

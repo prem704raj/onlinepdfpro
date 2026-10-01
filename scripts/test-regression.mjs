@@ -383,7 +383,7 @@ async function browserSmoke() {
             title: document.querySelector('#productTitle')?.textContent.trim(),
             included: document.querySelectorAll('#includedList li').length
         }));
-        check(previewInitial.thumbnails === 5 && previewInitial.widths.every(width => width < 200) && previewInitial.title === 'DBMS Complete Notes' && previewInitial.included >= 4, 'Detail page renders five compact previews and product details');
+        check(previewInitial.thumbnails === 5 && previewInitial.widths.every(width => width < 200) && previewInitial.title === 'DBMS Complete Notes' && previewInitial.included === 5, 'Detail page renders five compact previews and one copy of each coverage item');
         await page.click('#previewGrid .preview-thumb:nth-child(3)');
         await page.waitForFunction(() => document.querySelector('#previewDialog')?.open === true, { timeout: 5000 });
         check(await page.$eval('#dialogImage', image => /page 3 of 5/i.test(image.alt)), 'Detail preview opens the selected page in the dialog');
