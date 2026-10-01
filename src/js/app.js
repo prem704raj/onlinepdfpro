@@ -79,6 +79,13 @@ const MobileMenu = {
         });
 
         if (menuToggle && nav) {
+            const closeMenu = () => {
+                nav.classList.remove('active');
+                menuToggle.textContent = '☰';
+                menuToggle.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.setAttribute('aria-label', 'Open menu');
+            };
             menuToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = nav.classList.toggle('active');
@@ -91,22 +98,21 @@ const MobileMenu = {
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
-                    nav.classList.remove('active');
-                    menuToggle.textContent = '☰';
-                    menuToggle.classList.remove('open');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                    menuToggle.setAttribute('aria-label', 'Open menu');
+                    closeMenu();
                 }
             });
 
             // Close on nav link click (except install link)
             nav.querySelectorAll('.nav-link:not(.pwa-install-link)').forEach(link => {
                 link.addEventListener('click', () => {
-                    nav.classList.remove('active');
-                    menuToggle.textContent = '☰';
-                    menuToggle.classList.remove('open');
-                    menuToggle.setAttribute('aria-expanded', 'false');
+                    closeMenu();
                 });
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && nav.classList.contains('active')) {
+                    closeMenu();
+                    menuToggle.focus();
+                }
             });
         }
 
@@ -799,6 +805,9 @@ const PwaInstallManager = {
         }
     },
     showInstallBanner() {
+        // Leave the document workspace and an open checkout cart unobstructed.
+        // Installation remains available through the navigation menu.
+        if (document.body.classList.contains('pdf-editor-body') || document.querySelector('.cart-drawer.open')) return;
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';

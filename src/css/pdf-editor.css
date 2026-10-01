@@ -1400,6 +1400,15 @@ body.pdf-editor-body {
 }
 
 @media (max-width: 900px) {
+  .pdf-context-toggle, .pdf-context-color {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+  .pdf-text-context-toolbar select,
+  .pdf-text-context-toolbar input[type="number"],
+  .pdf-text-context-advanced select,
+  .pdf-text-context-advanced input[type="number"] { min-height: 44px; }
   .pdf-editor-layout {
     position: relative;
     display: block;
@@ -1504,12 +1513,12 @@ body.pdf-editor-body {
     white-space: nowrap;
   }
   .pdf-icon-button {
-    width: 34px;
-    min-width: 34px;
-    min-height: 34px;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
   .pdf-button {
-    min-height: 34px;
+    min-height: 44px;
     padding: 0 8px;
     font-size: .72rem;
   }

@@ -69,5 +69,6 @@ Before enabling the new production workflow:
 1. Completed on the review branch: explicit compression/image choices and form-only flattening, with exported-document tests. See `IMPLEMENTATION_BATCH_2.md`.
 2. Completed on the review branch: static DBMS product route using the existing price, sample pages and AI-assisted draft disclosure. See `IMPLEMENTATION_BATCH_3.md`.
 3. Completed on the review branch: AI document scope, error recovery and bounded conversation context, with synthetic long/scanned PDF tests. See `IMPLEMENTATION_BATCH_4.md`.
-4. Remaining acceptance work: real provider/conversion tests, test-mode payment fulfilment and recovery, keyboard task reviews, alerts, backup restoration and rollback validation.
-5. Remaining acquisition work: reviewed study material, original guides and measured acquisition → tool completion → return usage. Notes expansion needs human content review and demand evidence; avoid fabricated expertise, testimonials, or sales claims.
+4. Completed on the review branch: mobile layout and touch usability corrections, with 84-page responsive coverage and portrait/landscape cart, preview and loaded-editor interaction checks. See `IMPLEMENTATION_BATCH_5.md`.
+5. Remaining acceptance work: real provider/conversion tests, test-mode payment fulfilment and recovery, physical iPhone/Safari and Android keyboard/memory checks, keyboard task reviews, alerts, backup restoration and rollback validation.
+6. Remaining acquisition work: reviewed study material, original guides and measured acquisition → tool completion → return usage. Notes expansion needs human content review and demand evidence; avoid fabricated expertise, testimonials, or sales claims.
