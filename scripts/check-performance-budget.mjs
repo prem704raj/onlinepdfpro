@@ -44,6 +44,8 @@ const measured = {
         .reduce((total, file) => total + size(file), 0),
     coreJs: ['_site/js/app.js', '_site/js/auth.js', '_site/js/store.js', '_site/js/analytics.js']
         .reduce((total, file) => total + size(file), 0),
+    productCss: size('_site/css/product-detail.css'),
+    productJs: size('_site/js/product-reviews.js'),
     site: sumFiles('_site') - editorFonts,
     editorFonts
 };
@@ -52,6 +54,8 @@ const budgets = {
     homepage: 100_000,
     coreCss: 180_000,
     coreJs: 140_000,
+    productCss: 20_000,
+    productJs: 8_000,
     site: 30_000_000,
     editorFonts: 5_200_000
 };

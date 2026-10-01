@@ -1,7 +1,7 @@
 {
   "name": "doctools",
   "version": "1.0.0",
-  "description": "OnlinePDFPro — privacy-conscious PDF tools, powered by Eleventy.",
+  "description": "OnlinePDFPro \u2014 privacy-conscious PDF tools, powered by Eleventy.",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -24,7 +24,7 @@
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/write-release.js && node scripts/version-sw.js",
     "build:production": "node scripts/preflight-production.mjs && npm run build",
-    "test": "node scripts/test-site.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs && node scripts/test-pdf-output.mjs && node scripts/test-ai-document.mjs && node scripts/test-mobile.mjs",
+    "test": "node scripts/test-site.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs && node scripts/test-pdf-output.mjs && node scripts/test-ai-document.mjs && node scripts/test-mobile.mjs && node scripts/test-product-detail.mjs",
     "test:mobile": "node scripts/test-mobile.mjs",
     "test:analytics": "node scripts/test-analytics.mjs",
     "test:site": "node scripts/test-site.mjs",
@@ -35,7 +35,8 @@
     "start": "npm run dev",
     "sync:root": "node scripts/sync-to-root.js",
     "test:pdf-output": "node scripts/test-pdf-output.mjs",
-    "test:ai-document": "node scripts/test-ai-document.mjs"
+    "test:ai-document": "node scripts/test-ai-document.mjs",
+    "test:product": "node scripts/test-product-detail.mjs"
   },
   "repository": {
     "type": "git",
