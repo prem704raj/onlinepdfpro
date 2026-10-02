@@ -1137,6 +1137,27 @@ test("Speech to Text: recognition events preserve words and recover from errors"
     await p.close();
   }
 });
+test("Remove Background: a stalled model load can be stopped by reloading", async () => {
+  const p = await open('/remove-background', {
+    intercept: req => {
+      if (req.url().includes('@huggingface/transformers')) return req.respond({
+        status: 200, contentType: 'application/javascript', headers: { 'Access-Control-Allow-Origin': '*' },
+        body: 'export const env={backends:{onnx:{wasm:{}}}}; export const pipeline=()=>new Promise(()=>{});'
+      });
+      return req.abort();
+    }
+  });
+  try {
+    await upload(p, '#uploadZone input', fixtures.jpg);
+    await visible(p, '#processingSection');
+    await p.waitForFunction(() => document.querySelector('#progressText').textContent.includes('Loading BEN2 model'));
+    await visible(p, '#stopProcessingBtn');
+    await Promise.all([p.waitForNavigation({ waitUntil: 'load' }), click(p, '#stopProcessingBtn')]);
+    await visible(p, '#uploadZone');
+    assert.equal(await p.$eval('#fileInput', e => e.files.length), 0);
+    assert.deepEqual(p.testErrors, []);
+  } finally { await p.close(); }
+});
 test("Remove Background: corrupt image reports a recoverable error", async () => {
   const p = await open("/remove-background");
   try {

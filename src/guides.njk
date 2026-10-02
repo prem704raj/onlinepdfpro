@@ -1,0 +1,16 @@
+---
+title: PDF Guides & Original Examples
+description: Practical PDF walkthroughs with original example files, clear limitations and checks for the downloaded result.
+permalink: /guides.html
+---
+{% extends "base.njk" %}
+{% block head %}<link rel="stylesheet" href="/css/guides.css">{% endblock %}
+{% block content %}
+<section class="guide-shell">
+<p class="guide-kicker">Guides & Examples</p><h1>Finish a document task with a result you can check</h1>
+<p>Start with our original fictional files, follow the steps, and inspect the download. These walkthroughs explain the tool choices and limitations that matter when preparing assignments or application documents.</p>
+<div class="guide-grid">{% for guide in guides %}<article class="guide-card"><h2><a href="{{ guide.url }}">{{ guide.title }}</a></h2><p>{{ guide.description }}</p><a href="{{ guide.url }}">Follow the walkthrough →</a></article>{% endfor %}</div>
+<aside class="guide-note"><h2>Use examples before private files</h2><p>The downloadable samples contain no customer data and are free to use when trying these tools. Merge, Split, JPG to PDF and Compress PDF perform the workflows described here in the browser. Other tools may use external services; read their processing details before uploading.</p></aside>
+<p><a href="/tools">Browse all tools</a> · <a href="/support">Get help or report an incorrect result</a></p>
+</section>
+{% endblock %}

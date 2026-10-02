@@ -1,0 +1,23 @@
+---
+pagination:
+  data: guides
+  size: 1
+  alias: guide
+permalink: "guides/{{ guide.slug }}/index.html"
+eleventyComputed:
+  title: "{{ guide.title }}"
+  description: "{{ guide.description }}"
+---
+{% extends "base.njk" %}
+{% block head %}<link rel="stylesheet" href="/css/guides.css">{% endblock %}
+{% block content %}
+<article class="guide-shell">
+<nav aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides">Guides & Examples</a></nav>
+<p class="guide-kicker">Practical walkthrough · Updated 2 October 2026</p><h1>{{ guide.title }}</h1>
+<p class="guide-intro">{{ guide.description }}</p>
+<div class="guide-actions">{% for tool in guide.tools %}<a class="btn btn-primary" href="{{ tool.url }}">Open {{ tool.name }}</a>{% endfor %}</div>
+<div class="guide-body">{{ guide.body | safe }}</div>
+<aside class="guide-note"><h2>Found an unclear step or incorrect output?</h2><p><a href="/support">Report it to support</a> with the tool name, browser and the step that failed. Avoid sending private documents or passwords. These examples cover the stated workflow; they cannot guarantee every PDF, image or phone will behave identically.</p></aside>
+<p><a href="/guides">Explore the other walkthroughs</a></p>
+</article>
+{% endblock %}

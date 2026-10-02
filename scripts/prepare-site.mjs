@@ -42,9 +42,15 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
     };
     let hasCsp = false;
     let hasAnalytics = false;
+    let hasPublisher = false;
     let head;
     walk(document, node => {
         if (node.tagName === 'head') head = node;
+        if (node.tagName === 'div' && (attribute(node, 'class') || '').split(/\s+/).includes('banner-ad-spacer')
+            && (node.childNodes || []).every(child => child.nodeName === '#comment' || (child.nodeName === '#text' && !child.value.trim()))) {
+            const location = node.sourceCodeLocation;
+            if (location) edits.push({ start: location.startOffset, end: location.endOffset, text: '' });
+        }
         if (node.tagName === 'script' && attribute(node, 'src')?.startsWith('/js/analytics.js')) hasAnalytics = true;
         if (node.tagName === 'script') {
             const source = attribute(node, 'src') || '';
@@ -61,6 +67,10 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
         }
         if (node.tagName === 'meta') {
             const key = attribute(node, 'property') || attribute(node, 'name');
+            if (key === 'google-adsense-account') {
+                hasPublisher = true;
+                change(node, 'content', 'ca-pub-3541372477756449');
+            }
             if (key === 'robots' && canonicalPath === '/history') change(node, 'content', 'noindex, follow');
             if (key === 'og:url' || key === 'twitter:url') change(node, 'content', `${origin}${canonicalPath}`);
             if ((attribute(node, 'http-equiv') || '').toLowerCase() === 'content-security-policy') {
@@ -84,6 +94,18 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
                 return value;
             };
             const normalized = normalizeData(data);
+            // Standalone legacy pages carry a copy of the old site description.
+            // Keep their shared structured metadata consistent with the product.
+            const updateSiteDescription = value => {
+                if (Array.isArray(value)) value.forEach(updateSiteDescription);
+                else if (value && typeof value === 'object') {
+                    if (value['@type'] === 'WebSite' && value.url === `${origin}/`) {
+                        value.description = 'PDF tools with practical examples and previewable AI-assisted study drafts.';
+                    }
+                    Object.values(value).forEach(updateSiteDescription);
+                }
+            };
+            updateSiteDescription(normalized);
             if (JSON.stringify(normalized) !== JSON.stringify(data)) {
                 const location = textNode.sourceCodeLocation;
                 edits.push({ start: location.startOffset, end: location.endOffset,
@@ -91,6 +113,11 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
             }
         }
     });
+    if (!hasPublisher && head?.sourceCodeLocation?.endTag) {
+        const at = head.sourceCodeLocation.endTag.startOffset;
+        // Ownership metadata makes no advertising or tracking request.
+        edits.push({ start: at, end: at, text: '<meta name="google-adsense-account" content="ca-pub-3541372477756449">' });
+    }
     if (!hasCsp && csp && head?.sourceCodeLocation?.endTag) {
         const at = head.sourceCodeLocation.endTag.startOffset;
         edits.push({ start: at, end: at, text: `<meta http-equiv="Content-Security-Policy" content="${escapeAttribute(csp)}">` });
@@ -103,7 +130,15 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
         else edits.push({ start: at, end: at, text: markup });
     }
     // One attribute may be touched first as a URL and then as its canonical.
-    const unique = new Map(edits.map(edit => [`${edit.start}:${edit.end}`, edit]));
+    const unique = new Map();
+    for (const edit of edits) {
+        const key = `${edit.start}:${edit.end}`;
+        const previous = unique.get(key);
+        // Distinct additions at one position must all survive. Replacements
+        // still use the last value when an attribute is normalized twice.
+        if (previous && edit.start === edit.end) previous.text += edit.text;
+        else unique.set(key, { ...edit });
+    }
     for (const edit of [...unique.values()].sort((a, b) => b.start - a.start)) html = html.slice(0, edit.start) + edit.text + html.slice(edit.end);
     return html;
 }

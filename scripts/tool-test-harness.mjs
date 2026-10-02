@@ -116,7 +116,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(403).end();
     return;
   }
-  if (!path.extname(target)) target += ".html";
+  if (!path.extname(target) && fs.existsSync(target + '.html')) target += '.html';
+  else if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, 'index.html');
+  else if (!path.extname(target)) target += ".html";
   if (!fs.existsSync(target) || fs.statSync(target).isDirectory()) {
     res.writeHead(404).end();
     return;
@@ -274,7 +276,8 @@ export async function open(route, options = {}) {
     };
   });
   if (options.init) await page.evaluateOnNewDocument(options.init);
-  await page.goto(base + route, { waitUntil: "load" });
+  const response = await page.goto(base + route, { waitUntil: "load" });
+  assert.equal(response.status(), 200, `Test route must serve the intended page: ${route}`);
   await page.evaluate(() => {
     if (window.OnlinePDFPro?.Downloader)
       OnlinePDFPro.Downloader.saveBlob = window.__captureDownload;
@@ -324,8 +327,9 @@ export async function click(page, selector) {
   await page.$eval(selector, (e) =>
     e.scrollIntoView({ behavior: "instant", block: "center" }),
   );
-  await new Promise((r) => setTimeout(r, 150));
-  await page.click(selector);
+  // Use the browser driver's stability/viewport/enabled checks after scrolling.
+  // A fixed delay can click the old position during sticky-header reflow.
+  await page.locator(selector).click();
 }
 export async function download(page, index = 0) {
   try {

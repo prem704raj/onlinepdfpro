@@ -33,6 +33,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/**/*.otf');
   eleventyConfig.addPassthroughCopy('src/**/*.wasm');
   eleventyConfig.addPassthroughCopy('src/**/*.gz');
+  eleventyConfig.addPassthroughCopy({ 'src/assets/examples': 'assets/examples' });
   // Vendor libraries are committed under the repository-level js/ directory
   // because several of them are large binary/runtime assets. Copy them into
   // the deployable site as well; otherwise an _site-only Pages deployment

@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'parse5';
+import { createRequire } from 'node:module';
 import { attribute, walk, prepareHtml, cleanPath } from './prepare-site.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -13,6 +14,12 @@ const files = fs.readdirSync(site, { recursive: true }).filter(file => file.ends
 const redirectLines = fs.readFileSync(path.join(root, 'src/_redirects'), 'utf8').split(/\r?\n/)
     .map(line => line.trim()).filter(line => line && !line.startsWith('#'));
 const redirects = new Map(redirectLines.map(line => line.split(/\s+/).slice(0, 2)));
+
+test('the homepage focuses on five local PDF workflows while the directory preserves every tool', () => {
+    const registry = createRequire(import.meta.url)('../src/_data/tools.js').tools;
+    assert.equal(registry.length, 46);
+    assert.deepEqual(registry.filter(tool => tool.featured).map(tool => tool.name).sort(), ['Compress PDF', 'JPG to PDF', 'Merge PDF', 'PDF Editor', 'Split PDF']);
+});
 
 test('Cloudflare redirects use supported syntax and have no cycles or intermediate .html targets', () => {
     for (const line of redirectLines) {
@@ -41,7 +48,7 @@ test('every generated page has one canonical and analytics loader, with a consis
             assert.equal(html, fs.readFileSync(path.join(root, 'src', file), 'utf8'), 'Search Console verification must remain unchanged');
             continue;
         }
-        const canonicals = [], loaders = [], policies = [], links = [];
+        const canonicals = [], loaders = [], policies = [], links = [], publishers = [];
         let noindex = false;
         walk(parse(html), node => {
             if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') canonicals.push(attribute(node, 'href'));
@@ -49,6 +56,7 @@ test('every generated page has one canonical and analytics loader, with a consis
             if (node.tagName === 'meta' && attribute(node, 'http-equiv')?.toLowerCase() === 'content-security-policy') policies.push(attribute(node, 'content'));
             if (node.tagName === 'a') links.push(attribute(node, 'href'));
             if (node.tagName === 'meta' && attribute(node, 'name') === 'robots' && /noindex/.test(attribute(node, 'content') || '')) noindex = true;
+            if (node.tagName === 'meta' && attribute(node, 'name') === 'google-adsense-account') publishers.push(attribute(node, 'content'));
         });
         const expected = redirects.get(cleanPath(file)) || cleanPath(file);
         if (!noindex || canonicals.length) {
@@ -56,10 +64,27 @@ test('every generated page has one canonical and analytics loader, with a consis
             assert.equal(canonicals[0], `https://onlinepdfpro.com${expected}`, file);
         }
         assert.equal(loaders.length, 1, `${file}: one analytics loader`);
+        assert.deepEqual(publishers, ['ca-pub-3541372477756449'], `${file}: publisher ownership`);
         assert.deepEqual(policies, [policy], `${file}: shared CSP`);
         for (const link of links) if (link?.startsWith('/') || link?.startsWith('https://onlinepdfpro.com/')) {
             assert.ok(!/\.html(?:[?#]|$)/.test(link), `${file}: navigation still points to ${link}`);
         }
+    }
+});
+
+test('HTML preparation removes empty ad gaps while preserving populated containers', () => {
+    const html = '<html><head></head><body><div class="banner-ad-spacer"> \n<!-- reserved --></div><div class="banner-ad-spacer"><p>Useful content</p></div></body></html>';
+    const result = prepareHtml(html, { canonicalPath: '/', routes: new Map(), csp: "default-src 'self'" });
+    assert.ok(!result.includes('reserved'));
+    assert.ok(result.includes('<div class="banner-ad-spacer"><p>Useful content</p></div>'));
+    assert.equal(prepareHtml(result, { canonicalPath: '/', routes: new Map(), csp: "default-src 'self'" }), result);
+});
+
+test('protected tools use the public Turnstile widget key observed in the account dashboard', () => {
+    for (const tool of ['chat-with-pdf', 'pdf-summarizer', 'pdf-to-flashcards', 'word-to-pdf', 'pdf-to-word']) {
+        const html = fs.readFileSync(path.join(site, `tools/${tool}.html`), 'utf8');
+        assert.match(html, /sitekey:\s*'0x4AAAAAAEh3z6dQZl38ae8E'/, `${tool}: public widget key`);
+        assert.ok(!html.includes('0x4AAAAAAEh3z6dQZ138ae8E'), `${tool}: mistyped key must not survive`);
     }
 });
 

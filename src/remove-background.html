@@ -122,7 +122,7 @@
 
 <div class="container" style="max-width:900px;">
  <div class="tool-header">
- <span class="section-tag fade-in">AI Image Tool</span>
+ <span class="section-tag fade-in">Experimental AI Image Tool</span>
  <h1 class="tool-title fade-in">Remove Background from Image — Free</h1>
  <p class="tool-description fade-in" style="animation-delay:0.1s;">Remove image backgrounds in your browser. AI models download from Hugging Face on first use; your image stays on this device. No signup, no watermark.</p>
  </div>
@@ -163,6 +163,8 @@
  <div class="progress-track"><div class="progress-fill-bar" id="progressBar"></div></div>
  <p id="progressText" style="color:var(--text-secondary);font-size:.9rem;">Initializing...</p>
  <div class="model-info" id="modelNotice">&#9432; First use downloads a large model and can take several minutes. Browser caching depends on available storage.</div>
+ <button class="btn btn-secondary" id="stopProcessingBtn" type="button" style="margin-top:16px;">Stop and reload</button>
+ <p style="font-size:.85rem;margin-top:10px;">Reloading stops this attempt and clears the selected image. Choose it again to retry.</p>
  </div>
  </div>
 
@@ -764,6 +766,8 @@
  }
  }
 
+ var stopProcessingBtn = $('stopProcessingBtn');
+ if(stopProcessingBtn) stopProcessingBtn.addEventListener('click', function(){ window.location.reload(); });
  var retryBtn=$('retryBtn'),backBtn=$('backBtn'),newBtn=$('newImageBtn');
  if(retryBtn) retryBtn.addEventListener('click',function(){if(origFile) processFile(origFile);else resetAll();});
  if(backBtn||newBtn) [backBtn,newBtn].forEach(b=>b&&b.addEventListener('click',resetAll));

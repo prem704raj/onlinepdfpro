@@ -13,13 +13,21 @@ permalink: /sitemap.xml
   { url: '/terms', priority: '0.5', changefreq: 'yearly' },
   { url: '/refund', priority: '0.5', changefreq: 'yearly' },
   { url: '/study-materials', priority: '0.9', changefreq: 'weekly' },
-  { url: '/blog', priority: '0.7', changefreq: 'weekly' }
+  { url: '/blog', priority: '0.7', changefreq: 'weekly' },
+  { url: '/guides', priority: '0.7', changefreq: 'monthly' }
 ] -%}
 {%- for page in staticPages %}
   <url>
     <loc>https://onlinepdfpro.com{{ page.url }}</loc>
     <changefreq>{{ page.changefreq }}</changefreq>
     <priority>{{ page.priority }}</priority>
+  </url>
+{%- endfor %}
+{%- for guide in guides %}
+  <url>
+    <loc>https://onlinepdfpro.com{{ guide.url }}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 {%- endfor %}
 {%- for tool in toolRegistry.tools %}
