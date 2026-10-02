@@ -435,6 +435,7 @@
  document.getElementById('zoomValue').textContent = '100%';
  renderCropPreview();
  };
+ sourceImg.onerror = () => { sourceImg = null; alert('Could not decode this image. Choose a valid JPG, PNG or WebP image.'); };
  sourceImg.src = e.target.result;
  };
  reader.readAsDataURL(file);
@@ -461,8 +462,9 @@
  document.getElementById('customH').addEventListener('input', updateCustomSize);
 
  function updateCustomSize() {
- photoW_mm = parseInt(document.getElementById('customW').value) || 35;
- photoH_mm = parseInt(document.getElementById('customH').value) || 45;
+ const width = Number(document.getElementById('customW').value), height = Number(document.getElementById('customH').value);
+ if (![width,height].every(n => Number.isFinite(n) && n >= 10 && n <= 200)) return;
+ photoW_mm = width; photoH_mm = height;
  presetName = 'Custom';
  updateSizeInfo();
  renderCropPreview();
@@ -633,6 +635,7 @@
 
  function generatePhotos() {
  if (!sourceImg) return;
+ if (document.getElementById('presetSelect').value === 'custom' && (!document.getElementById('customW').reportValidity() || !document.getElementById('customH').reportValidity())) return;
 
  // 1. Generate single photo at 300 DPI
  const photoWpx = mmToPx(photoW_mm);
@@ -666,7 +669,7 @@
  fitH *= zoom / 100;
 
  // Scale pan from display coords to output coords
- const displayRatio = photoHpx / 420;
+ const displayRatio = photoHpx / parseFloat(cropCanvas.style.height);
  const scaledPanX = panX * displayRatio;
  const scaledPanY = panY * displayRatio;
 
@@ -731,8 +734,8 @@
  // Show results
  const inW = (photoW_mm / MM_PER_INCH).toFixed(1);
  const inH = (photoH_mm / MM_PER_INCH).toFixed(1);
- document.getElementById('singleInfo').textContent = `${photoW_mm}×${photoH_mm} mm (${inW}×${inH} in) at 300 DPI — ${photoWpx}×${photoHpx} pixels`;
- document.getElementById('sheetInfo').textContent = `${sheetType === '4x6' ? '4×6 inch' : 'A4'} sheet with ${photoCount} photos (${cols}×${rows} grid) at 300 DPI`;
+ document.getElementById('singleInfo').textContent = `${photoW_mm}×${photoH_mm} mm (${inW}×${inH} in) — ${photoWpx}×${photoHpx} pixels, enough for 300 pixels/inch at the stated size. Set the physical print size manually; browser image metadata may use a different DPI.`;
+ document.getElementById('sheetInfo').textContent = `${sheetType === '4x6' ? '4×6 inch' : 'A4'} sheet with ${photoCount} photos (${cols}×${rows} grid). Print at the stated paper size with scaling disabled. Check your application authority’s photo rules.`;
 
  editorSection.style.display = 'none';
  resultsSection.style.display = 'block';

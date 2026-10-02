@@ -444,7 +444,7 @@
  <p class="tool-description"
  style="color:var(--text-secondary); font-size:1rem; max-width:780px; margin:0 auto; line-height:1.6;">Upload
  a PDF, select pages from thumbnails or page ranges, preview selected pages, then extract as one PDF
- or export selected pages as high-quality 4K PNG images (direct download or ZIP).</p>
+ or export selected pages as high-quality 4K JPG images (direct download or ZIP).</p>
  </div>
 
  <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
@@ -641,7 +641,7 @@
  return String(pageNum).padStart(3, '0');
  }
 
- async function renderPageAs4kPngBlob(pageIndex) {
+ async function renderPageAs4kJpegBlob(pageIndex) {
  if (!state.pdfJsDoc) {
  throw new Error('PDF not loaded.');
  }
@@ -671,13 +671,13 @@
  }).promise;
 
  const blob = await new Promise(function (resolve, reject) {
- canvas.toBlob(function (pngBlob) {
- if (pngBlob) {
- resolve(pngBlob);
+ canvas.toBlob(function (jpegBlob) {
+ if (jpegBlob) {
+ resolve(jpegBlob);
  } else {
  reject(new Error('Could not render PNG blob.'));
  }
- }, 'image/png');
+ }, 'image/jpeg', 0.95);
  });
 
  canvas.width = 0;
@@ -888,7 +888,7 @@
  elements.extractSingleBtn.textContent = 'Extracting...';
 
  try {
- const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes, { ignoreEncryption: true });
+ const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes);
  const outDoc = await PDFLib.PDFDocument.create();
 
  for (let i = 0; i < selectedIndices.length; i++) {
@@ -933,14 +933,14 @@
  const pageNum = pageIndex + 1;
  setStatus('Preparing 4K image ' + (i + 1) + ' / ' + selectedIndices.length + '...');
 
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ downloadBlob(jpegBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.jpg');
  await nextFrame();
  }
 
  state.extractedCount = selectedIndices.length;
  updateStats();
- setStatus('Downloaded ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
+ setStatus('Downloaded ' + selectedIndices.length + ' high-quality 4K JPG image(s).');
  } catch (err) {
  console.error(err);
  alert('Could not download selected pages as 4K images.');
@@ -967,12 +967,12 @@
  const pageNum = pageIndex + 1;
  setStatus('Preparing single 4K image...');
 
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ downloadBlob(jpegBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.jpg');
 
  state.extractedCount = 1;
  updateStats();
- setStatus('Downloaded page ' + pageNum + ' as a 4K PNG image.');
+ setStatus('Downloaded page ' + pageNum + ' as a 4K JPG image.');
  } catch (err) {
  console.error(err);
  alert('Could not download the selected page as a 4K image.');
@@ -1005,8 +1005,8 @@
  for (let i = 0; i < selectedIndices.length; i++) {
  const pageIndex = selectedIndices[i];
  const pageNum = pageIndex + 1;
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- zip.file('page-' + pageToken(pageNum) + '-4k.png', pngBlob);
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ zip.file('page-' + pageToken(pageNum) + '-4k.jpg', jpegBlob);
 
  if (i % 3 === 0) {
  setStatus('Preparing ZIP: ' + (i + 1) + ' / ' + selectedIndices.length + ' pages...');
@@ -1022,7 +1022,7 @@
  downloadBlob(zipBlob, baseFileName() + '-images-4k.zip');
  state.extractedCount = selectedIndices.length;
  updateStats();
- setStatus('Created ZIP with ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
+ setStatus('Created ZIP with ' + selectedIndices.length + ' high-quality 4K JPG image(s).');
  } catch (err) {
  console.error(err);
  alert('Could not build image ZIP from selected pages.');
@@ -1050,7 +1050,7 @@
  try {
  const bytes = new Uint8Array(await file.arrayBuffer());
  state.originalPdfBytes = bytes;
- const loadingTask = pdfjsLib.getDocument({ data: bytes });
+ const loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
 
  loadingTask.onProgress = function (prog) {
  if (prog && prog.total) {

@@ -63,8 +63,8 @@
 
  }
 
- header h1,
- header h1 a {
+ body > header h1,
+ body > header h1 a {
  color: white !important;
  text-decoration: none;
  }
@@ -370,7 +370,7 @@
  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.18);
  border-radius: 4px;
  overflow: hidden;
- font-family: var(--resume-font, "Segoe UI", Arial, sans-serif);
+ font-family: var(--resume-font, "Segoe UI", Arial, sans-serif), "NotoSansDevanagari";
  --accent-color: #2563eb;
  }
 
@@ -534,72 +534,72 @@
  font-weight: 600;
  }
 
- .resume-sheet.template-modern.resume-header {
+ .resume-sheet.template-modern .resume-header {
 
  border-bottom: 3px solid color-mix(in srgb, var(--accent-color) 28%, #e2e8f0);
  }
 
- .resume-sheet.template-modern.resume-body {
+ .resume-sheet.template-modern .resume-body {
  display: grid;
  grid-template-columns: 1.05fr 0.95fr;
  gap: 16px;
  }
 
- .resume-sheet.template-modern.resume-main-col {
+ .resume-sheet.template-modern .resume-main-col {
  order: 1;
  }
 
- .resume-sheet.template-modern.resume-side-col {
+ .resume-sheet.template-modern .resume-side-col {
  order: 2;
  }
 
- .resume-sheet.template-modern.resume-section h3 {
+ .resume-sheet.template-modern .resume-section h3 {
  border-bottom-style: dashed;
  }
 
- .resume-sheet.template-executive.resume-header {
+ .resume-sheet.template-executive .resume-header { background: #0f172a;
 
  color: #f8fafc;
  border-bottom: none;
  }
 
- .resume-sheet.template-executive.resume-name,
- .resume-sheet.template-executive.item-title {
+ .resume-sheet.template-executive .resume-name,
+ .resume-sheet.template-executive .resume-header .item-title {
  color: #f8fafc;
  }
 
- .resume-sheet.template-executive.resume-role {
+ .resume-sheet.template-executive .resume-role {
  color: color-mix(in srgb, var(--accent-color) 65%, #ffffff);
  }
 
- .resume-sheet.template-executive.resume-contact {
+ .resume-sheet.template-executive .resume-contact {
  color: #cbd5e1;
  }
 
- .resume-sheet.template-executive.resume-link {
+ .resume-sheet.template-executive .resume-link {
  color: #93c5fd;
  }
 
- .resume-sheet.template-executive.resume-body {
+ .resume-sheet.template-executive .resume-body {
  padding-top: 12mm;
  }
 
- .resume-sheet.template-minimal.resume-header {
+ .resume-sheet.template-minimal .resume-header {
  border-bottom: 1px solid #e5e7eb;
  padding-bottom: 10mm;
  }
 
- .resume-sheet.template-minimal.resume-name {
+ .resume-sheet.template-minimal .resume-name {
  font-size: 30px;
  letter-spacing: 0;
  }
 
- .resume-sheet.template-minimal.resume-role {
+ .resume-sheet.template-minimal .resume-role {
  font-size: 15px;
  font-weight: 600;
  }
 
- .resume-sheet.template-minimal.resume-section h3 {
+ .resume-sheet.template-minimal .resume-section h3 {
  border-bottom: none;
  background: #f8fafc;
  padding: 4px 6px;
@@ -607,91 +607,91 @@
  display: inline-block;
  }
 
- .resume-sheet.template-compact.resume-header {
+ .resume-sheet.template-compact .resume-header {
  padding: 12mm 14mm 9mm;
  border-bottom: 2px solid color-mix(in srgb, var(--accent-color) 45%, #dbeafe);
  }
 
- .resume-sheet.template-compact.resume-body {
+ .resume-sheet.template-compact .resume-body {
  padding: 12mm 14mm;
  }
 
- .resume-sheet.template-compact.resume-name {
+ .resume-sheet.template-compact .resume-name {
  font-size: 28px;
  }
 
- .resume-sheet.template-compact.resume-section {
+ .resume-sheet.template-compact .resume-section {
  margin-top: 12px;
  }
 
- .resume-sheet.template-creative.resume-header {
+ .resume-sheet.template-creative .resume-header { background: #1e3a8a;
 
  color: #f8fafc;
  border-bottom: none;
  border-radius: 10px;
  }
 
- .resume-sheet.template-creative.resume-name,
- .resume-sheet.template-creative.item-title {
+ .resume-sheet.template-creative .resume-name,
+ .resume-sheet.template-creative .resume-header .item-title {
  color: #ffffff;
  }
 
- .resume-sheet.template-creative.resume-role,
- .resume-sheet.template-creative.resume-contact {
+ .resume-sheet.template-creative .resume-role,
+ .resume-sheet.template-creative .resume-contact {
  color: #dbeafe;
  }
 
- .resume-sheet.template-creative.resume-link {
+ .resume-sheet.template-creative .resume-link {
  color: #bfdbfe;
  }
 
- .resume-sheet.template-creative.resume-body {
+ .resume-sheet.template-creative .resume-body {
  display: grid;
  grid-template-columns: 1fr 1fr;
  gap: 12px;
  }
 
- .resume-sheet.template-creative.resume-section:first-child {
+ .resume-sheet.template-creative .resume-section:first-child {
  grid-column: 1 / -1;
  }
 
- .resume-sheet.template-corporate.resume-header {
+ .resume-sheet.template-corporate .resume-header {
  border-left: 7px solid color-mix(in srgb, var(--accent-color) 75%, #1d4ed8);
  border-bottom: 2px solid color-mix(in srgb, var(--accent-color) 30%, #cbd5e1);
  padding-left: 10mm;
  }
 
- .resume-sheet.template-corporate.resume-section {
+ .resume-sheet.template-corporate .resume-section {
  border: 1px solid #e2e8f0;
  border-radius: 8px;
  padding: 8px 9px;
  background: #f8fafc;
  }
 
- .resume-sheet.template-corporate.resume-section h3 {
+ .resume-sheet.template-corporate .resume-section h3 {
  border-bottom: none;
  padding-bottom: 0;
  margin-bottom: 8px;
  color: #1e3a8a;
  }
 
- .resume-sheet.template-elegant.resume-header {
+ .resume-sheet.template-elegant .resume-header {
  text-align: center;
  border-bottom: 1px solid #d1d5db;
 
  }
 
- .resume-sheet.template-elegant.resume-role {
+ .resume-sheet.template-elegant .resume-role {
  font-style: italic;
  color: #475569;
  letter-spacing: 0.3px;
  }
 
- .resume-sheet.template-elegant.resume-contact {
+ .resume-sheet.template-elegant .resume-contact {
  justify-content: center;
  }
 
- .resume-sheet.template-elegant.resume-section h3 {
+ .resume-sheet.template-elegant .resume-section h3 {
  border-bottom: none;
  border-top: 1px solid #e2e8f0;
  padding-top: 6px;
@@ -700,74 +700,74 @@
  letter-spacing: 0.8px;
  }
 
- .resume-sheet.template-neo.resume-header {
+ .resume-sheet.template-neo .resume-header { background: #312e81;
 
  color: #f8fafc;
  border-bottom: none;
  }
 
- .resume-sheet.template-neo.resume-name,
- .resume-sheet.template-neo.item-title {
+ .resume-sheet.template-neo .resume-name,
+ .resume-sheet.template-neo .resume-header .item-title {
  color: #f8fafc;
  }
 
- .resume-sheet.template-neo.resume-role,
- .resume-sheet.template-neo.resume-contact {
+ .resume-sheet.template-neo .resume-role,
+ .resume-sheet.template-neo .resume-contact {
  color: #c7d2fe;
  }
 
- .resume-sheet.template-neo.resume-link {
+ .resume-sheet.template-neo .resume-link {
  color: #bfdbfe;
  }
 
- .resume-sheet.template-slate.resume-body {
+ .resume-sheet.template-slate .resume-body {
  display: grid;
  grid-template-columns: 1.2fr 0.8fr;
  gap: 14px;
 
  }
 
- .resume-sheet.template-slate.resume-section h3 {
+ .resume-sheet.template-slate .resume-section h3 {
  color: #0f172a;
  border-bottom-color: #94a3b8;
  }
 
- .resume-sheet.template-atlas.resume-header {
+ .resume-sheet.template-atlas .resume-header {
  border-bottom: 3px solid color-mix(in srgb, var(--accent-color) 38%, #cbd5e1);
 
  }
 
- .resume-sheet.template-atlas.resume-body {
+ .resume-sheet.template-atlas .resume-body {
  columns: 2;
  column-gap: 14mm;
  padding-top: 14mm;
  }
 
- .resume-sheet.template-atlas.resume-section {
+ .resume-sheet.template-atlas .resume-section {
  break-inside: avoid;
  margin-top: 0;
  margin-bottom: 10px;
  }
 
- .resume-sheet.template-zenith.resume-header {
+ .resume-sheet.template-zenith .resume-header {
  border-bottom: 1px solid #e5e7eb;
 
  padding-bottom: 8mm;
  }
 
- .resume-sheet.template-zenith.resume-name {
+ .resume-sheet.template-zenith .resume-name {
  font-size: 29px;
  letter-spacing: 0;
  font-weight: 600;
  }
 
- .resume-sheet.template-zenith.resume-role {
+ .resume-sheet.template-zenith .resume-role {
  font-weight: 500;
  font-size: 14px;
  color: #334155;
  }
 
- .resume-sheet.template-zenith.resume-section h3 {
+ .resume-sheet.template-zenith .resume-section h3 {
  border-bottom: none;
  color: #0f172a;
  letter-spacing: 0.4px;
@@ -777,13 +777,13 @@
  margin-bottom: 6px;
  }
 
- .resume-sheet.template-horizon.resume-header {
+ .resume-sheet.template-horizon .resume-header {
  border-bottom: none;
 
  position: relative;
  }
 
- .resume-sheet.template-horizon.resume-header::after {
+ .resume-sheet.template-horizon .resume-header::after {
  content: '';
  position: absolute;
  left: 16mm;
@@ -794,14 +794,14 @@
  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 45%, #0ea5e9));
  }
 
- .resume-sheet.template-horizon.resume-section h3 {
+ .resume-sheet.template-horizon .resume-section h3 {
  border-bottom: none;
  color: #0f172a;
  position: relative;
  padding-left: 12px;
  }
 
- .resume-sheet.template-horizon.resume-section h3::before {
+ .resume-sheet.template-horizon .resume-section h3::before {
  content: '';
  position: absolute;
  left: 0;
@@ -848,12 +848,12 @@
  min-height: auto;
  }
 
- .resume-sheet.template-slate.resume-body {
+ .resume-sheet.template-slate .resume-body {
  display: block;
 
  }
 
- .resume-sheet.template-atlas.resume-body {
+ .resume-sheet.template-atlas .resume-body {
  columns: 1;
  }
  }
@@ -2335,6 +2335,11 @@
 
  try {
  await waitForImages(sheet);
+ if (/[^\x00-\x7F]/.test(sheet.textContent)) {
+ if (![...document.fonts].some(face => face.family === 'ResumeUnicode')) { const face = new FontFace('ResumeUnicode', 'url(/fonts/NotoSansDevanagari-Regular.ttf)'); await face.load(); document.fonts.add(face); }
+ sheet.style.fontFamily = getComputedStyle(sheet).fontFamily + ', ResumeUnicode';
+ await document.fonts.ready;
+ }
 
  const longestEdge = Math.max(sheet.scrollWidth, sheet.scrollHeight, 1);
  const targetScale = RESUME_EXPORT_LONG_EDGE / longestEdge;
@@ -2342,10 +2347,30 @@
 
  const canvas = await html2canvas(sheet, {
  scale: scale,
+ windowWidth: 1440,
+ windowHeight: 1024,
  backgroundColor: '#ffffff',
  useCORS: true,
  imageTimeout: 0,
- logging: false
+ logging: false,
+ onclone: clonedDocument => {
+ // html2canvas 1.4 cannot parse modern color() values emitted by color-mix().
+ // Convert the computed export colors to RGB in the cloned document only.
+ const probe = clonedDocument.createElement('canvas'); probe.width = probe.height = 1;
+ const context = probe.getContext('2d');
+ const rgbColor = value => { context.clearRect(0,0,1,1); context.fillStyle = value; context.fillRect(0,0,1,1); const [r,g,b,a] = context.getImageData(0,0,1,1).data; return `rgba(${r},${g},${b},${a/255})`; };
+ const exportSheet = clonedDocument.getElementById('resumeSheet');
+ exportSheet.style.setProperty('width', '210mm', 'important');
+ exportSheet.style.setProperty('min-height', '297mm', 'important');
+ exportSheet.parentElement.style.width = '210mm';
+ for (const element of [exportSheet,...exportSheet.querySelectorAll('*')]) {
+ const styles = clonedDocument.defaultView.getComputedStyle(element);
+ for (const property of ['color','backgroundColor','borderTopColor','borderRightColor','borderBottomColor','borderLeftColor','textDecorationColor','backgroundImage','boxShadow']) {
+ const value = styles[property];
+ if (value.includes('color(')) element.style[property] = value.replace(/color\([^)]*\)/g,rgbColor);
+ }
+ }
+ }
  });
 
  const imgData = canvas.toDataURL('image/png');

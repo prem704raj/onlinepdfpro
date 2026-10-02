@@ -190,6 +190,7 @@
  <p id="progressText" class="note">Preparing scan...</p>
  </div>
  <p class="note">Detected regions are covered with opaque boxes and exported as a new rasterized file. Review every page before sharing.</p>
+ <label class="note"><input type="checkbox" id="reviewConfirmed" disabled> I reviewed every page for missed sensitive data. Automatic detection can miss text; the exported PDF will contain images rather than searchable text.</label>
  </div>
 
  <div class="shield-panel preview-wrap" style="margin-bottom:16px;">
@@ -234,6 +235,12 @@ const scanBtn = document.getElementById('scanBtn');
 const clearBtn = document.getElementById('clearBtn');
 const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 const downloadImageBtn = document.getElementById('downloadImageBtn');
+const reviewConfirmed = document.getElementById('reviewConfirmed');
+let scanComplete = false;
+reviewConfirmed.addEventListener('change', () => {
+ downloadPdfBtn.disabled = !(scanComplete && reviewConfirmed.checked && state.fileType === 'pdf');
+ downloadImageBtn.disabled = !(scanComplete && reviewConfirmed.checked && state.fileType === 'image');
+});
 const previewCanvas = document.getElementById('previewCanvas');
 const prevPageBtn = document.getElementById('prevPageBtn');
 const nextPageBtn = document.getElementById('nextPageBtn');
@@ -325,6 +332,7 @@ function renderResults(counts) {
 }
 
 function resetState() {
+ scanComplete = false; reviewConfirmed.checked = false; reviewConfirmed.disabled = true;
  state.file = null;
  state.fileType = null;
  state.pdfDoc = null;
@@ -448,7 +456,7 @@ function combineCounts(base, add) {
  return next;
 }
 
-function getLineGroups(items, viewport) {
+function getLineGroups(items, viewport, styles = {}) {
  const lines = [];
  items.forEach(item => {
  if (!item.str || !item.str.trim()) {
@@ -460,7 +468,25 @@ function getLineGroups(items, viewport) {
  const height = Math.max(1, Math.hypot(transform[2], transform[3]));
  const width = Math.max(1, item.width * viewport.scale);
  const line = lines.find(existing => Math.abs(existing.y - y) < height * 0.6);
- const entry = { x, y, width, height, text: item.str };
+ // Include ascenders, descenders and rotation. Baseline minus font height
+ // alone leaves the bottom of letters such as g/p/y visible.
+ const style = styles[item.fontName] || {};
+ const ascent = Number.isFinite(style.ascent) ? style.ascent : 1;
+ const descent = Number.isFinite(style.descent) ? style.descent : -0.3;
+ const axisLength = Math.hypot(transform[0], transform[1]) || 1;
+ const dx = transform[0] / axisLength * width;
+ const dy = transform[1] / axisLength * width;
+ const corners = [ascent, descent].flatMap(offset => [
+ [x + transform[2] * offset, y + transform[3] * offset],
+ [x + dx + transform[2] * offset, y + dy + transform[3] * offset]
+ ]);
+ const padding = Math.max(2, height * 0.1);
+ const left = Math.min(...corners.map(point => point[0])) - padding;
+ const top = Math.min(...corners.map(point => point[1])) - padding;
+ const bounds = { x: left, y: top,
+ width: Math.max(...corners.map(point => point[0])) + padding - left,
+ height: Math.max(...corners.map(point => point[1])) + padding - top };
+ const entry = { x, y, width, height, text: item.str, bounds };
  if (line) {
  line.items.push(entry);
  } else {
@@ -470,8 +496,8 @@ function getLineGroups(items, viewport) {
  return lines;
 }
 
-function getLineBoxesFromText(items, viewport) {
- const lines = getLineGroups(items, viewport);
+function getLineBoxesFromText(items, viewport, styles) {
+ const lines = getLineGroups(items, viewport, styles);
  const regions = [];
  let counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
 
@@ -482,12 +508,7 @@ function getLineBoxesFromText(items, viewport) {
  if (lineCounts.total > 0) {
  counts = combineCounts(counts, lineCounts);
  line.items.forEach(entry => {
- regions.push({
- x: entry.x,
- y: entry.y - entry.height,
- width: entry.width,
- height: entry.height
- });
+ regions.push(entry.bounds);
  });
  }
  });
@@ -534,7 +555,7 @@ async function processPdfPage(pageNumber) {
  let counts = { phone: 0, email: 0, aadhaar: 0, pan: 0, address: 0, signature: 0 };
 
  if (textContent.items && textContent.items.length > 0) {
- const result = getLineBoxesFromText(textContent.items, viewport);
+ const result = getLineBoxesFromText(textContent.items, viewport, textContent.styles);
  regions = result.regions;
  counts = result.counts;
  if (result.regions.length === 0) {
@@ -581,6 +602,11 @@ async function scanAndRedact() {
  setStatus('Upload a file first', 'warn');
  return;
  }
+ if (scanBtn.disabled) return;
+ scanBtn.disabled = true; clearBtn.disabled = true; fileInput.disabled = true;
+ reviewConfirmed.checked = false; reviewConfirmed.disabled = true; scanComplete = false;
+ downloadPdfBtn.disabled = true; downloadImageBtn.disabled = true;
+ try {
  setStatus('Scanning...', 'busy');
  showProgress(0, state.pages.length || 1, 'Starting scan...');
 
@@ -593,16 +619,17 @@ async function scanAndRedact() {
  showProgress(i + 1, totalPages, `Scanning page ${i + 1} of ${totalPages}...`);
  const result = await processPdfPage(i + 1);
  state.pages[i] = result.canvas;
+ state.pages[i].pdfSize = [result.canvas.width / 2, result.canvas.height / 2];
  totals = combineCounts(totals, result.counts);
  }
- downloadPdfBtn.disabled = false;
+ downloadPdfBtn.disabled = true;
  downloadImageBtn.disabled = true;
  } else {
  showProgress(1, 1, 'Scanning image...');
  const result = await processImageFile(state.file);
  state.pages = [result.canvas];
  totals = combineCounts(totals, result.counts);
- downloadImageBtn.disabled = false;
+ downloadImageBtn.disabled = true;
  downloadPdfBtn.disabled = true;
  }
 
@@ -614,6 +641,14 @@ async function scanAndRedact() {
  renderResults(totals);
  setStatus('Scan complete', 'success');
  showProgress(1, 1, 'Done');
+ scanComplete = true; reviewConfirmed.disabled = false;
+ } catch (error) {
+ state.pages = []; clearPreview(); updatePageControls();
+ setStatus('Scan failed. Try again with a valid file or a smaller document.', 'warn');
+ progressWrap.style.display = 'none';
+ } finally {
+ scanBtn.disabled = false; clearBtn.disabled = false; fileInput.disabled = false;
+ }
 }
 
 fileInput.addEventListener('change', async event => {
@@ -639,7 +674,7 @@ fileInput.addEventListener('change', async event => {
  setStatus('Image loaded', 'success');
  }
  } catch (error) {
- console.error(error);
+ resetState(); fileInput.value = '';
  setStatus('Could not load file', 'warn');
  }
 });
@@ -673,7 +708,7 @@ nextPageBtn.addEventListener('click', () => {
 });
 
 downloadImageBtn.addEventListener('click', () => {
- if (!state.pages.length) {
+ if (!scanComplete || !reviewConfirmed.checked || !state.pages.length) {
  return;
  }
  const canvas = state.pages[state.currentPage];
@@ -693,7 +728,7 @@ downloadImageBtn.addEventListener('click', () => {
 });
 
 downloadPdfBtn.addEventListener('click', async () => {
- if (!state.pages.length) {
+ if (!scanComplete || !reviewConfirmed.checked || !state.pages.length) {
  return;
  }
  const pdfDoc = await PDFLib.PDFDocument.create();
@@ -701,8 +736,9 @@ downloadPdfBtn.addEventListener('click', async () => {
  const dataUrl = canvas.toDataURL('image/png');
  const imgBytes = await fetch(dataUrl).then(res => res.arrayBuffer());
  const img = await pdfDoc.embedPng(imgBytes);
- const page = pdfDoc.addPage([img.width, img.height]);
- page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+ const [width, height] = canvas.pdfSize || [img.width, img.height];
+ const page = pdfDoc.addPage([width, height]);
+ page.drawImage(img, { x: 0, y: 0, width, height });
  }
  const pdfBytes = await pdfDoc.save();
  const blob = new Blob([pdfBytes], { type: 'application/pdf' });

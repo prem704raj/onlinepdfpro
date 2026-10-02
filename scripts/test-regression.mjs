@@ -106,9 +106,10 @@ check(/MAX_ARCHIVE_UNCOMPRESSED_SIZE/.test(wordToPdfModal) && /MAX_ARCHIVE_ENTRI
 check(/communicate\(timeout=CONVERT_TIMEOUT\)/.test(wordToPdfModal) && /killpg/.test(wordToPdfModal) && /rmtree\(user_dir/.test(wordToPdfModal), 'Word-to-PDF cleans timed-out LibreOffice process groups and profiles');
 check(/annotations and interactive form widgets are intentionally omitted/.test(read('src/tools/pdf-to-word.html')), 'PDF-to-Word clearly discloses annotation and form-field omission');
 
-const headersContent = read('_headers');
+const headersContent = read('src/_headers');
 check(/Content-Security-Policy:/.test(headersContent) && /Content-Security-Policy-Report-Only:/.test(headersContent), 'HTTP headers enforce CSP while retaining report-only telemetry');
 check(/https:\/\/onlinepdfpro-proxy\.prem736raj\.workers\.dev/.test(headersContent) && /https:\/\/tmpfiles\.org/.test(headersContent), 'Enforced CSP permits the Worker gateway and QR upload provider');
+check(headersContent.split('\n').filter(line => /Content-Security-Policy/.test(line)).every(line => /https:\/\/\*\.hf\.co/.test(line)), 'Both CSP policies allow redirected Hugging Face model downloads');
 check(/Permissions-Policy:.*geolocation=\(\)/.test(headersContent) && !/microphone=\(\)/.test(headersContent) && !/payment=\(\)/.test(headersContent), 'Permissions-Policy preserves microphone and payment access');
 
 const manifestContent = read('site.webmanifest');

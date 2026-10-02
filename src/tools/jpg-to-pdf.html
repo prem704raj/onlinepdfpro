@@ -336,6 +336,7 @@
  <script>
  let images = [];
  let dragIndex = null;
+ let isConverting = false;
 
  // Click to upload
  document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -346,7 +347,7 @@
  dropArea.ondragover = e => { e.preventDefault(); dropArea.style.borderColor = '#2563eb'; };
  dropArea.ondragleave = () => { dropArea.style.borderColor = '#e2e8f0'; };
  dropArea.ondrop = e => {
- e.preventDefault();
+ e.preventDefault(); e.stopPropagation();
  dropArea.style.borderColor = '#e2e8f0';
  addImages(e.dataTransfer.files);
  };
@@ -359,17 +360,20 @@
  };
 
  function addImages(fileList) {
+ if (isConverting) return;
+ if (images.length + fileList.length > 100) { alert('Add up to 100 images per PDF.'); return; }
  // Use Promise.all to ensure sequential order matches selection
  const filePromises = [...fileList].map(file => {
  return new Promise(resolve => {
- if (file.type.startsWith('image/')) {
+ if (file.type.startsWith('image/') && file.size > 0 && file.size <= 50 * 1024 * 1024) {
  const reader = new FileReader();
  reader.onload = e => {
  resolve(e.target.result);
  };
+ reader.onerror = () => { alert('An image could not be read. Please select it again.'); resolve(null); };
  reader.readAsDataURL(file);
  } else {
- resolve(null);
+ alert('Choose a non-empty image up to 50 MB.'); resolve(null);
  }
  });
  });
@@ -457,8 +461,10 @@
  }
 
  async function convertToPDF() {
+ if (isConverting) return;
  if (images.length === 0) return alert("Add images first!");
 
+ isConverting = true;
  document.getElementById('convertSection').style.display = 'none';
  document.getElementById('progress').style.display = 'block';
 
@@ -476,13 +482,8 @@
 
  // Safe scaling — 4K resolution limit for maximum quality
  const MAX_DIM = 4096;
- if (w > h && w > MAX_DIM) {
- h = Math.round(h * MAX_DIM / w);
- w = MAX_DIM;
- } else if (h > w && h > MAX_DIM) {
- w = Math.round(w * MAX_DIM / h);
- h = MAX_DIM;
- }
+ const scale = Math.min(1, MAX_DIM / Math.max(w, h));
+ w = Math.max(1, Math.round(w * scale)); h = Math.max(1, Math.round(h * scale));
 
  canvas.width = w;
  canvas.height = h;
@@ -543,6 +544,7 @@
  alert("An unexpected error occurred building the PDF. Please try again.");
  }
 
+ isConverting = false;
  document.getElementById('progress').style.display = 'none';
  document.getElementById('convertSection').style.display = 'block';
  }

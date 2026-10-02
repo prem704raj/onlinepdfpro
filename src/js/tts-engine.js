@@ -7,6 +7,7 @@ let isPaused = false;
 let currentSpeed = 1.0;
 let progressInterval = null;
 let startTime = 0;
+let playbackGeneration = 0;
 let ttsHistory = [];
 try {
     const storedHistory = JSON.parse(localStorage.getItem('ttsHistory') || '[]');
@@ -25,6 +26,7 @@ try {
 
 // Load voices
 function loadVoices() {
+    if (!synth) { document.getElementById('playBtn').disabled = true; alert('Speech playback is unavailable in this browser. TXT export still works.'); return; }
     allVoices = synth.getVoices();
     filterVoices();
     if (allVoices.length === 0) {
@@ -75,6 +77,7 @@ function switchTab(tab) {
 document.getElementById('pdfInput').addEventListener('change', async function (e) {
     const file = e.target.files[0];
     if (!file) return;
+    try {
 
     document.getElementById('pdfFileName').textContent = `📄 ${file.name}`;
     document.getElementById('pdfFileName').style.display = 'block';
@@ -94,6 +97,12 @@ document.getElementById('pdfInput').addEventListener('change', async function (e
     document.getElementById('textInput').value = fullText.trim();
     updateStats();
     switchTab('text');
+    await pdf.destroy();
+    if (!fullText.trim()) alert('No searchable text was found. Extract scanned text with Image to Text first.');
+    } catch (error) {
+        e.target.value = ''; document.getElementById('pdfFileName').textContent = 'Could not read PDF. Choose a valid, unencrypted PDF and try again.';
+        document.getElementById('uploadBox').classList.remove('loaded');
+    }
 });
 
 // Drag and drop
@@ -136,6 +145,7 @@ document.getElementById('textInput').addEventListener('input', updateStats);
 
 // ========== MAIN PLAY/PAUSE/STOP ==========
 function togglePlay() {
+    if (!synth) return alert('Speech playback is unavailable in this browser.');
     const text = document.getElementById('textInput').value.trim();
     if (!text) return alert('Please enter or upload text first!');
 
@@ -163,11 +173,14 @@ function togglePlay() {
 }
 
 function speakText(text) {
+    if (!synth) return;
+    const generation = ++playbackGeneration;
     // Split text into chunks (Chrome has a bug with long text)
     const chunks = splitTextIntoChunks(text, 200);
     let currentChunk = 0;
 
     function speakNextChunk() {
+        if (generation !== playbackGeneration) return;
         if (currentChunk >= chunks.length) {
             stopAudio();
             return;
@@ -185,6 +198,7 @@ function speakText(text) {
         utterance.volume = parseFloat(document.getElementById('volumeRange').value);
 
         utterance.onstart = () => {
+            if (generation !== playbackGeneration) return;
             isPlaying = true;
             isPaused = false;
             updatePlayButton('playing');
@@ -193,6 +207,7 @@ function speakText(text) {
         };
 
         utterance.onend = () => {
+            if (generation !== playbackGeneration) return;
             currentChunk++;
             if (currentChunk < chunks.length) {
                 speakNextChunk();
@@ -202,6 +217,7 @@ function speakText(text) {
         };
 
         utterance.onerror = () => {
+            if (generation !== playbackGeneration) return;
             stopAudio();
         };
 
@@ -229,7 +245,8 @@ function splitTextIntoChunks(text, maxWords) {
 }
 
 function stopAudio() {
-    synth.cancel();
+    playbackGeneration++;
+    if (synth) synth.cancel();
     isPlaying = false;
     isPaused = false;
     updatePlayButton('stopped');
@@ -369,95 +386,8 @@ function downloadText() {
 
 // Download MP3 using robust multi-proxy failover
 async function downloadAudio() {
-    const text = document.getElementById('textInput').value.trim();
-    if (!text) return alert('Please enter some text first!');
-
-    const btn = document.getElementById('dlAudioBtn');
-    if (!btn) return;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ Generating MP3...';
-    btn.disabled = true;
-
-    try {
-        const langFilter = document.getElementById('langFilter');
-        const langCode = (langFilter && langFilter.value !== 'all') ? langFilter.value : 'en';
-
-        // Chunk by sentences, keeping under ~150 chars
-        const chunks = [];
-        let current = '';
-        const words = text.split(' ');
-
-        for (let word of words) {
-            if ((current + ' ' + word).length < 150) {
-                current += (current ? ' ' : '') + word;
-            } else {
-                if (current) chunks.push(current);
-                current = word;
-            }
-        }
-        if (current) chunks.push(current);
-
-        const proxies = [
-            (u) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-            (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-            (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`
-        ];
-
-        const audioBuffers = [];
-        for (let i = 0; i < chunks.length; i++) {
-            btn.innerHTML = `⏳ Part ${i + 1}/${chunks.length}...`;
-            const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(chunks[i])}`;
-
-            let success = false;
-            for (const proxyFn of proxies) {
-                try {
-                    const proxyUrl = proxyFn(url);
-                    const res = await fetch(proxyUrl);
-                    if (res.ok) {
-                        const arrayBuffer = await res.arrayBuffer();
-                        if (arrayBuffer.byteLength > 100) { // Valid MP3 data check
-                            audioBuffers.push(arrayBuffer);
-                            success = true;
-                            break;
-                        }
-                    }
-                } catch (e) {
-                    continue; // try next proxy
-                }
-            }
-            if (!success) {
-                throw new Error(`Failed to download audio chunk ${i + 1}`);
-            }
-            // anti-rate-limit 
-            await new Promise(r => setTimeout(r, 600));
-        }
-
-        const totalLength = audioBuffers.reduce((acc, buf) => acc + buf.byteLength, 0);
-        const combined = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const buf of audioBuffers) {
-            combined.set(new Uint8Array(buf), offset);
-            offset += buf.byteLength;
-        }
-
-        const blob = new Blob([combined], { type: 'audio/mpeg' });
-        const urlObj = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = urlObj;
-        a.download = `Audio-${langCode}-OnlinePDFPro.mp3`;
-        a.click();
-
-        btn.innerHTML = '✅ Saved MP3!';
-        setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 3000);
-
-    } catch (e) {
-        console.error("Audio generation error:", e);
-        alert('Failed to generate audio directly (Proxy was blocked). Please try a shorter text.');
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
+    alert('Audio file export is unavailable. Browser speech playback and TXT download are supported.');
 }
-
 
 // ========== HISTORY ==========
 function addToHistory(text) {
@@ -517,6 +447,6 @@ window.addEventListener('load', () => {
 });
 
 // Chrome needs this
-if (synth.onvoiceschanged !== undefined) {
+if (synth && synth.onvoiceschanged !== undefined) {
     synth.onvoiceschanged = loadVoices;
 }

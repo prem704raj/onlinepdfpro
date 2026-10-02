@@ -165,7 +165,7 @@
  </div>
 
  <div class="crop-workspace" id="cropContainer">
- <img loading="lazy" id="cropImage" class="crop-image" src="" alt="Workspace">
+ <img id="cropImage" class="crop-image" src="" alt="Workspace">
  <div class="crop-overlay" id="cropOverlay">
  <div class="dimensions-tag" id="cropDimensions">0 × 0</div>
  <div class="crop-grid"></div>
@@ -238,12 +238,6 @@
  const cropOverlay = document.getElementById('cropOverlay');
  const cropContainer = document.getElementById('cropContainer');
 
- const fileInput = document.getElementById('fileInput');
- uploadZone.addEventListener('click', () => fileInput.click());
- fileInput.addEventListener('change', (e) => {
- if (e.target.files.length > 0) handleFileSelected(e.target.files);
- });
-
  OnlinePDFPro.FileUploader.init('uploadZone', {
  accept: 'image/jpeg,image/png,image/webp',
  multiple: false,
@@ -256,12 +250,14 @@
  reader.onload = (e) => {
  cropImage.onload = () => {
  originalImage = cropImage;
- initCrop();
  uploadZone.style.display = 'none';
  cropSection.style.display = 'block';
+ initCrop();
  };
+ cropImage.onerror = () => { alert('This image could not be decoded. Choose a valid JPG, PNG or WebP image.'); resetTool(); };
  cropImage.src = e.target.result;
  };
+ reader.onerror = () => { alert('The image could not be read. Please try again.'); resetTool(); };
  reader.readAsDataURL(imageFile);
  }
 
@@ -287,9 +283,9 @@
  document.getElementById('cropDimensions').textContent = `${actualWidth} × ${actualHeight}`;
  }
 
- document.querySelectorAll('#aspectOptions.aspect-btn').forEach(btn => {
+ document.querySelectorAll('#aspectOptions .aspect-btn').forEach(btn => {
  btn.onclick = () => {
- document.querySelectorAll('#aspectOptions.aspect-btn').forEach(b => b.classList.remove('active'));
+ document.querySelectorAll('#aspectOptions .aspect-btn').forEach(b => b.classList.remove('active'));
  btn.classList.add('active');
  const aspect = btn.dataset.aspect;
  if (aspect === 'free') {
@@ -308,7 +304,9 @@
  };
  });
 
- cropOverlay.onmousedown = (e) => {
+ cropOverlay.style.touchAction = 'none';
+ cropOverlay.onpointerdown = (e) => {
+ cropOverlay.setPointerCapture(e.pointerId);
  if (e.target.classList.contains('crop-handle')) {
  isResizing = true;
  activeHandle = e.target.dataset.handle;
@@ -320,7 +318,7 @@
  e.preventDefault();
  };
 
- document.onmousemove = (e) => {
+ cropOverlay.onpointermove = (e) => {
  if (!isDragging && !isResizing) return;
  const dx = e.clientX - startX;
  const dy = e.clientY - startY;
@@ -361,7 +359,7 @@
  updateCropOverlay();
  };
 
- document.onmouseup = () => { isDragging = false; isResizing = false; activeHandle = null; };
+ cropOverlay.onpointerup = cropOverlay.onpointercancel = () => { isDragging = false; isResizing = false; activeHandle = null; };
 
  document.getElementById('resetCropBtn').onclick = initCrop;
  document.getElementById('cropBtn').onclick = cropImageHandler;
@@ -375,8 +373,12 @@
  canvas.height = Math.round(crop.height * scaleY);
  const ctx = canvas.getContext('2d');
  ctx.drawImage(cropImage, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, canvas.width, canvas.height);
- const mimeType = imageFile.type === 'image/png' ? 'image/png' : 'image/jpeg';
+ const mimeType = imageFile.type === 'image/png' ? 'image/png' : imageFile.type === 'image/webp' ? 'image/webp' : 'image/jpeg';
+ if (mimeType === 'image/jpeg') {
+ ctx.globalCompositeOperation = 'destination-over'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.globalCompositeOperation = 'source-over';
+ }
  canvas.toBlob((blob) => {
+ if (!blob) { alert('The crop could not be exported. Try a smaller image.'); return; }
  croppedBlob = blob;
  document.getElementById('resultImage').src = URL.createObjectURL(blob);
  cropSection.style.display = 'none';
@@ -388,7 +390,8 @@
 
  document.getElementById('downloadBtn').onclick = () => {
  if (!croppedBlob) return;
- OnlinePDFPro.Downloader.saveBlob(croppedBlob, imageFile.name || 'cropped.jpg');
+ const ext = croppedBlob.type === 'image/png' ? '.png' : croppedBlob.type === 'image/webp' ? '.webp' : '.jpg';
+ OnlinePDFPro.Downloader.saveBlob(croppedBlob, (imageFile.name || 'image').replace(/\.[^.]+$/, '') + '-cropped' + ext);
  };
 
  document.getElementById('cropAnother').onclick = resetTool;

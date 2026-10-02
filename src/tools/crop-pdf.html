@@ -498,9 +498,10 @@
 
  async function loadPDF(file) {
  if (!file) return;
+ try {
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+ pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
  totalPages = pdfJsDoc.numPages;
  currentPage = 1;
  pageRatios = {};
@@ -515,7 +516,14 @@
  document.getElementById('cropContainer').style.display = 'block';
 
  await renderPage();
- setTimeout(initCropBox, 100);
+ } catch (error) {
+ pdfBytes = null; pdfJsDoc = null;
+ document.getElementById('fileInput').value = '';
+ document.getElementById('dropArea').style.display = '';
+ document.getElementById('cropContainer').style.display = 'none';
+ const header = document.querySelector('.tool-header'); if (header) header.style.display = '';
+ alert('Could not open this PDF. Use a valid, unencrypted PDF and try again.');
+ }
  }
 
  async function renderPage() {
@@ -531,7 +539,7 @@
  const scaleByWidth = availableWidth / unscaledViewport.width;
  const scaleByHeight = availableHeight / unscaledViewport.height;
  // Pick the smaller scale so the page fits both dimensions
- const targetScale = Math.min(scaleByWidth, scaleByHeight, 1.5);
+ const targetScale = Math.max(0.1, Math.min(scaleByWidth, scaleByHeight, 1.5));
 
  const viewport = page.getViewport({ scale: targetScale });
  const dpr = Math.max(window.devicePixelRatio || 1, 2);
@@ -724,7 +732,7 @@
  if (!pdfBytes) return;
  try {
  const bytes = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes);
- const pdfDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+ const pdfDoc = await PDFLib.PDFDocument.load(bytes);
  const pages = pdfDoc.getPages();
  const applyAll = document.getElementById('applyAll').checked;
 
@@ -733,15 +741,15 @@
  let ratio = applyAll ? pageRatios[currentPage] : pageRatios[pageNum];
 
  if (ratio) {
- const { width, height } = page.getSize();
- const newLeft = width * ratio.rLeft;
- const newWidth = width * ratio.rWidth;
- const newHeight = height * ratio.rHeight;
- const newTopMargin = height * ratio.rTop;
- const newBottom = height - newTopMargin - newHeight;
-
- page.setCropBox(newLeft, newBottom, newWidth, newHeight);
- page.setMediaBox(newLeft, newBottom, newWidth, newHeight);
+ const box = page.getCropBox();
+ const angle = ((page.getRotation().angle % 360) + 360) % 360;
+ const left = ratio.rLeft, top = ratio.rTop, rw = ratio.rWidth, rh = ratio.rHeight;
+ let crop;
+ if (angle === 90) crop = [box.x + box.width * top, box.y + box.height * left, box.width * rh, box.height * rw];
+ else if (angle === 180) crop = [box.x + box.width * (1 - left - rw), box.y + box.height * top, box.width * rw, box.height * rh];
+ else if (angle === 270) crop = [box.x + box.width * (1 - top - rh), box.y + box.height * (1 - left - rw), box.width * rh, box.height * rw];
+ else crop = [box.x + box.width * left, box.y + box.height * (1 - top - rh), box.width * rw, box.height * rh];
+ page.setCropBox(...crop);
  }
  });
 

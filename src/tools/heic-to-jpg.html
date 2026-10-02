@@ -138,7 +138,7 @@
  <span class="section-tag fade-in">Image Conversion</span>
  <h1 class="tool-title fade-in">HEIC to JPG Converter — Convert iPhone Photos Free</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Convert Apple HEIC/HEIF photos to standard JPG format. Works with iPhone, iPad & Mac photos. Batch convert multiple files at once. Free to use — review the processing details before uploading.
+ Convert Apple HEIC/HEIF photos to standard JPG format. Only the first image of a multi-image file is exported; original camera metadata is not preserved. Works with iPhone, iPad & Mac photos. Batch convert multiple files at once. Free to use — review the processing details before uploading.
  </p>
  </div>
 
@@ -286,6 +286,7 @@
 </main>
 
  <script src="../js/app.js?v=96"></script>
+ <script src="/js/vendor/jszip/jszip.min.js"></script>
 
  <!-- heic2any library for HEIC conversion -->
  <script src="/js/vendor/heic2any/heic2any.min.js"></script>
@@ -565,6 +566,10 @@
 
  function showResults(totalOriginal, totalOutput) {
  const successResults = results.filter(r => r.success);
+ let summary = resultsSection.querySelector('.batch-result-status');
+ if (!summary) { summary = document.createElement('p'); summary.className = 'batch-result-status'; summary.setAttribute('role','status'); resultsSection.prepend(summary); }
+ summary.textContent = successResults.length + ' of ' + results.length + ' files processed successfully.' + (results.some(r => !r.success) ? ' Some files could not be decoded or processed. Try valid files again.' : '');
+
 
  document.getElementById('totalFiles').textContent = successResults.length;
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
@@ -605,7 +610,7 @@
  return;
  }
  const zip = new JSZip();
- for (const result of successResults) zip.file(result.name, result.blob);
+ OnlinePDFPro.Downloader.addUniqueZipFiles(zip, successResults);
  const content = await zip.generateAsync({ type: 'blob' });
  OnlinePDFPro.Downloader.saveBlob(content, 'heic-to-jpg-converted.zip');
  });

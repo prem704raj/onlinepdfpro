@@ -319,12 +319,24 @@ const FileUploader = {
     },
 
     handleFiles(fileList, config) {
-        const files = Array.from(fileList);
+        const inferredTypes = {pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',bmp:'image/bmp',heic:'image/heic',heif:'image/heif'};
+        const files = Array.from(fileList, file => {
+            const type = inferredTypes[file.name.split('.').pop().toLowerCase()];
+            return !file.type && type ? new File([file],file.name,{type,lastModified:file.lastModified}) : file;
+        });
         if (files.length > config.maxFiles) {
             alert(`Maximum ${config.maxFiles} files allowed`);
             return;
         }
         const validFiles = files.filter(file => {
+            if (!file.size) { alert(`${file.name} is empty. Choose a file with content.`); return false; }
+            const accepted = String(config.accept || '*/*').toLowerCase().split(',').map(value => value.trim());
+            const type = String(file.type || '').toLowerCase();
+            const name = file.name.toLowerCase();
+            if (!accepted.some(value => value === '*/*' || (value.startsWith('.') ? name.endsWith(value) : value.endsWith('/*') ? type.startsWith(value.slice(0, -1)) : type === value))) {
+                alert(`${file.name} is not a supported file type. Choose ${config.accept}.`);
+                return false;
+            }
             if (file.size > config.maxSize) {
                 alert(`${file.name} is too large. Maximum size is ${this.formatSize(config.maxSize)}`);
                 return false;
@@ -618,6 +630,16 @@ const HistoryDB = {
 // =========================================
 
 const Downloader = {
+    addUniqueZipFiles(zip, results) {
+        const used = new Set();
+        for (const result of results) {
+            const base = String(result.name || "file").replace(/[\\/]/g, "_");
+            const dot = base.lastIndexOf("."), stem = dot > 0 ? base.slice(0,dot) : base, ext = dot > 0 ? base.slice(dot) : "";
+            let name = base, count = 2;
+            while (used.has(name.toLowerCase())) name = stem + "-" + count++ + ext;
+            used.add(name.toLowerCase()); zip.file(name,result.blob);
+        }
+    },
     _lastBlob: null,
     _lastName: null,
     _cssInjected: false,

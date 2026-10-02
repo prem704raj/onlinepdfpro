@@ -1311,14 +1311,15 @@ async function exportPptx(name) {
         return;
     }
 
-    const exportName = name || app.presentation.name || 'My Presentation';
+    const exportName = (typeof name === 'string' && name) || app.presentation.name || 'My Presentation';
     await ensureFontsForPresentation();
 
     const pres = new PptxGenJS();
     pres.defineLayout({ name: 'LAYOUT1', width: 10, height: 5.625 });
+    pres.layout = 'LAYOUT1';
 
     app.presentation.slides.forEach(slide => {
-        const layout = pres.addSlide('LAYOUT1');
+        const layout = pres.addSlide();
 
         // Background
         const bg = slide.background || '#ffffff';
@@ -1326,7 +1327,7 @@ async function exportPptx(name) {
             const gradientImage = createGradientDataUrl(bg);
             layout.addImage({ data: gradientImage, x: 0, y: 0, w: PPTX_LAYOUT.width, h: PPTX_LAYOUT.height });
         } else {
-            layout.background = { fill: normalizeHexColor(bg) };
+            layout.background = { color: normalizeHexColor(bg) };
         }
 
         // Elements
@@ -1337,7 +1338,7 @@ async function exportPptx(name) {
                     y: elem.y / 96,
                     w: elem.width / 96,
                     h: elem.height / 96,
-                    fontSize: elem.size,
+                    fontSize: elem.size * 0.75,
                     fontFace: elem.font,
                     color: normalizeHexColor(elem.color),
                     bold: elem.bold,
@@ -1358,7 +1359,7 @@ async function exportPptx(name) {
         });
     });
 
-    pres.save({ fileName: exportName + '.pptx' });
+    await pres.writeFile({ fileName: exportName + '.pptx' });
 }
 
 async function exportPdf(name) {
@@ -1367,7 +1368,7 @@ async function exportPdf(name) {
         return;
     }
 
-    const exportName = name || app.presentation.name || 'My Presentation';
+    const exportName = (typeof name === 'string' && name) || app.presentation.name || 'My Presentation';
     await ensureFontsForPresentation();
 
     const { jsPDF } = window.jspdf;
@@ -1479,8 +1480,17 @@ function setupEventListeners() {
     document.getElementById('sendBackwardBtn').addEventListener('click', sendBackward);
 
     // Export buttons
-    document.getElementById('exportPptxBtn').addEventListener('click', exportPptx);
-    document.getElementById('exportPdfBtn').addEventListener('click', exportPdf);
+    let exporting = false;
+    async function exportWithFeedback(action) {
+        if (exporting) return;
+        exporting = true;
+        const buttons = ['exportPptxBtn','exportPdfBtn'].map(id=>document.getElementById(id));
+        buttons.forEach(button=>{button.disabled=true;button.setAttribute('aria-busy','true');});
+        try { await action(); } catch(error) { alert('Could not export the presentation: ' + error.message); }
+        finally { exporting=false;buttons.forEach(button=>{button.disabled=false;button.removeAttribute('aria-busy');}); }
+    }
+    document.getElementById('exportPptxBtn').addEventListener('click', () => exportWithFeedback(exportPptx));
+    document.getElementById('exportPdfBtn').addEventListener('click', () => exportWithFeedback(exportPdf));
 
     // Properties
     document.getElementById('bgColor').addEventListener('input', updateSlideBackground);

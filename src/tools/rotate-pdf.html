@@ -358,7 +358,7 @@
  const progress = OnlinePDFPro.ProgressHandler.create('uploadZone');
  progress.update(50, 'Loading document...');
 
- const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+ const pdf = await pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
 
  pages = [];
  for (let i = 1; i <= pdf.numPages; i++) {

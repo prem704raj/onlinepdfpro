@@ -17,7 +17,7 @@
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
- <meta name="description" content="Compress your images (JPEG, PNG, WebP) without losing quality. Free online image compressor.">
+ <meta name="description" content="Compress your images (JPEG, PNG, WebP) with adjustable quality; PNG transparency is preserved. Free online image compressor.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
  <link rel="canonical" href="https://onlinepdfpro.com/tools/image-compressor.html">
@@ -26,7 +26,7 @@
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://onlinepdfpro.com/tools/image-compressor.html">
  <meta property="og:title" content="Compress Images Free Online — Reduce JPG/PNG Size Without Quality Loss | OnlinePDFPro">
- <meta property="og:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes without losing quality. Batch compress multiple images. 100% free.">
+ <meta property="og:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes with adjustable quality; PNG transparency is preserved. Batch compress multiple images. 100% free.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
  <meta property="og:site_name" content="OnlinePDFPro">
  <meta property="og:locale" content="en_US">
@@ -35,7 +35,7 @@
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-compressor.html">
  <meta name="twitter:title" content="Compress Images Free Online — Reduce JPG/PNG Size Without Quality Loss | OnlinePDFPro">
- <meta name="twitter:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes without losing quality. Batch compress multiple images. 100% free.">
+ <meta name="twitter:description" content="Compress images free online. Reduce JPG, PNG, WEBP file sizes with adjustable quality; PNG transparency is preserved. Batch compress multiple images. 100% free.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
  <!-- Favicons -->
@@ -170,6 +170,7 @@
  style="text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--aurora-azure); font-family: 'Outfit', sans-serif;">
  <span id="qualityValue">80</span><span style="font-size: 1.25rem;">%</span>
  </div>
+ <p style="color:var(--text-secondary);font-size:.85rem">Quality changes JPEG and WebP output. PNG stays lossless and transparent. The original is kept if re-encoding is larger.</p>
  <input type="range" class="quality-slider" id="qualitySlider" min="10" max="100" value="80">
  <div
  style="display: flex; justify-content: space-between; font-size: 0.8125rem; color: var(--text-muted); font-weight: 500;">
@@ -256,6 +257,7 @@
 </main>
 
  <script src="../js/app.js?v=96"></script>
+ <script src="/js/vendor/jszip/jszip.min.js"></script>
  <script>
 
  function escapeHTML(str) {
@@ -399,7 +401,8 @@
  try {
  statusText.textContent = 'Processing...';
  progressFill.style.width = '30%';
- const compressedBlob = await compressImage(file, quality / 100);
+ const candidate = await compressImage(file, quality / 100);
+ const compressedBlob = candidate.size < file.size ? candidate : file;
  if (isCancelled) break;
  progressFill.style.width = '100%';
 
@@ -411,11 +414,11 @@
  totalCompressed += compressedSize;
 
  item.classList.add('success');
- statusText.textContent = 'Optimized';
+ statusText.textContent = compressedSize < originalSize ? 'Optimized' : 'Original kept — already smaller';
  statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(compressedSize)} (${savedPercent}% smaller)`;
 
  results.push({
- name: file.name.replace(/\.[^.]+$/, '-compressed' + (file.type === 'image/png' && quality >= 0.7 ? '.png' : file.type === 'image/webp' ? '.webp' : '.jpg')),
+ name: file.name.replace(/\.[^.]+$/, '-compressed' + (file.type === 'image/png' ? '.png' : file.type === 'image/webp' ? '.webp' : '.jpg')),
  originalSize, compressedSize, savedPercent,
  blob: compressedBlob, success: true
  });
@@ -450,19 +453,8 @@
  const isWebp = file.type === 'image/webp';
 
  if (isPng) {
- // PNG: re-encode as PNG (lossless) which strips metadata & re-compresses
- // If quality slider is below 70, convert to high-quality JPEG for bigger savings
- if (quality < 0.7) {
- canvas.toBlob((blob) => {
- if (blob) resolve(blob);
- else reject(new Error('Process failed'));
- }, 'image/jpeg', quality);
- } else {
- canvas.toBlob((blob) => {
- if (blob) resolve(blob);
- else reject(new Error('Process failed'));
- }, 'image/png');
- }
+ // Preserve PNG transparency and lossless pixels at every quality setting.
+ canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Process failed')), 'image/png');
  } else if (isWebp) {
  canvas.toBlob((blob) => {
  if (blob) resolve(blob);
@@ -483,6 +475,10 @@
 
  function showResults(totalOriginal, totalCompressed) {
  const successResults = results.filter(r => r.success);
+ let summary = resultsSection.querySelector('.batch-result-status');
+ if (!summary) { summary = document.createElement('p'); summary.className = 'batch-result-status'; summary.setAttribute('role','status'); resultsSection.prepend(summary); }
+ summary.textContent = successResults.length + ' of ' + results.length + ' files processed successfully.' + (results.some(r => !r.success) ? ' Some files could not be decoded or processed. Try valid files again.' : '');
+
  const totalSaved = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
 
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
@@ -520,7 +516,7 @@
  const successResults = results.filter(r => r.success);
  if (successResults.length === 0) return;
  const zip = new JSZip();
- for (const result of successResults) zip.file(result.name, result.blob);
+ OnlinePDFPro.Downloader.addUniqueZipFiles(zip, successResults);
  const content = await zip.generateAsync({ type: 'blob' });
  OnlinePDFPro.Downloader.saveBlob(content, 'shrunk-images.zip');
  });
@@ -541,7 +537,7 @@
  "@context": "https://schema.org",
  "@type": "WebApplication",
  "name": "Compress Images",
- "description": "Compress JPG, PNG, and WEBP images for free. Reduce file size with adjustable quality settings without losing quality. 100% free.",
+ "description": "Compress JPG, PNG, and WEBP images for free. Reduce file size with adjustable quality settings with adjustable quality; PNG transparency is preserved. 100% free.",
  "url": "https://onlinepdfpro.com/tools/image-compressor.html",
  "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",

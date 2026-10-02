@@ -345,6 +345,7 @@
 
  <script>
  let pdfDoc = null;
+ let originalPdfBytes = null;
  let _originalFileName = '';
 
  // Worker setup for PDF.js
@@ -370,9 +371,11 @@
  let totalPages = 0;
 
  async function loadPDF(file) {
- if (!file || file.type !== 'application/pdf') return alert('Please upload a valid PDF.');
+ if (!file || !file.size || !/\.pdf$/i.test(file.name)) return alert('Please upload a nonempty PDF.');
+ try {
  _originalFileName = file.name;
  const arrayBuffer = await file.arrayBuffer();
+ originalPdfBytes = arrayBuffer.slice(0);
  pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
 
  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -413,6 +416,14 @@
 
  currentPageIndex = 0;
  showPage(0);
+ await pdf.destroy();
+ } catch (error) {
+ pdfDoc = null; originalPdfBytes = null; fileInput.value = '';
+ document.getElementById('pages').replaceChildren();
+ document.getElementById('editor').style.display = 'none';
+ dropArea.style.display = '';
+ alert('Could not open this PDF. Use an unencrypted, valid PDF and try again.');
+ }
  }
 
  function showPage(index) {
@@ -425,7 +436,9 @@
 
  // Hide all, show current
  pages.forEach((p, i) => {
+ if (p.style.display !== 'none') p.querySelectorAll('.signature').forEach(rememberSignature);
  p.style.display = i === index ? 'inline-block' : 'none';
+ if (i === index) p.querySelectorAll('.signature').forEach(positionSignature);
  });
 
  // Update indicator
@@ -525,8 +538,26 @@
  }
 
  // signature placement & manipulation
- function placeSignature(dataURL) {
- const pageIndex = document.getElementById('pageSelector').value;
+ function signatureCanvasSize(sig) {
+ const canvas = sig.parentElement.querySelector('canvas');
+ return { width: canvas.getBoundingClientRect().width || parseFloat(canvas.style.width), height: canvas.getBoundingClientRect().height || parseFloat(canvas.style.height) };
+ }
+ function rememberSignature(sig) {
+ const size = signatureCanvasSize(sig);
+ const w = Math.min(parseFloat(sig.style.width), size.width);
+ const h = Math.min(parseFloat(sig.style.height), size.height);
+ const x = Math.max(0, Math.min(parseFloat(sig.style.left), size.width - w));
+ const y = Math.max(0, Math.min(parseFloat(sig.style.top), size.height - h));
+ sig.dataset.rect = JSON.stringify([x / size.width, y / size.height, w / size.width, h / size.height]);
+ positionSignature(sig);
+ }
+ function positionSignature(sig) {
+ if (!sig.dataset.rect) return;
+ const [x,y,w,h] = JSON.parse(sig.dataset.rect), size = signatureCanvasSize(sig);
+ Object.assign(sig.style, { left: x * size.width + 'px', top: y * size.height + 'px', width: w * size.width + 'px', height: h * size.height + 'px' });
+ }
+ window.addEventListener('resize', () => document.querySelectorAll('.page:not([style*="display: none"]) .signature').forEach(positionSignature));
+ function placeSignature(dataURL, pageIndex = document.getElementById('pageSelector').value, rect = [.25,.4,.5,.2], id = crypto.randomUUID()) {
  const pages = document.querySelectorAll('.page');
  if (pages.length === 0 || !pages[pageIndex]) return;
 
@@ -536,6 +567,8 @@
  const sig = document.createElement('div');
  sig.className = 'signature';
  sig.dataset.url = dataURL;
+ sig.dataset.signatureId = id;
+ sig.dataset.rect = JSON.stringify(rect);
  sig.style.backgroundImage = `url(${dataURL})`;
  sig.style.left = '200px';
  sig.style.top = '250px';
@@ -555,6 +588,7 @@
  sig.appendChild(del);
 
  pageDiv.appendChild(sig);
+ positionSignature(sig);
 
  makeDraggable(sig);
  makeResizable(sig, resize);
@@ -566,29 +600,33 @@
  const pages = document.querySelectorAll('.page');
  if (pages.length <= 1) return alert("This document only has 1 page.");
 
- const allSigs = [];
+ const allSigs = new Map();
  pages.forEach((page, pageIndex) => {
  const sigs = page.querySelectorAll('.signature');
  sigs.forEach(sig => {
- allSigs.push({
+ if (page.style.display !== 'none') rememberSignature(sig);
+ if (!allSigs.has(sig.dataset.signatureId)) allSigs.set(sig.dataset.signatureId, {
  sourcePageIndex: pageIndex,
  dataURL: sig.dataset.url,
  x: sig.style.left,
  y: sig.style.top,
  width: sig.style.width,
- height: sig.style.height
+ height: sig.style.height,
+ rect: JSON.parse(sig.dataset.rect), id: sig.dataset.signatureId
  });
  });
  });
 
- if (allSigs.length === 0) return alert("Please add at least one signature first!");
+ if (allSigs.size === 0) return alert("Please add at least one signature first!");
 
  pages.forEach((page, targetIdx) => {
  allSigs.forEach(sigData => {
- if (targetIdx !== sigData.sourcePageIndex) {
+ if (!page.querySelector(`[data-signature-id="${sigData.id}"]`)) {
  const newSig = document.createElement('div');
  newSig.className = 'signature';
  newSig.dataset.url = sigData.dataURL;
+ newSig.dataset.signatureId = sigData.id;
+ newSig.dataset.rect = JSON.stringify(sigData.rect);
  newSig.style.backgroundImage = `url(${sigData.dataURL})`;
  newSig.style.left = sigData.x;
  newSig.style.top = sigData.y;
@@ -607,6 +645,7 @@
  newSig.appendChild(del);
 
  page.appendChild(newSig);
+ positionSignature(newSig);
  makeDraggable(newSig);
  makeResizable(newSig, resize);
  }
@@ -651,6 +690,7 @@
  }
 
  function endDrag() {
+ rememberSignature(el);
  document.onmouseup = null;
  document.onmousemove = null;
  document.ontouchend = null;
@@ -679,6 +719,7 @@
  }
  }
  function endResize() {
+ rememberSignature(el);
  document.onmousemove = null; document.ontouchmove = null;
  document.onmouseup = null; document.ontouchend = null;
  }
@@ -701,6 +742,7 @@
  if (!pdfDoc) return alert("Upload PDF first");
 
  try {
+ const outputDoc = await PDFLib.PDFDocument.load(originalPdfBytes);
  const pages = document.querySelectorAll('.page');
  let hasSignatures = false;
 
@@ -711,19 +753,21 @@
  for (const sig of pageSigs) {
  const pngUrl = sig.dataset.url;
  const pngBytes = Uint8Array.from(atob(pngUrl.split(',')[1]), c => c.charCodeAt(0));
- const pngImage = await pdfDoc.embedPng(pngBytes);
+ const pngImage = await outputDoc.embedPng(pngBytes);
 
- const page = pdfDoc.getPage(i);
- const { width, height } = page.getSize();
-
- const canvasEl = pages[i].querySelector('canvas');
- const scale = width / canvasEl.offsetWidth;
-
+ const page = outputDoc.getPage(i);
+ if (pages[i].style.display !== 'none') rememberSignature(sig);
+ const [left,top,rw,rh] = JSON.parse(sig.dataset.rect);
+ const box = page.getCropBox(), angle = ((page.getRotation().angle % 360) + 360) % 360;
+ const dw = angle % 180 ? box.height : box.width, dh = angle % 180 ? box.width : box.height;
+ const vx = left * dw, vy = (1 - top - rh) * dh;
+ let x, y;
+ if (angle === 90) { x = box.x + box.width - vy; y = box.y + vx; }
+ else if (angle === 180) { x = box.x + box.width - vx; y = box.y + box.height - vy; }
+ else if (angle === 270) { x = box.x + vy; y = box.y + box.height - vx; }
+ else { x = box.x + vx; y = box.y + vy; }
  page.drawImage(pngImage, {
- x: sig.offsetLeft * scale,
- y: height - (sig.offsetTop * scale + sig.offsetHeight * scale),
- width: sig.offsetWidth * scale,
- height: sig.offsetHeight * scale,
+ x, y, width: rw * dw, height: rh * dh, rotate: PDFLib.degrees(angle)
  });
  }
  }
@@ -735,7 +779,7 @@
 
  incrementCounter('signPDF');
  incrementTodayCount();
- const finalBytes = await pdfDoc.save();
+ const finalBytes = await outputDoc.save();
 
  const blob = new Blob([finalBytes], { type: 'application/pdf' });
  OnlinePDFPro.Downloader.saveBlob(blob, _originalFileName || 'signed.pdf');
@@ -750,14 +794,14 @@
 <section class="tool-seo-content" style="max-width:800px; margin:48px auto 0; padding:0 24px 48px;">
 <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.6rem; font-weight:400; color:var(--text-primary,#2c2418); margin-bottom:16px;">How to Sign a PDF Online</h2>
 <p style="font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Adding a signature to a PDF is commonly needed for contracts, rental agreements, consent forms, and official letters. Instead of printing, signing by hand, and scanning, you can sign directly on the digital document.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Three ways to sign</h3>
+<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Draw and place your signature</h3>
 <ul style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; padding-left:20px; margin-bottom:16px;">
 <li><strong>Draw</strong> — use your mouse, trackpad, or finger on touchscreen to draw freehand.</li>
-<li><strong>Type</strong> — type your name and choose from signature-style fonts.</li>
-<li><strong>Upload</strong> — upload a photo or scan of your handwritten signature (PNG/JPG).</li>
+<li><strong>Place</strong> — drag and resize the drawing, or apply it to every page.</li>
+<li><strong>Review</strong> — inspect each page and export the signed PDF.</li>
 </ul>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Are e-signatures legally valid?</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">In many jurisdictions, electronic signatures carry the same legal weight as handwritten ones under laws like the U.S. ESIGN Act and the EU eIDAS Regulation. Some documents (wills, notarized contracts) may still require wet ink.</p>
+<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">What kind of signature does this tool add?</h3>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">This tool adds a drawing to PDF pages. It does not verify identity, issue a signing certificate, or provide a tamper-evident signing audit. Confirm the recipient accepts this kind of annotation.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">The signing process runs in your browser and this tool does not upload the document. The result is an electronic annotation, not a certificate-backed digital signature; confirm that it meets the requirements for your document.</p>
 </section>
@@ -769,7 +813,7 @@
  "@context": "https://schema.org",
  "@type": "WebApplication",
  "name": "Sign PDF",
- "description": "Sign PDF documents online for free. Draw your signature, drag and resize on any page. Fast, 100% free, legally valid e-signature.",
+ "description": "Sign PDF documents online for free. Draw your signature, drag and resize on any page. A drawn annotation, with no certificate or identity verification.",
  "url": "https://onlinepdfpro.com/tools/sign-pdf.html",
  "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",

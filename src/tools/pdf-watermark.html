@@ -17,7 +17,7 @@
  <link rel="preconnect" href="https://unpkg.com">
  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<meta name="description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
+<meta name="description" content="Add watermark to PDF free online. Insert text watermarks on all pages. Customize position, size, opacity. 100% free.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-watermark.html">
@@ -26,7 +26,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-watermark.html">
 <meta property="og:title" content="Add Watermark to PDF Online | OnlinePDFPro">
-<meta property="og:description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
+<meta property="og:description" content="Add watermark to PDF free online. Insert text watermarks on all pages. Customize position, size, opacity. 100% free.">
 <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
 <meta property="og:site_name" content="OnlinePDFPro">
 <meta property="og:locale" content="en_US">
@@ -35,7 +35,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-watermark.html">
 <meta name="twitter:title" content="Add Watermark to PDF Online | OnlinePDFPro">
-<meta name="twitter:description" content="Add watermark to PDF free online. Insert text or image watermarks on all pages. Customize position, size, opacity. 100% free.">
+<meta name="twitter:description" content="Add watermark to PDF free online. Insert text watermarks on all pages. Customize position, size, opacity. 100% free.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
 
 <!-- Favicons -->
@@ -139,7 +139,7 @@
  <span class="section-tag fade-in">Protection Suite</span>
  <h1 class="tool-title fade-in">Add Watermark to PDF Free Online</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Add text or image watermarks to your PDF documents. Customize the position, size, rotation, and opacity. Apply to all pages or specific ones. Review the processing details before uploading.
+ Add text watermarks to your PDF documents. Customize the position, size, rotation, and opacity. Apply to all pages or specific ones. Review the processing details before uploading.
  </p>
  </div>
 
@@ -253,6 +253,8 @@
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
+ <script src="/js/vendor/fontkit/regenerator-runtime.js"></script>
+ <script src="/js/vendor/fontkit/fontkit.umd.min.js"></script>
  <script src="../js/app.js?v=96"></script>
  <script>
  (function () {
@@ -295,6 +297,7 @@
  _originalFileName = file.name;
  try {
  pdfBytes = await readFile(file);
+ await PDFDocument.load(pdfBytes);
  document.getElementById('fileName').textContent = file.name;
  document.getElementById('fileSize').textContent = OnlinePDFPro.Utils.formatFileSize(file.size);
  uploadZone.style.display = 'none';
@@ -317,7 +320,15 @@
 
  try {
  const pdf = await PDFLib.PDFDocument.load(pdfBytes);
- const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+ let font;
+ if (/[^\x20-\x7E]/.test(text)) {
+ pdf.registerFontkit(window.fontkit);
+ const response = await fetch('/fonts/NotoSansDevanagari-Regular.ttf');
+ if (!response.ok) throw new Error('Could not load the Unicode font. Please try again.');
+ font = await pdf.embedFont(await response.arrayBuffer(), {subset:true});
+ const supported = new Set(font.getCharacterSet());
+ if ([...text].some(char => !supported.has(char.codePointAt(0)))) throw new Error('Some characters are not supported by this font. Use supported Latin or Devanagari text.');
+ } else font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
  const pages = pdf.getPages();
  const size = parseInt(fontSize.value);
  const opacityVal = parseInt(opacity.value) / 100;
@@ -366,7 +377,9 @@
  }, 500);
 
  } catch (error) {
- resetTool();
+ watermarkedPdfBytes = null;
+ progressSection.style.display = 'none'; optionsSection.style.display = 'block';
+ alert('Could not add the watermark: ' + error.message);
  }
  }
 
@@ -402,7 +415,7 @@
  "@context": "https://schema.org",
  "@type": "WebApplication",
  "name": "Add Watermark to PDF",
- "description": "Add text or image watermarks to PDF documents for free. Customize opacity, position, and rotation. 100% free.",
+ "description": "Add text watermarks to PDF documents for free. Customize opacity, position, and rotation. 100% free.",
  "url": "https://onlinepdfpro.com/tools/pdf-watermark.html",
  "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
