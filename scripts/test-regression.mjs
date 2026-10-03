@@ -15,6 +15,7 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
@@ -105,16 +106,17 @@ check(/MAX_ARCHIVE_UNCOMPRESSED_SIZE/.test(wordToPdfModal) && /MAX_ARCHIVE_ENTRI
 check(/communicate\(timeout=CONVERT_TIMEOUT\)/.test(wordToPdfModal) && /killpg/.test(wordToPdfModal) && /rmtree\(user_dir/.test(wordToPdfModal), 'Word-to-PDF cleans timed-out LibreOffice process groups and profiles');
 check(/annotations and interactive form widgets are intentionally omitted/.test(read('src/tools/pdf-to-word.html')), 'PDF-to-Word clearly discloses annotation and form-field omission');
 
-const headersContent = read('_headers');
+const headersContent = read('src/_headers');
 check(/Content-Security-Policy:/.test(headersContent) && /Content-Security-Policy-Report-Only:/.test(headersContent), 'HTTP headers enforce CSP while retaining report-only telemetry');
 check(/https:\/\/onlinepdfpro-proxy\.prem736raj\.workers\.dev/.test(headersContent) && /https:\/\/tmpfiles\.org/.test(headersContent), 'Enforced CSP permits the Worker gateway and QR upload provider');
+check(headersContent.split('\n').filter(line => /Content-Security-Policy/.test(line)).every(line => /https:\/\/\*\.hf\.co/.test(line)), 'Both CSP policies allow redirected Hugging Face model downloads');
 check(/Permissions-Policy:.*geolocation=\(\)/.test(headersContent) && !/microphone=\(\)/.test(headersContent) && !/payment=\(\)/.test(headersContent), 'Permissions-Policy preserves microphone and payment access');
 
 const manifestContent = read('site.webmanifest');
 check(!/100%\s*Free/i.test(manifestContent) && !/hero_centered\.png/.test(manifestContent), 'Webmanifest avoids misleading 100% Free claim and broken screenshot assets');
 
 const swContent = read('src/sw.js');
-check(/response\.status\s*===\s*200/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
+check(/if \(response\.status !== 200\) return Promise\.resolve\(\)/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
 check(/isKnownStaticAsset/.test(swContent) && /Never turn arbitrary same-origin GET responses/.test(swContent), 'Service Worker avoids caching arbitrary dynamic same-origin responses');
 
 const initialMigration = read('supabase/migrations/20260815000000_initial_schema.sql');
@@ -132,8 +134,11 @@ check(!packageJson.dependencies?.['crypto-js'] && /js-yaml/.test(read('package-l
 const workflowDeploy = read('.github/workflows/deploy.yml');
 check(/node-version:\s*22\.12\.0/.test(workflowDeploy), 'GitHub Actions workflow specifies the supported Node 22.12 baseline');
 check(/python -m compileall -q services/.test(workflowDeploy), 'GitHub Actions validates conversion service Python syntax');
-check(/actions\/checkout@[0-9a-f]{40}/.test(workflowDeploy) && /actions\/setup-node@[0-9a-f]{40}/.test(workflowDeploy) && /cloudflare\/wrangler-action@[0-9a-f]{40}/.test(workflowDeploy) && /peaceiris\/actions-gh-pages@[0-9a-f]{40}/.test(workflowDeploy), 'GitHub Actions third-party refs are pinned to immutable commit SHAs');
+check(/actions\/checkout@[0-9a-f]{40}/.test(workflowDeploy) && /actions\/setup-node@[0-9a-f]{40}/.test(workflowDeploy) && /cloudflare\/wrangler-action@[0-9a-f]{40}/.test(workflowDeploy), 'GitHub Actions third-party refs are pinned to immutable commit SHAs');
 check(/command:\s*deploy\s+--var\s+RELEASE_ID:\$\{\{\s*github\.sha\s*\}\}/.test(workflowDeploy) && /Verify frontend release attribution/.test(workflowDeploy), 'Deployment pipeline carries one release ID through Worker and frontend');
+check(/build-and-deploy:\s*\n\s*needs:\s*\[validate-worker, smoke-worker\]/.test(workflowDeploy), 'Frontend publication depends on successful live Worker verification');
+check(!/has_cf_secrets|Skipping Worker deployment/.test(workflowDeploy) && /Production publication requires/.test(workflowDeploy), 'Missing Cloudflare credentials fail production publication instead of skipping its API dependency');
+check(/node scripts\/smoke-worker.mjs --release/.test(workflowDeploy), 'Deployment executes the shared API contract probes');
 
 check(/write-release\.js/.test(packageJson.scripts.build) && exists('scripts/write-release.js'), 'Build writes deterministic release metadata before stamping the service-worker cache');
 
@@ -155,10 +160,10 @@ check(/Object\.defineProperty\(window,\s*["']supabaseClient/.test(authSource) &&
 const storeSource = read('src/js/store.js');
 check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
 const studySource = read('src/study-materials.html');
-const studyDetailSource = read('src/viewstudymaterials.html');
-check(/catalog-cover/.test(studySource) && /viewstudymaterials\.html\?product=dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
+const studyDetailSource = read('src/_includes/study-detail.njk');
+check(/catalog-cover/.test(studySource) && /products\/dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
 check(/previewGrid/.test(studyDetailSource) && /showModal\(\)/.test(studyDetailSource) && /slice\(0, 5\)/.test(studyDetailSource), 'Study material detail page provides a reusable five-page preview dialog');
-check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /viewstudymaterials\.html/.test(storeSource), 'Study material product metadata supports reusable detail pages');
+check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /products\/dbms-notes/.test(storeSource), 'Study material product metadata supports reusable static detail pages');
 check(/disclosure\.replaceChildren\(\)/.test(studyDetailSource) && !/getElementById\('disclosure'\)\.innerHTML/.test(studyDetailSource), 'Study material disclosures use text nodes instead of interpolated markup');
 const pageNumbers = read('src/tools/add-page-numbers-to-pdf.html');
 check(/textContent\s*=\s*`\s*\$\{file\.name\}/.test(pageNumbers) && !/textContent\s*=\s*`[^`]*escapeHTML\(file\.name\)/.test(pageNumbers), 'File names assigned through textContent are not double-escaped');
@@ -193,12 +198,10 @@ check(/featured:\s*true/.test(registry) && /toolRegistry\.tools/.test(read('src/
 check(/registryTools/.test(read('src/tools.njk')) && /toolsForFile/.test(read('src/tools.njk')) && !/var toolMap/.test(read('src/tools.njk')), 'Drag-and-drop picker consumes the registry');
 const appSource = read('src/js/app.js');
 check(/ToolRegistryUI/.test(appSource) && /tool-registry\.json/.test(appSource) && /renderRelated/.test(appSource), 'Shared UI consumes the tool registry for navigation and related tools');
-const registryHrefs = [...registry.matchAll(/href:\s*'([^']+)'/g)].map(match => match[1]);
-// Eleventy templates (including new /tools/*.html entries) are generated in _site;
-// older hand-authored pages may still live at the repository root.
+const registryHrefs = createRequire(import.meta.url)('../src/_data/tools.js').tools.map(tool => tool.href);
 const missingRegistryPages = registryHrefs.filter(href => {
-    const outputPath = href.replace(/^\//, '');
-    return !exists(outputPath) && !exists(path.join('_site', outputPath));
+    const stem = `src/${href.replace(/^\//, '')}`;
+    return !exists(`${stem}.html`) && !exists(`${stem}.njk`);
 });
 check(registryHrefs.length >= 40 && missingRegistryPages.length === 0, `Registry pages exist (${registryHrefs.length} public tools)`);
 check(new Set(registryHrefs).size === registryHrefs.length, 'Registry has no duplicate tool URLs');
@@ -220,8 +223,8 @@ if (exists('_site/release.json')) {
 }
 check(/\.wrangler\//.test(read('.gitignore')), 'Wrangler runtime files are ignored');
 check(exists('src/_redirects') && /about-us/.test(read('src/_redirects')), 'Legacy About URLs have redirects');
-check(/tools\/qr-generator\.html\s+\/tools\/qr-code-generator\.html\s+301!/.test(read('src/_redirects')) && /text-to-audio\.html\s+\/text-to-speech\.html\s+301!/.test(read('src/_redirects')), 'Legacy tool aliases use edge redirects instead of client-side meta refreshes');
-for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/viewstudymaterials.html']) {
+check(/tools\/qr-generator\.html\s+\/tools\/qr-code-generator\s+301/.test(read('src/_redirects')) && /text-to-audio\.html\s+\/text-to-speech\s+301/.test(read('src/_redirects')), 'Legacy tool aliases redirect to final clean URLs');
+for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/_includes/study-detail.njk']) {
     const source = read(page);
     check(/@supabase\/supabase-js@2\.49\.1/.test(source) && /<script defer[^>]+supabase-js/.test(source), `${page} pins and defers Supabase JS`);
 }
@@ -370,9 +373,9 @@ async function browserSmoke() {
             detailHref: document.querySelector('.catalog-cover-link')?.getAttribute('href'),
             hasLargePreview: Boolean(document.querySelector('.preview-grid, .preview-stage, .product-showcase'))
         }));
-        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.includes('viewstudymaterials.html?product=dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
+        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.endsWith('/products/dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
 
-        await page.goto(`${base}/viewstudymaterials.html?product=dbms-notes`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`${base}/products/dbms-notes.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#previewGrid .preview-thumb', { timeout: 5000 });
         await page.waitForFunction(() => [...document.querySelectorAll('#previewGrid img')].every(image => image.complete && image.naturalWidth > 0), { timeout: 10000 });
         const previewInitial = await page.evaluate(() => ({
@@ -381,7 +384,7 @@ async function browserSmoke() {
             title: document.querySelector('#productTitle')?.textContent.trim(),
             included: document.querySelectorAll('#includedList li').length
         }));
-        check(previewInitial.thumbnails === 5 && previewInitial.widths.every(width => width < 200) && previewInitial.title === 'DBMS Complete Notes' && previewInitial.included >= 4, 'Detail page renders five compact previews and product details');
+        check(previewInitial.thumbnails === 5 && previewInitial.widths.every(width => width < 200) && previewInitial.title === 'DBMS Complete Notes' && previewInitial.included === 5, 'Detail page renders five compact previews and one copy of each coverage item');
         await page.click('#previewGrid .preview-thumb:nth-child(3)');
         await page.waitForFunction(() => document.querySelector('#previewDialog')?.open === true, { timeout: 5000 });
         check(await page.$eval('#dialogImage', image => /page 3 of 5/i.test(image.alt)), 'Detail preview opens the selected page in the dialog');
@@ -627,8 +630,8 @@ async function browserSmoke() {
             { path: '/tools.html', width: 910, height: 768, heading: '.tp-hero-heading' },
             { path: '/study-materials.html', width: 390, height: 844, heading: '.catalog-cover' },
             { path: '/study-materials.html', width: 1280, height: 900, heading: '.catalog-cover' },
-            { path: '/viewstudymaterials.html?product=dbms-notes', width: 390, height: 844, heading: '#productTitle' },
-            { path: '/viewstudymaterials.html?product=dbms-notes', width: 1280, height: 900, heading: '#productTitle' }
+            { path: '/products/dbms-notes.html', width: 390, height: 844, heading: '#productTitle' },
+            { path: '/products/dbms-notes.html', width: 1280, height: 900, heading: '#productTitle' }
         ]) {
             await page.setViewport({ width: layout.width, height: layout.height });
             await page.goto(`${base}${layout.path}`, { waitUntil: 'domcontentloaded' });

@@ -1,6 +1,6 @@
 ---
 title: Free Online PDF Tools & Study Materials
-description: Your all-in-one platform for 45+ free PDF, image, OCR, conversion, and productivity tools plus curated study materials. Merge, compress, sign, convert PDFs, and more.
+description: Free PDF tools with practical examples for assignments and applications. Merge, split, compress and edit PDFs, turn photos into documents, and preview the available study draft.
 bodyClass: hp-body
 ---
 {% extends "base.njk" %}
@@ -125,10 +125,10 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
     <div class="hp-hero-content">
         <p class="hp-hero-label">Your All-in-One PDF Platform</p>
         <h1 class="hp-hero-heading"><em>Free Online PDF Tools Beautifully Crafted</em></h1>
-        <p class="hp-hero-subtitle">From 45+ free document tools to curated study materials, notes, and books — everything you need, in one place</p>
+        <p class="hp-hero-subtitle">Prepare assignments and application documents: combine pages, reduce file sizes and turn photographed notes into PDFs. Start with a free example before using your own files.</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools.html' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>
-            <a href="#offerings" class="hp-btn">Discover More</a>
+            <a href="/guides" class="hp-btn">Try the Examples</a>
         </div>
     </div>
 </section>
@@ -156,7 +156,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                     <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 </div>
                 <h3 class="hp-offering-title">Study Materials</h3>
-                <p class="hp-offering-desc">Curated notes, handwritten PDFs, exam prep materials, and reference books — carefully selected for quality.</p>
+                <p class="hp-offering-desc">Preview the 51-page DBMS study draft and its ₹9 one-time price. It was prepared with AI assistance; academic review is pending. Check the samples and course fit before buying.</p>
                 <span class="hp-offering-link">Browse Materials <span>→</span></span>
             </a>
         </div>
@@ -167,9 +167,9 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 <section class="hp-section hp-tools-section">
     <div class="hp-container">
         <div class="hp-tools-header hp-fade-up">
-            <p class="hp-label">Popular Tools</p>
-            <h2 class="hp-section-heading">100% Free – <em>No Watermarks</em></h2>
-            <p class="hp-section-desc">The essential tools that people reach for every day. Fast, reliable, and completely free</p>
+            <p class="hp-label">Start Here</p>
+            <h2 class="hp-section-heading">Free tools for <em>real document tasks</em></h2>
+            <p class="hp-section-desc">Merge, split, compress, edit or turn images into a PDF. Each tool explains its limits; open and check the downloaded result before submitting it.</p>
         </div>
         <div class="hp-tools-grid">
             {% for tool in toolRegistry.tools %}
@@ -208,22 +208,28 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
             <div class="hp-fade-up">
                 <p class="hp-label">Our Philosophy</p>
                 <h2 class="hp-section-heading">Built <em>Different</em></h2>
-                <p class="hp-section-desc">OnlinePDFPro is designed to keep PDF tools simple, transparent, and accessible — while giving students a trusted place to discover useful PDF study materials.</p>
+                <p class="hp-section-desc">Know what a tool can preserve before you use it. Our walkthroughs use original, fictional files and explain page order, readable exports, compression tradeoffs and why cropping is not redaction.</p>
                 <ul class="hp-feature-list">
                     <li>Free PDF tools, no hidden tool charges</li>
                     <li>No signup required for PDF tools</li>
                     <li>Clear processing and privacy information</li>
                     <li>Secure accounts for future purchases</li>
-                    <li>Works on any device, anywhere</li>
+                    <li>Mobile layouts with clearly stated browser and memory limits</li>
                 </ul>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════ QUOTE ═══════ -->
-<section class="hp-quote hp-fade-up">
-    <p class="hp-quote-text">The best tools are the ones you never have to think about</p>
+<section class="hp-section hp-info-section">
+    <div class="hp-container">
+        <p class="hp-label">Guides & Examples</p>
+        <h2 class="hp-section-heading">Practise with <em>original sample files</em></h2>
+        <p class="hp-section-desc">Follow a task from input to download, with a result you can inspect and limitations you can understand.</p>
+        <div class="hp-workflow-grid">
+        {% for guide in guides %}<a href="{{ guide.url }}"><span>{{ guide.title }}</span><br>{{ guide.description }}</a>{% endfor %}
+        </div>
+    </div>
 </section>
 
 

@@ -366,7 +366,7 @@
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">Need to recombine pages afterward? Use <a href="/tools/merge-pdf.html" style="color:var(--tp-accent,#8b6914);">Merge PDF</a> to join the extracted files.</p>
 </section>
 
-</main>
+<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/merge-and-split-an-assignment/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script src="../js/app.js?v=96"></script>
@@ -418,15 +418,16 @@
 
  // Get High-DPI for sharp rendering
  const dpr = Math.max(window.devicePixelRatio || 1, 2);
- const renderScale = 1.5 * dpr;
 
  for (let i = 1; i <= numPages; i++) {
  const page = await pdfDoc.getPage(i);
  const canvas = document.createElement('canvas');
  const ctx = canvas.getContext('2d');
 
- const viewport = page.getViewport({ scale: renderScale });
- const cssViewport = page.getViewport({ scale: 1.5 }); // CSS display scale maintains previous physical sizes
+ const natural = page.getViewport({ scale: 1 });
+ const displayScale = Math.min(1.5, Math.max(0.1, (window.innerWidth - 64) / natural.width));
+ const viewport = page.getViewport({ scale: displayScale * dpr });
+ const cssViewport = page.getViewport({ scale: displayScale });
 
  canvas.width = viewport.width;
  canvas.height = viewport.height;
@@ -498,6 +499,7 @@
  }
 
  function togglePage(pageNum, element) {
+ pageRange.value = ''; pageRange.setCustomValidity('');
  if (selectedPages.has(pageNum)) {
  selectedPages.delete(pageNum);
  element.classList.remove('selected');
@@ -523,31 +525,31 @@
  });
 
  function parsePageRange(input) {
- const pages = [];
- if (!input.trim()) return pages;
- const parts = input.split(',');
- parts.forEach(part => {
- part = part.trim();
- if (part.includes('-')) {
- const [start, end] = part.split('-').map(n => parseInt(n.trim()));
- for (let i = start; i <= end && i <= pdfDoc.numPages; i++) {
- if (i >= 1) pages.push(i);
+ const pages = new Set();
+ pageRange.setCustomValidity('');
+ if (!input.trim()) return [];
+ for (const part of input.split(',')) {
+ const match = part.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/);
+ const start = match ? Number(match[1]) : NaN;
+ const end = match ? Number(match[2] || match[1]) : NaN;
+ if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 1 || end < start || end > pdfDoc.numPages) {
+ pageRange.setCustomValidity('Enter valid pages or ranges between 1 and ' + pdfDoc.numPages + ', such as 1, 3-5.');
+ return [];
  }
- } else {
- const num = parseInt(part);
- if (num >= 1 && num <= pdfDoc.numPages) pages.push(num);
+ for (let page = start; page <= end; page++) pages.add(page);
  }
- });
- return pages;
+ return Array.from(pages);
  }
 
  document.getElementById('selectAllBtn').addEventListener('click', () => {
+ pageRange.value = ''; pageRange.setCustomValidity('');
  for (let i = 1; i <= pdfDoc.numPages; i++) selectedPages.add(i);
  document.querySelectorAll('.thumbnail-item').forEach(item => item.classList.add('selected'));
  updateSelectedCount();
  });
 
  document.getElementById('clearSelectionBtn').addEventListener('click', () => {
+ pageRange.value = ''; pageRange.setCustomValidity('');
  selectedPages.clear();
  document.querySelectorAll('.thumbnail-item').forEach(item => item.classList.remove('selected'));
  updateSelectedCount();
@@ -556,6 +558,7 @@
  document.getElementById('extractBtn').addEventListener('click', extractPages);
 
  async function extractPages() {
+ if (!pageRange.reportValidity()) return;
  if (selectedPages.size === 0) {
  alert('Please select at least one page.');
  return;
@@ -566,7 +569,7 @@
  progress.update(20, 'Analyzing document...');
 
  try {
- const srcPdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+ const srcPdf = await PDFDocument.load(pdfBytes);
  const newPdf = await PDFDocument.create();
  const sortedPages = Array.from(selectedPages).sort((a, b) => a - b);
  for (let i = 0; i < sortedPages.length; i++) {
@@ -605,7 +608,7 @@
  function resetTool() {
  pdfFile = null; pdfDoc = null; pdfBytes = null;
  selectedPages.clear(); extractedPdfBytes = null;
- thumbnailsGrid.innerHTML = ''; pageRange.value = '';
+ thumbnailsGrid.innerHTML = ''; pageRange.value = ''; pageRange.setCustomValidity('');
  uploadZone.style.display = 'block'; pageSection.style.display = 'none';
  progressSection.style.display = 'none'; resultsSection.style.display = 'none';
  OnlinePDFPro.AutoClear.clearAll();

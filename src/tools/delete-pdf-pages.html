@@ -369,6 +369,7 @@
 
  async function loadPDF(file) {
  if (!file) return;
+ try {
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
  document.getElementById('progressSection').style.display = 'block';
@@ -424,6 +425,16 @@
 
  // Auto-scroll to page grid
  document.getElementById('topControls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+ await pdfJsDoc.destroy();
+ } catch (error) {
+ pdfBytes = null; selectedPages.clear();
+ document.getElementById('fileInput').value = '';
+ document.getElementById('pagesGrid').replaceChildren();
+ document.getElementById('progressSection').style.display = 'none';
+ document.getElementById('topControls').style.display = 'none';
+ document.getElementById('dropArea').style.display = '';
+ alert('Could not open this PDF. Use a valid, unencrypted PDF and try again.');
+ }
  }
 
  function togglePage(card, pageNum) {
@@ -452,6 +463,7 @@
  const cards = document.querySelectorAll('.page-card');
  selectedPages.clear();
  cards.forEach((card, index) => {
+ card.classList.remove('selected');
  if (index < cards.length - 1) {
  selectedPages.add(index + 1);
  card.classList.add('selected');
@@ -470,7 +482,7 @@
  if (selectedPages.size === 0) return alert('Select at least 1 page to delete!');
 
  try {
- const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+ const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
  const pagesToKeep = [];
 
  for (let i = 0; i < totalPages; i++) {

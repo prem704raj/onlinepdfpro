@@ -15,6 +15,8 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",
+    "jsqr": "^1.4.0",
+    "parse5": "8.0.1",
     "puppeteer": "^25.5.0"
   },
   "overrides": {
@@ -22,11 +24,21 @@
   },
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/write-release.js && node scripts/version-sw.js",
-    "test": "node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs",
+    "build:production": "node scripts/preflight-production.mjs && npm run build",
+    "test": "node scripts/test-site.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs && node scripts/test-pdf-output.mjs && node scripts/test-ai-document.mjs && node scripts/test-mobile.mjs && node scripts/test-product-detail.mjs && node scripts/test-tool-workflows.mjs && node scripts/test-guide-workflows.mjs",
+    "test:tools": "node scripts/test-tool-workflows.mjs",
+    "test:mobile": "node scripts/test-mobile.mjs",
+    "test:analytics": "node scripts/test-analytics.mjs",
+    "test:site": "node scripts/test-site.mjs",
+    "test:worker": "node scripts/test-worker.mjs",
+    "smoke:worker": "node scripts/smoke-worker.mjs",
     "perf:budget": "node scripts/check-performance-budget.mjs",
     "dev": "npx @11ty/eleventy --serve",
     "start": "npm run dev",
-    "sync:root": "node scripts/sync-to-root.js"
+    "sync:root": "node scripts/sync-to-root.js",
+    "test:pdf-output": "node scripts/test-pdf-output.mjs",
+    "test:ai-document": "node scripts/test-ai-document.mjs",
+    "test:product": "node scripts/test-product-detail.mjs"
   },
   "repository": {
     "type": "git",

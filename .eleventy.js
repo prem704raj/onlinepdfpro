@@ -1,4 +1,10 @@
 module.exports = function(eleventyConfig) {
+  // Shared metadata applies to rendered layouts AND copied standalone tools.
+  // Running after every build keeps --serve/watch previews consistent too.
+  eleventyConfig.on('eleventy.after', async () => {
+    const { prepareSite } = await import('./scripts/prepare-site.mjs');
+    await prepareSite();
+  });
   // Expose the single public tool registry under an explicit, collision-free
   // template name. The data file remains the source of truth; this alias keeps
   // directory, sitemap, search, and navigation templates on the same object.
@@ -27,6 +33,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/**/*.otf');
   eleventyConfig.addPassthroughCopy('src/**/*.wasm');
   eleventyConfig.addPassthroughCopy('src/**/*.gz');
+  eleventyConfig.addPassthroughCopy({ 'src/assets/examples': 'assets/examples' });
   // Vendor libraries are committed under the repository-level js/ directory
   // because several of them are large binary/runtime assets. Copy them into
   // the deployable site as well; otherwise an _site-only Pages deployment

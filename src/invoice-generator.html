@@ -1253,7 +1253,7 @@
  const qty = Math.max(0, toNumber(item.quantity));
  const unitPrice = Math.max(0, toNumber(item.unitPrice));
  const taxPct = Math.max(0, toNumber(item.tax));
- const discountPct = Math.max(0, toNumber(item.discount));
+ const discountPct = Math.min(100, Math.max(0, toNumber(item.discount)));
  const base = qty * unitPrice;
  const taxAmount = base * (taxPct / 100);
  const discountAmount = base * (discountPct / 100);

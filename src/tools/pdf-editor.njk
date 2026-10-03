@@ -29,6 +29,7 @@ bodyClass: pdf-editor-body
       <p class="pdf-editor-eyebrow">OnlinePDFPro PDF Editor</p>
       <h1>Edit PDF Online Free</h1>
       <p class="pdf-editor-lede">Select existing text, make your change, and export a searchable PDF. Style matching depends on the fonts and page content in the source file.</p>
+      <p class="pdf-editor-lede" id="pdf-data-warning">Supported edits replace the original text. Other edits may use a visual overlay that leaves original text or images recoverable. Whiteout and this editor are not secure redaction tools. Export warnings identify overlay fallbacks.</p>
     </div>
     <div class="pdf-local-badge" role="status">
       <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg>
@@ -120,6 +121,7 @@ bodyClass: pdf-editor-body
     </div>
 
     <div class="pdf-text-context-toolbar" id="pdf-text-context-toolbar" role="toolbar" aria-label="Selected text formatting" hidden>
+      <button class="pdf-button pdf-button-quiet" id="context-edit-button" type="button">Edit text</button>
       <label class="pdf-context-font" for="context-font-family-input"><span class="sr-only">Font</span>
         <select id="context-font-family-input" aria-label="Font family">
           <option>Arial</option>
@@ -193,7 +195,7 @@ bodyClass: pdf-editor-body
         </div>
         <div class="pdf-mobile-status">
           <span id="mobile-page-count">Page 1 of 1</span>
-          <span>Click text to select · double-click to edit</span>
+          <span>Select text, then use Edit text</span>
         </div>
       </section>
 

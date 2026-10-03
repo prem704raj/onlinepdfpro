@@ -79,6 +79,13 @@ const MobileMenu = {
         });
 
         if (menuToggle && nav) {
+            const closeMenu = () => {
+                nav.classList.remove('active');
+                menuToggle.textContent = '☰';
+                menuToggle.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.setAttribute('aria-label', 'Open menu');
+            };
             menuToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = nav.classList.toggle('active');
@@ -91,22 +98,21 @@ const MobileMenu = {
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
-                    nav.classList.remove('active');
-                    menuToggle.textContent = '☰';
-                    menuToggle.classList.remove('open');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                    menuToggle.setAttribute('aria-label', 'Open menu');
+                    closeMenu();
                 }
             });
 
             // Close on nav link click (except install link)
             nav.querySelectorAll('.nav-link:not(.pwa-install-link)').forEach(link => {
                 link.addEventListener('click', () => {
-                    nav.classList.remove('active');
-                    menuToggle.textContent = '☰';
-                    menuToggle.classList.remove('open');
-                    menuToggle.setAttribute('aria-expanded', 'false');
+                    closeMenu();
                 });
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && nav.classList.contains('active')) {
+                    closeMenu();
+                    menuToggle.focus();
+                }
             });
         }
 
@@ -146,8 +152,7 @@ const MobileMenu = {
                 if (e.key === 'Enter') {
                     const q = e.target.value.trim();
                     if (q) {
-                        const isToolsDir = window.location.pathname.includes('/tools/');
-                        const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+const targetUrl = `/tools?q=${encodeURIComponent(q)}`;
                         window.location.href = targetUrl;
                     }
                 }
@@ -180,8 +185,7 @@ const MobileMenu = {
                     if (e.key === 'Enter') {
                         const q = e.target.value.trim();
                         if (q) {
-                            const isToolsDir = window.location.pathname.includes('/tools/');
-                            const targetUrl = isToolsDir ? `../tools.html?q=${encodeURIComponent(q)}` : `tools.html?q=${encodeURIComponent(q)}`;
+const targetUrl = `/tools?q=${encodeURIComponent(q)}`;
                             window.location.href = targetUrl;
                         }
                     }
@@ -315,12 +319,24 @@ const FileUploader = {
     },
 
     handleFiles(fileList, config) {
-        const files = Array.from(fileList);
+        const inferredTypes = {pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',bmp:'image/bmp',heic:'image/heic',heif:'image/heif'};
+        const files = Array.from(fileList, file => {
+            const type = inferredTypes[file.name.split('.').pop().toLowerCase()];
+            return !file.type && type ? new File([file],file.name,{type,lastModified:file.lastModified}) : file;
+        });
         if (files.length > config.maxFiles) {
             alert(`Maximum ${config.maxFiles} files allowed`);
             return;
         }
         const validFiles = files.filter(file => {
+            if (!file.size) { alert(`${file.name} is empty. Choose a file with content.`); return false; }
+            const accepted = String(config.accept || '*/*').toLowerCase().split(',').map(value => value.trim());
+            const type = String(file.type || '').toLowerCase();
+            const name = file.name.toLowerCase();
+            if (!accepted.some(value => value === '*/*' || (value.startsWith('.') ? name.endsWith(value) : value.endsWith('/*') ? type.startsWith(value.slice(0, -1)) : type === value))) {
+                alert(`${file.name} is not a supported file type. Choose ${config.accept}.`);
+                return false;
+            }
             if (file.size > config.maxSize) {
                 alert(`${file.name} is too large. Maximum size is ${this.formatSize(config.maxSize)}`);
                 return false;
@@ -614,6 +630,16 @@ const HistoryDB = {
 // =========================================
 
 const Downloader = {
+    addUniqueZipFiles(zip, results) {
+        const used = new Set();
+        for (const result of results) {
+            const base = String(result.name || "file").replace(/[\\/]/g, "_");
+            const dot = base.lastIndexOf("."), stem = dot > 0 ? base.slice(0,dot) : base, ext = dot > 0 ? base.slice(dot) : "";
+            let name = base, count = 2;
+            while (used.has(name.toLowerCase())) name = stem + "-" + count++ + ext;
+            used.add(name.toLowerCase()); zip.file(name,result.blob);
+        }
+    },
     _lastBlob: null,
     _lastName: null,
     _cssInjected: false,
@@ -801,6 +827,9 @@ const PwaInstallManager = {
         }
     },
     showInstallBanner() {
+        // Leave the document workspace and an open checkout cart unobstructed.
+        // Installation remains available through the navigation menu.
+        if (document.body.classList.contains('pdf-editor-body') || document.querySelector('.cart-drawer.open')) return;
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
@@ -966,7 +995,7 @@ const ToolRegistryUI = {
 
     currentPath() {
         const pathname = window.location.pathname.replace(/\\/g, '/');
-        const normalized = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname;
+        const normalized = pathname.length > 1 ? pathname.replace(/\.html$/, '').replace(/\/$/, '') : pathname;
         return normalized || '/';
     },
 
@@ -974,7 +1003,7 @@ const ToolRegistryUI = {
         const count = registry.tools.length;
         document.querySelectorAll('a.nav-link').forEach(link => {
             const href = link.getAttribute('href') || '';
-            if (!/tools\.html(?:[?#]|$)/.test(href)) return;
+            if (!/\/tools(?:\.html)?(?:[?#]|$)/.test(href)) return;
             link.dataset.toolCount = String(count);
             link.setAttribute('aria-label', `PDF Tools directory (${count} tools)`);
         });
@@ -1027,14 +1056,13 @@ const RecentlyUsedUI = {
         if (!target) return;
         const recent = RecentlyUsed.get();
         if (recent.length === 0) return;
-        const prefix = window.location.pathname.includes('/tools/') ? '../' : '';
         const wrap = document.createElement('div');
         wrap.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
         recent.forEach(item => {
             const id = typeof item?.id === 'string' && /^[a-z0-9-]+$/i.test(item.id) ? item.id : null;
             if (!id) return;
             const link = document.createElement('a');
-            link.href = `${prefix}tools/${id}.html`;
+            link.href = `/tools/${id}`;
             link.style.cssText = 'padding:10px 15px;background:var(--surface-1);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;';
             link.textContent = String(item.name || id);
             wrap.appendChild(link);

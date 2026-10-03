@@ -324,7 +324,11 @@
  const wordCountSpan = document.getElementById('wordCount');
  const charCountSpan = document.getElementById('charCount');
 
- let notes = JSON.parse(localStorage.getItem('pdf_scratchpad_notes')) || [];
+ let notes = [];
+ try {
+ const stored = JSON.parse(localStorage.getItem('pdf_scratchpad_notes') || '[]');
+ if (Array.isArray(stored)) notes = stored.filter(n => n && typeof n.id === 'string' && typeof n.title === 'string' && typeof n.content === 'string' && typeof n.updatedAt === 'string');
+ } catch (error) { /* A damaged saved draft must not break the editor. */ }
  let activeNoteId = null;
  let saveTimeout = null;
 
@@ -349,7 +353,9 @@
  updateCounts();
  });
 
+ window.addEventListener('pagehide', () => { if (saveTimeout) saveActiveNote(); });
  downloadBtn.addEventListener('click', () => {
+ if (saveTimeout) saveActiveNote();
  const activeNote = notes.find(n => n.id === activeNoteId);
  if (!activeNote) return;
 
@@ -369,6 +375,7 @@
  }
 
  function createNewNote() {
+ if (saveTimeout) saveActiveNote();
  const newNote = {
  id: generateId(),
  title: 'Untitled Note',
@@ -383,6 +390,7 @@
 
  function deleteNote(id, event) {
  event.stopPropagation();
+ if (saveTimeout) saveActiveNote();
  notes = notes.filter(n => n.id !== id);
  saveToLocalStorage();
 
@@ -396,6 +404,7 @@
  }
 
  function setActiveNote(id) {
+ if (saveTimeout) saveActiveNote();
  activeNoteId = id;
  const note = notes.find(n => n.id === id);
  if (note) {
@@ -414,6 +423,7 @@
  }
 
  function saveActiveNote() {
+ clearTimeout(saveTimeout); saveTimeout = null;
  if (!activeNoteId) return;
 
  const noteIndex = notes.findIndex(n => n.id === activeNoteId);

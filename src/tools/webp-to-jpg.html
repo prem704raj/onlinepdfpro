@@ -313,6 +313,7 @@
 </main>
 
  <script src="../js/app.js?v=96"></script>
+ <script src="/js/vendor/jszip/jszip.min.js"></script>
 
  <!-- No external library needed! WebP is natively supported by modern browsers via Canvas -->
 
@@ -610,6 +611,10 @@
 
  function showResults(totalOriginal, totalOutput) {
  const successResults = results.filter(r => r.success);
+ let summary = resultsSection.querySelector('.batch-result-status');
+ if (!summary) { summary = document.createElement('p'); summary.className = 'batch-result-status'; summary.setAttribute('role','status'); resultsSection.prepend(summary); }
+ summary.textContent = successResults.length + ' of ' + results.length + ' files processed successfully.' + (results.some(r => !r.success) ? ' Some files could not be decoded or processed. Try valid files again.' : '');
+
 
  document.getElementById('totalFiles').textContent = successResults.length;
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
@@ -650,7 +655,7 @@
  return;
  }
  const zip = new JSZip();
- for (const result of successResults) zip.file(result.name, result.blob);
+ OnlinePDFPro.Downloader.addUniqueZipFiles(zip, successResults);
  const content = await zip.generateAsync({ type: 'blob' });
  OnlinePDFPro.Downloader.saveBlob(content, 'webp-to-jpg-converted.zip');
  });

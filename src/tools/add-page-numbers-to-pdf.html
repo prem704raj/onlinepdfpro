@@ -319,7 +319,7 @@
  <input type="number" id="startNum" value="1" min="1">
  </div>
 
- <button onclick="addPageNumbers()" class="apply-btn"> Add Page Numbers & Download</button>
+ <button onclick="addPageNumbers()" class="apply-btn"> Apply Page Numbers</button>
  </div>
 
  <div class="success-box" id="successBox">
@@ -361,6 +361,7 @@ document.getElementById('dropArea').ondrop = e => {
 
 async function loadFile(file) {
  if (!file) return;
+ try {
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
 
@@ -371,6 +372,12 @@ async function loadFile(file) {
  document.getElementById('fileInfo').style.display = 'block';
  document.getElementById('fileInfo').textContent = ` ${file.name} — ${totalPages} pages`;
  document.getElementById('optionsBox').style.display = 'block';
+ } catch (error) {
+ pdfBytes = null; document.getElementById('fileInput').value = '';
+ document.getElementById('optionsBox').style.display = 'none';
+ document.getElementById('dropArea').style.display = '';
+ alert('Could not open this PDF. Use a valid, unencrypted PDF and try again.');
+ }
 }
 
 function setPosition(btn) {
@@ -381,24 +388,31 @@ function setPosition(btn) {
 
 async function addPageNumbers() {
  if (!pdfBytes) return;
-
+ const startField = document.getElementById('startNum');
+ if (!startField.reportValidity()) return;
+ const startNum = Number(startField.value);
+ if (!Number.isSafeInteger(startNum) || startNum < 1) { alert('Enter a whole starting number of at least 1.'); return; }
+ try {
  const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
  const pages = pdfDoc.getPages();
  const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
  const fontSize = parseInt(document.getElementById('fontSize').value);
  const format = document.getElementById('format').value;
- const startNum = parseInt(document.getElementById('startNum').value) || 1;
+
 
  for (let i = 0; i < pages.length; i++) {
  const page = pages[i];
- const { width, height } = page.getSize();
+ const box = page.getCropBox();
+ const angle = ((page.getRotation().angle % 360) + 360) % 360;
+ const width = angle % 180 ? box.height : box.width;
+ const height = angle % 180 ? box.width : box.height;
  const pageNum = i + startNum;
 
  let text = '';
  switch (format) {
  case 'number': text = `${pageNum}`; break;
- case 'pageOf': text = `Page ${pageNum} of ${pages.length}`; break;
+ case 'pageOf': text = `Page ${pageNum} of ${startNum + pages.length - 1}`; break;
  case 'dash': text = `- ${pageNum} -`; break;
  case 'bracket': text = `[${pageNum}]`; break;
  }
@@ -418,9 +432,17 @@ async function addPageNumbers() {
  default: x = (width - textWidth) / 2; y = margin;
  }
 
+ const points = {
+ 0: [box.x + x, box.y + y],
+ 90: [box.x + box.width - y, box.y + x],
+ 180: [box.x + box.width - x, box.y + box.height - y],
+ 270: [box.x + y, box.y + box.height - x]
+ };
+ const point = points[angle];
  page.drawText(text, {
- x: x,
- y: y,
+ x: point[0],
+ y: point[1],
+ rotate: PDFLib.degrees(angle),
  size: fontSize,
  font: font,
  color: PDFLib.rgb(0.3, 0.3, 0.3)
@@ -433,6 +455,7 @@ async function addPageNumbers() {
  document.getElementById('fileInfo').style.display = 'none';
  document.getElementById('resultInfo').textContent = `${pages.length} pages numbered successfully`;
  document.getElementById('successBox').style.display = 'block';
+ } catch (error) { alert('Page numbers could not be added. Try an unlocked, valid PDF.'); }
 }
 
 function downloadResult() {

@@ -200,7 +200,8 @@ async function run() {
   check(fs.existsSync(path.join(siteRoot, 'tools/pdf-editor.html')), 'Built PDF editor exists');
   check(fs.existsSync(path.join(siteRoot, 'fonts/pdf-editor/Arimo-Regular.ttf')), 'Bundled editor fonts are present in the built site');
   const redirectRules = fs.readFileSync(path.join(root, 'src/_redirects'), 'utf8');
-  check(redirectRules.includes('/tools/pdf-editor /tools/pdf-editor.html 301!'), 'Extensionless PDF editor URL permanently redirects to the canonical .html route');
+  const editorHtml = fs.readFileSync(path.join(siteRoot, 'tools/pdf-editor.html'), 'utf8');
+  check(/<link[^>]*href="https:\/\/onlinepdfpro.com\/tools\/pdf-editor"[^>]*rel="canonical"/.test(editorHtml) && !/^\/tools\/pdf-editor\s+\/tools\/pdf-editor\.html/m.test(redirectRules), 'PDF editor uses the clean canonical URL without a redirect back to .html');
   const editorSource = fs.readFileSync(path.join(root, 'src/js/pdf-editor/editor.js'), 'utf8');
   check(editorSource.includes("trackEditorEvent('export_failure')"), 'PDF editor records privacy-safe export failure events');
   await createFixture();
@@ -284,6 +285,7 @@ async function run() {
     check(firstText.text.includes('AMRIT') && !firstText.text.includes('PREM'), 'True replacement removes the old bold PREM run from extracted PDF text');
     check(firstText.text.includes('changed') && !firstText.text.includes('complex'), 'True replacement preserves a complex page background by replacing the text operator');
     check(firstText.text.includes('नमस्ते'), 'Fallback overlay text remains extractable after export');
+    check((await page.$eval('#pdf-export-notice', node => node.textContent)).includes('Original text or image data may remain recoverable'), 'Overlay fallback warns that original document data may remain recoverable');
     check(trueReplacementUsesBaseFont(reopened, 0, 'AMRIT RAJ', 'Helvetica-Bold'), 'The true-replaced AMRIT text retains the bold source font resource');
 
     await page.click('.pdf-text-hit[aria-label*="used"]');

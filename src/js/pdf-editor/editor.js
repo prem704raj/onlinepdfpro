@@ -119,6 +119,7 @@ const refs = {
   contextItalic: byId('context-italic-button'),
   contextColor: byId('context-text-color-input'),
   contextMore: byId('context-more-button'),
+  contextEdit: byId('context-edit-button'),
   contextFontStatus: byId('context-font-status'),
   contextRotation: byId('context-text-rotation-input'),
   contextLetterSpacing: byId('context-letter-spacing-input'),
@@ -1661,6 +1662,7 @@ refs.contextItalic.addEventListener('click', () => {
 });
 refs.contextColor.addEventListener('change', () => applyContextTextChange({ colorHex: refs.contextColor.value }));
 refs.contextMore.addEventListener('click', () => toggleContextAdvanced());
+refs.contextEdit.addEventListener('click', () => beginInlineTextEdit(editorState.selectedObjectId));
 refs.contextRotation.addEventListener('change', () => applyContextTextChange({ rotation: Number(refs.contextRotation.value) }));
 refs.contextLetterSpacing.addEventListener('change', () => applyContextTextChange({ letterSpacing: Number(refs.contextLetterSpacing.value) }));
 refs.contextOpacity.addEventListener('change', () => applyContextTextChange({ opacity: Number(refs.contextOpacity.value) }));

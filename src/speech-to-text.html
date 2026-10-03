@@ -317,11 +317,12 @@
 
  .format-grid {
  display: grid;
- grid-template-columns: repeat(2, 1fr);
+ grid-template-columns: repeat(2, minmax(0, 1fr));
  gap: 15px;
  }
 
  .format-group {
+ min-width: 0;
  display: flex;
  flex-direction: column;
  gap: 8px;
@@ -335,6 +336,7 @@
 
  .format-group select,
  .format-group input {
+ width: 100%;
  padding: 12px;
  border: 2px solid var(--border);
  border-radius: 12px;
@@ -688,11 +690,11 @@
  if (finalTranscript) {
  // Process commands
  let processed = finalTranscript;
- processed = processed.replace(/new line|next line|enter/gi, '\n');
- processed = processed.replace(/period|full stop/gi, '.');
- processed = processed.replace(/comma/gi, ',');
- processed = processed.replace(/question mark/gi, '?');
- processed = processed.replace(/exclamation mark|exclamation point/gi, '!');
+ processed = processed.replace(/\b(?:new line|next line|enter)\b/gi, '\n');
+ processed = processed.replace(/\b(?:period|full stop)\b/gi, '.');
+ processed = processed.replace(/\bcomma\b/gi, ',');
+ processed = processed.replace(/\bquestion mark\b/gi, '?');
+ processed = processed.replace(/\b(?:exclamation mark|exclamation point)\b/gi, '!');
 
  fullTranscript += processed;
  document.getElementById('textArea').value = fullTranscript;
@@ -718,6 +720,9 @@
  } else if (event.error === 'not-allowed') {
  alert('Microphone access denied. Please allow microphone access in your browser settings.');
  stopRecording();
+ } else if (event.error !== 'aborted') {
+ stopRecording();
+ document.getElementById('micStatus').textContent = 'Speech recognition failed (' + event.error + '). Check your browser and connection, then try again.';
  }
  };
 
@@ -748,7 +753,7 @@
 
  try {
  recognition.start();
- } catch (e) { }
+ } catch (e) { isRecording = false; document.getElementById('micStatus').textContent = 'Could not start speech recognition. Try again.'; return; }
 
  document.getElementById('micBtn').classList.add('recording');
  document.getElementById('micBtn').textContent = '⏹️';

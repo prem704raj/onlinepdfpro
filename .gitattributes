@@ -1,0 +1,3 @@
+# Preserve byte offsets in PDFs, including ASCII-encoded example documents.
+# Windows line-ending conversion would invalidate their cross-reference tables.
+*.pdf binary

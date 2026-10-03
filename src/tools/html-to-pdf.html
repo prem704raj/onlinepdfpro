@@ -403,7 +403,7 @@ Example:
  if (/^(?:javascript|vbscript):/i.test(value) || /^data:(?!image\/(?:png|jpe?g|gif|webp);?)/i.test(value)) continue;
  // Keep links and local assets same-origin. External URLs are intentionally
  // dropped so pasted markup cannot make requests from the OnlinePDFPro origin.
- if (/^(?:#|\/|\.{1,2}\/)/.test(value)) target.setAttribute(attr.name, value);
+ if (!/[\\\u0000-\u0020]/.test(value) && !value.startsWith('//') && /^(?:#|\/|\.{1,2}\/)/.test(value)) target.setAttribute(attr.name, value);
  continue;
  }
  if (name === 'style' || name === 'class' || name === 'id' || name === 'title' || name === 'alt' || name === 'width' || name === 'height' || name === 'align' || name === 'colspan' || name === 'rowspan') {

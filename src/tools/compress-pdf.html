@@ -170,8 +170,11 @@
 
  <div id="estimatedOutput" style="margin-top: 16px; padding: 12px 16px; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: 10px; font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px;">
  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent); flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
- <span style="line-height: 1.4;">The compressor will intelligently lower the PDF quality to match your requested size exactly. Please note that extreme reductions may cause blurriness.</span>
+ <span style="line-height: 1.4;">The target is a goal, not a guarantee. By default, we optimize the PDF structure while retaining text, links and form fields. The actual result may remain above your target.</span>
  </div>
+ <label style="display:block; margin-top:16px; line-height:1.6;" for="allowRasterization">
+ <input type="checkbox" id="allowRasterization"> Allow image-based compression if structural optimization misses the target. Pages become JPEG images: searchable text, links, forms and accessibility tags are lost, and small text may blur. Review the downloaded PDF before using it.
+ </label>
  </div>
 
  <div id="fileList" class="fade-in"></div>
@@ -245,7 +248,7 @@
 
  <!-- Added SEO Sections -->
 
-</main>
+<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/choose-a-pdf-compression-mode/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script src="/js/vendor/pdfjs/pdf.min.js"></script>
@@ -355,20 +358,10 @@
  // PHASE 1 — Lossless structural optimization
  //
  async function losslessCompress(arrayBuffer) {
- const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
- const newDoc = await PDFDocument.create();
- const pageIndices = srcDoc.getPageIndices();
- const copiedPages = await newDoc.copyPages(srcDoc, pageIndices);
- copiedPages.forEach(page => newDoc.addPage(page));
-
- // Copy metadata
- try {
- newDoc.setTitle(srcDoc.getTitle() || '');
- newDoc.setAuthor(srcDoc.getAuthor() || '');
- newDoc.setSubject(srcDoc.getSubject() || '');
- } catch(e) { /* ignore metadata errors */ }
-
- return await newDoc.save({
+ // Save the whole document instead of copying only pages, which discards
+ // document-level forms, bookmarks and other catalog entries.
+ const srcDoc = await PDFDocument.load(arrayBuffer, { updateMetadata: false });
+ return await srcDoc.save({
  useObjectStreams: true,
  addDefaultPage: false
  });
@@ -379,7 +372,7 @@
  //
  async function findOptimalParams(arrayBuffer, targetBytes, statusText, progressFill) {
  statusText.textContent = 'Estimating compression parameters...';
- const srcDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+ const srcDoc = await PDFDocument.load(arrayBuffer, { updateMetadata: false });
  const numPages = srcDoc.getPageCount();
  const targetBytesPerPage = targetBytes / numPages;
 
@@ -500,6 +493,7 @@
 
  const targetVal = parseFloat(document.getElementById('targetSizeInput').value);
  const targetUnit = document.getElementById('targetSizeUnit').value;
+ const allowRasterization = document.getElementById('allowRasterization').checked;
  if (isNaN(targetVal) || targetVal <= 0) {
  alert("Please enter a valid target size.");
  return;
@@ -567,15 +561,17 @@
 
  let bestBytes = await losslessCompress(arrayBuffer.slice(0));
  let bestSize = bestBytes.length;
+ let outputMode = 'Structural optimization';
 
  // Always keep original if lossless made it bigger
  if (bestSize >= originalSize) {
  bestBytes = new Uint8Array(arrayBuffer);
  bestSize = originalSize;
+ outputMode = 'Original file (no smaller output)';
  }
 
  //  PHASE 2 & 3: Smart rasterization (only if lossless didn't hit target)
- if (bestSize > targetBytes && isCancelled === false) {
+ if (allowRasterization && bestSize > targetBytes && isCancelled === false) {
 
  // Binary search for optimal parameters to hit target size
  const optimalParams = await findOptimalParams(arrayBuffer.slice(0), targetBytes, statusText, progressFill);
@@ -588,6 +584,7 @@
  if (rasterBytes && rasterBytes.length < bestSize) {
  bestBytes = rasterBytes;
  bestSize = rasterBytes.length;
+ outputMode = 'Image-based PDF (text, links and forms removed)';
  }
  }
  }
@@ -596,6 +593,7 @@
  if (bestSize >= originalSize) {
  bestBytes = new Uint8Array(arrayBuffer);
  bestSize = originalSize;
+ outputMode = 'Original file (no smaller output)';
  }
 
  progressFill.style.width = '100%';
@@ -605,7 +603,7 @@
  totalCompressed += bestSize;
 
  item.classList.add('success');
- statusText.textContent = 'Done!';
+ statusText.textContent = bestSize <= targetBytes ? 'Target met' : 'Above target';
  statusResult.textContent = `${OnlinePDFPro.Utils.formatFileSize(originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(bestSize)} (${savedPercent > 0 ? savedPercent + '% saved' : 'no change'})`;
 
  results.push({
@@ -614,6 +612,8 @@
  compressedSize: bestSize,
  savedPercent,
  bytes: bestBytes,
+ outputMode,
+ targetMet: bestSize <= targetBytes,
  success: true
  });
 
@@ -653,6 +653,7 @@
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(result.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(result.originalSize)} → ${OnlinePDFPro.Utils.formatFileSize(result.compressedSize)} (${result.savedPercent > 0 ? result.savedPercent + '% saved' : 'no change'})</div>
+ <p class="output-details">${result.targetMet ? 'Target met' : 'Above target'} · ${escapeHTML(result.outputMode)}</p>
  </div>
  <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" data-index="${index}">Download</button>
  </div>
@@ -694,6 +695,7 @@ resultsSection.style.display = 'block';
  files = [];
  results = [];
  isCancelled = false;
+ document.getElementById('allowRasterization').checked = false;
  fileList.innerHTML = '';
  processingList.innerHTML = '';
  resultsList.innerHTML = '';
@@ -718,17 +720,17 @@ resultsSection.style.display = 'block';
 
 <section class="tool-seo-content" style="max-width:800px; margin:48px auto 0; padding:0 24px 48px;">
 <h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.6rem; font-weight:400; color:var(--text-primary,#2c2418); margin-bottom:16px;">How PDF Compression Works</h2>
-<p style="font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">PDF files grow large when they contain high-resolution images, embedded fonts, or layers of annotations. Compression reduces file size by re-encoding images at a lower quality, removing duplicate font subsets, and stripping unnecessary metadata. The text content of your document is never altered.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">The default mode resaves the whole PDF with compressed object streams while retaining document content. It may produce little or no saving. Optional image-based compression renders pages as JPEG images and removes searchable text, interactive links, forms and accessibility tags. The smaller result is used only when it saves space.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Understanding quality levels</h3>
 <ul style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; padding-left:20px; margin-bottom:16px;">
-<li><strong>Low compression</strong> — minimal size reduction, visually lossless. Best for photography and design.</li>
-<li><strong>Medium compression</strong> — good balance. Works well for reports, presentations, and general documents.</li>
-<li><strong>High compression</strong> — maximum reduction. Ideal for email attachments and online uploads.</li>
+<li><strong>Structural optimization</strong> — the default, with no page rendering and no guaranteed size reduction.</li>
+<li><strong>Image-based compression</strong> — optional and destructive to document features. Quality is estimated from the first page, so mixed documents may remain above the target.</li>
+<li><strong>Original file</strong> — returned when neither selected method produces a smaller file.</li>
 </ul>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Common use cases</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Most email services cap attachments at 25 MB. Government portals often have stricter limits (5-10 MB). Compressing before uploading ensures your file is accepted on the first try. For scanned documents, compression can reduce file size by 60-80% without affecting text readability.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Check your destination's upload limit and the actual output size. Open the result and inspect small text, images and filled fields before submitting it. Saving a signed PDF can invalidate its digital signature; keep your original.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">Your file is processed using a secure backend worker. The document is compressed in memory, returned to your browser, and immediately discarded.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool processes your PDF locally in your browser. It does not upload the document for compression. Results are cleared from the page after five minutes or when you reset the tool. Your original file stays on your device.</p>
 </section>
 
  <script defer src="../counter.js"></script>

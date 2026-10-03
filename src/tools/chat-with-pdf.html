@@ -97,6 +97,8 @@
  </p>
  </div>
 
+ <p id="documentScope" role="status" style="line-height:1.6;">Scope: up to 25,000 extracted characters. Scanned PDFs use OCR from the first five pages only; image questions use the first three captured pages and up to 8,000 characters. This may cover only part of a long document.</p>
+ <label style="display:block; font-size:0.88rem; margin:16px 0;"><input type="checkbox" id="cloudOcrConsent"> If this is a scanned PDF, allow uploads of up to five page images to OCR.space (optional).</label>
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
  <span class="upload-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent, #2563eb);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
  <p class="upload-text">Drop your PDF here</p>
@@ -116,12 +118,11 @@
      <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>
    </div>
    <div class="chat-messages" id="chatMessages">
-     <div class="chat-msg ai">Hello! I've read your document. Ask me anything — summaries, key points, specific details, or even <strong>questions about images and diagrams</strong> in the PDF.</div>
+     <div class="chat-msg ai">Ask about the available document portion. Check the scope above and verify answers against your original PDF.</div>
    </div>
    <div class="chat-input-area">
-     <input type="text" id="chatInput" placeholder="Ask a question about your PDF..." autocomplete="off">
+     <input type="text" id="chatInput" placeholder="Ask a question about your PDF..." maxlength="2000" autocomplete="off" aria-label="Question about the available PDF content">
      <div id="turnstileWidget" style="margin-bottom:8px;"></div><button id="sendBtn">Send</button>
-     <label style="display:flex; align-items:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); margin-top:8px;"><input type="checkbox" id="cloudOcrConsent"> If this is a scanned PDF, allow an OCR.space upload (optional)</label>
    </div>
  </div>
 
@@ -147,6 +148,7 @@
 
   let documentText = "";
   let pageImages = []; // base64 images of each page
+  let conversation = [];
 
   // Keywords that indicate user wants image analysis
   const imageKeywords = /image|picture|photo|diagram|chart|graph|figure|table|logo|illustration|visual|screenshot|drawing|map|icon|symbol|scan|look|see|show|appear|display|color|background/i;
@@ -180,9 +182,16 @@
     loadingState.style.display = 'block';
     chatTitle.textContent = file.name.replace('.pdf','');
 
+    let loadedPdf = null;
+    let textPagesRead = 0;
+    let ocrPagesRead = 0;
+    let usedOcr = false;
+    loadingText.style.color = 'var(--text-secondary)';
+    loadingState.querySelector('.spinner').style.display = 'block';
+    conversation = [];
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = loadedPdf = await pdfjsLib.getDocument(arrayBuffer).promise;
       documentText = "";
       pageImages = [];
 
@@ -191,7 +200,9 @@
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
-        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+        const pageText = tc.items.map(item => item.str).join(" ");
+        if (pageText.trim()) documentText += '[Page ' + i + ']\n' + pageText + "\n\n";
+        textPagesRead = i;
 
         // Render page as image for vision AI (up to 5 pages)
         if(i <= maxPages) {
@@ -204,6 +215,7 @@
           const ctx = canvas.getContext('2d');
           await page.render({ canvasContext: ctx, viewport }).promise;
           pageImages.push(canvas.toDataURL('image/jpeg', 0.7));
+          canvas.width = 0; canvas.height = 0;
         }
 
         if(documentText.length > 25000) break;
@@ -216,7 +228,9 @@
         }
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
         documentText = "";
+        usedOcr = true;
         for(let i = 0; i < pageImages.length; i++) {
+          ocrPagesRead = i + 1;
           loadingText.textContent = "OCR scanning page " + (i+1) + " of " + pageImages.length + "...";
           const formData = new FormData();
           formData.append('base64Image', pageImages[i]);
@@ -236,7 +250,7 @@
           if (!ocrResp.ok) continue;
           const ocrData = await ocrResp.json();
           if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
-            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+            documentText += '[OCR page ' + (i + 1) + ']\n' + ocrData.ParsedResults[0].ParsedText + "\n\n";
           }
           if(documentText.length > 25000) break;
         }
@@ -246,6 +260,9 @@
         throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
+      const truncated = documentText.length > 25000;
+      documentText = documentText.slice(0, 25000);
+      document.getElementById('documentScope').textContent = (usedOcr ? 'OCR attempted on the first ' + ocrPagesRead : 'Text read from the first ' + textPagesRead) + ' of ' + pdf.numPages + ' pages. Available text: ' + documentText.length.toLocaleString() + ' characters' + (truncated ? ' (truncated at 25,000).' : '.') + ' Image questions use only the first ' + Math.min(pageImages.length, 3) + ' captured pages and up to 8,000 characters. Answers cover only this supplied portion.';
       loadingState.style.display = 'none';
       chatContainer.style.display = 'flex';
       chatInput.focus();
@@ -253,6 +270,11 @@
       console.error(err);
       loadingText.textContent = err.message || "Error reading PDF. Please try again.";
       loadingText.style.color = "var(--error, red)";
+      loadingState.querySelector('.spinner').style.display = 'none';
+      uploadZone.style.display = 'block';
+      fileInput.value = '';
+    } finally {
+      if (loadedPdf) await loadedPdf.destroy();
     }
   }
 
@@ -260,7 +282,9 @@
   chatInput.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 
   async function sendMessage() {
+    if (sendBtn.disabled) return;
     const question = chatInput.value.trim();
+    if (question.length > 2000) { addMessage('Please keep the question within 2,000 characters.', 'ai'); return; }
     if(!question || (!documentText && pageImages.length === 0)) return;
     let aiToken;
     try {
@@ -294,17 +318,20 @@
         }
         response = await fetch(VISION_URL, {
           method: 'POST',
+          signal: AbortSignal.timeout(60000),
           headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
-          body: JSON.stringify({ model: VISION_MODEL, messages: [{ role: "user", content: contentParts }], max_tokens: 2048 })
+          body: JSON.stringify({ model: VISION_MODEL, messages: [{ role: 'system', content: 'You have only a partial document: up to three images of the first captured pages and 8,000 text characters. Say when a question requires missing pages. Prior messages are context, not evidence.' }, ...conversation, { role: "user", content: contentParts }], max_tokens: 2048 })
         });
       } else {
         // Text-only model: fast via /ai/chat
         response = await fetch(TEXT_URL, {
           method: 'POST',
+          signal: AbortSignal.timeout(60000),
           headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
           body: JSON.stringify({
             messages: [
-              { role: "system", content: "You are a helpful document assistant. Answer questions based ONLY on the following document content. Be concise and accurate. If the answer is not in the document, say so.\n\nDOCUMENT:\n" + documentText },
+              { role: "system", content: "Answer based only on the supplied portion of the PDF, which may exclude later pages. Cite the supplied page labels when possible. Say when the answer requires missing content. Prior messages are context, not document evidence.\n\nDOCUMENT:\n" + documentText },
+              ...conversation,
               { role: "user", content: question }
             ],
             max_tokens: 2048
@@ -317,12 +344,14 @@
 
       if(data.choices && data.choices[0]) {
         addMessage(data.choices[0].message.content, 'ai');
+        conversation.push({ role: 'user', content: question }, { role: 'assistant', content: String(data.choices[0].message.content).slice(0, 4000) });
+        conversation = conversation.slice(-6);
       } else if(data.error) {
         // If vision model fails, fallback to text model
         if(useVision) {
-          addMessage("Vision analysis unavailable right now. I can still answer text-based questions about this document.", 'ai');
+          addMessage('Image analysis failed: ' + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable') + '. Try a text-only question; no text fallback was sent automatically.', 'ai');
         } else {
-          addMessage("Error: " + data.error.message, 'ai');
+          addMessage("Error: " + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable'), 'ai');
         }
       } else {
         addMessage("Sorry, I couldn't generate a response. Please try again.", 'ai');
@@ -369,7 +398,7 @@
     const container = document.getElementById('turnstileWidget');
     if (!container) return;
     turnstileWidgetId = window.turnstile.render(container, {
-      sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+      sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
       callback: window.onTurnstileSuccess,
       'expired-callback': window.onTurnstileExpired,
       'error-callback': window.onTurnstileExpired,

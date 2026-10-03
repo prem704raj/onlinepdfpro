@@ -1,7 +1,7 @@
 // OnlinePDFPro Service Worker (__BUILD_ID__)
 // The build step replaces __BUILD_ID__ with a content hash of the generated
 // site. This invalidates the entire cache whenever a static asset changes.
-// Network-first for HTML/JS, stale-while-revalidate for core CSS, and
+// Network-first for HTML/JS/CSS, and
 // cache-first for images/fonts with offline fallback.
 
 const CACHE_NAME = 'onlinepdfpro-cache-__BUILD_ID__';
@@ -60,9 +60,9 @@ function isKnownStaticAsset(url) {
 }
 
 function cacheSuccessfulResponse(cacheKey, response) {
-    if (response.status !== 200) return;
+    if (response.status !== 200) return Promise.resolve();
     const clone = response.clone();
-    caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
+    return caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
 }
 
 self.addEventListener('install', (event) => {
@@ -71,7 +71,7 @@ self.addEventListener('install', (event) => {
             // Use allSettled so one failed asset doesn't kill the entire install
             return Promise.allSettled(
                 STATIC_ASSETS.map(asset =>
-                    cache.add(asset).catch(err => console.warn('[SW] Failed to cache:', asset, err))
+                    cache.add(new Request(asset, { cache: 'reload' })).catch(err => console.warn('[SW] Failed to cache:', asset, err))
                 )
             );
         })
@@ -84,14 +84,13 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
+                    if (cacheName.startsWith('onlinepdfpro-cache-') && cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim())
     );
-    self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
@@ -114,7 +113,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    cacheSuccessfulResponse(request, response);
+                    event.waitUntil(cacheSuccessfulResponse(request, response));
                     return response;
                 })
                 .catch(() => caches.match(cacheKey, { ignoreSearch: true }))
@@ -130,7 +129,7 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    cacheSuccessfulResponse(cacheKey, response);
+                    event.waitUntil(cacheSuccessfulResponse(cacheKey, response));
                     return response;
                 })
                 .catch(() => {
@@ -141,22 +140,17 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // --- Strategy 3: Stale-while-revalidate for core CSS ---
-    const SWR_CSS_FILES = ['/css/style.css', '/css/mobile-fix-v2.css', '/css/tools-v2.css'];
-    const isCoreCss = url.origin === self.location.origin &&
-        SWR_CSS_FILES.some(file => url.pathname === file || url.pathname.endsWith(file));
-    if (isCoreCss) {
+    // --- Strategy 3: Network-first for same-origin CSS ---
+    // New HTML and JavaScript must not be paired with a previous layout.
+    // Cached styles remain available when the visitor is offline.
+    if (url.origin === self.location.origin && url.pathname.endsWith('.css')) {
         event.respondWith(
-            caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
-                const networkFetch = fetch(request).then((response) => {
-                    if (response.status === 200) {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, clone));
-                    }
+            fetch(request, { cache: 'no-cache' })
+                .then((response) => {
+                    event.waitUntil(cacheSuccessfulResponse(cacheKey, response));
                     return response;
-                });
-                return cached || networkFetch;
-            })
+                })
+                .catch(() => caches.match(cacheKey, { ignoreSearch: true }))
         );
         return;
     }
@@ -180,7 +174,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(cacheKey, { ignoreSearch: true }).then((cached) => {
             return cached || fetch(request).then((response) => {
-                cacheSuccessfulResponse(request, response);
+                event.waitUntil(cacheSuccessfulResponse(request, response));
                 return response;
             });
         })

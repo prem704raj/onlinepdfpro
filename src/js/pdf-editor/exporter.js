@@ -313,12 +313,16 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
     const backgrounds = new Map(textToCover.map((object, index) => [object.id, object.background || pageSamples[index]]));
     for (const object of objects) {
       if (!['text', 'new-text', 'ocr-text'].includes(object.type)) {
+        if (object.type === 'whiteout') addWarning(warnings, 'Whiteout only covers content visually. Underlying PDF data remains recoverable; this is not secure redaction.');
         await exportOverlayObject(page, pdfDocument, PDFLib, object);
         continue;
       }
       if (trueReplaced.has(object.id)) continue;
       if (object.type === 'ocr-text') object.replacementMode = 'OCR-overlay';
       else if (object.type === 'text') object.replacementMode = 'visual-overlay-fallback';
+      if (['text', 'ocr-text'].includes(object.type) && object.modified) {
+        addWarning(warnings, 'Some edits used a visual overlay. Original text or image data may remain recoverable beneath the replacement; this is not secure redaction.');
+      }
       const sampledBackground = backgrounds.get(object.id) || { rgb: [255, 255, 255], quality: 'estimated', complex: false };
       if (sampledBackground.complex) {
         addWarning(warnings, 'Complex background detected. Text replacement may not perfectly match the original background.');

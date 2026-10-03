@@ -89,6 +89,7 @@
  </p>
  </div>
 
+ <p id="documentScope" role="status" style="line-height:1.6;">Scope: up to 25,000 extracted characters. For scanned documents, optional OCR uses the first five pages only. A long PDF may receive a partial summary; verify coverage against the original.</p>
  <div class="mode-selector fade-in" style="animation-delay: 0.15s;">
    <button class="mode-btn active" data-mode="bullets">Bullet Points</button>
    <button class="mode-btn" data-mode="short">Short Summary</button>
@@ -173,15 +174,24 @@
     document.querySelector('.mode-selector').style.display = 'none';
     loadingState.style.display = 'block';
 
+    let loadedPdf = null;
+    let textPagesRead = 0;
+    let ocrPagesRead = 0;
+    let usedOcr = false;
+    summaryResult.style.display = 'none';
+    loadingText.style.color = 'var(--text-secondary)';
+    loadingState.querySelector('.spinner').style.display = 'block';
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = loadedPdf = await pdfjsLib.getDocument(arrayBuffer).promise;
       let documentText = "";
       for(let i = 1; i <= pdf.numPages; i++) {
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
-        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+        const pageText = tc.items.map(item => item.str).join(" ");
+        if (pageText.trim()) documentText += '[Page ' + i + ']\n' + pageText + "\n\n";
+        textPagesRead = i;
         if(documentText.length > 25000) break;
       }
 
@@ -192,8 +202,10 @@
         }
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
         documentText = "";
+        usedOcr = true;
         const maxOcrPages = Math.min(pdf.numPages, 5);
         for(let i = 1; i <= maxOcrPages; i++) {
+          ocrPagesRead = i;
           loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
           const page = await pdf.getPage(i);
           const scale = 2;
@@ -204,6 +216,7 @@
           const ctx = canvas.getContext('2d');
           await page.render({ canvasContext: ctx, viewport }).promise;
           const base64 = canvas.toDataURL('image/png');
+          canvas.width = 0; canvas.height = 0;
 
           const formData = new FormData();
           formData.append('base64Image', base64);
@@ -223,7 +236,7 @@
           if (!ocrResp.ok) continue;
           const ocrData = await ocrResp.json();
           if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
-            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+            documentText += '[OCR page ' + i + ']\n' + ocrData.ParsedResults[0].ParsedText + "\n\n";
           }
           if(documentText.length > 25000) break;
         }
@@ -233,6 +246,9 @@
         throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
+      const truncated = documentText.length > 25000;
+      documentText = documentText.slice(0, 25000);
+      document.getElementById('documentScope').textContent = (usedOcr ? 'OCR attempted on the first ' + ocrPagesRead : 'Text read from the first ' + textPagesRead) + ' of ' + pdf.numPages + ' pages. Sent ' + documentText.length.toLocaleString() + ' characters' + (truncated ? ' (truncated at 25,000).' : '.') + ' The summary covers only this supplied portion.';
       loadingText.textContent = "AI is generating your summary...";
 
       const prompts = {
@@ -244,10 +260,11 @@
       const aiToken = requireTurnstileToken();
       const response = await fetch(API_URL, {
         method: 'POST',
+        signal: AbortSignal.timeout(60000),
         headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
         body: JSON.stringify({
           messages: [
-            { role: "system", content: prompts[currentMode] },
+            { role: "system", content: prompts[currentMode] + ' Summarize only the supplied document portion. Do not imply the entire PDF was read. Cite supplied page labels when possible and state that missing pages may change the conclusions.' },
             { role: "user", content: "DOCUMENT:\n" + documentText }
           ],
           max_tokens: 4096
@@ -269,15 +286,22 @@
         summaryResult.style.display = 'block';
       } else if(data.error) {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Error: " + data.error.message;
+        throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'AI service unavailable. Please try again.');
       } else {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Could not generate summary. Please try again.";
+        throw new Error('Could not generate summary. Please try again.');
       }
     } catch(err) {
       console.error(err);
       loadingText.textContent = err.message || "Error processing PDF. Please try again.";
       loadingText.style.color = "var(--error, red)";
+      loadingState.style.display = 'block';
+      loadingState.querySelector('.spinner').style.display = 'none';
+      uploadZone.style.display = 'block';
+      document.querySelector('.mode-selector').style.display = 'flex';
+      fileInput.value = '';
+    } finally {
+      if (loadedPdf) await loadedPdf.destroy();
     }
     resetTurnstile();
   }
@@ -305,7 +329,7 @@
     const container = document.getElementById('turnstileWidget');
     if (!container) return;
     turnstileWidgetId = window.turnstile.render(container, {
-      sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+      sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
       callback: window.onTurnstileSuccess,
       'expired-callback': window.onTurnstileExpired,
       'error-callback': window.onTurnstileExpired,

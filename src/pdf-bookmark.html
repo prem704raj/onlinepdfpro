@@ -428,11 +428,32 @@
  try {
  _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
  pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
+ bookmarks = []; bookmarkCounter = 0;
+ const outlines = await pdfJsDoc.getOutline();
+ let unsupported = 0;
+ async function importOutlines(items) {
+ for (const item of items || []) {
+ let destination = item.dest;
+ if (typeof destination === 'string') destination = await pdfJsDoc.getDestination(destination);
+ let index = null;
+ if (Array.isArray(destination) && destination[0] != null) {
+ try { index = typeof destination[0] === 'number' ? destination[0] : await pdfJsDoc.getPageIndex(destination[0]); } catch (_) {}
+ }
+ if (Number.isInteger(index) && index >= 0 && index < totalPages && bookmarks.length < 200) bookmarks.push({ id: 'bm_' + ++bookmarkCounter, title: String(item.title || '').slice(0,200), page:index+1 });
+ else unsupported++;
+ await importOutlines(item.items);
+ }
+ }
+ await importOutlines(outlines); renderBookmarks();
+ let notice = document.getElementById('outlineScope');
+ if (!notice) { notice = document.createElement('p'); notice.id = 'outlineScope'; notice.setAttribute('role','status'); document.getElementById('bookmarkEditor').prepend(notice); }
+ notice.textContent = outlines ? 'Existing page bookmarks loaded. Saving produces a flat list of page destinations; nested structure and custom zoom are not retained.' + (unsupported ? ' ' + unsupported + ' unsupported or excess entries are omitted from this editor.' : '') : 'Add page bookmarks below. Saving replaces the document outline with this list.';
  document.getElementById('fileInfo').style.display = 'block'; document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' — ' + totalPages + ' pages';
  document.getElementById('bookmarkEditor').style.display = 'block'; document.getElementById('dropArea').style.display = 'none'; await renderPage(currentPage);
  } catch (error) {
  console.error('Unable to open PDF:', error);
  pdfBytes = null; pdfJsDoc = null; totalPages = 0;
+ document.getElementById('fileInput').value = '';
  alert('Unable to open this PDF. It may be damaged or password-protected.');
  }
  }
@@ -474,7 +495,7 @@
  });
  }
  function addPdfOutlines(doc) {
-  if (!bookmarks.length) return;
+  if (!bookmarks.length) { doc.catalog.delete(PDFLib.PDFName.of('Outlines')); return; }
   const { PDFName, PDFNumber, PDFHexString } = PDFLib;
   if (!PDFName || !PDFNumber || !PDFHexString) throw new Error('PDF outline support is unavailable.');
   const context = doc.context;
@@ -497,7 +518,7 @@
   doc.catalog.set(PDFName.of('Outlines'), rootRef);
  }
  async function savePDFWithBookmarks() {
- if (!pdfBytes || bookmarks.length === 0) return alert('Add at least one bookmark!');
+ if (!pdfBytes) return alert('Upload a PDF first.');
  const doc = await PDFLib.PDFDocument.load(pdfBytes); doc.setTitle('PDF with Bookmarks - OnlinePDFPro');
  doc.setSubject('Bookmarks: ' + bookmarks.map(b => b.title + ' (Page ' + b.page + ')').join(', '));
  addPdfOutlines(doc);

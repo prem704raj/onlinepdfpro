@@ -222,6 +222,7 @@
     </main>
 
     <script src="../js/app.js?v=96"></script>
+    <script src="/js/vendor/jszip/jszip.min.js"></script>
     <script>
         (function () {
             const uploadZone = document.getElementById('uploadZone');
@@ -244,7 +245,7 @@
                 const container = document.getElementById('turnstileWidget');
                 if (!container) return;
                 turnstileWidgetId = window.turnstile.render(container, {
-                    sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+                    sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
                     callback: window.onTurnstileSuccess,
                     'expired-callback': window.onTurnstileExpired,
                     'error-callback': window.onTurnstileExpired,
@@ -262,6 +263,7 @@
                         'Content-Type': 'application/json',
                         'X-Turnstile-Token': turnstileToken
                     },
+                    signal: AbortSignal.timeout(20000),
                     body: JSON.stringify({ target: '/convert/pdf-to-word' })
                 });
                 const body = await response.json().catch(() => ({}));
@@ -344,6 +346,7 @@
                             'X-Conversion-Token': conversionTicket,
                         },
                         body: arrayBuffer,
+                        signal: AbortSignal.timeout(120000),
                     });
 
                     progressBar.style.width = '80%';
@@ -361,6 +364,14 @@
                     progressBar.style.width = '90%';
 
                     const blob = await response.blob();
+                    const outputHeader = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+                    if (outputHeader[0] !== 0x50 || outputHeader[1] !== 0x4B || blob.size > 100 * 1024 * 1024) throw new Error('The conversion service returned an invalid or oversized document. Please try again.');
+                    try {
+                        const archive = await JSZip.loadAsync(blob);
+                        if (!archive.file('[Content_Types].xml') || !archive.file('word/document.xml')) throw new Error('Missing Word document entries');
+                        const documentXml = new DOMParser().parseFromString(await archive.file('word/document.xml').async('string'), 'application/xml');
+                        if (documentXml.querySelector('parsererror') || documentXml.documentElement.localName !== 'document') throw new Error('Invalid Word document XML');
+                    } catch (_) { throw new Error('The conversion service returned an invalid Word document. Please try again.'); }
                     const url = window.URL.createObjectURL(blob);
 
                     const outputName = file.name.replace(/\.pdf$/i, '') + '.docx';
@@ -378,7 +389,7 @@
                 } catch (err) {
                     console.error('PDF to Word conversion error:', err);
                     alert('Error: ' + err.message);
-                    uploadZone.style.display = 'block';
+                    uploadZone.style.display = 'block'; fileInput.value = '';
                     processingSection.style.display = 'none';
                     turnstileToken = '';
                     if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);

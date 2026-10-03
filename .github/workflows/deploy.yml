@@ -1,12 +1,6 @@
-# Build the Eleventy site from src/ and publish the output (_site/) to the
-# gh-pages branch — so src/ becomes the single source of truth.
-#
-# ONE-TIME SETUP:
-#   1. GitHub → Settings → Pages → "Build and deployment" → Source:
-#      "Deploy from a branch" → Branch: gh-pages / (root)
-#   2. If the custom domain was previously set on another branch, re-verify
-#      it under Settings → Pages → "Custom domain".
-#      (This workflow writes the CNAME file into the gh-pages branch itself.)
+# Publish the built artifact to the existing Cloudflare Pages project.
+# Disable Pages' automatic production deployments before enabling this workflow
+# so a main push cannot publish the stale repository root ahead of the API gate.
 
 name: Build & Deploy
 
@@ -20,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   # The Worker is a production dependency of the frontend. Validate both
@@ -28,8 +22,6 @@ jobs:
   # Worker deployment so an API/frontend mismatch cannot ship silently.
   validate-worker:
     runs-on: ubuntu-latest
-    outputs:
-      has_cf_secrets: ${{ steps.check_cf.outputs.has_cf_secrets }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -62,21 +54,17 @@ jobs:
           npx --yes wrangler@4.36.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
 
       - name: Check Cloudflare deployment credentials
-        id: check_cf
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
-            echo "::warning::Cloudflare secrets (CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID) not configured in GitHub repository. Skipping Worker deployment."
-            echo "has_cf_secrets=false" >> $GITHUB_OUTPUT
-          else
-            echo "has_cf_secrets=true" >> $GITHUB_OUTPUT
+            echo "::error::Production publication requires CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID. Configure repository Actions secrets before retrying."
+            exit 1
           fi
 
       - name: Check required Worker runtime secrets
-        if: steps.check_cf.outputs.has_cf_secrets == 'true'
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -94,7 +82,6 @@ jobs:
 
   deploy-worker:
     needs: validate-worker
-    if: needs.validate-worker.outputs.has_cf_secrets == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -112,35 +99,20 @@ jobs:
     needs: deploy-worker
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.12.0
+
       - name: Check health and defensive routes
-        shell: bash
-        run: |
-          set -euo pipefail
-          API="https://onlinepdfpro-proxy.prem736raj.workers.dev"
-          health="$(curl --fail --silent --show-error "$API/health")"
-          echo "$health" | grep -q '"status":"ok"'
-          echo "$health" | grep -q '"release":"'"$GITHUB_SHA"'"'
-
-          unknown_code="$(curl --silent --output /tmp/onlinepdfpro-unknown.json --write-out '%{http_code}' "$API/not-a-real-route")"
-          test "$unknown_code" = "404"
-
-          ai_code="$(curl --silent --output /tmp/onlinepdfpro-ai.json --write-out '%{http_code}' \
-            -X POST "$API/ai/chat" \
-            -H 'Origin: https://onlinepdfpro.com' \
-            -H 'Content-Type: application/json' \
-            --data '{}')"
-          test "$ai_code" = "403"
-
-          cors_headers="$(curl --silent --dump-header - --output /dev/null \
-            -H 'Origin: https://not-onlinepdfpro.example' "$API/health")"
-          ! echo "$cors_headers" | grep -qi '^access-control-allow-origin:'
+        run: node scripts/smoke-worker.mjs --release "$GITHUB_SHA"
 
   build-and-deploy:
-    needs: [validate-worker]
+    needs: [validate-worker, smoke-worker]
     runs-on: ubuntu-latest
-    concurrency:
-      group: gh-pages
-      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -163,9 +135,12 @@ jobs:
           set -euo pipefail
           test "$(node -p "require('./_site/release.json').release")" = "$GITHUB_SHA"
 
-      - name: Deploy _site to gh-pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+      - name: Publish verified artifact to Cloudflare Pages
+        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          cname: onlinepdfpro.com
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy _site --project-name onlinepdfpro --branch main --commit-hash ${{ github.sha }}
+
+      - name: Verify public frontend release
+        run: node scripts/smoke-site.mjs --release "$GITHUB_SHA"
