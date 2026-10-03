@@ -10,15 +10,28 @@ export const requiredRoutes = [
     '/store/razorpay-webhook', '/store/download', '/store/my-purchases'
 ];
 
-export async function smokeWorker({ baseUrl, release, request = fetch }) {
+export async function smokeWorker({ baseUrl, release, request = fetch,
+    protectionAttempts = 4, pause = ms => new Promise(resolve => setTimeout(resolve, ms)) }) {
     assert.ok(release && release !== 'local', 'An explicit production release ID is required');
+    assert.ok(Number.isInteger(protectionAttempts) && protectionAttempts >= 1 && protectionAttempts <= 4, 'Protection readiness attempts must be bounded');
     const probe = async (route, options = {}) => {
+      for (let attempt = 1; attempt <= protectionAttempts; attempt++) {
         const response = await request(new URL(route, baseUrl), {
             ...options, redirect: 'error', signal: AbortSignal.timeout(15_000),
             headers: { Origin: 'https://onlinepdfpro.com', ...options.headers }
         });
         assert.match(response.headers.get('content-type') || '', /application\/json/i, `${route}: expected JSON`);
-        return { response, body: await response.json() };
+        const body = await response.json();
+        // A newly deployed distributed rate-limit binding can briefly fail
+        // while becoming available at the edge. Recheck only that exact 503;
+        // never accept it as success or retry a broken authentication result.
+        if (response.status === 503 && body.error === 'Service protection is temporarily unavailable.' && attempt < protectionAttempts) {
+            console.log(`Waiting for Worker protection readiness (${attempt}/${protectionAttempts}): ${route}`);
+            await pause(10000);
+            continue;
+        }
+        return { response, body };
+      }
     };
     const health = await probe(`/health?release_check=${encodeURIComponent(release)}`);
     assert.equal(health.response.status, 200, 'Health must return 200');

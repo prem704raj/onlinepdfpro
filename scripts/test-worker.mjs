@@ -3,11 +3,43 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import test from 'node:test';
 import { smokeWorker } from './smoke-worker.mjs';
+import { waitForSiteRelease } from './wait-for-site-release.mjs';
 
 // Load the real ES-module handler without changing the site's CommonJS setup.
 const source = await fs.readFile(new URL('../cf-worker/pdf-api-proxy.js', import.meta.url), 'utf8');
 const { default: worker } = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 const limiter = { async limit() { return { success: true }; } };
+
+test('frontend readiness requires the exact release after stale or unavailable responses', async () => {
+    let calls = 0, waits = 0;
+    const urls = [];
+    const result = await waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        pause: async ms => { assert.equal(ms, 5000); waits++; }, report: () => {}, get: async url => {
+            urls.push(url); calls++;
+            if (calls === 1) return new Response('Not ready', { status: 404 });
+            return Response.json({ release: calls === 2 ? 'old-release' : 'new-release' });
+        } });
+    assert.equal(result.release, 'new-release');
+    assert.equal(waits, 2);
+    assert.equal(new Set(urls).size, 3, 'Readiness probes must not reuse stale cache keys');
+});
+
+test('frontend readiness fails with useful diagnostics when the wrong release persists', async () => {
+    let waits = 0;
+    await assert.rejects(waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        attempts: 2, pause: async () => { waits++; }, report: () => {},
+        get: async () => Response.json({ release: 'old-release' })
+    }), /failed after 2 attempts: Observed frontend release: old-release/);
+    assert.equal(waits, 1);
+});
+
+test('frontend readiness preserves network failure diagnostics', async () => {
+    await assert.rejects(waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        attempts: 1, report: () => {}, get: async () => {
+            throw new TypeError('fetch failed', { cause: Object.assign(new Error('network unreachable'), { code: 'ENETUNREACH' }) });
+        }
+    }), /fetch failed; ENETUNREACH; network unreachable/);
+});
 const env = {
     ENVIRONMENT: 'production', RELEASE_ID: 'test-release',
     API_RATE_LIMITER: limiter, AI_CHAT_LIMITER: limiter,
@@ -39,6 +71,36 @@ test('release gate accepts the real handler without calling external services', 
 test('release gate rejects the stale live-style health response', async () => {
     await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release', request: async () =>
         Response.json({ status: 'ok', routes: ['/ai/chat', '/ai/vision'] }) }), /release must match/);
+});
+
+test('release gate waits for temporary protection readiness and then enforces the complete contract', async () => {
+    let calls = 0, waits = 0;
+    await smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async ms => { assert.equal(ms, 10000); waits++; },
+        request: (url, options) => {
+            const unavailable = new URL(url).pathname === '/ai/chat' && ++calls === 1;
+            return worker.fetch(new Request(url, options), unavailable ? { ...env, AI_CHAT_LIMITER: undefined } : env);
+        } });
+    assert.equal(waits, 1);
+});
+
+test('release gate still fails when protection remains unavailable after bounded retries', async () => {
+    let waits = 0;
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        protectionAttempts: 2, pause: async () => { waits++; },
+        request: (url, options) => worker.fetch(new Request(url, options), { ...env, AI_CHAT_LIMITER: undefined })
+    }), /503 !== 403/);
+    assert.equal(waits, 1);
+});
+
+test('release gate immediately rejects an authentication bypass without retrying', async () => {
+    let waits = 0;
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async () => { waits++; },
+        request: (url, options) => new URL(url).pathname === '/ai/chat' ? Response.json({ result: 'unsafe success' }) :
+            worker.fetch(new Request(url, options), env)
+    }), /200 !== 403/);
+    assert.equal(waits, 0);
 });
 
 test('release gate refuses local attribution and redirects', async () => {
