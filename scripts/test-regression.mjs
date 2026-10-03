@@ -133,7 +133,7 @@ check(!packageJson.dependencies?.['crypto-js'] && /js-yaml/.test(read('package-l
 
 const workflowDeploy = read('.github/workflows/deploy.yml');
 const deploymentActions = [...workflowDeploy.matchAll(/uses: cloudflare\/wrangler-action@[^\n]+\n\s+with:\n([\s\S]*?)(?=\n\s*- name:|$)/g)];
-check(deploymentActions.length === 2 && deploymentActions.every(action => /wranglerVersion:\s*"4\.36\.0"/.test(action[1])) && /wrangler@4\.36\.0 deploy --dry-run/.test(workflowDeploy), 'Worker and Pages deployments pin the same rate-limit-capable Wrangler version as validation');
+check(deploymentActions.length === 2 && deploymentActions.every(action => /wranglerVersion:\s*"4\.147\.0"/.test(action[1])) && /wrangler@4\.147\.0 deploy --dry-run/.test(workflowDeploy) && /wrangler@4\.147\.0 deploy --dry-run/.test(read('.github/workflows/validate.yml')), 'Worker and Pages deployments pin the same audited, rate-limit-capable Wrangler version as validation');
 check(/node-version:\s*22\.12\.0/.test(workflowDeploy), 'GitHub Actions workflow specifies the supported Node 22.12 baseline');
 check(/python -m compileall -q services/.test(workflowDeploy), 'GitHub Actions validates conversion service Python syntax');
 check(/actions\/checkout@[0-9a-f]{40}/.test(workflowDeploy) && /actions\/setup-node@[0-9a-f]{40}/.test(workflowDeploy) && /cloudflare\/wrangler-action@[0-9a-f]{40}/.test(workflowDeploy), 'GitHub Actions third-party refs are pinned to immutable commit SHAs');
