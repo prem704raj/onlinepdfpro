@@ -32,6 +32,14 @@ test('frontend readiness fails with useful diagnostics when the wrong release pe
     }), /failed after 2 attempts: Observed frontend release: old-release/);
     assert.equal(waits, 1);
 });
+
+test('frontend readiness preserves network failure diagnostics', async () => {
+    await assert.rejects(waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        attempts: 1, report: () => {}, get: async () => {
+            throw new TypeError('fetch failed', { cause: Object.assign(new Error('network unreachable'), { code: 'ENETUNREACH' }) });
+        }
+    }), /fetch failed; ENETUNREACH; network unreachable/);
+});
 const env = {
     ENVIRONMENT: 'production', RELEASE_ID: 'test-release',
     API_RATE_LIMITER: limiter, AI_CHAT_LIMITER: limiter,

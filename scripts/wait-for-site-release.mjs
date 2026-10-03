@@ -11,13 +11,15 @@ export async function waitForSiteRelease({ origin, release, get, attempts = 12,
             // Each probe has a distinct cache key so a stale first response
             // cannot conceal the newly activated Pages deployment.
             const response = await get(`${origin}/release.json?check=${encodeURIComponent(release)}&attempt=${attempt}`);
-            assert.equal(response.status, 200, 'Release metadata must return HTTP 200');
+            assert.equal(response.status, 200, `Release metadata HTTP ${response.status}; content-type=${response.headers.get('content-type') || 'missing'}; cf-mitigated=${response.headers.get('cf-mitigated') || 'none'}`);
             const current = await response.json();
             assert.equal(current.release, release, `Observed frontend release: ${current.release}`);
             return current;
-        } catch (error) { lastFailure = error.message; }
+        } catch (error) {
+            lastFailure = [error.message, error.cause?.code, error.cause?.message].filter(Boolean).join('; ');
+        }
         if (attempt < attempts) {
-            report(`Waiting for public frontend release (${attempt}/${attempts})`);
+            report(`Waiting for public frontend release (${attempt}/${attempts}): ${lastFailure}`);
             await pause(5000);
         }
     }
