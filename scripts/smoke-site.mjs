@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
-import { setTimeout } from 'node:timers/promises';
+import { waitForSiteRelease } from './wait-for-site-release.mjs';
 import { parse } from 'parse5';
 import { attribute, walk } from './prepare-site.mjs';
 
@@ -9,20 +9,10 @@ const release = args.includes('--release') ? args[args.indexOf('--release') + 1]
 assert.ok(release && release !== 'local', 'Specify an immutable production release ID');
 const canonicalOrigin = 'https://onlinepdfpro.com';
 const origin = process.env.SITE_BASE_URL || canonicalOrigin;
-const get = url => fetch(url, { redirect: 'error', signal: AbortSignal.timeout(15_000) });
+const get = url => fetch(url, { redirect: 'error', signal: AbortSignal.timeout(15_000), headers: { 'Cache-Control': 'no-cache' } });
 
 // Allow a short propagation window; never turn a failed check into a warning.
-let current;
-for (let attempt = 0; attempt < 5; attempt++) {
-    try {
-        const response = await get(`${origin}/release.json?check=${encodeURIComponent(release)}`);
-        assert.equal(response.status, 200);
-        current = await response.json();
-        if (current.release === release) break;
-    } catch { /* Retry release attribution, then fail with the assertion below. */ }
-    if (attempt < 4) await setTimeout(3000);
-}
-assert.equal(current?.release, release, 'Live frontend must serve the published release');
+await waitForSiteRelease({ origin, release, get });
 for (const route of ['/', '/about', '/tools', '/blog', '/blog/how-to-extract-text-from-scanned-pdfs-ocr/', '/guides', '/guides/merge-and-split-an-assignment/', '/guides/choose-a-pdf-compression-mode/', '/guides/turn-note-images-into-a-readable-pdf/', '/products/dbms-notes']) {
     const response = await get(`${origin}${route}`);
     assert.equal(response.status, 200, `${route} must serve directly without redirects`);

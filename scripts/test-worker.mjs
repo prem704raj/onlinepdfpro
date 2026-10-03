@@ -3,11 +3,35 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import test from 'node:test';
 import { smokeWorker } from './smoke-worker.mjs';
+import { waitForSiteRelease } from './wait-for-site-release.mjs';
 
 // Load the real ES-module handler without changing the site's CommonJS setup.
 const source = await fs.readFile(new URL('../cf-worker/pdf-api-proxy.js', import.meta.url), 'utf8');
 const { default: worker } = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 const limiter = { async limit() { return { success: true }; } };
+
+test('frontend readiness requires the exact release after stale or unavailable responses', async () => {
+    let calls = 0, waits = 0;
+    const urls = [];
+    const result = await waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        pause: async ms => { assert.equal(ms, 5000); waits++; }, report: () => {}, get: async url => {
+            urls.push(url); calls++;
+            if (calls === 1) return new Response('Not ready', { status: 404 });
+            return Response.json({ release: calls === 2 ? 'old-release' : 'new-release' });
+        } });
+    assert.equal(result.release, 'new-release');
+    assert.equal(waits, 2);
+    assert.equal(new Set(urls).size, 3, 'Readiness probes must not reuse stale cache keys');
+});
+
+test('frontend readiness fails with useful diagnostics when the wrong release persists', async () => {
+    let waits = 0;
+    await assert.rejects(waitForSiteRelease({ origin: 'https://site.example', release: 'new-release',
+        attempts: 2, pause: async () => { waits++; }, report: () => {},
+        get: async () => Response.json({ release: 'old-release' })
+    }), /failed after 2 attempts: Observed frontend release: old-release/);
+    assert.equal(waits, 1);
+});
 const env = {
     ENVIRONMENT: 'production', RELEASE_ID: 'test-release',
     API_RATE_LIMITER: limiter, AI_CHAT_LIMITER: limiter,
