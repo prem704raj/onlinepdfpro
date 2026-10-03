@@ -1,4 +1,7 @@
-module.exports = function(eleventyConfig) {
+module.exports = async function(eleventyConfig) {
+  // Eleventy 3 still passes globs to its watcher. Chokidar 4 removes the
+  // vulnerable braces dependency; adapt watch paths without changing builds.
+  await require('./scripts/configure-watchers.cjs')();
   // Shared metadata applies to rendered layouts AND copied standalone tools.
   // Running after every build keeps --serve/watch previews consistent too.
   eleventyConfig.on('eleventy.after', async () => {

@@ -53,8 +53,8 @@ curl http://localhost:8080/health
 ### 2. Deploy Service B (Modal)
 
 ```bash
-# Install Modal CLI
-pip install modal
+# Install Modal CLI and the dependency imported by both deployment files
+pip install modal fastapi
 
 # Authenticate
 modal token new

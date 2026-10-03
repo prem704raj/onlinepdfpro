@@ -21,6 +21,7 @@ jobs:
         run: |
           npm run build
           npm test
+          npm run test:watchers
           npm run perf:budget
           npm audit
       - name: Validate conversion service source

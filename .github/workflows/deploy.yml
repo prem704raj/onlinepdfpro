@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit deployment dependencies
+        run: npm audit
+
       - name: Build site
         run: npm run build
 
@@ -42,7 +45,9 @@ jobs:
         run: npm run perf:budget
 
       - name: Run regression suite
-        run: npm test
+        run: |
+          npm test
+          npm run test:watchers
 
       - name: Validate conversion service source
         run: python -m compileall -q services
@@ -93,6 +98,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: cf-worker
+          wranglerVersion: "4.36.0"
           command: deploy --var RELEASE_ID:${{ github.sha }}
 
   smoke-worker:
@@ -141,6 +147,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy _site --project-name onlinepdfpro --branch main --commit-hash ${{ github.sha }}
+          wranglerVersion: "4.36.0"
 
       - name: Verify public frontend release
         run: node scripts/smoke-site.mjs --release "$GITHUB_SHA"
