@@ -41,6 +41,36 @@ test('release gate rejects the stale live-style health response', async () => {
         Response.json({ status: 'ok', routes: ['/ai/chat', '/ai/vision'] }) }), /release must match/);
 });
 
+test('release gate waits for temporary protection readiness and then enforces the complete contract', async () => {
+    let calls = 0, waits = 0;
+    await smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async ms => { assert.equal(ms, 10000); waits++; },
+        request: (url, options) => {
+            const unavailable = new URL(url).pathname === '/ai/chat' && ++calls === 1;
+            return worker.fetch(new Request(url, options), unavailable ? { ...env, AI_CHAT_LIMITER: undefined } : env);
+        } });
+    assert.equal(waits, 1);
+});
+
+test('release gate still fails when protection remains unavailable after bounded retries', async () => {
+    let waits = 0;
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        protectionAttempts: 2, pause: async () => { waits++; },
+        request: (url, options) => worker.fetch(new Request(url, options), { ...env, AI_CHAT_LIMITER: undefined })
+    }), /503 !== 403/);
+    assert.equal(waits, 1);
+});
+
+test('release gate immediately rejects an authentication bypass without retrying', async () => {
+    let waits = 0;
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async () => { waits++; },
+        request: (url, options) => new URL(url).pathname === '/ai/chat' ? Response.json({ result: 'unsafe success' }) :
+            worker.fetch(new Request(url, options), env)
+    }), /200 !== 403/);
+    assert.equal(waits, 0);
+});
+
 test('release gate refuses local attribution and redirects', async () => {
     await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'local' }), /explicit production/);
     await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release', request: async () =>
