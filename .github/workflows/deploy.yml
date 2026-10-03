@@ -42,7 +42,9 @@ jobs:
         run: npm run perf:budget
 
       - name: Run regression suite
-        run: npm test
+        run: |
+          npm test
+          npm run test:watchers
 
       - name: Validate conversion service source
         run: python -m compileall -q services
