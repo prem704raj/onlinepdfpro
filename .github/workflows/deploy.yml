@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           node --input-type=module --check < cf-worker/pdf-api-proxy.js
-          npx --yes wrangler@4.36.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
+          npx --yes wrangler@4.147.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
 
       - name: Check Cloudflare deployment credentials
         shell: bash
@@ -76,7 +76,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
-          secret_list="$(npx --yes wrangler@4.36.0 secret list --config cf-worker/wrangler.toml)"
+          secret_list="$(npx --yes wrangler@4.147.0 secret list --config cf-worker/wrangler.toml)"
           required=(GROQ_API_KEY OPENROUTER_API_KEY RAZORPAY_KEY_ID RAZORPAY_KEY_SECRET RAZORPAY_WEBHOOK_SECRET SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY TURNSTILE_SECRET_KEY CONVERSION_SIGNING_SECRET MODAL_API_TOKEN)
           for name in "${required[@]}"; do
             if ! grep -q "\"name\": \"$name\"" <<<"$secret_list"; then
@@ -98,7 +98,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: cf-worker
-          wranglerVersion: "4.36.0"
+          wranglerVersion: "4.147.0"
           command: deploy --var RELEASE_ID:${{ github.sha }}
 
   smoke-worker:
@@ -147,7 +147,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy _site --project-name onlinepdfpro --branch main --commit-hash ${{ github.sha }}
-          wranglerVersion: "4.36.0"
+          wranglerVersion: "4.147.0"
 
       - name: Verify public frontend release
         run: node scripts/smoke-site.mjs --release "$GITHUB_SHA"

@@ -26,7 +26,7 @@ npm run build
 npm test
 npm run perf:budget
 npm audit
-npx --yes wrangler@4.36.0 deploy --dry-run --config cf-worker/wrangler.toml
+npx --yes wrangler@4.147.0 deploy --dry-run --config cf-worker/wrangler.toml
 ```
 
 Fresh-checkout verification passed the whole-site, Worker, analytics, application regression, and existing PDF editor export checks. The dependency audit reported zero vulnerabilities. Performance budgets passed, including the preserved separate budget for optional editor fonts. Editor route assertions were updated for Cloudflare's clean canonical URLs; its true text replacement and font tests remain enabled.

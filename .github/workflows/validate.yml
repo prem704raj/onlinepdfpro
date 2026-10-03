@@ -29,4 +29,4 @@ jobs:
       - name: Validate Worker configuration
         run: |
           node --input-type=module --check < cf-worker/pdf-api-proxy.js
-          npx --yes wrangler@4.36.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
+          npx --yes wrangler@4.147.0 deploy --dry-run --config cf-worker/wrangler.toml --outdir /tmp/onlinepdfpro-worker-dry-run
