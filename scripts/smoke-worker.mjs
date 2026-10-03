@@ -11,9 +11,10 @@ export const requiredRoutes = [
 ];
 
 export async function smokeWorker({ baseUrl, release, request = fetch,
-    protectionAttempts = 4, pause = ms => new Promise(resolve => setTimeout(resolve, ms)) }) {
+    protectionAttempts = 4, releaseAttempts = 12, pause = ms => new Promise(resolve => setTimeout(resolve, ms)) }) {
     assert.ok(release && release !== 'local', 'An explicit production release ID is required');
     assert.ok(Number.isInteger(protectionAttempts) && protectionAttempts >= 1 && protectionAttempts <= 4, 'Protection readiness attempts must be bounded');
+    assert.ok(Number.isInteger(releaseAttempts) && releaseAttempts >= 1 && releaseAttempts <= 12, 'Worker release readiness attempts must be bounded');
     const probe = async (route, options = {}) => {
       for (let attempt = 1; attempt <= protectionAttempts; attempt++) {
         const response = await request(new URL(route, baseUrl), {
@@ -33,9 +34,20 @@ export async function smokeWorker({ baseUrl, release, request = fetch,
         return { response, body };
       }
     };
-    const health = await probe(`/health?release_check=${encodeURIComponent(release)}`);
-    assert.equal(health.response.status, 200, 'Health must return 200');
-    assert.equal(health.body.status, 'ok', 'Health must report ok');
+    let health;
+    for (let attempt = 1; attempt <= releaseAttempts; attempt++) {
+        health = await probe(`/health?release_check=${encodeURIComponent(release)}&attempt=${attempt}`);
+        assert.equal(health.response.status, 200, 'Health must return 200');
+        assert.equal(health.body.status, 'ok', 'Health must report ok');
+        // Deployment publication can precede activation at another location.
+        // Only wait for a known previous release; malformed/local health and
+        // persistent mismatches still fail, and no route probes run early.
+        if (health.body.release === release || typeof health.body.release !== 'string' || !health.body.release || health.body.release === 'local') break;
+        if (attempt < releaseAttempts) {
+            console.log(`Waiting for Worker release (${attempt}/${releaseAttempts}): observed ${health.body.release}`);
+            await pause(5000);
+        }
+    }
     assert.equal(health.body.release, release, 'Worker release must match the frontend source revision');
     assert.ok(Array.isArray(health.body.routes), 'Health must declare routes');
     for (const route of requiredRoutes) assert.ok(health.body.routes.includes(route), `Missing API route: ${route}`);
