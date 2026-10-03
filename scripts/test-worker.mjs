@@ -73,6 +73,45 @@ test('release gate rejects the stale live-style health response', async () => {
         Response.json({ status: 'ok', routes: ['/ai/chat', '/ai/vision'] }) }), /release must match/);
 });
 
+test('Worker release readiness waits for activation before checking protected routes', async () => {
+    let waits = 0, healthCalls = 0;
+    const healthUrls = [];
+    await smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async ms => { assert.equal(ms, 5000); waits++; },
+        request: (url, options) => {
+            if (new URL(url).pathname === '/health') {
+                healthUrls.push(String(url));
+                return worker.fetch(new Request(url, options), ++healthCalls === 1 ? { ...env, RELEASE_ID: 'previous-release' } : env);
+            }
+            assert.equal(healthCalls, 2, 'Protected routes must wait for the expected Worker release');
+            return worker.fetch(new Request(url, options), env);
+        }
+    });
+    assert.equal(waits, 1);
+    assert.equal(new Set(healthUrls).size, 2);
+});
+
+test('Worker release readiness fails boundedly if a previous release persists', async () => {
+    let waits = 0, healthCalls = 0;
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        releaseAttempts: 2, pause: async () => { waits++; },
+        request: (url, options) => {
+            assert.equal(new URL(url).pathname, '/health');
+            healthCalls++;
+            return worker.fetch(new Request(url, options), { ...env, RELEASE_ID: 'previous-release' });
+        }
+    }), /Worker release must match/);
+    assert.equal(waits, 1);
+    assert.equal(healthCalls, 2);
+});
+
+test('Worker release readiness rejects unhealthy responses immediately', async () => {
+    await assert.rejects(smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
+        pause: async () => assert.fail('Unhealthy responses must not be retried'),
+        request: async () => Response.json({ status: 'error', release: 'previous-release' })
+    }), /Health must report ok/);
+});
+
 test('release gate waits for temporary protection readiness and then enforces the complete contract', async () => {
     let calls = 0, waits = 0;
     await smokeWorker({ baseUrl: 'https://worker.example', release: 'test-release',
