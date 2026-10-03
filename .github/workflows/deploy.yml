@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit deployment dependencies
+        run: npm audit
+
       - name: Build site
         run: npm run build
 
