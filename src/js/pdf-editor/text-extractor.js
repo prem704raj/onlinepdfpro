@@ -1,6 +1,7 @@
 import { editorState, getPageState } from './state.js';
 import { resolveFont } from './font-resolver.js';
 import { extractTextColors, getEstimatedTextColor } from './color-extractor.js';
+import { attachEmbeddedFonts } from './embedded-fonts.js';
 
 function getResolvedFontMetadata(pdfPage, item, style) {
   let fontObject = null;
@@ -72,6 +73,7 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
   if (pageState.textLoading) return pageState.textLoading;
 
   pageState.textLoading = (async () => {
+    const originalBytes = editorState.originalBytes;
     const textContent = await pdfPage.getTextContent({ includeMarkedContent: false, disableNormalization: false });
     const textItems = textContent.items || [];
     const colorMap = withColors
@@ -156,6 +158,9 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
       });
     });
 
+    if (originalBytes !== editorState.originalBytes) return [];
+    await attachEmbeddedFonts(objects, pageState.sourcePageNumber || pageNumber);
+    if (originalBytes !== editorState.originalBytes) return [];
     const existing = new Set(editorState.objects.map((object) => object.id));
     objects.forEach((object) => {
       if (!existing.has(object.id)) editorState.objects.push(object);

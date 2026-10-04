@@ -1,4 +1,4 @@
-const DEFAULT_TEXT_COLOR = { rgb: [31, 31, 31], hex: '#1F1F1F', quality: 'estimated' };
+const DEFAULT_TEXT_COLOR = { rgb: [0, 0, 0], hex: '#000000', quality: 'estimated' };
 
 function clampByte(value) {
   return Math.max(0, Math.min(255, Math.round(Number(value) || 0)));
@@ -14,8 +14,9 @@ export function normalizeColor(value, type) {
     const rgb = [gray, gray, gray];
     return { rgb, hex: toHex(rgb), quality: 'exact' };
   }
-  if (Array.isArray(value)) {
-    const numbers = value.map(Number);
+  if (Array.isArray(value) || ArrayBuffer.isView(value)) {
+    const byteChannels = ArrayBuffer.isView(value);
+    const numbers = Array.from(value, Number);
     if (type === 'gray' || numbers.length === 1) {
       const gray = clampByte(numbers[0] * 255);
       const rgb = [gray, gray, gray];
@@ -31,7 +32,7 @@ export function normalizeColor(value, type) {
       return { rgb, hex: toHex(rgb), quality: 'exact' };
     }
     if (numbers.length >= 3) {
-      const rgb = numbers.slice(0, 3).map((number) => clampByte(number <= 1 ? number * 255 : number));
+      const rgb = numbers.slice(0, 3).map((number) => clampByte(!byteChannels && number <= 1 ? number * 255 : number));
       return { rgb, hex: toHex(rgb), quality: 'exact' };
     }
   }
@@ -54,18 +55,25 @@ export function normalizeColor(value, type) {
 
 function getOperatorFillColor(operatorList, pdfjsLib) {
   const OPS = pdfjsLib.OPS || {};
-  let current = null;
+  let current = { rgb: [0, 0, 0], hex: '#000000', quality: 'exact' };
+  const stack = [];
   const colors = [];
   const textOps = new Set([OPS.showText, OPS.showSpacedText, OPS.nextLineShowText, OPS.nextLineSetSpacingShowText].filter((value) => value !== undefined));
 
   for (let index = 0; index < operatorList.fnArray.length; index += 1) {
     const fn = operatorList.fnArray[index];
     const args = operatorList.argsArray[index];
-    if (fn === OPS.setFillRGBColor) current = normalizeColor(args && args[0], 'rgb') || normalizeColor(args, 'rgb');
+    if (fn === OPS.save) stack.push(current);
+    else if (fn === OPS.restore) current = stack.pop() || { rgb: [0, 0, 0], hex: '#000000', quality: 'exact' };
+    else if (fn === OPS.setFillRGBColor) current = normalizeColor(args && args[0], 'rgb') || normalizeColor(args, 'rgb');
     else if (fn === OPS.setFillGray) current = normalizeColor(args && args[0], 'gray');
     else if (fn === OPS.setFillCMYKColor) current = normalizeColor(args, 'cmyk') || normalizeColor(args && args[0], 'cmyk');
     else if (fn === OPS.setFillColor) current = normalizeColor(args, null) || current;
-    else if (textOps.has(fn)) colors.push(current);
+    else if (textOps.has(fn)) {
+      const glyphs = args && args.find(value => Array.isArray(value));
+      const text = glyphs ? glyphs.map(glyph => glyph && typeof glyph.unicode === 'string' ? glyph.unicode : '').join('') : '';
+      colors.push({ color: current, text });
+    }
   }
   return colors;
 }
@@ -76,15 +84,25 @@ export async function extractTextColors(page, textItems, pdfjsLib) {
   try {
     const operatorList = await page.getOperatorList();
     const colors = getOperatorFillColor(operatorList, pdfjsLib);
-    if (colors.length === textItems.length) {
-      textItems.forEach((item, index) => {
-        if (colors[index]) result.set(index, colors[index]);
-      });
-      return result;
-    }
-    // PDF.js may group text-content and operator-list runs differently. When
-    // there is no one-to-one correspondence, preserve an estimated color
-    // rather than attaching a neighboring run's fill color to the wrong text.
+    // Word's TJ runs and PDF.js text items have different boundaries. Match
+    // their Unicode text in source order instead of assigning colors by index.
+    const normalize = value => String(value || '').normalize('NFKC').replace(/\s/g, '');
+    let corpus = '', characterColors = [];
+    colors.forEach(entry => {
+      const text = normalize(entry.text);
+      corpus += text;
+      for (let index = 0; index < text.length; index += 1) characterColors.push(entry.color);
+    });
+    let cursor = 0;
+    textItems.forEach((item, index) => {
+      const needle = normalize(item.str);
+      if (!needle) return;
+      const offset = corpus.indexOf(needle, cursor);
+      if (offset < 0) return;
+      const matched = characterColors.slice(offset, offset + needle.length);
+      if (matched.length && matched.every(color => color && color.hex === matched[0].hex)) result.set(index, matched[0]);
+      cursor = offset + needle.length;
+    });
   } catch (error) {
     console.debug('[PDF Editor] Text color analysis was unavailable.', error);
   }
@@ -117,18 +135,35 @@ export function sampleBackgroundFromCanvas(canvas, rect) {
   const samples = [];
   try {
     points.forEach(([pointX, pointY]) => {
-      const px = Math.max(0, Math.min(canvas.width - 1, Math.round(pointX)));
-      const py = Math.max(0, Math.min(canvas.height - 1, Math.round(pointY)));
-      const data = context.getImageData(px, py, 1, 1).data;
-      samples.push([data[0], data[1], data[2]]);
+      const angle = Number(rect.angle || 0) * Math.PI / 180;
+      const dx = pointX - x, dy = pointY - y;
+      const rx = x + dx * Math.cos(angle) - dy * Math.sin(angle);
+      const ry = y + dx * Math.sin(angle) + dy * Math.cos(angle);
+      for (let oy = -1; oy <= 1; oy += 1) for (let ox = -1; ox <= 1; ox += 1) {
+        const px = Math.max(0, Math.min(canvas.width - 1, Math.round(rx) + ox));
+        const py = Math.max(0, Math.min(canvas.height - 1, Math.round(ry) + oy));
+        const data = context.getImageData(px, py, 1, 1).data;
+        // Composite transparent canvas pixels onto the page's white backing.
+        const alpha = data[3] / 255;
+        samples.push([0, 1, 2].map(channel => Math.round(data[channel] * alpha + 255 * (1 - alpha))));
+      }
     });
   } catch (error) {
     return { rgb: [255, 255, 255], hex: '#FFFFFF', quality: 'estimated', complex: true };
   }
-  const mean = [0, 1, 2].map((channel) => Math.round(samples.reduce((sum, sample) => sum + sample[channel], 0) / samples.length));
+  // Use the dominant surrounding color, not an average of background and
+  // neighboring glyphs. Averaging creates gray/yellow patches on white pages.
+  let dominant = [];
+  samples.forEach(sample => {
+    const cluster = samples.filter(other => Math.max(...other.map((value, channel) => Math.abs(value - sample[channel]))) <= 12);
+    if (cluster.length > dominant.length) dominant = cluster;
+  });
+  let mean = [0, 1, 2].map(channel => Math.round(dominant.reduce((sum, sample) => sum + sample[channel], 0) / dominant.length));
+  if (mean.every(value => value >= 252)) mean = [255, 255, 255];
   const spread = Math.max(...[0, 1, 2].map((channel) => {
     const values = samples.map((sample) => sample[channel]);
     return Math.max(...values) - Math.min(...values);
   }));
-  return { rgb: mean, hex: toHex(mean), quality: spread <= 14 ? 'sampled' : 'estimated', complex: spread > 14, spread };
+  const complex = dominant.length / samples.length < 0.65;
+  return { rgb: mean, hex: toHex(mean), quality: complex ? 'estimated' : 'sampled', complex, spread };
 }

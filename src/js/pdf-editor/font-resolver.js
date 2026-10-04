@@ -1,3 +1,5 @@
+import { getEmbeddedFont } from './embedded-fonts.js';
+
 const BUNDLED_FONTS = {
   Tinos: {
     family: 'Tinos',
@@ -228,6 +230,8 @@ export function getBundledFontSource(descriptor, bold, italic) {
 }
 
 export function getPreviewFontFamily(object) {
+  const source = getEmbeddedFont(object);
+  if (source) return source.family;
   return object && object.fontDescriptor && object.fontDescriptor.previewFont
     ? object.fontDescriptor.previewFont.family
     : object && object.fontFamily
@@ -259,6 +263,7 @@ export function resolveStandardFont(PDFLib, object) {
 }
 
 export function getFontMatchLabel(object) {
+  if (getEmbeddedFont(object)) return '✓ Original embedded font';
   const descriptor = object && object.fontDescriptor;
   const quality = descriptor ? descriptor.matchQuality : object && object.fontQuality;
   if (quality === 'exact') return '✓ Original font';
@@ -267,6 +272,7 @@ export function getFontMatchLabel(object) {
 }
 
 export function getFontMatchDescription(object) {
+  if (getEmbeddedFont(object)) return 'The PDF’s own embedded font is used for preview and export while its available characters and style are retained.';
   if (object && object.ocrAssisted) return 'OCR-assisted text has no source font metadata. The selected local font is used for preview and export.';
   const descriptor = object && object.fontDescriptor;
   if (descriptor && descriptor.fallbackReason) return descriptor.fallbackReason;

@@ -5,6 +5,7 @@ import { sampleBackgroundFromCanvas } from './color-extractor.js';
 import { attemptTrueTextReplacement } from './content-stream-replacer.js';
 import { ensureFontkit } from './vendor-loader.js';
 import { checkGlyphCoverage, loadLocalFontBytes } from './font-runtime.js';
+import { getEmbeddedFont } from './embedded-fonts.js';
 
 const fontCache = new Map();
 let devanagariFontBytes = null;
@@ -51,6 +52,15 @@ async function getDevanagariFont(pdfDocument) {
 }
 
 async function getEditableFont(pdfDocument, PDFLib, object) {
+  const source = getEmbeddedFont(object);
+  if (source) {
+    const cacheKey = 'source:' + source.key;
+    if (!fontCache.has(cacheKey)) {
+      pdfDocument.registerFontkit(await ensureFontkit());
+      fontCache.set(cacheKey, await pdfDocument.embedFont(source.bytes, { subset: true }));
+    }
+    return fontCache.get(cacheKey);
+  }
   const bundledSource = getBundledFontSource(object.fontDescriptor, object.bold, object.italic);
   if (bundledSource) {
     const fontkit = await ensureFontkit();
@@ -320,7 +330,9 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
     }
     const textToCover = objects.filter((object) => ['text', 'ocr-text'].includes(object.type) && object.modified && !trueReplaced.has(object.id));
     const pageSamples = sourcePage && textToCover.length ? await renderBackgroundSamples(sourcePage, textToCover) : [];
-    const backgrounds = new Map(textToCover.map((object, index) => [object.id, object.background || pageSamples[index]]));
+    // Export sampling uses the original document at a known pixel scale. A
+    // previously sampled UI canvas must not dictate the exported cover color.
+    const backgrounds = new Map(textToCover.map((object, index) => [object.id, pageSamples[index] || object.background]));
     for (const object of objects) {
       if (!['text', 'new-text', 'ocr-text'].includes(object.type)) {
         if (object.type === 'whiteout') addWarning(warnings, 'Whiteout only covers content visually. Underlying PDF data remains recoverable; this is not secure redaction.');
@@ -414,7 +426,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
           opacity: Math.max(0, Math.min(1, Number(object.opacity ?? 1)))
         }, object.letterSpacing);
       }
-      if (object.fontQuality !== 'exact') {
+      if (object.fontQuality !== 'exact' && !getEmbeddedFont(object)) {
         addWarning(warnings, 'Some edited text uses a built-in substitute font because the original custom or subset font could not be reused.');
       }
     }

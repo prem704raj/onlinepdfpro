@@ -3,6 +3,7 @@ import { loadPdfFile } from './pdf-loader.js';
 import { initializePageMetadata, extractAllText } from './text-extractor.js';
 import { PageRenderer, getTextScreenBox } from './page-renderer.js';
 import { sampleBackgroundFromCanvas } from './color-extractor.js';
+import { clearEmbeddedFonts } from './embedded-fonts.js';
 import { applyTextProperties, moveTextObject, setObjectBackground } from './text-editor.js';
 import { resetHistory, recordHistory, undo, redo, canUndo, canRedo, rememberObjectsForHistory } from './history.js';
 import { exportEditedPdf } from './exporter.js';
@@ -180,7 +181,8 @@ function suggestedReplacementFamily(object, text) {
   if (/[\u0900-\u097F]/.test(String(text || ''))) return 'Noto Sans Devanagari';
   const family = String((object.fontDescriptor && object.fontDescriptor.detectedFamily) || object.detectedFontFamily || '').toLowerCase();
   if (family.includes('calibri')) return 'Carlito';
-  if (family.includes('cambria') || family.includes('times')) return 'Caladea';
+  if (family.includes('times') || family.includes('tinos')) return 'Tinos';
+  if (family.includes('cambria')) return 'Caladea';
   return 'Arimo';
 }
 
@@ -1400,6 +1402,7 @@ async function clearCurrentDocument() {
     inlineTextEditor.destroy();
     inlineTextEditor = null;
   }
+  clearEmbeddedFonts();
   if (renderer) {
     renderer.destroy();
     renderer = null;
