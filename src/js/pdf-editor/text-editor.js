@@ -26,7 +26,7 @@ function measureTextWidth(object) {
   if (!context) return object.width;
   const style = [object.italic ? 'italic' : '', object.bold ? '700' : '400'].filter(Boolean).join(' ');
   context.font = style + ' ' + object.fontSize + 'px "' + String(getPreviewFontFamily(object)).replace(/["\\]/g, '') + '", sans-serif';
-  return Math.max(object.fontSize * 0.35, context.measureText(object.text || '').width + Math.max(-4, Math.min(24, Number(object.letterSpacing || 0))) * String(object.text || '').length);
+  return Math.max(object.fontSize * 0.35, context.measureText(object.text || '').width + Math.max(-4, Math.min(24, Number(object.letterSpacing || 0))) * Math.max(0, [...String(object.text || '')].length - 1));
 }
 
 export function applyTextProperties(object, values) {

@@ -28,7 +28,7 @@ bodyClass: pdf-editor-body
     <div>
       <p class="pdf-editor-eyebrow">OnlinePDFPro PDF Editor</p>
       <h1>Edit PDF Online Free</h1>
-      <p class="pdf-editor-lede">Select existing text, make your change, and export a searchable PDF. Style matching depends on the fonts and page content in the source file.</p>
+      <p class="pdf-editor-lede">Click existing text to edit it in place, then download your PDF. Style matching depends on the fonts and page content in the source file.</p>
       <p class="pdf-editor-lede" id="pdf-data-warning">Supported edits replace the original text. Other edits may use a visual overlay that leaves original text or images recoverable. Whiteout and this editor are not secure redaction tools. Export warnings identify overlay fallbacks.</p>
     </div>
     <div class="pdf-local-badge" role="status">
@@ -122,6 +122,7 @@ bodyClass: pdf-editor-body
 
     <div class="pdf-text-context-toolbar" id="pdf-text-context-toolbar" role="toolbar" aria-label="Selected text formatting" hidden>
       <button class="pdf-button pdf-button-quiet" id="context-edit-button" type="button">Edit text</button>
+      <button class="pdf-button pdf-button-quiet" id="context-move-button" type="button" aria-pressed="false" title="Enable dragging selected text">Move</button>
       <label class="pdf-context-font" for="context-font-family-input"><span class="sr-only">Font</span>
         <select id="context-font-family-input" aria-label="Font family">
           <option>Arial</option>
@@ -135,6 +136,7 @@ bodyClass: pdf-editor-body
           <option>Montserrat</option>
           <option>Roboto</option>
           <option>Times New Roman</option>
+          <option>Tinos</option>
           <option>Noto Sans Devanagari</option>
         </select>
       </label>
@@ -195,7 +197,7 @@ bodyClass: pdf-editor-body
         </div>
         <div class="pdf-mobile-status">
           <span id="mobile-page-count">Page 1 of 1</span>
-          <span>Select text, then use Edit text</span>
+          <span>Click or tap text to edit · use Move to drag</span>
         </div>
       </section>
 
@@ -204,7 +206,7 @@ bodyClass: pdf-editor-body
           <h2>Text properties</h2>
           <button class="pdf-icon-button pdf-properties-close" id="close-properties-button" type="button" aria-label="Close text settings">×</button>
         </div>
-        <p class="pdf-selection-empty" id="pdf-selection-empty">Click existing PDF text to select it. Double-click text to edit.</p>
+        <p class="pdf-selection-empty" id="pdf-selection-empty">Click existing PDF text to edit it. Choose Move to reposition it.</p>
         <form class="pdf-text-properties" id="pdf-text-properties" hidden>
           <label class="pdf-field-label" for="selected-text-value">Text</label>
           <textarea id="selected-text-value" rows="3" spellcheck="false" aria-label="Selected PDF text"></textarea>
@@ -300,7 +302,7 @@ bodyClass: pdf-editor-body
         </form>
       </aside>
     </div>
-    <p class="pdf-editor-shortcuts">Tip: Ctrl/Cmd + Z to undo, Ctrl/Cmd + Shift + Z to redo. Drag selected text to move it.</p>
+    <p class="pdf-editor-shortcuts">Click text to edit. Choose Move to drag it. Enter saves your edit; Escape cancels it. Ctrl/Cmd + Z undoes a change.</p>
     <p class="pdf-export-notice" id="pdf-export-notice" role="status" aria-live="polite" hidden></p>
   </section>
 

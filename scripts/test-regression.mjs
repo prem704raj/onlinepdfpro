@@ -18,7 +18,7 @@ import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
+const read = relative => fs.readFileSync(path.join(root, relative), 'utf8').replace(/\r\n/g, '\n');
 const exists = relative => fs.existsSync(path.join(root, relative));
 
 function check(condition, message) {

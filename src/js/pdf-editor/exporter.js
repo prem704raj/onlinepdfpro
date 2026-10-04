@@ -88,6 +88,7 @@ async function renderBackgroundSamples(pdfPage, objects) {
         y: object.originalY,
         width: object.originalWidth || object.width,
         height: object.originalHeight || object.height,
+        fontSize: object.originalFontSize || object.fontSize,
         rotation: object.originalRotation
       };
       return sampleBackgroundFromCanvas(canvas, getTextScreenBox(sampleObject, viewport));
@@ -104,7 +105,7 @@ async function renderBackgroundSamples(pdfPage, objects) {
 }
 
 function getOriginalCoverBox(object) {
-  const size = Math.max(1, object.fontSize);
+  const size = Math.max(1, object.originalFontSize || object.fontSize);
   const pad = Math.max(0.8, size * 0.055);
   const originalWidth = Math.max(object.originalWidth || object.width, size * 0.35);
   const originalHeight = Math.max(object.originalHeight || object.height, size * (object.ascent - object.descent), size);
@@ -124,6 +125,15 @@ function addWarning(warnings, message) {
 
 function colorOrNull(PDFLib, value) {
   return value && value !== 'transparent' ? colorFromHex(PDFLib, value) : undefined;
+}
+
+function drawEditableText(page, PDFLib, text, options, letterSpacing = 0) {
+  // pdf-lib's drawText accepts `size`, but has no characterSpacing option.
+  // Set the PDF text state explicitly and restore it around this overlay.
+  page.pushOperators(PDFLib.pushGraphicsState(), PDFLib.beginText(),
+    PDFLib.setCharacterSpacing(Math.max(-4, Math.min(24, Number(letterSpacing || 0)))), PDFLib.endText());
+  page.drawText(text, options);
+  page.pushOperators(PDFLib.popGraphicsState());
 }
 
 function dataUrlBytes(value) {
@@ -357,16 +367,16 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
                   color: PDFLib.rgb(back[0] / 255, back[1] / 255, back[2] / 255)
                 });
               }
-              page.drawText(encodedText, {
+              drawEditableText(page, PDFLib, encodedText, {
                 x: object.x,
                 y: object.y,
                 font: devanagari,
-                fontSize: object.fontSize,
+                size: object.fontSize,
+                lineHeight: object.fontSize * 1.2,
                 color: colorFromHex(PDFLib, object.colorHex),
                 rotate: PDFLib.degrees(object.rotation),
-                opacity: Math.max(0, Math.min(1, Number(object.opacity ?? 1))),
-                characterSpacing: Math.max(-4, Math.min(24, Number(object.letterSpacing || 0)))
-              });
+                opacity: Math.max(0, Math.min(1, Number(object.opacity ?? 1)))
+              }, object.letterSpacing);
               continue;
             } catch (fallbackError) {
               throw new Error('The selected font cannot encode every new character. This PDF was not downloaded so its text is not silently changed.');
@@ -376,7 +386,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
         throw new Error('The selected font cannot encode every new character. This PDF was not downloaded so its text is not silently changed.');
       }
 
-      const replacementWidth = object.text ? font.widthOfTextAtSize(object.text, object.fontSize) : 0;
+      const replacementWidth = object.text ? font.widthOfTextAtSize(object.text, object.fontSize) + Number(object.letterSpacing || 0) * Math.max(0, [...object.text].length - 1) : 0;
       if (object.type === 'text' || object.type === 'ocr-text') {
         const cover = getOriginalCoverBox(object);
         const backgroundRgb = sampledBackground.rgb || [255, 255, 255];
@@ -391,18 +401,18 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
       }
       if (object.text) {
         let drawX = object.x;
-        if (object.type === 'new-text' && object.alignment === 'center') drawX += (object.width - replacementWidth) / 2;
-        else if (object.type === 'new-text' && object.alignment === 'right') drawX += object.width - replacementWidth;
-        page.drawText(encodedText, {
+        if (object.alignment === 'center') drawX += (object.width - replacementWidth) / 2;
+        else if (object.alignment === 'right') drawX += object.width - replacementWidth;
+        drawEditableText(page, PDFLib, encodedText, {
           x: drawX,
           y: object.y,
           font,
-          fontSize: object.fontSize,
+          size: object.fontSize,
+          lineHeight: object.fontSize * 1.2,
           color: colorFromHex(PDFLib, object.colorHex),
           rotate: PDFLib.degrees(object.rotation),
-          opacity: Math.max(0, Math.min(1, Number(object.opacity ?? 1))),
-          characterSpacing: Math.max(-4, Math.min(24, Number(object.letterSpacing || 0)))
-        });
+          opacity: Math.max(0, Math.min(1, Number(object.opacity ?? 1)))
+        }, object.letterSpacing);
       }
       if (object.fontQuality !== 'exact') {
         addWarning(warnings, 'Some edited text uses a built-in substitute font because the original custom or subset font could not be reused.');

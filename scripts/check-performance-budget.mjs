@@ -57,7 +57,9 @@ const budgets = {
     productCss: 20_000,
     productJs: 8_000,
     site: 30_000_000,
-    editorFonts: 5_200_000
+    // Four locally hosted Tinos styles preserve Word/Times serif edits.
+    // These fonts are requested only by the editor, not by the main site.
+    editorFonts: 7_500_000
 };
 
 for (const [name, value] of Object.entries(measured)) {

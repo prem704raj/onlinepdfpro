@@ -99,6 +99,26 @@ body.pdf-editor-body {
   color: var(--text-primary);
 }
 
+@font-face { font-family: 'Tinos'; src: url('/fonts/pdf-editor/Tinos-Regular.ttf') format('truetype'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Tinos'; src: url('/fonts/pdf-editor/Tinos-Bold.ttf') format('truetype'); font-style: normal; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Tinos'; src: url('/fonts/pdf-editor/Tinos-Italic.ttf') format('truetype'); font-style: italic; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Tinos'; src: url('/fonts/pdf-editor/Tinos-BoldItalic.ttf') format('truetype'); font-style: italic; font-weight: 700; font-display: swap; }
+
+/* The document workspace owns the screen while a PDF is open. */
+body.pdf-editor-active > .header { display: none !important; }
+body.pdf-editor-active .pdf-editor-heading { display: none; }
+body.pdf-editor-active { padding-top: 0; overflow: hidden; }
+body.pdf-editor-active .pdf-editor-app { max-width: none; padding: 12px; }
+body.pdf-editor-active .pdf-editor-workspace { position: fixed; inset: 0 0 auto; height: var(--pdf-editor-viewport-height, 100dvh); z-index: 100; display: flex; flex-direction: column; border: 0; }
+body.pdf-editor-active .pdf-editor-layout { flex: 1; height: auto; min-height: 0; }
+body.pdf-editor-active .pdf-page-scroll { height: 100%; max-height: none; min-height: 0; flex: 1; overscroll-behavior: contain; }
+body.pdf-editor-active .pdf-editor-shortcuts { margin: 0; padding: 6px 12px; }
+
+.pdf-editor-app .sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
 .pdf-editor-app {
   --pdf-accent: var(--accent, #8b6914);
   --pdf-card: var(--bg-primary, #f6f5f0);
@@ -348,17 +368,28 @@ body.pdf-editor-body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
 }
 
-.pdf-text-context-toolbar[hidden],
 .pdf-text-context-advanced[hidden] {
   display: none !important;
 }
 
+/* Reserve the formatting row so the first click never moves the text target. */
+.pdf-text-context-toolbar[hidden] { visibility: hidden; }
+
 .pdf-text-context-toolbar {
-  top: 116px;
-  min-height: 48px;
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  flex: 0 0 auto;
+  align-self: center;
+  min-height: 52px;
   max-width: calc(100% - 24px);
   overflow-x: auto;
+  box-sizing: border-box;
 }
+
+.pdf-text-context-toolbar > * { flex-shrink: 0; }
+.pdf-text-context-toolbar .pdf-button { white-space: nowrap; }
 
 .pdf-text-context-toolbar select,
 .pdf-text-context-toolbar input[type="number"],
@@ -438,7 +469,12 @@ body.pdf-editor-body {
 }
 
 .pdf-text-context-advanced {
-  top: 170px;
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  align-self: center;
+  flex: 0 0 auto;
   flex-wrap: wrap;
   max-width: calc(100% - 24px);
   color: var(--pdf-muted);
@@ -1014,7 +1050,7 @@ body.pdf-editor-body {
   color: transparent;
   cursor: text;
   pointer-events: auto;
-  touch-action: none;
+  touch-action: manipulation;
   transform-origin: left top;
 }
 
@@ -1027,8 +1063,10 @@ body.pdf-editor-body {
   border-color: #2563eb;
   background: rgba(37, 99, 235, .13);
   box-shadow: 0 0 0 1px rgba(37, 99, 235, .12);
-  cursor: move;
+  cursor: text;
 }
+
+.is-moving-text .pdf-text-hit.is-selected { cursor: move; touch-action: none; }
 
 .pdf-text-hit.is-search-hit {
   border-color: #d97706;
@@ -1397,6 +1435,12 @@ body.pdf-editor-body {
   .pdf-toolbar-group {
     gap: 5px;
   }
+}
+
+@media (min-width: 901px) {
+  .pdf-editor-layout { position: relative; grid-template-columns: 180px minmax(0, 1fr); }
+  .pdf-properties-panel { position: absolute; z-index: 6; top: 0; right: 0; bottom: 0; width: 286px; box-shadow: -8px 0 24px rgba(0, 0, 0, .14); }
+  .pdf-properties-panel:not(.is-open) { display: none; }
 }
 
 @media (max-width: 900px) {

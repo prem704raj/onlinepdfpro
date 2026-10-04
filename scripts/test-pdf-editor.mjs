@@ -39,6 +39,9 @@ async function createFixture() {
   const helveticaBold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const arimoBytes = fs.readFileSync(path.join(root, 'src/fonts/pdf-editor/Arimo-Regular.ttf'));
   const arimoSubset = await pdf.embedFont(arimoBytes, { subset: true });
+  const wordBold = await pdf.embedFont(fs.readFileSync(path.join(root, 'src/fonts/pdf-editor/Tinos-Bold.ttf')), { subset: true });
+  page.drawText('COMPUTER SCIENCE & ENGINEERING', { x: 72, y: 745, size: 14, font: wordBold });
+  page.drawText('25BCS12194', { x: 380, y: 700, size: 10, font: helvetica });
 
   page.drawText('usable', { x: 72, y: 700, size: 18, font: helvetica, color: rgb(0.12, 0.12, 0.12) });
   page.drawText('PREM RAJ', { x: 72, y: 650, size: 18, font: helveticaBold, color: rgb(0.05, 0.05, 0.05) });
@@ -56,6 +59,8 @@ async function createFixture() {
   page.drawText('complex', { x: 78, y: 535, size: 18, font: helvetica, color: rgb(1, 1, 1) });
   page.drawText('rotated', { x: 315, y: 460, size: 16, font: helvetica, rotate: degrees(25), color: rgb(0.2, 0.2, 0.2) });
 
+  await pdf.flush();
+  pdf.context.lookup(wordBold.ref, PDFDict).set(PDFName.of('BaseFont'), PDFName.of('ABCDEF+TimesNewRomanPS-BoldMT'));
   fs.writeFileSync(fixturePath, await pdf.save({ useObjectStreams: false }));
 }
 
@@ -112,7 +117,7 @@ async function setInlineText(page, value) {
 async function beginEdit(page, text) {
   const selector = `.pdf-text-hit[aria-label*="${text}"]`;
   await page.waitForSelector(selector, { visible: true, timeout: 15000 });
-  await page.click(selector, { count: 2, delay: 35 });
+  await page.click(selector);
   await page.waitForSelector('.pdf-inline-text-input', { visible: true, timeout: 10000 });
 }
 
@@ -237,6 +242,72 @@ async function run() {
     await installDownloadCapture(page);
     await captureScreenshot(page, '01-before-existing-text.png');
 
+    const fontCases = await page.evaluate(async () => {
+      const { createFontDescriptor } = await import('/js/pdf-editor/font-resolver.js');
+      return ['ABCDEF+TimesNewRomanPSMT', 'TimesNewRomanPS-BoldMT', 'TimesNewRomanPS-ItalicMT', 'TimesNewRomanPS-BoldItalicMT'].map(pdfFontName => createFontDescriptor({ pdfFontName }));
+    });
+    check(fontCases.every(font => font.detectedFamily === 'Times New Roman' && font.previewFont.family === 'Tinos' && font.matchQuality === 'matched'), 'Word Times PostScript font names retain a matched serif family in all four styles');
+    check(fontCases[1].bold && fontCases[2].italic && fontCases[3].bold && fontCases[3].italic, 'Word PostScript bold and italic styles remain correctly detected');
+    const exportedFontCases = await page.evaluate(async () => {
+      const { createFontDescriptor } = await import('/js/pdf-editor/font-resolver.js');
+      return ['Tinos-Bold-9750', 'Tinos-Italic-12', 'Tinos-BoldItalic-500', 'Tinos-Regular-42'].map(pdfFontName => createFontDescriptor({ pdfFontName }));
+    });
+    check(exportedFontCases.every(font => font.detectedFamily === 'Tinos' && font.previewFont.family === 'Tinos'), 'Generated font suffixes retain the matched serif when an exported PDF is reopened');
+    const headingSelector = '.pdf-text-hit[aria-label*="COMPUTER SCIENCE"]';
+    const headingBefore = await page.$eval(headingSelector, node => ({ top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left }));
+    await page.click(headingSelector);
+    await page.waitForSelector('.pdf-inline-text-input', { visible: true });
+    check(await page.$eval('.pdf-inline-text-input', node => node.textContent === 'COMPUTER SCIENCE & ENGINEERING'), 'One click opens the complete source heading instead of an estimated word box');
+    check(await page.$eval('.pdf-inline-text-input', node => getComputedStyle(node).fontFamily.includes('Tinos') && getComputedStyle(node).fontWeight === '700'), 'Embedded Word-style heading uses the matched bold serif in the actual editing input');
+    const headingAfter = await page.$eval(headingSelector, node => ({ top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left }));
+    check(Math.abs(headingBefore.top - headingAfter.top) < 1 && Math.abs(headingBefore.left - headingAfter.left) < 1, 'Opening formatting controls does not shift the clicked heading');
+    check(await page.$eval('body > .header', node => getComputedStyle(node).display === 'none'), 'Site navigation cannot cover a loaded editor');
+    await page.keyboard.press('End');
+    for (let index = 0; index < 'ENGINEERING'.length; index += 1) await page.keyboard.press('Backspace');
+    await page.keyboard.type('PROGRAMMING');
+    check(await page.$eval('.pdf-inline-text-input', node => node.textContent === 'COMPUTER SCIENCE & PROGRAMMING'), 'Caret editing replaces the final word while preserving the rest of the heading');
+    // Download while the input is still focused: no separate Enter/Apply step.
+    const headingExport = await downloadBytes(page);
+    const headingText = await extractWithPdfJs(page, headingExport);
+    check(headingText.text.includes('COMPUTER SCIENCE & PROGRAMMING'), 'Download waits for the latest focused draft and embedded-font validation');
+    const savedHeading = headingText.items.find(item => item.str === 'COMPUTER SCIENCE & PROGRAMMING');
+    check(savedHeading && Math.abs(Math.hypot(savedHeading.transform[0], savedHeading.transform[1]) - 14) < 0.1 && Math.abs(savedHeading.transform[4] - 72) < 0.1 && Math.abs(savedHeading.transform[5] - 745) < 0.1, 'Embedded-font fallback exports at the original 14pt size and baseline, never the 24pt library default');
+    await captureScreenshot(page, '07-word-heading-after-edit.png');
+
+    await beginEdit(page, 'COMPUTER SCIENCE');
+    await page.keyboard.press('Escape');
+    const moveBefore = await page.$eval(headingSelector, node => ({ x: node.getBoundingClientRect().left, y: node.getBoundingClientRect().top }));
+    await page.click('#context-move-button');
+    await page.mouse.move(moveBefore.x + 10, moveBefore.y + 5);
+    await page.mouse.down();
+    await page.mouse.move(moveBefore.x + 11, moveBefore.y + 6);
+    await page.mouse.up();
+    const afterJitter = await page.$eval(headingSelector, node => ({ x: node.getBoundingClientRect().left, y: node.getBoundingClientRect().top }));
+    check(Math.abs(afterJitter.x - moveBefore.x) < 1 && Math.abs(afterJitter.y - moveBefore.y) < 1, 'Small pointer jitter does not move selected PDF text');
+    await page.mouse.move(moveBefore.x + 10, moveBefore.y + 5);
+    await page.mouse.down();
+    await page.mouse.move(moveBefore.x + 50, moveBefore.y + 25, { steps: 5 });
+    await page.mouse.up();
+    const movedHeading = await page.$eval(headingSelector, node => node.getBoundingClientRect().left);
+    check(Math.abs(movedHeading - moveBefore.x - 40) < 1, 'Explicit Move action drags a heading without changing its content');
+    await page.click('#undo-button');
+    await page.waitForFunction((left) => Math.abs(document.querySelector('.pdf-text-hit[aria-label*="COMPUTER SCIENCE"]').getBoundingClientRect().left - left) < 1, {}, moveBefore.x);
+    await page.click('#context-move-button');
+
+    await beginEdit(page, '25BCS12194');
+    await setInlineText(page, '25BCS12172');
+    await page.keyboard.press('Enter');
+    await page.waitForSelector('.pdf-text-hit[aria-label*="25BCS12172"]');
+    const uidBefore = await page.$eval('.pdf-text-hit[aria-label*="25BCS12172"]', node => node.getBoundingClientRect().width);
+    await page.$eval('#context-font-size-input', node => { node.value = '20'; node.dispatchEvent(new Event('change', { bubbles: true })); });
+    await page.waitForFunction(() => document.querySelector('.pdf-text-preview-glyph') && [...document.querySelectorAll('.pdf-text-preview-glyph')].some(node => node.textContent === '25BCS12172' && parseFloat(getComputedStyle(node).fontSize) > 20));
+    check(await page.$eval('.pdf-text-hit[aria-label*="25BCS12172"]', node => node.getBoundingClientRect().width) > uidBefore * 1.5, 'Changing font size updates the actual page preview and selection geometry');
+    check(await page.evaluate(() => {
+      const glyph = [...document.querySelectorAll('.pdf-text-preview-glyph')].find(node => node.textContent === '25BCS12172');
+      return glyph && parseFloat(glyph.previousElementSibling.style.height) < parseFloat(glyph.style.fontSize) * 0.75;
+    }), 'Resizing replacement text keeps the original-text mask at its original size');
+    await page.click('#undo-button');
+
     await commitEdit(page, 'usable', 'used', '02-inline-usable-to-used.png');
     check(await page.$eval('#pdf-text-context-toolbar', (node) => !node.hidden), 'Selecting existing text opens the compact contextual toolbar');
     check(await page.evaluate(() => window.__pdfEditorAnalytics.some((event) => event.name === 'existing_text_selected') && window.__pdfEditorAnalytics.some((event) => event.name === 'inline_edit_started')), 'Existing-text selection and inline editing emit product-only analytics events');
@@ -249,6 +320,12 @@ async function run() {
     pass('Redo reapplies the complete inline edit session');
 
     await beginEdit(page, 'used');
+    await setInlineText(page, 'caret');
+    await page.keyboard.press('End');
+    await page.keyboard.press('ArrowLeft');
+    await page.evaluate(() => window.dispatchEvent(new Event('pdf-editor:state-restored')));
+    await page.keyboard.type('X');
+    check(await page.$eval('.pdf-inline-text-input', node => node.textContent === 'careXt'), 'Refreshing the page text layer preserves both the active draft and caret position');
     await setInlineText(page, 'discarded');
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('.pdf-inline-text-input') && Array.from(document.querySelectorAll('.pdf-text-hit')).some((node) => node.getAttribute('aria-label')?.includes('used')), { timeout: 10000 });
@@ -257,8 +334,8 @@ async function run() {
     await page.click('.pdf-text-hit[aria-label*="PREM"]');
     check(await page.$eval('#context-bold-button', (node) => node.getAttribute('aria-pressed') === 'true'), 'Bold source styling is detected automatically');
     check(Math.abs(Number(await page.$eval('#context-font-size-input', (node) => node.value)) - 18) < 0.2, 'Source font size is inherited automatically');
-    await commitEdit(page, 'PREM', 'AMRIT', '03-bold-prem-to-amrit.png');
-    check(await page.evaluate(() => Array.from(document.querySelectorAll('.pdf-text-preview-glyph')).some((node) => node.textContent === 'AMRIT' && getComputedStyle(node).fontWeight >= 700)), 'Bold styling remains on the replacement preview');
+    await commitEdit(page, 'PREM', 'AMRIT RAJ', '03-bold-prem-to-amrit.png');
+    check(await page.evaluate(() => Array.from(document.querySelectorAll('.pdf-text-preview-glyph')).some((node) => node.textContent === 'AMRIT RAJ' && getComputedStyle(node).fontWeight >= 700)), 'Bold styling remains on the replacement preview');
 
     await beginEdit(page, 'subsetword');
     await setInlineText(page, 'नमस्ते');
@@ -287,6 +364,7 @@ async function run() {
     check(firstText.text.includes('नमस्ते'), 'Fallback overlay text remains extractable after export');
     check((await page.$eval('#pdf-export-notice', node => node.textContent)).includes('Original text or image data may remain recoverable'), 'Overlay fallback warns that original document data may remain recoverable');
     check(trueReplacementUsesBaseFont(reopened, 0, 'AMRIT RAJ', 'Helvetica-Bold'), 'The true-replaced AMRIT text retains the bold source font resource');
+    check(firstText.text.includes('25BCS12172'), 'UID edits preserve the typed replacement through later document edits');
 
     await page.click('.pdf-text-hit[aria-label*="used"]');
     await page.click('#context-more-button');
@@ -303,6 +381,12 @@ async function run() {
     check(opacityLayers.glyph === 0.5 && opacityLayers.mask === 1, '50% text opacity never makes the original-text mask translucent');
     await captureScreenshot(page, '06-opacity-50-percent-mask-opaque.png');
 
+    await page.$eval('#context-letter-spacing-input', (input) => {
+      input.value = '1';
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await page.waitForFunction(() => [...document.querySelectorAll('.pdf-text-preview-glyph')].some(node => node.textContent === 'used' && parseFloat(node.style.letterSpacing) > 0));
+
     const zoomBefore = await page.$eval('#zoom-level', (node) => node.textContent);
     await page.click('#zoom-in-button');
     await page.click('#zoom-in-button');
@@ -311,6 +395,11 @@ async function run() {
     const secondText = await extractWithPdfJs(page, secondExport);
     const usedItems = secondText.items.filter((item) => item.str === 'used');
     check(usedItems.some((item) => Math.abs(item.transform[4] - 72) < 0.5 && Math.abs(item.transform[5] - 700) < 0.5), 'Internal zoom does not change exported PDF text coordinates');
+    check(usedItems.some(item => Math.abs(Math.hypot(item.transform[0], item.transform[1]) - 18) < 0.1), 'Styled overlay export preserves its 18pt size after zoom and opacity changes');
+    const spacedPdf = await PDFDocument.load(secondExport);
+    const spacedContents = spacedPdf.getPage(0).node.Contents();
+    const spacedStreams = spacedContents instanceof PDFArray ? spacedContents.asArray().map(ref => spacedPdf.context.lookup(ref)) : [spacedPdf.context.lookup(spacedContents)];
+    check(spacedStreams.some(stream => stream instanceof PDFRawStream && /\b1 Tc\b/.test(new TextDecoder().decode(decodePDFRawStream(stream).decode()))), 'Letter spacing is written to the PDF text state instead of an ignored drawText option');
 
     const rotated = await page.$('.pdf-text-hit[aria-label*="rotated"]');
     check(Boolean(rotated), 'Rotated PDF text remains selectable');
