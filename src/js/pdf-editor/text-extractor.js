@@ -2,6 +2,7 @@ import { editorState, getPageState } from './state.js';
 import { resolveFont } from './font-resolver.js';
 import { extractTextColors, getEstimatedTextColor } from './color-extractor.js';
 import { attachEmbeddedFonts } from './embedded-fonts.js';
+import { rememberExtractedPageForHistory } from './history.js';
 
 function getResolvedFontMetadata(pdfPage, item, style) {
   let fontObject = null;
@@ -168,6 +169,7 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
     pageState.objects = objects.map((object) => object.id);
     pageState.textLoaded = true;
     pageState.textLoading = null;
+    rememberExtractedPageForHistory(pageState, objects);
     return objects;
   })();
 

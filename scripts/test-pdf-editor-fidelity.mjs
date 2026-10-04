@@ -59,6 +59,20 @@ try {
   assert.match(await page.$eval('.pdf-text-preview-glyph', el => getComputedStyle(el).fontFamily), /PDFSource/);
   console.log('PASS changing 15 to 20 retains the source typeface and white preview background');
 
+  await page.click('#undo-button');
+  const afterUndo = await page.evaluate(async () => {
+    const { editorState } = await import('/js/pdf-editor/state.js');
+    return editorState.objects.map(object => object.text);
+  });
+  assert.deepEqual(afterUndo, before.map(object => object.text));
+  await page.click('.pdf-text-hit[aria-label*="DEMO NAME"]');
+  await page.waitForSelector('.pdf-inline-text-input');
+  assert.match(await page.$eval('.pdf-inline-text-input', el => getComputedStyle(el).fontFamily), /PDFSource/);
+  await page.keyboard.press('Escape');
+  await page.click('#redo-button');
+  await page.waitForFunction(() => [...document.querySelectorAll('.pdf-text-preview-glyph')].some(el => el.textContent === '20% discount'));
+  console.log('PASS undo/redo keeps every original text field selectable after the first edit');
+
   await page.click('.pdf-text-hit[aria-label*="DEMO NAME"]');
   await page.waitForSelector('.pdf-inline-text-input');
   assert.equal(await page.$eval('.pdf-inline-text-mask', el => getComputedStyle(el).backgroundColor), 'rgb(255, 255, 255)');
