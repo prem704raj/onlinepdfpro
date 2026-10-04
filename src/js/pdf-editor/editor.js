@@ -120,6 +120,7 @@ const refs = {
   contextColor: byId('context-text-color-input'),
   contextMore: byId('context-more-button'),
   contextEdit: byId('context-edit-button'),
+  contextMove: byId('context-move-button'),
   contextFontStatus: byId('context-font-status'),
   contextRotation: byId('context-text-rotation-input'),
   contextLetterSpacing: byId('context-letter-spacing-input'),
@@ -298,7 +299,11 @@ function updateHistoryButtons() {
 }
 
 function setMode(mode) {
+  if (inlineTextEditor && inlineTextEditor.active) inlineTextEditor.commit('tool-change');
   editorState.mode = mode;
+  editorState.textMoveEnabled = false;
+  refs.pagesContainer.classList.remove('is-moving-text');
+  refs.contextMove.setAttribute('aria-pressed', 'false');
   const buttons = [
     ['select', 'mode-select-button'],
     ['text', 'mode-text-button'],
@@ -326,6 +331,20 @@ function updateZoomLabel() {
   refs.zoomLevel.textContent = Math.round(editorState.zoom * 100) + '%';
 }
 
+function updateWorkspaceViewport() {
+  if (refs.workspace.hidden) return;
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  refs.workspace.style.setProperty('--pdf-editor-viewport-height', viewportHeight + 'px');
+  if (inlineTextEditor && inlineTextEditor.active) window.requestAnimationFrame(() => {
+    const input = inlineTextEditor.input;
+    if (!input) return;
+    const rect = input.getBoundingClientRect();
+    const visible = refs.pageScroll.getBoundingClientRect();
+    if (rect.bottom > visible.bottom - 12) refs.pageScroll.scrollTop += rect.bottom - visible.bottom + 12;
+    else if (rect.top < visible.top + 12) refs.pageScroll.scrollTop -= visible.top - rect.top + 12;
+  });
+}
+
 function fitScale(pageNumber, fitPage) {
   const page = editorState.pages[pageNumber - 1];
   if (!page) return 1;
@@ -339,6 +358,7 @@ function fitScale(pageNumber, fitPage) {
 
 function changeZoom(value, mode = 'manual') {
   if (!renderer) return;
+  if (inlineTextEditor) inlineTextEditor.rememberSelection();
   renderer.setZoom(value, mode);
   updateZoomLabel();
 }
@@ -417,6 +437,7 @@ function syncContextToolbar(object) {
 }
 
 async function applyContextTextChange(values) {
+  if (inlineTextEditor) await inlineTextEditor.commit('format');
   const object = getTextObject(editorState.selectedObjectId);
   if (!isTextObject(object) || editorState.busy) return;
   const requestedFamily = typeof values.fontFamily === 'string' ? values.fontFamily : null;
@@ -535,7 +556,7 @@ function selectTextObject(id) {
   if (object.type === 'text' && previousSelectedId !== id) trackEditorEvent('existing_text_selected');
 }
 
-function beginInlineTextEdit(id) {
+function beginInlineTextEdit(id, point = null) {
   selectTextObject(id);
   const object = getTextObject(id);
   if (!object || !renderer) return;
@@ -547,23 +568,25 @@ function beginInlineTextEdit(id) {
       getObject: getTextObject,
       onDraftChange: (_object, draft) => {
         refs.textValue.value = draft;
+        refs.download.disabled = editorState.busy || (!editorState.dirty && draft === _object.text);
       },
       onCommit: async ({ objectId, draft }) => {
         const current = getTextObject(objectId);
         if (!current || editorState.busy) return;
+        if (draft === current.text) { updateDirtyUi(); return; }
         let fontResult;
         try {
           fontResult = await ensureEditFontCoverage(current, draft);
         } catch (error) {
           showExportNotice(error.message || 'The selected font could not be checked.', true);
           renderer && renderer.refreshTextLayers();
-          selectTextObject(current.id);
+          if (!inlineTextEditor.active) selectTextObject(current.id);
           return;
         }
         if (fontResult.cancelled) {
-          refs.textValue.value = current.text;
+          if (editorState.selectedObjectId === current.id) refs.textValue.value = current.text;
           renderer && renderer.refreshTextLayers();
-          selectTextObject(current.id);
+          if (!inlineTextEditor.active) selectTextObject(current.id);
           return;
         }
         rememberObjectsForHistory([current]);
@@ -571,9 +594,9 @@ function beginInlineTextEdit(id) {
         if (fontResult.descriptor) values.fontDescriptor = fontResult.descriptor;
         if (applyTextProperties(current, values)) {
           recordHistory();
-          refs.textValue.value = current.text;
+          if (editorState.selectedObjectId === current.id) refs.textValue.value = current.text;
           renderer && renderer.refreshTextLayers();
-          selectTextObject(current.id);
+          if (!inlineTextEditor.active) selectTextObject(current.id);
           updateDirtyUi();
         } else {
           renderer && renderer.refreshTextLayers();
@@ -587,7 +610,7 @@ function beginInlineTextEdit(id) {
       }
     });
   }
-  if (inlineTextEditor.start(object, layer, viewport)) trackEditorEvent('inline_edit_started');
+  if (inlineTextEditor.start(object, layer, viewport, point)) trackEditorEvent('inline_edit_started');
 }
 
 async function createSamplePdfFile() {
@@ -600,7 +623,7 @@ async function createSamplePdfFile() {
   page.drawText('OnlinePDFPro editable sample', { x: 72, y: 710, size: 24, font: bold, color: PDFLib.rgb(0.12, 0.12, 0.12) });
   page.drawText('Invoice Number:', { x: 72, y: 650, size: 18, font: regular, color: PDFLib.rgb(0.12, 0.12, 0.12) });
   page.drawText('1234', { x: 215, y: 650, size: 18, font: bold, color: PDFLib.rgb(0.08, 0.08, 0.08) });
-  page.drawText('Double-click existing text to edit it directly on the page.', { x: 72, y: 610, size: 12, font: regular, color: PDFLib.rgb(0.28, 0.28, 0.28) });
+  page.drawText('Click existing text to edit it directly on the page.', { x: 72, y: 610, size: 12, font: regular, color: PDFLib.rgb(0.28, 0.28, 0.28) });
   const bytes = await pdfDocument.save({ useObjectStreams: false });
   return new File([bytes], 'onlinepdfpro-sample.pdf', { type: 'application/pdf' });
 }
@@ -983,7 +1006,10 @@ function createPageRenderer() {
       }
     },
     onPageChange: updatePageIndicators,
-    onSelectText: selectTextObject,
+    onSelectText: (id, point) => {
+      selectTextObject(id);
+      if (isTextObject(getTextObject(id)) && !editorState.textMoveEnabled) beginInlineTextEdit(id, point);
+    },
     onDoubleClickText: beginInlineTextEdit,
     onDragStart: startTextDrag,
     onStagePointerDown,
@@ -1005,7 +1031,8 @@ function rebuildPageView(pageNumber = editorState.currentPage) {
   updatePageIndicators(pageNumber);
 }
 
-function runPageOperation(operation, message) {
+async function runPageOperation(operation, message) {
+  if (inlineTextEditor) await inlineTextEditor.commit('page-operation');
   if (editorState.busy || !operation(editorState.currentPage)) return;
   recordHistory();
   rebuildPageView(editorState.currentPage);
@@ -1016,6 +1043,7 @@ function runPageOperation(operation, message) {
 
 function startTextDrag(event, id) {
   const object = getTextObject(id);
+  if (isTextObject(object) && !editorState.textMoveEnabled) return;
   const pageState = object && editorState.pages[object.page - 1];
   if (!object || !pageState || !pageState.viewport || event.button !== 0) return;
   rememberObjectsForHistory([object]);
@@ -1048,7 +1076,7 @@ function moveSelectedText(event) {
   const point = pageState.viewport.convertToPdfPoint(event.clientX - rect.left, event.clientY - rect.top);
   const x = dragSession.startX + point[0] - startPoint[0];
   const y = dragSession.startY + point[1] - startPoint[1];
-  if (Math.abs(event.clientX - dragSession.startClientX) + Math.abs(event.clientY - dragSession.startClientY) > 2) dragSession.moved = true;
+  if (Math.hypot(event.clientX - dragSession.startClientX, event.clientY - dragSession.startClientY) > 6) dragSession.moved = true;
   if (!dragSession.moved) return;
   moveTextObject(object, x, y);
   const dx = event.clientX - dragSession.startClientX;
@@ -1287,7 +1315,7 @@ function updatePageTextStatus(pageNumber, objects) {
     } else if (hasOcr) {
       refs.stageStatus.textContent = 'OCR-assisted editing is active on this page. Original fonts cannot be detected from a scan.';
     } else if (!objects.length) refs.stageStatus.textContent = 'No selectable text was detected on this page.';
-    else refs.stageStatus.textContent = objects.length + ' text items detected · click to select · double-click to edit';
+    else refs.stageStatus.textContent = objects.length + ' text items detected · click text to edit';
     refs.stageStatus.hidden = false;
   }
   const selected = getTextObject(editorState.selectedObjectId);
@@ -1364,9 +1392,11 @@ function askForPassword(reason) {
 }
 
 async function clearCurrentDocument() {
+  document.body.classList.remove('pdf-editor-active');
   fontReplacementPreferences.clear();
   cancelFontReplacement();
   if (inlineTextEditor) {
+    await inlineTextEditor.pendingCommit;
     inlineTextEditor.destroy();
     inlineTextEditor = null;
   }
@@ -1423,6 +1453,8 @@ async function loadFile(file) {
     refs.documentName.title = file.name;
     refs.uploadCard.hidden = true;
     refs.workspace.hidden = false;
+    document.body.classList.add('pdf-editor-active');
+    updateWorkspaceViewport();
     if (file.size > 50 * 1024 * 1024 || loaded.pdfDocument.numPages > 120) {
       refs.stageStatus.textContent = 'Large PDF — pages render as you scroll to keep memory use lower.';
       refs.stageStatus.hidden = false;
@@ -1471,6 +1503,10 @@ function resetToPicker() {
 }
 
 async function exportPdf() {
+  if (editorState.busy) return;
+  // A toolbar click blurs the input before its click event. Wait for both
+  // that commit and any font validation before reading the document state.
+  if (inlineTextEditor) await inlineTextEditor.commit('export');
   if (editorState.busy) return;
   refs.exportNotice.hidden = true;
   setBusy(true, 'Exporting PDF…');
@@ -1634,14 +1670,16 @@ refs.movePageDown.addEventListener('click', () => runPageOperation((page) => reo
 refs.duplicatePage.addEventListener('click', () => runPageOperation(duplicatePdfPage, 'Page duplicated.'));
 refs.insertBlankPage.addEventListener('click', () => runPageOperation(insertBlankPageAfter, 'A blank page was inserted.'));
 refs.deletePage.addEventListener('click', () => runPageOperation(removePdfPage, 'Page deleted.'));
-refs.undoButton.addEventListener('click', () => {
+refs.undoButton.addEventListener('click', async () => {
+  if (inlineTextEditor) await inlineTextEditor.commit('undo');
   if (undo()) {
     renderer && renderer.refreshTextLayers();
     if (editorState.selectedObjectId) selectTextObject(editorState.selectedObjectId);
     updateDirtyUi();
   }
 });
-refs.redoButton.addEventListener('click', () => {
+refs.redoButton.addEventListener('click', async () => {
+  if (inlineTextEditor) await inlineTextEditor.commit('redo');
   if (redo()) {
     renderer && renderer.refreshTextLayers();
     if (editorState.selectedObjectId) selectTextObject(editorState.selectedObjectId);
@@ -1663,6 +1701,14 @@ refs.contextItalic.addEventListener('click', () => {
 refs.contextColor.addEventListener('change', () => applyContextTextChange({ colorHex: refs.contextColor.value }));
 refs.contextMore.addEventListener('click', () => toggleContextAdvanced());
 refs.contextEdit.addEventListener('click', () => beginInlineTextEdit(editorState.selectedObjectId));
+refs.contextMove.addEventListener('click', async () => {
+  if (inlineTextEditor) await inlineTextEditor.commit('move');
+  const enableMove = !editorState.textMoveEnabled;
+  if (enableMove) setMode('select');
+  editorState.textMoveEnabled = enableMove;
+  refs.contextMove.setAttribute('aria-pressed', String(editorState.textMoveEnabled));
+  refs.pagesContainer.classList.toggle('is-moving-text', editorState.textMoveEnabled);
+});
 refs.contextRotation.addEventListener('change', () => applyContextTextChange({ rotation: Number(refs.contextRotation.value) }));
 refs.contextLetterSpacing.addEventListener('change', () => applyContextTextChange({ letterSpacing: Number(refs.contextLetterSpacing.value) }));
 refs.contextOpacity.addEventListener('change', () => applyContextTextChange({ opacity: Number(refs.contextOpacity.value) }));
@@ -1793,3 +1839,13 @@ window.addEventListener('pdf-editor:state-restored', () => {
   updatePageIndicators();
   updateDirtyUi();
 });
+window.addEventListener('pdf-editor:text-layers-refreshed', () => {
+  if (!renderer || !inlineTextEditor || !inlineTextEditor.active) return;
+  const object = getTextObject(inlineTextEditor.activeObjectId);
+  if (object) inlineTextEditor.reattach(renderer.getTextLayer(object.page), renderer.getPageViewport(object.page));
+});
+window.addEventListener('pdf-editor:before-text-layers-refreshed', () => {
+  if (inlineTextEditor) inlineTextEditor.prepareForRefresh();
+});
+if (window.visualViewport) window.visualViewport.addEventListener('resize', updateWorkspaceViewport);
+window.addEventListener('resize', updateWorkspaceViewport);

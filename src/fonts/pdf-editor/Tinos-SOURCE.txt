@@ -1,0 +1,11 @@
+Tinos provides a Times New Roman-compatible serif family for PDF text editing.
+The four static styles come from the Google Fonts `ofl/tinos` distribution:
+https://github.com/google/fonts/tree/main/ofl/tinos
+
+Upstream source version: googlefonts/tinos commit
+3b4482a99b80ea5fc75f187b1be3120a3f5905b3.
+Copyright 2026 The Tinos Project Authors. Licensed under SIL OFL 1.1;
+the complete upstream license is included in Tinos-OFL.txt.
+
+These fonts are loaded locally when the PDF editor needs the serif family.
+The source PDF font is retained where true content-stream replacement is supported.

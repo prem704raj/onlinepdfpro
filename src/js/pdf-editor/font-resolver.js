@@ -1,4 +1,13 @@
 const BUNDLED_FONTS = {
+  Tinos: {
+    family: 'Tinos',
+    files: {
+      regular: '/fonts/pdf-editor/Tinos-Regular.ttf',
+      bold: '/fonts/pdf-editor/Tinos-Bold.ttf',
+      italic: '/fonts/pdf-editor/Tinos-Italic.ttf',
+      boldItalic: '/fonts/pdf-editor/Tinos-BoldItalic.ttf'
+    }
+  },
   Arimo: {
     family: 'Arimo',
     files: {
@@ -44,6 +53,10 @@ const ALIASES = [
   [/^cambria$/i, 'Cambria'],
   [/^times(?:newroman)?(?:psmt)?$/i, 'Times New Roman'],
   [/^timesroman$/i, 'Times New Roman'],
+  [/^timesnewromanps(?:bold|italic|bolditalic)?mt$/i, 'Times New Roman'],
+  [/^arial(?:bold|italic|bolditalic)mt$/i, 'Arial'],
+  [/^couriernewps(?:bold|italic|bolditalic)?mt$/i, 'Courier New'],
+  [/^tinos$/i, 'Tinos'],
   [/^courier(?:new)?$/i, 'Courier New'],
   [/^roboto$/i, 'Roboto'],
   [/^montserrat$/i, 'Montserrat'],
@@ -123,7 +136,7 @@ function standardPlan(family, rawName) {
     detectedFamily: family,
     previewFont: {
       type: 'css-fallback',
-      family: family === 'Times New Roman' ? 'Caladea' : family === 'Courier New' ? 'Courier New' : 'Arimo',
+      family: family === 'Times New Roman' ? 'Tinos' : family === 'Courier New' ? 'Courier New' : 'Arimo',
       quality: 'matched'
     },
     exportFont: { type: 'source-standard', family, quality: 'exact', rawName },
@@ -145,8 +158,8 @@ function resolvePlan(detectedFamily, rawName, bold, italic) {
   if (detectedFamily === 'Cambria' || detectedFamily === 'Caladea') {
     return bundledPlan('Caladea', bold, italic, detectedFamily === 'Caladea' ? 'exact' : 'matched', detectedFamily === 'Cambria' ? 'Caladea is used as a Cambria-compatible substitute for preview and overlay export.' : null, detectedFamily);
   }
-  if (detectedFamily === 'Times New Roman') {
-    return bundledPlan('Caladea', bold, italic, 'matched', 'Caladea is used as a metrically similar serif substitute for preview and overlay export.', detectedFamily);
+  if (detectedFamily === 'Times New Roman' || detectedFamily === 'Tinos') {
+    return bundledPlan('Tinos', bold, italic, detectedFamily === 'Tinos' ? 'exact' : 'matched', detectedFamily === 'Tinos' ? null : 'Tinos is used as a Times New Roman-compatible substitute for preview and overlay export.', detectedFamily);
   }
   if (detectedFamily === 'Noto Sans Devanagari') return bundledPlan('Noto Sans Devanagari', false, false, 'exact', null, detectedFamily);
   if (detectedFamily === 'Roboto' || detectedFamily === 'Montserrat') {

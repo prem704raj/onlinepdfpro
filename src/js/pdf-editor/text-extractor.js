@@ -2,8 +2,6 @@ import { editorState, getPageState } from './state.js';
 import { resolveFont } from './font-resolver.js';
 import { extractTextColors, getEstimatedTextColor } from './color-extractor.js';
 
-let measureCanvas = null;
-
 function getResolvedFontMetadata(pdfPage, item, style) {
   let fontObject = null;
   try {
@@ -20,29 +18,6 @@ function getResolvedFontMetadata(pdfPage, item, style) {
       embedded: Boolean(fontObject && fontObject.data && Number(fontObject.data.length || fontObject.data.byteLength || 0) > 0)
     }
   };
-}
-
-function splitTextItem(item, fontFamily, fontSize) {
-  const text = item.str;
-  if (item.dir === 'rtl' || !/\s/.test(text)) return [{ text, offset: 0, width: Math.abs(Number(item.width) || 0) }];
-  const pieces = text.match(/\S+|\s+/gu) || [text];
-  if (pieces.filter((piece) => /\S/.test(piece)).length < 2) return [{ text, offset: 0, width: Math.abs(Number(item.width) || 0) }];
-  if (!measureCanvas) measureCanvas = document.createElement('canvas');
-  const context = measureCanvas.getContext('2d');
-  context.font = fontSize + 'px "' + String(fontFamily).replace(/["\\]/g, '') + '", Arial, sans-serif';
-  const measured = pieces.map((piece) => context.measureText(piece).width);
-  const measuredTotal = measured.reduce((sum, width) => sum + width, 0);
-  const sourceWidth = Math.abs(Number(item.width) || 0);
-  if (!measuredTotal || !sourceWidth) return [{ text, offset: 0, width: sourceWidth }];
-  const factor = sourceWidth / measuredTotal;
-  let offset = 0;
-  const segments = [];
-  pieces.forEach((piece, index) => {
-    const width = measured[index] * factor;
-    if (/\S/.test(piece)) segments.push({ text: piece, offset, width });
-    offset += width;
-  });
-  return segments.length ? segments : [{ text, offset: 0, width: sourceWidth }];
 }
 
 export async function initializePageMetadata(pdfDocument, pageCount, onProgress = () => {}) {
@@ -114,7 +89,9 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
       const resolvedFont = getResolvedFontMetadata(pdfPage, item, style);
       const font = resolveFont(resolvedFont.style, resolvedFont.pdfFontName);
       const detectedColor = colorMap.get(itemIndex) || getEstimatedTextColor();
-      const segments = splitTextItem(item, font.family, fontSize);
+      // Keep the source run intact. Word boxes estimated with a substitute font
+      // shift the insertion point and break editing of headings and sentences.
+      const segments = [{ text: item.str, offset: 0, width: Math.abs(Number(item.width) || 0) }];
       segments.forEach((segment, segmentIndex) => {
         const x = baseX + (a / fontSize) * segment.offset;
         const y = baseY + (b / fontSize) * segment.offset;

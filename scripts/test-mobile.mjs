@@ -156,6 +156,8 @@ try {
       }
       assert.ok(await reachable(page, '.pdf-text-hit'), 'Sample PDF text remains selectable on mobile');
       await page.tap('.pdf-text-hit');
+      await page.waitForSelector('.pdf-inline-text-input', { visible: true, timeout: 10000 });
+      assert.ok(await reachable(page, '.pdf-inline-text-input'), 'A single tap opens existing text directly on the PDF');
       assert.ok(await reachable(page, '#context-edit-button', width <= 620 ? 44 : 0), 'Selected text must expose a single-tap edit action');
       await page.tap('#context-edit-button');
       await page.waitForSelector('.pdf-inline-text-input', { visible: true, timeout: 10000 });
@@ -176,6 +178,25 @@ try {
         return Boolean(layer.querySelector('.pdf-text-hit')) && Math.abs(canvas.getBoundingClientRect().width - layer.getBoundingClientRect().width) <= 1;
       }, { timeout: 10000 });
       assert.ok(await page.$eval('.pdf-text-hit', el => getComputedStyle(el).minHeight !== '44px'), 'Document text hit areas must follow PDF geometry rather than button touch sizing');
+      if (width === 768) {
+        if (await page.$eval('#pdf-pages-panel', el => el.classList.contains('is-open'))) await page.tap('#pages-drawer-button');
+        const scrollBefore = await page.$eval('#pdf-page-scroll', el => el.scrollTop);
+        const touchPoint = await page.$eval('.pdf-text-hit', el => {
+          const rect = el.getBoundingClientRect();
+          return { x: rect.left + 6, y: rect.top + rect.height / 2 };
+        });
+        assert.ok(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.classList.contains('pdf-text-hit'), touchPoint), 'The scroll gesture must start over PDF text');
+        const gesture = await page.createCDPSession();
+        await gesture.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...touchPoint, id: 1 }] });
+        for (let step = 1; step <= 8; step += 1) {
+          await gesture.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: touchPoint.x, y: touchPoint.y - step * 15, id: 1 }] });
+          await new Promise(resolve => setTimeout(resolve, 40));
+        }
+        await gesture.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await page.waitForFunction(before => document.querySelector('#pdf-page-scroll').scrollTop > before + 30, { timeout: 10000 }, scrollBefore);
+        assert.equal(Boolean(await page.$('.pdf-inline-text-input')), false, 'Scrolling from existing PDF text must not accidentally start an edit');
+        await gesture.detach();
+      }
       console.log(`PASS mobile interactions ${width}×${height}: menu, signed-in header, preview, cart, loaded PDF editor`);
     }
     await page.close();

@@ -85,10 +85,16 @@ try {
     console.log('PASS scanned chat requires visible opt-in before OCR and reports its five-of-seven-page scope');
 
     const send = async question => {
+        await page.waitForFunction(() => !document.querySelector('#sendBtn').disabled);
         await token();
         await page.type('#chatInput', question);
         const count = requests.length;
-        await page.click('#sendBtn');
+        const response = page.waitForResponse(result => result.url().includes('/ai/') && result.request().method() === 'POST');
+        // The transcript can move the Send button while a previous reply settles.
+        // Use the supported keyboard action and wait for this turn's actual response.
+        await page.focus('#chatInput');
+        await page.keyboard.press('Enter');
+        await response;
         await page.waitForFunction(() => !document.querySelector('#sendBtn').disabled);
         assert.equal(requests.length, count + 1);
         return requests.at(-1).body;
