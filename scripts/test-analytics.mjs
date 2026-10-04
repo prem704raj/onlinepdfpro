@@ -71,6 +71,6 @@ try {
         const rect = panel.getBoundingClientRect();
         return { left: rect.left, right: rect.right, width: innerWidth, height: rect.height };
     });
-    assert.ok(box.left >= 0 && box.right <= box.width && box.height < 300, 'Mobile consent controls fit the viewport');
+    assert.ok(box.left >= 0 && box.right <= box.width && box.height < 300, `Mobile consent controls fit the viewport: ${JSON.stringify(box)}`);
     console.log('PASS mobile privacy controls fit a 390px viewport');
 } finally { await browser.close(); }
