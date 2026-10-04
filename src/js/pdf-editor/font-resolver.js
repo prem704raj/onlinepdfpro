@@ -104,7 +104,13 @@ function styleFromName(value, style = {}) {
 }
 
 function normalizedFamily(value) {
-  const stripped = stripStyleSuffix(stripSubsetPrefix(value).replace(/,/g, ' ').replace(/_/g, ' ')).trim();
+  let base = stripSubsetPrefix(value).replace(/,/g, ' ').replace(/_/g, ' ');
+  // pdf-lib adds a numeric suffix to embedded font names. Recognize it only
+  // for known families so reopening an exported PDF retains the same preview.
+  const withoutSuffix = base.replace(/-\d+$/, '');
+  const knownFamily = stripStyleSuffix(withoutSuffix);
+  if (ALIASES.some(([pattern]) => pattern.test(compactName(knownFamily)) || pattern.test(knownFamily))) base = withoutSuffix;
+  const stripped = stripStyleSuffix(base).trim();
   const compact = compactName(stripped);
   for (const [pattern, family] of ALIASES) {
     if (pattern.test(compact) || pattern.test(stripped)) return family;

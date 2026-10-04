@@ -248,11 +248,17 @@ async function run() {
     });
     check(fontCases.every(font => font.detectedFamily === 'Times New Roman' && font.previewFont.family === 'Tinos' && font.matchQuality === 'matched'), 'Word Times PostScript font names retain a matched serif family in all four styles');
     check(fontCases[1].bold && fontCases[2].italic && fontCases[3].bold && fontCases[3].italic, 'Word PostScript bold and italic styles remain correctly detected');
+    const exportedFontCases = await page.evaluate(async () => {
+      const { createFontDescriptor } = await import('/js/pdf-editor/font-resolver.js');
+      return ['Tinos-Bold-9750', 'Tinos-Italic-12', 'Tinos-BoldItalic-500', 'Tinos-Regular-42'].map(pdfFontName => createFontDescriptor({ pdfFontName }));
+    });
+    check(exportedFontCases.every(font => font.detectedFamily === 'Tinos' && font.previewFont.family === 'Tinos'), 'Generated font suffixes retain the matched serif when an exported PDF is reopened');
     const headingSelector = '.pdf-text-hit[aria-label*="COMPUTER SCIENCE"]';
     const headingBefore = await page.$eval(headingSelector, node => ({ top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left }));
     await page.click(headingSelector);
     await page.waitForSelector('.pdf-inline-text-input', { visible: true });
     check(await page.$eval('.pdf-inline-text-input', node => node.textContent === 'COMPUTER SCIENCE & ENGINEERING'), 'One click opens the complete source heading instead of an estimated word box');
+    check(await page.$eval('.pdf-inline-text-input', node => getComputedStyle(node).fontFamily.includes('Tinos') && getComputedStyle(node).fontWeight === '700'), 'Embedded Word-style heading uses the matched bold serif in the actual editing input');
     const headingAfter = await page.$eval(headingSelector, node => ({ top: node.getBoundingClientRect().top, left: node.getBoundingClientRect().left }));
     check(Math.abs(headingBefore.top - headingAfter.top) < 1 && Math.abs(headingBefore.left - headingAfter.left) < 1, 'Opening formatting controls does not shift the clicked heading');
     check(await page.$eval('body > .header', node => getComputedStyle(node).display === 'none'), 'Site navigation cannot cover a loaded editor');
