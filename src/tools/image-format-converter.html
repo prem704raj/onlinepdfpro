@@ -20,11 +20,11 @@
 <meta name="description" content="Convert images between JPG, PNG, and WebP formats in your browser. Batch convert multiple files with real MIME-typed output.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/image-format-converter.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/image-format-converter">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/image-format-converter.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/image-format-converter">
  <meta property="og:title" content="Image Format Converter Online | OnlinePDFPro">
  <meta property="og:description" content="Convert images between JPG, PNG, and WebP formats in your browser with genuine output files.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -33,7 +33,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-format-converter.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-format-converter">
  <meta name="twitter:title" content="Image Format Converter Online | OnlinePDFPro">
  <meta name="twitter:description" content="Convert images between JPG, PNG, and WebP formats in your browser with genuine output files.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -47,8 +47,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/image-format-converter.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/image-format-converter.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/image-format-converter">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/image-format-converter">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,8 +141,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
 
@@ -241,32 +241,32 @@
  </div>
  </div>
 
- <div id="processingSection" style="display: none;">
+ <div id="processingSection" style="display: none;" data-nosnippet>
  <div class="glass-card" style="padding: 40px; text-align: center;">
  <div
  style="font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
- Converting <span id="processedCount" style="color: var(--aurora-azure);">0</span> / <span
+ Converting <span id="processedCount" style="color: var(--aurora-azure);" data-nosnippet>0</span> / <span
  id="totalCount">0</span>
  </div>
  <div
  style="height: 8px; background: var(--midnight); border-radius: 4px; overflow: hidden; margin-bottom: 32px;">
  <div id="overallProgress"
- style="height: 100%; background: var(--aurora-violet); width: 0%; transition: width 0.3s;">
+ style="height: 100%; background: var(--aurora-violet); width: 0%; transition: width 0.3s;" data-nosnippet>
  </div>
  </div>
  <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
  </div>
- <div id="processingList" style="margin-top: 32px;"></div>
+ <div id="processingList" style="margin-top: 32px;" data-nosnippet></div>
  </div>
 
- <div id="resultsSection" style="display: none;">
- <div class="results-section glass-card" style="padding: 48px;">
+ <div id="resultsSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" style="padding: 48px;" data-nosnippet>
  <div class="success-message"
- style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;">
+ style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;" data-nosnippet>
  Conversion Complete
  </div>
 
- <div class="results-stats">
+ <div class="results-stats" data-nosnippet>
  <div class="stat-item">
  <div class="stat-value" id="totalFiles">0</div>
  <div class="stat-label">Files Converted</div>
@@ -282,14 +282,14 @@
  </div>
 
  <div id="resultsList"
- style="margin: 32px 0; border-top: 1px solid var(--glass-border); padding-top: 24px;"></div>
+ style="margin: 32px 0; border-top: 1px solid var(--glass-border); padding-top: 24px;" data-nosnippet></div>
 
- <div class="download-section">
+ <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.ZIP)</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Convert More Images</button>
  </div>
- <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+ <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Privacy sweep in 5:00</div>
  </div>
  </div>
 

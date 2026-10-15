@@ -34,8 +34,10 @@ const types = { '.html': 'text/html', '.js': 'application/javascript', '.css': '
 const server = http.createServer((req, res) => {
     let pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     if (!path.extname(pathname)) pathname += '.html';
-    const target = path.resolve(site, `.${pathname}`);
-    if (!target.startsWith(site + path.sep) || !fs.existsSync(target)) { res.writeHead(404); res.end(); return; }
+    let target = path.resolve(site, `.${pathname}`);
+    if (fs.existsSync(target + '.html')) target += '.html';
+    else if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, 'index.html');
+    if (!target.startsWith(site + path.sep) || !fs.existsSync(target) || fs.statSync(target).isDirectory()) { res.writeHead(404); res.end(); return; }
     res.setHeader('Content-Type', types[path.extname(target)] || 'application/octet-stream');
     res.end(fs.readFileSync(target));
 });

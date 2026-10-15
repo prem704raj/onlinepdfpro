@@ -3,7 +3,7 @@
 
 <head>
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -15,7 +15,7 @@
 <meta name="description" content="Upload a PDF and generate an AI-assisted summary. Choose bullet points, short summary, or detailed summary. Review results for accuracy.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-summarizer.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-summarizer">
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -54,20 +54,20 @@
    .summary-actions button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
  </style>
  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
@@ -89,6 +89,7 @@
  </p>
  </div>
 
+ <p id="documentScope" role="status" style="line-height:1.6;">Scope: up to 25,000 extracted characters. For scanned documents, optional OCR uses the first five pages only. A long PDF may receive a partial summary; verify coverage against the original.</p>
  <div class="mode-selector fade-in" style="animation-delay: 0.15s;">
    <button class="mode-btn active" data-mode="bullets">Bullet Points</button>
    <button class="mode-btn" data-mode="short">Short Summary</button>
@@ -105,12 +106,12 @@
  <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); margin-top:10px;"><input type="checkbox" id="cloudOcrConsent"> If scanned, allow an OCR.space upload (optional)</label>
  </div>
 
- <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-   <div class="spinner"></div>
-   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+   <div class="spinner" data-nosnippet></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;" data-nosnippet>Extracting text from PDF...</p>
  </div>
 
- <div class="summary-result" id="summaryResult">
+ <div class="summary-result" id="summaryResult" data-nosnippet>
    <div style="display:flex; justify-content:space-between; align-items:center;">
      <h3 id="summaryTitle">Summary</h3>
      <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>
@@ -173,15 +174,24 @@
     document.querySelector('.mode-selector').style.display = 'none';
     loadingState.style.display = 'block';
 
+    let loadedPdf = null;
+    let textPagesRead = 0;
+    let ocrPagesRead = 0;
+    let usedOcr = false;
+    summaryResult.style.display = 'none';
+    loadingText.style.color = 'var(--text-secondary)';
+    loadingState.querySelector('.spinner').style.display = 'block';
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = loadedPdf = await pdfjsLib.getDocument(arrayBuffer).promise;
       let documentText = "";
       for(let i = 1; i <= pdf.numPages; i++) {
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
-        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+        const pageText = tc.items.map(item => item.str).join(" ");
+        if (pageText.trim()) documentText += '[Page ' + i + ']\n' + pageText + "\n\n";
+        textPagesRead = i;
         if(documentText.length > 25000) break;
       }
 
@@ -192,8 +202,10 @@
         }
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
         documentText = "";
+        usedOcr = true;
         const maxOcrPages = Math.min(pdf.numPages, 5);
         for(let i = 1; i <= maxOcrPages; i++) {
+          ocrPagesRead = i;
           loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
           const page = await pdf.getPage(i);
           const scale = 2;
@@ -204,6 +216,7 @@
           const ctx = canvas.getContext('2d');
           await page.render({ canvasContext: ctx, viewport }).promise;
           const base64 = canvas.toDataURL('image/png');
+          canvas.width = 0; canvas.height = 0;
 
           const formData = new FormData();
           formData.append('base64Image', base64);
@@ -223,7 +236,7 @@
           if (!ocrResp.ok) continue;
           const ocrData = await ocrResp.json();
           if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
-            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+            documentText += '[OCR page ' + i + ']\n' + ocrData.ParsedResults[0].ParsedText + "\n\n";
           }
           if(documentText.length > 25000) break;
         }
@@ -233,6 +246,9 @@
         throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
+      const truncated = documentText.length > 25000;
+      documentText = documentText.slice(0, 25000);
+      document.getElementById('documentScope').textContent = (usedOcr ? 'OCR attempted on the first ' + ocrPagesRead : 'Text read from the first ' + textPagesRead) + ' of ' + pdf.numPages + ' pages. Sent ' + documentText.length.toLocaleString() + ' characters' + (truncated ? ' (truncated at 25,000).' : '.') + ' The summary covers only this supplied portion.';
       loadingText.textContent = "AI is generating your summary...";
 
       const prompts = {
@@ -244,10 +260,11 @@
       const aiToken = requireTurnstileToken();
       const response = await fetch(API_URL, {
         method: 'POST',
+        signal: AbortSignal.timeout(60000),
         headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
         body: JSON.stringify({
           messages: [
-            { role: "system", content: prompts[currentMode] },
+            { role: "system", content: prompts[currentMode] + ' Summarize only the supplied document portion. Do not imply the entire PDF was read. Cite supplied page labels when possible and state that missing pages may change the conclusions.' },
             { role: "user", content: "DOCUMENT:\n" + documentText }
           ],
           max_tokens: 4096
@@ -269,15 +286,22 @@
         summaryResult.style.display = 'block';
       } else if(data.error) {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Error: " + data.error.message;
+        throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'AI service unavailable. Please try again.');
       } else {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Could not generate summary. Please try again.";
+        throw new Error('Could not generate summary. Please try again.');
       }
     } catch(err) {
       console.error(err);
       loadingText.textContent = err.message || "Error processing PDF. Please try again.";
       loadingText.style.color = "var(--error, red)";
+      loadingState.style.display = 'block';
+      loadingState.querySelector('.spinner').style.display = 'none';
+      uploadZone.style.display = 'block';
+      document.querySelector('.mode-selector').style.display = 'flex';
+      fileInput.value = '';
+    } finally {
+      if (loadedPdf) await loadedPdf.destroy();
     }
     resetTurnstile();
   }
@@ -305,7 +329,7 @@
     const container = document.getElementById('turnstileWidget');
     if (!container) return;
     turnstileWidgetId = window.turnstile.render(container, {
-      sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+      sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
       callback: window.onTurnstileSuccess,
       'expired-callback': window.onTurnstileExpired,
       'error-callback': window.onTurnstileExpired,

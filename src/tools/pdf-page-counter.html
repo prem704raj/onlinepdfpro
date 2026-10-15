@@ -13,11 +13,11 @@
     <meta name="description" content="Count the number of pages in multiple PDF files. Free to use; upload requirements are shown before processing.">
 <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-page-counter">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-page-counter">
     <meta property="og:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
     <meta property="og:description" content="Count the number of pages in multiple PDF files. Upload requirements are shown before processing.">
     <meta property="og:site_name" content="OnlinePDFPro">
@@ -25,7 +25,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-page-counter">
     <meta name="twitter:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
     <meta name="twitter:description" content="Count the number of pages in multiple PDF files. Upload requirements are shown before processing.">
 
@@ -189,8 +189,8 @@
             </svg>
         </button>
         <nav class="nav-links nav" id="nav">
-            <a href="/tools.html" class="nav-link">PDF Tools</a>
-            <a href="/study-materials.html" class="nav-link">Study Materials</a>
+            <a href="/tools" class="nav-link">PDF Tools</a>
+            <a href="/study-materials" class="nav-link">Study Materials</a>
             <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
                 <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="5"></circle>
@@ -240,8 +240,8 @@
             </div>
 
             <!-- RESULT AREA -->
-            <div id="resultBox" class="result-box">
-                <div class="result-header">
+            <div id="resultBox" class="result-box" data-nosnippet>
+                <div class="result-header" data-nosnippet>
                     <div class="total-count" id="totalCount">0</div>
                     <div class="total-label">Total Pages</div>
                 </div>
@@ -254,8 +254,8 @@
             </div>
 
             <!-- LOADING STATE -->
-            <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-                <div class="spinner"></div>
+            <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+                <div class="spinner" data-nosnippet></div>
                 <p style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Reading PDF files...</p>
             </div>
         </section>

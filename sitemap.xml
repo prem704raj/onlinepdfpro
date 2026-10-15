@@ -6,278 +6,398 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/about.html</loc>
+    <loc>https://onlinepdfpro.com/about</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools.html</loc>
+    <loc>https://onlinepdfpro.com/tools</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/support.html</loc>
+    <loc>https://onlinepdfpro.com/help</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/dmca.html</loc>
+    <loc>https://onlinepdfpro.com/dmca</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/privacy.html</loc>
+    <loc>https://onlinepdfpro.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/terms.html</loc>
+    <loc>https://onlinepdfpro.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/refund.html</loc>
+    <loc>https://onlinepdfpro.com/refund</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/study-materials.html</loc>
+    <loc>https://onlinepdfpro.com/study-materials</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/viewstudymaterials.html</loc>
+    <loc>https://onlinepdfpro.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/guides</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/guides/merge-and-split-an-assignment/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/guides/choose-a-pdf-compression-mode/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/guides/turn-note-images-into-a-readable-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/tools/compress-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/compress-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/merge-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/merge-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/split-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/split-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-reader</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-reader.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-editor</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-editor.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-presentation-mode</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-presentation-mode.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-to-word</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-to-word.html</loc>
+    <loc>https://onlinepdfpro.com/tools/word-to-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/word-to-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-to-text-extractor</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-to-text-extractor.html</loc>
+    <loc>https://onlinepdfpro.com/tools/html-to-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/html-to-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-scratchpad</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-scratchpad.html</loc>
+    <loc>https://onlinepdfpro.com/tools/jpg-to-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/jpg-to-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-to-jpg</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-to-jpg.html</loc>
+    <loc>https://onlinepdfpro.com/tools/image-to-text</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/image-to-text.html</loc>
+    <loc>https://onlinepdfpro.com/tools/heic-to-jpg</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/heic-to-jpg.html</loc>
+    <loc>https://onlinepdfpro.com/tools/image-compressor</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/image-compressor.html</loc>
+    <loc>https://onlinepdfpro.com/tools/image-crop</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/image-crop.html</loc>
+    <loc>https://onlinepdfpro.com/tools/image-format-converter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/image-format-converter.html</loc>
+    <loc>https://onlinepdfpro.com/tools/image-resize</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/image-resize.html</loc>
+    <loc>https://onlinepdfpro.com/tools/webp-to-jpg</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/webp-to-jpg.html</loc>
+    <loc>https://onlinepdfpro.com/tools/crop-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/crop-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/delete-pdf-pages</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/delete-pdf-pages.html</loc>
+    <loc>https://onlinepdfpro.com/tools/rotate-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/rotate-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-page-reorder</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-page-reorder.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-bookmark</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-bookmark.html</loc>
+    <loc>https://onlinepdfpro.com/tools/add-page-numbers-to-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/add-page-numbers-to-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-watermark</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-watermark.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-page-counter</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-page-counter.html</loc>
+    <loc>https://onlinepdfpro.com/compare-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/compare-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/pdf-highlighter-extractor</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/pdf-highlighter-extractor.html</loc>
+    <loc>https://onlinepdfpro.com/tools/sign-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/sign-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/password-protect-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/password-protect-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-unlock</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-unlock.html</loc>
+    <loc>https://onlinepdfpro.com/tools/redact-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/redact-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/flatten-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/flatten-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/chat-with-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/chat-with-pdf.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-summarizer</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-summarizer.html</loc>
+    <loc>https://onlinepdfpro.com/tools/pdf-to-flashcards</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/pdf-to-flashcards.html</loc>
+    <loc>https://onlinepdfpro.com/tools/qr-code-generator</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/qr-code-generator.html</loc>
+    <loc>https://onlinepdfpro.com/tools/passport-photo-maker</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/tools/passport-photo-maker.html</loc>
+    <loc>https://onlinepdfpro.com/resume-cv-builder</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/resume-cv-builder.html</loc>
+    <loc>https://onlinepdfpro.com/invoice-generator</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/invoice-generator.html</loc>
+    <loc>https://onlinepdfpro.com/speech-to-text</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/speech-to-text.html</loc>
+    <loc>https://onlinepdfpro.com/text-to-speech</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/text-to-speech.html</loc>
+    <loc>https://onlinepdfpro.com/remove-background</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/remove-background.html</loc>
+    <loc>https://onlinepdfpro.com/presentation-maker</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/presentation-maker.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://onlinepdfpro.com/blog/best-practices-creating-accessible-pdfs/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/comparing-word-vs-pdf-when-to-use-which/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/compress-pdf-without-losing-quality/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/convert-jpg-to-pdf-online/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/easy-ways-rearrange-delete-pdf-pages/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/edit-pdf-text-online-free/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/future-of-document-management-ai-and-pdfs/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-add-watermarks-to-your-pdf-documents/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-convert-excel-spreadsheets-to-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-convert-powerpoint-presentations-to-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-extract-text-from-scanned-pdfs-ocr/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-merge-pdf-files-free/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/how-to-reduce-pdf-file-size-for-email/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/importance-of-pdfa-for-long-term-archiving/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/step-by-step-guide-splitting-large-pdf-files/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/top-benefits-going-paperless-in-office/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/ultimate-guide-digital-signatures-pdfs/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/understanding-pdf-security-password-protect/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/blog/why-your-resume-should-always-be-a-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/products/dbms-notes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

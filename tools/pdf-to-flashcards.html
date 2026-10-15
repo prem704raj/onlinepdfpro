@@ -3,7 +3,7 @@
 
 <head>
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net https://onlinepdfpro-proxy.prem736raj.workers.dev blob: data:; worker-src 'self' blob:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -15,7 +15,7 @@
 <meta name="description" content="Generate study flashcards automatically from your PDF textbooks or notes using AI. Export to CSV for Anki or Quizlet. 100% free.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-flashcards.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-flashcards">
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -149,20 +149,20 @@
    }
  </style>
  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="OnlinePDFPro" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
@@ -203,12 +203,12 @@
  </div>
  </div>
 
- <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-   <div class="spinner"></div>
-   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+   <div class="spinner" data-nosnippet></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;" data-nosnippet>Extracting text from PDF...</p>
  </div>
 
- <div class="fc-app" id="fcApp">
+ <div class="fc-app" id="fcApp" data-nosnippet>
    <div class="fc-header">
      <h3 id="deckTitle">Study Deck</h3>
      <div class="fc-btns">
@@ -218,7 +218,7 @@
      </div>
    </div>
 
-   <div class="fc-progress"><div class="fc-progress-bar" id="progressBar" style="width: 0%"></div></div>
+   <div class="fc-progress" data-nosnippet><div class="fc-progress-bar" id="progressBar" style="width: 0%" data-nosnippet></div></div>
 
    <div class="fc-card-wrap" id="cardWrap">
      <div class="fc-card" id="flashcard">
@@ -253,6 +253,7 @@
    </div>
  </div>
 
+ <p id="documentScope" role="status" style="margin:16px 0;color:var(--text-secondary);line-height:1.6">Text is supplied to the AI in a bounded portion. The page reports the pages and characters read after extraction. PDF export supports basic Latin text; CSV preserves other scripts and symbols.</p>
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 24px;">
  <span class="privacy-reminder-icon"></span>
  <span>This tool uses AI processing; review the processing details before uploading.</span>
@@ -306,34 +307,42 @@
   uploadZone.addEventListener('drop', e => { uploadZone.classList.remove('drag-over'); if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
   fileInput.addEventListener('change', e => { if(e.target.files.length) handleFile(e.target.files[0]); });
 
+  let isProcessing = false;
   async function handleFile(file) {
+    if (isProcessing) return;
     if(file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)) { alert("Please upload a PDF file."); return; }
     if(!file.size || file.size > 50 * 1024 * 1024) { alert("Please choose a non-empty PDF up to 50 MB."); return; }
     const signature = new TextDecoder().decode(new Uint8Array(await file.slice(0, 5).arrayBuffer()));
     if(signature !== '%PDF-') { alert("This file does not contain a valid PDF header."); return; }
+    isProcessing = true; cardsData = []; fcApp.style.display = 'none';
+    document.getElementById('documentScope').textContent = '';
+    loadingText.style.color = ''; loadingState.querySelector('.spinner').style.display = '';
     uploadZone.style.display = 'none';
     loadingState.style.display = 'block';
     deckTitle.textContent = file.name.replace('.pdf','') + ' — Deck';
 
+    let loadedPdf = null;
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = await pdfjsLib.getDocument(arrayBuffer).promise; loadedPdf = pdf;
+      let textPagesRead = 0, ocrPagesRead = 0, usedOcr = false;
       let documentText = "";
       for(let i = 1; i <= pdf.numPages; i++) {
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";
         const page = await pdf.getPage(i);
         const tc = await page.getTextContent();
-        documentText += tc.items.map(item => item.str).join(" ") + "\n\n";
+        documentText += "[Page " + i + "]\n" + tc.items.map(item => item.str).join(" ") + "\n\n";
+        textPagesRead = i;
         if(documentText.length > 25000) break;
       }
 
       // OCR fallback for scanned/image PDFs
-      if (documentText.trim().length < 50) {
+      if (documentText.replace(/\[Page \d+\]/g, "").trim().length < 50) {
         if (!cloudOcrConsent.checked) {
           throw new Error('This PDF appears to be scanned. Enable the optional OCR.space consent below to upload page images for text extraction.');
         }
         loadingText.textContent = "Scanned PDF detected. Running OCR...";
-        documentText = "";
+        usedOcr = true; documentText = "";
         const maxOcrPages = Math.min(pdf.numPages, 5);
         for(let i = 1; i <= maxOcrPages; i++) {
           loadingText.textContent = "OCR scanning page " + i + " of " + maxOcrPages + "...";
@@ -346,6 +355,7 @@
           const ctx = canvas.getContext('2d');
           await page.render({ canvasContext: ctx, viewport }).promise;
           const base64 = canvas.toDataURL('image/png');
+          canvas.width = 0; canvas.height = 0; ocrPagesRead = i;
 
           const formData = new FormData();
           formData.append('base64Image', base64);
@@ -365,7 +375,7 @@
           if (!ocrResp.ok) continue;
           const ocrData = await ocrResp.json();
           if(ocrData.ParsedResults && ocrData.ParsedResults[0]) {
-            documentText += ocrData.ParsedResults[0].ParsedText + "\n\n";
+            documentText += "[OCR page " + i + "]\n" + ocrData.ParsedResults[0].ParsedText + "\n\n";
           }
           if(documentText.length > 25000) break;
         }
@@ -375,6 +385,9 @@
         throw new Error("Could not extract text from this PDF. The document may be empty or in an unsupported format.");
       }
 
+      const truncated = documentText.length > 25000;
+      documentText = documentText.slice(0, 25000);
+      document.getElementById('documentScope').textContent = (usedOcr ? 'OCR attempted on the first ' + ocrPagesRead : 'Text read from the first ' + textPagesRead) + ' of ' + pdf.numPages + ' pages. Sent ' + documentText.length.toLocaleString() + ' characters' + (truncated ? ' (truncated at 25,000).' : '.') + ' Cards cover only the supplied portion; check their accuracy against the PDF.';
       loadingText.textContent = "AI is generating flashcards...";
 
       const numCards = parseInt(cardCountSelect.value) || 10;
@@ -382,13 +395,14 @@
 
       const response = await fetch(API_URL, {
         method: 'POST',
+        signal: AbortSignal.timeout(60000),
         headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': aiToken },
         body: JSON.stringify({
           messages: [
             { role: "system", content: `You are a study flashcard generator. Create exactly ${numCards} high-quality study flashcards from the document.
 
 RULES:
-- Generate exactly ${numCards} flashcards
+- Generate exactly ${numCards} flashcards using only the supplied portion; do not imply missing pages were read
 - Each flashcard must have a clear QUESTION on "front" and a DETAILED ANSWER on "back"
 - Questions should test understanding, not just definitions
 - Answers must be 2-4 sentences explaining the concept clearly
@@ -411,11 +425,11 @@ No markdown, no code fences, just the raw JSON array.` },
 
       if(data.choices && data.choices[0]) {
         const jsonText = data.choices[0].message.content;
-        const parsed = JSON.parse(jsonText);
-        cardsData = Array.isArray(parsed) ? parsed : (parsed.flashcards || parsed.cards || Object.values(parsed)[0]);
+        const parsed = JSON.parse(String(jsonText).replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim());
+        cardsData = Array.isArray(parsed) ? parsed : parsed && (parsed.flashcards || parsed.cards);
 
-        if(!Array.isArray(cardsData) || cardsData.length === 0) {
-          throw new Error("No flashcards generated");
+        if(!Array.isArray(cardsData) || cardsData.length === 0 || cardsData.length > 100 || cardsData.some(card => !card || typeof card.front !== 'string' || !card.front.trim() || typeof card.back !== 'string' || !card.back.trim() || card.front.length > 4000 || card.back.length > 12000)) {
+          cardsData = []; throw new Error("The AI returned invalid flashcards. Please try again.");
         }
 
         totalCards.textContent = cardsData.length;
@@ -423,10 +437,10 @@ No markdown, no code fences, just the raw JSON array.` },
         showCard(0);
       } else if(data.error) {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Error: " + data.error.message;
+        throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'AI service unavailable. Try again.');
       } else {
         loadingState.style.display = 'block';
-        loadingText.textContent = "Could not generate flashcards. Please try again.";
+        throw new Error("Could not generate flashcards. Please try again.");
       }
     } catch(err) {
       console.error(err);
@@ -435,8 +449,13 @@ No markdown, no code fences, just the raw JSON array.` },
       }
       loadingText.textContent = "Error: " + (err.message || "Please try again.");
       loadingText.style.color = "var(--error, red)";
+      loadingState.querySelector('.spinner').style.display = 'none'; uploadZone.style.display = 'block';
+      cardsData = []; fcApp.style.display = 'none';
+    } finally {
+      if (loadedPdf) { try { await loadedPdf.destroy(); } catch (_) {} }
+      resetTurnstile();
+      isProcessing = false; fileInput.value = '';
     }
-    resetTurnstile();
   }
 
   flashcard.addEventListener('click', () => flashcard.classList.toggle('flipped'));
@@ -503,8 +522,8 @@ No markdown, no code fences, just the raw JSON array.` },
     if(!cardsData || cardsData.length === 0) return;
     let csv = "";
     cardsData.forEach(card => {
-      let front = card.front.replace(/"/g, '""');
-      let back = card.back.replace(/"/g, '""');
+      let front = (/^[=+\-@\t\r]/.test(card.front) ? "'" + card.front : card.front).replace(/"/g, '""');
+      let back = (/^[=+\-@\t\r]/.test(card.back) ? "'" + card.back : card.back).replace(/"/g, '""');
       csv += '"' + front + '","' + back + '"\r\n';
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -514,71 +533,32 @@ No markdown, no code fences, just the raw JSON array.` },
     link.click();
   });
 
-  // PDF Download
+  // Printable cards: paginate long questions and answers instead of clipping them.
   downloadPdfBtn.addEventListener('click', () => {
-    if(!cardsData || cardsData.length === 0) return;
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
-    const w = doc.internal.pageSize.getWidth();
-    const h = doc.internal.pageSize.getHeight();
-    const gradColors = [
-      [[102,126,234],[118,75,162]],
-      [[240,147,251],[245,87,108]],
-      [[79,172,254],[0,242,254]],
-      [[67,233,123],[56,249,215]],
-      [[250,112,154],[254,225,64]],
-      [[161,140,209],[251,194,235]],
-      [[252,203,144],[213,126,235]],
-      [[224,195,252],[142,197,252]],
-      [[245,175,25],[241,39,17]],
-      [[102,126,234],[0,210,255]]
-    ];
-
-    cardsData.forEach((card, i) => {
-      if(i > 0) doc.addPage();
-      const [c1, c2] = gradColors[i % gradColors.length];
-
-      // Gradient background (simulate with colored rect)
-      doc.setFillColor(c1[0], c1[1], c1[2]);
-      doc.rect(0, 0, w, h/2, 'F');
-      doc.setFillColor(245, 245, 245);
-      doc.rect(0, h/2, w, h/2, 'F');
-
-      // Card number badge
-      doc.setFontSize(10);
-      doc.setTextColor(255, 255, 255);
-      doc.text((i+1) + ' / ' + cardsData.length, w - 20, 15, { align: 'right' });
-
-      // Question label
-      doc.setFontSize(9);
-      doc.setTextColor(255, 255, 255);
-      doc.text('QUESTION', 20, 25);
-
-      // Question text
-      doc.setFontSize(18);
-      doc.setTextColor(255, 255, 255);
-      const qLines = doc.splitTextToSize(card.front, w - 40);
-      const qY = (h/2 - qLines.length * 9) / 2 + 15;
-      doc.text(qLines, w/2, qY, { align: 'center' });
-
-      // Answer label
-      doc.setFontSize(9);
-      doc.setTextColor(100, 100, 100);
-      doc.text('ANSWER', 20, h/2 + 15);
-
-      // Answer text
-      doc.setFontSize(12);
-      doc.setTextColor(50, 50, 50);
-      const aLines = doc.splitTextToSize(card.back, w - 40);
-      doc.text(aLines, 20, h/2 + 30);
-
-      // Divider line
-      doc.setDrawColor(c1[0], c1[1], c1[2]);
-      doc.setLineWidth(0.8);
-      doc.line(20, h/2 + 5, w - 20, h/2 + 5);
-    });
-
-    doc.save('flashcards.pdf');
+    if (!cardsData.length) return;
+    if (cardsData.some(card => /[^\x20-\x7E\n\r\t]/.test(card.front + card.back))) { alert('This PDF exporter supports basic Latin text. Use CSV to keep other scripts and symbols intact.'); return; }
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const width = doc.internal.pageSize.getWidth(), height = doc.internal.pageSize.getHeight();
+      let y;
+      const header = (index, continued = false) => {
+        doc.setFillColor(102,126,234); doc.rect(0,0,width,22,'F');
+        doc.setTextColor(255,255,255); doc.setFontSize(12);
+        doc.text('Card ' + (index + 1) + ' / ' + cardsData.length + (continued ? ' (continued)' : ''),20,14); y = 35;
+      };
+      const writeBlock = (index,label,text,size) => {
+        doc.setTextColor(75,75,75); doc.setFontSize(10); doc.text(label,20,y); y += 9;
+        doc.setFontSize(size); const lines = doc.splitTextToSize(text,width-40), lineHeight = size * .45;
+        for (const line of lines) {
+          if (y + lineHeight > height-20) { doc.addPage(); header(index,true); doc.setTextColor(50,50,50); doc.setFontSize(size); }
+          doc.text(line,20,y); y += lineHeight;
+        }
+        y += 12;
+      };
+      cardsData.forEach((card,index) => { if(index)doc.addPage();header(index);writeBlock(index,'QUESTION',card.front,16); if(y>height-35){doc.addPage();header(index,true);}writeBlock(index,'ANSWER',card.back,12); });
+      doc.save('flashcards.pdf');
+    } catch(error) { alert('Could not export cards: ' + error.message); }
   });
 })();
 
@@ -592,7 +572,7 @@ No markdown, no code fences, just the raw JSON array.` },
     const container = document.getElementById('turnstileWidget');
     if (!container) return;
     turnstileWidgetId = window.turnstile.render(container, {
-      sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+      sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
       callback: window.onTurnstileSuccess,
       'expired-callback': window.onTurnstileExpired,
       'error-callback': window.onTurnstileExpired,

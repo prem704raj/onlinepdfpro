@@ -76,6 +76,21 @@ export function rememberObjectsForHistory(objects) {
   });
 }
 
+export function rememberExtractedPageForHistory(page, objects) {
+  // Lazy text detection is document data, not an edit. Every earlier snapshot
+  // that contains this page must keep all its original text selectable.
+  editorState.history.forEach(entry => {
+    const pageIndex = entry.pages.findIndex(value => value.id === page.id);
+    if (pageIndex < 0) return;
+    const known = new Set(entry.objects.map(object => object.id));
+    objects.forEach(object => {
+      if (!known.has(object.id)) entry.objects.push(cloneObject({ ...object, page: pageIndex + 1 }));
+    });
+    entry.pages[pageIndex].objects = [...new Set([...entry.pages[pageIndex].objects, ...objects.map(object => object.id)])];
+    entry.pages[pageIndex].textLoaded = true;
+  });
+}
+
 export function resetHistory() {
   editorState.history = [snapshot()];
   editorState.historyIndex = 0;

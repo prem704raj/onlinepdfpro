@@ -4,16 +4,16 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Unlock PDF — Remove Password from PDF Online Free | OnlinePDFPro</title>
  <meta name="description"
  content="Remove password from PDF files online for free. Enter the password to decrypt a protected PDF. 100% free.">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-unlock.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-unlock">
 
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-unlock.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-unlock">
  <meta property="og:title" content="Unlock PDF — Remove Password from PDF Online Free | OnlinePDFPro">
  <meta property="og:description"
  content="Remove password from PDF files online for free. Enter the password to decrypt a protected PDF.">
@@ -185,17 +185,7 @@
  }
  </style>
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlinepdfpro.com/" },
- { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://onlinepdfpro.com/tools.html" },
- { "@type": "ListItem", "position": 3, "name": "Unlock PDF", "item": "https://onlinepdfpro.com/tools/pdf-unlock.html" }
- ]
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"Unlock PDF","item":"https://onlinepdfpro.com/tools/pdf-unlock"}]}</script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -207,21 +197,21 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="OnlinePDFPro - Free PDF Tools" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -286,7 +276,7 @@
  <button onclick="unlockPDF()" class="unlock-btn" id="unlockBtn"> Unlock PDF</button>
  </div>
 
- <div class="success-box" id="successBox">
+ <div class="success-box" id="successBox" data-nosnippet>
  <h2> PDF Unlocked Successfully!</h2>
  <p style="color:var(--text-secondary);">Password protection has been removed</p>
  <button onclick="downloadUnlocked()" class="download-btn"> Download Unlocked PDF</button>
@@ -466,20 +456,9 @@
  <!-- SEO Content -->
 
  <!-- Ad Spacer -->
- <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+ 
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "Unlock PDF - Remove Password",
- "description": "Remove password from PDF files online for free. Enter the password to decrypt a protected PDF.",
- "url": "https://onlinepdfpro.com/tools/pdf-unlock.html",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Unlock PDF - Remove Password","description":"Remove password from PDF files online for free. Enter the password to decrypt a protected PDF.","url":"https://onlinepdfpro.com/tools/pdf-unlock","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 
 </body>
 

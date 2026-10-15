@@ -20,7 +20,8 @@ const server = http.createServer((req, res) => {
   let relative = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname).replace(/^\/+/, '') || 'index.html';
   let file = path.resolve(site, relative);
   if (!file.startsWith(site + path.sep)) { res.writeHead(403).end(); return; }
-  if (!fs.existsSync(file) && !path.extname(file)) file += '.html';
+  if (fs.existsSync(file + '.html')) file += '.html';
+  else if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
   if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404).end(); return; }
   const types = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.ttf': 'font/ttf' };
   res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' });
@@ -110,7 +111,12 @@ try {
         assert.equal(await page.$eval('#menuToggle', el => el.getAttribute('aria-expanded')), 'false');
         // Render the real signed-in header using only a synthetic local user.
         await page.evaluate(async () => {
-          window.getCurrentUser = async () => ({ email: 'mobile-test@example.invalid', user_metadata: { full_name: 'Mobile test' } });
+          const user = { id: 'mobile-test', email: 'mobile-test@example.invalid', user_metadata: { full_name: 'Mobile test' } };
+          window.supabase = { createClient: () => ({ auth: {
+            getSession: async () => ({ data: { session: { user, access_token: 'synthetic-token', expires_at: Math.floor(Date.now() / 1000) + 3600 } } }),
+            getUser: async () => ({ data: { user } })
+          } }) };
+          await window.updateUserHeader();
           await initializeStoreProfile();
         });
         assert.ok(await reachable(page, '#profileTrigger', 44), 'Signed-in account button must fit on a small phone');

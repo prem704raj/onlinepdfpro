@@ -67,9 +67,14 @@ const MobileMenu = {
     init() {
         const menuToggle = document.getElementById('menuToggle');
         const nav = document.getElementById('nav');
+        const setMenuIcon = (button, icon) => {
+            let span = button.querySelector('span[aria-hidden="true"]');
+            if (!span) { span = document.createElement('span'); span.setAttribute('aria-hidden', 'true'); button.replaceChildren(span); }
+            span.textContent = icon;
+        };
 
         document.querySelectorAll('.menu-toggle').forEach((button) => {
-            if (!button.textContent.trim()) button.textContent = '☰';
+            setMenuIcon(button, button.textContent.trim() || '☰');
             if (!button.getAttribute('aria-label') || button.getAttribute('aria-label') === 'Menu') {
                 button.setAttribute('aria-label', 'Open menu');
             }
@@ -81,7 +86,7 @@ const MobileMenu = {
         if (menuToggle && nav) {
             const closeMenu = () => {
                 nav.classList.remove('active');
-                menuToggle.textContent = '☰';
+                setMenuIcon(menuToggle, '☰');
                 menuToggle.classList.remove('open');
                 menuToggle.setAttribute('aria-expanded', 'false');
                 menuToggle.setAttribute('aria-label', 'Open menu');
@@ -89,7 +94,7 @@ const MobileMenu = {
             menuToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = nav.classList.toggle('active');
-                menuToggle.textContent = isOpen ? '✕' : '☰';
+                setMenuIcon(menuToggle, isOpen ? '✕' : '☰');
                 menuToggle.classList.toggle('open', isOpen);
                 menuToggle.setAttribute('aria-expanded', String(isOpen));
                 menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');

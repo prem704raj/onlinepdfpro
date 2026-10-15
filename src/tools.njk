@@ -1,6 +1,6 @@
 ---
 title: "Free Online PDF Tools"
-description: "45+ browser-based document tools for PDF, image, conversion, OCR and productivity workflows. Processing details are shown on each tool; no registration is required for local tools."
+description: "46 Free Tools for PDF, image, conversion, OCR and productivity workflows. Processing details are shown on each tool; no registration is required for local tools."
 permalink: /tools.html
 bodyClass: tp-body
 ---
@@ -39,7 +39,7 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 .tp-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(44,36,24,0.06); border-color: var(--tp-accent); }
 .tp-card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .tp-card-icon svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.tp-card-name { font-family: var(--tp-serif); font-size: 0.95rem; font-weight: 500; color: var(--tp-text); margin-bottom: 2px; }
+.tp-card-name { font-family: var(--tp-serif); font-size: 0.95rem; font-weight: 500; color: var(--tp-text); line-height: inherit; margin: 0 0 2px; }
 .tp-card-desc { font-family: var(--tp-sans); font-size: 0.75rem; color: var(--tp-text-muted); line-height: 1.4; }
 .tp-card.coming-soon { opacity: 0.45; cursor: default; pointer-events: none; }
 .tp-fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -83,7 +83,7 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
         {% for tool in category.tools %}
         <a class="tp-card" href="{{ tool.href | url }}">
             <div class="tp-card-icon" style="background: {{ tool.color }};"><svg viewBox="0 0 24 24">{{ tool.svg | safe }}</svg></div>
-            <div><div class="tp-card-name">{{ tool.name }}</div><div class="tp-card-desc">{{ tool.desc }}</div></div>
+            <div><h3 class="tp-card-name">{{ tool.name }}</h3><div class="tp-card-desc">{{ tool.desc }}</div></div>
         </a>
         {% endfor %}
 </div>

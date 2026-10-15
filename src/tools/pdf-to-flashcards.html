@@ -15,7 +15,7 @@
 <meta name="description" content="Generate study flashcards automatically from your PDF textbooks or notes using AI. Export to CSV for Anki or Quizlet. 100% free.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-flashcards.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-flashcards">
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -161,8 +161,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
@@ -203,12 +203,12 @@
  </div>
  </div>
 
- <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-   <div class="spinner"></div>
-   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+   <div class="spinner" data-nosnippet></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;" data-nosnippet>Extracting text from PDF...</p>
  </div>
 
- <div class="fc-app" id="fcApp">
+ <div class="fc-app" id="fcApp" data-nosnippet>
    <div class="fc-header">
      <h3 id="deckTitle">Study Deck</h3>
      <div class="fc-btns">
@@ -218,7 +218,7 @@
      </div>
    </div>
 
-   <div class="fc-progress"><div class="fc-progress-bar" id="progressBar" style="width: 0%"></div></div>
+   <div class="fc-progress" data-nosnippet><div class="fc-progress-bar" id="progressBar" style="width: 0%" data-nosnippet></div></div>
 
    <div class="fc-card-wrap" id="cardWrap">
      <div class="fc-card" id="flashcard">

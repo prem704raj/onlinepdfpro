@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -15,11 +15,11 @@
 <meta name="description" content="Free online JPG to PDF converter. Convert your images (JPG, PNG) to PDF easily.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/jpg-to-pdf.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/jpg-to-pdf">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://onlinepdfpro.com/tools/jpg-to-pdf.html">
+<meta property="og:url" content="https://onlinepdfpro.com/tools/jpg-to-pdf">
 <meta property="og:title" content="Images to PDF Free — Convert JPG, PNG to PDF Online | OnlinePDFPro">
 <meta property="og:description" content="Convert images to PDF free online. Combine JPG, PNG, WEBP photos into a single PDF document. Fast, drag-and-drop reorder, instant download.">
 <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -28,7 +28,7 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://onlinepdfpro.com/tools/jpg-to-pdf.html">
+<meta name="twitter:url" content="https://onlinepdfpro.com/tools/jpg-to-pdf">
 <meta name="twitter:title" content="Images to PDF Free — Convert JPG, PNG to PDF Online | OnlinePDFPro">
 <meta name="twitter:description" content="Convert images to PDF free online. Combine JPG, PNG, WEBP photos into a single PDF document. Fast, drag-and-drop reorder, instant download.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -42,8 +42,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
 <!-- Hreflang (if you plan multilingual) -->
-<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/jpg-to-pdf.html">
-<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/jpg-to-pdf.html">
+<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/jpg-to-pdf">
+<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/jpg-to-pdf">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,32 +217,7 @@
 
  <!-- MOBILE FIX -->
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- {
- "@type": "ListItem",
- "position": 1,
- "name": "Home",
- "item": "https://onlinepdfpro.com/"
- },
- {
- "@type": "ListItem",
- "position": 2,
- "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
- },
- {
- "@type": "ListItem",
- "position": 3,
- "name": "JPG to PDF Converter",
- "item": "https://onlinepdfpro.com/tools/jpg-to-pdf.html"
- }
- ]
-}
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"JPG to PDF Converter","item":"https://onlinepdfpro.com/tools/jpg-to-pdf"}]}</script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -254,19 +229,19 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -316,18 +291,18 @@
  </button>
  </div>
 
- <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;">
+ <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;" data-nosnippet>
  <h3 style="color: var(--text-primary); margin-bottom: 20px;"> Crafting your A4 PDF pages...</h3>
  </div>
 
  <!-- Ad Spacer -->
- <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+ 
 
  <!-- Added SEO Sections -->
 
  </div>
 
-</main>
+<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/turn-note-images-into-a-readable-pdf/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <!-- download.js removed: CDN was broken (404). Using native Blob download instead -->
@@ -336,6 +311,7 @@
  <script>
  let images = [];
  let dragIndex = null;
+ let isConverting = false;
 
  // Click to upload
  document.getElementById('dropArea').onclick = () => document.getElementById('fileInput').click();
@@ -346,7 +322,7 @@
  dropArea.ondragover = e => { e.preventDefault(); dropArea.style.borderColor = '#2563eb'; };
  dropArea.ondragleave = () => { dropArea.style.borderColor = '#e2e8f0'; };
  dropArea.ondrop = e => {
- e.preventDefault();
+ e.preventDefault(); e.stopPropagation();
  dropArea.style.borderColor = '#e2e8f0';
  addImages(e.dataTransfer.files);
  };
@@ -359,17 +335,20 @@
  };
 
  function addImages(fileList) {
+ if (isConverting) return;
+ if (images.length + fileList.length > 100) { alert('Add up to 100 images per PDF.'); return; }
  // Use Promise.all to ensure sequential order matches selection
  const filePromises = [...fileList].map(file => {
  return new Promise(resolve => {
- if (file.type.startsWith('image/')) {
+ if (file.type.startsWith('image/') && file.size > 0 && file.size <= 50 * 1024 * 1024) {
  const reader = new FileReader();
  reader.onload = e => {
  resolve(e.target.result);
  };
+ reader.onerror = () => { alert('An image could not be read. Please select it again.'); resolve(null); };
  reader.readAsDataURL(file);
  } else {
- resolve(null);
+ alert('Choose a non-empty image up to 50 MB.'); resolve(null);
  }
  });
  });
@@ -457,8 +436,10 @@
  }
 
  async function convertToPDF() {
+ if (isConverting) return;
  if (images.length === 0) return alert("Add images first!");
 
+ isConverting = true;
  document.getElementById('convertSection').style.display = 'none';
  document.getElementById('progress').style.display = 'block';
 
@@ -476,13 +457,8 @@
 
  // Safe scaling — 4K resolution limit for maximum quality
  const MAX_DIM = 4096;
- if (w > h && w > MAX_DIM) {
- h = Math.round(h * MAX_DIM / w);
- w = MAX_DIM;
- } else if (h > w && h > MAX_DIM) {
- w = Math.round(w * MAX_DIM / h);
- h = MAX_DIM;
- }
+ const scale = Math.min(1, MAX_DIM / Math.max(w, h));
+ w = Math.max(1, Math.round(w * scale)); h = Math.max(1, Math.round(h * scale));
 
  canvas.width = w;
  canvas.height = h;
@@ -543,6 +519,7 @@
  alert("An unexpected error occurred building the PDF. Please try again.");
  }
 
+ isConverting = false;
  document.getElementById('progress').style.display = 'none';
  document.getElementById('convertSection').style.display = 'block';
  }
@@ -550,28 +527,7 @@
 
 <script defer src="../counter.js"></script>
 <!-- Schema.org Structured Data -->
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "JPG to PDF Converter",
- "description": "Convert images to PDF online free — Combine JPG and PNG photos into a PDF. No registration required.",
- "url": "https://onlinepdfpro.com/tools/jpg-to-pdf.html",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "browserRequirements": "Requires HTML5 support",
- "offers": {
- "@type": "Offer",
- "price": "0",
- "priceCurrency": "USD"
- },
- "author": {
- "@type": "Organization",
- "name": "OnlinePDFPro",
- "url": "https://onlinepdfpro.com"
- }
-}
-</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"JPG to PDF Converter","description":"Convert images to PDF online free — Combine JPG and PNG photos into a PDF. No registration required.","url":"https://onlinepdfpro.com/tools/jpg-to-pdf","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires HTML5 support","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com/"}}</script>
 
 
 

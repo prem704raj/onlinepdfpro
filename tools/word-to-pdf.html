@@ -3,7 +3,7 @@
 
 <head>
    
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://challenges.cloudflare.com https://onlinepdfpro-proxy.prem736raj.workers.dev; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -12,11 +12,11 @@
     <meta name="description" content="Convert Word to PDF free online. Transform Microsoft Word (.docx) files into professional, publication-ready PDF documents with exact formatting and fonts.">
 <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/word-to-pdf.html">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/word-to-pdf">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onlinepdfpro.com/tools/word-to-pdf.html">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/word-to-pdf">
     <meta property="og:title" content="Word to PDF Converter Online | OnlinePDFPro">
     <meta property="og:description" content="Convert Word to PDF free online with exact formatting, fonts, and images preserved.">
     <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -82,7 +82,7 @@
             width: 0%;
         }
     </style>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
     <header class="header">
@@ -92,8 +92,8 @@
                 <span class="logo-text">OnlinePDF<span class="accent">Pro</span></span>
             </a>
             <nav class="nav-links nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
             <div class="header-actions">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
@@ -131,14 +131,14 @@
             </div>
 
             <!-- Processing Section -->
-            <div id="processingSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 60px 20px; border-radius: 20px; margin-top: 20px;">
-                <div class="spinner"></div>
+            <div id="processingSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 60px 20px; border-radius: 20px; margin-top: 20px;" data-nosnippet>
+                <div class="spinner" data-nosnippet></div>
                 <h2 style="margin-bottom: 12px;">Rendering Word to PDF...</h2>
-                <p id="processingStatus" style="color: var(--text-secondary); margin-bottom: 8px;">
+                <p id="processingStatus" style="color: var(--text-secondary); margin-bottom: 8px;" data-nosnippet>
                     Uploading document to conversion server...
                 </p>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" id="progressBar"></div>
+                <div class="progress-bar-container" data-nosnippet>
+                    <div class="progress-bar-fill" id="progressBar" data-nosnippet></div>
                 </div>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); opacity: 0.7; margin-top: 12px;">
                     LibreOffice rendering typically takes 2–5 seconds.
@@ -146,15 +146,15 @@
             </div>
 
             <!-- Results Section -->
-            <div id="resultsSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 50px 20px; border-radius: 20px; margin-top: 20px;">
+            <div id="resultsSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 50px 20px; border-radius: 20px; margin-top: 20px;" data-nosnippet>
                 <div style="font-size: 56px; margin-bottom: 16px;">✅</div>
                 <h2 style="margin-bottom: 10px; color: var(--success, #16a34a);">Conversion Complete!</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">
                     Your Word document has been successfully rendered to a high-fidelity PDF file.
                 </p>
-                <div class="file-pill" id="resultPill">
+                <div class="file-pill" id="resultPill" data-nosnippet>
                     <span>📄</span>
-                    <span id="resultFilename" style="font-weight: 600;">document.pdf</span>
+                    <span id="resultFilename" style="font-weight: 600;" data-nosnippet>document.pdf</span>
                 </div>
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
                     <a id="downloadBtn" class="btn btn-primary btn-lg" style="padding: 16px 44px; font-size: 1.1rem; border-radius: 12px; text-decoration: none; display: inline-block;">
@@ -208,6 +208,7 @@
     </main>
 
     <script src="../js/app.js?v=96"></script>
+    <script src="/js/vendor/pdfjs/pdf.min.js"></script>
     <script>
         (function () {
             const uploadZone = document.getElementById('uploadZone');
@@ -230,7 +231,7 @@
                 const container = document.getElementById('turnstileWidget');
                 if (!container) return;
                 turnstileWidgetId = window.turnstile.render(container, {
-                    sitekey: '0x4AAAAAAEh3z6dQZ138ae8E',
+                    sitekey: '0x4AAAAAAEh3z6dQZl38ae8E',
                     callback: window.onTurnstileSuccess,
                     'expired-callback': window.onTurnstileExpired,
                     'error-callback': window.onTurnstileExpired,
@@ -248,6 +249,7 @@
                         'Content-Type': 'application/json',
                         'X-Turnstile-Token': turnstileToken
                     },
+                    signal: AbortSignal.timeout(20000),
                     body: JSON.stringify({ target: '/convert/word-to-pdf' })
                 });
                 const body = await response.json().catch(() => ({}));
@@ -342,6 +344,7 @@
                             'X-Conversion-Token': conversionTicket,
                         },
                         body: arrayBuffer,
+                        signal: AbortSignal.timeout(120000),
                     });
 
                     progressBar.style.width = '80%';
@@ -359,6 +362,14 @@
                     progressBar.style.width = '90%';
 
                     const blob = await response.blob();
+                    const outputHeader = new Uint8Array(await blob.slice(0, 5).arrayBuffer());
+                    if (new TextDecoder().decode(outputHeader) !== '%PDF-' || blob.size > 100 * 1024 * 1024) throw new Error('The conversion service returned an invalid or oversized document. Please try again.');
+                    try {
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
+                        const outputPdf = await pdfjsLib.getDocument({data:await blob.arrayBuffer()}).promise;
+                        if (!outputPdf.numPages) throw new Error('No pages');
+                        await outputPdf.destroy();
+                    } catch (_) { throw new Error('The conversion service returned an invalid PDF document. Please try again.'); }
                     const url = window.URL.createObjectURL(blob);
 
                     const outputName = file.name.replace(/\.\w+$/i, '') + '.pdf';
@@ -376,7 +387,7 @@
                 } catch (err) {
                     console.error('Word to PDF conversion error:', err);
                     alert('Error: ' + err.message);
-                    uploadZone.style.display = 'block';
+                    uploadZone.style.display = 'block'; fileInput.value = '';
                     processingSection.style.display = 'none';
                     turnstileToken = '';
                     if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);

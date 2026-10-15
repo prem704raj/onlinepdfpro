@@ -49,12 +49,12 @@ bodyClass: pdf-editor-body
     </label>
     <button class="pdf-button pdf-button-quiet" id="pdf-editor-sample-button" type="button">Try sample PDF</button>
     <p class="pdf-drop-hint">or drag a PDF into this area</p>
-    <div id="pdf-load-status" class="pdf-load-status" role="status" aria-live="polite" hidden></div>
+    <div id="pdf-load-status" data-nosnippet class="pdf-load-status" role="status" aria-live="polite" hidden></div>
     <div id="pdf-upload-error" class="pdf-error-message" role="alert" hidden></div>
     <p class="pdf-format-note">Large files may take longer to analyze. Pages render as you scroll.</p>
   </section>
 
-  <section class="pdf-editor-workspace" id="pdf-editor-workspace" hidden aria-label="PDF editor workspace">
+  <section class="pdf-editor-workspace" id="pdf-editor-workspace" data-nosnippet hidden aria-label="PDF editor workspace">
     <div class="pdf-editor-document-bar">
       <div class="pdf-document-name" id="pdf-document-name" title="Opened PDF"></div>
       <div class="pdf-document-actions">
@@ -172,7 +172,7 @@ bodyClass: pdf-editor-body
       <button class="pdf-button pdf-button-quiet" id="find-previous-button" type="button" disabled>Previous</button>
       <button class="pdf-button pdf-button-quiet" id="find-next-button" type="button" disabled>Next</button>
       <button class="pdf-button pdf-button-primary" id="replace-all-button" type="button" disabled>Replace all</button>
-      <span id="find-result-status" role="status" aria-live="polite"></span>
+      <span id="find-result-status" data-nosnippet role="status" aria-live="polite"></span>
     </div>
 
     <div class="pdf-editor-layout">
@@ -190,12 +190,12 @@ bodyClass: pdf-editor-body
       </aside>
 
       <section class="pdf-stage" aria-label="PDF page view">
-        <div class="pdf-stage-status" id="pdf-stage-status" role="status" aria-live="polite"></div>
+        <div class="pdf-stage-status" id="pdf-stage-status" data-nosnippet role="status" aria-live="polite"></div>
         <button class="pdf-button pdf-button-quiet pdf-run-ocr-button" id="run-page-ocr-button" type="button" hidden>Run OCR locally</button>
         <div class="pdf-page-scroll" id="pdf-page-scroll" tabindex="0" aria-label="PDF pages, scroll to navigate">
           <div class="pdf-pages-container" id="pdf-pages-container"></div>
         </div>
-        <div class="pdf-mobile-status">
+        <div class="pdf-mobile-status" data-nosnippet>
           <span id="mobile-page-count">Page 1 of 1</span>
           <span>Click or tap text to edit · use Move to drag</span>
         </div>
@@ -303,7 +303,7 @@ bodyClass: pdf-editor-body
       </aside>
     </div>
     <p class="pdf-editor-shortcuts">Click text to edit. Choose Move to drag it. Enter saves your edit; Escape cancels it. Ctrl/Cmd + Z undoes a change.</p>
-    <p class="pdf-export-notice" id="pdf-export-notice" role="status" aria-live="polite" hidden></p>
+    <p class="pdf-export-notice" id="pdf-export-notice" data-nosnippet role="status" aria-live="polite" hidden></p>
   </section>
 
   <dialog class="pdf-password-dialog" id="pdf-password-dialog" aria-labelledby="pdf-password-title">

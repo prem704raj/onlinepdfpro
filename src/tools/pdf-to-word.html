@@ -12,11 +12,11 @@
     <meta name="description" content="Convert PDF to Word (.docx) free online. Reconstruct text, tables, images, and reading order with layout-aware pdf2docx conversion.">
 <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-word.html">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-to-word">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-to-word.html">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-to-word">
     <meta property="og:title" content="PDF to Word Converter Online | OnlinePDFPro">
     <meta property="og:description" content="Convert PDF to Word (.docx) free online with automated layout detection. Preserves tables, fonts, and images.">
     <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -92,8 +92,8 @@
                 <span class="logo-text">OnlinePDF<span class="accent">Pro</span></span>
             </a>
             <nav class="nav-links nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
             <div class="header-actions">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
@@ -132,14 +132,14 @@
             </div>
 
             <!-- Processing Section -->
-            <div id="processingSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 60px 20px; border-radius: 20px; margin-top: 20px;">
-                <div class="spinner"></div>
+            <div id="processingSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 60px 20px; border-radius: 20px; margin-top: 20px;" data-nosnippet>
+                <div class="spinner" data-nosnippet></div>
                 <h2 style="margin-bottom: 12px;">Converting PDF to Word...</h2>
-                <p id="processingStatus" style="color: var(--text-secondary); margin-bottom: 8px;">
+                <p id="processingStatus" style="color: var(--text-secondary); margin-bottom: 8px;" data-nosnippet>
                     Uploading and analyzing document layout...
                 </p>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" id="progressBar"></div>
+                <div class="progress-bar-container" data-nosnippet>
+                    <div class="progress-bar-fill" id="progressBar" data-nosnippet></div>
                 </div>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); opacity: 0.7; margin-top: 12px;">
                     Conversion time varies with document length and service availability; review the processing notice before uploading.
@@ -147,15 +147,15 @@
             </div>
 
             <!-- Results Section -->
-            <div id="resultsSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 50px 20px; border-radius: 20px; margin-top: 20px;">
+            <div id="resultsSection" class="glass-card fade-in" style="display: none; text-align: center; padding: 50px 20px; border-radius: 20px; margin-top: 20px;" data-nosnippet>
                 <div style="font-size: 56px; margin-bottom: 16px;">✅</div>
                 <h2 style="margin-bottom: 10px; color: var(--success, #16a34a);">Conversion Complete!</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 24px;">
                     Your PDF has been successfully converted into an editable Microsoft Word document.
                 </p>
-                <div class="file-pill" id="resultPill">
+                <div class="file-pill" id="resultPill" data-nosnippet>
                     <span>📄</span>
-                    <span id="resultFilename" style="font-weight: 600;">document.docx</span>
+                    <span id="resultFilename" style="font-weight: 600;" data-nosnippet>document.docx</span>
                 </div>
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
                     <a id="downloadBtn" class="btn btn-primary btn-lg" style="padding: 16px 44px; font-size: 1.1rem; border-radius: 12px; text-decoration: none; display: inline-block;">

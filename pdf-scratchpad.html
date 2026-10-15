@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <!-- Primary Meta Tags -->
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +13,11 @@
  content="A browser notepad designed for drafting text and organizing content extracted from PDFs. Saves drafts while you work.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow">
- <link rel="canonical" href="https://onlinepdfpro.com/pdf-scratchpad.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/pdf-scratchpad">
 
  <!-- Open Graph -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/pdf-scratchpad.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/pdf-scratchpad">
  <meta property="og:title" content="PDF Scratchpad Free Online | OnlinePDFPro">
  <meta property="og:description"
  content="Organize your extracted PDF text or draft new content with our real-time auto-saving browser notepad.">
@@ -247,21 +247,21 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="index.html" class="logo">
+ <a href="/" class="logo">
  <img src="logo.png" alt="" aria-hidden="true" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
@@ -324,7 +324,11 @@
  const wordCountSpan = document.getElementById('wordCount');
  const charCountSpan = document.getElementById('charCount');
 
- let notes = JSON.parse(localStorage.getItem('pdf_scratchpad_notes')) || [];
+ let notes = [];
+ try {
+ const stored = JSON.parse(localStorage.getItem('pdf_scratchpad_notes') || '[]');
+ if (Array.isArray(stored)) notes = stored.filter(n => n && typeof n.id === 'string' && typeof n.title === 'string' && typeof n.content === 'string' && typeof n.updatedAt === 'string');
+ } catch (error) { /* A damaged saved draft must not break the editor. */ }
  let activeNoteId = null;
  let saveTimeout = null;
 
@@ -349,7 +353,9 @@
  updateCounts();
  });
 
+ window.addEventListener('pagehide', () => { if (saveTimeout) saveActiveNote(); });
  downloadBtn.addEventListener('click', () => {
+ if (saveTimeout) saveActiveNote();
  const activeNote = notes.find(n => n.id === activeNoteId);
  if (!activeNote) return;
 
@@ -369,6 +375,7 @@
  }
 
  function createNewNote() {
+ if (saveTimeout) saveActiveNote();
  const newNote = {
  id: generateId(),
  title: 'Untitled Note',
@@ -383,6 +390,7 @@
 
  function deleteNote(id, event) {
  event.stopPropagation();
+ if (saveTimeout) saveActiveNote();
  notes = notes.filter(n => n.id !== id);
  saveToLocalStorage();
 
@@ -396,6 +404,7 @@
  }
 
  function setActiveNote(id) {
+ if (saveTimeout) saveActiveNote();
  activeNoteId = id;
  const note = notes.find(n => n.id === id);
  if (note) {
@@ -414,6 +423,7 @@
  }
 
  function saveActiveNote() {
+ clearTimeout(saveTimeout); saveTimeout = null;
  if (!activeNoteId) return;
 
  const noteIndex = notes.findIndex(n => n.id === activeNoteId);

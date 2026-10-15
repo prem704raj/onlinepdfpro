@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
 <!-- ===== MUST HAVE SEO META TAGS ===== -->
 <!-- Primary Meta Tags -->
 <title>Speech to Text (Voice to PDF) - Free Online Converter</title>
 <meta name="description" content="Convert English or Hindi speech to text and download a Unicode PDF, Word, or TXT transcript in your browser.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://onlinepdfpro.com/speech-to-text.html">
+<link rel="canonical" href="https://onlinepdfpro.com/speech-to-text">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://onlinepdfpro.com/speech-to-text.html">
+<meta property="og:url" content="https://onlinepdfpro.com/speech-to-text">
 <meta property="og:title" content="Voice to PDF Free — English and Hindi Speech Transcripts | OnlinePDFPro">
 <meta property="og:description" content="Convert English or Hindi speech to a Unicode PDF transcript in your browser.">
 <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -25,7 +25,7 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://onlinepdfpro.com/speech-to-text.html">
+<meta name="twitter:url" content="https://onlinepdfpro.com/speech-to-text">
 <meta name="twitter:title" content="Voice to PDF Free — English and Hindi Speech Transcripts | OnlinePDFPro">
 <meta name="twitter:description" content="Convert English or Hindi speech to a Unicode PDF transcript in your browser.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -39,23 +39,12 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
 <!-- Hreflang (if you plan multilingual) -->
-<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/speech-to-text.html">
-<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/speech-to-text.html">
+<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/speech-to-text">
+<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/speech-to-text">
 
 <link rel="stylesheet" href="css/style.css?v=96">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "Voice to PDF Converter",
- "url": "https://onlinepdfpro.com/speech-to-text.html",
- "description": "Free online voice to Unicode PDF converter for English and Hindi speech.",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Voice to PDF Converter","url":"https://onlinepdfpro.com/speech-to-text","description":"Free online voice to Unicode PDF converter for English and Hindi speech.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
  <style>
  .voice-container {
  max-width: 800px;
@@ -317,11 +306,12 @@
 
  .format-grid {
  display: grid;
- grid-template-columns: repeat(2, 1fr);
+ grid-template-columns: repeat(2, minmax(0, 1fr));
  gap: 15px;
  }
 
  .format-group {
+ min-width: 0;
  display: flex;
  flex-direction: column;
  gap: 8px;
@@ -335,6 +325,7 @@
 
  .format-group select,
  .format-group input {
+ width: 100%;
  padding: 12px;
  border: 2px solid var(--border);
  border-radius: 12px;
@@ -463,20 +454,20 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="index.html" class="logo">
+ <a href="/" class="logo">
  <img src="logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -628,7 +619,7 @@
  </div>
 
  <!-- Ad Spacer -->
- <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+ 
 
  <!-- Added SEO Sections -->
 
@@ -688,11 +679,11 @@
  if (finalTranscript) {
  // Process commands
  let processed = finalTranscript;
- processed = processed.replace(/new line|next line|enter/gi, '\n');
- processed = processed.replace(/period|full stop/gi, '.');
- processed = processed.replace(/comma/gi, ',');
- processed = processed.replace(/question mark/gi, '?');
- processed = processed.replace(/exclamation mark|exclamation point/gi, '!');
+ processed = processed.replace(/\b(?:new line|next line|enter)\b/gi, '\n');
+ processed = processed.replace(/\b(?:period|full stop)\b/gi, '.');
+ processed = processed.replace(/\bcomma\b/gi, ',');
+ processed = processed.replace(/\bquestion mark\b/gi, '?');
+ processed = processed.replace(/\b(?:exclamation mark|exclamation point)\b/gi, '!');
 
  fullTranscript += processed;
  document.getElementById('textArea').value = fullTranscript;
@@ -718,6 +709,9 @@
  } else if (event.error === 'not-allowed') {
  alert('Microphone access denied. Please allow microphone access in your browser settings.');
  stopRecording();
+ } else if (event.error !== 'aborted') {
+ stopRecording();
+ document.getElementById('micStatus').textContent = 'Speech recognition failed (' + event.error + '). Check your browser and connection, then try again.';
  }
  };
 
@@ -748,7 +742,7 @@
 
  try {
  recognition.start();
- } catch (e) { }
+ } catch (e) { isRecording = false; document.getElementById('micStatus').textContent = 'Could not start speech recognition. Try again.'; return; }
 
  document.getElementById('micBtn').classList.add('recording');
  document.getElementById('micBtn').textContent = '⏹️';

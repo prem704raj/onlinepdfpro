@@ -23,8 +23,10 @@ sheet.drawText('COLORED BACKGROUND', { x: 72, y: 470, size: 20, font, color: rgb
 fs.writeFileSync(fixture, await pdf.save());
 const tailOffset = font.widthOfTextAtSize('15%', 20);
 const server = http.createServer((request, response) => {
-  const filename = path.resolve(site, '.' + decodeURIComponent(new URL(request.url, 'http://localhost').pathname));
-  if (!filename.startsWith(site + path.sep) || !fs.existsSync(filename)) return response.writeHead(404).end();
+  let filename = path.resolve(site, '.' + decodeURIComponent(new URL(request.url, 'http://localhost').pathname));
+  if (fs.existsSync(filename + '.html')) filename += '.html';
+  else if (fs.existsSync(filename) && fs.statSync(filename).isDirectory()) filename = path.join(filename, 'index.html');
+  if (!filename.startsWith(site + path.sep) || !fs.existsSync(filename) || fs.statSync(filename).isDirectory()) return response.writeHead(404).end();
   response.setHeader('Content-Type', { '.js': 'application/javascript', '.css': 'text/css', '.html': 'text/html' }[path.extname(filename)] || 'application/octet-stream');
   fs.createReadStream(filename).pipe(response);
 });

@@ -13,6 +13,7 @@ export const editorState = {
   zoom: 1,
   zoomMode: 'fit-width',
   mode: 'select',
+  textMoveEnabled: false,
   dirty: false,
   busy: false,
   password: null,
@@ -39,6 +40,7 @@ export function resetEditorState() {
   editorState.zoom = 1;
   editorState.zoomMode = 'fit-width';
   editorState.mode = 'select';
+  editorState.textMoveEnabled = false;
   editorState.dirty = false;
   editorState.busy = false;
   editorState.password = null;

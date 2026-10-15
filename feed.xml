@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>OnlinePDFPro Blog</title>
-    <link>https://onlinepdfpro.com/blog.html</link>
+    <link>https://onlinepdfpro.com/blog</link>
     <description>Tips, guides, and tutorials for working with PDFs, images, and documents online. 100% free, Tool-specific processing.</description>
     <language>en-us</language>
     <lastBuildDate>Sun, 08 Jun 2026 08:00:00 +0000</lastBuildDate>
@@ -10,7 +10,7 @@
     <image>
       <url>https://onlinepdfpro.com/icon-192.png</url>
       <title>OnlinePDFPro Blog</title>
-      <link>https://onlinepdfpro.com/blog.html</link>
+      <link>https://onlinepdfpro.com/blog</link>
     </image>
 
     <item>

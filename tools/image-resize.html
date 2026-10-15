@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -20,11 +20,11 @@
  <meta name="description" content="Resize images free online. Change width, height, or scale of JPG/PNG images. Maintain aspect ratio or custom dimensions. Fast, instant processing.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/image-resize.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/image-resize">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/image-resize.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/image-resize">
  <meta property="og:title" content="Resize Images Online Free | OnlinePDFPro">
  <meta property="og:description" content="Resize images free online. Change width, height, or scale of JPG/PNG images. Maintain aspect ratio or custom dimensions. Fast, instant processing.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -33,7 +33,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-resize.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/image-resize">
  <meta name="twitter:title" content="Resize Images Online Free | OnlinePDFPro">
  <meta name="twitter:description" content="Resize images free online. Change width, height, or scale of JPG/PNG images. Maintain aspect ratio or custom dimensions. Fast, instant processing.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -47,8 +47,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang (if you plan multilingual) -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/image-resize.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/image-resize.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/image-resize">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/image-resize">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,32 +61,7 @@
 
  <!-- MOBILE FIX -->
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- {
- "@type": "ListItem",
- "position": 1,
- "name": "Home",
- "item": "https://onlinepdfpro.com/"
- },
- {
- "@type": "ListItem",
- "position": 2,
- "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
- },
- {
- "@type": "ListItem",
- "position": 3,
- "name": "Resize Image",
- "item": "https://onlinepdfpro.com/tools/image-resize.html"
- }
- ]
-}
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"Resize Image","item":"https://onlinepdfpro.com/tools/image-resize"}]}</script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -98,20 +73,20 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -236,38 +211,38 @@
  </div>
  </div>
 
- <div id="processingSection" style="display: none;">
- <div class="results-section glass-card" style="padding: 48px; text-align: center;">
+ <div id="processingSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" style="padding: 48px; text-align: center;" data-nosnippet>
  <div
  style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; font-family: 'Outfit', sans-serif;">
- Processing <span id="processedCount">0</span> / <span id="totalCount">0</span>
+ Processing <span id="processedCount" data-nosnippet>0</span> / <span id="totalCount">0</span>
  </div>
  <div class="progress-bar"
- style="height: 12px; background: var(--bg-tertiary); border-radius: 100px; margin-bottom: 32px; overflow: hidden;">
+ style="height: 12px; background: var(--bg-tertiary); border-radius: 100px; margin-bottom: 32px; overflow: hidden;" data-nosnippet>
  <div class="progress-fill" id="overallProgress"
- style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.4s;">
+ style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.4s;" data-nosnippet>
  </div>
  </div>
  <button class="btn btn-secondary" id="cancelBtn">Stop Processing</button>
  </div>
- <div id="processingList" style="margin-top: 32px;"></div>
+ <div id="processingList" style="margin-top: 32px;" data-nosnippet></div>
  </div>
 
- <div id="resultsSection" style="display: none;">
- <div class="results-section glass-card" style="padding: 48px;">
+ <div id="resultsSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" style="padding: 48px;" data-nosnippet>
  <div class="success-message"
- style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;">
+ style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;" data-nosnippet>
  Resizing Complete
  </div>
 
- <div id="resultsList" style="margin-bottom: 40px;"></div>
+ <div id="resultsList" style="margin-bottom: 40px;" data-nosnippet></div>
 
- <div class="download-section">
+ <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.ZIP)</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
  </div>
- <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+ <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Privacy sweep in 5:00</div>
  </div>
  <div class="action-buttons mt-lg" style="text-align: center;">
  <button class="btn btn-secondary" id="resizeAnother">New Session</button>
@@ -285,6 +260,7 @@
 </main>
 
  <script src="../js/app.js?v=96"></script>
+ <script src="/js/vendor/jszip/jszip.min.js"></script>
  <script>
 
  function escapeHTML(str) {
@@ -376,7 +352,7 @@
  };
 
  widthInput.oninput = () => {
- targetWidth = parseInt(widthInput.value) || 1;
+ targetWidth = Number(widthInput.value);
  if (lockAspect) {
  targetHeight = Math.round(targetWidth / aspectRatio);
  heightInput.value = targetHeight;
@@ -384,7 +360,7 @@
  };
 
  heightInput.oninput = () => {
- targetHeight = parseInt(heightInput.value) || 1;
+ targetHeight = Number(heightInput.value);
  if (lockAspect) {
  targetWidth = Math.round(targetHeight * aspectRatio);
  widthInput.value = targetWidth;
@@ -406,6 +382,7 @@
  for (const file of newFiles) {
  files.push(file);
  thumbnails[file.name] = await createThumbnail(file);
+ if (files.length === 1) { const img = new Image(); await new Promise(resolve => { img.onload = resolve; img.onerror = resolve; img.src = thumbnails[file.name]; }); if (img.naturalWidth && img.naturalHeight) { aspectRatio = img.naturalWidth / img.naturalHeight; targetHeight = Math.max(1, Math.round(targetWidth / aspectRatio)); heightInput.value = targetHeight; } }
  }
  renderFileList();
  uploadZone.style.display = 'none';
@@ -416,6 +393,7 @@
  return new Promise((resolve) => {
  const reader = new FileReader();
  reader.onload = (e) => resolve(e.target.result);
+ reader.onerror = () => resolve('');
  reader.readAsDataURL(file);
  });
  }
@@ -453,6 +431,7 @@
 
  async function startBatchResize() {
  if (files.length === 0) return;
+ if (resizeMode !== 'percentage' && (![targetWidth,targetHeight].every(n => Number.isSafeInteger(n) && n >= 1 && n <= 16384) || targetWidth * targetHeight > 32000000)) { alert('Use whole dimensions from 1 to 16384 pixels, up to 32 million pixels total.'); return; }
  isCancelled = false; results = [];
  fileSection.style.display = 'none';
  processingSection.style.display = 'block';
@@ -512,17 +491,19 @@
  img.onload = () => {
  let newWidth, newHeight;
  if (resizeMode === 'percentage') {
- newWidth = Math.round(img.width * percentageScale / 100);
- newHeight = Math.round(img.height * percentageScale / 100);
+ newWidth = Math.max(1, Math.round(img.width * percentageScale / 100));
+ newHeight = Math.max(1, Math.round(img.height * percentageScale / 100));
  } else {
- newWidth = targetWidth; newHeight = targetHeight;
+ newWidth = targetWidth; newHeight = lockAspect ? Math.max(1, Math.round(targetWidth * img.height / img.width)) : targetHeight;
  }
+ if (newWidth > 16384 || newHeight > 16384 || newWidth * newHeight > 32000000) { URL.revokeObjectURL(img.src); reject(new Error('Result is too large; choose smaller dimensions.')); return; }
  const canvas = document.createElement('canvas');
  canvas.width = newWidth; canvas.height = newHeight;
  const ctx = canvas.getContext('2d');
  ctx.imageSmoothingEnabled = true;
  ctx.imageSmoothingQuality = 'high';
  ctx.drawImage(img, 0, 0, newWidth, newHeight);
+ URL.revokeObjectURL(img.src);
  // Format-aware: preserve PNG as lossless, JPEG/WEBP at max quality
  const isPng = file.type === 'image/png';
  const isWebp = file.type === 'image/webp';
@@ -532,13 +513,17 @@
  else reject(new Error('Canvas failure'));
  }, outMime, 1.0);
  };
- img.onerror = () => reject(new Error('Corrupt image'));
+ img.onerror = () => { URL.revokeObjectURL(img.src); reject(new Error('Corrupt image')); };
  img.src = URL.createObjectURL(file);
  });
  }
 
  function showResults() {
  const successResults = results.filter(r => r.success);
+ let summary = resultsSection.querySelector('.batch-result-status');
+ if (!summary) { summary = document.createElement('p'); summary.className = 'batch-result-status'; summary.setAttribute('role','status'); resultsSection.prepend(summary); }
+ summary.textContent = successResults.length + ' of ' + results.length + ' files processed successfully.' + (results.some(r => !r.success) ? ' Some files could not be decoded or processed. Try valid files again.' : '');
+
  resultsList.innerHTML = successResults.map((result, index) => `
  <div class="batch-file-item" style="margin-bottom: 12px;">
  <div class="batch-file-header" style="margin-bottom: 0;">
@@ -564,7 +549,7 @@
  const successResults = results.filter(r => r.success);
  if (successResults.length === 0) return;
  const zip = new JSZip();
- for (const result of successResults) zip.file(result.name, result.blob);
+ OnlinePDFPro.Downloader.addUniqueZipFiles(zip, successResults);
  const content = await zip.generateAsync({ type: 'blob' });
  OnlinePDFPro.Downloader.saveBlob(content, 'resized-batch.zip');
  };
@@ -580,28 +565,7 @@
  </script>
 
  <!-- Schema.org Structured Data -->
- <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "Resize Images",
- "description": "Resize images to any dimension for free. Maintain aspect ratio. Supports JPG, PNG, WEBP. 100% free.",
- "url": "https://onlinepdfpro.com/tools/image-resize.html",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "browserRequirements": "Requires HTML5 support",
- "offers": {
- "@type": "Offer",
- "price": "0",
- "priceCurrency": "USD"
- },
- "author": {
- "@type": "Organization",
- "name": "OnlinePDFPro",
- "url": "https://onlinepdfpro.com"
- }
-}
-</script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Resize Images","description":"Resize images to any dimension for free. Maintain aspect ratio. Supports JPG, PNG, WEBP. 100% free.","url":"https://onlinepdfpro.com/tools/image-resize","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires HTML5 support","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com/"}}</script>
 
 
 

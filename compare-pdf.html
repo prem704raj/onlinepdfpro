@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <!-- ===== MUST HAVE SEO META TAGS ===== -->
  <!-- Primary Meta Tags -->
  <title>Compare PDFs Online Free | OnlinePDFPro</title>
  <meta name="description" content="Compare two PDF files side by side for free. Spot differences with visual highlighting. Processing details are shown before upload.">
  <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/compare-pdf.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/compare-pdf">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/compare-pdf.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/compare-pdf">
  <meta property="og:title" content="Compare PDFs Online Free | OnlinePDFPro">
  <meta property="og:description" content="Compare two PDF files side by side for free. Spot differences with visual highlighting. Processing details are shown before upload.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -25,7 +25,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/compare-pdf.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/compare-pdf">
  <meta name="twitter:title" content="Compare PDFs Online Free | OnlinePDFPro">
  <meta name="twitter:description" content="Compare two PDF files side by side for free. Spot differences with visual highlighting. Processing details are shown before upload.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -39,24 +39,13 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang (if you plan multilingual) -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/compare-pdf.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/compare-pdf.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/compare-pdf">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/compare-pdf">
 
  <link rel="stylesheet" href="css/style.css?v=96">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
  <link rel="stylesheet" href="css/tools-v2.css">
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "Compare PDF Files",
- "url": "https://onlinepdfpro.com/compare-pdf.html",
- "description": "Free online PDF comparison tool.",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Compare PDF Files","url":"https://onlinepdfpro.com/compare-pdf","description":"Free online PDF comparison tool.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
  <style>
  /* Upload Section */
  .upload-row {
@@ -473,20 +462,20 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
  <!-- ===== HEADER ===== -->
  <header class="header" id="header">
 <div class="header-content">
- <a href="index.html" class="logo">
+ <a href="/" class="logo">
  <img src="logo.png" alt="" aria-hidden="true" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -623,7 +612,7 @@
  <!-- SEO Sections -->
 
  <!-- Ad Spacer -->
- <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+ 
 
  </div>
 
@@ -718,7 +707,11 @@
  }
  }
 
+ const panelRenders = {1:{version:0,task:null},2:{version:0,task:null}};
  async function renderPage(panelNum, pageNum) {
+ const state = panelRenders[panelNum], version = ++state.version;
+ if (state.task) { state.task.cancel(); try { await state.task.promise; } catch (_) {} }
+ if (version !== state.version) return;
  var pdfDoc = panelNum === 1 ? pdfDoc1 : pdfDoc2;
  var canvas = document.getElementById('canvas' + panelNum);
  var wrapper = document.getElementById('wrapper' + panelNum);
@@ -727,6 +720,7 @@
  var ctx = canvas.getContext('2d');
 
  var page = await pdfDoc.getPage(pageNum);
+ if (version !== state.version) return;
  var viewport = page.getViewport({ scale: 1 });
 
  // Scale to fit the panel width, then apply user zoom
@@ -753,7 +747,9 @@
  container.style.width = scaledViewport.width + 'px';
  container.style.height = scaledViewport.height + 'px';
 
- await page.render({ canvasContext: ctx, viewport: hiResViewport }).promise;
+ state.task = page.render({ canvasContext: ctx, viewport: hiResViewport });
+ try { await state.task.promise; } catch (error) { if (error.name === 'RenderingCancelledException') return; throw error; }
+ if (version !== state.version) return;
 
  // Build text layer with positioned spans
  textLayerDiv.innerHTML = '';
@@ -761,6 +757,7 @@
  textLayerDiv.style.height = scaledViewport.height + 'px';
 
  var textContent = await page.getTextContent();
+ if (version !== state.version) return;
  var textItems = textContent.items;
 
  textItems.forEach(function (item) {

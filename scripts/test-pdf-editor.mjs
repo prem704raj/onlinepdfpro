@@ -90,7 +90,8 @@ async function createServer() {
         response.writeHead(403).end('Forbidden');
         return;
       }
-      if (fs.existsSync(filename) && fs.statSync(filename).isDirectory()) filename = path.join(filename, 'index.html');
+      if (fs.existsSync(filename + '.html')) filename += '.html';
+      else if (fs.existsSync(filename) && fs.statSync(filename).isDirectory()) filename = path.join(filename, 'index.html');
       if (!fs.existsSync(filename)) {
         response.writeHead(404).end('Not found');
         return;

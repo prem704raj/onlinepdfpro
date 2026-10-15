@@ -7,7 +7,7 @@
     <title>My Library | OnlinePDFPro</title>
     <meta content="Access your purchased study materials and downloads." name="description"/>
     <meta content="noindex, nofollow" name="robots"/>
-    <link href="https://onlinepdfpro.com/library.html" rel="canonical"/>
+    <link href="https://onlinepdfpro.com/library" rel="canonical"/>
     <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
     <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
@@ -281,8 +281,8 @@
                 <span class="logo-text">OnlinePDFPro</span>
             </a>
             <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
             <div class="header-actions">
                 <button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle" type="button">
@@ -296,8 +296,8 @@
                     </button>
                     <div id="userDropdown" class="user-dropdown" style="display:none; position:absolute; top:calc(100% + 8px); right:0; min-width:180px; background:var(--bg-primary, #fff); border:1px solid var(--border, #e2e8f0); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.15); padding:8px 0; z-index:9999;">
                         <div id="userDropdownName" style="padding:10px 16px; font-size:0.85rem; font-weight:600; color:var(--text-primary, #1a1a2e); border-bottom:1px solid var(--border, #e2e8f0); margin-bottom:4px;"></div>
-                        <a href="/library.html" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:var(--text-primary, #1a1a2e); background:none; border:none; cursor:pointer; text-decoration:none; transition:background 0.15s;">My Library</a>
-                        <button id="logoutBtn" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:#dc2626; background:none; border:none; cursor:pointer; transition:background 0.15s;">Sign Out</button>
+                        <a href="/library" class="user-dropdown-item" style="display:block; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:var(--text-primary, #1a1a2e); background:none; border:none; cursor:pointer; text-decoration:none; transition:background 0.15s;">My Library</a>
+                        <button id="logoutBtn" class="user-dropdown-item" style="display: none; width:100%; text-align:left; padding:8px 16px; font-size:0.82rem; color:#dc2626; background:none; border:none; cursor:pointer; transition:background 0.15s;" hidden>Sign Out</button>
                     </div>
                 </div>
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
@@ -318,7 +318,7 @@
                 <div class="lib-login-prompt">
                     <h2>Sign in to access your library</h2>
                     <p>Log in with your account to view and download your purchased study materials.</p>
-                    <a href="/login.html" class="lib-btn">Sign In</a>
+                    <a href="/login" class="lib-btn">Sign In</a>
                 </div>
             </div>
 
@@ -343,19 +343,19 @@
                 <div class="lib-empty">
                     <h2>No purchases yet</h2>
                     <p>You haven't bought any study materials yet. Browse our collection and grab your first notes!</p>
-                    <a href="/study-materials.html" class="lib-btn">Browse Study Materials</a>
+                    <a href="/study-materials" class="lib-btn">Browse Study Materials</a>
                 </div>
             </div>
 
             <!-- Purchases list -->
             <div id="libPurchases" class="lib-purchases" style="display:none;"></div>
 
-            <a href="/study-materials.html" class="lib-back-link">← Back to Study Materials</a>
+            <a href="/study-materials" class="lib-back-link">← Back to Study Materials</a>
         </div>
     </main>
 
     <footer class="hp-footer" style="background: var(--lib-bg-alt); border-top: 1px solid var(--lib-border); padding: 40px 24px; text-align: center; color: var(--lib-text-muted); font-size: 0.85rem;">
-        <p>© 2026 OnlinePDFPro · <a href="/terms.html" style="color: var(--lib-text-muted);">Terms</a> · <a href="/privacy.html" style="color: var(--lib-text-muted);">Privacy</a> · <a href="/refund.html" style="color: var(--lib-text-muted);">Refund Policy</a></p>
+        <p>© 2026 OnlinePDFPro · <a href="/terms" style="color: var(--lib-text-muted);">Terms</a> · <a href="/privacy" style="color: var(--lib-text-muted);">Privacy</a> · <a href="/refund" style="color: var(--lib-text-muted);">Refund Policy</a></p>
     </footer>
 
     <script defer src="/js/app.js?v=96"></script>

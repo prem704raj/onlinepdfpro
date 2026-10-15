@@ -12,11 +12,11 @@
 <meta name="description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/redact-pdf.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/redact-pdf">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
+<meta property="og:url" content="https://onlinepdfpro.com/tools/redact-pdf">
 <meta property="og:title" content="Redact PDF Online Free | OnlinePDFPro">
 <meta property="og:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
 <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -25,7 +25,7 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://onlinepdfpro.com/tools/redact-pdf.html">
+<meta name="twitter:url" content="https://onlinepdfpro.com/tools/redact-pdf">
 <meta name="twitter:title" content="Redact PDF Online Free | OnlinePDFPro">
 <meta name="twitter:description" content="Detect and hide phone numbers, emails, Aadhaar/PAN-style IDs, addresses, and signatures. Fast and secure processing.">
 <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -39,8 +39,8 @@
 <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
 <!-- Hreflang (if you plan multilingual) -->
-<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/redact-pdf.html">
-<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/redact-pdf.html">
+<link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/redact-pdf">
+<link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/redact-pdf">
 
 <link rel="stylesheet" href="../css/style.css?v=96">
 <link rel="stylesheet" href="../css/mobile-fix-v2.css">
@@ -124,8 +124,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -185,9 +185,9 @@
  <button id="downloadPdfBtn" class="btn btn-outline" disabled>Download Redacted PDF</button>
  <button id="downloadImageBtn" class="btn btn-outline" disabled>Download Redacted Image</button>
  </div>
- <div id="progressWrap" style="display:none; margin-top: 12px;">
- <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
- <p id="progressText" class="note">Preparing scan...</p>
+ <div id="progressWrap" style="display:none; margin-top: 12px;" data-nosnippet>
+ <div class="progress-bar" data-nosnippet><div id="progressFill" class="progress-fill" data-nosnippet></div></div>
+ <p id="progressText" class="note" data-nosnippet>Preparing scan...</p>
  </div>
  <p class="note">Detected regions are covered with opaque boxes and exported as a new rasterized file. Review every page before sharing.</p>
  <label class="note"><input type="checkbox" id="reviewConfirmed" disabled> I reviewed every page for missed sensitive data. Automatic detection can miss text; the exported PDF will contain images rather than searchable text.</label>
@@ -209,8 +209,8 @@
  <div class="shield-grid">
  <div class="shield-panel">
  <h4>Findings</h4>
- <div id="resultsList" class="results-list"></div>
- <p id="emptyResults" class="note">No scan results yet.</p>
+ <div id="resultsList" class="results-list" data-nosnippet></div>
+ <p id="emptyResults" class="note" data-nosnippet>No scan results yet.</p>
  </div>
  <div class="shield-panel" style="grid-column: span 2;">
  <h4>Export notes</h4>

@@ -8,18 +8,18 @@ const CACHE_NAME = 'onlinepdfpro-cache-__BUILD_ID__';
 
 const STATIC_ASSETS = [
     // Core pages
-    'index.html',
-    '404.html',
-    'about.html',
-    'tools.html',
-    'study-materials.html',
-    'login.html',
-    'library.html',
-    'support.html',
-    'refund.html',
-    'dmca.html',
-    'privacy.html',
-    'terms.html',
+    '/',
+    '/404',
+    '/about',
+    '/tools',
+    '/study-materials',
+    '/login',
+    '/library',
+    '/help',
+    '/refund',
+    '/dmca',
+    '/privacy',
+    '/terms',
 
     // CSS
     'css/style.css',
@@ -43,6 +43,12 @@ const STATIC_ASSETS = [
     'og-image.jpg',
     'site.webmanifest'
 ];
+
+const PAGE_ROUTES = /* __PAGE_ROUTES__ */ {};
+function pageCacheKey(url) {
+    const pathname = PAGE_ROUTES[url.pathname] || url.pathname;
+    return new Request(new URL(pathname, self.location.origin).href);
+}
 
 const STATIC_ASSET_PATHS = new Set(
     STATIC_ASSETS.map((asset) => new URL(asset, self.location.origin).pathname)
@@ -103,20 +109,18 @@ self.addEventListener('fetch', (event) => {
     // Ignore non-GET requests
     if (request.method !== 'GET') return;
 
-    let cacheKey = request;
-    if (url.origin === self.location.origin && url.pathname === '/') {
-        cacheKey = new Request('index.html');
-    }
+    const cacheKey = request;
 
     // --- Strategy 1: Network-first for HTML ---
-    if (request.headers.get('accept')?.includes('text/html')) {
+    if (url.origin === self.location.origin && (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html'))) {
+        const htmlKey = pageCacheKey(url);
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    event.waitUntil(cacheSuccessfulResponse(request, response));
+                    event.waitUntil(cacheSuccessfulResponse(htmlKey, response));
                     return response;
                 })
-                .catch(() => caches.match(cacheKey, { ignoreSearch: true }))
+                .catch(async () => (await caches.match(htmlKey, { ignoreSearch: true })) || (await caches.match('/404', { ignoreSearch: true })) || Response.error())
         );
         return;
     }

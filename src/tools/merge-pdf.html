@@ -20,11 +20,11 @@
  <meta name="description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/merge-pdf">
  <meta property="og:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta property="og:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -33,7 +33,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/merge-pdf">
  <meta name="twitter:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta name="twitter:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -47,8 +47,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang (if you plan multilingual) -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/merge-pdf.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/merge-pdf">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/merge-pdf">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,8 +110,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
 
@@ -173,21 +173,21 @@
  </div>
  </div>
 
- <div id="progressSection" style="display: none;">
+ <div id="progressSection" style="display: none;" data-nosnippet>
  <div class="glass-card" style="padding: 40px; text-align: center;">
  <h2 style="margin-bottom: 24px;">Merging...</h2>
- <div id="progressContainer"></div>
+ <div id="progressContainer" data-nosnippet></div>
  </div>
  </div>
 
- <div id="resultsSection" style="display: none;">
- <div class="results-section glass-card">
+ <div id="resultsSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" data-nosnippet>
  <div class="success-message"
- style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;">
+ style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;" data-nosnippet>
  Documents Merged
  </div>
 
- <div class="results-stats">
+ <div class="results-stats" data-nosnippet>
  <div class="stat-item">
  <div class="stat-value" id="totalPages">0</div>
  <div class="stat-label">Total Pages</div>
@@ -198,12 +198,12 @@
  </div>
  </div>
 
- <div class="download-section">
+ <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
  Document</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Process Another File</button>
  </div>
- <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Results will clear in 5:00</div>
+ <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
  <div class="action-buttons mt-lg">
  <button class="btn btn-secondary" id="mergeAnother">Start New Merge</button>
@@ -467,7 +467,7 @@
 <li><strong>Preparing reports</strong> — join individually authored sections into a final deliverable.</li>
 </ul>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Page ordering tips</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf.html" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">How it works</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool runs in your browser using pdf-lib; files are not uploaded. Page content and embedded resources are copied, but interactive form fields, bookmarks, and some annotations may not transfer because the browser library rebuilds the document. Up to 100 PDF files can be selected.</p>
 </section>

@@ -35,7 +35,8 @@ console.log('PASS truthful review status and escaped, correctly labelled publica
 const server = http.createServer((req, res) => {
   let file = path.resolve(site, decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname).replace(/^\/+/, '') || 'index.html');
   if (!file.startsWith(site + path.sep)) { res.writeHead(403).end(); return; }
-  if (!fs.existsSync(file) && !path.extname(file)) file += '.html';
+  if (fs.existsSync(file + '.html')) file += '.html';
+  else if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
   if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404).end(); return; }
   const types = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.webp': 'image/webp', '.png': 'image/png', '.svg': 'image/svg+xml' };
   res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' });

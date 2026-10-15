@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -15,11 +15,11 @@
 <meta name="description" content="Crop PDF pages online free. Trim margins, remove white space, or crop to specific dimensions. Review the processing details before uploading.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/crop-pdf.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/crop-pdf">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/crop-pdf.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/crop-pdf">
  <meta property="og:title" content="Crop PDF Online Free — Trim PDF Pages Precisely | OnlinePDFPro">
 <meta property="og:description" content="Crop PDF pages online free. Trim margins, remove white space, or crop to specific dimensions. Review the processing details before uploading.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -28,7 +28,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/crop-pdf.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/crop-pdf">
  <meta name="twitter:title" content="Crop PDF Online Free — Trim PDF Pages Precisely | OnlinePDFPro">
 <meta name="twitter:description" content="Crop PDF pages online free. Trim margins, remove white space, or crop to specific dimensions. Review the processing details before uploading.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -42,8 +42,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang (if you plan multilingual) -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/crop-pdf.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/crop-pdf.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/crop-pdf">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/crop-pdf">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -314,32 +314,7 @@
 
  <!-- MOBILE FIX -->
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- {
- "@type": "ListItem",
- "position": 1,
- "name": "Home",
- "item": "https://onlinepdfpro.com/"
- },
- {
- "@type": "ListItem",
- "position": 2,
- "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
- },
- {
- "@type": "ListItem",
- "position": 3,
- "name": "Crop PDF",
- "item": "https://onlinepdfpro.com/tools/crop-pdf.html"
- }
- ]
-}
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"Crop PDF","item":"https://onlinepdfpro.com/tools/crop-pdf"}]}</script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -351,21 +326,21 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -498,9 +473,10 @@
 
  async function loadPDF(file) {
  if (!file) return;
+ try {
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+ pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
  totalPages = pdfJsDoc.numPages;
  currentPage = 1;
  pageRatios = {};
@@ -515,7 +491,14 @@
  document.getElementById('cropContainer').style.display = 'block';
 
  await renderPage();
- setTimeout(initCropBox, 100);
+ } catch (error) {
+ pdfBytes = null; pdfJsDoc = null;
+ document.getElementById('fileInput').value = '';
+ document.getElementById('dropArea').style.display = '';
+ document.getElementById('cropContainer').style.display = 'none';
+ const header = document.querySelector('.tool-header'); if (header) header.style.display = '';
+ alert('Could not open this PDF. Use a valid, unencrypted PDF and try again.');
+ }
  }
 
  async function renderPage() {
@@ -531,7 +514,7 @@
  const scaleByWidth = availableWidth / unscaledViewport.width;
  const scaleByHeight = availableHeight / unscaledViewport.height;
  // Pick the smaller scale so the page fits both dimensions
- const targetScale = Math.min(scaleByWidth, scaleByHeight, 1.5);
+ const targetScale = Math.max(0.1, Math.min(scaleByWidth, scaleByHeight, 1.5));
 
  const viewport = page.getViewport({ scale: targetScale });
  const dpr = Math.max(window.devicePixelRatio || 1, 2);
@@ -724,7 +707,7 @@
  if (!pdfBytes) return;
  try {
  const bytes = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes);
- const pdfDoc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+ const pdfDoc = await PDFLib.PDFDocument.load(bytes);
  const pages = pdfDoc.getPages();
  const applyAll = document.getElementById('applyAll').checked;
 
@@ -733,15 +716,15 @@
  let ratio = applyAll ? pageRatios[currentPage] : pageRatios[pageNum];
 
  if (ratio) {
- const { width, height } = page.getSize();
- const newLeft = width * ratio.rLeft;
- const newWidth = width * ratio.rWidth;
- const newHeight = height * ratio.rHeight;
- const newTopMargin = height * ratio.rTop;
- const newBottom = height - newTopMargin - newHeight;
-
- page.setCropBox(newLeft, newBottom, newWidth, newHeight);
- page.setMediaBox(newLeft, newBottom, newWidth, newHeight);
+ const box = page.getCropBox();
+ const angle = ((page.getRotation().angle % 360) + 360) % 360;
+ const left = ratio.rLeft, top = ratio.rTop, rw = ratio.rWidth, rh = ratio.rHeight;
+ let crop;
+ if (angle === 90) crop = [box.x + box.width * top, box.y + box.height * left, box.width * rh, box.height * rw];
+ else if (angle === 180) crop = [box.x + box.width * (1 - left - rw), box.y + box.height * top, box.width * rw, box.height * rh];
+ else if (angle === 270) crop = [box.x + box.width * (1 - top - rh), box.y + box.height * (1 - left - rw), box.width * rh, box.height * rw];
+ else crop = [box.x + box.width * left, box.y + box.height * (1 - top - rh), box.width * rw, box.height * rh];
+ page.setCropBox(...crop);
  }
  });
 

@@ -39,6 +39,8 @@ function createBlankViewport(metadata, scale) {
 
 export function getTextScreenBox(object, viewport) {
   const transform = object.transform.slice();
+  const sizeRatio = Number(object.fontSize || 1) / Number(object.originalFontSize || object.fontSize || 1);
+  for (let index = 0; index < 4; index += 1) transform[index] *= sizeRatio;
   const originalAngle = Math.atan2(transform[1], transform[0]);
   const requestedAngle = Number.isFinite(object.rotation) ? object.rotation * Math.PI / 180 : originalAngle;
   const delta = requestedAngle - originalAngle;
@@ -84,18 +86,19 @@ function makeTextButton(object, box, selectedId, onSelect, onDoubleClick, onDrag
   button.style.setProperty('--text-hit-angle', box.angle + 'deg');
   button.addEventListener('click', (event) => {
     if (Date.now() < Number(editorState.ignoreObjectClickUntil || 0)) return;
-    if (editorState.mode !== 'select') return;
+    if (!['select', 'text'].includes(editorState.mode)) return;
     event.stopPropagation();
-    onSelect(object.id);
+    onSelect(object.id, event);
   });
   button.addEventListener('dblclick', (event) => {
-    if (editorState.mode !== 'select') return;
+    if (!['select', 'text'].includes(editorState.mode)) return;
     event.preventDefault();
     event.stopPropagation();
     onDoubleClick(object.id);
   });
   button.addEventListener('pointerdown', (event) => {
-    if (editorState.mode === 'select' && event.button === 0 && object.id === selectedId) onDragStart(event, object.id);
+    event.stopPropagation();
+    if (editorState.mode === 'select' && editorState.textMoveEnabled && event.button === 0 && object.id === editorState.selectedObjectId) onDragStart(event, object.id);
   });
   return button;
 }
@@ -109,6 +112,7 @@ function makePreview(object, viewport) {
       y: object.originalY,
       width: object.originalWidth || object.width,
       height: object.originalHeight || object.height,
+      fontSize: object.originalFontSize || object.fontSize,
       rotation: object.originalRotation
     };
     const cover = getTextScreenBox(originalState, viewport);
@@ -428,7 +432,9 @@ export class PageRenderer {
   }
 
   refreshTextLayers() {
+    window.dispatchEvent(new Event('pdf-editor:before-text-layers-refreshed'));
     this.shells.forEach((_, pageNumber) => this.renderTextLayer(pageNumber));
+    window.dispatchEvent(new Event('pdf-editor:text-layers-refreshed'));
   }
 
   releaseDistantPages() {
@@ -465,6 +471,7 @@ export class PageRenderer {
   }
 
   setZoom(value, mode = 'manual') {
+    window.dispatchEvent(new Event('pdf-editor:before-text-layers-refreshed'));
     editorState.zoom = Math.max(0.35, Math.min(3.25, value));
     editorState.zoomMode = mode;
     editorState.renderEpoch += 1;

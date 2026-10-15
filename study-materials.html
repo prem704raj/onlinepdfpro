@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Study Materials | OnlinePDFPro</title>
     <meta name="description" content="Browse downloadable study material PDFs from OnlinePDFPro.">
-    <link rel="canonical" href="https://onlinepdfpro.com/study-materials.html">
+    <link rel="canonical" href="https://onlinepdfpro.com/study-materials">
     <meta name="theme-color" content="#171512">
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
@@ -242,21 +242,22 @@
             cursor: pointer;
         }
         .profile-dropdown a:hover, .profile-dropdown button:hover { background: rgba(120,111,100,.12); }
-        .cart-overlay { position: fixed; inset: 0; z-index: 2998; background: rgba(0,0,0,.45); opacity: 0; visibility: hidden; transition: .2s; }
+        .cart-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,.45); opacity: 0; visibility: hidden; transition: .2s; }
         .cart-overlay.open { opacity: 1; visibility: visible; }
-        .cart-drawer { position: fixed; top: 0; right: 0; z-index: 2999; width: min(420px, 100%); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; transform: translateX(100%); border-left: 1px solid var(--sm-border); background: var(--sm-bg); transition: transform .25s ease; }
+        .cart-drawer { position: fixed; top: 0; right: 0; z-index: 10001; width: min(420px, 100%); height: 100vh; height: 100dvh; display: flex; flex-direction: column; box-sizing: border-box; transform: translateX(100%); border-left: 1px solid var(--sm-border); background: var(--sm-bg); transition: transform .25s ease; }
         .cart-drawer.open { transform: translateX(0); }
-        .cart-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--sm-border); }
+        .cart-drawer-header { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--sm-border); }
         .cart-drawer-header h2 { margin: 4px 0 0; font: 500 1.45rem var(--sm-serif); }
         .cart-small-label { color: var(--sm-accent); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; }
-        .cart-close { border: 0; background: transparent; color: var(--sm-text); font-size: 1.7rem; cursor: pointer; }
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px 24px; }
+        .cart-close { width: 44px; height: 44px; flex-shrink: 0; border: 0; background: transparent; color: var(--sm-text); font-size: 1.7rem; cursor: pointer; }
+        .cart-items { flex: 1; min-height: 0; overscroll-behavior: contain; overflow-y: auto; padding: 20px 24px; }
         .cart-item { display: flex; justify-content: space-between; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--sm-border); }
+        .cart-item-info { min-width: 0; overflow-wrap: anywhere; }
         .cart-item-info strong, .cart-item-info span { display: block; }
         .cart-item-info span { margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
-        .cart-remove { border: 0; background: none; color: #b91c1c; cursor: pointer; }
+        .cart-remove { min-width: 44px; min-height: 44px; border: 0; background: none; color: #b91c1c; cursor: pointer; }
         .cart-empty { padding: 60px 20px; color: var(--sm-muted); text-align: center; }
-        .cart-footer { padding: 22px 24px; border-top: 1px solid var(--sm-border); }
+        .cart-footer { flex-shrink: 0; padding: 22px 24px; padding-bottom: max(22px, env(safe-area-inset-bottom)); border-top: 1px solid var(--sm-border); }
         .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 18px; }
         .cart-checkout-btn { width: 100%; padding: 15px; border: 0; background: var(--sm-accent); color: #fff; font-weight: 700; cursor: pointer; }
         .cart-checkout-message { margin-bottom: 16px; padding: 12px 14px; border: 1px solid var(--sm-accent); color: var(--sm-text); font-size: .85rem; line-height: 1.5; }
@@ -274,19 +275,19 @@
             document.documentElement.setAttribute('data-theme', theme);
         }());
     </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;"></head>
 <body class="sm-body">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="header">
         <div class="header-content">
             <a class="logo" href="/"><img class="logo-icon" src="/logo.png" alt="" aria-hidden="true"><span class="logo-text">OnlinePDFPro</span></a>
             <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link active" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link active" href="/study-materials">Study Materials</a>
             </nav>
             <div class="header-actions">
                 <button class="store-header-btn" type="button" onclick="openCart()" aria-label="Shopping cart" title="Cart"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg><span class="cart-count" hidden>0</span></button>
-                <div class="profile-menu-wrap" id="profileMenuWrap" hidden><button class="store-header-btn profile-trigger" id="profileTrigger" type="button" aria-label="My account" aria-expanded="false"><img id="profileAvatar" class="profile-avatar" alt="" hidden><span id="profileInitial" class="profile-initial">U</span></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-dropdown-user"><strong id="profileName">User</strong><span id="profileEmail"></span></div><div class="profile-divider"></div><a href="/library.html">My Library</a><button type="button" onclick="logout()">Sign Out</button></div></div>
+                <div class="profile-menu-wrap" id="profileMenuWrap" hidden><button class="store-header-btn profile-trigger" id="profileTrigger" type="button" aria-label="My account" aria-expanded="false"><img id="profileAvatar" class="profile-avatar" alt="" hidden><span id="profileInitial" class="profile-initial">U</span></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-dropdown-user"><strong id="profileName">User</strong><span id="profileEmail"></span></div><div class="profile-divider"></div><a href="/library">My Library</a><button type="button" onclick="logout()" hidden style="display: none;" id="logoutBtn">Sign Out</button></div></div>
                 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span></button>
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
             </div>
@@ -304,7 +305,7 @@
             <h2 class="catalog-title">DBMS Complete Notes</h2>
             <div class="catalog-grid">
                 <article class="catalog-card" aria-label="DBMS Complete Notes">
-                    <a class="catalog-cover-link" href="/viewstudymaterials.html?product=dbms-notes" aria-label="View DBMS Complete Notes details and preview">
+                    <a class="catalog-cover-link" href="/products/dbms-notes" aria-label="View DBMS Complete Notes details and preview">
                         <img class="catalog-cover" src="/assets/previews/dbms/cover.jpg" alt="DBMS Complete Notes cover" width="809" height="1106" fetchpriority="high">
                     </a>
                     <div class="catalog-actions">
@@ -320,9 +321,9 @@
     <footer class="hp-footer">
         <div class="hp-footer-grid">
             <div class="hp-footer-brand"><p class="hp-footer-brand-title">OnlinePDFPro</p><p class="hp-footer-brand-sub">Free PDF Tools &amp; Study Materials</p></div>
-            <div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf.html">Merge PDF</a></li><li><a href="/tools/compress-pdf.html">Compress PDF</a></li><li><a href="/tools/split-pdf.html">Split PDF</a></li><li><a href="/tools.html">All Tools</a></li></ul></div>
-            <div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about.html">About</a></li><li><a href="/support.html">Support &amp; FAQ</a></li></ul></div>
-            <div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms.html">Terms</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refund.html">Refund Policy</a></li></ul></div>
+            <div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf">Merge PDF</a></li><li><a href="/tools/compress-pdf">Compress PDF</a></li><li><a href="/tools/split-pdf">Split PDF</a></li><li><a href="/tools">All Tools</a></li></ul></div>
+            <div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about">About</a></li><li><a href="/help">Support &amp; FAQ</a></li></ul></div>
+            <div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/refund">Refund Policy</a></li></ul></div>
         </div>
         <div class="hp-footer-bottom"><p class="hp-footer-copy">© 2026 OnlinePDFPro. All rights reserved.</p></div>
     </footer>
@@ -331,7 +332,7 @@
     <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
         <div class="cart-drawer-header"><div><span class="cart-small-label">Your cart</span><h2>Study Materials</h2></div><button type="button" class="cart-close" onclick="closeCart()" aria-label="Close cart">×</button></div>
         <div id="cartItems" class="cart-items"></div>
-        <div class="cart-footer"><div class="cart-total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div><div id="cartCheckoutMessage" class="cart-checkout-message" role="alert" hidden><span id="cartCheckoutMessageText"></span><a id="cartCheckoutLibraryLink" href="/library.html" hidden>Open My Library</a></div><button class="cart-checkout-btn" type="button" onclick="checkoutCart()">Continue to checkout</button><p class="cart-secure-text">Secure checkout · Instant PDF access</p></div>
+        <div class="cart-footer"><div class="cart-total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div><div id="cartCheckoutMessage" class="cart-checkout-message" role="alert" hidden><span id="cartCheckoutMessageText"></span><a id="cartCheckoutLibraryLink" href="/library" hidden>Open My Library</a></div><button class="cart-checkout-btn" type="button" onclick="checkoutCart()">Continue to checkout</button><p class="cart-secure-text">Secure checkout · Instant PDF access</p></div>
     </aside>
 
     <script>

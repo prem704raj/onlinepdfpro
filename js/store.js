@@ -4,7 +4,7 @@ const STORE_PRODUCTS = {
         title: "DBMS Complete Notes",
         price: 9,
         image: "/assets/previews/dbms/page-01.webp",
-        url: "/viewstudymaterials.html?product=dbms-notes",
+        url: "/products/dbms-notes",
         pageCount: 51,
         format: "PDF",
         description: "A focused guide to database fundamentals, relational models, ER diagrams, normalization, SQL, transactions, indexing, and exam revision.",
@@ -121,6 +121,8 @@ function updateCartCount() {
     });
 }
 
+let cartFocusContext = null;
+
 function openCart() {
     const drawer = document.getElementById("cartDrawer");
     const overlay = document.getElementById("cartOverlay");
@@ -129,10 +131,24 @@ function openCart() {
 
     renderCart();
 
+    if (!cartFocusContext) {
+        cartFocusContext = { trigger: document.activeElement, overflow: document.body.style.overflow, siblings: [] };
+        for (const element of document.body.children) {
+            if (element === drawer || element === overlay || element.matches('script, style')) continue;
+            cartFocusContext.siblings.push([element, element.inert]);
+            element.inert = true;
+        }
+    }
+    drawer.inert = false;
+    drawer.setAttribute('role', 'dialog');
+    drawer.setAttribute('aria-modal', 'true');
+    drawer.removeAttribute('aria-hidden');
+
     drawer.classList.add("open");
     overlay.classList.add("open");
 
     document.body.style.overflow = "hidden";
+    drawer.querySelector('.cart-close')?.focus();
 }
 
 function closeCart() {
@@ -143,9 +159,35 @@ function closeCart() {
 
     drawer.classList.remove("open");
     overlay.classList.remove("open");
-
-    document.body.style.overflow = "";
+    if (cartFocusContext) {
+        for (const [element, previous] of cartFocusContext.siblings) element.inert = previous;
+        document.body.style.overflow = cartFocusContext.overflow;
+        cartFocusContext.trigger?.focus();
+        cartFocusContext = null;
+    }
+    drawer.inert = true;
+    drawer.setAttribute('aria-hidden', 'true');
+    drawer.removeAttribute('aria-modal');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const drawer = document.getElementById('cartDrawer');
+    if (drawer && !drawer.classList.contains('open')) {
+        drawer.inert = true;
+        drawer.setAttribute('aria-hidden', 'true');
+    }
+});
+document.addEventListener('keydown', event => {
+    const drawer = document.getElementById('cartDrawer');
+    if (!drawer?.classList.contains('open')) return;
+    if (event.key === 'Escape') { event.preventDefault(); closeCart(); }
+    if (event.key !== 'Tab') return;
+    const controls = [...drawer.querySelectorAll('button, a[href], input, select, textarea, [tabindex="0"]')]
+        .filter(element => !element.disabled && element.getClientRects().length && !element.closest('[hidden]'));
+    const first = controls[0], last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+});
 
 function renderCart() {
     const container =

@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -20,11 +20,11 @@
  <meta name="description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/merge-pdf">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/merge-pdf">
  <meta property="og:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta property="og:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -33,7 +33,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/merge-pdf">
  <meta name="twitter:title" content="Merge PDF Free Online — No Signup, Combine PDF Files Instantly | OnlinePDFPro">
  <meta name="twitter:description" content="Merge PDF files free online — no signup required. Combine multiple PDFs into one document with drag-and-drop reordering.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -47,8 +47,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang (if you plan multilingual) -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/merge-pdf.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/merge-pdf.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/merge-pdf">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/merge-pdf">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,32 +61,7 @@
 
  <!-- MOBILE FIX -->
 
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- {
- "@type": "ListItem",
- "position": 1,
- "name": "Home",
- "item": "https://onlinepdfpro.com/"
- },
- {
- "@type": "ListItem",
- "position": 2,
- "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
- },
- {
- "@type": "ListItem",
- "position": 3,
- "name": "Merge PDF",
- "item": "https://onlinepdfpro.com/tools/merge-pdf.html"
- }
- ]
-}
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"Merge PDF","item":"https://onlinepdfpro.com/tools/merge-pdf"}]}</script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -98,20 +73,20 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
 
@@ -173,21 +148,21 @@
  </div>
  </div>
 
- <div id="progressSection" style="display: none;">
+ <div id="progressSection" style="display: none;" data-nosnippet>
  <div class="glass-card" style="padding: 40px; text-align: center;">
  <h2 style="margin-bottom: 24px;">Merging...</h2>
- <div id="progressContainer"></div>
+ <div id="progressContainer" data-nosnippet></div>
  </div>
  </div>
 
- <div id="resultsSection" style="display: none;">
- <div class="results-section glass-card">
+ <div id="resultsSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" data-nosnippet>
  <div class="success-message"
- style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;">
+ style="background: none; border: none; font-size: 1.5rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 32px;" data-nosnippet>
  Documents Merged
  </div>
 
- <div class="results-stats">
+ <div class="results-stats" data-nosnippet>
  <div class="stat-item">
  <div class="stat-value" id="totalPages">0</div>
  <div class="stat-label">Total Pages</div>
@@ -198,12 +173,12 @@
  </div>
  </div>
 
- <div class="download-section">
+ <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
  Document</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Process Another File</button>
  </div>
- <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Results will clear in 5:00</div>
+ <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
  <div class="action-buttons mt-lg">
  <button class="btn btn-secondary" id="mergeAnother">Start New Merge</button>
@@ -218,7 +193,7 @@
 
  <!-- Added SEO Sections -->
 
-</main>
+<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/merge-and-split-an-assignment/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script src="../js/app.js?v=96"></script>
@@ -268,6 +243,7 @@
  });
 
  function handleFilesSelected(newFiles) {
+ if (files.length + newFiles.length > 100) { alert('A merge can contain up to 100 files. Remove some files before adding more.'); return; }
  files = [...files,...newFiles];
  renderFileList();
  uploadZone.style.display = 'none';
@@ -312,6 +288,7 @@
  if (files.length === 0) resetTool();
  else renderFileList();
  });
+ });
 
  fileList.querySelectorAll('.file-move-up').forEach(btn => {
  btn.addEventListener('click', (e) => {
@@ -332,7 +309,6 @@
  files.splice(idx + 1, 0, item);
  renderFileList();
  }
- });
  });
  });
  }
@@ -395,7 +371,7 @@
  for (let i = 0; i < files.length; i++) {
  progress.update((i / files.length) * 80, `Reading ${files[i].name}...`);
  const arrayBuffer = await readFileAsArrayBuffer(files[i]);
- const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+ const pdf = await PDFDocument.load(arrayBuffer);
  const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
  pages.forEach(page => {
  mergedPdf.addPage(page);
@@ -466,35 +442,14 @@
 <li><strong>Preparing reports</strong> — join individually authored sections into a final deliverable.</li>
 </ul>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Page ordering tips</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf.html" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
+<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">How it works</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool runs in your browser using pdf-lib; files are not uploaded. Page content and embedded resources are copied, but interactive form fields, bookmarks, and some annotations may not transfer because the browser library rebuilds the document. Up to 100 PDF files can be selected.</p>
 </section>
 
  <script defer src="../counter.js"></script>
  <!-- Schema.org Structured Data -->
- <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "Merge PDF",
- "description": "Merge multiple PDF files into one document for free. Drag and drop to reorder pages. Fast, 100% free, works on mobile.",
- "url": "https://onlinepdfpro.com/tools/merge-pdf.html",
- "applicationCategory": "UtilitiesApplication",
- "operatingSystem": "Any",
- "browserRequirements": "Requires HTML5 support",
- "offers": {
- "@type": "Offer",
- "price": "0",
- "priceCurrency": "USD"
- },
- "author": {
- "@type": "Organization",
- "name": "OnlinePDFPro",
- "url": "https://onlinepdfpro.com"
- }
-}
-</script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Merge PDF","description":"Merge multiple PDF files into one document for free. Drag and drop to reorder pages. Fast, 100% free, works on mobile.","url":"https://onlinepdfpro.com/tools/merge-pdf","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires HTML5 support","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"OnlinePDFPro","url":"https://onlinepdfpro.com/"}}</script>
  <script>
  if ('serviceWorker' in navigator) {
  window.addEventListener('load', () => {

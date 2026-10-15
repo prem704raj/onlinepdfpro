@@ -15,7 +15,7 @@
 <meta name="description" content="Upload a PDF and chat with AI to ask questions, get summaries, and extract information. 100% free, no signup.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/chat-with-pdf.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/chat-with-pdf">
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -74,8 +74,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
@@ -107,12 +107,12 @@
  <input type="file" id="fileInput" accept=".pdf" style="display:none">
  </div>
 
- <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-   <div class="spinner"></div>
-   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+   <div class="spinner" data-nosnippet></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;" data-nosnippet>Extracting text from PDF...</p>
  </div>
 
- <div class="chat-container" id="chatContainer">
+ <div class="chat-container" id="chatContainer" data-nosnippet>
    <div class="chat-header">
      <h3 id="chatTitle">Chat with Document</h3>
      <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>

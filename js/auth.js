@@ -200,8 +200,8 @@ async function getCurrentUser() {
   const client = getSupabaseClient();
   if (!client) return null;
   try {
-    const { data: { user } } = await client.auth.getUser();
-    return user;
+    const { data: { user }, error } = await client.auth.getUser();
+    return error ? null : user;
   } catch (err) {
     console.warn("Could not retrieve user session:", err);
     return null;
@@ -240,9 +240,36 @@ function getUserAvatar(user) {
 // -------------------------------------
 // UPDATE HEADER WITH USER INFO
 // -------------------------------------
+let headerAuthRevision = 0;
 async function updateUserHeader() {
-  const user = await getCurrentUser();
-  const container = document.getElementById("loggedInUser");
+  const revision = ++headerAuthRevision;
+  renderUserHeader(null);
+  const client = getSupabaseClient();
+  if (!client) return;
+  try {
+    const { data: { session }, error } = await client.auth.getSession();
+    if (error || !session?.user || !session.access_token || !Number.isFinite(session.expires_at) || session.expires_at * 1000 <= Date.now()) return;
+    const user = await getCurrentUser();
+    // A sign-out or newer verification must invalidate pending requests.
+    if (revision !== headerAuthRevision) return;
+    if (user?.id === session.user.id && !user.is_anonymous) renderUserHeader(user);
+  } catch (error) {
+    // Offline, expired, and rejected sessions leave account actions hidden.
+    console.warn("Could not verify header session:", error);
+  }
+}
+
+function renderUserHeader(user) {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.hidden = !user;
+    logoutBtn.style.display = user ? "block" : "none";
+  }
+  const dropdown = document.getElementById("userDropdown");
+  if (!user && dropdown) dropdown.style.display = "none";
+  const storeDropdown = document.getElementById("profileDropdown");
+  if (!user && storeDropdown) storeDropdown.hidden = true;
+  const container = document.getElementById("loggedInUser") || document.getElementById("profileMenuWrap");
   if (!container) return;
   if (!user) {
     container.hidden = true;
@@ -279,7 +306,6 @@ async function updateUserHeader() {
 
   // Dropdown toggle
   const btn = document.getElementById("userAvatarBtn");
-  const dropdown = document.getElementById("userDropdown");
   if (btn && dropdown && !btn._hasDropdownHandler) {
     btn._hasDropdownHandler = true;
     btn.addEventListener("click", function (e) {
@@ -295,8 +321,7 @@ async function updateUserHeader() {
   }
 
   // Sign out button
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn && !logoutBtn._hasLogoutHandler) {
+  if (logoutBtn && !logoutBtn.onclick && !logoutBtn._hasLogoutHandler) {
     logoutBtn._hasLogoutHandler = true;
     logoutBtn.addEventListener("click", function () {
       logout();
@@ -334,4 +359,20 @@ window.buyProduct = buyProduct;
 window.saveAuthReturnUrl = saveAuthReturnUrl;
 window.redirectAfterAuth = redirectAfterAuth;
 
-document.addEventListener("DOMContentLoaded", updateUserHeader);
+function initializeHeaderAuth() {
+  const client = getSupabaseClient();
+  if (client) {
+    client.auth.onAuthStateChange((event, session) => {
+      ++headerAuthRevision;
+      renderUserHeader(null);
+      // Run verification outside the Supabase callback's auth lock.
+      if (event !== "SIGNED_OUT" && session) setTimeout(updateUserHeader, 0);
+    });
+  }
+  updateUserHeader();
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeHeaderAuth, { once: true });
+} else {
+  initializeHeaderAuth();
+}

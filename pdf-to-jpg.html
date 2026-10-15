@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <!-- Primary Meta Tags -->
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +13,11 @@
  content="Extract selected pages from any PDF file with visual thumbnail selection, range input, and ZIP export.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/pdf-to-jpg.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/pdf-to-jpg">
 
  <!-- Open Graph -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/pdf-to-jpg.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/pdf-to-jpg">
  <meta property="og:title" content="PDF to JPG Converter Free Online | OnlinePDFPro">
  <meta property="og:description"
  content="Select PDF pages visually, extract into a single PDF or per-page ZIP, and download when processing completes.">
@@ -27,7 +27,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-to-jpg.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/pdf-to-jpg">
  <meta name="twitter:title" content="PDF to JPG Converter Free Online | OnlinePDFPro">
  <meta name="twitter:description"
  content="Extract selected pages from PDF with thumbnail preview, page-range input, and ZIP/PDF export.">
@@ -41,8 +41,8 @@
  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-to-jpg.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-to-jpg.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/pdf-to-jpg">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/pdf-to-jpg">
 
  <link rel="stylesheet" href="css/style.css?v=96">
  <link rel="stylesheet" href="css/mobile-fix-v2.css">
@@ -399,21 +399,21 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="index.html" class="logo">
+ <a href="/" class="logo">
  <img src="logo.png" alt="" aria-hidden="true" class="logo-icon"
  style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  
@@ -444,7 +444,7 @@
  <p class="tool-description"
  style="color:var(--text-secondary); font-size:1rem; max-width:780px; margin:0 auto; line-height:1.6;">Upload
  a PDF, select pages from thumbnails or page ranges, preview selected pages, then extract as one PDF
- or export selected pages as high-quality 4K PNG images (direct download or ZIP).</p>
+ or export selected pages as high-quality 4K JPG images (direct download or ZIP).</p>
  </div>
 
  <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor:pointer; animation-delay:0.2s;">
@@ -641,7 +641,7 @@
  return String(pageNum).padStart(3, '0');
  }
 
- async function renderPageAs4kPngBlob(pageIndex) {
+ async function renderPageAs4kJpegBlob(pageIndex) {
  if (!state.pdfJsDoc) {
  throw new Error('PDF not loaded.');
  }
@@ -671,13 +671,13 @@
  }).promise;
 
  const blob = await new Promise(function (resolve, reject) {
- canvas.toBlob(function (pngBlob) {
- if (pngBlob) {
- resolve(pngBlob);
+ canvas.toBlob(function (jpegBlob) {
+ if (jpegBlob) {
+ resolve(jpegBlob);
  } else {
  reject(new Error('Could not render PNG blob.'));
  }
- }, 'image/png');
+ }, 'image/jpeg', 0.95);
  });
 
  canvas.width = 0;
@@ -888,7 +888,7 @@
  elements.extractSingleBtn.textContent = 'Extracting...';
 
  try {
- const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes, { ignoreEncryption: true });
+ const srcDoc = await PDFLib.PDFDocument.load(state.originalPdfBytes);
  const outDoc = await PDFLib.PDFDocument.create();
 
  for (let i = 0; i < selectedIndices.length; i++) {
@@ -933,14 +933,14 @@
  const pageNum = pageIndex + 1;
  setStatus('Preparing 4K image ' + (i + 1) + ' / ' + selectedIndices.length + '...');
 
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ downloadBlob(jpegBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.jpg');
  await nextFrame();
  }
 
  state.extractedCount = selectedIndices.length;
  updateStats();
- setStatus('Downloaded ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
+ setStatus('Downloaded ' + selectedIndices.length + ' high-quality 4K JPG image(s).');
  } catch (err) {
  console.error(err);
  alert('Could not download selected pages as 4K images.');
@@ -967,12 +967,12 @@
  const pageNum = pageIndex + 1;
  setStatus('Preparing single 4K image...');
 
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- downloadBlob(pngBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.png');
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ downloadBlob(jpegBlob, baseFileName() + '-page-' + pageToken(pageNum) + '-4k.jpg');
 
  state.extractedCount = 1;
  updateStats();
- setStatus('Downloaded page ' + pageNum + ' as a 4K PNG image.');
+ setStatus('Downloaded page ' + pageNum + ' as a 4K JPG image.');
  } catch (err) {
  console.error(err);
  alert('Could not download the selected page as a 4K image.');
@@ -1005,8 +1005,8 @@
  for (let i = 0; i < selectedIndices.length; i++) {
  const pageIndex = selectedIndices[i];
  const pageNum = pageIndex + 1;
- const pngBlob = await renderPageAs4kPngBlob(pageIndex);
- zip.file('page-' + pageToken(pageNum) + '-4k.png', pngBlob);
+ const jpegBlob = await renderPageAs4kJpegBlob(pageIndex);
+ zip.file('page-' + pageToken(pageNum) + '-4k.jpg', jpegBlob);
 
  if (i % 3 === 0) {
  setStatus('Preparing ZIP: ' + (i + 1) + ' / ' + selectedIndices.length + ' pages...');
@@ -1022,7 +1022,7 @@
  downloadBlob(zipBlob, baseFileName() + '-images-4k.zip');
  state.extractedCount = selectedIndices.length;
  updateStats();
- setStatus('Created ZIP with ' + selectedIndices.length + ' high-quality 4K PNG image(s).');
+ setStatus('Created ZIP with ' + selectedIndices.length + ' high-quality 4K JPG image(s).');
  } catch (err) {
  console.error(err);
  alert('Could not build image ZIP from selected pages.');
@@ -1050,7 +1050,7 @@
  try {
  const bytes = new Uint8Array(await file.arrayBuffer());
  state.originalPdfBytes = bytes;
- const loadingTask = pdfjsLib.getDocument({ data: bytes });
+ const loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
 
  loadingTask.onProgress = function (prog) {
  if (prog && prog.total) {

@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://api.ocr.space https://api.imgbb.com https://huggingface.co https://*.huggingface.co https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -20,11 +20,11 @@
  <meta name="description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format. Batch convert multiple WebP files.">
 <meta name="author" content="OnlinePDFPro">
  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
- <link rel="canonical" href="https://onlinepdfpro.com/tools/webp-to-jpg.html">
+ <link rel="canonical" href="https://onlinepdfpro.com/tools/webp-to-jpg">
 
  <!-- Open Graph / Facebook -->
  <meta property="og:type" content="website">
- <meta property="og:url" content="https://onlinepdfpro.com/tools/webp-to-jpg.html">
+ <meta property="og:url" content="https://onlinepdfpro.com/tools/webp-to-jpg">
  <meta property="og:title" content="WebP to JPG Converter Online | OnlinePDFPro">
  <meta property="og:description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format. Batch convert multiple files.">
  <meta property="og:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -33,7 +33,7 @@
 
  <!-- Twitter -->
  <meta name="twitter:card" content="summary_large_image">
- <meta name="twitter:url" content="https://onlinepdfpro.com/tools/webp-to-jpg.html">
+ <meta name="twitter:url" content="https://onlinepdfpro.com/tools/webp-to-jpg">
  <meta name="twitter:title" content="WebP to JPG Converter Online | OnlinePDFPro">
  <meta name="twitter:description" content="Convert WebP to JPG online for free. Transform WebP images to JPEG or PNG format.">
  <meta name="twitter:image" content="https://onlinepdfpro.com/og-image.jpg">
@@ -47,8 +47,8 @@
  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
  <!-- Hreflang -->
- <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/webp-to-jpg.html">
- <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/webp-to-jpg.html">
+ <link rel="alternate" hreflang="en" href="https://onlinepdfpro.com/tools/webp-to-jpg">
+ <link rel="alternate" hreflang="x-default" href="https://onlinepdfpro.com/tools/webp-to-jpg">
 
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,60 +60,10 @@
  <link rel="stylesheet" href="../css/tools-v2.css">
 
  <!-- Breadcrumb Schema -->
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [
- {
- "@type": "ListItem",
- "position": 1,
- "name": "Home",
- "item": "https://onlinepdfpro.com/"
- },
- {
- "@type": "ListItem",
- "position": 2,
- "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
- },
- {
- "@type": "ListItem",
- "position": 3,
- "name": "WebP to JPG Converter",
- "item": "https://onlinepdfpro.com/tools/webp-to-jpg.html"
- }
- ]
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"WebP to JPG Converter","item":"https://onlinepdfpro.com/tools/webp-to-jpg"}]}</script>
 
  <!-- WebApplication Schema -->
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "WebP to JPG Converter",
- "url": "https://onlinepdfpro.com/tools/webp-to-jpg.html",
- "applicationCategory": "MultimediaApplication",
- "operatingSystem": "Any",
- "browserRequirements": "Requires JavaScript. Works in Chrome, Firefox, Safari, Edge.",
- "offers": {
- "@type": "Offer",
- "price": "0",
- "priceCurrency": "USD"
- },
- "description": "Convert WebP images to JPG/JPEG or PNG format online for free. Batch convert multiple WebP files.",
- "featureList": [
- "Convert WebP to JPG/JPEG",
- "Convert WebP to PNG",
- "Batch conversion up to 30 files",
- "Adjustable output quality",
- "ZIP download for multiple files",
- "100% fast processing",
- "external processing may be used; review the details before uploading"
- ]
- }
- </script>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"WebP to JPG Converter","url":"https://onlinepdfpro.com/tools/webp-to-jpg","applicationCategory":"MultimediaApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript. Works in Chrome, Firefox, Safari, Edge.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Convert WebP images to JPG/JPEG or PNG format online for free. Batch convert multiple WebP files.","featureList":["Convert WebP to JPG/JPEG","Convert WebP to PNG","Batch conversion up to 30 files","Adjustable output quality","ZIP download for multiple files","100% fast processing","external processing may be used; review the details before uploading"]}</script>
 
  <!-- FAQ Schema -->
 
@@ -129,20 +79,20 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
  </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body class="fade-in">
  <a href="#main" class="skip-link">Skip to main content</a>
 
  <header class="header">
 <div class="header-content">
- <a href="../index.html" class="logo">
+ <a href="/" class="logo">
  <img src="../logo.png" alt="" aria-hidden="true" class="logo-icon" style="width:28px; height:28px; border-radius:6px;">
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
 
@@ -229,32 +179,32 @@
  </div>
  </div>
 
- <div id="processingSection" style="display: none;">
+ <div id="processingSection" style="display: none;" data-nosnippet>
  <div class="glass-card" style="padding: 40px; text-align: center;">
  <div
  style="font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
- Converting <span id="processedCount" style="color: var(--aurora-azure);">0</span> / <span
+ Converting <span id="processedCount" style="color: var(--aurora-azure);" data-nosnippet>0</span> / <span
  id="totalCount">0</span>
  </div>
  <div
  style="height: 8px; background: var(--midnight); border-radius: 4px; overflow: hidden; margin-bottom: 32px;">
  <div id="overallProgress"
- style="height: 100%; background: var(--aurora-violet); width: 0%; transition: width 0.3s;">
+ style="height: 100%; background: var(--aurora-violet); width: 0%; transition: width 0.3s;" data-nosnippet>
  </div>
  </div>
  <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
  </div>
- <div id="processingList" style="margin-top: 32px;"></div>
+ <div id="processingList" style="margin-top: 32px;" data-nosnippet></div>
  </div>
 
- <div id="resultsSection" style="display: none;">
- <div class="results-section glass-card" style="padding: 48px;">
+ <div id="resultsSection" style="display: none;" data-nosnippet>
+ <div class="results-section glass-card" style="padding: 48px;" data-nosnippet>
  <div class="success-message"
- style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;">
+ style="background: none; border: none; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--success); padding: 0; margin-bottom: 40px;" data-nosnippet>
  Conversion Complete
  </div>
 
- <div class="results-stats">
+ <div class="results-stats" data-nosnippet>
  <div class="stat-item">
  <div class="stat-value" id="totalFiles">0</div>
  <div class="stat-label">Files Converted</div>
@@ -270,14 +220,14 @@
  </div>
 
  <div id="resultsList"
- style="margin: 32px 0; border-top: 1px solid var(--glass-border); padding-top: 24px;"></div>
+ style="margin: 32px 0; border-top: 1px solid var(--glass-border); padding-top: 24px;" data-nosnippet></div>
 
- <div class="download-section">
+ <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadAllBtn" style="width: 100%;">Download All
  (.ZIP)</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Convert More Images</button>
  </div>
- <div class="auto-clear" id="autoClear" style="margin-top: 24px;">Privacy sweep in 5:00</div>
+ <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Privacy sweep in 5:00</div>
  </div>
  </div>
 
@@ -313,6 +263,7 @@
 </main>
 
  <script src="../js/app.js?v=96"></script>
+ <script src="/js/vendor/jszip/jszip.min.js"></script>
 
  <!-- No external library needed! WebP is natively supported by modern browsers via Canvas -->
 
@@ -610,6 +561,10 @@
 
  function showResults(totalOriginal, totalOutput) {
  const successResults = results.filter(r => r.success);
+ let summary = resultsSection.querySelector('.batch-result-status');
+ if (!summary) { summary = document.createElement('p'); summary.className = 'batch-result-status'; summary.setAttribute('role','status'); resultsSection.prepend(summary); }
+ summary.textContent = successResults.length + ' of ' + results.length + ' files processed successfully.' + (results.some(r => !r.success) ? ' Some files could not be decoded or processed. Try valid files again.' : '');
+
 
  document.getElementById('totalFiles').textContent = successResults.length;
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
@@ -650,7 +605,7 @@
  return;
  }
  const zip = new JSZip();
- for (const result of successResults) zip.file(result.name, result.blob);
+ OnlinePDFPro.Downloader.addUniqueZipFiles(zip, successResults);
  const content = await zip.generateAsync({ type: 'blob' });
  OnlinePDFPro.Downloader.saveBlob(content, 'webp-to-jpg-converted.zip');
  });

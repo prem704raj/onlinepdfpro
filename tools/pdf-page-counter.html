@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; object-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cdn.jsdelivr.net blob: data:; worker-src 'self' blob:; frame-ancestors 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -13,11 +13,11 @@
     <meta name="description" content="Count the number of pages in multiple PDF files. Free to use; upload requirements are shown before processing.">
 <meta name="author" content="OnlinePDFPro">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-page-counter">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta property="og:url" content="https://onlinepdfpro.com/tools/pdf-page-counter">
     <meta property="og:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
     <meta property="og:description" content="Count the number of pages in multiple PDF files. Upload requirements are shown before processing.">
     <meta property="og:site_name" content="OnlinePDFPro">
@@ -25,7 +25,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-page-counter.html">
+    <meta name="twitter:url" content="https://onlinepdfpro.com/tools/pdf-page-counter">
     <meta name="twitter:title" content="PDF Page Counter - Count Pages in PDF Files Free Online">
     <meta name="twitter:description" content="Count the number of pages in multiple PDF files. Upload requirements are shown before processing.">
 
@@ -146,17 +146,7 @@
         }
     </style>
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlinepdfpro.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://onlinepdfpro.com/tools.html" },
-            { "@type": "ListItem", "position": 3, "name": "PDF Page Counter", "item": "https://onlinepdfpro.com/tools/pdf-page-counter.html" }
-        ]
-    }
-    </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"PDF Page Counter","item":"https://onlinepdfpro.com/tools/pdf-page-counter"}]}</script>
     <script>
         (function() {
   var savedTheme = localStorage.getItem('doctools-theme');
@@ -166,7 +156,7 @@
   document.documentElement.setAttribute('data-theme', theme);
 })();
     </script>
-</head>
+<meta name="google-adsense-account" content="ca-pub-3541372477756449"><link rel="stylesheet" href="/css/analytics.css"><script defer src="/js/analytics.js"></script></head>
 
 <body>
     <!-- HEADER -->
@@ -189,8 +179,8 @@
             </svg>
         </button>
         <nav class="nav-links nav" id="nav">
-            <a href="/tools.html" class="nav-link">PDF Tools</a>
-            <a href="/study-materials.html" class="nav-link">Study Materials</a>
+            <a href="/tools" class="nav-link">PDF Tools</a>
+            <a href="/study-materials" class="nav-link">Study Materials</a>
             <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
                 <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="5"></circle>
@@ -240,8 +230,8 @@
             </div>
 
             <!-- RESULT AREA -->
-            <div id="resultBox" class="result-box">
-                <div class="result-header">
+            <div id="resultBox" class="result-box" data-nosnippet>
+                <div class="result-header" data-nosnippet>
                     <div class="total-count" id="totalCount">0</div>
                     <div class="total-label">Total Pages</div>
                 </div>
@@ -254,8 +244,8 @@
             </div>
 
             <!-- LOADING STATE -->
-            <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-                <div class="spinner"></div>
+            <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+                <div class="spinner" data-nosnippet></div>
                 <p style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Reading PDF files...</p>
             </div>
         </section>

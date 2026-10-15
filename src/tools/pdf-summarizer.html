@@ -15,7 +15,7 @@
 <meta name="description" content="Upload a PDF and generate an AI-assisted summary. Choose bullet points, short summary, or detailed summary. Review results for accuracy.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-summarizer.html">
+<link rel="canonical" href="https://onlinepdfpro.com/tools/pdf-summarizer">
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -66,8 +66,8 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools.html">PDF Tools</a>
-                <a class="nav-link" href="/study-materials.html">Study Materials</a>
+                <a class="nav-link" href="/tools">PDF Tools</a>
+                <a class="nav-link" href="/study-materials">Study Materials</a>
             </nav>
  <div class="header-actions">
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
@@ -106,12 +106,12 @@
  <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); margin-top:10px;"><input type="checkbox" id="cloudOcrConsent"> If scanned, allow an OCR.space upload (optional)</label>
  </div>
 
- <div id="loadingState" style="display:none; text-align:center; padding: 40px;">
-   <div class="spinner"></div>
-   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;">Extracting text from PDF...</p>
+ <div id="loadingState" style="display:none; text-align:center; padding: 40px;" data-nosnippet>
+   <div class="spinner" data-nosnippet></div>
+   <p id="loadingText" style="margin-top: 15px; color: var(--text-secondary); font-weight: 500;" data-nosnippet>Extracting text from PDF...</p>
  </div>
 
- <div class="summary-result" id="summaryResult">
+ <div class="summary-result" id="summaryResult" data-nosnippet>
    <div style="display:flex; justify-content:space-between; align-items:center;">
      <h3 id="summaryTitle">Summary</h3>
      <button class="btn btn-secondary" onclick="location.reload()" style="padding:6px 14px; font-size:0.8rem;">New PDF</button>

@@ -13,6 +13,12 @@ const analytics = fs.readFileSync(path.join(root, 'src/js/analytics.js'), 'utf8'
 const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
 try {
     const page = await browser.newPage();
+    // Registration happens in inline page code. A production Service Worker
+    // can fetch outside page interception and replace these isolated fixtures.
+    await page.setBypassServiceWorker(true);
+    await page.evaluateOnNewDocument(() => {
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register = async () => ({});
+    });
     const googleRequests = [];
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -36,6 +42,7 @@ try {
     assert.equal(googleRequests.length, 0, 'Essential-only choice cannot load analytics');
     await page.reload({ waitUntil: 'load' });
     assert.equal(await page.$('#analyticsConsent'), null, 'Consent choice persists');
+    await page.$eval('#analyticsPreferences', button => button.scrollIntoView({ behavior: 'instant', block: 'center' }));
     await page.click('#analyticsPreferences');
     await page.click('#analyticsConsent button:nth-of-type(2)');
     await page.waitForFunction(() => document.querySelector('script[src*="googletagmanager.com/gtag/js"]'));
@@ -51,6 +58,7 @@ try {
     assert.ok(queue.some(item => item[1] === 'tool_error' && item[2].error_code === 'invalid_file'));
     assert.ok(queue.some(item => item[1] === 'export_success'), 'Known editor completion events are retained');
     await page.evaluate(() => { document.cookie = '_ga=test-value; path=/'; });
+    await page.$eval('#analyticsPreferences', button => button.scrollIntoView({ behavior: 'instant', block: 'center' }));
     await page.click('#analyticsPreferences');
     await page.click('#analyticsConsent button:first-of-type');
     assert.ok(!(await page.cookies()).some(cookie => cookie.name === '_ga'), 'Withdrawal removes the site analytics cookie');

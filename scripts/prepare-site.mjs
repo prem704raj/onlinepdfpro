@@ -42,6 +42,7 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
     };
     let hasCsp = false;
     let hasAnalytics = false;
+    let hasCanonical = false;
     let hasPublisher = false;
     let head;
     walk(document, node => {
@@ -73,12 +74,17 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
             }
             if (key === 'robots' && canonicalPath === '/history') change(node, 'content', 'noindex, follow');
             if (key === 'og:url' || key === 'twitter:url') change(node, 'content', `${origin}${canonicalPath}`);
+            if ((attribute(node, 'http-equiv') || '').toLowerCase() === 'refresh') {
+                const content = attribute(node, 'content') || '';
+                change(node, 'content', content.replace(/(url=)(.+)$/i, (_, prefix, url) => prefix + normalizeUrl(url.trim())));
+            }
             if ((attribute(node, 'http-equiv') || '').toLowerCase() === 'content-security-policy') {
                 hasCsp = true;
                 if (csp) change(node, 'content', csp);
             }
         }
         if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') {
+            hasCanonical = true;
             // Legacy alias pages identify their replacement, not themselves.
             change(node, 'href', `${origin}${aliases.get(canonicalPath) || canonicalPath}`);
         }
@@ -113,6 +119,10 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
             }
         }
     });
+    if (!hasCanonical && head?.sourceCodeLocation?.endTag) {
+        const at = head.sourceCodeLocation.endTag.startOffset;
+        edits.push({ start: at, end: at, text: `<link rel="canonical" href="${origin}${aliases.get(canonicalPath) || canonicalPath}">` });
+    }
     if (!hasPublisher && head?.sourceCodeLocation?.endTag) {
         const at = head.sourceCodeLocation.endTag.startOffset;
         // Ownership metadata makes no advertising or tracking request.
@@ -171,11 +181,15 @@ export async function prepareSite() {
     // frame-ancestors is header-only; browsers ignore it in a meta policy.
     const csp = policy.replace(/frame-ancestors[^;]*;\s*/g, '');
     for (const file of files) {
+        if (/^google[0-9a-f]+\.html$/.test(file)) continue;
         const full = path.join(site, file);
         const before = await fs.readFile(full, 'utf8');
         const after = prepareHtml(before, { canonicalPath: cleanPath(file), routes, aliases, csp });
         await fs.writeFile(full, after);
     }
+    const worker = path.join(site, 'sw.js');
+    const pageRoutes = Object.fromEntries([...routes, ...aliases]);
+    await fs.writeFile(worker, (await fs.readFile(worker, 'utf8')).replace(/^const PAGE_ROUTES = .*;$/m, `const PAGE_ROUTES = ${JSON.stringify(pageRoutes)};`));
     const feed = path.join(site, 'feed.xml');
     await fs.writeFile(feed, (await fs.readFile(feed, 'utf8')).replaceAll(`${origin}/blog.html`, `${origin}/blog`));
     console.log(`Prepared canonical navigation, shared CSP, and opt-in analytics for ${files.length} HTML pages.`);

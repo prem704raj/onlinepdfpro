@@ -1,5 +1,6 @@
 import { ensureFontkit } from './vendor-loader.js';
 import { getBundledFontSource } from './font-resolver.js';
+import { getEmbeddedFont } from './embedded-fonts.js';
 
 const byteCache = new Map();
 const parsedFontCache = new Map();
@@ -39,6 +40,11 @@ function uniqueCodePoints(text) {
 }
 
 export async function checkGlyphCoverage(object, text) {
+  const source = getEmbeddedFont(object);
+  if (source) {
+    const unsupported = uniqueCodePoints(text).filter(codePoint => !source.parsed.hasGlyphForCodePoint(codePoint));
+    return { supported: unsupported.length === 0, unsupported, source: { type: 'source-embedded', family: source.parsed.familyName } };
+  }
   const descriptor = object && object.fontDescriptor;
   if (!descriptor) return { supported: true, unsupported: [], source: null };
   const exportFont = descriptor.exportFont || {};
