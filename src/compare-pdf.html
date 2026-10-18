@@ -659,7 +659,7 @@
  document.getElementById('name1').textContent = '⏳ Loading...';
  document.getElementById('box1').classList.add('loaded');
  var arrayBuffer = await file.arrayBuffer();
- pdfDoc1 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+ pdfDoc1 = await pdfjsLib.getDocument({ isEvalSupported: false, data: new Uint8Array(arrayBuffer) }).promise;
  document.getElementById('name1').textContent = ' ' + file.name;
  document.getElementById('viewer-name1').textContent = file.name;
  checkBothLoaded();
@@ -676,7 +676,7 @@
  document.getElementById('name2').textContent = '⏳ Loading...';
  document.getElementById('box2').classList.add('loaded');
  var arrayBuffer = await file.arrayBuffer();
- pdfDoc2 = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+ pdfDoc2 = await pdfjsLib.getDocument({ isEvalSupported: false, data: new Uint8Array(arrayBuffer) }).promise;
  document.getElementById('name2').textContent = ' ' + file.name;
  document.getElementById('viewer-name2').textContent = file.name;
  checkBothLoaded();

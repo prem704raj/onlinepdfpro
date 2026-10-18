@@ -1153,7 +1153,7 @@
 
  try {
  const pdfData = new Uint8Array(await file.arrayBuffer());
- const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: pdfData });
 
  loadingTask.onProgress = function (progress) {
  if (progress && progress.total) {

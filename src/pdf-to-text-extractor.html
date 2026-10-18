@@ -854,7 +854,7 @@
 
  try {
  const bytes = new Uint8Array(await file.arrayBuffer());
- const loadingTask = pdfjsLib.getDocument({ data: bytes });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: bytes });
 
  loadingTask.onProgress = function (data) {
  if (data && data.total) {

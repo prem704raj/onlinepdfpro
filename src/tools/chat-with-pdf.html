@@ -191,7 +191,7 @@
     conversation = [];
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = loadedPdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = loadedPdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
       documentText = "";
       pageImages = [];
 

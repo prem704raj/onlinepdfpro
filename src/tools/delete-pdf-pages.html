@@ -375,7 +375,7 @@
  document.getElementById('progressSection').style.display = 'block';
 
  // Pass a COPY to pdfjsLib — it detaches the ArrayBuffer, making it unusable for PDFLib later
- const pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+ const pdfJsDoc = await pdfjsLib.getDocument({ isEvalSupported: false, data: pdfBytes.slice(0) }).promise;
  totalPages = pdfJsDoc.numPages;
 
  document.getElementById('fileInfo').style.display = 'block';

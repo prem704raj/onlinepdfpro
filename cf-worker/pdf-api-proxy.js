@@ -178,8 +178,9 @@ export default {
             const contentType = request.headers.get('content-type') || '';
             if (contentType.includes('application/json')) {
                 try {
-                    const parsed = await request.clone().json();
-                    if (typeof parsed?.target === 'string') targetPath = parsed.target;
+                    const parsed = await readJsonRequest(request);
+                    if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+                    if (typeof parsed.data?.target === 'string') targetPath = parsed.data.target;
                 } catch {}
             }
             if (!targetPath) {
@@ -286,18 +287,14 @@ async function verifyTurnstile(token, ip, env) {
         if (ip && ip !== 'unknown') formData.append('remoteip', ip);
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 8000);
-        let res;
         try {
-            res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
                 body: formData,
                 signal: controller.signal
             });
-        } finally {
-            clearTimeout(timeout);
-        }
         if (!res.ok) return false;
-        const outcome = await res.json();
+        const outcome = JSON.parse(new TextDecoder().decode(await readBoundedBytes(res, MAX_JSON_SIZE, { signal: controller.signal })));
         const hostname = String(outcome.hostname || '').toLowerCase();
         const allowedHostnames = String(env.TURNSTILE_ALLOWED_HOSTNAMES || 'onlinepdfpro.com,www.onlinepdfpro.com')
             .split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
@@ -305,6 +302,7 @@ async function verifyTurnstile(token, ip, env) {
             ? true
             : allowedHostnames.includes(hostname);
         return outcome.success === true && hostnameValid;
+        } finally { clearTimeout(timeout); }
     } catch (err) {
         console.error('Turnstile verification error:', err);
         return false;
@@ -506,7 +504,7 @@ async function handleConversion(request, env, pathname, corsHeaders) {
         return jsonResponse({ error: 'Unsupported document type.' }, 415, corsHeaders);
     }
     try {
-        const body = await request.arrayBuffer();
+        let body = await readBoundedBytes(request, MAX_CONVERSION_SIZE);
         if (!body.byteLength || body.byteLength > MAX_CONVERSION_SIZE) return jsonResponse({ error: 'File is empty or exceeds the 50MB limit.' }, 413, corsHeaders);
         if (!isValidConversionDocument(pathname, new Uint8Array(body))) {
             return jsonResponse({ error: 'The file contents do not match a supported document format.' }, 415, corsHeaders);
@@ -515,20 +513,18 @@ async function handleConversion(request, env, pathname, corsHeaders) {
         if (env.MODAL_API_TOKEN) headers.Authorization = `Bearer ${env.MODAL_API_TOKEN}`;
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 120000);
-        let response;
         try {
-            response = await fetch(upstream, { method: 'POST', headers, body, signal: controller.signal });
-        } finally {
-            clearTimeout(timeout);
-        }
+        const response = await fetch(upstream, { method: 'POST', headers, body, signal: controller.signal });
+        body = null; // Input validation/upload is complete; do not retain it during output buffering.
         if (!response.ok) {
-            const message = (await response.text()).slice(0, 1000);
-            console.error('[Conversion] upstream failure', pathname, response.status, message);
+            response.body?.cancel().catch(() => {});
+            console.error('[Conversion] upstream failure', pathname, response.status);
             return jsonResponse({ error: 'Conversion failed. Please verify the document and try again.' }, response.status >= 500 ? 502 : 400, corsHeaders);
         }
-        const output = await response.arrayBuffer();
-        if (!output.byteLength || output.byteLength > 100 * 1024 * 1024) return jsonResponse({ error: 'Conversion returned an invalid or oversized file.' }, 502, corsHeaders);
-        if (!isValidConversionOutput(pathname, new Uint8Array(output))) {
+        // Keep both document directions within the same 50 MB parser budget.
+        const output = await readBoundedBytes(response, MAX_CONVERSION_SIZE, { signal: controller.signal, timeoutMs: 120000 });
+        if (!output.byteLength) return jsonResponse({ error: 'Conversion returned an empty file.' }, 502, corsHeaders);
+        if (!isValidConversionOutput(pathname, output)) {
             console.error('[Conversion] upstream returned an invalid output signature', pathname);
             return jsonResponse({ error: 'Conversion returned an invalid document.' }, 502, corsHeaders);
         }
@@ -538,8 +534,12 @@ async function handleConversion(request, env, pathname, corsHeaders) {
         responseHeaders.set('Cache-Control', 'no-store');
         responseHeaders.set('X-Content-Type-Options', 'nosniff');
         return new Response(output, { status: 200, headers: responseHeaders });
+        } finally {
+            clearTimeout(timeout);
+        }
     } catch (err) {
         console.error('[Conversion] request failed', pathname, err);
+        if (err.name === 'BodyTooLargeError') return jsonResponse({ error: 'Document exceeds the 50MB processing limit.' }, 413, corsHeaders);
         return jsonResponse({ error: 'Conversion service is temporarily unavailable.' }, 502, corsHeaders);
     }
 }
@@ -560,7 +560,7 @@ async function supabaseQuery(env, path, method, body, token, extraHeaders = {}) 
     opts.signal = controller.signal;
     try {
         const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`, opts);
-        const text = await res.text();
+        const text = new TextDecoder().decode(await readBoundedBytes(res, 2 * 1024 * 1024, { signal: controller.signal }));
         try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
         catch { return { ok: res.ok, status: res.status, data: text }; }
     } finally {
@@ -624,12 +624,16 @@ async function razorpayRequest(env, path, method = 'GET', body) {
         'Authorization': razorpayAuthHeader(env),
         'Content-Type': 'application/json'
     };
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
     const response = await fetch(`https://api.razorpay.com/v1/${path}`, {
         method,
         headers,
+        signal: controller.signal,
         ...(body ? { body: JSON.stringify(body) } : {})
     });
-    const text = await response.text();
+    const text = new TextDecoder().decode(await readBoundedBytes(response, 1024 * 1024, { signal: controller.signal }));
     let data;
     try {
         data = JSON.parse(text);
@@ -637,6 +641,7 @@ async function razorpayRequest(env, path, method = 'GET', body) {
         data = text;
     }
     return { ok: response.ok, status: response.status, data };
+    } finally { clearTimeout(timeout); }
 }
 
 async function getProduct(env, productId) {
@@ -688,7 +693,7 @@ async function verifySupabaseJWT(env, authHeader) {
             signal: controller.signal
         });
         if (!res.ok) return null;
-        const user = await res.json();
+        const user = JSON.parse(new TextDecoder().decode(await readBoundedBytes(res, MAX_JSON_SIZE, { signal: controller.signal })));
         return typeof user?.id === 'string' && user.id.length <= 100 ? user.id : null;
     } catch (err) {
         console.error('[Store] Supabase JWT verification failed', err);
@@ -712,12 +717,9 @@ async function handleCreateOrder(request, env, allowedOrigins) {
         const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
         if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
 
-        let body;
-        try {
-            body = await request.json();
-        } catch (err) {
-            return jsonResponse({ error: 'Invalid request.' }, 400, corsHeaders);
-        }
+        const parsed = await readJsonRequest(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+        const body = parsed.data;
         const { product_id } = body || {};
         if (!isValidProductId(product_id)) {
             return jsonResponse({ error: 'A valid product is required.' }, 400, corsHeaders);
@@ -804,12 +806,9 @@ async function handleVerifyPayment(request, env, allowedOrigins) {
         const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
         if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
 
-        let body;
-        try {
-            body = await request.json();
-        } catch (err) {
-            return jsonResponse({ error: 'Invalid request.' }, 400, corsHeaders);
-        }
+        const parsed = await readJsonRequest(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+        const body = parsed.data;
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body || {};
         
         if (!isValidRazorpayId(razorpay_order_id, 'order') ||
@@ -954,10 +953,7 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
         }
 
         const signature = request.headers.get('X-Razorpay-Signature') || '';
-        const rawBody = await request.text();
-        if (rawBody.length > 256 * 1024) {
-            return jsonResponse({ error: 'Webhook payload too large.' }, 413, corsHeaders);
-        }
+        const rawBody = new TextDecoder().decode(await readBoundedBytes(request, MAX_JSON_SIZE));
         if (!await verifyHmacHex(env.RAZORPAY_WEBHOOK_SECRET, rawBody, signature)) {
             return jsonResponse({ error: 'Invalid webhook signature.' }, 400, corsHeaders);
         }
@@ -978,8 +974,15 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
         if (refundEvents.has(event)) {
             const refundPayment = body?.payload?.payment?.entity;
             const refundOrder = body?.payload?.order?.entity;
+            const refundEntity = body?.payload?.refund?.entity || body?.payload?.dispute?.entity;
             const refundOrderId = refundPayment?.order_id || refundOrder?.id;
-            const refundPaymentId = refundPayment?.id;
+            const refundPaymentId = refundPayment?.id || refundEntity?.payment_id;
+
+            if ((refundOrderId && !isValidRazorpayId(refundOrderId, 'order')) ||
+                (refundPaymentId && !isValidRazorpayId(refundPaymentId, 'pay')) ||
+                (!refundOrderId && !refundPaymentId)) {
+                return jsonResponse({ error: 'Invalid webhook payload.' }, 400, corsHeaders);
+            }
 
             let targetOrderId = refundOrderId;
             if (!targetOrderId && refundPaymentId) {
@@ -988,23 +991,46 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
                     `orders?razorpay_payment_id=eq.${encodeURIComponent(refundPaymentId)}&select=razorpay_order_id&limit=1`,
                     'GET'
                 );
-                if (lookupRes.ok && Array.isArray(lookupRes.data) && lookupRes.data.length) {
+                if (!lookupRes.ok || !Array.isArray(lookupRes.data)) {
+                    return jsonResponse({ error: 'Webhook processing is temporarily unavailable.' }, 503, corsHeaders);
+                }
+                if (lookupRes.data.length) {
                     targetOrderId = lookupRes.data[0].razorpay_order_id;
+                } else {
+                    return jsonResponse({ received: true, ignored: true }, 200, corsHeaders);
                 }
             }
 
-            if (targetOrderId) {
+            if (!isValidRazorpayId(targetOrderId, 'order')) {
+                return jsonResponse({ error: 'Webhook processing is temporarily unavailable.' }, 503, corsHeaders);
+            }
+            const orderRes = await getOrderByRazorpayId(env, targetOrderId);
+            if (!orderRes.ok || !Array.isArray(orderRes.data)) {
+                return jsonResponse({ error: 'Webhook processing is temporarily unavailable.' }, 503, corsHeaders);
+            }
+            if (!orderRes.data.length) {
+                return jsonResponse({ received: true, ignored: true }, 200, corsHeaders);
+            }
+            if (orderRes.data[0].status === 'refunded') {
+                return jsonResponse({ received: true, processed: true, already_processed: true, status: 'refunded' }, 200, corsHeaders);
+            }
+            {
                 // The product policy is conservative: any refund or dispute
                 // signal suspends the entitlement, including partial refunds,
                 // until support confirms the final payment state.
-                await supabaseQuery(
+                const updateRes = await supabaseQuery(
                     env,
-                    `orders?razorpay_order_id=eq.${encodeURIComponent(targetOrderId)}`,
+                    `orders?razorpay_order_id=eq.${encodeURIComponent(targetOrderId)}&select=id,status`,
                     'PATCH',
                     { status: 'refunded' },
                     undefined,
                     { 'Prefer': 'return=representation' }
                 );
+                if (!updateRes.ok || !Array.isArray(updateRes.data) || !updateRes.data.length ||
+                    updateRes.data.some(order => order.status !== 'refunded')) {
+                    console.error('[Store] refund/dispute revocation could not be confirmed', updateRes.status);
+                    return jsonResponse({ error: 'Webhook processing is temporarily unavailable.' }, 503, corsHeaders);
+                }
                 console.info('[Store] processed refund/dispute event for order', targetOrderId);
             }
             return jsonResponse({ received: true, processed: true, status: 'refunded' }, 200, corsHeaders);
@@ -1108,6 +1134,7 @@ async function handleRazorpayWebhook(request, env, allowedOrigins) {
         return jsonResponse({ received: true, processed: true }, 200, corsHeaders);
     } catch (err) {
         console.error('[Store] razorpay-webhook failed', err);
+        if (err.name === 'BodyTooLargeError') return jsonResponse({ error: 'Webhook payload too large.' }, 413, corsHeaders);
         return jsonResponse({ error: 'Webhook processing is temporarily unavailable.' }, 503, corsHeaders);
     }
 }
@@ -1124,12 +1151,9 @@ async function handleDownload(request, env, allowedOrigins) {
         const userId = await verifySupabaseJWT(env, request.headers.get('Authorization'));
         if (!userId) return jsonResponse({ error: 'Unauthorized' }, 401, corsHeaders);
 
-        let body;
-        try {
-            body = await request.json();
-        } catch (err) {
-            return jsonResponse({ error: 'Invalid request.' }, 400, corsHeaders);
-        }
+        const parsed = await readJsonRequest(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, 400, corsHeaders);
+        const body = parsed.data;
         const { product_id } = body || {};
         if (!isValidProductId(product_id)) {
             return jsonResponse({ error: 'A valid product is required.' }, 400, corsHeaders);
@@ -1216,17 +1240,62 @@ async function handleMyPurchases(request, env, allowedOrigins) {
     }
 }
 
-async function readJsonRequest(request, maxBytes = MAX_JSON_SIZE) {
-    const declaredLength = Number(request.headers.get('content-length') || 0);
-    if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
-        return { error: 'Request is too large.' };
+// Read at most maxBytes and stop as soon as a streamed body crosses the limit.
+// The deadline also covers stalled bodies after response headers have arrived.
+async function readBoundedBytes(message, maxBytes, { signal, timeoutMs = 30000 } = {}) {
+    const tooLarge = () => Object.assign(new Error('Body exceeds the byte limit.'), { name: 'BodyTooLargeError' });
+    const declared = Number(message.headers.get('content-length') || 0);
+    if (Number.isFinite(declared) && declared > maxBytes) {
+        message.body?.cancel().catch(() => {});
+        throw tooLarge();
     }
+    if (!message.body) return new Uint8Array(0);
+    const reader = message.body.getReader();
+    let interrupted = false;
+    let rejectAbort;
+    const aborted = new Promise((_, reject) => { rejectAbort = reject; });
+    const abort = () => {
+        interrupted = true;
+        rejectAbort(new DOMException('Body read timed out or was aborted.', 'AbortError'));
+        reader.cancel().catch(() => {});
+    };
+    const timer = setTimeout(abort, timeoutMs);
+    signal?.addEventListener('abort', abort, { once: true });
+    let storage = new Uint8Array(Math.min(maxBytes, 65536));
+    let length = 0;
     try {
-        const text = await request.text();
-        if (new TextEncoder().encode(text).byteLength > maxBytes) return { error: 'Request is too large.' };
+        if (signal?.aborted) throw new DOMException('Body read aborted.', 'AbortError');
+        while (true) {
+            const { done, value } = await Promise.race([reader.read(), aborted]);
+            if (interrupted || signal?.aborted) throw new DOMException('Body read aborted.', 'AbortError');
+            if (done) break;
+            if (length + value.byteLength > maxBytes) throw tooLarge();
+            if (length + value.byteLength > storage.length) {
+                const grown = new Uint8Array(Math.min(maxBytes, Math.max(length + value.byteLength, storage.length * 2)));
+                grown.set(storage.subarray(0, length));
+                storage = grown;
+            }
+            storage.set(value, length);
+            length += value.byteLength;
+        }
+        return storage.subarray(0, length);
+    } catch (error) {
+        reader.cancel().catch(() => {});
+        throw error;
+    } finally {
+        clearTimeout(timer);
+        signal?.removeEventListener('abort', abort);
+        reader.releaseLock();
+    }
+}
+
+async function readJsonRequest(request, maxBytes = MAX_JSON_SIZE) {
+    try {
+        const text = new TextDecoder().decode(await readBoundedBytes(request, maxBytes));
         const data = JSON.parse(text);
         return { data };
-    } catch {
+    } catch (error) {
+        if (error.name === 'BodyTooLargeError') return { error: 'Request is too large.' };
         return { error: 'Invalid request body.' };
     }
 }
@@ -1288,7 +1357,7 @@ async function fetchJsonUpstream(url, options, timeoutMs = 60_000) {
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
         const response = await fetch(url, { ...options, signal: controller.signal });
-        const text = await response.text();
+        const text = new TextDecoder().decode(await readBoundedBytes(response, 2 * 1024 * 1024, { signal: controller.signal }));
         let data;
         try { data = JSON.parse(text); } catch { data = { error: { message: 'Invalid upstream response.' } }; }
         return { ok: response.ok, status: response.status, data };

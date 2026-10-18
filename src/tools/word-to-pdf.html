@@ -366,7 +366,7 @@
                     if (new TextDecoder().decode(outputHeader) !== '%PDF-' || blob.size > 100 * 1024 * 1024) throw new Error('The conversion service returned an invalid or oversized document. Please try again.');
                     try {
                         pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdfjs/pdf.worker.min.js';
-                        const outputPdf = await pdfjsLib.getDocument({data:await blob.arrayBuffer()}).promise;
+                        const outputPdf = await pdfjsLib.getDocument({ isEvalSupported: false,data:await blob.arrayBuffer()}).promise;
                         if (!outputPdf.numPages) throw new Error('No pages');
                         await outputPdf.destroy();
                     } catch (_) { throw new Error('The conversion service returned an invalid PDF document. Please try again.'); }

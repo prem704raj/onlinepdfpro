@@ -376,7 +376,7 @@
  const numPages = srcDoc.getPageCount();
  const targetBytesPerPage = targetBytes / numPages;
 
- const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: arrayBuffer.slice(0) });
  const pdfDocJs = await loadingTask.promise;
  const firstPage = await pdfDocJs.getPage(1);
 
@@ -440,7 +440,7 @@
  //
  async function rasterizeCompress(arrayBuffer, optimalParams, statusText, progressFill, numPagesTotal) {
  const newPdfDoc = await PDFDocument.create();
- const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: new Uint8Array(arrayBuffer) });
  const pdfDocJs = await loadingTask.promise;
  const numPages = pdfDocJs.numPages;
 

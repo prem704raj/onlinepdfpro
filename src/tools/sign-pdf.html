@@ -378,7 +378,7 @@
  originalPdfBytes = arrayBuffer.slice(0);
  pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
 
- const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+ const pdf = await pdfjsLib.getDocument({ isEvalSupported: false, data: arrayBuffer }).promise;
  const pagesDiv = document.getElementById('pages');
  const selector = document.getElementById('pageSelector');
  pagesDiv.innerHTML = '';
