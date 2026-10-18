@@ -15,6 +15,9 @@ const release = option('--release');
 const require = createRequire(import.meta.url);
 const registry = require('../src/_data/tools.js').tools;
 const guides = require('../src/_data/guides.js');
+const redirects = new Map(fs.readFileSync(new URL('../src/_redirects', import.meta.url), 'utf8')
+  .split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'))
+  .map(line => line.split(/\s+/).slice(0, 2)));
 const results = [], errors = [], warnings = [];
 const routes = [...new Set(['/', '/tools', '/guides', '/about', '/contact', '/support', '/privacy', '/terms', '/help', '/blog', '/study-materials', '/products/dbms-notes', ...registry.map(t => t.href.replace(/\.html$/, '')), ...guides.map(g => g.url)])];
 if (routes.some(route => typeof route !== 'string' || !route.startsWith('/'))) throw new Error('Every public audit route must be an explicit site path');
@@ -25,7 +28,7 @@ const get = async pathname => {
 
 for (let i = 0; i < routes.length; i += 4) await Promise.all(routes.slice(i, i + 4).map(async route => {
   try {
-    const { response, body } = await get(route), metadata = { route, status: response.status, canonical: [], publisher: [], h1: 0 };
+    const { response, body } = await get(route), metadata = { route, finalUrl: response.url, status: response.status, canonical: [], publisher: [], h1: 0 };
     walk(parse(body), node => {
       if (node.tagName === 'h1') metadata.h1++;
       if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') metadata.canonical.push(attribute(node, 'href'));
@@ -35,7 +38,16 @@ for (let i = 0; i < routes.length; i += 4) await Promise.all(routes.slice(i, i +
     if (response.status !== 200) errors.push(`${route}: HTTP ${response.status}`);
     else {
       if (!metadata.h1) errors.push(`${route}: missing primary heading`);
-      if (metadata.canonical.length !== 1 || metadata.canonical[0] !== `https://onlinepdfpro.com${route}`) errors.push(`${route}: unexpected canonical`);
+      const finalUrl = new URL(response.url);
+      let expectedPath = route;
+      const visited = new Set();
+      while (redirects.has(expectedPath) && !visited.has(expectedPath)) {
+        visited.add(expectedPath);
+        expectedPath = redirects.get(expectedPath);
+      }
+      if (finalUrl.origin !== base.origin) errors.push(`${route}: redirected outside the audited site`);
+      if (finalUrl.pathname !== expectedPath) errors.push(`${route}: unexpected redirect destination`);
+      if (metadata.canonical.length !== 1 || metadata.canonical[0] !== `https://onlinepdfpro.com${expectedPath}`) errors.push(`${route}: unexpected canonical`);
       if (metadata.publisher.length !== 1 || metadata.publisher[0] !== 'ca-pub-3541372477756449') warnings.push(`${route}: ownership metadata absent or inconsistent`);
     }
   } catch (error) { errors.push(`${route}: ${error.message}`); }
