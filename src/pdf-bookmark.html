@@ -427,7 +427,7 @@
  if (header !== '%PDF-') return alert('That file is not a valid PDF.');
  try {
  _originalFileName = file.name; pdfBytes = await file.arrayBuffer();
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
+ pdfJsDoc = await pdfjsLib.getDocument({ isEvalSupported: false, data: pdfBytes.slice(0) }).promise; totalPages = pdfJsDoc.numPages; currentPage = 1;
  bookmarks = []; bookmarkCounter = 0;
  const outlines = await pdfJsDoc.getOutline();
  let unsupported = 0;

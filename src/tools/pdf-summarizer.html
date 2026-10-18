@@ -183,7 +183,7 @@
     loadingState.querySelector('.spinner').style.display = 'block';
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = loadedPdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+      const pdf = loadedPdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
       let documentText = "";
       for(let i = 1; i <= pdf.numPages; i++) {
         loadingText.textContent = "Reading page " + i + " of " + pdf.numPages + "...";

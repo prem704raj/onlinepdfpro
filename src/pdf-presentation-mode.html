@@ -1406,7 +1406,7 @@
  stopSlideshow();
  stopTimer();
 
- const task = pdfjsLib.getDocument({ data: bytes });
+ const task = pdfjsLib.getDocument({ isEvalSupported: false, data: bytes });
  task.onProgress = function (p) {
  if (p && p.total) {
  const pct = 2 + Math.round((p.loaded / p.total) * 15);

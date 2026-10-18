@@ -402,7 +402,7 @@
  const arrayBuffer = await readFileAsArrayBuffer(pdfFile);
  pdfBytes = arrayBuffer;
  // Pass a copy so PDF.js doesn't detach the underlying ArrayBuffer
- const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: arrayBuffer.slice(0) });
  pdfDoc = await loadingTask.promise;
  await renderThumbnails();
  uploadZone.style.display = 'none';

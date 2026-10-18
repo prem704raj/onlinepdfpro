@@ -344,7 +344,7 @@
             for (const file of files) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
                     const numPages = pdf.numPages;
                     totalPages += numPages;
 

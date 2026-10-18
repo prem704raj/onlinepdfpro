@@ -72,6 +72,19 @@ test('every generated page has one canonical and analytics loader, with a consis
     }
 });
 
+test('Cloudflare analytics beacon and collection endpoint are permitted by both CSP modes', () => {
+    for (const filename of ['src/_headers', '_headers', '_site/_headers']) {
+        const lines = fs.readFileSync(path.join(root, filename), 'utf8').split(/\r?\n/);
+        const policies = lines.filter(line => /^\s+Content-Security-Policy(?:-Report-Only)?:/.test(line));
+        assert.equal(policies.length, 2, filename);
+        for (const line of policies) {
+            const directives = Object.fromEntries(line.slice(line.indexOf(':') + 1).split(';')
+                .map(part => part.trim().split(/\s+/)).filter(parts => parts[0]).map(parts => [parts[0], parts.slice(1)]));
+            assert.ok(directives['script-src']?.includes('https://static.cloudflareinsights.com'), filename + ': beacon');
+            assert.ok(directives['connect-src']?.includes('https://cloudflareinsights.com'), filename + ': collection');
+        }
+    }
+});
 test('HTML preparation removes empty ad gaps while preserving populated containers', () => {
     const html = '<html><head></head><body><div class="banner-ad-spacer"> \n<!-- reserved --></div><div class="banner-ad-spacer"><p>Useful content</p></div></body></html>';
     const result = prepareHtml(html, { canonicalPath: '/', routes: new Map(), csp: "default-src 'self'" });

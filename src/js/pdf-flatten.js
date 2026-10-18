@@ -25,7 +25,7 @@ window.flattenLocalPdf = async function (bytes, { mode, removeMetadata, onProgre
         onProgress(90, 'Saving form appearances...');
     } else if (mode === 'images') {
         pdf = await PDFDocument.create();
-        const rendered = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
+        const rendered = await pdfjsLib.getDocument({ isEvalSupported: false, data: bytes.slice(0) }).promise;
         try {
             for (let pageNumber = 1; pageNumber <= rendered.numPages; pageNumber++) {
                 onProgress(20 + 70 * pageNumber / rendered.numPages, `Rendering page ${pageNumber} of ${rendered.numPages}...`);

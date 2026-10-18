@@ -501,7 +501,7 @@
  try {
  _originalFileName = file.name;
  pdfBytes = await file.arrayBuffer();
- pdfJsDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+ pdfJsDoc = await pdfjsLib.getDocument({ isEvalSupported: false, data: pdfBytes.slice(0) }).promise;
  totalPages = pdfJsDoc.numPages;
  currentPage = 1;
  pageRatios = {};

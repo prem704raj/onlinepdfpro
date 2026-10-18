@@ -49,7 +49,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
 
                 pdfBytes = await file.arrayBuffer();
                 // Pass a copy to pdfjsLib — it detaches the ArrayBuffer
-                pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+                pdfDoc = await pdfjsLib.getDocument({ isEvalSupported: false, data: pdfBytes.slice(0) }).promise;
                 totalPages = pdfDoc.numPages;
                 currentPage = 1;
 
@@ -1774,7 +1774,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
             }
 
             async function refreshPdfAfterStructureChange() {
-                pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+                pdfDoc = await pdfjsLib.getDocument({ isEvalSupported: false, data: pdfBytes.slice(0) }).promise;
                 totalPages = pdfDoc.numPages;
                 normalizeKeyedPageState();
                 await renderPage();
