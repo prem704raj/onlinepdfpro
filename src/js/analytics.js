@@ -125,7 +125,9 @@
                 size_bucket: size < 1 ? 'under_1mb' : size < 10 ? '1_to_10mb' : size <= 50 ? '10_to_50mb' : 'over_50mb' });
         }, true);
         document.addEventListener('click', event => {
-            if (event.target.closest?.('a[download]')) track('tool_download');
+            // Programmatic download links are measured by the exporting workflow.
+            // Only count a real user's direct anchor click here.
+            if (event.isTrusted && event.target.closest?.('a[download]')) track('tool_download', { action: 'download' });
         }, true);
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });

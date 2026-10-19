@@ -6,6 +6,7 @@ import { createRequire } from 'node:module';
 import { parse } from 'parse5';
 import { attribute, walk } from './prepare-site.mjs';
 import { requiredRoutes } from './smoke-worker.mjs';
+import { blocksIndexing, priorityIndexPaths, robotsProblems, sitemapPaths } from './public-indexability.mjs';
 
 const args = process.argv.slice(2);
 const option = name => args.includes(name) ? args[args.indexOf(name) + 1] : undefined;
@@ -19,20 +20,36 @@ const redirects = new Map(fs.readFileSync(new URL('../src/_redirects', import.me
   .split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'))
   .map(line => line.split(/\s+/).slice(0, 2)));
 const results = [], errors = [], warnings = [];
-const routes = [...new Set(['/', '/tools', '/guides', '/about', '/contact', '/support', '/privacy', '/terms', '/help', '/blog', '/study-materials', '/products/dbms-notes', ...registry.map(t => t.href.replace(/\.html$/, '')), ...guides.map(g => g.url)])];
-if (routes.some(route => typeof route !== 'string' || !route.startsWith('/'))) throw new Error('Every public audit route must be an explicit site path');
+const configuredRoutes = ['/', '/tools', '/guides', '/about', '/contact', '/support', '/privacy', '/terms', '/help', '/blog', '/study-materials', '/products/dbms-notes', ...registry.map(t => t.href.replace(/\.html$/, '')), ...guides.map(g => g.url)];
+if (configuredRoutes.some(route => typeof route !== 'string' || !route.startsWith('/'))) throw new Error('Every public audit route must be an explicit site path');
 const get = async pathname => {
   const response = await fetch(new URL(pathname, base), { redirect: 'follow', signal: AbortSignal.timeout(20000), headers: { 'Cache-Control': 'no-cache' } });
   return { response, body: await response.text() };
 };
 
+let indexedPaths = [];
+try {
+  const { response, body } = await get('/sitemap.xml');
+  if (response.status !== 200) errors.push(`Sitemap: HTTP ${response.status}`);
+  else indexedPaths = sitemapPaths(body);
+} catch (error) { errors.push(`Sitemap: ${error.message}`); }
+for (const path of priorityIndexPaths) if (!indexedPaths.includes(path)) errors.push(`Priority URL absent from sitemap: ${path}`);
+try {
+  const { response, body } = await get('/robots.txt');
+  if (response.status !== 200) errors.push(`robots.txt: HTTP ${response.status}`);
+  else errors.push(...robotsProblems(body));
+} catch (error) { errors.push(`robots.txt: ${error.message}`); }
+const indexedSet = new Set(indexedPaths);
+const routes = [...new Set([...configuredRoutes, ...indexedPaths])];
+
 for (let i = 0; i < routes.length; i += 4) await Promise.all(routes.slice(i, i + 4).map(async route => {
   try {
-    const { response, body } = await get(route), metadata = { route, finalUrl: response.url, status: response.status, canonical: [], publisher: [], h1: 0 };
+    const { response, body } = await get(route), metadata = { route, finalUrl: response.url, status: response.status, canonical: [], publisher: [], robots: [], xRobotsTag: response.headers.get('x-robots-tag'), h1: 0 };
     walk(parse(body), node => {
       if (node.tagName === 'h1') metadata.h1++;
       if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') metadata.canonical.push(attribute(node, 'href'));
       if (node.tagName === 'meta' && attribute(node, 'name') === 'google-adsense-account') metadata.publisher.push(attribute(node, 'content'));
+      if (node.tagName === 'meta' && ['robots', 'googlebot'].includes(attribute(node, 'name')?.toLowerCase())) metadata.robots.push(attribute(node, 'content'));
     });
     results.push(metadata);
     if (response.status !== 200) errors.push(`${route}: HTTP ${response.status}`);
@@ -49,6 +66,7 @@ for (let i = 0; i < routes.length; i += 4) await Promise.all(routes.slice(i, i +
       if (finalUrl.pathname !== expectedPath) errors.push(`${route}: unexpected redirect destination`);
       if (metadata.canonical.length !== 1 || metadata.canonical[0] !== `https://onlinepdfpro.com${expectedPath}`) errors.push(`${route}: unexpected canonical`);
       if (metadata.publisher.length !== 1 || metadata.publisher[0] !== 'ca-pub-3541372477756449') warnings.push(`${route}: ownership metadata absent or inconsistent`);
+      if (indexedSet.has(route) && (metadata.robots.some(blocksIndexing) || blocksIndexing(metadata.xRobotsTag))) errors.push(`${route}: sitemap URL is noindex`);
     }
   } catch (error) { errors.push(`${route}: ${error.message}`); }
 }));
@@ -76,7 +94,7 @@ try {
   if (missing.length) errors.push(`Worker is missing routes: ${missing.join(', ')}`);
   if (!worker.release || worker.release !== observedRelease) errors.push(`Worker/frontend releases differ: ${worker.release || 'unattributed'} / ${observedRelease || 'unknown'}`);
 } catch (error) { errors.push(`Worker: ${error.message}`); }
-const report = { checkedAt: new Date().toISOString(), base: base.origin, expectedRelease: release, observedRelease, toolCount: registry.length, checkedPages: routes.length, http200Pages: results.filter(r => r.status === 200).length, worker, errors, warnings, pages: results.sort((a, b) => a.route.localeCompare(b.route)), limitation: 'HTTP and metadata only. Successful real providers, payments, file outputs and physical devices require separate acceptance.' };
+const report = { checkedAt: new Date().toISOString(), base: base.origin, expectedRelease: release, observedRelease, toolCount: registry.length, sitemapUrls: indexedPaths.length, priorityUrlsInSitemap: priorityIndexPaths.filter(path => indexedSet.has(path)).length, checkedPages: routes.length, http200Pages: results.filter(r => r.status === 200).length, worker, errors, warnings, pages: results.sort((a, b) => a.route.localeCompare(b.route)), limitation: 'HTTP and metadata only. Search Console indexing, successful real providers, payments, file outputs and physical devices require separate acceptance.' };
 if (option('--output')) fs.writeFileSync(option('--output'), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ ...report, pages: undefined }, null, 2));
 process.exitCode = errors.length ? 1 : 0;

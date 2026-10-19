@@ -23,8 +23,23 @@ const cases = [];
 const test = (name, run) => cases.push({ name, run });
 const registry = createRequire(import.meta.url)("../src/_data/tools.js").tools;
 
+function captureFunnel() {
+  window.__funnelEvents = [];
+  window.OnlinePDFProAnalytics = {
+    track: (name, params) => window.__funnelEvents.push({ name, params }),
+  };
+}
+
+async function checkFunnel(page, action, fileCount) {
+  const events = await page.evaluate(() => window.__funnelEvents);
+  assert.deepEqual(events.map(event => event.name), ['tool_start', 'tool_complete']);
+  assert.deepEqual(events.map(event => event.params), [
+    { action, file_count: fileCount }, { action, file_count: fileCount },
+  ]);
+}
+
 test("Merge PDF: one move changes order once; output follows chosen order", async () => {
-  const p = await open("/tools/merge-pdf");
+  const p = await open("/tools/merge-pdf", { init: captureFunnel });
   try {
     await upload(p, "#uploadZone input", fixtures.pdf, fixtures.second);
     await visible(p, "#mergeBtn");
@@ -35,6 +50,7 @@ test("Merge PDF: one move changes order once; output follows chosen order", asyn
     );
     await click(p, "#mergeBtn");
     await visible(p, "#resultsSection");
+    await checkFunnel(p, 'merge', 2);
     await click(p, "#downloadBtn");
     const out = await download(p);
     const info = await pdfInfo(p, out.bytes);
@@ -48,7 +64,7 @@ test("Merge PDF: one move changes order once; output follows chosen order", asyn
   }
 });
 test("Split PDF: valid ranges preserve order and rotation; malformed ranges are rejected", async () => {
-  const p = await open("/tools/split-pdf");
+  const p = await open("/tools/split-pdf", { init: captureFunnel });
   try {
     await upload(p, "#uploadZone input", fixtures.pdf);
     await visible(p, "#pageSection");
@@ -67,6 +83,7 @@ test("Split PDF: valid ranges preserve order and rotation; malformed ranges are 
     );
     await click(p, "#extractBtn");
     await visible(p, "#resultsSection");
+    await checkFunnel(p, 'split', 1);
     await click(p, "#downloadBtn");
     const info = await pdfInfo(p, (await download(p)).bytes);
     assert.equal(info.length, 2);
@@ -79,7 +96,7 @@ test("Split PDF: valid ranges preserve order and rotation; malformed ranges are 
   }
 });
 test("JPG to PDF: transparent PNG and JPEG produce ordered A4 pages", async () => {
-  const p = await open("/tools/jpg-to-pdf");
+  const p = await open("/tools/jpg-to-pdf", { init: captureFunnel });
   try {
     await upload(p, "#fileInput", fixtures.png, fixtures.jpg);
     await visible(p, "#convertSection");
@@ -89,6 +106,7 @@ test("JPG to PDF: transparent PNG and JPEG produce ordered A4 pages", async () =
     );
     await click(p, ".convert-btn");
     const info = await pdfInfo(p, (await download(p)).bytes);
+    await checkFunnel(p, 'convert', 2);
     assert.equal(info.length, 2);
     assert.ok(Math.abs(info[0].width - 595.28) < 0.1);
     assert.ok(Math.abs(info[0].height - 841.89) < 0.1);

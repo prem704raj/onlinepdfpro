@@ -1,5 +1,19 @@
 # OnlinePDFPro: 90-day launch and security roadmap
-Updated: 18 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an assertion about live webmaster metrics.
+Updated: 19 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an assertion about live webmaster metrics.
+
+## Public indexability follow-up — 19 October 2026
+
+- The expanded read-only production audit checked **82/82** distinct public routes successfully, covering all **80** live sitemap URLs and all **10** priority search URLs. Sitemap destinations, canonical tags, heading presence, declared robots sitemap, and HTML/HTTP noindex signals passed; Pages and Worker still agree on release `20ba1feee2322fb81b351e89475616a34bc753a0`. Evidence: `P:/Projects/onlinepdfpro/.audit/evidence/public-audit-2026-10-19-indexability.json`.
+- The audit now includes all discoverable sitemap routes, including blog posts, and fails on missing priority paths, duplicate/legacy sitemap URLs, blocked root crawling or a noindex directive on a sitemap URL. These checks establish public crawlability signals; **actual Google indexing and GSC's historical 404/noindex examples still require Search Console inspection**.
+- The five flagship analytics workflows were committed locally in `1fdf8d9` and their existing regression suite noted in `344eab2`. The observed production release predates these changes; a reviewed deployment is still needed before live conversion measurement can be verified.
+
+## Continued audit and measurement implementation — 18 October, approximately 22:33 IST
+
+- **Fresh public audit:** the read-only `scripts/audit-public-site.mjs` crawl found 61/61 expected routes returning HTTP 200, with zero reported errors or metadata warnings. The production Pages release and Worker health both identify `20ba1feee2322fb81b351e89475616a34bc753a0` (merged PR #13), a newer release than the PR #12 snapshot below. Worker health advertised all ten protected routes. HTTP/metadata and health checks do not establish that real file exports or payments succeed.
+- **Audit evidence:** `P:/Projects/onlinepdfpro/.audit/evidence/public-audit-2026-10-18-2233.json` contains the complete route-by-route report. Rerun using `node scripts/audit-public-site.mjs --output <report-path>` after the next deployment.
+- **Implemented locally, not deployed:** the five flagship tools (Merge, Split, Compress, JPG to PDF, PDF Editor) now emit opt-in, sanitized `tool_start` and `tool_complete` events for successful operations; failures emit `tool_error`. The shared rename-and-download flow emits `tool_download` only after confirmation, and ignores its programmatic anchor clicks to avoid double counting. The editor also marks successful export download initiation. Events contain only permitted actions/counts/error codes, never document text or filenames.
+- **Coverage added:** automation checks start/completion cardinality for Merge, Split, JPG to PDF and Compress, verifies PDF Editor successful exports, and exercises both cancellation and confirmation for the shared downloader. Live GA4 confirmation awaits production rollout and consented manual exports.
+- **Next operational steps:** after releasing the validated change, explicitly opt in during a real browser export, inspect GA4 DebugView/Realtime for `tool_start`, `tool_complete`, `tool_download` and check counts. Configure `tool_complete` (and `tool_download` if useful) as GA4 key events in the property. Exclude owner/test traffic when assessing organic conversion. Finish the existing Google URL inspections and 404/noindex review, then owner authentication and sandbox purchase/refund acceptance; the code-only measurement work does not resolve those account tasks.
 
 ## Verified production progress — 18 October, approximately 21:30 IST
 
@@ -132,8 +146,8 @@ Record (with explicit collection/consent scope): total visits, traffic source, l
 
 ## Still requiring account access / live confirmation
 
-- Actual GSC indexed count and coverage categories; Search Console–GA4 property link status.
-- Bing Webmaster verified submission/index inspection beyond already accepted IndexNow pings.
-- Cloudflare Web Analytics data after CSP fix is deployed; domain-level WAF, bot and TLS policy.
-- GA4 Realtime test consent and sanitized event flow; marketing-attribution baseline.
-- Production validation of both Worker and Pages release hashes after deployment.
+- Refresh GSC's indexed/excluded coverage data after its 12 October report; inspect the remaining priority canonical URLs, three 404s and nine noindex examples. The GA4 property association was already confirmed on 18 October.
+- Recheck Bing's impressions/clicks and crawl reports after the ten confirmed submissions. Existing sitemap/index observations are recorded above.
+- Inspect actual Cloudflare Web Analytics dashboard trends and security events. Beacon delivery, strict TLS and the relevant current API bindings have been checked, but trend analysis remains outstanding.
+- Deploy the local funnel instrumentation, then verify each consented GA4 event in Realtime/DebugView and configure appropriate key events. Separate owner/test activity from user conversion rates.
+- Following any future release, confirm Pages and Worker hashes match and recheck protected route behavior. The 18 October live audit already confirmed matching PR #13 hashes.

@@ -475,6 +475,8 @@
  if (isConverting) return;
  if (images.length === 0) return alert("Add images first!");
 
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'convert', file_count: images.length });
+
  isConverting = true;
  document.getElementById('convertSection').style.display = 'none';
  document.getElementById('progress').style.display = 'block';
@@ -546,11 +548,13 @@
  }
 
  const pdfBytes = await pdfDoc.save();
+ window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'convert', file_count: images.length });
 
  // Download via shared Downloader (auto-saves to history)
  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
  OnlinePDFPro.Downloader.saveBlob(blob, 'images.pdf');
  } catch (err) {
+ window.OnlinePDFProAnalytics?.track('tool_error', { action: 'convert', error_code: 'processing_failed' });
  console.error("PDF Generation Error (Universal Sanitizer):", err);
  alert("An unexpected error occurred building the PDF. Please try again.");
  }

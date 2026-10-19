@@ -731,6 +731,9 @@ const Downloader = {
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
+        // Count download initiation after the user confirms the rename sheet.
+        // A cancelled sheet never reaches this method; filenames stay local.
+        window.OnlinePDFProAnalytics?.track('tool_download', { action: 'download' });
         // Delay cleanup to give the browser time to initiate the download
         setTimeout(() => {
             document.body.removeChild(a);

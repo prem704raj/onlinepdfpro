@@ -148,10 +148,11 @@ let pageJumpTimer = 0;
 const fontReplacementPreferences = new Map();
 let pendingFontReplacement = null;
 
-function trackEditorEvent(name) {
+function trackEditorEvent(name, action) {
   const analytics = window.OnlinePDFPro && window.OnlinePDFPro.Analytics;
-  if (analytics && typeof analytics.track === 'function') analytics.track(name, { tool_name: 'pdf_editor' });
-  else if (typeof window.gtag === 'function') window.gtag('event', name, { tool_name: 'pdf_editor' });
+  const parameters = { tool_name: 'pdf_editor', ...(action ? { action } : {}) };
+  if (analytics && typeof analytics.track === 'function') analytics.track(name, parameters);
+  else if (typeof window.gtag === 'function') window.gtag('event', name, parameters);
 }
 
 function isTextObject(object) {
@@ -1512,6 +1513,7 @@ async function exportPdf() {
   if (inlineTextEditor) await inlineTextEditor.commit('export');
   if (editorState.busy) return;
   refs.exportNotice.hidden = true;
+  trackEditorEvent('tool_start', 'start');
   setBusy(true, 'Exporting PDF…');
   try {
     const result = await exportEditedPdf({
@@ -1528,8 +1530,11 @@ async function exportPdf() {
       refs.exportNotice.hidden = false;
     }
     trackEditorEvent('export_success');
+    trackEditorEvent('tool_complete', 'complete');
+    trackEditorEvent('tool_download', 'download');
   } catch (error) {
     trackEditorEvent('export_failure');
+    trackEditorEvent('tool_error', 'process');
     refs.exportNotice.textContent = (error && error.message) || 'The PDF could not be exported.';
     refs.exportNotice.hidden = false;
   } finally {

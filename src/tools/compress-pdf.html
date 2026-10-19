@@ -501,6 +501,8 @@
  let targetBytes = targetVal * 1024;
  if (targetUnit === 'MB') targetBytes *= 1024;
 
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'compress', file_count: files.length });
+
  isCancelled = false;
  results = [];
 
@@ -640,6 +642,8 @@
 
  function showResults(totalOriginal, totalCompressed) {
  const successResults = results.filter(r => r.success);
+ if (successResults.length) window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'compress', file_count: successResults.length });
+ if (results.some(r => !r.success)) window.OnlinePDFProAnalytics?.track('tool_error', { action: 'compress', error_code: 'processing_failed' });
  const totalSaved = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
 
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);

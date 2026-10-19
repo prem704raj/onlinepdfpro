@@ -10,6 +10,7 @@ import puppeteer from 'puppeteer';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const html = fs.readFileSync(path.join(root, '_site/index.html'), 'utf8');
 const analytics = fs.readFileSync(path.join(root, 'src/js/analytics.js'), 'utf8');
+const app = fs.readFileSync(path.join(root, 'src/js/app.js'), 'utf8');
 const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
 try {
     const page = await browser.newPage();
@@ -57,9 +58,27 @@ try {
     assert.equal(queue.find(item => item[0] === 'event' && item[1] === 'page_view')[2].page_location, 'https://onlinepdfpro.com/');
     assert.ok(queue.some(item => item[1] === 'tool_error' && item[2].error_code === 'invalid_file'));
     assert.ok(queue.some(item => item[1] === 'export_success'), 'Known editor completion events are retained');
+    // The shared downloader opens a rename sheet first: cancellation is not a download.
+    // A programmatically clicked blob link must not double count the initiated download.
+    await page.addScriptTag({ content: app });
+    await page.evaluate(() => OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'private-file.txt'));
+    await page.click('#renameCancelBtn');
+    await page.waitForSelector('.rename-overlay', { hidden: true });
+    assert.equal(await page.evaluate(() => window.dataLayer.filter(item => item[1] === 'tool_download').length), 0,
+        'Cancelling the rename sheet never counts as a download');
+    await page.evaluate(() => OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'private-file.txt'));
+    await page.click('#renameDlBtn');
+    await page.waitForFunction(() => window.dataLayer.some(item => item[1] === 'tool_download'));
+    // Download initiation is delayed until the rename dialog closes. Wait for
+    // its overlay to clear before clicking the privacy control underneath it.
+    await page.waitForSelector('.rename-overlay', { hidden: true });
+    const downloadEvents = await page.evaluate(() => window.dataLayer.filter(item => item[1] === 'tool_download').map(item => Array.from(item)));
+    assert.equal(downloadEvents.length, 1, 'Confirmed download initiation is counted exactly once');
+    assert.deepEqual(downloadEvents[0][2], { tool_id: 'home', action: 'download' }, 'Download event contains no filename');
     await page.evaluate(() => { document.cookie = '_ga=test-value; path=/'; });
     await page.$eval('#analyticsPreferences', button => button.scrollIntoView({ behavior: 'instant', block: 'center' }));
     await page.click('#analyticsPreferences');
+    await page.waitForSelector('#analyticsConsent button:first-of-type');
     await page.click('#analyticsConsent button:first-of-type');
     assert.ok(!(await page.cookies()).some(cookie => cookie.name === '_ga'), 'Withdrawal removes the site analytics cookie');
     const count = await page.evaluate(() => window.dataLayer.length);
@@ -70,7 +89,7 @@ try {
     await page.goto('https://onlinepdfpro.com/login?code=another-auth-secret', { waitUntil: 'load' });
     assert.equal(googleRequests.length, priorRequests, 'Authentication pages do not load measurement even after consent');
     assert.deepEqual(errors, []);
-    console.log('PASS analytics: no requests before opt-in, persistent choices, one pageview, filtered private data, withdrawal, and no auth-page measurement');
+    console.log('PASS analytics: opt-in only, filtered private data, cancel-safe download funnel, withdrawal, and no auth-page measurement');
     await page.setViewport({ width: 390, height: 844 });
     await page.evaluate(() => localStorage.removeItem('onlinepdfpro-analytics-consent-v1'));
     await page.goto('https://onlinepdfpro.com/', { waitUntil: 'load' });
