@@ -37,7 +37,7 @@ for (const path of priorityIndexPaths) if (!indexedPaths.includes(path)) errors.
 try {
   const { response, body } = await get('/robots.txt');
   if (response.status !== 200) errors.push(`robots.txt: HTTP ${response.status}`);
-  else errors.push(...robotsProblems(body));
+  else errors.push(...robotsProblems(body, base.origin, indexedPaths));
 } catch (error) { errors.push(`robots.txt: ${error.message}`); }
 const indexedSet = new Set(indexedPaths);
 const routes = [...new Set([...configuredRoutes, ...indexedPaths])];
