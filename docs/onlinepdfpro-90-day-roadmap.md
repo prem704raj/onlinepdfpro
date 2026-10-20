@@ -1,11 +1,20 @@
 # OnlinePDFPro: 90-day launch and security roadmap
 Updated: 20 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an assertion about live webmaster metrics.
 
+## Search Console account follow-up — 20 October 2026
+
+- The Page indexing report still says **last updated 12 October**: 18 indexed and 43 not indexed (12 canonical alternatives, 9 noindex, 5 redirects, 3 404s, 14 crawled but not indexed). These are historical coverage counts. The submitted `/sitemap.xml` shows **Success**, last read **19 October**, with **80 discovered pages**. Manual actions says **No issues detected**.
+- Individual URL inspection now shows `/tools/image-to-text` **indexed**. `/tools/sign-pdf`, `/tools/pdf-to-word`, `/tools/jpg-to-pdf`, `/pdf-to-jpg` and `/tools/word-to-pdf` show **Discovered – currently not indexed**. Three initially returned “URL is unknown to Google” but showed the sitemap and discovered status on repeat inspection. A Search Console live test at **23:54 IST** said JPG to PDF is **available to Google** and **can be indexed**; this does not mean Google indexed it. No indexing request was submitted in this pass.
+- Google's three 404 examples were last crawled in June: `/qr-pdf.html`, `/tools/xlsx-to-csv.html`, `/tools/repair-pdf.html`. Live checks now return **404**, **301 to `/tools`**, and **404**, respectively. The two still-missing paths are absent from the current tool registry and sitemap. Choose a redirect only if a genuinely matching successor is identified; do not imply the 404 count is already resolved.
+- All nine historical noindex examples are retired aliases: `/text-to-audio` and its `.html` form, `/tools/csv-to-xlsx` and its `.html` form, `/tools/qr-generator` and its `.html` form, `/tools/image-compress` and its `.html` form, plus `/tools/delete-pages.html`. Each now returns **301** to its configured destination, whose final page returns HTTP 200 without a noindex directive. No coverage validation request was submitted; wait for Google's report to refresh before interpreting the old exclusion counts as current.
+- Next Google check: review refreshed coverage and the five discovered priority URLs after Google recrawls. Avoid repeat indexing requests for previously submitted URLs. Review any real inbound links to the two remaining 404 paths before deciding whether a relevant redirect exists.
+- Account and route-check record: `P:/Projects/onlinepdfpro/.audit/evidence/gsc-2026-10-20-followup.json`.
+
 ## Sitemap crawler-rule follow-up — 20 October 2026
 
 - The local read-only audit now evaluates Googlebot and Bingbot rules against **every sitemap path**, including partial restrictions such as `Disallow: /tools/`, and checks user-agent specificity, wildcard patterns and more-specific `Allow` exceptions. Deterministic regression cases cover these combinations. This is a pre-release audit improvement proposed in draft PR #14, not a deployed change.
 - A fresh production crawl at **00:34 IST, 20 October** returned HTTP 200 for **82/82** public routes, covering **80** sitemap URLs and **10/10** priority search URLs, with zero reported crawler, canonical, noindex or metadata errors/warnings. Pages and Worker both still identify release `20ba1feee2322fb81b351e89475616a34bc753a0`, so flagship analytics from PR #14 are **not yet verified in production**. Evidence: `P:/Projects/onlinepdfpro/.audit/evidence/public-audit-2026-10-20-crawlers.json`.
-- After PR #14 is reviewed, merged and deployed through the ordered Worker/Pages workflow, rerun the public audit and release-parity checks; only then use a consented browser export and GA4 DebugView/Realtime to confirm successful tool events. Google Search Console indexing decisions, its historic 404/noindex examples, and authenticated purchase/refund acceptance still require separate account-level checks.
+- After PR #14 is reviewed, merged and deployed through the ordered Worker/Pages workflow, rerun the public audit and release-parity checks; only then use a consented browser export and GA4 DebugView/Realtime to confirm successful tool events. Google's future recrawling and indexing decisions, and authenticated purchase/refund acceptance, remain unverified.
 
 ## Public indexability follow-up — 19 October 2026
 
@@ -35,12 +44,11 @@ Updated: 20 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an
 
 ### Exact remaining order
 
-1. Finish Google URL inspection for the remaining priority canonical pages and request indexing only for missing/improved pages. Record confirmations and quota limits; do not promise ten additional indexed pages or repeatedly resubmit accepted URLs.
-2. Audit Google's three 404 examples and nine noindex examples against intended routes before changing exclusions. Inspect current sitemap processing and manual actions separately. Keep intentional account/redirect exclusions.
-3. Verify a real owner sign-in, sandbox purchase/refund and entitled download after Supabase recovery. Review pause notifications; do not silently upgrade a paid plan or create artificial keepalive activity.
-4. Configure meaningful GA4 key events for actual successful exports/downloads, verify Realtime, and separate owner/test traffic from acquisition. Preserve consent and event sanitization.
-5. Add an appropriate DMARC policy after confirming mail providers and a reporting mailbox. Check TLS edge settings and security-event trends. Evaluate the legacy `/services/` rate rule against actual traffic before repurposing it.
-6. Execute the growth work below: recruit five real testers for the five flagship workflows, publish demonstrations with tracked campaign links, and measure completed outputs and returning visitors before adding more tools or buying ads.
+1. Review the next Google coverage refresh and the five discovered priority URLs. Investigate whether the two remaining old 404 paths have relevant successors; preserve intentional exclusions and avoid repeated indexing submissions.
+2. Verify a real owner sign-in, sandbox purchase/refund and entitled download after Supabase recovery. Review pause notifications; do not silently upgrade a paid plan or create artificial keepalive activity.
+3. After PR #14 deploys, confirm release parity and consented GA4 export/download events; then configure meaningful key events and separate owner/test traffic from acquisition.
+4. Add an appropriate DMARC policy after confirming mail providers and a reporting mailbox. Check TLS edge settings and security-event trends. Evaluate the legacy `/services/` rate rule against actual traffic before repurposing it.
+5. Execute the growth work below: recruit five real testers for the five flagship workflows, publish demonstrations with tracked campaign links, and measure completed outputs and returning visitors before adding more tools or buying ads.
 
 Screenshots are saved locally under `P:/Projects/onlinepdfpro/.audit/evidence/`: Google Merge/PDF Editor request confirmations, Bing submissions, GA4 association and strict TLS.
 
@@ -152,7 +160,7 @@ Record (with explicit collection/consent scope): total visits, traffic source, l
 
 ## Still requiring account access / live confirmation
 
-- Refresh GSC's indexed/excluded coverage data after its 12 October report; inspect the remaining priority canonical URLs, three 404s and nine noindex examples. The GA4 property association was already confirmed on 18 October.
+- Revisit GSC after its 12 October coverage report refreshes. The remaining priority URL inspections and historic 404/noindex example review were completed on 20 October; Google's recrawling and indexing outcomes are still unknown. The GA4 property association was confirmed on 18 October.
 - Recheck Bing's impressions/clicks and crawl reports after the ten confirmed submissions. Existing sitemap/index observations are recorded above.
 - Inspect actual Cloudflare Web Analytics dashboard trends and security events. Beacon delivery, strict TLS and the relevant current API bindings have been checked, but trend analysis remains outstanding.
 - Deploy the local funnel instrumentation, then verify each consented GA4 event in Realtime/DebugView and configure appropriate key events. Separate owner/test activity from user conversion rates.
