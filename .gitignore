@@ -57,3 +57,6 @@ env/
 
 # Design artifacts (dev only)
 design-specs/
+
+dist/
+.audit/

@@ -1,5 +1,11 @@
 # OnlinePDFPro: 90-day launch and security roadmap
-Updated: 19 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an assertion about live webmaster metrics.
+Updated: 20 October 2026. Owner: OnlinePDFPro. This is a working backlog, not an assertion about live webmaster metrics.
+
+## Sitemap crawler-rule follow-up — 20 October 2026
+
+- The local read-only audit now evaluates Googlebot and Bingbot rules against **every sitemap path**, including partial restrictions such as `Disallow: /tools/`, and checks user-agent specificity, wildcard patterns and more-specific `Allow` exceptions. Deterministic regression cases cover these combinations. This is a pre-release audit improvement proposed in draft PR #14, not a deployed change.
+- A fresh production crawl at **00:34 IST, 20 October** returned HTTP 200 for **82/82** public routes, covering **80** sitemap URLs and **10/10** priority search URLs, with zero reported crawler, canonical, noindex or metadata errors/warnings. Pages and Worker both still identify release `20ba1feee2322fb81b351e89475616a34bc753a0`, so flagship analytics from PR #14 are **not yet verified in production**. Evidence: `P:/Projects/onlinepdfpro/.audit/evidence/public-audit-2026-10-20-crawlers.json`.
+- After PR #14 is reviewed, merged and deployed through the ordered Worker/Pages workflow, rerun the public audit and release-parity checks; only then use a consented browser export and GA4 DebugView/Realtime to confirm successful tool events. Google Search Console indexing decisions, its historic 404/noindex examples, and authenticated purchase/refund acceptance still require separate account-level checks.
 
 ## Public indexability follow-up — 19 October 2026
 
