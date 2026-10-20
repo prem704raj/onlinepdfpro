@@ -77,13 +77,13 @@
  "@type": "ListItem",
  "position": 2,
  "name": "Tools",
- "item": "https://onlinepdfpro.com/tools.html"
+ "item": "https://onlinepdfpro.com/tools"
  },
  {
  "@type": "ListItem",
  "position": 3,
  "name": "Sign PDF",
- "item": "https://onlinepdfpro.com/tools/sign-pdf.html"
+ "item": "https://onlinepdfpro.com/tools/sign-pdf"
  }
  ]
 }
@@ -273,6 +273,7 @@
  <span class="file-limit-note"> Works best with files under 50MB. ⚡ Fast processing.</span>
  <input type="file" id="fileInput" accept=".pdf" hidden />
  </div>
+ <p class="tool-sample-hint">Need a test document first? Try our sample <a href="/assets/examples/sample-admit-card.pdf" download="sample-admit-card.pdf">sample admit card</a> or <a href="/assets/examples/sample-assignment.pdf" download="sample-assignment.pdf">sample assignment PDF</a>.</p>
 
  <div id="editor" style="display:none; margin-top: 32px;">
  <div class="fixed-top-bar"
@@ -804,6 +805,22 @@
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">This tool adds a drawing to PDF pages. It does not verify identity, issue a signing certificate, or provide a tamper-evident signing audit. Confirm the recipient accepts this kind of annotation.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">The signing process runs in your browser and this tool does not upload the document. The result is an electronic annotation, not a certificate-backed digital signature; confirm that it meets the requirements for your document.</p>
+
+<div class="tool-next-steps" style="margin:24px 0; padding:18px 20px; background:var(--surface-2); border:1px solid var(--border); border-radius:14px; font-family:'Inter',sans-serif;">
+  <h3 style="margin:0 0 8px; font-size:1.05rem; font-weight:600; color:var(--text-primary,#2c2418);">Recommended Next Steps</h3>
+  <p style="margin:0 0 10px; font-size:0.88rem; color:var(--text-secondary,#6b5e4f);">Finished signing your document? Continue your workflow:</p>
+  <ul style="margin:0; padding-left:20px; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.75;">
+    <li>Need to combine this signed document with other pages? Use <a href="/tools/merge-pdf" style="color:var(--accent,#2563eb);">Merge PDF</a>.</li>
+    <li>Need to reduce final file size for email or portal submission? Use <a href="/tools/compress-pdf" style="color:var(--accent,#2563eb);">Compress PDF</a>.</li>
+    <li>Need to add page numbers or stamps? Use <a href="/tools/add-page-numbers-to-pdf" style="color:var(--accent,#2563eb);">Add Page Numbers</a>.</li>
+  </ul>
+</div>
+<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-top:20px; margin-bottom:8px;">Frequently Asked Questions</h3>
+<div style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">
+  <p><strong>What is the difference between this electronic signature and a digital signature?</strong><br>This tool places a visual handwritten drawing or stamp on your PDF. A cryptographic "digital signature" uses an X.509 PKI certificate to prove non-repudiation and document integrity. For internal approvals, university forms, and routine receipts, a visual signature is commonly accepted. For high-stakes contracts or official court filings, verify if the receiving party mandates a certificate-backed cryptographic signature.</p>
+  <p><strong>Can I draw a signature on my smartphone or tablet?</strong><br>Yes. The drawing modal supports touch gestures on mobile devices. You can draw with your finger or stylus, reposition the signature box on any page, and apply it to one or all pages.</p>
+  <p><strong>Does my sensitive document stay on my device?</strong><br>Yes. PDF rendering and signature embedding happen directly in your device's browser memory using PDF.js and pdf-lib. No files are uploaded to our servers.</p>
+</div>
 </section>
 
  <script defer src="../counter.js"></script>
@@ -814,7 +831,7 @@
  "@type": "WebApplication",
  "name": "Sign PDF",
  "description": "Sign PDF documents online for free. Draw your signature, drag and resize on any page. A drawn annotation, with no certificate or identity verification.",
- "url": "https://onlinepdfpro.com/tools/sign-pdf.html",
+ "url": "https://onlinepdfpro.com/tools/sign-pdf",
  "applicationCategory": "UtilitiesApplication",
  "operatingSystem": "Any",
  "browserRequirements": "Requires HTML5 support",

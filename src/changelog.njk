@@ -1,0 +1,57 @@
+---
+title: Changelog & Release Notes | OnlinePDFPro
+description: Track product improvements, performance optimizations, privacy enhancements, and bug fixes across OnlinePDFPro.
+permalink: /changelog.html
+---
+{% extends "base.njk" %}
+{% block head %}<link rel="stylesheet" href="/css/guides.css">{% endblock %}
+{% block content %}
+<section class="guide-shell">
+<nav aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/help">Help</a></nav>
+<p class="guide-kicker">Product Updates · Updated October 2026</p>
+<h1>Changelog &amp; Release Notes</h1>
+<p class="guide-intro">We continuously improve OnlinePDFPro to deliver fast, reliable, privacy-conscious PDF workflows without artificial paywalls or deceptive metrics.</p>
+
+<div class="guide-body">
+  <h2>October 2026 — Phase 1 &amp; Phase 2 Enhancements</h2>
+
+  <h3>1. Flagship Workflows &amp; Direct Tool Access</h3>
+  <ul>
+    <li>Prioritized the top 5 core workflows directly below the homepage hero: <strong>Merge PDF</strong>, <strong>Compress PDF</strong>, <strong>Split PDF</strong>, <strong>PDF Editor</strong>, and <strong>JPG to PDF</strong>.</li>
+    <li>Added recommended next-step actions on completion screens (e.g., Merge &rarr; Compress, Split &rarr; Compress, Word &rarr; Word to PDF).</li>
+    <li>Cleaned directory and category descriptions to eliminate conflicting marketing claims.</li>
+  </ul>
+
+  <h3>2. Transparent Privacy Architecture</h3>
+  <ul>
+    <li>Introduced the 3-Tier Processing Boundary card distinguishing local client-side memory processing, ephemeral isolated server gateways, and opt-in cloud AI.</li>
+    <li>Clarified visual electronic annotations versus cryptographic PKI signatures in Sign PDF.</li>
+    <li>Clarified client-side Tesseract.js OCR vs explicit opt-in cloud OCR in Image to Text.</li>
+  </ul>
+
+  <h3>3. Official Downloadable Practice Pack &amp; Workflow Guides</h3>
+  <ul>
+    <li>Published the non-sensitive <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip">Official Practice Pack (ZIP)</a> featuring assignment and exam hall ticket fixtures.</li>
+    <li>Published step-by-step illustrated guides: <a href="/guides/split-admit-card-pages/">Split an admit card or exam hall ticket</a> and <a href="/guides/compress-a-university-upload/">Compress a university or employment portal upload</a>.</li>
+    <li>Linked test fixtures directly below upload dropzones across all top 10 core search landing pages.</li>
+  </ul>
+
+  <h3>4. Performance &amp; Mobile Responsive Reflow</h3>
+  <ul>
+    <li>Reflowed homepage and tool layouts to pass 320px ultra-compact mobile viewport audits without horizontal overflow.</li>
+    <li>Eliminated empty reserved advertisement spaces to guarantee zero content obstruction above the fold.</li>
+    <li>Maintained strict static site performance budgets under 30 MB.</li>
+  </ul>
+
+  <h3>5. Privacy-Safe Feedback</h3>
+  <ul>
+    <li>Support and issue reporting now explicitly encourages qualitative error codes and non-sensitive test fixtures, ensuring zero user document bytes or filenames are transmitted in bug reports.</li>
+  </ul>
+</div>
+
+<aside class="guide-note">
+  <h2>Have feedback or found a bug?</h2>
+  <p>Help us improve by visiting our <a href="/help">Help &amp; Support page</a>. When reporting an issue, specify the tool name, browser version, and error code. Never send sensitive or personal documents.</p>
+</aside>
+</section>
+{% endblock %}
