@@ -340,6 +340,35 @@ bodyClass: pdf-editor-body
       </div>
     </form>
   </dialog>
+  <section class="tool-seo-content" style="max-width: 900px; margin: 40px auto; padding: 0 20px 40px; text-align: left;">
+    <div class="tool-next-steps" style="margin-bottom: 32px;" data-nosnippet>
+      <div class="tool-next-steps-title">Recommended Next Steps</div>
+      <div class="tool-next-steps-links">
+        <a href="/tools/compress-pdf" class="tool-next-step-link">
+          <span>Need to reduce file size?</span> <strong>Compress PDF &rarr;</strong>
+        </a>
+        <a href="/tools/sign-pdf" class="tool-next-step-link">
+          <span>Add electronic signature?</span> <strong>Sign PDF &rarr;</strong>
+        </a>
+        <a href="/tools/merge-pdf" class="tool-next-step-link">
+          <span>Combine with other files?</span> <strong>Merge PDF &rarr;</strong>
+        </a>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary, #1e293b);">PDF Editor Guide &amp; Technical Limitations</h2>
+    <p style="color: var(--text-secondary, #64748b); line-height: 1.7; margin-bottom: 16px;">This editor runs entirely inside your web browser. Your document is never uploaded to any remote server or third-party service, providing complete confidentiality for contracts, financial statements, and personal records.</p>
+    
+    <h3 style="font-size: 1.05rem; font-weight: 600; margin-top: 20px; margin-bottom: 8px; color: var(--text-primary, #1e293b);">How in-place text replacement works</h3>
+    <p style="color: var(--text-secondary, #64748b); line-height: 1.7; margin-bottom: 16px;">When you click on existing text, the editor identifies the exact font, size, and baseline position. Supported fonts (standard PDF standard 14 fonts and common modern equivalents) allow direct inline replacement. If a custom or embedded subset font is missing necessary glyphs, the editor prompts you to choose a compatible replacement font.</p>
+
+    <h3 style="font-size: 1.05rem; font-weight: 600; margin-top: 20px; margin-bottom: 8px; color: var(--text-primary, #1e293b);">Why can't I edit text on a scanned document?</h3>
+    <p style="color: var(--text-secondary, #64748b); line-height: 1.7; margin-bottom: 16px;">Scanned documents consist of full-page raster images rather than selectable digital text glyphs. To edit text on a scanned PDF, use our <a href="/tools/image-to-text" style="color: var(--accent, #2563eb);">Image to Text (OCR)</a> tool first to extract the textual content into an editable format.</p>
+
+    <h3 style="font-size: 1.05rem; font-weight: 600; margin-top: 20px; margin-bottom: 8px; color: var(--text-primary, #1e293b);">Redaction Notice &amp; Whiteout Tool</h3>
+    <p style="color: var(--text-secondary, #64748b); line-height: 1.7;">The Whiteout tool places a visual opaque rectangle over content. It does not sanitize underlying text streams or image metadata. Do not use whiteout for legal or security redactions of sensitive data (such as SSNs, passwords, or credit card numbers); instead use true redaction tools.</p>
+  </section>
+
   <dialog class="pdf-signature-dialog" id="pdf-signature-dialog" aria-labelledby="pdf-signature-title">
     <form method="dialog" id="pdf-signature-form">
       <h2 id="pdf-signature-title">Create a signature</h2>

@@ -305,6 +305,7 @@
  </p>
  <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" />
  </div>
+ <p class="tool-sample-hint">Want to test with sample photos? <a href="/assets/examples/notes-page.jpg" download>Download Sample Notes JPG</a> or read our <a href="/guides/turn-note-images-into-a-readable-pdf/">Phone Notes to PDF Guide</a>.</p>
 
  <p class="image-count fade-in" id="imageCount"></p>
 
@@ -314,14 +315,24 @@
  <button onclick="convertToPDF()" class="convert-btn">
  Convert to PDF & Download
  </button>
+ <div class="tool-next-steps" style="max-width: 600px; margin: 24px auto 0;" data-nosnippet>
+   <div class="tool-next-steps-title">Recommended Next Steps</div>
+   <div class="tool-next-steps-links" style="justify-content: center;">
+     <a href="/tools/compress-pdf" class="tool-next-step-link">
+       <span>Need to reduce size for upload?</span> <strong>Compress PDF &rarr;</strong>
+     </a>
+     <a href="/tools/merge-pdf" class="tool-next-step-link">
+       <span>Combine with assignment cover?</span> <strong>Merge PDF &rarr;</strong>
+     </a>
+   </div>
+ </div>
  </div>
 
  <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;" data-nosnippet>
  <h3 style="color: var(--text-primary); margin-bottom: 20px;"> Crafting your A4 PDF pages...</h3>
  </div>
 
- <!-- Ad Spacer -->
- <div class="banner-ad-spacer" style="height: 120px; display: block; width: 100%; clear: both;"></div>
+
 
  <section class="tool-seo-content" style="max-width:800px;margin:32px auto 48px;padding:0 24px;text-align:left;line-height:1.75;">
  <h2>How to turn photos into one PDF</h2>
@@ -334,6 +345,10 @@
  <h2>What happens to image quality and privacy?</h2>
  <p>The converter processes your photos in this browser; it does not upload them to a conversion server. It prepares an image up to 4096 pixels on its longest edge and embeds it as JPEG. Transparent backgrounds become white, and very large originals may lose fine detail. The page size is fixed to portrait A4; landscape and custom page sizes are not available in this tool.</p>
  <p>Have a PDF and need separate pictures instead? <a href="/pdf-to-jpg">Export PDF pages to JPG</a>.</p>
+ <h2>Troubleshooting &amp; Frequently Asked Questions</h2>
+ <p><strong>Why are landscape images fitted with top/bottom margins?</strong><br>This tool standardizes images to standard A4 portrait format (595 &times; 842 points). Wide photos are proportionally scaled to fit within page boundaries without cropping or distortion.</p>
+ <p><strong>Does this converter make text searchable?</strong><br>No. The generated PDF contains high-resolution image pages. To extract searchable text from photographed notes, use <a href="/tools/image-to-text">Image to Text (OCR)</a>.</p>
+ <p><strong>What is the maximum number of images?</strong><br>You can combine up to 100 images (JPG, PNG, WebP) up to 50 MB each in a single PDF. All image rendering and PDF construction happens directly in your browser memory.</p>
 </section>
 
  </div>
