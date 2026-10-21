@@ -384,6 +384,8 @@
  return;
  }
 
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'merge', file_count: files.length });
+
  fileSection.style.display = 'none';
  progressSection.style.display = 'block';
 
@@ -406,6 +408,7 @@
 
  progress.update(90, 'Finalizing...');
  mergedPdfBytes = await mergedPdf.save();
+ window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'merge', file_count: files.length });
  document.getElementById('totalPages').textContent = totalPages;
  document.getElementById('finalSize').textContent = OnlinePDFPro.Utils.formatFileSize(mergedPdfBytes.length);
  progress.complete('Success!');
@@ -420,6 +423,7 @@
  }, 500);
 
  } catch (error) {
+ window.OnlinePDFProAnalytics?.track('tool_error', { action: 'merge', error_code: 'processing_failed' });
  alert('Merge error: ' + error.message);
  resetTool();
  }

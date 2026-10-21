@@ -355,7 +355,9 @@ async function run() {
     const firstExport = await downloadBytes(page);
     const analyticsSnapshot = await page.evaluate(() => window.__pdfEditorAnalytics);
     check(analyticsSnapshot.some((event) => event.name === 'export_success'), 'Successful export emits a product-only analytics event');
-    check(analyticsSnapshot.every((event) => Object.keys(event.params || {}).every((key) => key === 'tool_name')), 'PDF editor analytics never include filename, PDF text, or document metadata');
+    check(['tool_start', 'tool_complete', 'tool_download'].every(name => analyticsSnapshot.filter(event => event.name === name).length === 2),
+      'PDF editor records exactly one start, completion and download per successful export');
+    check(analyticsSnapshot.every((event) => Object.keys(event.params || {}).every((key) => ['tool_name', 'action'].includes(key))), 'PDF editor analytics never include filename, PDF text, or document metadata');
     const reopened = await PDFDocument.load(firstExport);
     check(reopened.getPageCount() === 1, 'Exported PDF reopens with pdf-lib');
     const firstText = await extractWithPdfJs(page, firstExport);

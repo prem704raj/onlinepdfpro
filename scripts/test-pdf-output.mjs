@@ -126,6 +126,8 @@ try {
     await page.goto(`${base}/tools/compress-pdf`, { waitUntil: 'load' });
     await page.evaluate(() => {
         window.__output = null;
+        window.__funnelEvents = [];
+        window.OnlinePDFProAnalytics = { track: (name, params) => window.__funnelEvents.push({ name, params }) };
         OnlinePDFPro.Downloader.saveBlob = async blob => { window.__output = Array.from(new Uint8Array(await blob.arrayBuffer())); };
     });
     await (await page.$('#uploadZone input[type=file]')).uploadFile(fixture);
@@ -135,6 +137,10 @@ try {
     await page.select('#targetSizeUnit', 'KB');
     await page.click('#compressBtn');
     await page.waitForFunction(() => document.querySelector('#resultsSection').style.display === 'block');
+    assert.deepEqual(await page.evaluate(() => window.__funnelEvents), [
+        { name: 'tool_start', params: { action: 'compress', file_count: 1 } },
+        { name: 'tool_complete', params: { action: 'compress', file_count: 1 } }
+    ], 'One successful compression batch produces one start and completion');
     assert.match(await page.$eval('#resultsList', el => el.textContent), /Above target/);
     await page.click('#resultsList button');
     await page.waitForFunction(() => window.__output !== null);
@@ -151,6 +157,8 @@ try {
     await page.click('#allowRasterization');
     await page.click('#compressBtn');
     await page.waitForFunction(() => document.querySelector('#resultsSection').style.display === 'block');
+    assert.deepEqual(await page.evaluate(() => window.__funnelEvents.map(event => event.name)),
+        ['tool_start', 'tool_complete', 'tool_start', 'tool_complete'], 'A second batch is measured once');
     assert.match(await page.$eval('#resultsList', el => el.textContent), /Image-based PDF/);
     await page.evaluate(() => { window.__output = null; });
     await page.click('#resultsList button');

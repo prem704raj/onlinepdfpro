@@ -563,6 +563,7 @@
  alert('Please select at least one page.');
  return;
  }
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'split', file_count: 1 });
  pageSection.style.display = 'none';
  progressSection.style.display = 'block';
  const progress = OnlinePDFPro.ProgressHandler.create('progressContainer');
@@ -579,6 +580,7 @@
  }
  progress.update(95, 'Finalizing output...');
  extractedPdfBytes = await newPdf.save();
+ window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'split', file_count: 1 });
  document.getElementById('extractedPages').textContent = sortedPages.length;
  progress.complete('Success!');
  setTimeout(() => {
@@ -588,6 +590,7 @@
  OnlinePDFPro.RecentlyUsed.add('split-pdf', 'Split PDF');
  }, 500);
  } catch (error) {
+ window.OnlinePDFProAnalytics?.track('tool_error', { action: 'split', error_code: 'processing_failed' });
  alert('Error: ' + error.message);
  resetTool();
  }
