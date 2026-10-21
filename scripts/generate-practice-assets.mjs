@@ -13,6 +13,8 @@ async function createSampleAdmitCard() {
     doc.setTitle('Sample Admit Card - Fictional Exam Hall Ticket');
     doc.setAuthor('OnlinePDFPro');
     doc.setSubject('Fictional test fixture for Split PDF and PDF Tools');
+    doc.setCreationDate(new Date('2026-10-21T00:00:00Z'));
+    doc.setModificationDate(new Date('2026-10-21T00:00:00Z'));
 
     const font = await doc.embedFont(StandardFonts.Helvetica);
     const bold = await doc.embedFont(StandardFonts.HelveticaBold);
@@ -358,6 +360,7 @@ examples_dir = r"${examplesDir}"
 zip_path = os.path.join(examples_dir, "onlinepdfpro-practice-pack.zip")
 files_to_zip = [
     ("sample-assignment.pdf", "sample-assignment.pdf"),
+    ("sample-assignment.docx", "sample-assignment.docx"),
     ("sample-admit-card.pdf", "sample-admit-card.pdf"),
     ("notes-page.jpg", "notes-page.jpg"),
     ("checklist-page.jpg", "checklist-page.jpg"),
@@ -366,8 +369,13 @@ files_to_zip = [
 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
     for filename, arcname in files_to_zip:
         p = os.path.join(examples_dir, filename)
-        if os.path.exists(p):
-            zf.write(p, arcname=arcname)
+        if not os.path.exists(p):
+            raise FileNotFoundError(p)
+        info = zipfile.ZipInfo(arcname, date_time=(2026, 10, 21, 0, 0, 0))
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16
+        with open(p, "rb") as source:
+            zf.writestr(info, source.read(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
 size = os.path.getsize(zip_path)
 print(f"Created {zip_path}: {size} bytes")
 `;
@@ -375,6 +383,7 @@ print(f"Created {zip_path}: {size} bytes")
 }
 
 async function main() {
+    execFileSync('python', [path.join(root, 'scripts', 'generate-sample-word.py')]);
     await createSampleAdmitCard();
     createChecklistTxt();
     createZipArchive();

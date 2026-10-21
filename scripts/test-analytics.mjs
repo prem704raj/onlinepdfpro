@@ -61,11 +61,15 @@ try {
     // The shared downloader opens a rename sheet first: cancellation is not a download.
     // A programmatically clicked blob link must not double count the initiated download.
     await page.addScriptTag({ content: app });
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeinstallprompt', { cancelable: true })));
+    assert.equal(await page.$('#pwaInstallBanner'), null, 'Install suggestion waits for completed exports');
     await page.evaluate(() => OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'private-file.txt'));
     await page.click('#renameCancelBtn');
     await page.waitForSelector('.rename-overlay', { hidden: true });
     assert.equal(await page.evaluate(() => window.dataLayer.filter(item => item[1] === 'tool_download').length), 0,
         'Cancelling the rename sheet never counts as a download');
+    assert.equal(await page.evaluate(() => OnlinePDFPro.PwaInstallManager.exportCount()), 0,
+        'Cancelling a download never advances the PWA prompt');
     await page.evaluate(() => OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'private-file.txt'));
     await page.click('#renameDlBtn');
     await page.waitForFunction(() => window.dataLayer.some(item => item[1] === 'tool_download'));
@@ -75,9 +79,30 @@ try {
     const downloadEvents = await page.evaluate(() => window.dataLayer.filter(item => item[1] === 'tool_download').map(item => Array.from(item)));
     assert.equal(downloadEvents.length, 1, 'Confirmed download initiation is counted exactly once');
     assert.deepEqual(downloadEvents[0][2], { tool_id: 'home', action: 'download' }, 'Download event contains no filename');
+    assert.equal(await page.evaluate(() => OnlinePDFPro.PwaInstallManager.exportCount()), 1);
+    assert.equal(await page.$('#pwaInstallBanner'), null, 'One export does not show the install banner');
+    await page.evaluate(() => OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'second-file.txt'));
+    await page.click('#renameDlBtn');
+    await page.waitForFunction(() => OnlinePDFPro.PwaInstallManager.exportCount() === 2);
+    await page.waitForSelector('#pwaInstallBanner');
+    await page.$eval('#pwaBannerClose', button => button.click());
+    await page.waitForSelector('#pwaInstallBanner', { hidden: true });
+    await page.evaluate(() => {
+        window.originalSetItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function (key, value) {
+            if (key === 'onlinepdfpro-export-initiations') throw new DOMException('Storage blocked', 'QuotaExceededError');
+            return window.originalSetItem.call(this, key, value);
+        };
+        OnlinePDFPro.Downloader.saveBlob(new Blob(['test'], { type: 'text/plain' }), 'third-file.txt');
+    });
+    await page.click('#renameDlBtn');
+    await page.waitForFunction(() => window.dataLayer.filter(item => item[1] === 'tool_download').length === 3);
+    assert.equal(await page.evaluate(() => OnlinePDFPro.PwaInstallManager.exportCount()), 2,
+        'Blocked optional PWA storage cannot interrupt the file download');
+    await page.evaluate(() => { Storage.prototype.setItem = window.originalSetItem; });
+    await page.waitForSelector('.rename-overlay', { hidden: true });
     await page.evaluate(() => { document.cookie = '_ga=test-value; path=/'; });
-    await page.$eval('#analyticsPreferences', button => button.scrollIntoView({ behavior: 'instant', block: 'center' }));
-    await page.click('#analyticsPreferences');
+    await page.$eval('#analyticsPreferences', button => button.click());
     await page.waitForSelector('#analyticsConsent button:first-of-type');
     await page.click('#analyticsConsent button:first-of-type');
     assert.ok(!(await page.cookies()).some(cookie => cookie.name === '_ga'), 'Withdrawal removes the site analytics cookie');

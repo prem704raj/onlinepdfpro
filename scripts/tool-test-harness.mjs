@@ -14,6 +14,7 @@ export const root = path.resolve(
 export const scratch = path.join(root, ".tmp_tool_audit");
 fs.mkdirSync(scratch, { recursive: true });
 export const fixtures = {};
+fixtures.sampleWord = path.join(root, 'src/assets/examples/sample-assignment.docx');
 const write = (name, bytes) => {
   const target = path.join(scratch, name);
   fs.writeFileSync(target, bytes);
@@ -100,7 +101,9 @@ const types = {
   ".ttf": "font/ttf",
   ".png": "image/png",
   ".jpg": "image/jpeg",
+  ".svg": "image/svg+xml",
   ".webp": "image/webp",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ".wasm": "application/wasm",
 };
 const server = http.createServer((req, res) => {

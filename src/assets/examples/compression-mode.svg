@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="525" viewBox="0 0 320 525" role="img" aria-labelledby="title desc">
+<title id="title">Choose a PDF compression mode</title>
+<desc id="desc">Start with structural compression, which retains text. Optional image compression may reduce size but removes searchable text and forms.</desc>
+<rect width="320" height="525" rx="16" fill="#f5f7fb"/>
+<rect x="22" y="22" width="276" height="95" rx="10" fill="#fff" stroke="#64748b" stroke-width="2"/>
+<text x="40" y="54" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">Original PDF</text>
+<text x="40" y="82" font-family="Arial,sans-serif" font-size="15" fill="#334155">Check size and keep a backup</text>
+<path d="M160 126v31m-10-10 10 10 10-10" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="22" y="168" width="276" height="108" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<text x="40" y="202" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">Try structural mode first</text>
+<text x="40" y="232" font-family="Arial,sans-serif" font-size="15" fill="#334155">Text remains selectable</text>
+<text x="40" y="255" font-family="Arial,sans-serif" font-size="15" fill="#334155">Size may not fall enough</text>
+<path d="M160 285v31m-10-10 10 10 10-10" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="22" y="327" width="276" height="108" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+<text x="40" y="361" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#7c2d12">Optional image mode</text>
+<text x="40" y="391" font-family="Arial,sans-serif" font-size="15" fill="#334155">Text and forms are lost</text>
+<text x="40" y="414" font-family="Arial,sans-serif" font-size="15" fill="#334155">Inspect small print carefully</text>
+<text x="22" y="469" font-family="Arial,sans-serif" font-size="14" fill="#475569">Reopen the output before submitting.</text>
+<text x="22" y="493" font-family="Arial,sans-serif" font-size="14" fill="#475569">The target size is not guaranteed.</text>
+</svg>

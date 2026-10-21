@@ -1532,6 +1532,7 @@ async function exportPdf() {
     trackEditorEvent('export_success');
     trackEditorEvent('tool_complete', 'complete');
     trackEditorEvent('tool_download', 'download');
+    window.OnlinePDFPro?.PwaInstallManager?.recordExportInitiated();
   } catch (error) {
     trackEditorEvent('export_failure');
     trackEditorEvent('tool_error', 'process');

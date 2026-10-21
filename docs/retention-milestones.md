@@ -34,19 +34,20 @@ Every Monday, log the following metrics into the private operational log. Keep m
    - `/tools/pdf-to-word`
    - `/tools/word-to-pdf`
    - `/tools/image-to-text`
-3. **Consented GA4 Page Views & Cloudflare Requests**: Contrast raw Cloudflare edge requests with consented analytics sessions to measure client consent rates.
+3. **Consented GA4 Page Views & Cloudflare Web Analytics**: Record each separately with its collection scope. Edge requests, Web Analytics visits, and opted-in GA4 sessions have different denominators and cannot be divided to infer a consent rate.
 
 ### Conversion & Reliability Funnel
-4. **Tool Start Events**: Number of files selected / dropzone activations (`tool_interaction`).
-5. **Successful Exports**: Number of successful downloads (`file_download`).
-6. **Start-to-Export Completion Rate**: `(Successful Exports / Tool Start Events) * 100%`. Healthy benchmark: &gt; 65%.
-7. **Errors by Tool**: Aggregate count of recoverable errors (e.g., password-locked file, oversized input) versus unhandled script rejections.
-8. **p75 Performance**: p75 page load and script initialization times across mobile and desktop.
+4. **File Selection**: Count `file_selected` separately from actual processing starts. A dropzone or button click is not a started job.
+5. **Flagship Starts and Completions**: Count `tool_start` when processing begins and `tool_complete` when an output is created. Segment by `tool_id`; exclude owner and test traffic where possible.
+6. **Download Initiations**: Count `tool_download` after the user confirms or starts an export. This is a proxy for completion, not proof that the browser saved or the user reopened a usable file. Do not mix it with legacy `file_download` click events.
+7. **Start-to-Download Rate**: `(tool_download / tool_start) * 100%` for the same flagship tool and reporting window, with the number of consented starts shown alongside it. Validate actual usable outputs through tester feedback and file inspection; mark that outcome unknown when it has not been checked.
+8. **Errors by Tool**: Aggregate `tool_error` codes and independently observed script or provider failures. A missing event is unknown, not a zero error rate.
+9. **p75 Performance**: p75 page load and script initialization times across mobile and desktop.
 
 ### Search Engine Hygiene
-9. **GSC & Bing Index Coverage**: Number of valid indexed URLs versus excluded URLs.
-10. **Exclusion Reasons**: Track crawl anomalies, canonical mismatches, or soft 404s. Ensure all 10 priority routes maintain `Indexed, not submitted` or `Submitted and indexed`.
-11. **Impressions & Clicks**: Weekly Google Search Console impressions and organic click-through rate.
+10. **GSC & Bing Index Coverage**: Number of indexed URLs and reported exclusions, recording each dashboard's update date.
+11. **Exclusion Reasons**: Track crawl anomalies, canonical mismatches, or soft 404s. Inspect the 10 priority routes; their indexing status is controlled by search engines and may remain discovered but not indexed.
+12. **Impressions & Clicks**: Weekly Google Search Console impressions and organic click-through rate.
 
 ---
 
@@ -59,9 +60,9 @@ All outreach must be high-utility, permission-based, and accompanied by reproduc
 | **Student & Academic Communities** | Share practical walkthroughs on Reddit (r/college, r/students) or campus forums where permitted. Offer the fictional [Downloadable Practice Pack](/guides) and explain local client-side privacy tradeoffs. | Qualified visits, tool completions, community upvotes/feedback. |
 | **Educators & Campus Offices** | Conduct 10 genuine, personalized outreach emails weekly to faculty coordinators or document offices demonstrating assignment splitting/merging. | Direct replies, institutional use cases, workflow feedback. |
 | **YouTube Shorts & Video Guides** | Publish 2–3 concise 20–45 second screen captures demonstrating single tasks (e.g., "Split only page 1 from an exam hall ticket"). Deep-link directly to the specific tool. | View-through rate, clicks on deep links, completed jobs. |
-| **Developer & Privacy Communities** | Publish technical write-ups on Hacker News, Dev.to, or GitHub detailing client-side WASM processing, Web Workers, and strict CSP nonce enforcement. | Developer backlinks, technical feedback, GitHub stars. |
+| **Developer & Privacy Communities** | Publish technical write-ups on Hacker News, Dev.to, or GitHub detailing client-side WASM processing, Web Workers, and current CSP tradeoffs. | Developer backlinks, technical feedback, GitHub stars. |
 | **Search Guides & Documentation** | Publish long-tail tutorials accompanied by real downloadable test fixtures (e.g., Admit Card Split Guide, University Upload Compression Guide). | Organic search impressions, landing clicks, practice pack downloads. |
-| **PWA & Offline Distribution** | Prompt users who have completed 2+ successful exports to install the Progressive Web App for offline access. | Installed PWA sessions, repeat visits within 30 days. |
+| **PWA & Offline Distribution** | After two locally recorded export initiations, offer installation for quick access when the browser supports it. State offline support per tool; server conversions still require a connection. | Installed PWA sessions, repeat visits within 30 days. |
 
 ---
 

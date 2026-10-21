@@ -878,7 +878,7 @@ test("Flashcards: AI response validation, coverage, Unicode CSV and same-file re
 });
 for (const [name, route, fixture, extension] of [
   ["PDF to Word", "/tools/pdf-to-word", "pdf", ".docx"],
-  ["Word to PDF", "/tools/word-to-pdf", "rtf", ".pdf"],
+  ["Word to PDF", "/tools/word-to-pdf", "sampleWord", ".pdf"],
 ]) {
   test(`${name}: rejects invalid provider output and permits retry`, async () => {
     let valid = false;

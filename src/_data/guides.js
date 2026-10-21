@@ -57,6 +57,7 @@ module.exports = [
     body: `<p>Most examination boards and university admission systems issue multi-page admit cards. Typically, page 1 contains the candidate photo, roll number, desk assignment, and barcode, while pages 2 and 3 list general examination guidelines, prohibited items, and travel instructions. When submitting proof of registration to a verification portal, uploading the entire multi-page document often exceeds file limits or confuses document checkers.</p>
 <h2>Practise with the sample admit card fixture</h2>
 <p><a href="/assets/examples/sample-admit-card.pdf" download>Download the two-page sample admit card PDF</a>. Page 1 is the Candidate Copy and page 2 is the Instructions Sheet. The file uses standard A4 dimensions with vector text and barcode markers. It contains only fictional student data and no real personal records.</p>
+<figure class="guide-figure"><img src="/assets/examples/admit-card-split.svg" alt="Before: candidate copy and instructions pages. After: candidate copy alone." width="320" height="470" loading="lazy"><figcaption>Select page 1 to leave the instructions sheet out of the downloaded PDF.</figcaption></figure>
 <h2>Extract Page 1 (Candidate Copy)</h2>
 <ol>
   <li>Open <a href="/tools/split-pdf">Split PDF</a> and choose <code>sample-admit-card.pdf</code>.</li>
@@ -83,6 +84,7 @@ module.exports = [
     body: `<p>Online university portals and public recruitment boards commonly impose strict file size limits—often as small as 200 KB, 500 KB, or 1 MB. An applicant's document bundle may include degree certificates, semester marksheets, and identity cards that easily total several megabytes. The goal is reducing file size without rendering essential grades, dates, or signatures illegible.</p>
 <h2>Practise with the sample documents</h2>
 <p>You can test compression techniques using our <a href="/assets/examples/sample-assignment.pdf" download>3-page sample assignment PDF</a> or download the complete <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download>practice pack (ZIP)</a>.</p>
+<figure class="guide-figure"><img src="/assets/examples/compression-mode.svg" alt="Try structural compression first. Optional image mode may reduce size but removes searchable text and forms." width="320" height="525" loading="lazy"><figcaption>Start with structural compression, then compare the actual result with your upload limit.</figcaption></figure>
 <h2>Step 1: Always try structural compression first</h2>
 <ol>
   <li>Open <a href="/tools/compress-pdf">Compress PDF</a> and select your document.</li>
@@ -90,12 +92,12 @@ module.exports = [
   <li>Leave <strong>Allow image-based compression</strong> unchecked for the first run.</li>
   <li>Click <strong>Compress PDF</strong> and examine the reported output size.</li>
 </ol>
-<p>Structural compression cleans redundant PDF streams, font subsets, and metadata while preserving 100% of the underlying text characters, tables, and vector lines. Zooming in at 300% will reveal zero degradation because no rasterization occurred.</p>
+<p>Structural compression avoids rasterizing the pages, so ordinary text and vector lines remain sharp. Open the result and check forms, links, signatures, and page content before using it; some document features may not survive PDF rewriting.</p>
 <h2>Step 2: What to do when structural compression is not enough</h2>
 <p>If your original document consists of smartphone camera photos or high-DPI flatbed scans, structural compression may only yield modest savings because the embedded image pixels take up most of the file. You have two options:</p>
 <ul>
   <li><strong>Separate your documents:</strong> Check if the application portal allows uploading individual files (for example, separate fields for Degree Certificate and Marksheet). If allowed, use <a href="/tools/split-pdf">Split PDF</a> to separate the pages into smaller individual files.</li>
-  <li><strong>Controlled image compression:</strong> If the portal insists on a single consolidated file, enable <strong>Allow image-based compression</strong> in Compress PDF. This recompresses embedded photographs into balanced JPEGs.</li>
+  <li><strong>Controlled image compression:</strong> If the portal insists on a single consolidated file, enable <strong>Allow image-based compression</strong> in Compress PDF. This renders entire pages as JPEG images, removing searchable text, links, and interactive forms.</li>
 </ul>
 <h2>Essential verification checklist before submitting</h2>
 <ul>
