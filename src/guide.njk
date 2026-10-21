@@ -13,7 +13,7 @@ eleventyComputed:
 {% block content %}
 <article class="guide-shell">
 <nav aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides">Guides & Examples</a></nav>
-<p class="guide-kicker">Practical walkthrough · Updated 2 October 2026</p><h1>{{ guide.title }}</h1>
+<p class="guide-kicker">Practical walkthrough · Updated 21 October 2026</p><h1>{{ guide.title }}</h1>
 <p class="guide-intro">{{ guide.description }}</p>
 <div class="guide-actions">{% for tool in guide.tools %}<a class="btn btn-primary" href="{{ tool.url }}">Open {{ tool.name }}</a>{% endfor %}</div>
 <div class="guide-body">{{ guide.body | safe }}</div>

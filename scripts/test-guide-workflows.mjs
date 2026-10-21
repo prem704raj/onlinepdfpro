@@ -6,11 +6,12 @@ import { open, upload, visible, fill, click, download, pdfInfo, renderPdf, finis
 
 const guides = createRequire(import.meta.url)('../src/_data/guides.js');
 const sample = path.join(root, 'src/assets/examples/sample-assignment.pdf');
+const admitCard = path.join(root, 'src/assets/examples/sample-admit-card.pdf');
 const heading = [/Assignment cover/, /Revision notes/, /Submission checklist/];
-const split = async range => {
+const split = async (range, source = sample) => {
   const p = await open('/tools/split-pdf');
   try {
-    await upload(p, '#uploadZone input', sample);
+    await upload(p, '#uploadZone input', source);
     await visible(p, '#pageSection');
     await fill(p, '#pageRange', range);
     await click(p, '#extractBtn');
@@ -23,6 +24,12 @@ const split = async range => {
 };
 
 try {
+  const candidate = await split('1', admitCard);
+  assert.equal(candidate.pages.length, 1);
+  assert.match(candidate.pages[0].text, /2026-ENG-49102/);
+  assert.doesNotMatch(candidate.pages[0].text, /PROHIBITED ARTICLES/);
+  console.log('PASS new admit-card guide: page 1 export retains candidate details and omits instructions');
+
   // The guides describe an actual split/merge exercise, not just page links.
   const notes = await split('2-3');
   assert.equal(notes.pages.length, 2);
@@ -86,6 +93,16 @@ try {
       for (const pathname of links.filter(link => link.startsWith('/assets/examples/'))) {
         assert.ok(fs.existsSync(path.join(root, '_site', pathname)), `Missing downloadable example ${pathname}`);
       }
+      if (route.includes('split-admit-card-pages') || route.includes('compress-a-university-upload')) {
+        await p.$eval('.guide-figure img', img => img.scrollIntoView({ block: 'center' }));
+        await p.waitForFunction(() => {
+          const image = document.querySelector('.guide-figure img');
+          return image?.complete && image.naturalWidth > 0;
+        });
+        const illustration = await p.$eval('.guide-figure img', img => ({ loaded: img.complete && img.naturalWidth > 0, pathname: new URL(img.src).pathname }));
+        assert.ok(illustration.loaded, `Guide illustration failed to load: ${illustration.pathname}`);
+        assert.ok(fs.existsSync(path.join(root, '_site', illustration.pathname)));
+      }
       assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
       await click(p, '.theme-toggle');
       assert.equal(await p.$eval('html', e => e.dataset.theme), 'dark');
@@ -94,5 +111,5 @@ try {
       assert.deepEqual(p.testErrors, []);
     } finally { await p.close(); }
   }
-  console.log('PASS guide hub and three walkthroughs: 320px light/dark layouts and real downloadable examples');
+  console.log('PASS guide hub and five walkthroughs: 320px light/dark layouts and real downloadable examples');
 } finally { await finish(); }

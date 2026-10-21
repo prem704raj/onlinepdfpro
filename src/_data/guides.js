@@ -48,4 +48,63 @@ module.exports = [
 <h2>Check before sending</h2><ul><li>Zoom into the smallest writing rather than judging only the thumbnail.</li><li>Check page count, orientation and order in another PDF viewer.</li><li>Check file size against the recipient's actual limit. Image-heavy files can be large.</li><li>Keep the original photos. If compression is needed, read <a href="/guides/choose-a-pdf-compression-mode/">the compression tradeoffs</a> before reducing quality.</li></ul>
 <p>This image-to-PDF workflow runs in your browser. Older phones can struggle with many high-resolution pictures; process a smaller batch if the browser becomes unresponsive.</p>`,
   },
+  {
+    slug: 'split-admit-card-pages',
+    url: '/guides/split-admit-card-pages/',
+    title: 'Split an admit card or exam hall ticket',
+    description: 'Extract the candidate copy while omitting multi-page instructions, inspect barcode clarity, and stay under strict portal upload limits.',
+    tools: [{name: 'Split PDF',url: '/tools/split-pdf'}, {name: 'Compress PDF',url: '/tools/compress-pdf'}],
+    body: `<p>Most examination boards and university admission systems issue multi-page admit cards. Typically, page 1 contains the candidate photo, roll number, desk assignment, and barcode, while pages 2 and 3 list general examination guidelines, prohibited items, and travel instructions. When submitting proof of registration to a verification portal, uploading the entire multi-page document often exceeds file limits or confuses document checkers.</p>
+<h2>Practise with the sample admit card fixture</h2>
+<p><a href="/assets/examples/sample-admit-card.pdf" download>Download the two-page sample admit card PDF</a>. Page 1 is the Candidate Copy and page 2 is the Instructions Sheet. The file uses standard A4 dimensions with vector text and barcode markers. It contains only fictional student data and no real personal records.</p>
+<figure class="guide-figure"><img src="/assets/examples/admit-card-split.svg" alt="Before: candidate copy and instructions pages. After: candidate copy alone." width="320" height="470" loading="lazy"><figcaption>Select page 1 to leave the instructions sheet out of the downloaded PDF.</figcaption></figure>
+<h2>Extract Page 1 (Candidate Copy)</h2>
+<ol>
+  <li>Open <a href="/tools/split-pdf">Split PDF</a> and choose <code>sample-admit-card.pdf</code>.</li>
+  <li>Under Page Range Selection, enter <strong>1</strong>. The selected count will indicate 1 page. Alternatively, tap the first thumbnail directly.</li>
+  <li>Select <strong>Extract &amp; Save</strong>, then download the resulting PDF.</li>
+  <li>Open the downloaded file in a standalone viewer. Confirm that it contains only the candidate credentials, photo box, and barcode, without the instructions sheet.</li>
+</ol>
+<h2>Inspect the output before upload</h2>
+<ul>
+  <li><strong>Barcode &amp; QR readability:</strong> Zoom into the barcode and roll number to confirm crisp vector outlines.</li>
+  <li><strong>Page dimensions:</strong> Verify that the page orientation is portrait and remains standard A4.</li>
+  <li><strong>File size:</strong> Check the file size in your device's file manager. A single-page vector admit card is usually under 50 KB.</li>
+</ul>
+<h2>If the portal has a strict file size limit (e.g., under 200 KB)</h2>
+<p>If your scanned admit card is an image capture rather than a digital vector PDF, it may exceed strict 100 KB–200 KB submission caps. If that happens, use <a href="/tools/compress-pdf">Compress PDF</a> with structural compression first to preserve text sharpness. Read our <a href="/guides/choose-a-pdf-compression-mode/">compression mode guide</a> before choosing image rasterization.</p>
+<p>Split PDF runs locally in your web browser. Your private admit card and identity details are not uploaded to any remote server.</p>`,
+  },
+  {
+    slug: 'compress-a-university-upload',
+    url: '/guides/compress-a-university-upload/',
+    title: 'Compress a university or employment portal upload',
+    description: 'Meet 200 KB to 1 MB document caps for university and job portals without making roll numbers, grades, or signatures unreadable.',
+    tools: [{name: 'Compress PDF',url: '/tools/compress-pdf'}, {name: 'Split PDF',url: '/tools/split-pdf'}],
+    body: `<p>Online university portals and public recruitment boards commonly impose strict file size limits—often as small as 200 KB, 500 KB, or 1 MB. An applicant's document bundle may include degree certificates, semester marksheets, and identity cards that easily total several megabytes. The goal is reducing file size without rendering essential grades, dates, or signatures illegible.</p>
+<h2>Practise with the sample documents</h2>
+<p>You can test compression techniques using our <a href="/assets/examples/sample-assignment.pdf" download>3-page sample assignment PDF</a> or download the complete <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download>practice pack (ZIP)</a>.</p>
+<figure class="guide-figure"><img src="/assets/examples/compression-mode.svg" alt="Try structural compression first. Optional image mode may reduce size but removes searchable text and forms." width="320" height="525" loading="lazy"><figcaption>Start with structural compression, then compare the actual result with your upload limit.</figcaption></figure>
+<h2>Step 1: Always try structural compression first</h2>
+<ol>
+  <li>Open <a href="/tools/compress-pdf">Compress PDF</a> and select your document.</li>
+  <li>Enter your portal's required limit (for example, <strong>500 KB</strong> or <strong>1 MB</strong>).</li>
+  <li>Leave <strong>Allow image-based compression</strong> unchecked for the first run.</li>
+  <li>Click <strong>Compress PDF</strong> and examine the reported output size.</li>
+</ol>
+<p>Structural compression avoids rasterizing the pages, so ordinary text and vector lines remain sharp. Open the result and check forms, links, signatures, and page content before using it; some document features may not survive PDF rewriting.</p>
+<h2>Step 2: What to do when structural compression is not enough</h2>
+<p>If your original document consists of smartphone camera photos or high-DPI flatbed scans, structural compression may only yield modest savings because the embedded image pixels take up most of the file. You have two options:</p>
+<ul>
+  <li><strong>Separate your documents:</strong> Check if the application portal allows uploading individual files (for example, separate fields for Degree Certificate and Marksheet). If allowed, use <a href="/tools/split-pdf">Split PDF</a> to separate the pages into smaller individual files.</li>
+  <li><strong>Controlled image compression:</strong> If the portal insists on a single consolidated file, enable <strong>Allow image-based compression</strong> in Compress PDF. This renders entire pages as JPEG images, removing searchable text, links, and interactive forms.</li>
+</ul>
+<h2>Essential verification checklist before submitting</h2>
+<ul>
+  <li>Zoom in to 200% on registration numbers, dates of birth, and official stamps. If numbers like 8 and 3 or 5 and 6 become ambiguous, reject the compressed output.</li>
+  <li>Check every page in an independent PDF viewer to verify no pages were omitted or rotated.</li>
+  <li>Check the exact file size on disk against the portal's stated ceiling. Target slightly below the maximum (e.g. 900 KB for a 1 MB limit).</li>
+</ul>
+<p>All compression operations in this tool occur locally in your browser memory. Your academic transcripts and personal credentials never leave your machine.</p>`,
+  },
 ];
