@@ -72,41 +72,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-btn-warm { box-sizing: border-box; font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 44px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; display: inline-block; }
 .hp-btn-warm:hover { opacity: 0.8; }
 
-/* Privacy & Processing Transparency Box */
-.hp-privacy-boundary { background: var(--hp-bg); }
-.hp-privacy-box { border: 1px solid var(--hp-border); background: var(--hp-card-bg); padding: 40px 36px; box-sizing: border-box; }
-.hp-privacy-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
-.hp-privacy-shield { font-size: 2.2rem; line-height: 1; color: var(--hp-accent); }
-.hp-privacy-title { font-family: var(--hp-serif); font-size: 1.35rem; font-weight: 500; color: var(--hp-text); margin: 0 0 4px; }
-.hp-privacy-subtitle { font-family: var(--hp-sans); font-size: 0.88rem; color: var(--hp-text-secondary); margin: 0; }
-.hp-privacy-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; border-top: 1px solid var(--hp-border); padding-top: 28px; }
-@media (max-width: 900px) { .hp-privacy-columns { grid-template-columns: 1fr; gap: 20px; } }
-.hp-privacy-col h4 { font-family: var(--hp-serif); font-size: 1.05rem; font-weight: 500; color: var(--hp-text); margin: 8px 0 6px; }
-.hp-privacy-col p { font-family: var(--hp-sans); font-size: 0.82rem; color: var(--hp-text-secondary); line-height: 1.6; margin: 0; }
-.hp-privacy-pill { display: inline-block; font-family: var(--hp-sans); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 6px; }
-.hp-pill-local { background: #dcfce7; color: #166534; }
-[data-theme="dark"] .hp-pill-local { background: #14532d; color: #86efac; }
-.hp-pill-server { background: #e0f2fe; color: #075985; }
-[data-theme="dark"] .hp-pill-server { background: #0c4a6e; color: #7dd3fc; }
-.hp-pill-ai { background: #fef3c7; color: #92400e; }
-[data-theme="dark"] .hp-pill-ai { background: #78350f; color: #fde68a; }
-
-/* Offerings & Guides */
-.hp-offerings { background: var(--hp-bg-alt); }
-.hp-offerings-header { text-align: center; margin-bottom: 56px; }
-.hp-offerings-header .hp-section-desc { margin: 0 auto; }
-.hp-offerings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-@media (max-width: 1024px) { .hp-offerings-grid { grid-template-columns: 1fr; gap: 16px; } }
-.hp-offering-card { background: var(--hp-card-bg); border: 1px solid var(--hp-border); padding: 44px 32px 36px; text-align: left; text-decoration: none; color: inherit; transition: all 0.4s ease; position: relative; overflow: hidden; box-sizing: border-box; }
-.hp-offering-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(44,36,24,0.07); }
-.hp-offering-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--hp-accent); }
-.hp-offering-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-.hp-offering-title { font-family: var(--hp-serif); font-size: 1.3rem; font-weight: 500; color: var(--hp-text); margin-bottom: 10px; }
-.hp-offering-desc { font-family: var(--hp-sans); font-size: 0.85rem; color: var(--hp-text-secondary); line-height: 1.7; margin-bottom: 24px; }
-.hp-offering-link { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hp-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: gap 0.3s ease; }
-.hp-offering-card:hover .hp-offering-link { gap: 14px; }
-.hp-offering-badge { display: inline-block; font-family: var(--hp-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--hp-accent); color: var(--hp-accent); margin-bottom: 18px; }
-
 /* Separated Supplementary Study Drafts */
 .hp-study-section { background: var(--hp-bg); }
 .hp-study-box { border: 1px solid var(--hp-border); padding: 44px 36px; max-width: 950px; margin: 0 auto; background: var(--hp-card-bg); text-align: center; box-sizing: border-box; }
@@ -144,11 +109,8 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
   .hp-hero-ctas { flex-direction: column; align-items: center; }
   .hp-btn, .hp-btn-warm { box-sizing: border-box; width: 100%; max-width: 260px; text-align: center; padding: 14px 20px; }
   .hp-philosophy-art { max-width: 240px; }
-  .hp-offering-card { padding: 24px 16px; box-sizing: border-box; }
-  .hp-tool-item { padding: 16px 14px; gap: 12px; box-sizing: border-box; }
-  .hp-privacy-box { padding: 24px 16px; box-sizing: border-box; }
-  .hp-privacy-header { gap: 14px; }
-  .hp-study-box { padding: 24px 16px; box-sizing: border-box; }
+.hp-tool-item { padding: 16px 14px; gap: 12px; box-sizing: border-box; }
+.hp-study-box { padding: 24px 16px; box-sizing: border-box; }
   .hp-workflow-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 </style>
@@ -195,69 +157,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
         </div>
         <div class="hp-tools-cta hp-fade-up">
             <a href="{{ '/tools' | url }}" class="hp-btn-warm">View All 46 Free Tools</a>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ TRANSPARENT PROCESSING & PRIVACY BOUNDARIES ═══════ -->
-<section class="hp-section hp-privacy-boundary" id="privacy-boundary">
-    <div class="hp-container">
-        <div class="hp-privacy-box hp-fade-up">
-            <div class="hp-privacy-header">
-                <span class="hp-privacy-shield">🔒</span>
-                <div>
-                    <h3 class="hp-privacy-title">Transparent Processing & Privacy Boundaries</h3>
-                    <p class="hp-privacy-subtitle">We clearly disclose how every document is handled before you choose a file.</p>
-                </div>
-            </div>
-            <div class="hp-privacy-columns">
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-local">100% Client-Side</span>
-                    <h4>Local Browser Memory</h4>
-                    <p>Merge PDF, Compress PDF, Split PDF, JPG to PDF, and PDF Editor execute in your browser via WebAssembly & Canvas. Your files are never uploaded to any server.</p>
-                </div>
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-server">Server-Assisted</span>
-                    <h4>Protected Ephemeral Gateways</h4>
-                    <p>Format conversions like PDF to Word and Word to PDF run on an isolated conversion service. Documents are encrypted in transit and purged immediately after completion.</p>
-                </div>
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-ai">Opt-In Cloud AI</span>
-                    <h4>Explicit Interaction Only</h4>
-                    <p>AI tools such as Chat with PDF, Summarizer, and Flashcards call secure AI language models only after you explicitly click to analyze text.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ FULL DIRECTORY & TASK GUIDES ═══════ -->
-<section class="hp-section hp-offerings" id="offerings">
-    <div class="hp-container">
-        <div class="hp-offerings-header hp-fade-up">
-            <p class="hp-label">Explore More</p>
-            <h2 class="hp-section-heading">Built for <em>reliable document work</em></h2>
-            <p class="hp-section-desc">Search the full 46-tool collection or follow step-by-step walkthroughs with downloadable sample files.</p>
-        </div>
-        <div class="hp-offerings-grid">
-            <a href="{{ '/tools' | url }}" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge">46 Free Tools</div>
-                <div class="hp-offering-icon">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                </div>
-                <h3 class="hp-offering-title">Searchable Tool Directory</h3>
-                <p class="hp-offering-desc">Explore all 46 tools organized by task: Organize & Pages, Optimize & Convert, Edit & Secure, and AI & Productivity. Instant search and zero signup needed.</p>
-                <span class="hp-offering-link">Browse All 46 Tools <span>→</span></span>
-            </a>
-            <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge">Practice Pack (ZIP)</div>
-                <div class="hp-offering-icon">
-                    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                </div>
-                <h3 class="hp-offering-title">Official Practice Pack</h3>
-                <p class="hp-offering-desc">Download non-sensitive test files including Word documents, multi-page assignments, and exam admit cards to safely test tools locally before working with real files.</p>
-                <span class="hp-offering-link">Download Practice Pack (ZIP) <span>↓</span></span>
-            </a>
         </div>
     </div>
 </section>
