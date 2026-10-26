@@ -65,7 +65,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-tool-content { flex: 1; min-width: 0; }
 .hp-tool-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
 .hp-tool-name { font-family: var(--hp-serif); font-size: 0.98rem; font-weight: 500; color: var(--hp-text); margin: 0; }
-.hp-tool-badge { font-family: var(--hp-sans); font-size: 0.54rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: rgba(139, 105, 20, 0.12); color: var(--hp-accent); }
 .hp-tool-desc { font-family: var(--hp-sans); font-size: 0.75rem; color: var(--hp-text-muted); line-height: 1.4; margin: 0; }
 .hp-tools-cta { text-align: center; }
 .hp-btn-warm { box-sizing: border-box; font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 44px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; display: inline-block; }
@@ -121,7 +120,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
     <div class="hp-hero-content">
         <p class="hp-hero-label">Simple, Fast & Private</p>
         <h1 class="hp-hero-heading"><em>Free PDF tools for simple document tasks; choose a file and download a result.</em></h1>
-        <p class="hp-hero-subtitle">Fast, private document utilities in your browser. Combine assignment pages, compress files for portal uploads, split documents, edit text, and turn photos into clean PDFs. Standard tools process locally on your device with zero file upload.</p>
+        <p class="hp-hero-subtitle">Fast, private document utilities in your browser. Combine assignment pages, compress files for portal uploads, split documents, edit text, and turn photos into clean PDFs. Standard tools process locally on your device.</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>&#32;
             <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip" class="hp-btn">Try the Examples</a>
@@ -145,7 +144,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                 <div class="hp-tool-content">
                     <div class="hp-tool-header">
                         <div class="hp-tool-name">{{ tool.name }}</div>
-                        <span class="hp-tool-badge">Local · Zero Upload</span>
                     </div>
                     <div class="hp-tool-desc">{{ tool.desc }}</div>
                 </div>
