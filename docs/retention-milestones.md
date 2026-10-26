@@ -57,7 +57,7 @@ All outreach must be high-utility, permission-based, and accompanied by reproduc
 
 | Channel | Specific Outreach Protocol | Success Metric |
 | :--- | :--- | :--- |
-| **Student & Academic Communities** | Share practical walkthroughs on Reddit (r/college, r/students) or campus forums where permitted. Offer the fictional [Downloadable Practice Pack](/guides) and explain local client-side privacy tradeoffs. | Qualified visits, tool completions, community upvotes/feedback. |
+| **Student & Academic Communities** | Share practical walkthroughs on Reddit (r/college, r/students) or campus forums where permitted. Offer the fictional [Downloadable Practice Pack](/assets/examples/onlinepdfpro-practice-pack.zip) and explain local client-side privacy tradeoffs. | Qualified visits, tool completions, community upvotes/feedback. |
 | **Educators & Campus Offices** | Conduct 10 genuine, personalized outreach emails weekly to faculty coordinators or document offices demonstrating assignment splitting/merging. | Direct replies, institutional use cases, workflow feedback. |
 | **YouTube Shorts & Video Guides** | Publish 2–3 concise 20–45 second screen captures demonstrating single tasks (e.g., "Split only page 1 from an exam hall ticket"). Deep-link directly to the specific tool. | View-through rate, clicks on deep links, completed jobs. |
 | **Developer & Privacy Communities** | Publish technical write-ups on Hacker News, Dev.to, or GitHub detailing client-side WASM processing, Web Workers, and current CSP tradeoffs. | Developer backlinks, technical feedback, GitHub stars. |

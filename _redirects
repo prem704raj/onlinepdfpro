@@ -27,12 +27,13 @@
 /404.html /404 301
 /about.html /about 301
 /blog.html /blog 301
+/changelog.html /changelog 301
+/changelog/ /changelog 301
 /compare-pdf.html /compare-pdf 301
 /contact.html /contact 301
 /disclaimer.html /disclaimer 301
 /dmca.html /dmca 301
 /flatten-pdf.html /flatten-pdf 301
-/guides.html /guides 301
 /help.html /help 301
 /history.html /history 301
 /invoice-generator.html /invoice-generator 301

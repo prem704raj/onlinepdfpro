@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="470" viewBox="0 0 320 470" role="img" aria-labelledby="title desc">
+<title id="title">Split the candidate copy from an admit card</title>
+<desc id="desc">A two-page PDF containing a candidate copy and instructions becomes a one-page PDF containing only the candidate copy.</desc>
+<rect width="320" height="470" rx="16" fill="#f5f7fb"/>
+<text x="22" y="37" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">Before: two-page PDF</text>
+<rect x="22" y="58" width="132" height="142" rx="7" fill="#fff" stroke="#64748b" stroke-width="2"/>
+<text x="34" y="90" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#172554">Page 1</text>
+<text x="34" y="118" font-family="Arial,sans-serif" font-size="14" fill="#334155">Candidate copy</text>
+<text x="34" y="148" font-family="Arial,sans-serif" font-size="13" fill="#475569">Roll number</text>
+<text x="34" y="175" font-family="Arial,sans-serif" font-size="13" fill="#475569">Barcode</text>
+<rect x="166" y="58" width="132" height="142" rx="7" fill="#fff" stroke="#64748b" stroke-width="2"/>
+<text x="178" y="90" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#172554">Page 2</text>
+<text x="178" y="118" font-family="Arial,sans-serif" font-size="14" fill="#334155">Instructions</text>
+<path d="M160 218v28m-10-10 10 10 10-10" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="22" y="281" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#172554">After: page 1 only</text>
+<rect x="94" y="302" width="132" height="142" rx="7" fill="#fff" stroke="#2563eb" stroke-width="3"/>
+<text x="106" y="334" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#172554">Page 1</text>
+<text x="106" y="362" font-family="Arial,sans-serif" font-size="14" fill="#334155">Candidate copy</text>
+<text x="106" y="392" font-family="Arial,sans-serif" font-size="13" fill="#475569">Roll number</text>
+<text x="106" y="419" font-family="Arial,sans-serif" font-size="13" fill="#475569">Barcode</text>
+</svg>

@@ -163,7 +163,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
         <p class="hp-hero-subtitle">Fast, private document utilities in your browser. Combine assignment pages, compress files for portal uploads, split documents, edit text, and turn photos into clean PDFs. Standard tools process locally on your device with zero file upload.</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>&#32;
-            <a href="/guides" class="hp-btn">Try the Examples</a>
+            <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip" class="hp-btn">Try the Examples</a>
         </div>
     </div>
 </section>
@@ -249,14 +249,14 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                 <p class="hp-offering-desc">Explore all 46 tools organized by task: Organize & Pages, Optimize & Convert, Edit & Secure, and AI & Productivity. Instant search and zero signup needed.</p>
                 <span class="hp-offering-link">Browse All 46 Tools <span>→</span></span>
             </a>
-            <a href="/guides" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge">Sample Walkthroughs</div>
+            <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip" class="hp-offering-card hp-fade-up">
+                <div class="hp-offering-badge">Practice Pack (ZIP)</div>
                 <div class="hp-offering-icon">
                     <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                 </div>
-                <h3 class="hp-offering-title">Practical Task Guides</h3>
-                <p class="hp-offering-desc">Step-by-step walkthroughs with original sample files. Learn how to combine assignment pages, compress for university portals, and turn photos into PDFs.</p>
-                <span class="hp-offering-link">View Workflow Guides <span>→</span></span>
+                <h3 class="hp-offering-title">Official Practice Pack</h3>
+                <p class="hp-offering-desc">Download non-sensitive test files including Word documents, multi-page assignments, and exam admit cards to safely test tools locally before working with real files.</p>
+                <span class="hp-offering-link">Download Practice Pack (ZIP) <span>↓</span></span>
             </a>
         </div>
     </div>
@@ -283,7 +283,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
             <div class="hp-fade-up">
                 <p class="hp-label">Our Philosophy</p>
                 <h2 class="hp-section-heading">Built <em>Different</em></h2>
-                <p class="hp-section-desc">Know what a tool can preserve before you use it. Our walkthroughs use original, fictional files and explain page order, readable exports, compression tradeoffs and why cropping is not redaction.</p>
+                <p class="hp-section-desc">Know what a tool can preserve before you use it. Our tools explain page order, readable exports, compression tradeoffs and why cropping is not redaction.</p>
                 <ul class="hp-feature-list">
                     <li>Free PDF tools, no hidden tool charges</li>
                     <li>No signup required for PDF tools</li>
@@ -296,17 +296,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
     </div>
 </section>
 
-<!-- ═══════ GUIDES & EXAMPLES ═══════ -->
-<section class="hp-section hp-info-section">
-    <div class="hp-container">
-        <p class="hp-label">Guides & Examples</p>
-        <h2 class="hp-section-heading">Practise with <em>original sample files</em></h2>
-        <p class="hp-section-desc">Follow a task from input to download, with a result you can inspect and limitations you can understand.</p>
-        <div class="hp-workflow-grid">
-        {% for guide in guides %}<a href="{{ guide.url }}"><span>{{ guide.title }}</span><br>{{ guide.description }}</a>{% endfor %}
-        </div>
-    </div>
-</section>
 
 <!-- ═══════ SEPARATED STUDY MATERIALS (DECOUPLED STOREFRONT) ═══════ -->
 <section class="hp-section hp-study-section" id="study-drafts">
