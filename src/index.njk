@@ -55,19 +55,18 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-tools-section { background: var(--hp-bg-alt); }
 .hp-tools-header { text-align: center; margin-bottom: 48px; }
 .hp-tools-header .hp-section-desc { margin: 0 auto; }
-.hp-tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 48px; }
+.hp-tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 36px; }
 @media (max-width: 1024px) { .hp-tools-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) { .hp-tools-grid { grid-template-columns: 1fr; } }
-.hp-tool-item { display: flex; align-items: flex-start; gap: 18px; padding: 24px 22px; background: var(--hp-card-bg); border: 1px solid var(--hp-border); text-decoration: none; color: inherit; transition: all 0.3s ease; box-sizing: border-box; }
-.hp-tool-item:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(44,36,24,0.06); border-color: var(--hp-accent); }
-.hp-tool-icon-wrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.hp-tool-icon-wrap svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.hp-tool-content { flex: 1; }
-.hp-tool-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.hp-tool-name { font-family: var(--hp-serif); font-size: 1.05rem; font-weight: 500; color: var(--hp-text); margin: 0; }
-.hp-tool-badge { font-family: var(--hp-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; background: rgba(139, 105, 20, 0.12); color: var(--hp-accent); }
-.hp-tool-desc { font-family: var(--hp-sans); font-size: 0.78rem; color: var(--hp-text-muted); line-height: 1.5; margin-bottom: 10px; }
-.hp-tool-cta-link { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--hp-accent); display: inline-flex; align-items: center; gap: 6px; }
+.hp-tool-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--hp-card-bg); border: 1px solid var(--hp-border); text-decoration: none; color: inherit; transition: all 0.25s ease; box-sizing: border-box; border-radius: 8px; }
+.hp-tool-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,36,24,0.06); border-color: var(--hp-accent); }
+.hp-tool-icon-wrap { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hp-tool-icon-wrap svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hp-tool-content { flex: 1; min-width: 0; }
+.hp-tool-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
+.hp-tool-name { font-family: var(--hp-serif); font-size: 0.98rem; font-weight: 500; color: var(--hp-text); margin: 0; }
+.hp-tool-badge { font-family: var(--hp-sans); font-size: 0.54rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: rgba(139, 105, 20, 0.12); color: var(--hp-accent); }
+.hp-tool-desc { font-family: var(--hp-sans); font-size: 0.75rem; color: var(--hp-text-muted); line-height: 1.4; margin: 0; }
 .hp-tools-cta { text-align: center; }
 .hp-btn-warm { box-sizing: border-box; font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 44px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; display: inline-block; }
 .hp-btn-warm:hover { opacity: 0.8; }
@@ -109,7 +108,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
   .hp-hero-ctas { flex-direction: column; align-items: center; }
   .hp-btn, .hp-btn-warm { box-sizing: border-box; width: 100%; max-width: 260px; text-align: center; padding: 14px 20px; }
   .hp-philosophy-art { max-width: 240px; }
-.hp-tool-item { padding: 16px 14px; gap: 12px; box-sizing: border-box; }
+.hp-tool-item { padding: 12px 14px; gap: 12px; box-sizing: border-box; }
 .hp-study-box { padding: 24px 16px; box-sizing: border-box; }
   .hp-workflow-grid { grid-template-columns: 1fr; gap: 16px; }
 }
@@ -149,7 +148,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                         <span class="hp-tool-badge">Local · Zero Upload</span>
                     </div>
                     <div class="hp-tool-desc">{{ tool.desc }}</div>
-                    <span class="hp-tool-cta-link">Open Tool <span>→</span></span>
                 </div>
             </a>
             {% endif %}
