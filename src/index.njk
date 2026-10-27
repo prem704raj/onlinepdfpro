@@ -26,14 +26,13 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-hero { position: relative; width: 100%; min-height: auto; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: transparent; border: none; }
 .hp-hero::before { display: none !important; }
 .hp-hero::after { display: none !important; }
-.hp-hero-content { position: relative; z-index: 3; text-align: center; max-width: 1200px; padding: 0 24px; padding-top: 100px; padding-bottom: 36px; }
-.hp-hero-label { font-family: var(--hp-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--hp-accent); margin-bottom: 24px; }
+.hp-hero-content { position: relative; z-index: 3; text-align: center; max-width: 1200px; padding: 0 24px; padding-top: 96px; padding-bottom: 36px; }
 .hp-hero-heading { font-family: var(--hp-serif); font-size: clamp(1.8rem, 3.2vw, 3rem); font-weight: 400; font-style: italic; line-height: 1.25; color: var(--hp-accent); max-width: 1200px; margin: 0 auto 24px; letter-spacing: -0.01em; white-space: normal; text-wrap: balance; }
 @media (max-width: 850px) {
   .hp-hero-heading { white-space: normal; overflow-wrap: anywhere; font-size: clamp(1.8rem, 6vw, 2.5rem); }
 }
 @media (max-width: 768px) {
-  .hp-hero-content { width: 100%; max-width: 100%; padding: 72px 20px 32px; box-sizing: border-box; }
+  .hp-hero-content { width: 100%; max-width: 100%; padding: 84px 20px 32px; box-sizing: border-box; }
   .hp-hero-heading { width: 100%; max-width: 100%; font-size: clamp(1.6rem, 8vw, 2.2rem); white-space: normal; overflow-wrap: anywhere; }
   .hp-hero-subtitle { max-width: 100%; white-space: normal; }
 }
@@ -55,57 +54,20 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 .hp-tools-section { background: var(--hp-bg-alt); }
 .hp-tools-header { text-align: center; margin-bottom: 48px; }
 .hp-tools-header .hp-section-desc { margin: 0 auto; }
-.hp-tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 48px; }
+.hp-tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 36px; }
 @media (max-width: 1024px) { .hp-tools-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) { .hp-tools-grid { grid-template-columns: 1fr; } }
-.hp-tool-item { display: flex; align-items: flex-start; gap: 18px; padding: 24px 22px; background: var(--hp-card-bg); border: 1px solid var(--hp-border); text-decoration: none; color: inherit; transition: all 0.3s ease; box-sizing: border-box; }
-.hp-tool-item:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(44,36,24,0.06); border-color: var(--hp-accent); }
-.hp-tool-icon-wrap { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.hp-tool-icon-wrap svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.hp-tool-content { flex: 1; }
-.hp-tool-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.hp-tool-name { font-family: var(--hp-serif); font-size: 1.05rem; font-weight: 500; color: var(--hp-text); margin: 0; }
-.hp-tool-badge { font-family: var(--hp-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; background: rgba(139, 105, 20, 0.12); color: var(--hp-accent); }
-.hp-tool-desc { font-family: var(--hp-sans); font-size: 0.78rem; color: var(--hp-text-muted); line-height: 1.5; margin-bottom: 10px; }
-.hp-tool-cta-link { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--hp-accent); display: inline-flex; align-items: center; gap: 6px; }
+.hp-tool-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--hp-card-bg); border: 1px solid var(--hp-border); text-decoration: none; color: inherit; transition: all 0.25s ease; box-sizing: border-box; border-radius: 8px; }
+.hp-tool-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,36,24,0.06); border-color: var(--hp-accent); }
+.hp-tool-icon-wrap { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hp-tool-icon-wrap svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hp-tool-content { flex: 1; min-width: 0; }
+.hp-tool-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 2px; flex-wrap: wrap; }
+.hp-tool-name { font-family: var(--hp-serif); font-size: 0.98rem; font-weight: 500; color: var(--hp-text); margin: 0; }
+.hp-tool-desc { font-family: var(--hp-sans); font-size: 0.75rem; color: var(--hp-text-muted); line-height: 1.4; margin: 0; }
 .hp-tools-cta { text-align: center; }
 .hp-btn-warm { box-sizing: border-box; font-family: var(--hp-sans); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; padding: 16px 44px; border: 1.5px solid var(--hp-text); background: transparent; color: var(--hp-text); text-decoration: none; transition: all 0.35s ease; display: inline-block; }
 .hp-btn-warm:hover { opacity: 0.8; }
-
-/* Privacy & Processing Transparency Box */
-.hp-privacy-boundary { background: var(--hp-bg); }
-.hp-privacy-box { border: 1px solid var(--hp-border); background: var(--hp-card-bg); padding: 40px 36px; box-sizing: border-box; }
-.hp-privacy-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
-.hp-privacy-shield { font-size: 2.2rem; line-height: 1; color: var(--hp-accent); }
-.hp-privacy-title { font-family: var(--hp-serif); font-size: 1.35rem; font-weight: 500; color: var(--hp-text); margin: 0 0 4px; }
-.hp-privacy-subtitle { font-family: var(--hp-sans); font-size: 0.88rem; color: var(--hp-text-secondary); margin: 0; }
-.hp-privacy-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; border-top: 1px solid var(--hp-border); padding-top: 28px; }
-@media (max-width: 900px) { .hp-privacy-columns { grid-template-columns: 1fr; gap: 20px; } }
-.hp-privacy-col h4 { font-family: var(--hp-serif); font-size: 1.05rem; font-weight: 500; color: var(--hp-text); margin: 8px 0 6px; }
-.hp-privacy-col p { font-family: var(--hp-sans); font-size: 0.82rem; color: var(--hp-text-secondary); line-height: 1.6; margin: 0; }
-.hp-privacy-pill { display: inline-block; font-family: var(--hp-sans); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 6px; }
-.hp-pill-local { background: #dcfce7; color: #166534; }
-[data-theme="dark"] .hp-pill-local { background: #14532d; color: #86efac; }
-.hp-pill-server { background: #e0f2fe; color: #075985; }
-[data-theme="dark"] .hp-pill-server { background: #0c4a6e; color: #7dd3fc; }
-.hp-pill-ai { background: #fef3c7; color: #92400e; }
-[data-theme="dark"] .hp-pill-ai { background: #78350f; color: #fde68a; }
-
-/* Offerings & Guides */
-.hp-offerings { background: var(--hp-bg-alt); }
-.hp-offerings-header { text-align: center; margin-bottom: 56px; }
-.hp-offerings-header .hp-section-desc { margin: 0 auto; }
-.hp-offerings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-@media (max-width: 1024px) { .hp-offerings-grid { grid-template-columns: 1fr; gap: 16px; } }
-.hp-offering-card { background: var(--hp-card-bg); border: 1px solid var(--hp-border); padding: 44px 32px 36px; text-align: left; text-decoration: none; color: inherit; transition: all 0.4s ease; position: relative; overflow: hidden; box-sizing: border-box; }
-.hp-offering-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(44,36,24,0.07); }
-.hp-offering-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--hp-accent); }
-.hp-offering-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-.hp-offering-title { font-family: var(--hp-serif); font-size: 1.3rem; font-weight: 500; color: var(--hp-text); margin-bottom: 10px; }
-.hp-offering-desc { font-family: var(--hp-sans); font-size: 0.85rem; color: var(--hp-text-secondary); line-height: 1.7; margin-bottom: 24px; }
-.hp-offering-link { font-family: var(--hp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hp-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: gap 0.3s ease; }
-.hp-offering-card:hover .hp-offering-link { gap: 14px; }
-.hp-offering-badge { display: inline-block; font-family: var(--hp-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--hp-accent); color: var(--hp-accent); margin-bottom: 18px; }
 
 /* Separated Supplementary Study Drafts */
 .hp-study-section { background: var(--hp-bg); }
@@ -144,11 +106,8 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
   .hp-hero-ctas { flex-direction: column; align-items: center; }
   .hp-btn, .hp-btn-warm { box-sizing: border-box; width: 100%; max-width: 260px; text-align: center; padding: 14px 20px; }
   .hp-philosophy-art { max-width: 240px; }
-  .hp-offering-card { padding: 24px 16px; box-sizing: border-box; }
-  .hp-tool-item { padding: 16px 14px; gap: 12px; box-sizing: border-box; }
-  .hp-privacy-box { padding: 24px 16px; box-sizing: border-box; }
-  .hp-privacy-header { gap: 14px; }
-  .hp-study-box { padding: 24px 16px; box-sizing: border-box; }
+.hp-tool-item { padding: 12px 14px; gap: 12px; box-sizing: border-box; }
+.hp-study-box { padding: 24px 16px; box-sizing: border-box; }
   .hp-workflow-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 </style>
@@ -158,12 +117,11 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
 <!-- ═══════ HERO ═══════ -->
 <section class="hp-hero">
     <div class="hp-hero-content">
-        <p class="hp-hero-label">Simple, Fast & Private</p>
         <h1 class="hp-hero-heading"><em>Free PDF tools for simple document tasks; choose a file and download a result.</em></h1>
-        <p class="hp-hero-subtitle">Fast, private document utilities in your browser. Combine assignment pages, compress files for portal uploads, split documents, edit text, and turn photos into clean PDFs. Standard tools process locally on your device with zero file upload.</p>
+        <p class="hp-hero-subtitle">Fast, private document utilities in your browser. Combine assignment pages, compress files for portal uploads, split documents, edit text, and turn photos into clean PDFs. Standard tools process locally on your device.</p>
         <div class="hp-hero-ctas">
             <a href="{{ '/tools' | url }}" class="hp-btn hp-btn-filled">Explore Tools</a>&#32;
-            <a href="/guides" class="hp-btn">Try the Examples</a>
+            <a href="/assets/examples/onlinepdfpro-practice-pack.zip" download="onlinepdfpro-practice-pack.zip" class="hp-btn">Try the Examples</a>
         </div>
     </div>
 </section>
@@ -184,10 +142,8 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
                 <div class="hp-tool-content">
                     <div class="hp-tool-header">
                         <div class="hp-tool-name">{{ tool.name }}</div>
-                        <span class="hp-tool-badge">Local · Zero Upload</span>
                     </div>
                     <div class="hp-tool-desc">{{ tool.desc }}</div>
-                    <span class="hp-tool-cta-link">Open Tool <span>→</span></span>
                 </div>
             </a>
             {% endif %}
@@ -195,69 +151,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
         </div>
         <div class="hp-tools-cta hp-fade-up">
             <a href="{{ '/tools' | url }}" class="hp-btn-warm">View All 46 Free Tools</a>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ TRANSPARENT PROCESSING & PRIVACY BOUNDARIES ═══════ -->
-<section class="hp-section hp-privacy-boundary" id="privacy-boundary">
-    <div class="hp-container">
-        <div class="hp-privacy-box hp-fade-up">
-            <div class="hp-privacy-header">
-                <span class="hp-privacy-shield">🔒</span>
-                <div>
-                    <h3 class="hp-privacy-title">Transparent Processing & Privacy Boundaries</h3>
-                    <p class="hp-privacy-subtitle">We clearly disclose how every document is handled before you choose a file.</p>
-                </div>
-            </div>
-            <div class="hp-privacy-columns">
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-local">100% Client-Side</span>
-                    <h4>Local Browser Memory</h4>
-                    <p>Merge PDF, Compress PDF, Split PDF, JPG to PDF, and PDF Editor execute in your browser via WebAssembly & Canvas. Your files are never uploaded to any server.</p>
-                </div>
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-server">Server-Assisted</span>
-                    <h4>Protected Ephemeral Gateways</h4>
-                    <p>Format conversions like PDF to Word and Word to PDF run on an isolated conversion service. Documents are encrypted in transit and purged immediately after completion.</p>
-                </div>
-                <div class="hp-privacy-col">
-                    <span class="hp-privacy-pill hp-pill-ai">Opt-In Cloud AI</span>
-                    <h4>Explicit Interaction Only</h4>
-                    <p>AI tools such as Chat with PDF, Summarizer, and Flashcards call secure AI language models only after you explicitly click to analyze text.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ FULL DIRECTORY & TASK GUIDES ═══════ -->
-<section class="hp-section hp-offerings" id="offerings">
-    <div class="hp-container">
-        <div class="hp-offerings-header hp-fade-up">
-            <p class="hp-label">Explore More</p>
-            <h2 class="hp-section-heading">Built for <em>reliable document work</em></h2>
-            <p class="hp-section-desc">Search the full 46-tool collection or follow step-by-step walkthroughs with downloadable sample files.</p>
-        </div>
-        <div class="hp-offerings-grid">
-            <a href="{{ '/tools' | url }}" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge">46 Free Tools</div>
-                <div class="hp-offering-icon">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                </div>
-                <h3 class="hp-offering-title">Searchable Tool Directory</h3>
-                <p class="hp-offering-desc">Explore all 46 tools organized by task: Organize & Pages, Optimize & Convert, Edit & Secure, and AI & Productivity. Instant search and zero signup needed.</p>
-                <span class="hp-offering-link">Browse All 46 Tools <span>→</span></span>
-            </a>
-            <a href="/guides" class="hp-offering-card hp-fade-up">
-                <div class="hp-offering-badge">Sample Walkthroughs</div>
-                <div class="hp-offering-icon">
-                    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                </div>
-                <h3 class="hp-offering-title">Practical Task Guides</h3>
-                <p class="hp-offering-desc">Step-by-step walkthroughs with original sample files. Learn how to combine assignment pages, compress for university portals, and turn photos into PDFs.</p>
-                <span class="hp-offering-link">View Workflow Guides <span>→</span></span>
-            </a>
         </div>
     </div>
 </section>
@@ -283,7 +176,7 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
             <div class="hp-fade-up">
                 <p class="hp-label">Our Philosophy</p>
                 <h2 class="hp-section-heading">Built <em>Different</em></h2>
-                <p class="hp-section-desc">Know what a tool can preserve before you use it. Our walkthroughs use original, fictional files and explain page order, readable exports, compression tradeoffs and why cropping is not redaction.</p>
+                <p class="hp-section-desc">Know what a tool can preserve before you use it. Our tools explain page order, readable exports, compression tradeoffs and why cropping is not redaction.</p>
                 <ul class="hp-feature-list">
                     <li>Free PDF tools, no hidden tool charges</li>
                     <li>No signup required for PDF tools</li>
@@ -296,17 +189,6 @@ body.hp-body .header .header-search, body.hp-body .header .mobile-search-toggle 
     </div>
 </section>
 
-<!-- ═══════ GUIDES & EXAMPLES ═══════ -->
-<section class="hp-section hp-info-section">
-    <div class="hp-container">
-        <p class="hp-label">Guides & Examples</p>
-        <h2 class="hp-section-heading">Practise with <em>original sample files</em></h2>
-        <p class="hp-section-desc">Follow a task from input to download, with a result you can inspect and limitations you can understand.</p>
-        <div class="hp-workflow-grid">
-        {% for guide in guides %}<a href="{{ guide.url }}"><span>{{ guide.title }}</span><br>{{ guide.description }}</a>{% endfor %}
-        </div>
-    </div>
-</section>
 
 <!-- ═══════ SEPARATED STUDY MATERIALS (DECOUPLED STOREFRONT) ═══════ -->
 <section class="hp-section hp-study-section" id="study-drafts">

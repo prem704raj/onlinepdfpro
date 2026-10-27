@@ -14,7 +14,6 @@ permalink: /sitemap.xml
   { url: '/refund', priority: '0.5', changefreq: 'yearly' },
   { url: '/study-materials', priority: '0.9', changefreq: 'weekly' },
   { url: '/blog', priority: '0.7', changefreq: 'weekly' },
-  { url: '/guides', priority: '0.7', changefreq: 'monthly' },
   { url: '/changelog', priority: '0.6', changefreq: 'monthly' }
 ] -%}
 {%- for page in staticPages %}
@@ -24,13 +23,7 @@ permalink: /sitemap.xml
     <priority>{{ page.priority }}</priority>
   </url>
 {%- endfor %}
-{%- for guide in guides %}
-  <url>
-    <loc>https://onlinepdfpro.com{{ guide.url }}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-{%- endfor %}
+
 {%- for tool in toolRegistry.tools %}
   <url>
     <loc>https://onlinepdfpro.com{{ tool.href }}</loc>

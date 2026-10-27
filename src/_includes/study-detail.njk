@@ -8,7 +8,7 @@
     <title>{% if detailProduct %}{{ detailProduct.title }} — {{ detailProduct.pageCount }}-page PDF Study Draft{% else %}View Study Material{% endif %} | OnlinePDFPro</title>
     <meta name="description" content="{% if detailProduct %}{{ detailProduct.description }} AI-assisted draft. Preview five pages before purchase.{% else %}View study material details and a five-page preview before purchase on OnlinePDFPro.{% endif %}">
     <meta name="robots" content="{% if detailProduct %}index, follow{% else %}noindex, follow{% endif %}">
-    <link rel="canonical" href="https://onlinepdfpro.com{% if detailProduct %}{{ detailProduct.url }}{% else %}/viewstudymaterials.html{% endif %}">
+    <link rel="canonical" href="https://onlinepdfpro.com{% if detailProduct %}{{ detailProduct.url }}{% else %}/viewstudymaterials{% endif %}">
     {% if detailProduct %}
     <meta property="og:title" content="{{ detailProduct.title }}">
     <meta property="og:description" content="{{ detailProduct.disclosure }}">

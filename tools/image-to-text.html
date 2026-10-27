@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cloudflareinsights.com https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -61,7 +61,32 @@
 
  <!-- MOBILE FIX -->
 
- <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://onlinepdfpro.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://onlinepdfpro.com/tools"},{"@type":"ListItem","position":3,"name":"Image to Text (OCR)","item":"https://onlinepdfpro.com/tools/image-to-text"}]}</script>
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+ {
+ "@type": "ListItem",
+ "position": 1,
+ "name": "Home",
+ "item": "https://onlinepdfpro.com/"
+ },
+ {
+ "@type": "ListItem",
+ "position": 2,
+ "name": "Tools",
+ "item": "https://onlinepdfpro.com/tools"
+ },
+ {
+ "@type": "ListItem",
+ "position": 3,
+ "name": "Image to Text (OCR)",
+ "item": "https://onlinepdfpro.com/tools/image-to-text"
+ }
+ ]
+}
+ </script>
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -124,6 +149,7 @@
   style="font-size: 0.9em; color: var(--text-muted);">(Maximum file size: 20 MB; PDFs process up to 30 pages per run)</span></p>
  <input type="file" id="fileInput" accept="image/*,.pdf" hidden />
  </div>
+ <p class="tool-sample-hint">Need a test image first? Try our sample <a href="/assets/examples/notes-page.jpg" download="notes-page.jpg">notes page JPG</a> or <a href="/assets/examples/checklist-page.jpg" download="checklist-page.jpg">checklist JPG</a>.</p>
 
  <div class="glass-card" style="margin-top:18px; padding:18px 20px; border-radius:14px;">
  <label for="ocrLanguage" style="display:block; font-weight:700; color:var(--text-primary); margin-bottom:8px;">OCR language</label>
@@ -151,7 +177,17 @@
  <button onclick="copyText()" class="btn btn-secondary btn-lg"> Copy Text</button>
  <button onclick="downloadText()" class="btn btn-primary btn-lg"> Download .txt</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
+ 
+ <div class="tool-next-steps" style="margin:24px 0; padding:18px 20px; background:var(--surface-2); border:1px solid var(--border); border-radius:14px; text-align:left;">
+   <h3 style="margin:0 0 8px; font-size:1.05rem; font-weight:600; color:var(--text-primary);">Recommended Next Steps</h3>
+   <p style="margin:0 0 10px; font-size:0.88rem; color:var(--text-secondary);">Extracted text successfully? Here is what you can do next:</p>
+   <ul style="margin:0; padding-left:20px; font-size:0.88rem; color:var(--text-secondary); line-height:1.75;">
+     <li>Need to assemble note photos into an orderly A4 document? Use <a href="/tools/jpg-to-pdf" style="color:var(--accent);">JPG to PDF</a>.</li>
+     <li>Need to annotate or redact text on a PDF? Use <a href="/tools/pdf-editor" style="color:var(--accent);">PDF Editor</a>.</li>
+     <li>Need to split out individual pages from a scanned document? Use <a href="/tools/split-pdf" style="color:var(--accent);">Split PDF</a>.</li>
+   </ul>
  </div>
+</div>
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
@@ -162,6 +198,15 @@
 
  <!-- Added SEO Sections -->
 
+<section class="tool-seo-content" style="max-width:800px; margin:40px auto 0; padding:0 24px 48px; font-family:'Inter',sans-serif; line-height:1.8;">
+  <h2 style="font-size:1.4rem; font-weight:700; color:var(--text-primary); margin-bottom:16px;">OCR Accuracy, Handwriting &amp; Processing Bounds</h2>
+  <div style="font-size:0.9rem; color:var(--text-secondary);">
+    <p><strong>How accurate is client-side Tesseract.js OCR?</strong><br>Tesseract.js performs exceptionally well with clear, printed English text (typically 95%+ accuracy on scanned documents at 300 DPI with good contrast). Curved, shadowed, or blurry captures may reduce accuracy.</p>
+    <p><strong>Can this tool recognize cursive or handwritten notes?</strong><br>Standard OCR engines are optimized for typed and printed characters. While neat, block-printed handwriting may be recognized, freeform cursive handwriting often yields fragmented words. For handwriting, ensure high-contrast lighting and legible penmanship.</p>
+    <p><strong>What is the document size and page limit?</strong><br>To prevent your browser tab from freezing due to memory exhaustion, this tool accepts files up to 20 MB and processes up to the first 30 pages of a multi-page PDF.</p>
+    <p><strong>When is cloud OCR used?</strong><br>Never by default. Tesseract runs 100% locally on your machine. An optional OCR.space cloud retry is triggered only if local confidence is low AND you explicitly check the opt-in consent checkbox.</p>
+  </div>
+</section>
 </main>
 
  <!-- Scripts -->
@@ -362,7 +407,7 @@
 
   async function pdfToImageBlobs(file) {
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await pdfjsLib.getDocument({ isEvalSupported: false, data: arrayBuffer }).promise;
   const totalPages = pdf.numPages;
   const pageCount = Math.min(totalPages, MAX_OCR_PAGES);
   const blobs = [];

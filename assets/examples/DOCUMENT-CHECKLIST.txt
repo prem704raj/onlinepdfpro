@@ -1,0 +1,28 @@
+ONLINEPDFPRO DOCUMENT VERIFICATION CHECKLIST
+============================================
+Non-sensitive test instructions for validating PDF workflows.
+
+1. SPLIT PDF VERIFICATION
+   [ ] Upload 'sample-admit-card.pdf' (2 pages).
+   [ ] Select Page 1 only (Candidate Copy).
+   [ ] Download extracted PDF and verify it has exactly 1 page.
+   [ ] Confirm Roll Number '2026-ENG-49102' is sharp and readable.
+
+2. MERGE PDF VERIFICATION
+   [ ] Upload extracted Page 1 and 'sample-assignment.pdf'.
+   [ ] Check file ordering in the draggable queue.
+   [ ] Merge and download. Verify total page count matches expected sum.
+   [ ] Verify vector text remains sharp in independent viewer.
+
+3. COMPRESS PDF VERIFICATION
+   [ ] Upload 'sample-assignment.pdf'.
+   [ ] Set target size to 200 KB or 1 MB.
+   [ ] Test default Structural Mode (keeps searchable text and vector lines).
+   [ ] Confirm tool reports actual size outcome honestly.
+
+4. PRIVACY CHECK
+   [ ] Confirm tool execution remains local in your browser.
+   [ ] No document bytes are uploaded to remote servers for local tools.
+   [ ] Check network tab in dev tools to verify 0 document egress.
+
+(Fictional test pack by OnlinePDFPro. All fixtures contain 0 personal data.)

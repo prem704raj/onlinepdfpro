@@ -731,6 +731,10 @@ const Downloader = {
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
+        // Count download initiation after the user confirms the rename sheet.
+        // A cancelled sheet never reaches this method; filenames stay local.
+        window.OnlinePDFProAnalytics?.track('tool_download', { action: 'download' });
+        PwaInstallManager.recordExportInitiated();
         // Delay cleanup to give the browser time to initiate the download
         setTimeout(() => {
             document.body.removeChild(a);
@@ -817,7 +821,7 @@ const PwaInstallManager = {
     init() {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault(); this.deferredPrompt = e;
-            if (!sessionStorage.getItem('pwa-dismissed')) this.showInstallBanner();
+            if (this.exportCount() >= 2) this.showInstallBanner();
         });
         window.addEventListener('appinstalled', () => {
             this.hideInstallBanner(); this.deferredPrompt = null;
@@ -834,11 +838,14 @@ const PwaInstallManager = {
     showInstallBanner() {
         // Leave the document workspace and an open checkout cart unobstructed.
         // Installation remains available through the navigation menu.
+        try { if (sessionStorage.getItem('pwa-dismissed')) return; } catch { return; }
+        if (this.exportCount() < 2) return;
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) return;
         if (document.body.classList.contains('pdf-editor-body') || document.querySelector('.cart-drawer.open')) return;
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
-        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon"><div class="pwa-banner-text"><strong>OnlinePDFPro</strong><span>Fast & works offline</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose">✕</button></div></div>`;
+        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon" alt=""><div class="pwa-banner-text"><strong>OnlinePDFPro</strong><span>Install for quick access</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose" aria-label="Dismiss install suggestion">✕</button></div></div>`;
         document.body.appendChild(this.installBanner);
         this.injectBannerCSS();
         document.getElementById('pwaBannerInstall').addEventListener('click', () => this.triggerInstall());
@@ -882,11 +889,16 @@ const PwaInstallManager = {
         document.body.appendChild(div);
         document.getElementById('pwaCloseIns').onclick = () => div.remove();
     },
-    suggestInstall() {
-        const count = parseInt(localStorage.getItem('onlinepdfpro_usage') || '0');
-        if ([2, 5, 10].includes(count)) {
-            setTimeout(() => { Toast.show('🚀 Pro tip: Install the app for faster access!'); if (this.deferredPrompt) this.showInstallBanner(); }, 2000);
-        }
+    exportCount() {
+        try { return Number.parseInt(localStorage.getItem('onlinepdfpro-export-initiations') || '0', 10) || 0; }
+        catch { return 0; }
+    },
+    recordExportInitiated() {
+        try {
+            const count = this.exportCount() + 1;
+            localStorage.setItem('onlinepdfpro-export-initiations', String(count));
+            if (count === 2 && this.deferredPrompt) setTimeout(() => this.showInstallBanner(), 1200);
+        } catch { /* An optional install hint must never interrupt a download. */ }
     }
 };
 PwaInstallManager.init();

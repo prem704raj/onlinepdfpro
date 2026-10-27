@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cloudflareinsights.com https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -124,6 +124,7 @@
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Processing details</span> <span>•</span> <span>Maximum size: 100 MB</span> <span>•</span> <span>Processing time varies</span></p>
  <button class="btn btn-primary upload-btn">Choose Files</button>
  </div>
+ <p class="tool-sample-hint">Test with an original sample: <a href="/assets/examples/sample-assignment.pdf" download>Download 3-page sample assignment PDF</a>.</p>
 
  <div style="margin-top: 24px; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
  <strong>How it works:</strong> Compression results depend on document contents and the selected quality setting. Perfect for email attachments (under 25MB) or web publishing.
@@ -208,6 +209,17 @@
  (.zip)</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
  </div>
+ <div class="tool-next-steps" data-nosnippet>
+   <div class="tool-next-steps-title">Recommended Next Steps</div>
+   <div class="tool-next-steps-links">
+     <a href="/tools/merge-pdf" class="tool-next-step-link">
+       <span>Combine with other documents?</span> <strong>Merge PDF &rarr;</strong>
+     </a>
+     <a href="/tools/pdf-editor" class="tool-next-step-link">
+       <span>Make text corrections or sign?</span> <strong>Edit PDF &rarr;</strong>
+     </a>
+   </div>
+ </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
  <div class="action-buttons mt-lg">
@@ -222,8 +234,7 @@
  </div>
 
  <!-- Added SEO Sections -->
-
-<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/choose-a-pdf-compression-mode/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
+</main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script src="/js/vendor/pdfjs/pdf.min.js"></script>
@@ -351,7 +362,7 @@
  const numPages = srcDoc.getPageCount();
  const targetBytesPerPage = targetBytes / numPages;
 
- const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer.slice(0) });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: arrayBuffer.slice(0) });
  const pdfDocJs = await loadingTask.promise;
  const firstPage = await pdfDocJs.getPage(1);
 
@@ -415,7 +426,7 @@
  //
  async function rasterizeCompress(arrayBuffer, optimalParams, statusText, progressFill, numPagesTotal) {
  const newPdfDoc = await PDFDocument.create();
- const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+ const loadingTask = pdfjsLib.getDocument({ isEvalSupported: false, data: new Uint8Array(arrayBuffer) });
  const pdfDocJs = await loadingTask.promise;
  const numPages = pdfDocJs.numPages;
 
@@ -475,6 +486,8 @@
  }
  let targetBytes = targetVal * 1024;
  if (targetUnit === 'MB') targetBytes *= 1024;
+
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'compress', file_count: files.length });
 
  isCancelled = false;
  results = [];
@@ -615,6 +628,8 @@
 
  function showResults(totalOriginal, totalCompressed) {
  const successResults = results.filter(r => r.success);
+ if (successResults.length) window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'compress', file_count: successResults.length });
+ if (results.some(r => !r.success)) window.OnlinePDFProAnalytics?.track('tool_error', { action: 'compress', error_code: 'processing_failed' });
  const totalSaved = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
 
  document.getElementById('totalOriginal').textContent = OnlinePDFPro.Utils.formatFileSize(totalOriginal);
@@ -706,6 +721,12 @@ resultsSection.style.display = 'block';
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Check your destination's upload limit and the actual output size. Open the result and inspect small text, images and filled fields before submitting it. Saving a signed PDF can invalidate its digital signature; keep your original.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool processes your PDF locally in your browser. It does not upload the document for compression. Results are cleared from the page after five minutes or when you reset the tool. Your original file stays on your device.</p>
+<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-top:24px; margin-bottom:8px;">Troubleshooting &amp; Frequently Asked Questions</h3>
+<div style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">
+  <p><strong>Why didn't my PDF get any smaller?</strong><br>If your PDF contains purely text and vector graphics without embedded uncompressed images, structural compression may only save a few bytes. The tool will never return a file larger than your original.</p>
+  <p><strong>When should I check 'Allow image-based compression'?</strong><br>Enable this option only when an upload portal has a strict file size cutoff (such as under 200 KB) and searchable text is not required. It renders pages as JPEG images, which removes the text layer and interactive elements.</p>
+  <p><strong>Why is my result labeled 'Above target'?</strong><br>Target size is an optimization goal, not a guarantee. Structural mode avoids reducing visual fidelity. If reaching the target requires drastic degradation, the tool prioritizes document readability.</p>
+</div>
 </section>
 
  <script defer src="../counter.js"></script>

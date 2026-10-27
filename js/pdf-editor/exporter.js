@@ -446,7 +446,7 @@ export async function exportEditedPdf({ onProgress = () => {} } = {}) {
   try {
     const checkPdf = await PDFLib.PDFDocument.load(savedBytes.slice());
     if (checkPdf.getPageCount() !== editorState.pages.length) throw new Error('Page count changed unexpectedly.');
-    const validationTask = window.pdfjsLib.getDocument({ data: savedBytes.slice() });
+    const validationTask = window.pdfjsLib.getDocument({ isEvalSupported: false, data: savedBytes.slice() });
     const checkPdfJs = await validationTask.promise;
     if (checkPdfJs.numPages !== editorState.pages.length) throw new Error('The exported PDF has a different page count.');
     for (const check of trueReplacementChecks) {

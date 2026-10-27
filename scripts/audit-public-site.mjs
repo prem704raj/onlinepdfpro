@@ -15,12 +15,11 @@ if (base.protocol !== 'https:') throw new Error('An HTTPS public site is require
 const release = option('--release');
 const require = createRequire(import.meta.url);
 const registry = require('../src/_data/tools.js').tools;
-const guides = require('../src/_data/guides.js');
 const redirects = new Map(fs.readFileSync(new URL('../src/_redirects', import.meta.url), 'utf8')
   .split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('#'))
   .map(line => line.split(/\s+/).slice(0, 2)));
 const results = [], errors = [], warnings = [];
-const configuredRoutes = ['/', '/tools', '/guides', '/about', '/contact', '/support', '/privacy', '/terms', '/help', '/blog', '/study-materials', '/products/dbms-notes', ...registry.map(t => t.href.replace(/\.html$/, '')), ...guides.map(g => g.url)];
+const configuredRoutes = ['/', '/tools', '/about', '/contact', '/support', '/privacy', '/terms', '/help', '/blog', '/study-materials', '/products/dbms-notes', ...registry.map(t => t.href.replace(/\.html$/, ''))];
 if (configuredRoutes.some(route => typeof route !== 'string' || !route.startsWith('/'))) throw new Error('Every public audit route must be an explicit site path');
 const get = async pathname => {
   const response = await fetch(new URL(pathname, base), { redirect: 'follow', signal: AbortSignal.timeout(20000), headers: { 'Cache-Control': 'no-cache' } });

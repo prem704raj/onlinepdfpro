@@ -15,9 +15,8 @@ body.tp-body .header { background: rgba(246,245,240,0.97) !important; backdrop-f
 body.tp-body .header .logo-text { color: var(--tp-text) !important; }
 body.tp-body .header .nav-link { color: var(--tp-text-secondary) !important; }
 body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
-.tp-hero { background: transparent; padding: 20px 24px 80px; text-align: center; position: relative; overflow: hidden; border-bottom: none; }
+.tp-hero { background: transparent; padding: 8px 24px 48px; text-align: center; position: relative; overflow: hidden; border-bottom: none; }
 .tp-hero::before { display: none !important; }
-.tp-hero-label { font-family: var(--tp-sans); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tp-accent); margin-bottom: 16px; position: relative; }
 .tp-hero-heading { font-family: var(--tp-serif); font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.15; color: var(--tp-text); margin-bottom: 16px; letter-spacing: -0.01em; position: relative; white-space: normal; text-wrap: balance; }
 @media (max-width: 768px) { .tp-hero-heading, .tp-hero-subtitle { white-space: normal; } }
 .tp-hero-heading em { font-style: italic; }
@@ -52,7 +51,7 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
     .tp-card-icon svg { width: 20px; height: 20px; }
     .tp-card-name { font-size: 0.82rem; }
     .tp-card-desc { font-size: 0.68rem; line-height: 1.3; }
-    .tp-hero { padding: 80px 20px 56px; }
+    .tp-hero { padding: 20px 20px 40px; }
     .tp-category { padding: 40px 0 0; }
 }
 </style>
@@ -61,9 +60,8 @@ body.tp-body .header .nav-link:hover { color: var(--tp-text) !important; }
 {% block content %}
 <!-- ═══════ HERO ═══════ -->
 <section class="tp-hero">
-    <p class="tp-hero-label">{{ toolRegistry.tools | length }} Free PDF & Document Tools</p>
     <h1 class="tp-hero-heading">All Your PDF Tools <em>in One Place</em></h1>
-    <p class="tp-hero-subtitle">Merge, compress, convert, sign, and edit documents in your browser. Standard tools run 100% locally with zero server upload; conversion gateways and AI features clearly disclose their processing boundaries.</p>
+    <p class="tp-hero-subtitle">Merge, compress, convert, sign, and edit documents in your browser. Standard tools run 100% locally; conversion gateways and AI features clearly disclose their processing boundaries.</p>
     <div class="tp-search-wrap">
         <div class="tp-search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
         <input type="text" id="toolSearch" placeholder="Search tools..." autocomplete="off"/>

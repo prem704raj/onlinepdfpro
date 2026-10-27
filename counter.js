@@ -1,13 +1,12 @@
 // ============================================
-// ONLINE PDF PRO - USAGE COUNTER SYSTEM
-// Tracks usage on this device (localStorage-based)
+// ONLINE PDF PRO - LOCAL USAGE COUNTER
+// These counts describe only this browser, never sitewide usage.
 // ============================================
 
 const COUNTER_KEY = 'onlinepdfpro_counter';
-const COUNTER_START_KEY = 'onlinepdfpro_start_date';
-
-// Base numbers (starting point - looks professional from day 1)
-const BASE_COUNTS = {
+// Previous versions stored fabricated starting values. Keep these only to
+// subtract them when migrating a returning browser's real local usage.
+const LEGACY_BASE_COUNTS = {
     totalPDFs: 127843,
     totalUsers: 48291,
     mergePDF: 18432,
@@ -36,18 +35,28 @@ const BASE_COUNTS = {
     pdfEditor: 11234,
     repairPDF: 4567
 };
+const EMPTY_COUNTS = Object.fromEntries(Object.keys(LEGACY_BASE_COUNTS).map(key => [key, 0]));
 
 // Get saved counter or initialize
 function getCounter() {
     const saved = localStorage.getItem(COUNTER_KEY);
     if (saved) {
-        return JSON.parse(saved);
+        try {
+            const previous = JSON.parse(saved);
+            if (previous.version === 2) return previous;
+            const counter = { ...EMPTY_COUNTS, version: 2, realUsage: Math.max(0, Number(previous.realUsage) || 0) };
+            counter.totalPDFs = counter.realUsage;
+            for (const key of Object.keys(EMPTY_COUNTS)) {
+                if (key === 'totalPDFs' || key === 'totalUsers') continue;
+                counter[key] = Math.max(0, (Number(previous[key]) || 0) - LEGACY_BASE_COUNTS[key]);
+            }
+            saveCounter(counter);
+            return counter;
+        } catch { /* Start a clean local counter if old storage is malformed. */ }
     }
 
-    // First time visitor - initialize
-    const counter = { ...BASE_COUNTS, realUsage: 0 };
-    localStorage.setItem(COUNTER_KEY, JSON.stringify(counter));
-    localStorage.setItem(COUNTER_START_KEY, Date.now().toString());
+    const counter = { ...EMPTY_COUNTS, version: 2, realUsage: 0 };
+    saveCounter(counter);
     return counter;
 }
 
@@ -68,41 +77,17 @@ function incrementCounter(toolName) {
 
     saveCounter(counter);
     
-    // Sync for PWA manager
-    localStorage.setItem('onlinepdfpro_usage', counter.realUsage.toString());
-    
     updateCounterDisplay();
-
-    // Trigger PWA suggest if available
-    if (window.PwaInstallManager && typeof window.PwaInstallManager.suggestInstall === 'function') {
-        window.PwaInstallManager.suggestInstall();
-    } else if (window.OnlinePDFPro && window.OnlinePDFPro.PwaInstallManager) {
-        window.OnlinePDFPro.PwaInstallManager.suggestInstall();
-    }
 }
 
-// Calculate daily growth (simulates organic growth)
-function getDailyGrowth() {
-    const startDate = localStorage.getItem(COUNTER_START_KEY);
-    if (!startDate) return 0;
-
-    const daysPassed = Math.floor((Date.now() - parseInt(startDate)) / (1000 * 60 * 60 * 24));
-    // Simulate 150-300 new PDFs per day
-    return daysPassed * (150 + Math.floor(Math.random() * 150));
-}
-
-// Get total count with daily growth
+// The total is the number of recorded operations on this browser only.
 function getTotalCount() {
-    const counter = getCounter();
-    const growth = getDailyGrowth();
-    return counter.totalPDFs + growth;
+    return getCounter().totalPDFs;
 }
 
-// Get total users with growth
+// This script has no sitewide user measurement.
 function getTotalUsers() {
-    const counter = getCounter();
-    const growth = Math.floor(getDailyGrowth() / 3);
-    return counter.totalUsers + growth;
+    return null;
 }
 
 // Format number with commas (1234567 → 1,234,567)
@@ -121,9 +106,7 @@ function formatNumberShort(num) {
 function getTodayCount() {
     const todayKey = 'onlinepdfpro_today_' + new Date().toDateString();
     const saved = localStorage.getItem(todayKey);
-    // Base daily count + real usage today
-    const baseDaily = 247 + Math.floor(Math.random() * 100);
-    return (saved ? parseInt(saved) : 0) + baseDaily;
+    return Math.max(0, Number.parseInt(saved || '0', 10) || 0);
 }
 
 // Increment today's count
@@ -136,7 +119,6 @@ function incrementTodayCount() {
 // Update all counter displays on page
 function updateCounterDisplay() {
     const total = getTotalCount();
-    const users = getTotalUsers();
     const today = getTodayCount();
 
     // Update elements if they exist
@@ -150,67 +132,17 @@ function updateCounterDisplay() {
     if (totalShortEl) totalShortEl.textContent = formatNumberShort(total);
 
     const usersEl = document.getElementById('counter-users');
-    if (usersEl) usersEl.textContent = formatNumber(users);
+    if (usersEl) usersEl.textContent = '—';
 
     const usersShortEl = document.getElementById('counter-users-short');
-    if (usersShortEl) usersShortEl.textContent = formatNumberShort(users);
+    if (usersShortEl) usersShortEl.textContent = '—';
 
     const todayEl = document.getElementById('counter-today');
     if (todayEl) todayEl.textContent = formatNumber(today);
 
-    // Animate counter
-    const animEls = document.querySelectorAll('.counter-animate');
-    animEls.forEach(el => {
-        const target = parseInt(el.dataset.target);
-        if (target) animateCounter(el, target);
-    });
-}
-
-// Smooth counter animation
-function animateCounter(element, target) {
-    let current = 0;
-    const duration = 2000;
-    const steps = 60;
-    const increment = target / steps;
-    const stepTime = duration / steps;
-
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        element.textContent = formatNumber(Math.floor(current));
-    }, stepTime);
-}
-
-// Live counter that updates every few seconds (looks real-time)
-function startLiveCounter() {
-    setInterval(() => {
-        const totalEl = document.getElementById('counter-total');
-        const todayEl = document.getElementById('counter-today');
-
-        if (totalEl) {
-            const current = parseInt(totalEl.textContent.replace(/,/g, ''));
-            if (!isNaN(current)) {
-                // Random increment every 3-8 seconds
-                if (Math.random() > 0.5) {
-                    totalEl.textContent = formatNumber(current + 1);
-                }
-            }
-        }
-
-        if (todayEl) {
-            const current = parseInt(todayEl.textContent.replace(/,/g, ''));
-            if (!isNaN(current) && Math.random() > 0.7) {
-                todayEl.textContent = formatNumber(current + 1);
-            }
-        }
-    }, 4000);
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     updateCounterDisplay();
-    startLiveCounter();
 });

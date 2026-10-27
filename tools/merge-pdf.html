@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cloudflareinsights.com https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -125,7 +125,7 @@
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
- </svg> ⚡ Fast</span> <span>•</span> <span>Max: 100MB</span> <span>•</span> <span
+ </svg> ⚡ Fast</span> <span>•</span> <span>Up to 100 files · Max: 100MB</span> <span>•</span> <span
  style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <circle cx="12" cy="12" r="10"></circle>
@@ -192,8 +192,7 @@
  </div>
 
  <!-- Added SEO Sections -->
-
-<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/merge-and-split-an-assignment/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
+</main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <script src="../js/app.js?v=96"></script>
@@ -359,6 +358,8 @@
  return;
  }
 
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'merge', file_count: files.length });
+
  fileSection.style.display = 'none';
  progressSection.style.display = 'block';
 
@@ -381,6 +382,7 @@
 
  progress.update(90, 'Finalizing...');
  mergedPdfBytes = await mergedPdf.save();
+ window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'merge', file_count: files.length });
  document.getElementById('totalPages').textContent = totalPages;
  document.getElementById('finalSize').textContent = OnlinePDFPro.Utils.formatFileSize(mergedPdfBytes.length);
  progress.complete('Success!');
@@ -395,6 +397,7 @@
  }, 500);
 
  } catch (error) {
+ window.OnlinePDFProAnalytics?.track('tool_error', { action: 'merge', error_code: 'processing_failed' });
  alert('Merge error: ' + error.message);
  resetTool();
  }
@@ -445,6 +448,12 @@
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
 <h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">How it works</h3>
 <p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool runs in your browser using pdf-lib; files are not uploaded. Page content and embedded resources are copied, but interactive form fields, bookmarks, and some annotations may not transfer because the browser library rebuilds the document. Up to 100 PDF files can be selected.</p>
+<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-top:24px; margin-bottom:8px;">Troubleshooting &amp; Frequently Asked Questions</h3>
+<div style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">
+  <p><strong>Why did a merge fail with a memory error?</strong><br>Merging happens entirely in your device's browser memory. When combining dozens of high-resolution scanned PDFs on a mobile browser, memory limits can be reached. Try merging in batches of 5–10 files or use a desktop browser.</p>
+  <p><strong>Are interactive form fields and bookmarks preserved?</strong><br>Standard page content, fonts, and vector graphics are preserved. However, document-level form scripts, interactive AcroForm bindings, and document bookmarks may be simplified during reassembly.</p>
+  <p><strong>Can I merge password-protected PDFs?</strong><br>Encrypted files cannot be read without their password. Unlock password-protected PDFs using <a href="/tools/pdf-unlock" style="color:var(--tp-accent,#8b6914);">PDF Unlock</a> before merging.</p>
+</div>
 </section>
 
  <script defer src="../counter.js"></script>

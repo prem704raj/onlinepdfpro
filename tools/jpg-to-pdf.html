@@ -4,7 +4,7 @@
 <head>
     <!-- Fix: Force scroll to top on page load (prevents blank-page bug) -->
    
- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://challenges.cloudflare.com https://checkout.razorpay.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.clarity.ms https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com; object-src 'none'; connect-src 'self' https://onlinepdfpro-proxy.prem736raj.workers.dev https://*.supabase.co https://api.ocr.space https://api.imgbb.com https://tmpfiles.org https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com https://cdn.jsdelivr.net https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://cloudflareinsights.com https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; worker-src 'self' blob:;">
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -12,7 +12,7 @@
 
 <!-- Primary Meta Tags -->
 <title>JPG to PDF Converter - Convert Images to PDF Free</title>
-<meta name="description" content="Free online JPG to PDF converter. Convert your images (JPG, PNG) to PDF easily.">
+<meta name="description" content="Combine JPG, PNG and WebP images into one A4 PDF. Reorder photos, then download your PDF free in your browser.">
 <meta name="author" content="OnlinePDFPro">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://onlinepdfpro.com/tools/jpg-to-pdf">
@@ -270,7 +270,7 @@
  <span class="section-tag fade-in">File Conversion</span>
  <h1 class="tool-title fade-in">Images to PDF Free — Convert JPG/PNG to PDF Online</h1>
  <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Combine multiple images (JPG, PNG, WEBP) into a single PDF document. Drag to reorder, adjust page size and orientation. processed according to the tool details.
+ Combine JPG, PNG and WebP images into one PDF. Drag to reorder your images, then download a document with A4 portrait pages. Conversion runs in your browser.
  </p>
  </div>
 <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
@@ -278,8 +278,9 @@
  <p class="upload-text">Drop Images Here or Click to Upload</p>
  <p class="upload-hint">JPG, PNG, WebP — Multiple images allowed
  </p>
- <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
+ <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" />
  </div>
+ <p class="tool-sample-hint">Want to test with sample photos? <a href="/assets/examples/notes-page.jpg" download>Download Sample Notes JPG</a>.</p>
 
  <p class="image-count fade-in" id="imageCount"></p>
 
@@ -289,20 +290,44 @@
  <button onclick="convertToPDF()" class="convert-btn">
  Convert to PDF & Download
  </button>
+ <div class="tool-next-steps" style="max-width: 600px; margin: 24px auto 0;" data-nosnippet>
+   <div class="tool-next-steps-title">Recommended Next Steps</div>
+   <div class="tool-next-steps-links" style="justify-content: center;">
+     <a href="/tools/compress-pdf" class="tool-next-step-link">
+       <span>Need to reduce size for upload?</span> <strong>Compress PDF &rarr;</strong>
+     </a>
+     <a href="/tools/merge-pdf" class="tool-next-step-link">
+       <span>Combine with assignment cover?</span> <strong>Merge PDF &rarr;</strong>
+     </a>
+   </div>
+ </div>
  </div>
 
  <div id="progress" class="fade-in" style="display:none; text-align:center; margin: 40px 0;" data-nosnippet>
  <h3 style="color: var(--text-primary); margin-bottom: 20px;"> Crafting your A4 PDF pages...</h3>
  </div>
 
- <!-- Ad Spacer -->
- 
 
- <!-- Added SEO Sections -->
+
+ <section class="tool-seo-content" style="max-width:800px;margin:32px auto 48px;padding:0 24px;text-align:left;line-height:1.75;">
+ <h2>How to turn photos into one PDF</h2>
+ <ol>
+  <li>Select one or more JPG, PNG or WebP photos with the upload area.</li>
+  <li>Check each preview. Drag the photos to choose the page order; remove any unwanted image.</li>
+  <li>Select <strong>Convert to PDF &amp; Download</strong>. Each photo becomes a separate A4 portrait page, centered and scaled to fit without cropping.</li>
+  <li>Open the downloaded PDF and verify the image order and readability before sharing.</li>
+ </ol>
+ <h2>What happens to image quality and privacy?</h2>
+ <p>The converter processes your photos in this browser; it does not upload them to a conversion server. It prepares an image up to 4096 pixels on its longest edge and embeds it as JPEG. Transparent backgrounds become white, and very large originals may lose fine detail. The page size is fixed to portrait A4; landscape and custom page sizes are not available in this tool.</p>
+ <p>Have a PDF and need separate pictures instead? <a href="/pdf-to-jpg">Export PDF pages to JPG</a>.</p>
+ <h2>Troubleshooting &amp; Frequently Asked Questions</h2>
+ <p><strong>Why are landscape images fitted with top/bottom margins?</strong><br>This tool standardizes images to standard A4 portrait format (595 &times; 842 points). Wide photos are proportionally scaled to fit within page boundaries without cropping or distortion.</p>
+ <p><strong>Does this converter make text searchable?</strong><br>No. The generated PDF contains high-resolution image pages. To extract searchable text from photographed notes, use <a href="/tools/image-to-text">Image to Text (OCR)</a>.</p>
+ <p><strong>What is the maximum number of images?</strong><br>You can combine up to 100 images (JPG, PNG, WebP) up to 50 MB each in a single PDF. All image rendering and PDF construction happens directly in your browser memory.</p>
+</section>
 
  </div>
-
-<p class="tool-guide-link" style="max-width:800px;margin:24px auto;padding:16px;line-height:1.7;"><a href="/guides/turn-note-images-into-a-readable-pdf/">Try this tool with an original example</a> and follow the steps to check the downloaded result.</p></main>
+</main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
  <!-- download.js removed: CDN was broken (404). Using native Blob download instead -->
@@ -340,7 +365,7 @@
  // Use Promise.all to ensure sequential order matches selection
  const filePromises = [...fileList].map(file => {
  return new Promise(resolve => {
- if (file.type.startsWith('image/') && file.size > 0 && file.size <= 50 * 1024 * 1024) {
+ if (['image/jpeg', 'image/png', 'image/webp'].includes(file.type) && file.size > 0 && file.size <= 50 * 1024 * 1024) {
  const reader = new FileReader();
  reader.onload = e => {
  resolve(e.target.result);
@@ -348,7 +373,7 @@
  reader.onerror = () => { alert('An image could not be read. Please select it again.'); resolve(null); };
  reader.readAsDataURL(file);
  } else {
- alert('Choose a non-empty image up to 50 MB.'); resolve(null);
+ alert('Choose a JPG, PNG or WebP image up to 50 MB.'); resolve(null);
  }
  });
  });
@@ -439,6 +464,8 @@
  if (isConverting) return;
  if (images.length === 0) return alert("Add images first!");
 
+ window.OnlinePDFProAnalytics?.track('tool_start', { action: 'convert', file_count: images.length });
+
  isConverting = true;
  document.getElementById('convertSection').style.display = 'none';
  document.getElementById('progress').style.display = 'block';
@@ -510,11 +537,13 @@
  }
 
  const pdfBytes = await pdfDoc.save();
+ window.OnlinePDFProAnalytics?.track('tool_complete', { action: 'convert', file_count: images.length });
 
  // Download via shared Downloader (auto-saves to history)
  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
  OnlinePDFPro.Downloader.saveBlob(blob, 'images.pdf');
  } catch (err) {
+ window.OnlinePDFProAnalytics?.track('tool_error', { action: 'convert', error_code: 'processing_failed' });
  console.error("PDF Generation Error (Universal Sanitizer):", err);
  alert("An unexpected error occurred building the PDF. Please try again.");
  }

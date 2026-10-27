@@ -13,7 +13,7 @@ const get = url => fetch(url, { redirect: 'error', signal: AbortSignal.timeout(1
 
 // Allow a short propagation window; never turn a failed check into a warning.
 await waitForSiteRelease({ origin, release, get });
-for (const route of ['/', '/about', '/tools', '/blog', '/blog/how-to-extract-text-from-scanned-pdfs-ocr/', '/guides', '/guides/merge-and-split-an-assignment/', '/guides/choose-a-pdf-compression-mode/', '/guides/turn-note-images-into-a-readable-pdf/', '/guides/split-admit-card-pages/', '/guides/compress-a-university-upload/', '/changelog', '/tools/word-to-pdf', '/products/dbms-notes']) {
+for (const route of ['/', '/about', '/tools', '/blog', '/blog/how-to-extract-text-from-scanned-pdfs-ocr/', '/changelog', '/tools/word-to-pdf', '/products/dbms-notes']) {
     const response = await get(`${origin}${route}`);
     assert.equal(response.status, 200, `${route} must serve directly without redirects`);
     const html = await response.text();
@@ -35,7 +35,6 @@ assert.equal(sitemap.status, 200);
 const xml = await sitemap.text();
 assert.ok(!/<loc>[^<]*\.html(?:[?<]|$)/.test(xml), 'Sitemap must contain final public URLs');
 assert.ok(xml.includes('/blog/how-to-extract-text-from-scanned-pdfs-ocr/'), 'Published blog must be discoverable');
-assert.ok(xml.includes('/guides/turn-note-images-into-a-readable-pdf/'), 'Original guides must be discoverable');
 for (const [route, type] of [['/ads.txt', 'text/plain'], ['/assets/examples/sample-assignment.pdf', 'application/pdf'], ['/assets/examples/sample-assignment.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], ['/assets/examples/onlinepdfpro-practice-pack.zip', 'application/zip'], ['/assets/examples/admit-card-split.svg', 'image/svg+xml'], ['/assets/examples/compression-mode.svg', 'image/svg+xml'], ['/assets/examples/notes-page.jpg', 'image/jpeg'], ['/assets/examples/checklist-page.jpg', 'image/jpeg']]) {
     const response = await get(`${origin}${route}`);
     assert.equal(response.status, 200, `${route}: published example or publisher file`);

@@ -4,7 +4,6 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { open, upload, visible, fill, click, download, pdfInfo, renderPdf, finish, root, scratch } from './tool-test-harness.mjs';
 
-const guides = createRequire(import.meta.url)('../src/_data/guides.js');
 const sample = path.join(root, 'src/assets/examples/sample-assignment.pdf');
 const admitCard = path.join(root, 'src/assets/examples/sample-admit-card.pdf');
 const heading = [/Assignment cover/, /Revision notes/, /Submission checklist/];
@@ -85,31 +84,4 @@ try {
   } finally { await jpg.close(); }
   console.log('PASS original guide: the supplied JPGs produce two A4 image pages');
 
-  for (const route of ['/guides', ...guides.map(g => g.url)]) {
-    const p = await open(route, { viewport: { width: 320, height: 844, isMobile: true, hasTouch: true }, init: () => localStorage.setItem('doctools-theme', 'light') });
-    try {
-      assert.equal(await p.$eval('h1', e => Boolean(e.textContent.trim())), true);
-      const links = await p.$$eval('.guide-shell a[href]', elements => elements.map(e => new URL(e.href).pathname));
-      for (const pathname of links.filter(link => link.startsWith('/assets/examples/'))) {
-        assert.ok(fs.existsSync(path.join(root, '_site', pathname)), `Missing downloadable example ${pathname}`);
-      }
-      if (route.includes('split-admit-card-pages') || route.includes('compress-a-university-upload')) {
-        await p.$eval('.guide-figure img', img => img.scrollIntoView({ block: 'center' }));
-        await p.waitForFunction(() => {
-          const image = document.querySelector('.guide-figure img');
-          return image?.complete && image.naturalWidth > 0;
-        });
-        const illustration = await p.$eval('.guide-figure img', img => ({ loaded: img.complete && img.naturalWidth > 0, pathname: new URL(img.src).pathname }));
-        assert.ok(illustration.loaded, `Guide illustration failed to load: ${illustration.pathname}`);
-        assert.ok(fs.existsSync(path.join(root, '_site', illustration.pathname)));
-      }
-      assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-      await click(p, '.theme-toggle');
-      assert.equal(await p.$eval('html', e => e.dataset.theme), 'dark');
-      assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-      await p.screenshot({ path: path.join(scratch, 'guide-' + (route === '/guides' ? 'hub' : route.split('/')[2]) + '-mobile.png'), fullPage: true });
-      assert.deepEqual(p.testErrors, []);
-    } finally { await p.close(); }
-  }
-  console.log('PASS guide hub and five walkthroughs: 320px light/dark layouts and real downloadable examples');
 } finally { await finish(); }
