@@ -93,14 +93,14 @@
  <!-- Compact Header Search -->
  <div class="header-search" style="position: relative; margin-right: 8px;">
  <span
- style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">&#128269;</span>
+ style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
  <input type="text" id="globalToolSearch" placeholder="Search tools..."
  style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
  </div>
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
  style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
- <span class="theme-icon-light">&#127769;</span>
- <span class="theme-icon-dark">&#9728;&#65039;</span>
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
@@ -121,7 +121,7 @@
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
- </svg> ⚡ Fast</span> <span>•</span> <span>Up to 100 files · Max: 100MB</span> <span>•</span> <span
+ </svg> Fast</span> <span>•</span> <span>Up to 100 files · Max: 100MB</span> <span>•</span> <span
  style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <circle cx="12" cy="12" r="10"></circle>
@@ -172,7 +172,7 @@
  <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
  Document</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">Process Another File</button>
  </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
@@ -182,7 +182,7 @@
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
- <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+ 
  <span>Fast, free & easy to use.</span>
  </div>
  </div>
@@ -254,7 +254,7 @@
 
  item.innerHTML = `
  <span class="file-drag-handle" title="Drag to reorder">⋮⋮</span>
- <span class="file-icon" style="font-size: 1.5rem;">&#128196;</span>
+ <span class="file-icon" style="display:inline-flex; align-items:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
  <div class="file-info">
  <div class="file-name">${escapeHTML(file.name)}</div>
  <div class="file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -262,7 +262,7 @@
  <div class="file-item-actions" style="display:flex;gap:6px;margin-left:auto;align-items:center;">
  <button class="file-move-up" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} up">↑</button>
  <button class="file-move-down" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} down">↓</button>
- <button class="file-remove" data-index="${index}" type="button" aria-label="Remove ${escapeHTML(file.name)}">✕</button>
+ <button class="file-remove" data-index="${index}" type="button" aria-label="Remove ${escapeHTML(file.name)}">&times;</button>
  </div>
  `;
 

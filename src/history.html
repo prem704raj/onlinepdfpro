@@ -534,14 +534,14 @@
  <div class="mobile-search-bar" id="mobileSearchBar">
  <div class="mobile-search-content">
  <input type="text" id="mobileHistorySearch" placeholder="Search history..." oninput="filterHistoryMobile()">
- <button id="mobileSearchClose">✕</button>
+ <button id="mobileSearchClose">&times;</button>
  </div>
  </div>
 
  <main class="history-page">
 
 <div class="history-header">
- <h1>📂 Local History</h1>
+ <h1>Local History</h1>
  <p>Your history is stored by your browser until you clear the site's data.</p>
  </div>
 
@@ -555,14 +555,14 @@
 
  <div id="statsBar" class="history-stats-bar" style="display: none;">
  <div class="stat-item">
- <div class="stat-icon">📑</div>
+ <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>
  <div class="stat-content">
  <span class="stat-value" id="totalCount">0</span>
  <span class="stat-label">Tasks</span>
  </div>
  </div>
  <div class="stat-item">
- <div class="stat-icon">💾</div>
+ <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></div>
  <div class="stat-content">
  <span class="stat-value" id="totalSize">0 KB</span>
  <span class="stat-label">Used Space</span>
@@ -570,7 +570,7 @@
  </div>
  <div class="history-actions">
  <button class="btn-action btn-danger" onclick="clearAllHistory()">
- <span>🗑️</span> Clear All History
+ Clear All History
  </button>
  </div>
  </div>
@@ -591,14 +591,14 @@
  let allEntries = [];
 
  const ICON_MAP = {
- 'pdf': '📄', 'zip': '📦', 'docx': '📝', 'xlsx': '📊',
- 'pptx': '📽️', 'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️',
- 'csv': '📋', 'txt': '📝', 'webp': '🖼️'
+ 'pdf': '', 'zip': '', 'docx': '', 'xlsx': '',
+ 'pptx': '', 'png': '', 'jpg': '', 'jpeg': '',
+ 'csv': '', 'txt': '', 'webp': ''
  };
 
  function getFileIcon(filename) {
  const ext = (filename || '').split('.').pop().toLowerCase();
- return ICON_MAP[ext] || '📄';
+ return '';
  }
 
  function formatSize(bytes) {
@@ -657,7 +657,7 @@
  controls.style.display = 'none';
  listContainer.innerHTML = `
  <div class="empty-state">
- <div class="empty-icon">📂</div>
+ <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
  <h2>No History Found</h2>
  <p>You haven't processed any files yet. Try one of our tools to see them appear here.</p>
  <a href="tools.html" class="btn-primary">Explore Tools</a>
@@ -721,8 +721,8 @@
  </div>
  </div>
  <div class="result-actions">
- <button class="btn-download" onclick="redownload(${entry.id})">⬇️ Download</button>
- <button class="btn-delete" onclick="deleteEntry(${entry.id})" title="Delete from history">🗑️</button>
+ <button class="btn-download" onclick="redownload(${entry.id})">Download</button>
+ <button class="btn-delete" onclick="deleteEntry(${entry.id})" title="Delete from history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
  </div>
  </div>
  </div>

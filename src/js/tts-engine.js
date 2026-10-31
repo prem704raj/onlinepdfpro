@@ -79,7 +79,7 @@ document.getElementById('pdfInput').addEventListener('change', async function (e
     if (!file) return;
     try {
 
-    document.getElementById('pdfFileName').textContent = `📄 ${file.name}`;
+    document.getElementById('pdfFileName').textContent = `${file.name}`;
     document.getElementById('pdfFileName').style.display = 'block';
     document.getElementById('uploadBox').classList.add('loaded');
 
@@ -266,13 +266,13 @@ function updatePlayButton(state) {
     const btn = document.getElementById('playBtn');
     btn.className = 'play-btn';
     if (state === 'playing') {
-        btn.textContent = '⏸️';
+        btn.textContent = 'Pause';
         btn.classList.add('playing');
     } else if (state === 'paused') {
-        btn.textContent = '▶️';
+        btn.textContent = 'Play';
         btn.classList.add('paused');
     } else {
-        btn.textContent = '▶️';
+        btn.textContent = 'Play';
     }
 }
 
@@ -361,7 +361,7 @@ function copyText() {
     const text = document.getElementById('textInput').value;
     if (!text) return alert('No text to copy!');
     navigator.clipboard.writeText(text).then(() => {
-        alert('Text copied to clipboard! ✅');
+        alert('Text copied to clipboard!');
     });
 }
 
@@ -422,7 +422,7 @@ function renderHistory() {
         const play = document.createElement('button');
         play.type = 'button';
         play.className = 'history-play';
-        play.textContent = '▶️ Play';
+        play.textContent = 'Play';
         play.addEventListener('click', () => playFromHistory(i));
         row.append(preview, play);
         fragment.appendChild(row);
