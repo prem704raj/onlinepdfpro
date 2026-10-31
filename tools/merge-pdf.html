@@ -93,14 +93,14 @@
  <!-- Compact Header Search -->
  <div class="header-search" style="position: relative; margin-right: 8px;">
  <span
- style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">&#128269;</span>
+ style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
  <input type="text" id="globalToolSearch" placeholder="Search tools..."
  style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
  </div>
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
  style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
- <span class="theme-icon-light">&#127769;</span>
- <span class="theme-icon-dark">&#9728;&#65039;</span>
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
 
@@ -112,11 +112,7 @@
 
 <div class="container" style="max-width: 800px;">
  <div class="tool-header">
- <span class="section-tag fade-in">Document Assembly</span>
  <h1 class="tool-title fade-in">Merge PDF Free — No Signup, Combine Files Instantly</h1>
- <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Combine multiple PDF files into a single document in seconds. Drag and drop to reorder pages. No signup, no watermarks — your files are processed according to the tool details for maximum privacy.
- </p>
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
@@ -125,7 +121,7 @@
  <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
- </svg> ⚡ Fast</span> <span>•</span> <span>Up to 100 files · Max: 100MB</span> <span>•</span> <span
+ </svg> Fast</span> <span>•</span> <span>Up to 100 files · Max: 100MB</span> <span>•</span> <span
  style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14"
  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
  <circle cx="12" cy="12" r="10"></circle>
@@ -176,7 +172,7 @@
  <div class="download-section" data-nosnippet>
  <button class="btn btn-primary btn-lg" id="downloadBtn" style="width: 100%;">Download
  Document</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Process Another File</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">Process Another File</button>
  </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
@@ -186,12 +182,10 @@
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s;">
- <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+ 
  <span>Fast, free & easy to use.</span>
  </div>
  </div>
-
- <!-- Added SEO Sections -->
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
@@ -260,7 +254,7 @@
 
  item.innerHTML = `
  <span class="file-drag-handle" title="Drag to reorder">⋮⋮</span>
- <span class="file-icon" style="font-size: 1.5rem;">&#128196;</span>
+ <span class="file-icon" style="display:inline-flex; align-items:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
  <div class="file-info">
  <div class="file-name">${escapeHTML(file.name)}</div>
  <div class="file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -268,7 +262,7 @@
  <div class="file-item-actions" style="display:flex;gap:6px;margin-left:auto;align-items:center;">
  <button class="file-move-up" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} up">↑</button>
  <button class="file-move-down" data-index="${index}" type="button" aria-label="Move ${escapeHTML(file.name)} down">↓</button>
- <button class="file-remove" data-index="${index}" type="button" aria-label="Remove ${escapeHTML(file.name)}">✕</button>
+ <button class="file-remove" data-index="${index}" type="button" aria-label="Remove ${escapeHTML(file.name)}">&times;</button>
  </div>
  `;
 
@@ -432,29 +426,6 @@
  }
  })();
  </script>
-
- 
-<section class="tool-seo-content" style="max-width:800px; margin:48px auto 0; padding:0 24px 48px;">
-<h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.6rem; font-weight:400; color:var(--text-primary,#2c2418); margin-bottom:16px;">How to Merge PDF Files Online</h2>
-<p style="font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Combining multiple PDFs into a single document is one of the most common tasks when working with digital documents. Whether you are assembling chapters of a report, joining scanned pages, or organizing receipts, merging keeps everything in one file for easier sharing and storage.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">When should you merge PDFs?</h3>
-<ul style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; padding-left:20px; margin-bottom:16px;">
-<li><strong>Submitting applications</strong> — combine cover letter, resume, and certificates into one PDF.</li>
-<li><strong>Organizing scans</strong> — scanners often produce one PDF per page; merging reassembles the original document.</li>
-<li><strong>Archiving invoices</strong> — consolidate monthly invoices into a single file for bookkeeping or tax filing.</li>
-<li><strong>Preparing reports</strong> — join individually authored sections into a final deliverable.</li>
-</ul>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Page ordering tips</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Use the drag-and-drop list above to reorder your files before merging. The final document follows top-to-bottom order. Need to reorder individual pages? Try <a href="/tools/split-pdf" style="color:var(--tp-accent,#8b6914);">Split PDF</a> first, then merge the extracted pages.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">How it works</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool runs in your browser using pdf-lib; files are not uploaded. Page content and embedded resources are copied, but interactive form fields, bookmarks, and some annotations may not transfer because the browser library rebuilds the document. Up to 100 PDF files can be selected.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-top:24px; margin-bottom:8px;">Troubleshooting &amp; Frequently Asked Questions</h3>
-<div style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">
-  <p><strong>Why did a merge fail with a memory error?</strong><br>Merging happens entirely in your device's browser memory. When combining dozens of high-resolution scanned PDFs on a mobile browser, memory limits can be reached. Try merging in batches of 5–10 files or use a desktop browser.</p>
-  <p><strong>Are interactive form fields and bookmarks preserved?</strong><br>Standard page content, fonts, and vector graphics are preserved. However, document-level form scripts, interactive AcroForm bindings, and document bookmarks may be simplified during reassembly.</p>
-  <p><strong>Can I merge password-protected PDFs?</strong><br>Encrypted files cannot be read without their password. Unlock password-protected PDFs using <a href="/tools/pdf-unlock" style="color:var(--tp-accent,#8b6914);">PDF Unlock</a> before merging.</p>
-</div>
-</section>
 
  <script defer src="../counter.js"></script>
  <!-- Schema.org Structured Data -->

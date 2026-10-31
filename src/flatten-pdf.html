@@ -421,9 +421,7 @@
 <div class="container">
 
  <div class="tool-header" style="text-align:center; margin-bottom:48px;">
- <span class="section-tag" style="display:inline-block; padding:6px 18px; background:rgba(37,99,235,0.08); color:var(--accent); border-radius:50px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">PDF Processing</span>
  <h1 class="tool-title" style="font-size:2.5rem; font-weight:800; color:var(--text-primary); margin:0 0 12px; line-height:1.2;">Flatten PDF</h1>
- <p class="tool-description" style="color:var(--text-secondary); font-size:1rem; max-width:520px; margin:0 auto; line-height:1.6;">Make filled form fields static while keeping searchable text, or explicitly choose image-based output. Processing happens locally in your browser.</p>
  </div>
 <div class="upload-zone glass-card fade-in" id="dropArea" style="cursor: pointer; animation-delay: 0.2s;">
  <p class="upload-text">Drop your PDF here or Click to Upload</p>
@@ -439,22 +437,22 @@
  <p style="text-align:center; color:var(--text-secondary); margin-bottom:25px;">Form flattening makes field appearances part of the page. Image mode instead renders pages as pictures. Both outputs can still be edited with suitable software.</p>
  <div class="info-cards">
  <div class="info-card card-form">
- <div class="icon">📝</div>
+ <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
  <h3>Form Fields</h3>
  <p>Text inputs, checkboxes, dropdowns become static text</p>
  </div>
  <div class="info-card card-anno">
- <div class="icon">📌</div>
+ <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-2l-2-2V5h1V3H6v2h1v8l-2 2v2z"></path></svg></div>
  <h3>Annotations</h3>
  <p>Kept in form mode; rendered as visible appearances in image mode</p>
  </div>
  <div class="info-card card-comment">
- <div class="icon">💬</div>
+ <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
  <h3>Comments</h3>
  <p>Kept in form mode; interactive comment data is lost in image mode</p>
  </div>
  <div class="info-card card-layer">
- <div class="icon">📄</div>
+ <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
  <h3>Layers</h3>
  <p>Kept in form mode; only the rendered appearance survives image mode</p>
  </div>
@@ -473,7 +471,7 @@
  <label for="acceptImageOutput" style="display:block; margin:16px 0; line-height:1.6;"><input type="checkbox" id="acceptImageOutput"> I accept the loss of document features if I choose image mode.</label>
  <label class="option-item" for="opt5">
  <input type="checkbox" id="opt5">
- <div class="option-icon">📊</div>
+ <div class="option-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
  <div class="option-text">
  <h3>Remove Metadata</h3>
  <p>Remove standard document info (title, author and dates). This does not remove XMP metadata or hidden content.</p>
@@ -499,11 +497,9 @@
 
  <div class="before-after" id="beforeAfter"></div>
 
- <button onclick="downloadFlattened()" class="download-btn">📥 Download Flattened PDF</button>
- <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#x1f504; Process Another File</button>
+ <button onclick="downloadFlattened()" class="download-btn">Download Flattened PDF</button>
+ <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">Process Another File</button>
  </div>
-
- <!-- Added SEO Sections -->
 
 </div>
 
@@ -541,7 +537,7 @@
  originalSize = file.size;
 
  document.getElementById('fileInfo').style.display = 'block';
- document.getElementById('fileInfo').textContent = '📄 ' + file.name + ' (' + formatSize(file.size) + ')';
+ document.getElementById('fileInfo').textContent = file.name + ' (' + formatSize(file.size) + ')';
  document.getElementById('optionsBox').style.display = 'block';
  document.getElementById('infoSection').style.display = 'none';
  document.getElementById('resultBox').style.display = 'none';

@@ -680,7 +680,7 @@ const Downloader = {
         sheet.className = 'rename-sheet';
         const title = document.createElement('div');
         title.className = 'rename-sheet-title';
-        title.textContent = '📄  Save File';
+        title.textContent = 'Save File';
         const inputWrap = document.createElement('div');
         inputWrap.className = 'rename-input-wrap';
         const nameInput = document.createElement('input');
@@ -748,7 +748,7 @@ const Downloader = {
         if (existing) existing.remove();
         const toast = document.createElement('div');
         toast.id = 'shareFileToast';
-        toast.innerHTML = `<div style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: white; padding: 12px 24px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 8px 30px rgba(16,185,129,0.4); z-index: 10001; display: flex; align-items: center; gap: 12px; cursor: pointer; opacity: 0; transition: all 0.4s ease;" id="shareFileToastInner"><span>📤</span><span>Share this file</span><button style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 6px; cursor: pointer; margin-left: 8px;" id="shareToastClose">✕</button></div>`;
+        toast.innerHTML = `<div style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: white; padding: 12px 24px; border-radius: 14px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 8px 30px rgba(16,185,129,0.4); z-index: 10001; display: flex; align-items: center; gap: 12px; cursor: pointer; opacity: 0; transition: all 0.4s ease;" id="shareFileToastInner"><span>Share this file</span><button style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 6px; cursor: pointer; margin-left: 8px;" id="shareToastClose">&times;</button></div>`;
         document.body.appendChild(toast);
         const inner = document.getElementById('shareFileToastInner');
         requestAnimationFrame(() => { inner.style.opacity = '1'; inner.style.transform = 'translateX(-50%) translateY(0)'; });
@@ -826,7 +826,7 @@ const PwaInstallManager = {
         window.addEventListener('appinstalled', () => {
             this.hideInstallBanner(); this.deferredPrompt = null;
             Analytics.track('pwa_installed');
-            Toast.show('✅ App installed successfully!');
+            Toast.show('App installed successfully!');
         });
         this.checkIfInstalled();
     },
@@ -845,7 +845,7 @@ const PwaInstallManager = {
         if (this.installBanner) return;
         this.installBanner = document.createElement('div');
         this.installBanner.id = 'pwaInstallBanner';
-        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon" alt=""><div class="pwa-banner-text"><strong>OnlinePDFPro</strong><span>Install for quick access</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose" aria-label="Dismiss install suggestion">✕</button></div></div>`;
+        this.installBanner.innerHTML = `<div class="pwa-banner-content"><div class="pwa-banner-info"><img src="/logo.png" class="pwa-banner-icon" alt=""><div class="pwa-banner-text"><strong>OnlinePDFPro</strong><span>Install for quick access</span></div></div><div class="pwa-banner-actions"><button class="pwa-install-btn" id="pwaBannerInstall">Install</button><button class="pwa-close-btn" id="pwaBannerClose" aria-label="Dismiss install suggestion">&times;</button></div></div>`;
         document.body.appendChild(this.installBanner);
         this.injectBannerCSS();
         document.getElementById('pwaBannerInstall').addEventListener('click', () => this.triggerInstall());

@@ -1208,126 +1208,29 @@
 }
 
 /* ==========================================================================
-   Page-Specific Upload Zone Outlines (Vibrant contrasts for Light/Dark themes)
+   Universal Upload Zone Styling (Harmonized with Image 3 across all tools)
    ========================================================================== */
 
-/* 1. Organize & Split (Indigo/Purple Theme) */
-.page-merge-pdf .upload-zone,
-.page-split-pdf .upload-zone,
-.page-pdf-watermark .upload-zone,
-.page-sign-pdf .upload-zone,
-.page-add-page-numbers .upload-zone,
-.page-pdf-page-reorder .upload-zone,
-.page-pdf-page-extractor .upload-zone,
-.page-pdf-highlighter-extractor .upload-zone,
-.page-pdf-reader .upload-zone,
-.page-pdf-editor .upload-zone,
-.page-pdf-bookmark .upload-zone,
-.page-flatten-pdf .upload-zone,
-.page-compare-pdf .upload-zone,
-.page-tools .upload-zone {
-    border-color: #6366f1 !important;
-}
-[data-theme="dark"] .page-merge-pdf .upload-zone,
-[data-theme="dark"] .page-split-pdf .upload-zone,
-[data-theme="dark"] .page-pdf-watermark .upload-zone,
-[data-theme="dark"] .page-sign-pdf .upload-zone,
-[data-theme="dark"] .page-add-page-numbers .upload-zone,
-[data-theme="dark"] .page-pdf-page-reorder .upload-zone,
-[data-theme="dark"] .page-pdf-page-extractor .upload-zone,
-[data-theme="dark"] .page-pdf-highlighter-extractor .upload-zone,
-[data-theme="dark"] .page-pdf-reader .upload-zone,
-[data-theme="dark"] .page-pdf-editor .upload-zone,
-[data-theme="dark"] .page-pdf-bookmark .upload-zone,
-[data-theme="dark"] .page-flatten-pdf .upload-zone,
-[data-theme="dark"] .page-compare-pdf .upload-zone,
-[data-theme="dark"] .page-tools .upload-zone {
-    border-color: #818cf8 !important;
-}
-
-/* 2. Optimization, Crop & Edit (Royal Blue Theme) */
-.page-compress-pdf .upload-zone,
-.page-crop-pdf .upload-zone,
-.page-delete-pages .upload-zone,
-.page-image-compress .upload-zone,
-.page-image-crop .upload-zone,
-.page-image-resize .upload-zone {
-    border-color: #2563eb !important;
-}
-[data-theme="dark"] .page-compress-pdf .upload-zone,
-[data-theme="dark"] .page-crop-pdf .upload-zone,
-[data-theme="dark"] .page-delete-pages .upload-zone,
-[data-theme="dark"] .page-image-compress .upload-zone,
-[data-theme="dark"] .page-image-crop .upload-zone,
-[data-theme="dark"] .page-image-resize .upload-zone {
-    border-color: #60a5fa !important;
-}
-
-/* 3. Security, Shield & Lock (Green/Teal Theme) */
-.page-pdf-unlock .upload-zone,
-.page-pdf-lock .upload-zone,
-.page-privacy-shield .upload-zone {
-    border-color: #10b981 !important;
-}
-[data-theme="dark"] .page-pdf-unlock .upload-zone,
-[data-theme="dark"] .page-pdf-lock .upload-zone,
-[data-theme="dark"] .page-privacy-shield .upload-zone {
-    border-color: #34d399 !important;
-}
-
-/* 4. Conversion, Media & OCR (Cyan/Blue Theme) */
-.page-voice-to-pdf .upload-zone,
-.page-text-to-audio .upload-zone,
-.page-ocr .upload-zone,
-.page-html-to-pdf .upload-zone,
-.page-images-to-pdf .upload-zone {
-    border-color: #0284c7 !important;
-}
-[data-theme="dark"] .page-voice-to-pdf .upload-zone,
-[data-theme="dark"] .page-text-to-audio .upload-zone,
-[data-theme="dark"] .page-ocr .upload-zone,
-[data-theme="dark"] .page-html-to-pdf .upload-zone,
-[data-theme="dark"] .page-images-to-pdf .upload-zone {
-    border-color: #38bdf8 !important;
-}
-
-/* 5. AI Background Removal (Gold/Orange Theme) */
-.page-remove-background .upload-zone {
-    border-color: #d97706 !important;
-}
-[data-theme="dark"] .page-remove-background .upload-zone {
-    border-color: #fbbf24 !important;
-}
-
-/* 6. Creative Document Editors (Pink/Rose Theme) */
-.page-qr-generator .upload-zone,
-.page-invoice-generator .upload-zone,
-.page-resume-cv-builder .upload-zone,
-.page-presentation-maker .upload-zone {
-    border-color: #ec4899 !important;
-}
-[data-theme="dark"] .page-qr-generator .upload-zone,
-[data-theme="dark"] .page-invoice-generator .upload-zone,
-[data-theme="dark"] .page-resume-cv-builder .upload-zone,
-[data-theme="dark"] .page-presentation-maker .upload-zone {
-    border-color: #f472b6 !important;
-}
-/* UNIVERSAL UPLOAD ZONE THEME */
 .upload-zone {
+    border: 2px dashed #8b6914 !important;
+    border-color: #8b6914 !important;
     background-color: #f3efe5 !important;
-    border-color: #8a6d3b !important;
     color: #8a6d3b !important;
 }
+
 .upload-zone .upload-text {
     color: #3b3024 !important;
 }
+
 .upload-zone .upload-hint {
     color: #8a6d3b !important;
 }
+
 .upload-zone svg {
     stroke: #8a6d3b !important;
     color: #8a6d3b !important;
 }
+
 .upload-zone .upload-btn,
 .upload-zone .btn-primary,
 .upload-zone button,
@@ -1339,6 +1242,7 @@
     border-radius: 9999px !important;
     box-shadow: 0 4px 14px rgba(138, 109, 59, 0.25) !important;
 }
+
 .upload-zone .upload-btn:hover,
 .upload-zone .btn-primary:hover,
 .upload-zone button:hover,
@@ -1348,16 +1252,57 @@
     border-color: #a47d1b !important;
     color: #ffffff !important;
 }
+
 .upload-zone:hover,
 .upload-zone.dragover {
     background-color: #e8e2d4 !important;
 }
+
+/* Universal Dark Mode styling matching Image 3 */
+html[data-theme="dark"] .upload-zone,
+[data-theme="dark"] .upload-zone {
+    background-color: var(--surface-1) !important;
+    border: 2px dashed var(--accent, #d4a942) !important;
+    border-color: var(--accent, #d4a942) !important;
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .upload-zone .upload-text,
+[data-theme="dark"] .upload-zone .upload-text {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .upload-zone .upload-hint,
+[data-theme="dark"] .upload-zone .upload-hint {
+    color: var(--text-secondary) !important;
+}
+
+html[data-theme="dark"] .upload-zone svg,
+html[data-theme="dark"] .upload-zone .upload-icon,
+html[data-theme="dark"] .upload-zone > svg,
+[data-theme="dark"] .upload-zone svg,
+[data-theme="dark"] .upload-zone .upload-icon,
+[data-theme="dark"] .upload-zone > svg {
+    color: var(--accent, #d4a942) !important;
+    stroke: currentColor !important;
+}
+
+html[data-theme="dark"] .upload-zone:hover,
+html[data-theme="dark"] .upload-zone.dragover,
+[data-theme="dark"] .upload-zone:hover,
+[data-theme="dark"] .upload-zone.dragover {
+    background-color: var(--accent-subtle) !important;
+    border-color: var(--accent, #d4a942) !important;
+}
+
 .upload-icon {
     display: none !important;
 }
+
 .privacy-reminder {
     display: none !important;
 }
+
 .upload-zone > svg,
 .upload-zone svg[width="48"],
 .upload-icon,

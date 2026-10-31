@@ -177,11 +177,7 @@
  <main id="main" class="tool-page">
 <div class="container" style="max-width: 800px;">
  <div class="tool-header">
- <span class="section-tag fade-in">AI-Assisted</span>
  <h1 class="tool-title fade-in">PDF to Flashcards</h1>
- <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Let AI analyze your study materials, lecture notes, or textbooks and generate interactive flashcards. Review generated cards for accuracy before exporting them to Anki, Quizlet, or CSV.
- </p>
  </div>
 
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
@@ -193,7 +189,7 @@
  <div id="turnstileWidget" style="display:flex; justify-content:center; margin:20px auto 0;"></div>
  <label style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); margin-top:10px;"><input type="checkbox" id="cloudOcrConsent"> If scanned, allow an OCR.space upload (optional)</label>
  <div class="fc-count-selector">
-   <label for="cardCount">📝 How many flashcards?</label>
+   <label for="cardCount">How many flashcards?</label>
    <select id="cardCount">
      <option value="5">5 cards</option>
      <option value="10" selected>10 cards</option>
@@ -213,8 +209,8 @@
      <h3 id="deckTitle">Study Deck</h3>
      <div class="fc-btns">
        <button onclick="location.reload()">New PDF</button>
-       <button class="pdf-btn" id="downloadPdfBtn">📄 Download PDF</button>
-       <button class="primary" id="exportBtn">📥 Export CSV</button>
+       <button class="pdf-btn" id="downloadPdfBtn">Download PDF</button>
+       <button class="primary" id="exportBtn">Export CSV</button>
      </div>
    </div>
 

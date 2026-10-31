@@ -106,12 +106,12 @@
  <div class="header-actions">
 
  <div class="header-search" style="position:relative;margin-right:8px;">
- <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.9rem;opacity:0.5;">&#128269;</span>
+ <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.9rem;opacity:0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
  <input type="text" id="globalToolSearch" placeholder="Search tools..." style="padding:8px 12px 8px 32px;border-radius:20px;border:1px solid var(--border,#e2e8f0);background:var(--bg-primary,#fff);color:var(--text-primary,#1a1a2e);font-size:0.85rem;width:180px;transition:width 0.2s;outline:none;">
  </div>
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" style="font-size:20px;background:none;border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;">
- <span class="theme-icon-light">&#127769;</span>
- <span class="theme-icon-dark">&#9728;&#65039;</span>
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
@@ -122,14 +122,12 @@
 
 <div class="container" style="max-width:900px;">
  <div class="tool-header">
- <span class="section-tag fade-in">Experimental AI Image Tool</span>
  <h1 class="tool-title fade-in">Remove Background from Image — Free</h1>
- <p class="tool-description fade-in" style="animation-delay:0.1s;">Remove image backgrounds in your browser. AI models download from Hugging Face on first use; your image stays on this device. No signup, no watermark.</p>
  </div>
 
  <!-- UPLOAD -->
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay:0.2s;">
- <span class="upload-icon">&#9986;&#127912;</span>
+ <span class="upload-icon"></span>
  <p class="upload-text">Drop image here or click to upload</p>
  <p class="upload-hint" style="display:flex;gap:12px;justify-content:center;align-items:center;">
  <span style="display:flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Processing details</span>
@@ -151,8 +149,8 @@
  </div>
 
  <div style="text-align:center;margin:-16px 0 24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
- <button class="btn btn-secondary" id="pasteBtn" style="padding:8px 18px;font-size:.85rem;">&#128203; Paste from Clipboard</button>
- <button class="btn btn-secondary" id="sampleBtn" style="padding:8px 18px;font-size:.85rem;">&#128248; Try Sample</button>
+ <button class="btn btn-secondary" id="pasteBtn" style="padding:8px 18px;font-size:.85rem;">Paste from Clipboard</button>
+ <button class="btn btn-secondary" id="sampleBtn" style="padding:8px 18px;font-size:.85rem;">Try Sample</button>
  </div>
 
  <!-- PROCESSING -->
@@ -171,12 +169,12 @@
  <!-- ERROR -->
  <div id="errorSection" style="display:none;">
  <div class="error-box">
- <span style="font-size:3rem;">&#9888;&#65039;</span>
+ <span style="font-size:3rem;">&#65039;</span>
  <h3>Something Went Wrong</h3>
  <p id="errorMessage">Failed to process image.</p>
  <div class="error-detail" id="errorDetails"></div>
  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
- <button class="btn btn-primary" id="retryBtn">&#128260; Try Again</button>
+ <button class="btn btn-primary" id="retryBtn">Try Again</button>
  <button class="btn btn-secondary" id="backBtn">&#8592; Go Back</button>
  </div>
  </div>
@@ -205,7 +203,7 @@
  </div>
  <div class="bg-tool-sidebar">
  <div class="panel">
- <h3>&#128396;&#65039; Touch Up</h3>
+ <h3>&#65039; Touch Up</h3>
  <div style="display:flex;gap:8px;margin-bottom:12px;">
  <button class="dl-btn dl-btn-secondary active" id="modeRestore" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Restore</button>
  <button class="dl-btn dl-btn-secondary" id="modeErase" style="margin:0;flex:1;font-size:0.85rem;padding:8px;">Erase</button>
@@ -228,7 +226,7 @@
  <button class="dl-btn dl-btn-secondary" id="applyRefine" style="font-size:0.85rem;padding:8px;border-color:var(--accent);color:var(--accent);">Refine Now</button>
  </div>
  <div class="panel">
- <h3>🎨 Background</h3>
+ <h3>Background</h3>
  <div class="bg-colors">
  <button class="bg-color-btn bg-transparent-swatch active" data-bg="transparent" title="Transparent"></button>
  <button class="bg-color-btn" data-bg="#FFFFFF" style="background:#fff" title="White"></button>
@@ -242,19 +240,19 @@
  </div>
  </div>
  <div class="panel">
- <h3>&#128229; Download</h3>
- <button class="dl-btn dl-btn-primary" id="downloadPng">&#128229; Download PNG</button>
- <button class="dl-btn dl-btn-secondary" id="downloadJpg">&#128229; Download JPG</button>
+ <h3>Download</h3>
+ <button class="dl-btn dl-btn-primary" id="downloadPng">Download PNG</button>
+ <button class="dl-btn dl-btn-secondary" id="downloadJpg">Download JPG</button>
  </div>
  <div class="panel">
- <button class="dl-btn dl-btn-secondary" id="newImageBtn" style="border-color:var(--accent);color:var(--accent);">&#128260; Upload New Image</button>
+ <button class="dl-btn dl-btn-secondary" id="newImageBtn" style="border-color:var(--accent);color:var(--accent);">Upload New Image</button>
  </div>
  </div>
  </div>
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay:0.3s;margin-top:20px;">
- <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+ <span class="privacy-reminder-icon">&#65039;</span>
  <span>Images are processed on-device. AI model downloads contact Hugging Face and the library CDN.</span>
  </div>
  </div>

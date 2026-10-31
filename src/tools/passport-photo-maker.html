@@ -173,14 +173,14 @@
  <div class="header-actions">
 
  <div class="header-search" style="position: relative; margin-right: 8px;">
- <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;">&#128269;</span>
+ <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
  <input type="text" id="globalToolSearch" placeholder="Search tools..."
  style="padding: 8px 12px 8px 32px; border-radius: 20px; border: 1px solid var(--border, #e2e8f0); background: var(--bg-primary, #fff); color: var(--text-primary, #1a1a2e); font-size: 0.85rem; width: 180px; transition: width 0.2s, border-color 0.2s; outline: none;">
  </div>
  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"
  style="font-size:20px; background:none; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s;">
- <span class="theme-icon-light">&#127769;</span>
- <span class="theme-icon-dark">&#9728;&#65039;</span>
+ <span class="theme-icon-light"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+ <span class="theme-icon-dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
  </button>
  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
  </div>
@@ -191,18 +191,14 @@
 
 <div class="container" style="max-width: 900px;">
  <div class="tool-header">
- <span class="section-tag fade-in">Photo Tool</span>
  <h1 class="tool-title fade-in">Passport Photo Maker — Create ID Photos Free Online</h1>
- <p class="tool-description fade-in" style="animation-delay: 0.1s;">
- Create passport size photos for any country. Supports US, India, UK, EU, Canada & 15+ document types. Generate a print-ready photo sheet. Free to use.
- </p>
  </div>
 
  <!-- Upload Zone -->
  <div class="upload-zone glass-card fade-in" id="uploadZone" style="animation-delay: 0.2s;">
  <p class="upload-text">Drop your photo here</p>
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
- <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> ⚡ Fast</span>
+ <span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Fast</span>
  <span>•</span> <span>JPG, PNG, WebP</span>
  <span>•</span> <span>Review file guidance</span>
  </p>
@@ -342,7 +338,7 @@
  </div>
 
  <div style="text-align: center; margin-top: 32px;">
- <button onclick="window.location.reload()" style="display:inline-block; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#128260; Make Another Photo</button>
+ <button onclick="window.location.reload()" style="display:inline-block; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">Make Another Photo</button>
  </div>
 
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Privacy sweep in 5:00</div>
@@ -350,7 +346,7 @@
  </div>
 
  <div class="privacy-reminder fade-in" style="animation-delay: 0.3s; margin-top: 20px;">
- <span class="privacy-reminder-icon">&#128274;&#128737;&#65039;</span>
+ 
  <span>Review the processing details before uploading. Your original photo is unchanged if processing fails.</span>
  </div>
  </div>

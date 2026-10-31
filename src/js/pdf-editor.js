@@ -67,7 +67,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 toolHeader.replaceChildren();
                 const compactTitle = document.createElement('h1');
                 compactTitle.style.cssText = 'font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:0;display:flex;align-items:center;gap:8px;justify-content:center;';
-                compactTitle.append('✍️ PDF Editor ');
+                compactTitle.append('PDF Editor ');
                 const compactFilename = document.createElement('span');
                 compactFilename.style.cssText = 'font-size:0.85rem;font-weight:500;color:var(--text-secondary);';
                 compactFilename.textContent = `— ${file.name}`;
@@ -296,7 +296,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                 // Replace button
                 const btn = document.createElement('button');
                 btn.className = 'img-replace-btn';
-                btn.textContent = existing ? '✅ Change Again' : '🖼️ Replace Image';
+                btn.textContent = existing ? 'Change Again' : 'Replace Image';
                 btn.onclick = function (e) {
                     e.stopPropagation();
                     activeReplaceTarget = {
@@ -341,7 +341,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                     target.div.style.backgroundSize = 'cover';
                     target.div.style.backgroundPosition = 'center';
                     target.div.style.borderColor = '#22c55e';
-                    target.div.querySelector('.img-replace-btn').textContent = '✅ Change Again';
+                    target.div.querySelector('.img-replace-btn').textContent = 'Change Again';
 
                     activeReplaceTarget = null;
                     updateLayers();
@@ -979,7 +979,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
 
             function clearPage() {
                 const confirmed = confirm(
-                    "⚠️ Are you sure?\n\n" +
+                    "Are you sure?\n\n" +
                     "This will erase ALL your edits on this page.\n" +
                     "This action cannot be undone."
                 );
@@ -1020,19 +1020,19 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
                     fragment.appendChild(item);
                 };
                 if (modifiedCount > 0) {
-                    addLayer(`✍️ ${modifiedCount} Text Edit(s)`);
+                    addLayer(`${modifiedCount} Text Edit(s)`);
                 }
                 textEls.forEach((el, i) => {
-                    addLayer(`🔤 Text ${i + 1}`, el, updateLayers);
+                    addLayer(`Text ${i + 1}`, el, updateLayers);
                 });
                 imgEls.forEach((el, i) => {
-                    addLayer(`🖼️ Image ${i + 1}`, el, updateLayers);
+                    addLayer(`Image ${i + 1}`, el, updateLayers);
                 });
                 noteEls.forEach((el, i) => {
-                    addLayer(`📝 Note ${i + 1}`, el, updateLayers);
+                    addLayer(`Note ${i + 1}`, el, updateLayers);
                 });
                 if (drawCount > 0) {
-                    addLayer(`✏️ ${drawCount} Drawing(s)`);
+                    addLayer(`${drawCount} Drawing(s)`);
                 }
                 if (!fragment.childNodes.length) {
                     const empty = document.createElement('p');

@@ -2,9 +2,9 @@
    ONLINEPDFPRO — MOBILE REDESIGN V5
    Premium app-like mobile experience
 
-   ✅ ONLY inside @media (max-width: 768px)
-   ✅ Desktop is NEVER touched
-   ✅ Uses CSS vars for dark/light mode
+    ONLY inside @media (max-width: 768px)
+    Desktop is NEVER touched
+    Uses CSS vars for dark/light mode
    ============================================= */
 
 @media screen and (max-width: 768px) {
@@ -159,7 +159,7 @@
         display: none !important;
     }
 
-    /* Mobile search toggle button (🔍) - Hidden since search is now always visible */
+    /* Mobile search toggle button () - Hidden since search is now always visible */
     .mobile-search-toggle {
         display: none !important;
     }
@@ -473,7 +473,7 @@
 
 
     /* ══════════════════════════════════════════
-       TOOL CARDS — 2-COLUMN GRID 🔥
+       TOOL CARDS — 2-COLUMN GRID 
        This is the key UX improvement.
        2 columns = less scrolling, more density.
        ══════════════════════════════════════════ */

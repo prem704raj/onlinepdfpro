@@ -263,12 +263,12 @@ export function resolveStandardFont(PDFLib, object) {
 }
 
 export function getFontMatchLabel(object) {
-  if (getEmbeddedFont(object)) return '✓ Original embedded font';
+  if (getEmbeddedFont(object)) return 'Original embedded font';
   const descriptor = object && object.fontDescriptor;
   const quality = descriptor ? descriptor.matchQuality : object && object.fontQuality;
-  if (quality === 'exact') return '✓ Original font';
+  if (quality === 'exact') return 'Original font';
   if (quality === 'matched') return '≈ Matched font';
-  return '⚠ Fallback font';
+  return 'Fallback font';
 }
 
 export function getFontMatchDescription(object) {
