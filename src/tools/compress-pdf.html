@@ -149,7 +149,6 @@
  <p class="upload-hint" style="display: flex; gap: 12px; justify-content: center; align-items: center;"><span style="display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Processing details</span> <span>•</span> <span>Maximum size: 100 MB</span> <span>•</span> <span>Processing time varies</span></p>
  <button class="btn btn-primary upload-btn">Choose Files</button>
  </div>
- <p class="tool-sample-hint">Test with an original sample: <a href="/assets/examples/sample-assignment.pdf" download>Download 3-page sample assignment PDF</a>.</p>
 
  <div style="margin-top: 24px; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
  <strong>How it works:</strong> Compression results depend on document contents and the selected quality setting. Perfect for email attachments (under 25MB) or web publishing.
@@ -234,17 +233,6 @@
  (.zip)</button>
  <button onclick="window.location.reload()" style="display:block; margin:20px auto 0; padding:14px 32px; font-size:16px; font-weight:600; border-radius:12px; background:transparent; color:var(--accent, #2563eb); border:2px solid var(--accent, #2563eb); cursor:pointer; transition:all 0.3s;" onmouseenter="this.style.background='var(--accent, #2563eb)';this.style.color='#fff'" onmouseleave="this.style.background='transparent';this.style.color='var(--accent, #2563eb)'">&#8635; Process Another File</button>
  </div>
- <div class="tool-next-steps" data-nosnippet>
-   <div class="tool-next-steps-title">Recommended Next Steps</div>
-   <div class="tool-next-steps-links">
-     <a href="/tools/merge-pdf" class="tool-next-step-link">
-       <span>Combine with other documents?</span> <strong>Merge PDF &rarr;</strong>
-     </a>
-     <a href="/tools/pdf-editor" class="tool-next-step-link">
-       <span>Make text corrections or sign?</span> <strong>Edit PDF &rarr;</strong>
-     </a>
-   </div>
- </div>
  <div class="auto-clear" id="autoClear" style="margin-top: 24px;" data-nosnippet>Results will clear in 5:00</div>
  </div>
  <div class="action-buttons mt-lg">
@@ -257,8 +245,6 @@
  <span>Review the processing details before uploading. Your original file is unchanged if compression fails.</span>
  </div>
  </div>
-
- <!-- Added SEO Sections -->
 </main>
 
  <script src="/js/vendor/pdflib/pdf-lib.min.js"></script>
@@ -731,28 +717,6 @@ resultsSection.style.display = 'block';
  }
  })();
  </script>
-
-
-<section class="tool-seo-content" style="max-width:800px; margin:48px auto 0; padding:0 24px 48px;">
-<h2 style="font-family:'Playfair Display',Georgia,serif; font-size:1.6rem; font-weight:400; color:var(--text-primary,#2c2418); margin-bottom:16px;">How PDF Compression Works</h2>
-<p style="font-family:'Inter',sans-serif; font-size:0.92rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">The default mode resaves the whole PDF with compressed object streams while retaining document content. It may produce little or no saving. Optional image-based compression renders pages as JPEG images and removes searchable text, interactive links, forms and accessibility tags. The smaller result is used only when it saves space.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Understanding quality levels</h3>
-<ul style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; padding-left:20px; margin-bottom:16px;">
-<li><strong>Structural optimization</strong> — the default, with no page rendering and no guaranteed size reduction.</li>
-<li><strong>Image-based compression</strong> — optional and destructive to document features. Quality is estimated from the first page, so mixed documents may remain above the target.</li>
-<li><strong>Original file</strong> — returned when neither selected method produces a smaller file.</li>
-</ul>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Common use cases</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8; margin-bottom:16px;">Check your destination's upload limit and the actual output size. Open the result and inspect small text, images and filled fields before submitting it. Saving a signed PDF can invalidate its digital signature; keep your original.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-bottom:8px;">Privacy</h3>
-<p style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">This tool processes your PDF locally in your browser. It does not upload the document for compression. Results are cleared from the page after five minutes or when you reset the tool. Your original file stays on your device.</p>
-<h3 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; color:var(--text-primary,#2c2418); margin-top:24px; margin-bottom:8px;">Troubleshooting &amp; Frequently Asked Questions</h3>
-<div style="font-family:'Inter',sans-serif; font-size:0.88rem; color:var(--text-secondary,#6b5e4f); line-height:1.8;">
-  <p><strong>Why didn't my PDF get any smaller?</strong><br>If your PDF contains purely text and vector graphics without embedded uncompressed images, structural compression may only save a few bytes. The tool will never return a file larger than your original.</p>
-  <p><strong>When should I check 'Allow image-based compression'?</strong><br>Enable this option only when an upload portal has a strict file size cutoff (such as under 200 KB) and searchable text is not required. It renders pages as JPEG images, which removes the text layer and interactive elements.</p>
-  <p><strong>Why is my result labeled 'Above target'?</strong><br>Target size is an optimization goal, not a guarantee. Structural mode avoids reducing visual fidelity. If reaching the target requires drastic degradation, the tool prioritizes document readability.</p>
-</div>
-</section>
 
  <script defer src="../counter.js"></script>
 <!-- Schema.org Structured Data -->
