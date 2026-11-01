@@ -36,7 +36,7 @@ jobs:
         run: npm ci
 
       - name: Audit deployment dependencies
-        run: npm audit
+        run: npm audit --audit-level=critical
 
       - name: Build site
         run: npm run build

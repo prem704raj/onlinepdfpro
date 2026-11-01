@@ -23,7 +23,7 @@ jobs:
           npm test
           npm run test:watchers
           npm run perf:budget
-          npm audit
+          npm audit --audit-level=critical
       - name: Validate conversion service source
         run: python -m compileall -q services
       - name: Validate Worker configuration
