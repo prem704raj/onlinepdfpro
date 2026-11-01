@@ -226,7 +226,7 @@
                 <div class="upload-text">
                     <strong>Choose PDF files</strong> or drop them here
                 </div>
-                <button class="select-btn" onclick="document.getElementById('fileInput').click()">Select PDF files</button>
+                <button class="btn btn-primary upload-btn" type="button" onclick="document.getElementById('fileInput').click()">Choose PDF Files</button>
                 <input type="file" id="fileInput" multiple accept=".pdf" style="display: none">
 
                 <div class="privacy-badge">
@@ -269,6 +269,13 @@
         const fileList = document.getElementById('fileList');
         const totalCountEl = document.getElementById('totalCount');
         const loadingState = document.getElementById('loadingState');
+
+        dropZone.style.cursor = 'pointer';
+        dropZone.onclick = (e) => {
+            if (e.target.id !== 'fileInput' && !e.target.closest('.upload-btn')) {
+                fileInput.click();
+            }
+        };
 
         // Drag & Drop Handlers
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
