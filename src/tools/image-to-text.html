@@ -223,6 +223,11 @@
 
  // ==================== HYBRID OCR ENGINE ====================
 
+ function setOcrStatus(msg) {
+   const el = document.querySelector('.tool-description');
+   if (el) el.textContent = msg;
+ }
+
  async function processFile(file) {
  try {
  await processFileInternal(file);
@@ -232,7 +237,7 @@
  document.getElementById('progress').style.display = 'none';
  document.getElementById('result').style.display = 'none';
  document.getElementById('dropArea').style.display = 'block';
- document.querySelector('.tool-description').textContent = 'Choose a PDF or image to extract text locally.';
+  setOcrStatus('Choose a PDF or image to extract text locally.');
  }
  }
 
@@ -258,7 +263,7 @@
  document.getElementById('progress').style.display = 'block';
  document.getElementById('result').style.display = 'none';
  document.getElementById('dropArea').style.display = 'none';
- document.querySelector('.tool-description').textContent = "Analyzing your document... Please wait.";
+  setOcrStatus("Analyzing your document... Please wait.");
 
   // Render every PDF page (up to the browser-safety cap) before OCR. Images
   // are represented as a one-item list so both paths use the same pipeline.
@@ -277,7 +282,7 @@
   for (let i = 0; i < imageBlobs.length; i += 1) {
   let imageBlob = imageBlobs[i];
   if (imageBlob.size > 1500000) imageBlob = await compressImage(imageBlob);
-  document.querySelector('.tool-description').textContent = `Recognizing page ${i + 1} of ${imageBlobs.length} locally...`;
+  setOcrStatus(`Recognizing page ${i + 1} of ${imageBlobs.length} locally...`);
   localResults.push(await runTesseract(imageBlob, language));
   }
 
@@ -293,7 +298,7 @@
   return;
   }
 
-  document.querySelector('.tool-description').textContent = "Optional cloud retry through OCR.space...";
+  setOcrStatus("Optional cloud retry through OCR.space...");
   const finalTexts = localResults.map(result => result.text.trim());
   for (const { result, index } of weakPages) {
   let pageBlob = imageBlobs[index];
@@ -319,7 +324,7 @@
       logger: m => {
  if (m.status === 'recognizing text' && typeof m.progress === 'number') {
  const pct = Math.round(m.progress * 100);
- document.querySelector('.tool-description').textContent = `Recognizing text... ${pct}%`;
+ setOcrStatus(`Recognizing text... ${pct}%`);
  }
  }
  });
@@ -439,7 +444,7 @@
   document.getElementById('textOutput').value = text.trim() || 'No text found in this document.';
   document.getElementById('result').style.display = 'block';
   document.getElementById('progress').style.display = 'none';
-  document.querySelector('.tool-description').textContent = statusText;
+  setOcrStatus(statusText);
   }
 
  function copyText() {
