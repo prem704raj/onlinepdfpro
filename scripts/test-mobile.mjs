@@ -59,7 +59,7 @@ try {
     await isolate(page);
     await page.setViewport({ width, height: 844, isMobile: true, hasTouch: true });
     for (const route of routes) {
-      await page.goto(base + route, { waitUntil: 'load' });
+      await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 45000 });
       await page.evaluate(async () => { await document.fonts.ready; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
       const result = await page.evaluate(() => {
         const width = innerWidth;
@@ -236,5 +236,7 @@ try {
   }
 } finally {
   await browser.close();
+  if (server.closeAllConnections) server.closeAllConnections();
   await new Promise(resolve => server.close(resolve));
+  process.exit(failures.length ? 1 : 0);
 }
