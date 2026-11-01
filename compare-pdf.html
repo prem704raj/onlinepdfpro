@@ -513,12 +513,14 @@
  <h3>PDF 1</h3>
  <p>Click to upload first PDF</p>
  <div class="file-name" id="name1"></div>
+ <button class="btn btn-primary upload-btn" type="button" onclick="event.stopPropagation(); document.getElementById('file1').click()">Choose PDF 1</button>
  <input type="file" id="file1" accept=".pdf" hidden />
  </div>
  <div class="upload-box" id="box2" onclick="document.getElementById('file2').click()">
  <h3>PDF 2</h3>
  <p>Click to upload second PDF</p>
  <div class="file-name" id="name2"></div>
+ <button class="btn btn-primary upload-btn" type="button" onclick="event.stopPropagation(); document.getElementById('file2').click()">Choose PDF 2</button>
  <input type="file" id="file2" accept=".pdf" hidden />
  </div>
  </div>
