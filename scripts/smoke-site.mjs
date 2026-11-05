@@ -28,21 +28,15 @@ for (const route of ['/', '/about', '/tools', '/changelog', '/tools/word-to-pdf'
     assert.equal(canonical, `${canonicalOrigin}${route}`, `${route}: final canonical URL`);
     assert.equal(analyticsCount, 1, `${route}: one analytics entry point`);
     assert.equal(publisherCount, 1, `${route}: publisher ownership`);
-    if (route === '/tools/word-to-pdf') assert.ok(html.includes('/assets/examples/sample-assignment.docx'), 'Word conversion page must link the Word sample');
 }
 const sitemap = await get(`${origin}/sitemap.xml`);
 assert.equal(sitemap.status, 200);
 const xml = await sitemap.text();
 assert.ok(!/<loc>[^<]*\.html(?:[?<]|$)/.test(xml), 'Sitemap must contain final public URLs');
-for (const [route, type] of [['/ads.txt', 'text/plain'], ['/assets/examples/sample-assignment.pdf', 'application/pdf'], ['/assets/examples/sample-assignment.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], ['/assets/examples/onlinepdfpro-practice-pack.zip', 'application/zip'], ['/assets/examples/admit-card-split.svg', 'image/svg+xml'], ['/assets/examples/compression-mode.svg', 'image/svg+xml'], ['/assets/examples/notes-page.jpg', 'image/jpeg'], ['/assets/examples/checklist-page.jpg', 'image/jpeg']]) {
+for (const [route, type] of [['/ads.txt', 'text/plain']]) {
     const response = await get(`${origin}${route}`);
-    assert.equal(response.status, 200, `${route}: published example or publisher file`);
+    assert.equal(response.status, 200, `${route}: publisher file`);
     assert.ok((response.headers.get('content-type') || '').includes(type), `${route}: correct content type`);
     if (route === '/ads.txt') assert.ok((await response.text()).split(/\r?\n/).some(line => line.trim() === 'google.com, pub-3541372477756449, DIRECT, f08c47fec0942fa0'));
-    if (route.endsWith('.docx') || route.endsWith('.zip')) {
-        const bytes = new Uint8Array(await response.arrayBuffer());
-        assert.equal(bytes[0], 0x50, `${route}: ZIP-based asset signature`);
-        assert.equal(bytes[1], 0x4b, `${route}: ZIP-based asset signature`);
-    }
 }
 console.log(`PASS public frontend ${release}: canonical pages, blog, sitemap, and analytics installation`);

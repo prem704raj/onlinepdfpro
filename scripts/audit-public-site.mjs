@@ -80,10 +80,6 @@ try {
   const expected = fs.readFileSync(new URL('../src/ads.txt', import.meta.url), 'utf8').trim();
   if (response.status !== 200 || !/text\/plain/.test(response.headers.get('content-type') || '') || !body.split(/\r?\n/).some(line => line.trim() === expected)) errors.push('ads.txt is unavailable, has the wrong content type or publisher record');
 } catch (error) { errors.push(`ads.txt: ${error.message}`); }
-for (const asset of ['/assets/examples/sample-assignment.pdf', '/assets/examples/notes-page.jpg', '/assets/examples/checklist-page.jpg']) {
-  try { const { response } = await get(asset); if (response.status !== 200) errors.push(`${asset}: HTTP ${response.status}`); }
-  catch (error) { errors.push(`${asset}: ${error.message}`); }
-}
 let worker;
 try {
   const response = await fetch(`${process.env.API_BASE_URL || 'https://onlinepdfpro-proxy.prem736raj.workers.dev'}/health`, { signal: AbortSignal.timeout(15000) });

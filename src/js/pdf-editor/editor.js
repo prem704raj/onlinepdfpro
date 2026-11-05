@@ -1632,7 +1632,7 @@ function onKeyDown(event) {
 }
 
 refs.fileInput.addEventListener('change', (event) => loadFile(event.target.files && event.target.files[0]));
-refs.samplePdf.addEventListener('click', async () => {
+refs.samplePdf?.addEventListener('click', async () => {
   if (loading) return;
   try {
     setUploadStatus('Preparing sample PDF locally…');

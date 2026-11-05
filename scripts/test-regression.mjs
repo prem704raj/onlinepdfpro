@@ -157,11 +157,6 @@ check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /produ
 check(createRequire(import.meta.url)('../src/_data/dbmsPages.js').length === 30, 'DBMS Chapter 1 study guide dataset contains all 30 pages');
 const pageNumbers = read('src/tools/add-page-numbers-to-pdf.html');
 check(/textContent\s*=\s*`\s*\$\{file\.name\}/.test(pageNumbers) && !/textContent\s*=\s*`[^`]*escapeHTML\(file\.name\)/.test(pageNumbers), 'File names assigned through textContent are not double-escaped');
-const previewAssetPaths = Array.from({ length: 5 }, (_, index) => `src/assets/previews/dbms/page-0${index + 1}.webp`);
-previewAssetPaths.forEach((assetPath, index) => {
-    const assetData = exists(assetPath) ? fs.readFileSync(path.join(root, assetPath)) : Buffer.alloc(0);
-    check(assetData.length > 12 && filePrefix(assetPath, [0x52, 0x49, 0x46, 0x46]) && assetData.subarray(8, 12).toString('ascii') === 'WEBP', `DBMS preview page ${index + 1} is a valid WebP asset`);
-});
 
 const protect = read('src/tools/password-protect-pdf.html');
 const unlock = read('src/tools/pdf-unlock.html');

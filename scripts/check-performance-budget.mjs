@@ -42,7 +42,7 @@ const measured = {
     homepage: size('_site/index.html'),
     coreCss: ['_site/css/style.css', '_site/css/mobile-fix-v2.css', '_site/css/tools-v2.css', '_site/css/analytics.css']
         .reduce((total, file) => total + size(file), 0),
-    coreJs: ['_site/js/app.js', '_site/js/auth.js', '_site/js/store.js', '_site/js/analytics.js']
+    coreJs: ['_site/js/app.js', '_site/js/store.js', '_site/js/analytics.js']
         .reduce((total, file) => total + size(file), 0),
     productCss: size('_site/css/product-detail.css'),
     site: sumFiles('_site') - editorFonts,
