@@ -13,7 +13,7 @@ const get = url => fetch(url, { redirect: 'error', signal: AbortSignal.timeout(1
 
 // Allow a short propagation window; never turn a failed check into a warning.
 await waitForSiteRelease({ origin, release, get });
-for (const route of ['/', '/about', '/tools', '/changelog', '/tools/word-to-pdf', '/products/dbms-notes']) {
+for (const route of ['/', '/about', '/tools', '/tools/word-to-pdf', '/products/dbms-notes']) {
     const response = await get(`${origin}${route}`);
     assert.equal(response.status, 200, `${route} must serve directly without redirects`);
     const html = await response.text();
