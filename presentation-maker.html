@@ -85,7 +85,8 @@
  /* Main Editor Layout */
  .presentation-editor {
  display: flex;
- height: calc(100vh - 80px);
+ height: calc(100vh - 76px);
+ min-height: 620px;
  overflow: hidden;
  background: var(--bg);
  gap: 1px;
@@ -93,46 +94,74 @@
 
  /* LEFT PANEL - THUMBNAILS */
  .slides-panel {
- width: 240px;
+ width: 260px;
  background: var(--surface-1);
  border-right: 1px solid var(--border);
  display: flex;
  flex-direction: column;
  overflow: hidden;
- }
-
- .slides-header {
- padding: 16px;
- border-bottom: 1px solid var(--border);
  flex-shrink: 0;
  }
 
+ .slides-header {
+ padding: 12px 14px;
+ border-bottom: 1px solid var(--border);
+ flex-shrink: 0;
+ display: flex;
+ flex-direction: column;
+ gap: 10px;
+ }
+
+ .slides-header-top {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 8px;
+ }
+
  .slides-header h3 {
- font-size: 14px;
- font-weight: 600;
+ font-size: 13px;
+ font-weight: 700;
  color: var(--text-primary);
- margin-bottom: 12px;
+ margin: 0;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ /* Slide Counter Badge */
+ .slide-counter {
+ background: var(--surface-2);
+ border: 1px solid var(--border);
+ border-radius: 999px;
+ padding: 3px 10px;
+ font-size: 11px;
+ font-weight: 600;
+ color: var(--text-secondary);
+ white-space: nowrap;
  }
 
  .slides-actions {
- display: flex;
- gap: 8px;
- flex-wrap: wrap;
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 6px;
  }
 
  .slide-action-btn {
- flex: 1;
- min-width: 60px;
- padding: 8px 12px;
+ padding: 7px 8px;
  background: var(--surface-2);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
- color: var(--text-secondary);
+ color: var(--text-primary);
  font-size: 12px;
  font-weight: 600;
  cursor: pointer;
  transition: var(--transition);
  font-family: inherit;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 4px;
+ white-space: nowrap;
  }
 
  .slide-action-btn:hover {
@@ -141,10 +170,45 @@
  border-color: var(--border-hover);
  }
 
- .slide-action-btn.active {
+ .slide-action-btn.primary-action {
  background: var(--accent);
- color: white;
+ color: #ffffff;
  border-color: var(--accent);
+ }
+
+ .slide-action-btn.primary-action:hover {
+ background: var(--accent-hover);
+ }
+
+ .quick-layouts-bar {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 5px;
+ padding-top: 6px;
+ border-top: 1px dashed var(--border);
+ }
+
+ .quick-layout-btn {
+ padding: 5px 6px;
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: 6px;
+ color: var(--text-secondary);
+ font-size: 11px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: var(--transition);
+ font-family: inherit;
+ text-align: left;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+
+ .quick-layout-btn:hover {
+ border-color: var(--accent);
+ color: var(--text-primary);
+ background: var(--accent-subtle);
  }
 
  /* Slides Container */
@@ -192,7 +256,7 @@
  position: absolute;
  top: 4px;
  right: 4px;
- background: rgba(0, 0, 0, 0.7);
+ background: rgba(0, 0, 0, 0.75);
  color: white;
  font-size: 10px;
  font-weight: 600;
@@ -206,14 +270,15 @@
  display: flex;
  flex-direction: column;
  background: var(--bg);
+ min-width: 0;
  }
 
  .editor-toolbar {
  background: var(--surface-1);
  border-bottom: 1px solid var(--border);
- padding: 12px 20px;
+ padding: 10px 16px;
  display: flex;
- gap: 16px;
+ gap: 12px;
  align-items: center;
  flex-wrap: wrap;
  flex-shrink: 0;
@@ -221,38 +286,41 @@
 
  .toolbar-section {
  display: flex;
- gap: 8px;
+ gap: 6px;
  align-items: center;
  border-right: 1px solid var(--border);
- padding-right: 16px;
+ padding-right: 12px;
  }
 
  .toolbar-section:last-child {
  border-right: none;
+ padding-right: 0;
  }
 
  .toolbar-label {
- font-size: 12px;
- font-weight: 600;
+ font-size: 11px;
+ font-weight: 700;
  color: var(--text-secondary);
  text-transform: uppercase;
  letter-spacing: 0.5px;
+ margin-right: 2px;
  }
 
  .toolbar-btn {
- padding: 8px 14px;
+ padding: 7px 12px;
  background: var(--surface-2);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
- color: var(--text-secondary);
- font-size: 13px;
+ color: var(--text-primary);
+ font-size: 12px;
  font-weight: 600;
  cursor: pointer;
  transition: var(--transition);
  font-family: inherit;
- display: flex;
+ display: inline-flex;
  align-items: center;
- gap: 6px;
+ gap: 5px;
+ white-space: nowrap;
  }
 
  .toolbar-btn:hover {
@@ -267,6 +335,75 @@
  border-color: var(--accent);
  }
 
+ .toolbar-btn.fast-btn {
+ background: linear-gradient(135deg, #4f46e5, #7c3aed);
+ color: #ffffff;
+ border-color: transparent;
+ box-shadow: 0 2px 10px rgba(79, 70, 229, 0.28);
+ }
+
+ .toolbar-btn.fast-btn:hover {
+ filter: brightness(1.08);
+ transform: translateY(-1px);
+ }
+
+ .toolbar-btn.export-pptx {
+ background: #ea580c;
+ color: #ffffff;
+ border-color: #ea580c;
+ }
+
+ .toolbar-btn.export-pptx:hover {
+ background: #c2410c;
+ }
+
+ .toolbar-btn.export-pdf {
+ background: var(--accent);
+ color: #ffffff;
+ border-color: var(--accent);
+ }
+
+ .deck-title-input {
+ padding: 6px 10px;
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: var(--radius-md);
+ color: var(--text-primary);
+ font-size: 13px;
+ font-weight: 600;
+ width: 170px;
+ font-family: inherit;
+ }
+
+ .deck-title-input:focus {
+ outline: none;
+ border-color: var(--accent);
+ }
+
+ /* Speed Hint Strip */
+ .speed-hint-strip {
+ background: var(--surface-1);
+ border-bottom: 1px solid var(--border);
+ padding: 6px 16px;
+ font-size: 12px;
+ color: var(--text-secondary);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 12px;
+ flex-wrap: wrap;
+ }
+
+ .speed-hint-strip kbd {
+ background: var(--surface-2);
+ border: 1px solid var(--border);
+ border-radius: 4px;
+ padding: 1px 5px;
+ font-size: 11px;
+ font-family: inherit;
+ color: var(--text-primary);
+ }
+
  /* Canvas Area */
  .canvas-container {
  flex: 1;
@@ -274,87 +411,57 @@
  align-items: center;
  justify-content: center;
  overflow: auto;
- padding: 24px;
+ padding: 20px;
  background: var(--bg);
+ position: relative;
  }
 
  #slideCanvas {
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
  background: white;
- box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+ box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
  position: relative;
- max-width: 90%;
- max-height: 90%;
- cursor: crosshair;
- }
-
- /* Canvas Elements */
- .slide-element {
- position: absolute;
- border: 1px dashed rgba(129, 140, 248, 0.3);
- border-radius: 4px;
- padding: 8px;
- resize: none;
- font-family: inherit;
- cursor: move;
- user-select: text;
- }
-
- .slide-element:focus,
- .slide-element.selected {
- border-color: var(--accent);
- box-shadow: 0 0 0 2px var(--accent-subtle);
- outline: none;
- }
-
- .slide-element-text {
- background: transparent;
- border: none;
- color: var(--text-primary);
- overflow: visible;
- white-space: pre-wrap;
- word-wrap: break-word;
- line-height: 1.4;
- }
-
- .slide-element-image {
- object-fit: contain;
- background: transparent;
- border: 1px solid var(--border);
+ max-width: 96%;
+ max-height: 92%;
+ cursor: default;
  }
 
  /* RIGHT PANEL - PROPERTIES */
  .properties-panel {
- width: 280px;
+ width: 290px;
  background: var(--surface-1);
  border-left: 1px solid var(--border);
  display: flex;
  flex-direction: column;
  overflow: hidden;
+ flex-shrink: 0;
  }
 
  .properties-header {
- padding: 16px;
+ padding: 14px 16px;
  border-bottom: 1px solid var(--border);
  flex-shrink: 0;
  }
 
  .properties-header h3 {
- font-size: 14px;
- font-weight: 600;
+ font-size: 13px;
+ font-weight: 700;
  color: var(--text-primary);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin: 0;
  }
 
  .properties-content {
  flex: 1;
  overflow-y: auto;
- padding: 16px;
+ padding: 14px 16px;
  }
 
  .property-group {
- margin-bottom: 20px;
- padding-bottom: 16px;
+ margin-bottom: 18px;
+ padding-bottom: 14px;
  border-bottom: 1px solid var(--border);
  }
 
@@ -363,8 +470,8 @@
  }
 
  .property-label {
- font-size: 12px;
- font-weight: 600;
+ font-size: 11px;
+ font-weight: 700;
  color: var(--text-secondary);
  text-transform: uppercase;
  letter-spacing: 0.5px;
@@ -374,7 +481,7 @@
 
  .property-input {
  width: 100%;
- padding: 8px 12px;
+ padding: 8px 10px;
  background: var(--bg);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
@@ -385,7 +492,7 @@
  }
 
  #textContent {
- min-height: 90px;
+ min-height: 84px;
  resize: vertical;
  }
 
@@ -397,7 +504,7 @@
 
  .property-select {
  width: 100%;
- padding: 8px 12px;
+ padding: 8px 10px;
  background: var(--bg);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
@@ -408,7 +515,7 @@
 
  .property-color {
  width: 100%;
- height: 40px;
+ height: 36px;
  padding: 2px;
  background: var(--bg);
  border: 1px solid var(--border);
@@ -419,47 +526,93 @@
  .property-checkbox {
  display: flex;
  align-items: center;
- gap: 8px;
+ gap: 6px;
  cursor: pointer;
  }
 
  .property-checkbox input[type="checkbox"] {
- width: 16px;
- height: 16px;
+ width: 15px;
+ height: 15px;
  cursor: pointer;
  accent-color: var(--accent);
  }
 
  .property-checkbox label {
  cursor: pointer;
- font-size: 13px;
+ font-size: 12px;
  color: var(--text-primary);
  }
 
- /* Template Grid */
+ /* Theme Swatches */
+ .theme-swatches-grid {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 6px;
+ }
+
+ .theme-swatch-btn {
+ display: flex;
+ align-items: center;
+ gap: 7px;
+ padding: 7px 8px;
+ border-radius: 8px;
+ border: 1px solid var(--border);
+ background: var(--bg);
+ color: var(--text-primary);
+ font-size: 11px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: var(--transition);
+ font-family: inherit;
+ text-align: left;
+ }
+
+ .theme-swatch-btn:hover {
+ border-color: var(--accent);
+ transform: translateY(-1px);
+ }
+
+ .theme-swatch-dot {
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ flex-shrink: 0;
+ border: 1px solid rgba(255,255,255,0.25);
+ }
+
+ /* Template Grid & Quick Deck Cards */
  .template-grid {
  display: grid;
- grid-template-columns: 1fr;
- gap: 10px;
+ grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+ gap: 12px;
  }
 
  .template-item {
- padding: 10px;
+ padding: 14px;
  background: var(--bg);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
  cursor: pointer;
  transition: var(--transition);
- text-align: center;
- font-size: 12px;
+ text-align: left;
+ font-size: 13px;
  font-weight: 600;
- color: var(--text-secondary);
+ color: var(--text-primary);
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
  }
 
  .template-item:hover {
  border-color: var(--accent);
  background: var(--accent-subtle);
- color: var(--text-primary);
+ transform: translateY(-2px);
+ }
+
+ .template-item-meta {
+ font-size: 11px;
+ font-weight: 500;
+ color: var(--text-secondary);
  }
 
  /* MODAL */
@@ -470,10 +623,11 @@
  left: 0;
  right: 0;
  bottom: 0;
- background: rgba(0, 0, 0, 0.6);
+ background: rgba(0, 0, 0, 0.65);
  z-index: 2000;
  align-items: center;
  justify-content: center;
+ padding: 16px;
  }
 
  .modal-overlay.active {
@@ -484,17 +638,17 @@
  background: var(--surface-1);
  border: 1px solid var(--border);
  border-radius: var(--radius-lg);
- max-width: 500px;
- width: 90%;
- max-height: 80vh;
+ max-width: 680px;
+ width: 100%;
+ max-height: 88vh;
  overflow-y: auto;
- box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
- animation: slideIn 0.3s ease;
+ box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+ animation: slideIn 0.22s ease;
  }
 
  @keyframes slideIn {
  from {
- transform: translateY(-20px);
+ transform: translateY(-14px);
  opacity: 0;
  }
  to {
@@ -504,7 +658,7 @@
  }
 
  .modal-header {
- padding: 20px;
+ padding: 18px 20px;
  border-bottom: 1px solid var(--border);
  display: flex;
  justify-content: space-between;
@@ -543,19 +697,20 @@
  }
 
  .modal-footer {
- padding: 16px 20px;
+ padding: 14px 20px;
  border-top: 1px solid var(--border);
  display: flex;
- gap: 12px;
+ gap: 10px;
  justify-content: flex-end;
+ flex-wrap: wrap;
  }
 
  /* Buttons */
  .btn {
- padding: 10px 18px;
+ padding: 9px 16px;
  border: none;
  border-radius: var(--radius-md);
- font-size: 14px;
+ font-size: 13px;
  font-weight: 600;
  cursor: pointer;
  transition: var(--transition);
@@ -590,83 +745,68 @@
  color: white;
  }
 
- .btn-danger:hover {
- background: #f05252;
- }
-
- /* Slide Counter */
- .slide-counter {
- position: absolute;
- top: 12px;
- left: 20px;
- background: var(--surface-1);
- border: 1px solid var(--border);
- border-radius: var(--radius-md);
- padding: 8px 16px;
- font-size: 12px;
- font-weight: 600;
- color: var(--text-secondary);
- }
-
  /* Responsive Design */
  @media (max-width: 1200px) {
  .slides-panel {
- width: 200px;
+ width: 210px;
  }
-
  .properties-panel {
- width: 240px;
+ width: 250px;
  }
  }
 
  @media (max-width: 900px) {
  .presentation-editor {
  flex-direction: column;
+ height: auto;
+ min-height: calc(100vh - 76px);
+ overflow: visible;
  }
 
  .slides-panel,
  .properties-panel {
  width: 100%;
- max-height: 150px;
+ max-height: none;
+ border-right: none;
+ border-left: none;
+ border-bottom: 1px solid var(--border);
  }
 
- .editor-panel {
- flex: 1;
- }
-
- .slides-container,
- .properties-content {
+ .slides-container {
  display: flex;
  flex-direction: row;
  overflow-x: auto;
  overflow-y: hidden;
+ padding: 10px;
  }
 
  .slide-thumbnail {
- aspect-ratio: auto;
- min-width: 120px;
- width: 120px;
+ aspect-ratio: 16 / 9;
+ min-width: 130px;
+ width: 130px;
+ }
+
+ .editor-panel {
+ min-height: 360px;
  }
 
  #slideCanvas {
- max-width: 95%;
- max-height: 80vh;
+ width: 100% !important;
+ height: auto !important;
+ max-width: 100%;
  }
  }
 
  @media (max-width: 600px) {
- .presentation-editor {
- height: calc(100vh - 80px);
- }
-
  .editor-toolbar {
- padding: 8px 12px;
- gap: 8px;
- overflow-x: auto;
+ padding: 8px 10px;
+ gap: 6px;
  }
 
  .toolbar-section {
- padding-right: 12px;
+ padding-right: 8px;
+ border-right: none;
+ flex-wrap: wrap;
  }
 
  .toolbar-label {
@@ -674,12 +814,20 @@
  }
 
  .toolbar-btn {
- padding: 6px 10px;
- font-size: 12px;
+ padding: 6px 9px;
+ font-size: 11px;
+ }
+
+ .deck-title-input {
+ width: 100%;
  }
 
  .canvas-container {
- padding: 12px;
+ padding: 10px;
+ }
+
+ .speed-hint-strip {
+ display: none;
  }
  }
 
@@ -687,6 +835,7 @@
  .slides-container::-webkit-scrollbar,
  .properties-content::-webkit-scrollbar {
  width: 6px;
+ height: 6px;
  }
 
  .slides-container::-webkit-scrollbar-track,
@@ -699,19 +848,7 @@
  background: var(--surface-2);
  border-radius: 3px;
  }
-
- .slides-container::-webkit-scrollbar-thumb:hover,
- .properties-content::-webkit-scrollbar-thumb:hover {
- background: var(--surface-3);
- }
-
- /* Add Text Icon */
- .icon {
- font-size: 14px;
- line-height: 1;
- }
  </style><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Free Presentation Maker Online","url":"https://onlinepdfpro.com/presentation-maker","description":"Create presentations and slides for free directly in your web browser. Export as PPTX or PDF when your design is ready.","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-
 
  <!-- Theme Prevention (FOIT) -->
  <script>
@@ -735,32 +872,35 @@
  <span class="logo-text">OnlinePDFPro</span>
  </a>
  <nav class="nav" id="nav">
-                <a class="nav-link" href="/tools">PDF Tools</a>
-                <a class="nav-link" href="/study-materials">Study Materials</a>
-            </nav>
- <div class="header-actions">
- 
- </div>
+ <a class="nav-link" href="/tools">PDF Tools</a>
+ <a class="nav-link" href="/study-materials">Study Materials</a>
+ </nav>
+ <div class="header-actions"></div>
  </div>
  </header>
 
  <main id="main">
-
  <h1 class="visually-hidden">Presentation Maker Online</h1>
-
-<!-- Slide Counter -->
- <div class="slide-counter" id="slideCounter">Slide 1 of 1</div>
 
  <!-- Editor -->
  <div class="presentation-editor">
- <!-- LEFT PANEL: SLIDE THUMBNAILS -->
+ <!-- LEFT PANEL: SLIDE THUMBNAILS & QUICK LAYOUTS -->
  <div class="slides-panel">
  <div class="slides-header">
+ <div class="slides-header-top">
  <h3>Slides</h3>
+ <div class="slide-counter" id="slideCounter">Slide 1 of 1</div>
+ </div>
  <div class="slides-actions">
- <button class="slide-action-btn" id="addSlideBtn" title="Add new slide">+</button>
- <button class="slide-action-btn" id="duplicateSlideBtn" title="Duplicate current slide"></button>
- <button class="slide-action-btn" id="deleteSlideBtn" title="Delete current slide"></button>
+ <button class="slide-action-btn primary-action" id="addSlideBtn" title="Add new slide (Alt+N)">+ Slide</button>
+ <button class="slide-action-btn" id="duplicateSlideBtn" title="Duplicate current slide (Ctrl+D)">Copy</button>
+ <button class="slide-action-btn" id="deleteSlideBtn" title="Delete current slide">Delete</button>
+ </div>
+ <div class="quick-layouts-bar" aria-label="1-Click Slide Layouts">
+ <button type="button" class="quick-layout-btn" data-layout="bullets" title="Add Title + Bullet Points slide">+ Bullets Slide</button>
+ <button type="button" class="quick-layout-btn" data-layout="two-col" title="Add Two-Column Comparison slide">+ 2-Column</button>
+ <button type="button" class="quick-layout-btn" data-layout="metric" title="Add Big Metric / Key Takeaway slide">+ Key Metric</button>
+ <button type="button" class="quick-layout-btn" data-layout="section" title="Add Section Divider slide">+ Section</button>
  </div>
  </div>
  <div class="slides-container" id="slidesContainer"></div>
@@ -770,30 +910,37 @@
  <div class="editor-panel">
  <div class="editor-toolbar">
  <div class="toolbar-section">
+ <input type="text" id="presentationTitleInput" class="deck-title-input" value="My Presentation" aria-label="Presentation title" placeholder="Presentation Title">
+ <button class="toolbar-btn fast-btn" id="quickDeckBtn" title="Generate a full multi-slide deck from an outline or starter pack">⚡ Quick Deck</button>
+ <button class="toolbar-btn" id="templateBtn" title="Choose starter decks & slide templates">Starter Decks</button>
+ </div>
+
+ <div class="toolbar-section">
+ <span class="toolbar-label">Insert</span>
+ <button class="toolbar-btn" id="addTextBtn" title="Add heading or text box">+ Text</button>
+ <button class="toolbar-btn" id="addBulletsBtn" title="Add formatted bullet list">+ Bullet List</button>
+ <button class="toolbar-btn" id="addImageBtn" title="Upload image to slide">+ Image</button>
+ </div>
+
+ <div class="toolbar-section">
  <span class="toolbar-label">Edit</span>
  <button class="toolbar-btn" id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button>
  <button class="toolbar-btn" id="redoBtn" title="Redo (Ctrl+Y)">↷ Redo</button>
- </div>
-
- <div class="toolbar-section">
- <span class="toolbar-label">Add</span>
- <button class="toolbar-btn" id="addTextBtn" title="Add text box"> Text</button>
- <button class="toolbar-btn" id="addImageBtn" title="Add image"> Image</button>
- <button class="toolbar-btn" id="templateBtn" title="Use template"> Templates</button>
- </div>
-
- <div class="toolbar-section">
- <span class="toolbar-label">Element</span>
- <button class="toolbar-btn" id="deleteElementBtn" title="Delete selected element"></button>
- <button class="toolbar-btn" id="bringForwardBtn" title="Bring forward">⬆️</button>
- <button class="toolbar-btn" id="sendBackwardBtn" title="Send backward">⬇️</button>
+ <button class="toolbar-btn" id="deleteElementBtn" title="Delete selected element (Delete)">Delete</button>
+ <button class="toolbar-btn" id="bringForwardBtn" title="Bring element forward">↑ Front</button>
+ <button class="toolbar-btn" id="sendBackwardBtn" title="Send element backward">↓ Back</button>
  </div>
 
  <div class="toolbar-section">
  <span class="toolbar-label">Export</span>
- <button class="toolbar-btn" id="exportPptxBtn" title="Export as PPTX"> PPTX</button>
- <button class="toolbar-btn" id="exportPdfBtn" title="Export as PDF"> PDF</button>
+ <button class="toolbar-btn export-pptx" id="exportPptxBtn" title="Download PowerPoint (.pptx) immediately">⬇ PPTX</button>
+ <button class="toolbar-btn export-pdf" id="exportPdfBtn" title="Download PDF Slides (.pdf) immediately">⬇ PDF</button>
  </div>
+ </div>
+
+ <div class="speed-hint-strip">
+ <span><strong>Fast Mode:</strong> Click any text on the slide to type directly, or click <strong>⚡ Quick Deck</strong> to turn notes into a full presentation in 1 click.</span>
+ <span><kbd>Double-Click</kbd> Edit Text · <kbd>Ctrl+D</kbd> Duplicate · <kbd>Del</kbd> Remove</span>
  </div>
 
  <div class="canvas-container">
@@ -801,99 +948,107 @@
  </div>
  </div>
 
- <!-- RIGHT PANEL: PROPERTIES -->
+ <!-- RIGHT PANEL: PROPERTIES & 1-CLICK THEMES -->
  <div class="properties-panel">
  <div class="properties-header">
- <h3>Slide Properties</h3>
+ <h3>Theme &amp; Properties</h3>
  </div>
  <div class="properties-content">
+ <!-- 1-Click Deck Themes -->
  <div class="property-group">
- <label class="property-label">Background Color</label>
+ <label class="property-label">1-Click Deck Theme (All Slides)</label>
+ <div class="theme-swatches-grid" id="themePresetsGrid">
+ <button type="button" class="theme-swatch-btn" data-theme-preset="indigo">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #1e1b4b, #4338ca);"></span>
+ <span>Midnight Indigo</span>
+ </button>
+ <button type="button" class="theme-swatch-btn" data-theme-preset="clean">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #f8fafc, #3b82f6);"></span>
+ <span>Academic Light</span>
+ </button>
+ <button type="button" class="theme-swatch-btn" data-theme-preset="obsidian">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #0b0c10, #d4af37);"></span>
+ <span>Obsidian Gold</span>
+ </button>
+ <button type="button" class="theme-swatch-btn" data-theme-preset="emerald">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #064e3b, #10b981);"></span>
+ <span>Emerald Tech</span>
+ </button>
+ <button type="button" class="theme-swatch-btn" data-theme-preset="executive">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #0f172a, #38bdf8);"></span>
+ <span>Executive Slate</span>
+ </button>
+ <button type="button" class="theme-swatch-btn" data-theme-preset="crimson">
+ <span class="theme-swatch-dot" style="background: linear-gradient(135deg, #450a0a, #f97316);"></span>
+ <span>Sunset Warmth</span>
+ </button>
+ </div>
+ </div>
+
+ <div class="property-group">
+ <label class="property-label" for="bgColor">Slide Background Color</label>
  <input type="color" id="bgColor" class="property-color" value="#ffffff">
  </div>
 
  <div class="property-group">
- <label class="property-label">Background Gradient</label>
+ <label class="property-label" for="gradientType">Background Gradient</label>
  <select id="gradientType" class="property-select">
- <option value="none">None</option>
- <option value="linear">Linear</option>
- <option value="radial">Radial</option>
+ <option value="none">None (Solid Color)</option>
+ <option value="linear">Linear Gradient</option>
+ <option value="radial">Radial Gradient</option>
  </select>
  <div id="gradientControls" style="display: none; gap: 8px; margin-top: 8px;">
  <div style="flex: 1;">
- <label class="property-label" style="margin-bottom: 4px;">Color 1</label>
+ <label class="property-label" for="gradientColor1" style="margin-bottom: 4px;">Color 1</label>
  <input type="color" id="gradientColor1" class="property-color" value="#3b82f6">
  </div>
  <div style="flex: 1;">
- <label class="property-label" style="margin-bottom: 4px;">Color 2</label>
+ <label class="property-label" for="gradientColor2" style="margin-bottom: 4px;">Color 2</label>
  <input type="color" id="gradientColor2" class="property-color" value="#8b5cf6">
  </div>
  </div>
  </div>
 
  <div id="elementProperties" style="display: none;">
- <!-- Position & Size -->
- <div class="property-group">
- <label class="property-label">Position & Size</label>
- <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
- <div>
- <label class="property-label" style="margin-bottom: 4px;">X</label>
- <input type="number" id="elemX" class="property-input" value="0">
- </div>
- <div>
- <label class="property-label" style="margin-bottom: 4px;">Y</label>
- <input type="number" id="elemY" class="property-input" value="0">
- </div>
- <div>
- <label class="property-label" style="margin-bottom: 4px;">Width</label>
- <input type="number" id="elemWidth" class="property-input" value="0">
- </div>
- <div>
- <label class="property-label" style="margin-bottom: 4px;">Height</label>
- <input type="number" id="elemHeight" class="property-input" value="0">
- </div>
- </div>
- </div>
-
- <!-- Text Properties -->
+ <!-- Text Properties Put First for Speed -->
  <div class="property-group" id="textPropertiesGroup">
- <label class="property-label">Text Properties</label>
+ <label class="property-label">Selected Text</label>
  <div style="margin-bottom: 8px;">
- <label class="property-label" style="margin-bottom: 4px;">Text</label>
- <textarea id="textContent" class="property-input" rows="4" placeholder="Type your text..."></textarea>
+ <label class="property-label" for="textContent" style="margin-bottom: 4px;">Content</label>
+ <textarea id="textContent" class="property-input" rows="4" placeholder="Type your slide text..."></textarea>
  </div>
  <div style="margin-bottom: 8px;">
- <label class="property-label" style="margin-bottom: 4px;">Font Family</label>
+ <label class="property-label" for="fontFamily" style="margin-bottom: 4px;">Font Family</label>
  <select id="fontFamily" class="property-select">
- <option value="Arial">Arial</option>
- <option value="Helvetica">Helvetica</option>
- <option value="Times New Roman">Times New Roman</option>
- <option value="Courier New">Courier New</option>
- <option value="Georgia">Georgia</option>
- <option value="Trebuchet MS">Trebuchet MS</option>
- <option value="Verdana">Verdana</option>
- <option value="Comic Sans MS">Comic Sans MS</option>
  <option value="Inter">Inter</option>
  <option value="Poppins">Poppins</option>
+ <option value="Montserrat">Montserrat</option>
  <option value="Roboto">Roboto</option>
  <option value="Open Sans">Open Sans</option>
  <option value="Playfair Display">Playfair Display</option>
  <option value="Merriweather">Merriweather</option>
+ <option value="Arial">Arial</option>
+ <option value="Helvetica">Helvetica</option>
+ <option value="Georgia">Georgia</option>
+ <option value="Times New Roman">Times New Roman</option>
+ <option value="Courier New">Courier New</option>
+ <option value="Trebuchet MS">Trebuchet MS</option>
+ <option value="Verdana">Verdana</option>
  </select>
  </div>
 
  <div style="display: flex; gap: 8px; margin-bottom: 8px;">
  <div style="flex: 1;">
- <label class="property-label" style="margin-bottom: 4px;">Size</label>
- <input type="number" id="fontSize" class="property-input" min="8" max="120" value="16">
+ <label class="property-label" for="fontSize" style="margin-bottom: 4px;">Size</label>
+ <input type="number" id="fontSize" class="property-input" min="8" max="120" value="24">
  </div>
  <div style="flex: 1;">
- <label class="property-label" style="margin-bottom: 4px;">Color</label>
- <input type="color" id="textColor" class="property-color" value="#000000">
+ <label class="property-label" for="textColor" style="margin-bottom: 4px;">Color</label>
+ <input type="color" id="textColor" class="property-color" value="#0f172a">
  </div>
  </div>
 
- <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+ <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
  <div class="property-checkbox">
  <input type="checkbox" id="boldCheckbox">
  <label for="boldCheckbox">Bold</label>
@@ -913,9 +1068,32 @@
  <div class="property-group" id="textAlignGroup">
  <label class="property-label">Text Alignment</label>
  <div style="display: flex; gap: 4px;">
- <button class="toolbar-btn align-btn active" data-align="left" onclick="setTextAlignment('left')" title="Align Left" style="flex:1;justify-content:center;">⬅</button>
- <button class="toolbar-btn align-btn" data-align="center" onclick="setTextAlignment('center')" title="Center" style="flex:1;justify-content:center;">⬛</button>
- <button class="toolbar-btn align-btn" data-align="right" onclick="setTextAlignment('right')" title="Align Right" style="flex:1;justify-content:center;">→</button>
+ <button type="button" class="toolbar-btn align-btn active" data-align="left" onclick="setTextAlignment('left')" title="Align Left" style="flex:1;justify-content:center;">Left</button>
+ <button type="button" class="toolbar-btn align-btn" data-align="center" onclick="setTextAlignment('center')" title="Center" style="flex:1;justify-content:center;">Center</button>
+ <button type="button" class="toolbar-btn align-btn" data-align="right" onclick="setTextAlignment('right')" title="Align Right" style="flex:1;justify-content:center;">Right</button>
+ </div>
+ </div>
+
+ <!-- Position & Size -->
+ <div class="property-group">
+ <label class="property-label">Position &amp; Size</label>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+ <div>
+ <label class="property-label" for="elemX" style="margin-bottom: 4px;">X</label>
+ <input type="number" id="elemX" class="property-input" value="0">
+ </div>
+ <div>
+ <label class="property-label" for="elemY" style="margin-bottom: 4px;">Y</label>
+ <input type="number" id="elemY" class="property-input" value="0">
+ </div>
+ <div>
+ <label class="property-label" for="elemWidth" style="margin-bottom: 4px;">Width</label>
+ <input type="number" id="elemWidth" class="property-input" value="0">
+ </div>
+ <div>
+ <label class="property-label" for="elemHeight" style="margin-bottom: 4px;">Height</label>
+ <input type="number" id="elemHeight" class="property-input" value="0">
+ </div>
  </div>
  </div>
  </div>
@@ -925,14 +1103,81 @@
 
 </main>
 
- <!-- Template Modal -->
+ <!-- ⚡ Quick Deck Generator Modal (Paste Notes -> Full Presentation) -->
+ <div class="modal-overlay" id="quickDeckModal">
+ <div class="modal">
+ <div class="modal-header">
+ <h2>⚡ Quick Deck Studio — Build Slides in Seconds</h2>
+ <button class="modal-close" onclick="closeModal('quickDeckModal')" aria-label="Close">&times;</button>
+ </div>
+ <div class="modal-body">
+ <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.5;">
+ Paste your topic outline, lecture notes, or bullet points below. Separate each slide with a blank line (or start slide titles with <code>#</code>). The first line of each block becomes the slide heading, and the rest become clean bullet points.
+ </p>
+
+ <div class="property-group" style="margin-bottom: 14px; padding-bottom: 14px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 8px; flex-wrap: wrap;">
+ <label class="property-label" for="outlineInput" style="margin-bottom: 0;">Slide Outline / Notes</label>
+ <button type="button" class="btn btn-secondary" id="loadSampleOutlineBtn" style="padding: 4px 10px; font-size: 11px;">Load Sample Seminar Outline</button>
+ </div>
+ <textarea id="outlineInput" class="property-input" rows="8" style="min-height: 165px; font-family: inherit; line-height: 1.5;" placeholder="# Database Management Systems (DBMS)
+Complete Revision &amp; Architecture Overview
+
+# Why DBMS Over File Systems?
+Eliminates data redundancy and inconsistency
+Supports concurrent multi-user ACID transactions
+Centralized security, integrity constraints, and backup recovery
+
+# Three-Schema Architecture
+External Level: Custom user views and API endpoints
+Conceptual Level: Logical schema, entities, and relationships
+Physical Level: B+ Tree indexes, pages, and disk storage blocks
+
+# Normalization &amp; Normal Forms
+1NF: Atomic column values and repeating group removal
+2NF &amp; 3NF: Eliminate partial and transitive functional dependencies
+BCNF: Every determinant is a candidate superkey"></textarea>
+ </div>
+
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+ <div>
+ <label class="property-label" for="quickDeckTheme">Visual Theme</label>
+ <select id="quickDeckTheme" class="property-select">
+ <option value="indigo">Midnight Indigo (Modern Tech)</option>
+ <option value="clean">Academic Light (Clean &amp; Printable)</option>
+ <option value="obsidian">Obsidian Gold (Executive Luxury)</option>
+ <option value="emerald">Emerald Tech (Product &amp; Growth)</option>
+ <option value="executive">Executive Slate (Corporate Navy)</option>
+ <option value="crimson">Sunset Warmth (Creative Pitch)</option>
+ </select>
+ </div>
+ <div>
+ <label class="property-label" for="quickDeckMode">Generation Mode</label>
+ <select id="quickDeckMode" class="property-select">
+ <option value="replace">Replace current slides with new deck</option>
+ <option value="append">Append to existing slides</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ <div class="modal-footer">
+ <button type="button" class="btn btn-secondary" onclick="closeModal('quickDeckModal')">Cancel</button>
+ <button type="button" class="btn btn-primary" id="generateDeckBtn">⚡ Generate Full Presentation</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Starter Decks & Templates Modal -->
  <div class="modal-overlay" id="templateModal">
  <div class="modal">
  <div class="modal-header">
- <h2>Choose Template</h2>
- <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
+ <h2>1-Click Multi-Slide Starter Decks &amp; Templates</h2>
+ <button class="modal-close" onclick="closeModal('templateModal')" aria-label="Close">&times;</button>
  </div>
  <div class="modal-body">
+ <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
+ Choose a complete multi-slide starter deck (5–6 structured slides) or insert a single styled slide template.
+ </p>
  <div class="template-grid" id="templateGrid"></div>
  </div>
  </div>
@@ -940,20 +1185,20 @@
 
  <!-- Export Modal -->
  <div class="modal-overlay" id="exportModal">
- <div class="modal">
+ <div class="modal" style="max-width: 440px;">
  <div class="modal-header">
  <h2>Export Presentation</h2>
- <button class="modal-close" onclick="closeModal('exportModal')">&times;</button>
+ <button class="modal-close" onclick="closeModal('exportModal')" aria-label="Close">&times;</button>
  </div>
  <div class="modal-body">
- <div class="property-group">
- <label class="property-label">Presentation Name</label>
+ <div class="property-group" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+ <label class="property-label" for="exportName">Presentation File Name</label>
  <input type="text" id="exportName" class="property-input" placeholder="My Presentation" value="My Presentation">
  </div>
  </div>
  <div class="modal-footer">
  <button class="btn btn-secondary" onclick="closeModal('exportModal')">Cancel</button>
- <button class="btn btn-primary" id="confirmExportBtn">Export</button>
+ <button class="btn btn-primary" id="confirmExportBtn">Download Now</button>
  </div>
  </div>
  </div>

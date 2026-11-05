@@ -1,6 +1,0 @@
-{
-  "name": "OnlinePDFPro",
-  "description": "OnlinePDFPro — privacy-conscious web toolkit for working with PDFs, images, documents, QR codes, and productivity tasks directly in your browser.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

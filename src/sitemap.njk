@@ -10,8 +10,7 @@ permalink: /sitemap.xml
   { url: '/dmca', priority: '0.5', changefreq: 'yearly' },
   { url: '/privacy', priority: '0.5', changefreq: 'yearly' },
   { url: '/terms', priority: '0.5', changefreq: 'yearly' },
-  { url: '/study-materials', priority: '0.9', changefreq: 'weekly' },
-  { url: '/blog', priority: '0.7', changefreq: 'weekly' }
+  { url: '/study-materials', priority: '0.9', changefreq: 'weekly' }
 ] -%}
 {%- for page in staticPages %}
   <url>
@@ -26,13 +25,6 @@ permalink: /sitemap.xml
     <loc>https://onlinepdfpro.com{{ tool.href }}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-{%- endfor %}
-{%- for post in blogPosts %}
-  <url>
-    <loc>https://onlinepdfpro.com{{ post.url }}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
 {%- endfor %}
 {%- for id, product in storeProducts %}

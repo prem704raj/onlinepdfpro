@@ -77,7 +77,7 @@ jobs:
         run: |
           set -euo pipefail
           secret_list="$(npx --yes wrangler@4.147.0 secret list --config cf-worker/wrangler.toml)"
-          required=(GROQ_API_KEY OPENROUTER_API_KEY RAZORPAY_KEY_ID RAZORPAY_KEY_SECRET RAZORPAY_WEBHOOK_SECRET SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY TURNSTILE_SECRET_KEY CONVERSION_SIGNING_SECRET MODAL_API_TOKEN)
+          required=(GROQ_API_KEY OPENROUTER_API_KEY TURNSTILE_SECRET_KEY CONVERSION_SIGNING_SECRET MODAL_API_TOKEN)
           for name in "${required[@]}"; do
             if ! grep -q "\"name\": \"$name\"" <<<"$secret_list"; then
               echo "Missing required Cloudflare Worker secret: $name" >&2

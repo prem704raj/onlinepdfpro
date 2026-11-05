@@ -101,14 +101,11 @@ test('protected tools use the public Turnstile widget key observed in the accoun
     }
 });
 
-test('the clean sitemap contains real canonical pages, all 19 preserved blog posts, and no empty product detail', () => {
+test('the clean sitemap contains real canonical pages and no empty product detail', () => {
     const urls = [...fs.readFileSync(path.join(site, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
     assert.equal(new Set(urls).size, urls.length);
     assert.ok(!urls.some(url => url.includes('.html') || url.includes('viewstudymaterials')));
     assert.ok(urls.includes('https://onlinepdfpro.com/products/dbms-notes'));
-    const posts = files.filter(file => file.startsWith('blog/') && file.endsWith('/index.html'));
-    assert.equal(posts.length, 19);
-    for (const file of posts) assert.ok(urls.includes(`https://onlinepdfpro.com${cleanPath(file)}`), file);
     for (const url of urls) {
         const pathname = new URL(url).pathname;
         const file = pathname.endsWith('/') ? `${pathname}index.html` : `${pathname}.html`;

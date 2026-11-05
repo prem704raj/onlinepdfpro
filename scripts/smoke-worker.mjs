@@ -6,8 +6,7 @@ import { pathToFileURL } from 'node:url';
 
 export const requiredRoutes = [
     '/ai/chat', '/ai/vision', '/convert/token', '/convert/pdf-to-word',
-    '/convert/word-to-pdf', '/store/create-order', '/store/verify-payment',
-    '/store/razorpay-webhook', '/store/download', '/store/my-purchases'
+    '/convert/word-to-pdf'
 ];
 
 export async function smokeWorker({ baseUrl, release, request = fetch,
@@ -58,10 +57,6 @@ export async function smokeWorker({ baseUrl, release, request = fetch,
         const result = await probe(route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
         assert.equal(result.response.status, 403, `${route}: unauthenticated work must be rejected`);
         assert.equal(typeof result.body.error, 'string', `${route}: usable error required`);
-    }
-    for (const route of ['/store/create-order', '/store/verify-payment', '/store/download', '/store/my-purchases']) {
-        const result = await probe(route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-        assert.equal(result.response.status, 401, `${route}: login must be required`);
     }
     const hostile = await probe('/ai/chat', { method: 'POST', headers: {
         Origin: 'https://not-onlinepdfpro.example', 'Content-Type': 'application/json'

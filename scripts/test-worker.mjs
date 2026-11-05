@@ -9,7 +9,7 @@ import { waitForSiteRelease } from './wait-for-site-release.mjs';
 // Load the real ES-module handler without changing the site's CommonJS setup.
 const source = await fs.readFile(new URL('../cf-worker/pdf-api-proxy.js', import.meta.url), 'utf8');
 const { default: worker } = await import(`data:text/javascript;base64,${Buffer.from(source + '\n//# sourceURL=worker-handler-test.mjs').toString('base64')}`);
-const internal = await import(`data:text/javascript;base64,${Buffer.from(source + '\nexport { readBoundedBytes, readJsonRequest, razorpayRequest, handleConversion };\n//# sourceURL=worker-internals-test.mjs').toString('base64')}`);
+const internal = await import(`data:text/javascript;base64,${Buffer.from(source + '\nexport { readBoundedBytes, readJsonRequest, handleConversion };\n//# sourceURL=worker-internals-test.mjs').toString('base64')}`);
 const limiter = { async limit() { return { success: true }; } };
 
 test('frontend readiness requires the exact release after stale or unavailable responses', async () => {
@@ -91,7 +91,7 @@ test('stalled response bodies respect aborts and deadlines after headers', async
     assert.equal(cancelled, 2);
 });
 
-test('payment and conversion deadlines stay active during response-body consumption', async () => {
+test('conversion deadlines stay active during response-body consumption', async () => {
     const realFetch = globalThis.fetch, realSetTimeout = globalThis.setTimeout;
     const signals = [];
     globalThis.setTimeout = (callback, ms, ...args) => realSetTimeout(callback, ms >= 15000 ? 5 : ms, ...args);
@@ -102,91 +102,12 @@ test('payment and conversion deadlines stay active during response-body consumpt
         } }));
     };
     try {
-        await assert.rejects(internal.razorpayRequest(env, 'orders/order_fixture'), { name: 'AbortError' });
         const result = await internal.handleConversion(new Request('https://example.test', { method: 'POST', body: '%PDF-1.7\n',
             headers: { 'content-type': 'application/pdf' } }), env, '/convert/pdf-to-word', {});
         assert.equal(result.status, 502);
-        assert.equal(signals.length, 2);
+        assert.equal(signals.length, 1);
         assert.ok(signals.every(signal => signal?.aborted));
     } finally { globalThis.fetch = realFetch; globalThis.setTimeout = realSetTimeout; }
-});
-
-async function refundWebhook(event, responses, payload = { payment: { entity: { id: 'pay_fixture', order_id: 'order_fixture' } } }) {
-    const originalFetch = globalThis.fetch;
-    const queries = [];
-    globalThis.fetch = async (url, options) => {
-        queries.push({ url: String(url), ...options });
-        const response = responses.shift();
-        assert.ok(response, 'No unexpected database request');
-        return Response.json(response.data, { status: response.status || 200 });
-    };
-    try {
-        const raw = JSON.stringify({ event, payload });
-        const secret = 'local-webhook-test-secret';
-        const response = await request('/store/razorpay-webhook', { method: 'POST', body: raw,
-            headers: { 'X-Razorpay-Signature': createHmac('sha256', secret).update(raw).digest('hex') }
-        }, { ...env, RAZORPAY_WEBHOOK_SECRET: secret });
-        return { status: response.status, body: await response.json(), queries };
-    } finally { globalThis.fetch = originalFetch; }
-}
-
-for (const event of ['payment.refunded', 'refund.processed', 'refund.created', 'payment.dispute.created']) {
-    test(`${event} returns a retryable error when entitlement revocation fails`, async () => {
-        const result = await refundWebhook(event, [
-            { data: [{ id: 'local-order', status: 'paid' }] },
-            { status: 503, data: { message: 'database unavailable' } }
-        ]);
-        assert.equal(result.status, 503);
-        assert.notEqual(result.body.processed, true);
-    });
-}
-
-test('refund lookup failures and zero-row updates must not be acknowledged as processed', async () => {
-    for (const responses of [
-        [{ status: 503, data: {} }],
-        [{ data: [{ id: 'local-order', status: 'paid' }] }, { data: [] }]
-    ]) {
-        const result = await refundWebhook('payment.refunded', responses);
-        assert.equal(result.status, 503);
-        assert.notEqual(result.body.processed, true);
-    }
-});
-
-test('refund success is verified and duplicate delivery is idempotent', async () => {
-    const result = await refundWebhook('payment.refunded', [
-        { data: [{ id: 'local-order', status: 'paid' }] },
-        { data: [{ id: 'local-order', status: 'refunded' }] }
-    ]);
-    assert.equal(result.status, 200);
-    assert.equal(result.body.processed, true);
-    assert.equal(result.queries[1].method, 'PATCH');
-    assert.equal(result.queries[1].headers.Prefer, 'return=representation');
-    const duplicate = await refundWebhook('payment.refunded', [{ data: [{ id: 'local-order', status: 'refunded' }] }]);
-    assert.equal(duplicate.body.already_processed, true);
-    assert.equal(duplicate.queries.length, 1);
-});
-
-test('refund-only and dispute-only payloads resolve their payment IDs', async () => {
-    for (const payload of [{ refund: { entity: { payment_id: 'pay_fixture' } } }, { dispute: { entity: { payment_id: 'pay_fixture' } } }]) {
-        const result = await refundWebhook('refund.processed', [
-            { data: [{ razorpay_order_id: 'order_fixture' }] },
-            { data: [{ id: 'local-order', status: 'paid' }] },
-            { data: [{ id: 'local-order', status: 'refunded' }] }
-        ], payload);
-        assert.equal(result.body.processed, true);
-        assert.match(result.queries[0].url, /razorpay_payment_id=eq.pay_fixture/);
-    }
-});
-
-test('unknown authenticated refund orders are ignored, malformed IDs rejected', async () => {
-    const unknown = await refundWebhook('payment.refunded', [{ data: [] }]);
-    assert.equal(unknown.status, 200);
-    assert.equal(unknown.body.ignored, true);
-    assert.notEqual(unknown.body.processed, true);
-    const malformed = await refundWebhook('payment.refunded', [], { payment: { entity: { order_id: 'invalid' } } });
-    assert.equal(malformed.status, 400);
-    const unavailable = await refundWebhook('refund.processed', [{ status: 503, data: {} }], { refund: { entity: { payment_id: 'pay_fixture' } } });
-    assert.equal(unavailable.status, 503);
 });
 
 test('release gate accepts the real handler without calling external services', async () => {

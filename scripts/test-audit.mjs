@@ -68,64 +68,6 @@ test('compression placeholders are excluded from snippets while upload instructi
     assert.match(read('_site/tools/compress-pdf.html'), /approach your requested size as closely as possible without destroying readability/);
 });
 
-function authFixture() {
-    const ids = ['logoutBtn', 'loggedInUser', 'userDropdown', 'userDropdownName', 'loggedInAvatar', 'loggedInInitial', 'userAvatarBtn'];
-    const nodes = Object.fromEntries(ids.map(id => [id, { hidden: true, style: { display: 'none' }, addEventListener() {} }]));
-    let session = null, user = null, error = null, listener, ready;
-    const timers = [];
-    const auth = {
-        async getSession() { return { data: { session }, error }; },
-        async getUser() { return { data: { user }, error }; },
-        onAuthStateChange(callback) { listener = callback; return { data: { subscription: { unsubscribe() {} } } }; }
-    };
-    const context = vm.createContext({
-        window: { location: { origin: 'https://onlinepdfpro.com' } },
-        document: { readyState: 'loading', getElementById: id => nodes[id], addEventListener(event, callback) { if (event === 'DOMContentLoaded') ready = callback; } },
-        supabase: { createClient: () => ({ auth }) }, URL, console,
-        setTimeout: callback => timers.push(callback)
-    });
-    vm.runInContext(read('src/js/auth.js'), context);
-    return { nodes, auth, context, ready: () => ready(), set(value, failure = null) { session = value; user = value?.user || null; error = failure; },
-        event(event, value) { listener(event, value); }, async flush() { while (timers.length) timers.shift()(); await tick(); } };
-}
-const activeSession = () => ({ access_token: 'test-token', expires_at: Math.floor(Date.now() / 1000) + 3600,
-    user: { id: 'user-1', email: 'test@example.com', user_metadata: { full_name: 'Test User' } } });
-
-test('auth stays hidden for guests, expired sessions, and verification errors', async () => {
-    for (const state of [null, { ...activeSession(), expires_at: 1 }, { ...activeSession(), expires_at: undefined }]) {
-        const fixture = authFixture(); fixture.set(state); fixture.ready(); await tick();
-        assert.equal(fixture.nodes.logoutBtn.hidden, true);
-        assert.equal(fixture.nodes.logoutBtn.style.display, 'none');
-    }
-    const fixture = authFixture(); fixture.set(activeSession(), new Error('Rejected')); fixture.ready(); await tick();
-    assert.equal(fixture.nodes.logoutBtn.hidden, true);
-});
-
-test('auth reveals verified sessions, follows refresh events, and hides immediately on sign-out', async () => {
-    const fixture = authFixture(); fixture.ready(); await tick();
-    const session = activeSession(); fixture.set(session); fixture.event('SIGNED_IN', session);
-    assert.equal(fixture.nodes.logoutBtn.hidden, true, 'Remain hidden pending verification');
-    await fixture.flush();
-    assert.equal(fixture.nodes.logoutBtn.hidden, false);
-    assert.equal(fixture.nodes.logoutBtn.style.display, 'block');
-    fixture.event('TOKEN_REFRESHED', session); await fixture.flush();
-    assert.equal(fixture.nodes.logoutBtn.hidden, false);
-    fixture.nodes.userDropdown.style.display = 'block'; fixture.set(null); fixture.event('SIGNED_OUT', null);
-    assert.equal(fixture.nodes.logoutBtn.hidden, true);
-    assert.equal(fixture.nodes.loggedInUser.hidden, true);
-    assert.equal(fixture.nodes.userDropdown.style.display, 'none');
-});
-
-test('a delayed getUser response cannot reveal Sign Out after the session ends', async () => {
-    const fixture = authFixture(); fixture.set(activeSession());
-    let finish;
-    fixture.auth.getUser = () => new Promise(resolve => { finish = resolve; });
-    fixture.ready(); await tick();
-    fixture.set(null); fixture.event('SIGNED_OUT', null);
-    finish({ data: { user: activeSession().user } }); await tick();
-    assert.equal(fixture.nodes.logoutBtn.hidden, true);
-});
-
 function workerFixture() {
     const origin = 'https://onlinepdfpro.com', handlers = {}, entries = new Map();
     let offline = false;

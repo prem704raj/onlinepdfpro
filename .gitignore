@@ -62,6 +62,9 @@ dist/
 .audit/
 
 .implementation-review/
+.agents/
+
+
 
 # AI Studio artifacts
 .aistudio/

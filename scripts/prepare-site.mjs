@@ -190,8 +190,6 @@ export async function prepareSite() {
     const worker = path.join(site, 'sw.js');
     const pageRoutes = Object.fromEntries([...routes, ...aliases]);
     await fs.writeFile(worker, (await fs.readFile(worker, 'utf8')).replace(/^const PAGE_ROUTES = .*;$/m, `const PAGE_ROUTES = ${JSON.stringify(pageRoutes)};`));
-    const feed = path.join(site, 'feed.xml');
-    await fs.writeFile(feed, (await fs.readFile(feed, 'utf8')).replaceAll(`${origin}/blog.html`, `${origin}/blog`));
     console.log(`Prepared canonical navigation, shared CSP, and opt-in analytics for ${files.length} HTML pages.`);
 }
 

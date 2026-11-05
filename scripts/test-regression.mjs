@@ -75,11 +75,10 @@ check(/MODAL_API_TOKEN/.test(worker) && /temporarily unavailable/.test(worker), 
 check(/API_RATE_LIMITER/.test(worker) && /\.limit\(\{ key \}\)/.test(worker), 'Worker uses the durable rate-limit binding');
 check(/AI_CHAT_LIMITER/.test(worker) && /AI_VISION_LIMITER/.test(worker) && /CONVERSION_LIMITER/.test(worker), 'Worker uses per-route rate limit bindings');
 check(!/AI_CHAT_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker) && !/AI_VISION_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker) && !/CONVERSION_LIMITER\s*\|\|\s*env\.API_RATE_LIMITER/.test(worker), 'Worker does not silently downgrade costly routes to the generic limiter');
-check(/WEBHOOK_PATHS/.test(worker) && /!WEBHOOK_PATHS\.has\(url\.pathname\)/.test(worker), 'Worker keeps Razorpay webhooks out of end-user rate-limit buckets');
+
 check(/ALLOWED_CHAT_MODELS/.test(worker) && /ALLOWED_VISION_MODELS/.test(worker), 'Worker restricts AI models to strict allowlists');
 check(/ALLOWED_VISION_MODELS\.has\(body\.model\)/.test(worker), 'Worker applies the vision model allowlist before forwarding requests');
 check(/release:\s*env\.RELEASE_ID\s*\|\|\s*'local'/.test(worker) && !/6e9ff18841b0e0d810df05860a12558f6fc4da25/.test(worker), 'Worker health endpoint exposes current release attribution without a stale fallback');
-check(/payment\.refunded/.test(worker) && /status:\s*'refunded'/.test(worker), 'Worker handles refund and dispute webhooks');
 check(!exists('src/refund.njk') && !exists('src/login.html') && !exists('src/library.html'), 'Obsolete paid refund, login, and library pages are removed');
 check(/isValidConversionDocument/.test(worker) && /isValidConversionOutput/.test(worker), 'Worker validates conversion input and output signatures');
 const syntax = spawnSync(process.execPath, ['--input-type=module', '--check'], {
@@ -119,14 +118,6 @@ const swContent = read('src/sw.js');
 check(/if \(response\.status !== 200\) return Promise\.resolve\(\)/.test(swContent) && /url\.origin\s*===\s*self\.location\.origin/.test(swContent), 'Service Worker Strategy 4 restricts caching to same-origin 200 responses');
 check(/isKnownStaticAsset/.test(swContent) && /Never turn arbitrary same-origin GET responses/.test(swContent), 'Service Worker avoids caching arbitrary dynamic same-origin responses');
 
-const initialMigration = read('supabase/migrations/20260815000000_initial_schema.sql');
-const hideR2Migration = read('supabase/migrations/20260910120000_hide_r2_key_from_public.sql');
-const updatedAtMigration = read('supabase/migrations/20260912100000_orders_updated_at_trigger.sql');
-check(/CREATE TABLE IF NOT EXISTS public\.orders/i.test(initialMigration) && /auth\.uid\(\).*user_id/i.test(initialMigration), 'Supabase initial schema migration versions reproducible schema and RLS policies');
-check(/create extension if not exists pgcrypto/i.test(initialMigration), 'Supabase initial schema provisions pgcrypto for UUID generation');
-check(/revoke select on table public\.products/i.test(hideR2Migration) && /grant select \([^)]*title[^)]*\)/i.test(hideR2Migration), 'Supabase migration restricts public access to r2_key');
-check(/create trigger orders_set_updated_at/i.test(updatedAtMigration) && /new\.updated_at\s*=\s*now\(\)/i.test(updatedAtMigration), 'Supabase schema keeps order updated_at accurate for every transition');
-
 const packageJson = JSON.parse(read('package.json'));
 check(packageJson.engines && packageJson.engines.node === '>=22.12.0', 'package.json specifies Node >=22.12.0 engine');
 check(!packageJson.dependencies?.['crypto-js'] && /js-yaml/.test(read('package-lock.json')), 'Unused discontinued CryptoJS dependency is removed and lockfile remains explicit');
@@ -156,9 +147,6 @@ for (const page of ['src/tools/pdf-to-word.html', 'src/tools/word-to-pdf.html'])
     const source = read(page);
     check(/render\(container/.test(source) && /reset\(turnstileWidgetId\)/.test(source), `${page} explicitly renders and resets Turnstile by widget ID`);
 }
-const authSource = read('src/js/auth.js');
-check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChange/.test(authSource), 'Authentication session flow is wired to Supabase');
-check(/Object\.defineProperty\(window,\s*["']supabaseClient/.test(authSource) && /get:\s*getSupabaseClient/.test(authSource), 'Authentication exposes a live Supabase client getter');
 const storeSource = read('src/js/store.js');
 check(/viewStudyPdf|downloadStudyPdf/i.test(storeSource) && /dbms-chapter-01\.pdf/.test(storeSource), 'Free study materials flow exposes View and Download PDF helpers');
 const studySource = read('src/study-materials.html');

@@ -36,11 +36,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://onlinepdfpro.com/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://onlinepdfpro.com/tools/compress-pdf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -269,101 +264,6 @@
     <loc>https://onlinepdfpro.com/presentation-maker</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/best-practices-creating-accessible-pdfs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/comparing-word-vs-pdf-when-to-use-which/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/compress-pdf-without-losing-quality/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/convert-jpg-to-pdf-online/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/easy-ways-rearrange-delete-pdf-pages/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/edit-pdf-text-online-free/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/future-of-document-management-ai-and-pdfs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-add-watermarks-to-your-pdf-documents/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-convert-excel-spreadsheets-to-pdf/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-convert-powerpoint-presentations-to-pdf/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-extract-text-from-scanned-pdfs-ocr/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-merge-pdf-files-free/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/how-to-reduce-pdf-file-size-for-email/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/importance-of-pdfa-for-long-term-archiving/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/step-by-step-guide-splitting-large-pdf-files/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/top-benefits-going-paperless-in-office/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/ultimate-guide-digital-signatures-pdfs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/understanding-pdf-security-password-protect/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onlinepdfpro.com/blog/why-your-resume-should-always-be-a-pdf/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://onlinepdfpro.com/products/dbms-notes</loc>
