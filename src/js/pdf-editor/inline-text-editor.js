@@ -1,9 +1,5 @@
 import { getTextScreenBox } from './page-renderer.js';
-import { getPreviewFontFamily } from './font-resolver.js';
-
-function safeFamily(value) {
-  return String(value || 'Helvetica').replace(/["\\]/g, '');
-}
+import { getPreviewFontStack } from './font-resolver.js';
 
 function applyTextStyle(element, object, box, viewport) {
   element.style.left = box.left + 'px';
@@ -11,11 +7,12 @@ function applyTextStyle(element, object, box, viewport) {
   element.style.minWidth = Math.max(box.width, box.fontSize * 0.35) + 'px';
   element.style.minHeight = box.height + 'px';
   element.style.transform = 'rotate(' + box.angle + 'deg)';
-  element.style.fontFamily = '"' + safeFamily(getPreviewFontFamily(object)) + '", sans-serif';
+  element.style.fontFamily = getPreviewFontStack(object);
   element.style.fontSize = box.fontSize + 'px';
-  element.style.fontWeight = object.bold ? '700' : '400';
+  element.style.fontWeight = object.bold ? '700' : String(object.fontWeight || 400);
   element.style.fontStyle = object.italic ? 'italic' : 'normal';
   element.style.color = object.colorHex || '#1F1F1F';
+  element.style.backgroundColor = object.background && object.background.hex ? object.background.hex : '#FFFFFF';
   element.style.opacity = String(Number(object.opacity ?? 1));
   element.style.textAlign = object.alignment || 'left';
   element.style.letterSpacing = (Number(object.letterSpacing || 0) * viewport.scale) + 'px';
@@ -40,6 +37,8 @@ export class InlineTextEditor {
     this.session = null;
     this.mask = null;
     this.input = null;
+    this.layer = null;
+    this.viewport = null;
     this.ending = false;
     this.refreshing = false;
     this.pendingCommit = Promise.resolve();
@@ -91,6 +90,12 @@ export class InlineTextEditor {
     this.removeNodes();
     this.ending = false;
     this.refreshing = false;
+    this.layer = layer;
+    this.viewport = viewport;
+
+    layer.querySelectorAll(`[data-object-id="${object.id}"]`).forEach((node) => {
+      node.classList.add('is-editing-inline');
+    });
 
     if (object.type !== 'new-text') {
       const source = {
@@ -103,12 +108,14 @@ export class InlineTextEditor {
         rotation: object.originalRotation
       };
       const cover = getTextScreenBox(source, viewport);
+      const padX = Math.max(2, cover.fontSize * 0.08);
+      const padY = Math.max(0.5, cover.fontSize * 0.03);
       const mask = document.createElement('div');
       mask.className = 'pdf-inline-text-mask';
-      mask.style.left = cover.left + 'px';
-      mask.style.top = cover.top + 'px';
-      mask.style.width = Math.max(cover.width, cover.fontSize * 0.35) + 'px';
-      mask.style.height = cover.height + 'px';
+      mask.style.left = (cover.left - padX) + 'px';
+      mask.style.top = (cover.top - padY) + 'px';
+      mask.style.width = (Math.max(cover.width, cover.fontSize * 0.35) + padX * 2) + 'px';
+      mask.style.height = (cover.height + padY * 2) + 'px';
       mask.style.transform = 'rotate(' + cover.angle + 'deg)';
       mask.style.backgroundColor = object.background && object.background.hex ? object.background.hex : '#FFFFFF';
       layer.appendChild(mask);
@@ -124,10 +131,11 @@ export class InlineTextEditor {
     input.setAttribute('aria-label', 'Edit PDF text');
     input.setAttribute('spellcheck', 'false');
     input.textContent = this.session.draft;
-    applyTextStyle(input, object, box, viewport);
+    applyTextStyle(input, object, box, viewport, this.session.draft);
     input.addEventListener('input', () => {
       if (!this.session) return;
       this.session.draft = input.textContent || '';
+      input.style.fontFamily = getPreviewFontStack(object, this.session.draft);
       if (this.onDraftChange) this.onDraftChange(object, this.session.draft);
     });
     input.addEventListener('paste', (event) => {
@@ -202,12 +210,16 @@ export class InlineTextEditor {
     this.ending = true;
     const session = this.session;
     if (this.input) session.draft = this.input.textContent || '';
+    const scale = this.viewport && this.viewport.scale ? this.viewport.scale : 1;
+    const measuredWidth = this.input && scale > 0
+      ? Math.max(this.input.scrollWidth, this.input.offsetWidth) / scale
+      : 0;
     this.session = null;
     this.removeNodes();
     this.ending = false;
     // Serialize commits: slow font validation must not reorder document undo
     // history or let an older draft overwrite a newer one.
-    this.pendingCommit = this.pendingCommit.then(() => this.onCommit && this.onCommit({ ...session, reason }));
+    this.pendingCommit = this.pendingCommit.then(() => this.onCommit && this.onCommit({ ...session, measuredWidth, reason }));
     return this.pendingCommit;
   }
 
@@ -222,6 +234,11 @@ export class InlineTextEditor {
   }
 
   removeNodes() {
+    if (this.layer) {
+      this.layer.querySelectorAll('.is-editing-inline').forEach((node) => {
+        node.classList.remove('is-editing-inline');
+      });
+    }
     if (this.mask && this.mask.isConnected) this.mask.remove();
     if (this.input && this.input.isConnected) this.input.remove();
     this.mask = null;
@@ -231,5 +248,7 @@ export class InlineTextEditor {
   destroy() {
     this.session = null;
     this.removeNodes();
+    this.layer = null;
+    this.viewport = null;
   }
 }

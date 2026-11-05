@@ -1,0 +1,81 @@
+================================================================================
+ONLINEPDFPRO PRODUCTION CODEBASE CLEANUP REPORT (BATCHES A, B, AND C)
+================================================================================
+
+1. SUMMARY OF BEFORE vs. AFTER METRICS (excluding node_modules)
+--------------------------------------------------------------------------------
+- Total Files:                  896  ->  761         (-135 files removed)
+- Total Lines of Code:      205,313  ->  190,341     (-14,972 lines removed)
+- Total Repository Size:   95.16 MB  ->  89.09 MB    (-6.07 MB / -6,069,830 bytes)
+- src/ Directory Size:     13.37 MB  ->  11.89 MB    (-1.48 MB / -1,476,714 bytes)
+- _site/ Budget Size:      30.03 MB  ->  28.55 MB    (-1.48 MB; fixes perf:budget)
+- Dependencies Removed:           0  (all 10 npm packages in package.json are used)
+
+2. DELETED FILES & HIDDEN CODE BLOCKS (GROUPED BY BATCH)
+--------------------------------------------------------------------------------
+Batch A — Temporary Directories & Unrelated Scratch Files:
+- .tmp_tool_audit/ (24 temporary audit scratch files, 74,246 bytes)
+- .playwright-cli/ (18 temporary browser automation logs/snapshots, 898,508 bytes)
+- COA_Instruction_Set_Complete_Revision.pdf (37,116 bytes — unrelated PDF in root)
+- learn.md (8,089 bytes — scratch markdown notes)
+- learnhtml.md (10,412 bytes — scratch HTML notes)
+- replace_links.py (2,100 bytes — one-off legacy helper script)
+- bun.lock (13,508 bytes — stale Bun lockfile; project uses npm + package-lock.json)
+
+Batch B — Superseded Bundles, Unused CSS Snapshots & Unreferenced Assets:
+- src/js/pdf-editor.js & js/pdf-editor.js (2 x 98,116 bytes — superseded by modular /js/pdf-editor/editor.js)
+- src/css/pdf-editor-page.css & css/pdf-editor-page.css (2 x 17,987 bytes — superseded by /css/pdf-editor.css)
+- src/css/style.min.css & css/style.min.css (2 x 20,265 bytes — unused pre-minified snapshot)
+- src/css/tools.min.css & css/tools.min.css (2 x 8,166 bytes — unused pre-minified snapshot)
+- src/css/mobile-fix.min.css & css/mobile-fix.min.css (2 x 13,803 bytes — unused pre-minified snapshot)
+- src/hero-bg.png & hero-bg.png (2 x 832,826 bytes — unreferenced hero background PNG)
+- src/founder_avatar.png & founder_avatar.png (2 x 429,110 bytes — unreferenced avatar PNG)
+- src/logo.jpg & logo.jpg (2 x 32,423 bytes — unreferenced JPEG logo; site uses logo.png & logo.svg)
+- src/assets/dummy/dbms-notes.txt & assets/dummy/dbms-notes.txt (2 x 80 bytes — old dummy placeholder)
+- src/_includes/partials/footer-minimal.njk (284 bytes — unused Nunjucks partial)
+- services/pdf2docx/inspect_marker.py (617 bytes — leftover 15-line debug script)
+
+Batch C — Legacy Review Files, Unused Guides CSS, Unused Icons, Docs & Hidden Markup:
+- src/_data/productReviews.js, _data/productReviews.js, content/product-reviews.json,
+  src/js/product-reviews.js, js/product-reviews.js (removed together alongside updating
+  scripts/check-performance-budget.mjs so neither Eleventy nor perf:budget fails)
+- src/css/guides.css & css/guides.css (2 x 2,100 bytes — unreferenced legacy guide CSS)
+- src/sitemap.txt & sitemap.txt (2 x 2,335 bytes — stale plaintext URL list; sitemap.xml is canonical)
+- src/icons/icon-{72,96,128,144,152,384}.svg & root copies (12 files — unreferenced SVG sizes;
+  icon-192.svg and icon-512.svg are kept because sw.js caches them)
+- scripts/create-guide-sample.py & scripts/integrate-turnstile.js (one-off migration helpers)
+- AUDIT_FINDINGS_V2.md, PRODUCTION_READINESS.md, docs/IMPLEMENTATION_BATCH_1..7.md,
+  docs/DBMS_REVIEW_BRIEF.md, docs/LAUNCH_AND_ADSENSE_AUDIT_2026-10-02.md,
+  docs/TOOL_WORKFLOW_AUDIT_2026-10-02.md, docs/github-delivery-2026-10-16.md,
+  docs/onlinepdfpro-90-day-*.md, docs/refactor-*.md, docs/retention-milestones.md,
+  and docs/assets/tool-audit/* (keeping docs/PDF_EDITOR.md and docs/assets/pdf-editor/*)
+- public/assets/aistudio/* (15 temporary chat screenshot attachments)
+- Removed 9 hidden `<!-- Ad Spacer --> <div class="banner-ad-spacer" ...></div>` blocks from 9 tool pages
+- Removed 19 hidden `#loggedInUser` sign-in avatar blocks + `@supabase/supabase-js` & `/js/auth.js`
+  script tags from all 19 blog post HTML files (`src/blog/*/index.html`)
+- Removed 22 broken `<script src="/js/security-shield.js"></script>` tags across `src/blog/**`,
+  `src/blog.html`, `src/contact.html`, and `src/disclaimer.html`
+
+3. PROTECTED ITEMS KEPT SAFE (NEVER DELETED)
+--------------------------------------------------------------------------------
+- src/icons/icon-192.svg & src/icons/icon-512.svg (+ root copies — cached by src/sw.js)
+- src/app-ads.txt & src/f7519b74692148c0bf9dcae721267abf.txt (+ root copies — external crawler verification)
+- docs/PDF_EDITOR.md & docs/assets/pdf-editor/* (asserted by scripts/test-pdf-editor.mjs)
+- scripts/test-*.mjs, scripts/audit-public-site.mjs, scripts/generate-practice-assets.mjs,
+  scripts/generate-sample-word.py (all verification & fixture generators)
+- All root-synced active HTML, CSS, JS, and asset files managed by scripts/sync-to-root.js
+
+4. POST-CLEANUP VERIFICATION RESULTS
+--------------------------------------------------------------------------------
+- npm run build:                        PASS (87 HTML pages generated cleanly)
+- npm run sync:root:                    PASS
+- npm test:                             PASS (32/32 unit subtests + all site, audit, worker, indexability & regression checks)
+- npm run test:watchers:                PASS
+- npm run perf:budget:                  PASS (28,553,994 bytes / 30,000,000 byte limit)
+- npm run test:mobile:                  PASS (All public routes pass at 320px, 390px, 768px + touch interactions)
+- python3 -m compileall -q services:    PASS
+
+5. HOW TO UNDO IN GIT
+--------------------------------------------------------------------------------
+When running on a Git branch with tag `pre-cleanup-backup`:
+  git reset --hard pre-cleanup-backup

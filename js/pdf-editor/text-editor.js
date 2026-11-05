@@ -1,6 +1,6 @@
 import { markDirty } from './state.js';
 import { normalizeColor } from './color-extractor.js';
-import { descriptorForFamily, getPreviewFontFamily } from './font-resolver.js';
+import { descriptorForFamily, getPreviewFontStack } from './font-resolver.js';
 
 let measureCanvas = null;
 
@@ -17,16 +17,23 @@ function applyDescriptor(object, descriptor, explicitReplacement = false) {
   object.detectedFontFamily = descriptor.detectedFamily;
   object.fontFamily = descriptor.previewFont.family;
   object.fontQuality = descriptor.matchQuality;
+  if (typeof descriptor.bold === 'boolean') object.bold = descriptor.bold;
+  if (typeof descriptor.italic === 'boolean') object.italic = descriptor.italic;
+  if (Number.isFinite(descriptor.weight)) object.fontWeight = descriptor.weight;
   if (explicitReplacement) object.fontRestyled = true;
 }
 
-function measureTextWidth(object) {
+export function measureTextWidth(object, draftText = object && object.text) {
   if (!measureCanvas) measureCanvas = document.createElement('canvas');
   const context = measureCanvas.getContext('2d');
   if (!context) return object.width;
-  const style = [object.italic ? 'italic' : '', object.bold ? '700' : '400'].filter(Boolean).join(' ');
-  context.font = style + ' ' + object.fontSize + 'px "' + String(getPreviewFontFamily(object)).replace(/["\\]/g, '') + '", sans-serif';
-  return Math.max(object.fontSize * 0.35, context.measureText(object.text || '').width + Math.max(-4, Math.min(24, Number(object.letterSpacing || 0))) * Math.max(0, [...String(object.text || '')].length - 1));
+  const weight = object.bold ? '700' : String(object.fontWeight || 400);
+  const style = [object.italic ? 'italic' : '', weight].filter(Boolean).join(' ');
+  context.font = style + ' ' + object.fontSize + 'px ' + getPreviewFontStack(object);
+  const rawText = String(draftText ?? '');
+  const measured = context.measureText(rawText).width
+    + Math.max(-4, Math.min(24, Number(object.letterSpacing || 0))) * Math.max(0, [...rawText].length - 1);
+  return Math.max(object.fontSize * 0.35, measured + (rawText.length ? object.fontSize * 0.08 : 0));
 }
 
 export function applyTextProperties(object, values) {
@@ -52,7 +59,8 @@ export function applyTextProperties(object, values) {
     const requestedFamily = values.fontFamily.trim();
     const descriptor = descriptorForFamily(values.fontFamily.trim(), {
       bold: typeof values.bold === 'boolean' ? values.bold : object.bold,
-      italic: typeof values.italic === 'boolean' ? values.italic : object.italic
+      italic: typeof values.italic === 'boolean' ? values.italic : object.italic,
+      weight: object.fontWeight
     });
     applyDescriptor(object, descriptor);
     object.fontRestyled = requestedFamily !== (object.originalFontDescriptor && object.originalFontDescriptor.detectedFamily);
@@ -67,10 +75,17 @@ export function applyTextProperties(object, values) {
     }
   }
   if (Number.isFinite(values.rotation)) object.rotation = Math.max(-360, Math.min(360, values.rotation));
-  if (typeof values.bold === 'boolean') object.bold = values.bold;
+  if (typeof values.bold === 'boolean') {
+    object.bold = values.bold;
+    object.fontWeight = values.bold ? 700 : (object.originalFontWeight && object.originalFontWeight < 600 ? object.originalFontWeight : 400);
+  }
   if (typeof values.italic === 'boolean') object.italic = values.italic;
   if (object.fontDescriptor && (typeof values.bold === 'boolean' || typeof values.italic === 'boolean')) {
-    const descriptor = descriptorForFamily(object.detectedFontFamily || object.fontFamily, { bold: object.bold, italic: object.italic });
+    const descriptor = descriptorForFamily(object.detectedFontFamily || object.fontFamily, {
+      bold: object.bold,
+      italic: object.italic,
+      weight: object.fontWeight
+    });
     applyDescriptor(object, descriptor, object.fontRestyled);
   }
   if (['left', 'center', 'right'].includes(values.alignment)) object.alignment = values.alignment;
@@ -78,7 +93,8 @@ export function applyTextProperties(object, values) {
   if (Number.isFinite(values.opacity)) object.opacity = Math.max(0, Math.min(1, values.opacity));
   if (['text', 'new-text', 'ocr-text'].includes(object.type)) {
     const minimumWidth = object.originalWidth || (object.type === 'new-text' ? object.width : 0);
-    object.editedWidth = Math.max(minimumWidth, measureTextWidth(object));
+    const domMeasured = Number.isFinite(values.measuredWidth) && values.measuredWidth > 0 ? values.measuredWidth : 0;
+    object.editedWidth = Math.max(minimumWidth, measureTextWidth(object), domMeasured);
     object.editedHeight = Math.max(object.originalHeight || object.height || object.fontSize, object.fontSize);
     object.width = object.editedWidth;
     object.height = object.editedHeight;

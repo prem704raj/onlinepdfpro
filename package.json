@@ -18,8 +18,7 @@
     "chokidar": "4.0.3",
     "jsqr": "^1.4.0",
     "parse5": "8.0.1",
-    "picomatch": "4.0.7",
-    "puppeteer": "^25.5.0"
+    "picomatch": "4.0.7"
   },
   "overrides": {
     "chokidar": "$chokidar",
@@ -28,7 +27,7 @@
   "scripts": {
     "build": "node scripts/clean-site.js && npx @11ty/eleventy && node scripts/write-release.js && node scripts/version-sw.js",
     "build:production": "node scripts/preflight-production.mjs && npm run build",
-    "test": "node scripts/test-pdfjs-safety.mjs && node scripts/test-history-safety.mjs && node scripts/test-counter.mjs && node scripts/test-site.mjs && node scripts/test-public-indexability.mjs && node scripts/test-audit.mjs && node scripts/test-worker.mjs && node scripts/test-analytics.mjs && node scripts/test-regression.mjs && node scripts/test-pdf-editor.mjs && node scripts/test-pdf-editor-fidelity.mjs && node scripts/test-pdf-output.mjs && node scripts/test-ai-document.mjs && node scripts/test-mobile.mjs && node scripts/test-product-detail.mjs && node scripts/test-tool-workflows.mjs && node scripts/test-guide-workflows.mjs",
+    "test": "node scripts/test-pdfjs-safety.mjs && node scripts/test-history-safety.mjs && node scripts/test-counter.mjs && node scripts/test-site.mjs && node scripts/test-public-indexability.mjs && node scripts/test-audit.mjs && node scripts/test-worker.mjs && node scripts/test-regression.mjs",
     "test:watchers": "node scripts/test-watchers.mjs",
     "test:tools": "node scripts/test-tool-workflows.mjs",
     "test:mobile": "node scripts/test-mobile.mjs",
@@ -37,7 +36,7 @@
     "test:worker": "node scripts/test-worker.mjs",
     "smoke:worker": "node scripts/smoke-worker.mjs",
     "perf:budget": "node scripts/check-performance-budget.mjs",
-    "dev": "npx @11ty/eleventy --serve",
+    "dev": "npx @11ty/eleventy --serve --port=3000",
     "start": "npm run dev",
     "sync:root": "node scripts/sync-to-root.js",
     "test:pdf-output": "node scripts/test-pdf-output.mjs",

@@ -143,6 +143,8 @@ export async function extractTextForPage(pdfPage, pageNumber, { withColors = tru
           descent: Number.isFinite(style.descent) ? style.descent : -0.2,
           bold: font.bold,
           originalBold: font.bold,
+          fontWeight: font.weight || (font.bold ? 700 : 400),
+          originalFontWeight: font.weight || (font.bold ? 700 : 400),
           italic: font.italic,
           originalItalic: font.italic,
           alignment: 'left',

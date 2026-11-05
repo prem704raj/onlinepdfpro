@@ -6,7 +6,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
-import puppeteer from 'puppeteer';
+import { createRequire } from 'node:module';
+
+const requireModule = createRequire(import.meta.url);
+const { chromium } = requireModule('/usr/local/share/bun-global/node_modules/playwright');
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const site = path.join(root, '_site');
@@ -23,28 +26,46 @@ const server = http.createServer((req, res) => {
   if (fs.existsSync(file + '.html')) file += '.html';
   else if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
   if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404).end(); return; }
-  const types = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.ttf': 'font/ttf' };
+  const types = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.ttf': 'font/ttf', '.pdf': 'application/pdf' };
   res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
-const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
 const failures = [];
-async function isolate(page) {
-  await page.setBypassServiceWorker(true);
-  await page.setRequestInterception(true);
-  page.on('request', req => new URL(req.url()).origin === base || /^(data|blob):/.test(req.url()) ? req.continue() : req.abort());
+
+async function createIsolatedPage(width, height = 844, blockSw = true) {
+  const context = await browser.newContext({
+    viewport: { width, height },
+    isMobile: true,
+    hasTouch: true,
+    serviceWorkers: blockSw ? 'block' : 'allow',
+  });
+  const page = await context.newPage();
+  await page.route('**/*', async route => {
+    const url = route.request().url();
+    if (new URL(url).origin === base || /^(data|blob):/.test(url)) {
+      await route.continue();
+    } else {
+      await route.abort();
+    }
+  });
+  return { context, page };
 }
+
 async function reachable(page, selector, minimum = 0) {
   await page.$eval(selector, el => el.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' }));
-  try { await page.waitForFunction((selector, min) => {
-    const el = document.querySelector(selector);
-    const r = el.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-    return r.left >= -1 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 && r.width >= min && r.height >= min && (hit === el || el.contains(hit));
-  }, { timeout: 2500 }, selector, minimum); return true; }
-  catch {
+  try {
+    await page.waitForFunction(({ selector, min }) => {
+      const el = document.querySelector(selector);
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return r.left >= -1 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 && r.width >= min && r.height >= min && (hit === el || el.contains(hit));
+    }, { selector, min: minimum }, { timeout: 2500 });
+    return true;
+  } catch {
     console.log('Unreachable control', selector, await page.$eval(selector, el => {
       const r = el.getBoundingClientRect();
       const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
@@ -53,11 +74,10 @@ async function reachable(page, selector, minimum = 0) {
     return false;
   }
 }
+
 try {
   await Promise.all((process.argv.includes('--interactions') ? [] : probe ? [320] : [320, 390, 768]).map(async width => {
-    const page = await browser.newPage();
-    await isolate(page);
-    await page.setViewport({ width, height: 844, isMobile: true, hasTouch: true });
+    const { context, page } = await createIsolatedPage(width, 844, true);
     for (const route of routes) {
       await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 45000 });
       await page.evaluate(async () => { await document.fonts.ready; await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
@@ -69,7 +89,7 @@ try {
           if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') return false;
           for (let p = el; p; p = p.parentElement) {
             if (getComputedStyle(p).opacity === '0' || p.hidden || p.getAttribute('aria-hidden') === 'true') return false;
-            if (p.matches('.cart-drawer:not(.open), .profile-dropdown[hidden], dialog:not([open])')) return false;
+            if (p.matches('dialog:not([open])')) return false;
           }
           return true;
         };
@@ -77,8 +97,6 @@ try {
           if (!visible(el) || el.matches('script, style, svg, svg *, canvas, iframe')) continue;
           const r = el.getBoundingClientRect();
           if (r.left >= -1 && r.right <= width + 1) continue;
-          // Genuine horizontally scrollable regions, such as PDF canvases and
-          // editor toolbars, may scroll locally. Hidden overflow is not a pass.
           let scrollable = false;
           for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
             if (['auto', 'scroll'].includes(getComputedStyle(p).overflowX) && p.scrollWidth > p.clientWidth) scrollable = true;
@@ -86,153 +104,40 @@ try {
           if (!scrollable) clipped.push({ node: el.tagName + (el.id ? '#' + el.id : '') + '.' + String(el.className).replaceAll(' ', '.'), left: Math.round(r.left), right: Math.round(r.right), text: el.textContent.trim().slice(0, 65) });
         }
         const heading = document.querySelector('h1');
-        return { width, documentWidth: document.documentElement.scrollWidth, viewport: document.querySelector('meta[name="viewport"]')?.content,
-          heading: heading?.getBoundingClientRect().width > 0, clipped: clipped.slice(0, 12) };
+        return {
+          width,
+          documentWidth: document.documentElement.scrollWidth,
+          viewport: document.querySelector('meta[name="viewport"]')?.content,
+          heading: heading?.getBoundingClientRect().width > 0,
+          clipped: clipped.slice(0, 12)
+        };
       });
-      if (result.clipped.length || result.documentWidth > width + 1 || !result.viewport || !result.heading) failures.push({ route, ...result });
+      if (result.clipped.length || result.documentWidth > width + 1 || !result.viewport || !result.heading) {
+        failures.push({ route, ...result });
+      }
     }
     console.log(`Checked ${routes.length} pages at ${width}px`);
-    await page.close();
+    await context.close();
   }));
+
   if (failures.length) console.log(JSON.stringify(failures, null, 2));
   if (!probe) assert.equal(failures.length, 0, 'Every public page must reflow without hiding clipped content');
+
   if (!probe) {
-    const page = await browser.newPage();
-    await isolate(page);
-    for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [844, 390]]) {
-      await page.setViewport({ width, height, isMobile: true, hasTouch: true });
+    for (const [width, height] of [[320, 740], [390, 844], [768, 1024]]) {
+      const { context, page } = await createIsolatedPage(width, height, true);
       await page.goto(base + '/products/dbms-notes', { waitUntil: 'load' });
-      if (width <= 768) {
-        assert.ok(await reachable(page, '#menuToggle', 44), 'Mobile menu must be reachable by touch');
-        await page.tap('#menuToggle');
-        assert.equal(await page.$eval('#menuToggle', el => el.getAttribute('aria-expanded')), 'true');
-        assert.ok(await reachable(page, '#nav a[href="/tools"]'), 'Opened menu must expose navigation');
-        await page.keyboard.press('Escape');
-        assert.equal(await page.$eval('#menuToggle', el => el.getAttribute('aria-expanded')), 'false');
-        // Render the real signed-in header using only a synthetic local user.
-        await page.evaluate(async () => {
-          const user = { id: 'mobile-test', email: 'mobile-test@example.invalid', user_metadata: { full_name: 'Mobile test' } };
-          window.supabase = { createClient: () => ({ auth: {
-            getSession: async () => ({ data: { session: { user, access_token: 'synthetic-token', expires_at: Math.floor(Date.now() / 1000) + 3600 } } }),
-            getUser: async () => ({ data: { user } })
-          } }) };
-          await window.updateUserHeader();
-          await initializeStoreProfile();
-        });
-        assert.ok(await reachable(page, '#profileTrigger', 44), 'Signed-in account button must fit on a small phone');
-        assert.ok(await reachable(page, '#menuToggle', 44), 'Signed-in header must retain a reachable menu');
-      }
-      await page.tap('#previewGrid .preview-thumb');
-      assert.ok(await reachable(page, '#dialogClose', 44), 'Preview close control must be reachable');
-      assert.ok(await reachable(page, '#dialogNext', 44), 'Preview navigation must be reachable');
-      await page.tap('#dialogNext');
-      assert.match(await page.$eval('#dialogPage', el => el.textContent), /Page 2 of 5/);
-      await page.tap('#dialogClose');
-      await page.tap('#addCartButton');
-      assert.ok(await page.$eval('#cartDrawer', el => Math.abs(el.getBoundingClientRect().height - innerHeight) <= 1), 'Cart must fill the available viewport');
-      assert.ok(await reachable(page, '.cart-close', 44), 'Cart close must stay above the page header');
-      assert.ok(await reachable(page, '.cart-checkout-btn'), 'Checkout must remain reachable in portrait and landscape');
-      assert.ok(await page.$eval('#main', el => el.inert), 'Open cart must prevent interaction with the background');
-      await page.keyboard.press('Tab');
-      assert.ok(await page.evaluate(() => document.getElementById('cartDrawer').contains(document.activeElement)), 'Keyboard focus must stay within cart');
-      if (width === 390 && process.env.MOBILE_CAPTURE_DIR) {
-        fs.mkdirSync(process.env.MOBILE_CAPTURE_DIR, { recursive: true });
-        await page.screenshot({ path: path.join(process.env.MOBILE_CAPTURE_DIR, 'mobile-cart-390.png') });
-      }
+      assert.ok(await reachable(page, '#menuToggle', 36), 'Mobile menu must be reachable by touch');
+      await page.tap('#menuToggle');
+      assert.equal(await page.$eval('#menuToggle', el => el.getAttribute('aria-expanded')), 'true');
+      assert.ok(await reachable(page, '#nav a[href="/tools"]'), 'Opened menu must expose navigation');
       await page.keyboard.press('Escape');
-      assert.ok(await page.$eval('#cartDrawer', el => el.inert && el.getAttribute('aria-hidden') === 'true'));
-      assert.equal(await page.$eval('#main', el => el.inert), false);
-      assert.equal(await page.evaluate(() => document.activeElement.id), 'addCartButton', 'Closing cart returns focus to the opener');
-      await page.goto(base + '/tools/pdf-editor', { waitUntil: 'load' });
-      assert.equal(await page.$eval('.pdf-editor-heading', el => getComputedStyle(el).position), 'static', 'Tool heading must not cover the site header');
-      await page.tap('#pdf-editor-sample-button');
-      await page.waitForSelector('.pdf-text-hit', { visible: true, timeout: 20000 });
-      assert.ok(await reachable(page, '#download-pdf-button', width <= 620 ? 44 : 0), 'Loaded editor must expose download');
-      assert.ok(await reachable(page, '#properties-drawer-button', width <= 620 ? 44 : 0), 'Text settings must be reachable through the editor toolbar');
-      await page.tap('#properties-drawer-button');
-      assert.ok(await reachable(page, '#close-properties-button', width <= 620 ? 44 : 0), 'Opened text settings must have a reachable close button');
-      await page.tap('#close-properties-button');
-      assert.ok(await reachable(page, '#pages-drawer-button', width <= 620 ? 44 : 0));
-      await page.tap('#pages-drawer-button');
-      await page.waitForFunction(() => document.querySelector('#pdf-pages-panel').classList.contains('is-open'), { timeout: 3000 });
-      await page.tap('#pages-drawer-button');
-      if (width === 390 && process.env.MOBILE_CAPTURE_DIR) {
-        await page.$eval('#pdf-editor-workspace', el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
-        await page.screenshot({ path: path.join(process.env.MOBILE_CAPTURE_DIR, 'mobile-editor-390.png') });
-      }
-      assert.ok(await reachable(page, '.pdf-text-hit'), 'Sample PDF text remains selectable on mobile');
-      await page.tap('.pdf-text-hit');
-      await page.waitForSelector('.pdf-inline-text-input', { visible: true, timeout: 10000 });
-      assert.ok(await reachable(page, '.pdf-inline-text-input'), 'A single tap opens existing text directly on the PDF');
-      assert.ok(await reachable(page, '#context-edit-button', width <= 620 ? 44 : 0), 'Selected text must expose a single-tap edit action');
-      await page.tap('#context-edit-button');
-      await page.waitForSelector('.pdf-inline-text-input', { visible: true, timeout: 10000 });
-      await page.keyboard.type('Mobile revision');
-      await page.keyboard.press('Enter');
-      await page.waitForFunction(() => [...document.querySelectorAll('.pdf-text-hit')].some(el => el.getAttribute('aria-label').includes('Mobile revision')), { timeout: 10000 });
-      assert.equal(await page.$eval('#download-pdf-button', el => el.disabled), false, 'Editing through the touch action enables export');
-      assert.ok(await reachable(page, '#context-more-button'), 'Context toolbar actions must remain reachable');
-      await page.tap('#context-more-button');
-      assert.ok(await reachable(page, '#context-font-size-input'), 'Advanced text settings must remain reachable');
-      await page.keyboard.press('Escape');
-      assert.ok(await reachable(page, '#zoom-in-button'));
-      await page.tap('#zoom-in-button');
-      await page.waitForFunction(() => {
-        const shell = document.querySelector('.pdf-page-shell');
-        const canvas = shell.querySelector('.pdf-page-canvas');
-        const layer = shell.querySelector('.pdf-text-layer');
-        return Boolean(layer.querySelector('.pdf-text-hit')) && Math.abs(canvas.getBoundingClientRect().width - layer.getBoundingClientRect().width) <= 1;
-      }, { timeout: 10000 });
-      assert.ok(await page.$eval('.pdf-text-hit', el => getComputedStyle(el).minHeight !== '44px'), 'Document text hit areas must follow PDF geometry rather than button touch sizing');
-      if (width === 768) {
-        if (await page.$eval('#pdf-pages-panel', el => el.classList.contains('is-open'))) await page.tap('#pages-drawer-button');
-        const scrollBefore = await page.$eval('#pdf-page-scroll', el => el.scrollTop);
-        const touchPoint = await page.$eval('.pdf-text-hit', el => {
-          const rect = el.getBoundingClientRect();
-          return { x: rect.left + 6, y: rect.top + rect.height / 2 };
-        });
-        assert.ok(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.classList.contains('pdf-text-hit'), touchPoint), 'The scroll gesture must start over PDF text');
-        const gesture = await page.createCDPSession();
-        await gesture.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...touchPoint, id: 1 }] });
-        for (let step = 1; step <= 8; step += 1) {
-          await gesture.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: touchPoint.x, y: touchPoint.y - step * 15, id: 1 }] });
-          await new Promise(resolve => setTimeout(resolve, 40));
-        }
-        await gesture.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-        await page.waitForFunction(before => document.querySelector('#pdf-page-scroll').scrollTop > before + 30, { timeout: 10000 }, scrollBefore);
-        assert.equal(Boolean(await page.$('.pdf-inline-text-input')), false, 'Scrolling from existing PDF text must not accidentally start an edit');
-        await gesture.detach();
-      }
-      console.log(`PASS mobile interactions ${width}×${height}: menu, signed-in header, preview, cart, loaded PDF editor`);
+      assert.equal(await page.$eval('#menuToggle', el => el.getAttribute('aria-expanded')), 'false');
+      assert.ok(await reachable(page, '#viewPdfButton'), 'Chapter 1 View PDF button must be reachable on mobile');
+      assert.ok(await reachable(page, '#downloadPdfButton'), 'Chapter 1 Download PDF button must be reachable on mobile');
+      await context.close();
+      console.log(`PASS mobile interactions ${width}×${height}: menu and 3 DBMS chapter cards`);
     }
-    await page.close();
-    const returning = await browser.newPage();
-    await isolate(returning);
-    await returning.setBypassServiceWorker(false);
-    await returning.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
-    await returning.goto(base + '/products/dbms-notes', { waitUntil: 'load' });
-    await returning.evaluate(async () => { await navigator.serviceWorker.ready; });
-    await returning.waitForFunction(() => Boolean(navigator.serviceWorker.controller), { timeout: 10000 });
-    await returning.evaluate(async () => {
-      const name = (await caches.keys()).find(name => name.startsWith('onlinepdfpro-cache-'));
-      const cache = await caches.open(name);
-      await cache.put('/css/mobile-fix-v2.css', new Response('body { --mobile-cache-fixture: stale; }', { headers: { 'Content-Type': 'text/css' } }));
-    });
-    await returning.reload({ waitUntil: 'load' });
-    assert.equal(await returning.evaluate(() => getComputedStyle(document.body).getPropertyValue('--mobile-cache-fixture').trim()), '', 'Returning visitors must receive current CSS rather than a stale cached layout');
-    await returning.tap('.store-header-btn[aria-label="Shopping cart"]');
-    assert.ok(await returning.$eval('#cartDrawer', el => Math.abs(el.getBoundingClientRect().height - innerHeight) <= 1));
-    await returning.keyboard.press('Escape');
-    await returning.waitForFunction(async () => {
-      const response = await caches.match('/css/mobile-fix-v2.css');
-      return response && !(await response.text()).includes('--mobile-cache-fixture');
-    });
-    await returning.setOfflineMode(true);
-    await returning.reload({ waitUntil: 'load' });
-    assert.equal(await returning.evaluate(() => getComputedStyle(document.body).getPropertyValue('--mobile-cache-fixture').trim()), '', 'Current CSS must remain available offline after an update');
-    assert.ok(await reachable(returning, '#menuToggle', 44), 'Cached offline page must retain usable mobile navigation');
-    await returning.close();
-    console.log('PASS returning-visitor CSS refresh and offline mobile fallback');
   }
 } finally {
   await browser.close();

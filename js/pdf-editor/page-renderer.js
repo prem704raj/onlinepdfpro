@@ -1,6 +1,6 @@
 import { editorState, getPageState } from './state.js';
 import { extractTextForPage } from './text-extractor.js';
-import { getPreviewFontFamily } from './font-resolver.js';
+import { getPreviewFontStack } from './font-resolver.js';
 
 function createBlankViewport(metadata, scale) {
   const baseWidth = metadata.baseWidth || metadata.width;
@@ -116,12 +116,15 @@ function makePreview(object, viewport) {
       rotation: object.originalRotation
     };
     const cover = getTextScreenBox(originalState, viewport);
+    const padX = Math.max(2, cover.fontSize * 0.08);
+    const padY = Math.max(0.5, cover.fontSize * 0.03);
     const mask = document.createElement('div');
     mask.className = 'pdf-text-preview-mask';
-    mask.style.left = cover.left + 'px';
-    mask.style.top = cover.top + 'px';
-    mask.style.width = Math.max(cover.width, cover.fontSize * 0.35) + 'px';
-    mask.style.height = cover.height + 'px';
+    mask.dataset.objectId = object.id;
+    mask.style.left = (cover.left - padX) + 'px';
+    mask.style.top = (cover.top - padY) + 'px';
+    mask.style.width = (Math.max(cover.width, cover.fontSize * 0.35) + padX * 2) + 'px';
+    mask.style.height = (cover.height + padY * 2) + 'px';
     mask.style.transform = 'rotate(' + cover.angle + 'deg)';
     mask.style.backgroundColor = object.background && object.background.hex ? object.background.hex : '#FFFFFF';
     fragment.appendChild(mask);
@@ -130,15 +133,16 @@ function makePreview(object, viewport) {
   const glyphBox = getTextScreenBox(object, viewport);
   const glyph = document.createElement('div');
   glyph.className = 'pdf-text-preview-glyph';
+  glyph.dataset.objectId = object.id;
   glyph.style.left = glyphBox.left + 'px';
   glyph.style.top = glyphBox.top + 'px';
   glyph.style.minWidth = Math.max(glyphBox.width, object.fontSize * 0.35) + 'px';
   glyph.style.height = glyphBox.height + 'px';
   glyph.style.transform = 'rotate(' + glyphBox.angle + 'deg)';
   glyph.style.color = object.colorHex || '#1F1F1F';
-  glyph.style.fontFamily = '"' + String(getPreviewFontFamily(object)).replace(/["\\]/g, '') + '", sans-serif';
+  glyph.style.fontFamily = getPreviewFontStack(object);
   glyph.style.fontSize = glyphBox.fontSize + 'px';
-  glyph.style.fontWeight = object.bold ? '700' : '400';
+  glyph.style.fontWeight = object.bold ? '700' : String(object.fontWeight || 400);
   glyph.style.fontStyle = object.italic ? 'italic' : 'normal';
   glyph.style.opacity = String(Number(object.opacity ?? 1));
   glyph.style.textAlign = object.alignment || 'left';

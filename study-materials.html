@@ -3,37 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Study Materials | OnlinePDFPro</title>
-    <meta name="description" content="Browse downloadable study material PDFs from OnlinePDFPro.">
+    <title>Free Study Materials for College Studies | OnlinePDFPro</title>
+    <meta name="description" content="Free study materials for college studies. View and download written DBMS Complete Notes PDF directly in your browser — no sign-in or payment required.">
     <link rel="canonical" href="https://onlinepdfpro.com/study-materials">
     <meta name="theme-color" content="#171512">
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/mobile-fix-v2.css">
     <style>
         :root {
-            --sm-bg: #f7f5f0;
+            --sm-bg: #f6f5f0;
             --sm-surface: #fffdf9;
-            --sm-text: #211d18;
-            --sm-muted: #786f64;
-            --sm-border: #e5ded3;
-            --sm-accent: #a97822;
-            --sm-accent-dark: #8f641b;
-            --sm-serif: "Playfair Display", Georgia, serif;
-            --sm-sans: "DM Sans", Inter, sans-serif;
+            --sm-surface-soft: #efe9de;
+            --sm-text: #2c2418;
+            --sm-muted: #6b5e4f;
+            --sm-border: #d9d0c3;
+            --sm-accent: #8b6914;
+            --sm-accent-dark: #735610;
+            --sm-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+            --sm-sans: "DM Sans", Inter, -apple-system, BlinkMacSystemFont, sans-serif;
         }
         [data-theme="dark"] {
-            --sm-bg: #171512;
-            --sm-surface: #211e1a;
-            --sm-text: #f6f0e7;
-            --sm-muted: #aea397;
-            --sm-border: #3a342c;
-            --sm-accent: #d5a943;
-            --sm-accent-dark: #e1b650;
+            --sm-bg: #1a1714;
+            --sm-surface: #242019;
+            --sm-surface-soft: #2a2520;
+            --sm-text: #f0ebe2;
+            --sm-muted: #a89e8f;
+            --sm-border: #3a342a;
+            --sm-accent: #d4a942;
+            --sm-accent-dark: #e6be5a;
         }
         html { background: var(--sm-bg); }
         body.sm-body {
@@ -43,14 +45,21 @@
             color: var(--sm-text) !important;
             font-family: var(--sm-sans);
         }
-        body.sm-body main.catalog-main { padding-top: 84px !important; }
         body.sm-body .header {
-            position: relative;
-            background: var(--sm-bg) !important;
-            border-bottom: 1px solid var(--sm-border) !important;
-            box-shadow: none !important;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f6f5f0 !important;
+            border: 1px solid var(--sm-border) !important;
+            box-shadow: 0 4px 20px rgba(44, 36, 24, 0.08) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        [data-theme="dark"] body.sm-body .header {
+            background: #1a1714 !important;
+            border: 1px solid #4a4238 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
         }
         body.sm-body .header .logo-text,
         body.sm-body .header .nav-link,
@@ -58,34 +67,40 @@
         body.sm-body .header .menu-toggle { color: var(--sm-text) !important; }
         body.sm-body .header .nav-link:hover { color: var(--sm-accent) !important; }
         body.sm-body .header .logo-icon { object-fit: cover; }
+
         .catalog-main {
             min-height: calc(100vh - 86px);
-            padding: 110px 24px 80px !important;
+            padding: 96px 24px 72px !important;
             box-sizing: border-box;
             max-width: 1120px;
             margin: 0 auto;
         }
         .sm-hero {
-            margin-bottom: 24px;
-            text-align: left;
+            margin-bottom: 32px;
+            text-align: center;
         }
-.sm-hero-heading {
-            margin: 0 0 12px;
-            color: var(--sm-text);
-            font-family: var(--sm-serif);
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            font-weight: 600;
-            line-height: 1.2;
+        .sm-hero-heading {
+            margin: 0 auto 14px;
+            color: var(--sm-accent) !important;
+            font-family: var(--sm-serif) !important;
+            font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+            font-weight: 400 !important;
+            font-style: italic !important;
+            line-height: 1.25 !important;
+            letter-spacing: -0.01em !important;
+            text-wrap: balance;
         }
         .sm-hero-subtitle {
-            margin: 0;
+            margin: 0 auto;
             max-width: 680px;
             color: var(--sm-muted);
-            font-size: .95rem;
-            line-height: 1.6;
+            font-size: 0.96rem;
+            line-height: 1.65;
         }
         .catalog-shell {
             width: 100%;
+            display: flex;
+            justify-content: center;
         }
         .catalog-title {
             position: absolute;
@@ -100,64 +115,158 @@
         }
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 260px));
-            gap: 24px;
-            justify-content: start;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            width: 100%;
+            max-width: 920px;
         }
         .catalog-card {
             margin: 0;
-            background: #1a2230;
-            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            background: var(--sm-surface);
+            border-radius: 12px;
             overflow: hidden;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
-            transition: transform .2s ease, box-shadow .2s ease;
+            border: 1px solid var(--sm-border);
+            box-shadow: 0 12px 32px rgba(33, 29, 24, .06);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+        [data-theme="dark"] .catalog-card {
+            box-shadow: 0 14px 36px rgba(0, 0, 0, .32);
         }
         .catalog-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+            transform: translateY(-2px);
+            border-color: var(--sm-accent);
+            box-shadow: 0 16px 40px rgba(33, 29, 24, .11);
+        }
+        .catalog-cover-col {
+            display: flex;
+            flex-direction: column;
+            background: #1a2230;
+            padding: 24px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
         .catalog-cover-link {
             display: block;
+            width: 100%;
             padding: 0;
             border: none;
             background: transparent;
-            box-shadow: none;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .38);
+            border-radius: 6px;
+            overflow: hidden;
             outline: none;
         }
         .catalog-cover {
             display: block;
             width: 100%;
             height: auto;
-            aspect-ratio: 3 / 2;
+            aspect-ratio: 3 / 4;
             object-fit: cover;
             object-position: top;
             background: transparent;
         }
-        .catalog-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 12px;
-            background: #1a2230;
+        .catalog-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 32px 36px;
+            gap: 20px;
         }
-        .catalog-actions button {
-            min-height: 40px;
-            padding: 10px 6px;
-            border: 1px solid var(--sm-accent);
-            border-radius: 4px;
-            font: 700 .68rem var(--sm-sans);
-            letter-spacing: .06em;
+        .catalog-kicker {
+            margin: 0 0 8px;
+            color: var(--sm-accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
+        }
+        .catalog-heading {
+            margin: 0 0 12px;
+            font-family: var(--sm-serif);
+            font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+            font-weight: 600;
+            color: var(--sm-text);
+            line-height: 1.25;
+        }
+        .catalog-heading a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .catalog-heading a:hover {
+            color: var(--sm-accent);
+        }
+        .catalog-summary {
+            margin: 0 0 18px;
+            color: var(--sm-muted);
+            font-size: 0.93rem;
+            line-height: 1.65;
+        }
+        .catalog-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 10px;
+            margin: 0 0 18px;
+            padding: 0;
+            list-style: none;
+        }
+        .catalog-topics li {
+            padding: 5px 12px;
+            border-radius: 6px;
+            background: var(--sm-surface-soft);
+            border: 1px solid var(--sm-border);
+            font-size: 0.78rem;
+            color: var(--sm-text);
+            font-weight: 600;
+        }
+        .catalog-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-top: 18px;
+            border-top: 1px solid var(--sm-border);
+        }
+        .catalog-page-badge {
+            color: var(--sm-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+        .catalog-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+            background: transparent;
+        }
+        .catalog-actions a {
+            min-height: 44px;
+            padding: 10px 22px;
+            border: 1.5px solid var(--sm-accent);
+            border-radius: 6px;
+            font: 700 .74rem var(--sm-sans);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             cursor: pointer;
+            box-sizing: border-box;
             transition: transform .2s ease, background .2s ease, color .2s ease;
         }
-        .catalog-actions button:hover,
-        .catalog-actions button:focus-visible { transform: translateY(-1px); outline: none; }
-        .catalog-cart { background: transparent; color: var(--sm-accent); }
-        .catalog-cart:hover, .catalog-cart:focus-visible { background: rgba(213, 169, 67, .15); }
-        .catalog-buy { background: var(--sm-accent); color: #171512; font-weight: 800; }
-        .catalog-buy:hover, .catalog-buy:focus-visible { background: var(--sm-accent-dark); color: #fff; }
+        .catalog-actions a:hover,
+        .catalog-actions a:focus-visible { transform: translateY(-1px); outline: none; }
+        .catalog-view-btn { background: transparent; color: var(--sm-accent); }
+        .catalog-view-btn:hover, .catalog-view-btn:focus-visible { background: rgba(139, 105, 20, .1); }
+        .catalog-download-btn { background: var(--sm-accent); color: #fff !important; font-weight: 700; }
+        [data-theme="dark"] .catalog-download-btn { color: #1a1714 !important; }
+        .catalog-download-btn:hover, .catalog-download-btn:focus-visible { background: var(--sm-accent-dark); }
         .catalog-screen-reader {
             position: absolute;
             width: 1px;
@@ -169,93 +278,15 @@
             white-space: nowrap;
             border: 0;
         }
-        .store-header-btn {
-            position: relative;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--sm-border);
-            border-radius: 50%;
-            background: transparent;
-            color: var(--sm-text);
-            cursor: pointer;
+        @media (max-width: 768px) {
+            .catalog-main { padding: 24px 16px 64px !important; }
+            .catalog-card { grid-template-columns: 1fr; }
+            .catalog-cover-col { padding: 24px 32px; }
+            .catalog-cover-link { max-width: 220px; }
+            .catalog-body { padding: 24px 20px; }
+            .catalog-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
         }
-        .cart-count {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            min-width: 17px;
-            height: 17px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-            border-radius: 999px;
-            background: var(--sm-accent);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-        }
-        .cart-count:not([hidden]) { display: flex; }
-        .profile-menu-wrap { position: relative; }
-        .profile-menu-wrap:not([hidden]) { display: block; }
-        .profile-avatar, .profile-initial { width: 36px; height: 36px; border-radius: 50%; }
-        .profile-avatar { object-fit: cover; }
-        .profile-initial { display: flex; align-items: center; justify-content: center; background: var(--sm-accent); color: #fff; font-weight: 700; }
-        .profile-avatar[hidden], .profile-initial[hidden] { display: none !important; }
-        .profile-dropdown {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            z-index: 20;
-            width: 220px;
-            padding: 8px;
-            border: 1px solid var(--sm-border);
-            background: var(--sm-surface);
-            box-shadow: 0 18px 50px rgba(0,0,0,.16);
-        }
-        .profile-dropdown-user { padding: 10px 12px; }
-        .profile-dropdown-user strong, .profile-dropdown-user span { display: block; }
-        .profile-dropdown-user span { margin-top: 4px; color: var(--sm-muted); font-size: .75rem; overflow: hidden; text-overflow: ellipsis; }
-        .profile-divider { height: 1px; margin: 4px 0; background: var(--sm-border); }
-        .profile-dropdown a, .profile-dropdown button {
-            display: block;
-            width: 100%;
-            padding: 10px 12px;
-            border: 0;
-            background: transparent;
-            color: var(--sm-text);
-            font: .84rem var(--sm-sans);
-            text-align: left;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .profile-dropdown a:hover, .profile-dropdown button:hover { background: rgba(120,111,100,.12); }
-        .cart-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,.45); opacity: 0; visibility: hidden; transition: .2s; }
-        .cart-overlay.open { opacity: 1; visibility: visible; }
-        .cart-drawer { position: fixed; top: 0; right: 0; z-index: 10001; width: min(420px, 100%); height: 100vh; height: 100dvh; display: flex; flex-direction: column; box-sizing: border-box; transform: translateX(100%); border-left: 1px solid var(--sm-border); background: var(--sm-bg); transition: transform .25s ease; }
-        .cart-drawer.open { transform: translateX(0); }
-        .cart-drawer-header { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--sm-border); }
-        .cart-drawer-header h2 { margin: 4px 0 0; font: 500 1.45rem var(--sm-serif); }
-        .cart-small-label { color: var(--sm-accent); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; }
-        .cart-close { width: 44px; height: 44px; flex-shrink: 0; border: 0; background: transparent; color: var(--sm-text); font-size: 1.7rem; cursor: pointer; }
-        .cart-items { flex: 1; min-height: 0; overscroll-behavior: contain; overflow-y: auto; padding: 20px 24px; }
-        .cart-item { display: flex; justify-content: space-between; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--sm-border); }
-        .cart-item-info { min-width: 0; overflow-wrap: anywhere; }
-        .cart-item-info strong, .cart-item-info span { display: block; }
-        .cart-item-info span { margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
-        .cart-remove { min-width: 44px; min-height: 44px; border: 0; background: none; color: #b91c1c; cursor: pointer; }
-        .cart-empty { padding: 60px 20px; color: var(--sm-muted); text-align: center; }
-        .cart-footer { flex-shrink: 0; padding: 22px 24px; padding-bottom: max(22px, env(safe-area-inset-bottom)); border-top: 1px solid var(--sm-border); }
-        .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 18px; }
-        .cart-checkout-btn { width: 100%; padding: 15px; border: 0; background: var(--sm-accent); color: #fff; font-weight: 700; cursor: pointer; }
-        .cart-checkout-message { margin-bottom: 16px; padding: 12px 14px; border: 1px solid var(--sm-accent); color: var(--sm-text); font-size: .85rem; line-height: 1.5; }
-        .cart-checkout-message a { display: inline-block; margin-top: 6px; color: var(--sm-accent); font-weight: 700; }
-        .cart-secure-text { margin: 12px 0 0; color: var(--sm-muted); font-size: .7rem; text-align: center; }
-        @media (max-width: 600px) {
-            .catalog-main { padding: 52px 18px 72px; }
+        @media (max-width: 480px) {
             .catalog-actions { grid-template-columns: 1fr; }
         }
     </style>
@@ -271,38 +302,53 @@
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="header">
         <div class="header-content">
-            <a class="logo" href="/"><img class="logo-icon" src="/logo.png" alt="" aria-hidden="true"><span class="logo-text">OnlinePDFPro</span></a>
+            <a class="logo" href="/"><img class="logo-icon" src="/logo.png" alt="" aria-hidden="true" style="width:28px; height:28px; border-radius:6px;"><span class="logo-text">OnlinePDFPro</span></a>
             <nav class="nav" id="nav">
                 <a class="nav-link" href="/tools">PDF Tools</a>
                 <a class="nav-link active" href="/study-materials">Study Materials</a>
             </nav>
             <div class="header-actions">
-                <button class="store-header-btn" type="button" onclick="openCart()" aria-label="Shopping cart" title="Cart"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg><span class="cart-count" hidden>0</span></button>
-                <div class="profile-menu-wrap" id="profileMenuWrap" hidden><button class="store-header-btn profile-trigger" id="profileTrigger" type="button" aria-label="My account" aria-expanded="false"><img id="profileAvatar" class="profile-avatar" alt="" hidden><span id="profileInitial" class="profile-initial">U</span></button><div class="profile-dropdown" id="profileDropdown" hidden><div class="profile-dropdown-user"><strong id="profileName">User</strong><span id="profileEmail"></span></div><div class="profile-divider"></div><a href="/library">My Library</a><button type="button" onclick="logout()" hidden style="display: none;" id="logoutBtn">Sign Out</button></div></div>
                 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="theme-icon-light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="theme-icon-dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span></button>
-                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
+                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span aria-hidden="true">☰</span></button>
             </div>
         </div>
     </header>
 
     <main id="main" class="catalog-main">
         <section class="sm-hero">
-            <h1 class="sm-hero-heading">Study Materials for Computer Science Students</h1>
-            <p class="sm-hero-subtitle">Carefully prepared PDF notes and revision material. Review topics before purchasing, then access paid files from My Library.</p>
+            <h1 class="sm-hero-heading">Free Study Materials for College Studies</h1>
+            <p class="sm-hero-subtitle">Written Computer Science PDF notes and exam revision guides for college studies — view directly in your browser or download for offline study.</p>
         </section>
 
         <div class="catalog-shell">
             <h2 class="catalog-title">DBMS Complete Notes</h2>
             <div class="catalog-grid">
                 <article class="catalog-card" aria-label="DBMS Complete Notes">
-                    <a class="catalog-cover-link" href="/products/dbms-notes" aria-label="View DBMS Complete Notes details and preview">
-                        <img class="catalog-cover" src="/assets/previews/dbms/cover.jpg" alt="DBMS Complete Notes cover" width="809" height="1106" fetchpriority="high">
-                    </a>
-                    <div class="catalog-actions">
-                        <button class="catalog-cart" type="button" onclick="addToCart('dbms-notes')">Add to cart</button>
-                        <button class="catalog-buy" type="button" onclick="buyProduct('dbms-notes')">Buy now · ₹9</button>
+                    <div class="catalog-cover-col">
+                        <a class="catalog-cover-link" href="/products/dbms-notes" aria-label="Open DBMS Chapter-Wise Study Notes">
+                            <img class="catalog-cover" src="/assets/previews/dbms/cover.jpg" alt="DBMS From Basics to Advanced — Chapter-Wise Study Guide cover" width="809" height="1106" fetchpriority="high">
+                        </a>
                     </div>
-                    <span class="catalog-screen-reader">51-page PDF. Select the cover to view what's included and preview five pages.</span>
+                    <div class="catalog-body">
+                        <div>
+                            <p class="catalog-kicker">Database Management Systems · Chapter-Wise College Study Guide · Free PDF</p>
+                            <h3 class="catalog-heading"><a href="/products/dbms-notes">DBMS — From Basics to Advanced (Chapter-Wise Notes)</a></h3>
+                            <p class="catalog-summary">Click the DBMS cover or Open Chapters to browse chapter-wise textbook notes with worked numerical examples, Python &amp; Java JDBC code, GATE/Viva question banks, and complete step-by-step solutions.</p>
+                            <ul class="catalog-topics" aria-label="Included chapters">
+                                <li>Chapter 1: Data, Databases &amp; DBMS Fundamentals (30 Pages)</li>
+                                <li>Chapter 2: DBMS Architecture &amp; Data Independence</li>
+                                <li>Chapter 3: ER &amp; Enhanced ER Modeling</li>
+                            </ul>
+                        </div>
+                        <div class="catalog-meta-row">
+                            <span class="catalog-page-badge">Chapter-Wise PDF Series · Chapter 1 Ready (30 Pages)</span>
+                            <div class="catalog-actions">
+                                <a class="catalog-view-btn" href="/products/dbms-notes">Open Chapters</a>
+                                <a class="catalog-download-btn" href="/assets/study-materials/dbms-chapter-01.pdf" download="DBMS-Chapter-01-Fundamentals.pdf">Download Ch. 1 PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="catalog-screen-reader">Free chapter-wise DBMS study notes PDF for college studies. View online or download directly.</span>
                 </article>
             </div>
         </div>
@@ -312,25 +358,16 @@
         <div class="hp-footer-grid">
             <div class="hp-footer-brand"><p class="hp-footer-brand-title">OnlinePDFPro</p><p class="hp-footer-brand-sub">Free PDF Tools &amp; Study Materials</p></div>
             <div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf">Merge PDF</a></li><li><a href="/tools/compress-pdf">Compress PDF</a></li><li><a href="/tools/split-pdf">Split PDF</a></li><li><a href="/tools">All Tools</a></li></ul></div>
-            <div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about">About</a></li><li><a href="/help">Support &amp; FAQ</a></li></ul></div>
-            <div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/refund">Refund Policy</a></li></ul></div>
+            <div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about">About</a></li></ul></div>
+            <div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/dmca">Copyright &amp; DMCA</a></li></ul></div>
         </div>
         <div class="hp-footer-bottom"><p class="hp-footer-copy">© 2026 OnlinePDFPro. All rights reserved.</p></div>
     </footer>
-
-    <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
-    <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
-        <div class="cart-drawer-header"><div><span class="cart-small-label">Your cart</span><h2>Study Materials</h2></div><button type="button" class="cart-close" onclick="closeCart()" aria-label="Close cart">×</button></div>
-        <div id="cartItems" class="cart-items"></div>
-        <div class="cart-footer"><div class="cart-total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div><div id="cartCheckoutMessage" class="cart-checkout-message" role="alert" hidden><span id="cartCheckoutMessageText"></span><a id="cartCheckoutLibraryLink" href="/library" hidden>Open My Library</a></div><button class="cart-checkout-btn" type="button" onclick="checkoutCart()">Continue to checkout</button><p class="cart-secure-text">Secure checkout · Instant PDF access</p></div>
-    </aside>
 
     <script>
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
     </script>
     <script defer src="/js/app.js?v=96"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1"></script>
-    <script defer src="/js/auth.js?v=96"></script>
     <script defer src="/js/store.js?v=96"></script>
 </body>
 </html>

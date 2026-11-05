@@ -165,7 +165,11 @@ function fontPreferenceKey(object) {
 }
 
 function makeFontCandidate(object, family, bold = object.bold, italic = object.italic) {
-  const descriptor = descriptorForFamily(family, { bold: Boolean(bold), italic: Boolean(italic) });
+  const descriptor = descriptorForFamily(family, {
+    bold: Boolean(bold),
+    italic: Boolean(italic),
+    weight: object.fontWeight
+  });
   return {
     ...object,
     fontDescriptor: descriptor,
@@ -180,10 +184,13 @@ function makeFontCandidate(object, family, bold = object.bold, italic = object.i
 
 function suggestedReplacementFamily(object, text) {
   if (/[\u0900-\u097F]/.test(String(text || ''))) return 'Noto Sans Devanagari';
-  const family = String((object.fontDescriptor && object.fontDescriptor.detectedFamily) || object.detectedFontFamily || '').toLowerCase();
-  if (family.includes('calibri')) return 'Carlito';
-  if (family.includes('times') || family.includes('tinos')) return 'Tinos';
-  if (family.includes('cambria')) return 'Caladea';
+  const descriptor = object && object.fontDescriptor;
+  const family = String((descriptor && descriptor.detectedFamily) || object.detectedFontFamily || object.fontFamily || '').toLowerCase();
+  if (family.includes('calibri') || family.includes('carlito')) return 'Carlito';
+  if (family.includes('cambria') || family.includes('caladea')) return 'Caladea';
+  if ((descriptor && descriptor.isSerif) || /serif|times|tinos|georgia|garamond|baskerville|palatino|bookman|playfair|instrument|merriweather|lora|charter|century|minion|caslon|didot|bodoni|spectral|crimson/i.test(family)) {
+    return 'Tinos';
+  }
   return 'Arimo';
 }
 
@@ -193,7 +200,7 @@ async function requestFontReplacement(object, draft, initialCoverage) {
   if (remembered) {
     const candidate = makeFontCandidate(object, remembered);
     const coverage = await checkGlyphCoverage(candidate, draft);
-    if (coverage.supported) return descriptorForFamily(remembered, { bold: object.bold, italic: object.italic });
+    if (coverage.supported) return descriptorForFamily(remembered, { bold: object.bold, italic: object.italic, weight: object.fontWeight });
     fontReplacementPreferences.delete(key);
   }
 
@@ -222,6 +229,14 @@ async function ensureEditFontCoverage(object, draft, { family = null, bold = obj
   const candidate = family ? makeFontCandidate(object, family, bold, italic) : { ...object, bold: Boolean(bold), italic: Boolean(italic) };
   const coverage = await checkGlyphCoverage(candidate, draft);
   if (coverage.supported) return { cancelled: false, descriptor: family ? candidate.fontDescriptor : null };
+  if (!/[\u0900-\u097F]/.test(String(draft || ''))) {
+    const autoFamily = family || suggestedReplacementFamily(candidate, draft);
+    const autoCandidate = makeFontCandidate(candidate, autoFamily, bold, italic);
+    const autoCoverage = await checkGlyphCoverage(autoCandidate, draft);
+    if (autoCoverage.supported) {
+      return { cancelled: false, descriptor: autoCandidate.fontDescriptor };
+    }
+  }
   const replacement = await requestFontReplacement(candidate, draft, coverage);
   return replacement
     ? { cancelled: false, descriptor: replacement }
@@ -383,20 +398,20 @@ function updatePageIndicators(pageNumber = editorState.currentPage) {
   refs.thumbnails.querySelectorAll('.pdf-thumbnail').forEach((button) => {
     button.classList.toggle('is-current', Number(button.dataset.pageNumber) === editorState.currentPage);
   });
-  refs.movePageUp.disabled = editorState.currentPage <= 1 || editorState.busy;
-  refs.movePageDown.disabled = editorState.currentPage >= total || editorState.busy;
-  refs.deletePage.disabled = total <= 1 || editorState.busy;
+  if (refs.movePageUp) refs.movePageUp.disabled = editorState.currentPage <= 1 || editorState.busy;
+  if (refs.movePageDown) refs.movePageDown.disabled = editorState.currentPage >= total || editorState.busy;
+  if (refs.deletePage) refs.deletePage.disabled = total <= 1 || editorState.busy;
   updateZoomLabel();
 }
 
 function openPropertiesPanel() {
   refs.propertiesPanel.classList.add('is-open');
-  refs.propertiesDrawer.setAttribute('aria-expanded', 'true');
+  refs.propertiesDrawer?.setAttribute('aria-expanded', 'true');
 }
 
 function closePropertiesPanel() {
   refs.propertiesPanel.classList.remove('is-open');
-  refs.propertiesDrawer.setAttribute('aria-expanded', 'false');
+  refs.propertiesDrawer?.setAttribute('aria-expanded', 'false');
 }
 
 function ensureSelectValue(select, value, suffix = '') {
@@ -489,28 +504,11 @@ function selectTextObject(id) {
     syncContextToolbar(null);
     refs.selectionEmpty.hidden = true;
     refs.propertiesForm.hidden = true;
-    refs.objectProperties.hidden = false;
-    const labels = { image: 'Image', signature: 'Signature', draw: 'Drawing', shape: 'Shape', highlight: 'Highlight', whiteout: 'Whiteout cover' };
-    refs.objectKind.textContent = labels[object.type] || 'Object';
-    refs.objectWidth.value = String(Math.round(object.width || 1));
-    refs.objectHeight.value = String(Math.round(object.height || 1));
-    refs.objectRotation.value = String(Math.round(object.rotation || 0));
-    refs.objectOpacity.value = String(Number(object.opacity ?? 1));
-    refs.objectStroke.value = /^#[0-9a-f]{6}$/i.test(object.strokeColor || '') ? object.strokeColor : '#2563eb';
-    refs.objectFill.value = /^#[0-9a-f]{6}$/i.test(object.fillColor || '') ? object.fillColor : '#ffffff';
-    refs.objectStrokeWidth.value = String(Number(object.strokeWidth || 0));
-    refs.objectLockAspect.checked = ['image', 'signature'].includes(object.type);
-    refs.objectLockAspect.closest('label').hidden = !['image', 'signature'].includes(object.type);
-    refs.objectNoFill.checked = object.fillColor === 'transparent';
-    refs.objectNoFill.closest('label').hidden = ['image', 'signature', 'draw', 'highlight', 'whiteout'].includes(object.type);
-    refs.objectStrokeRow.hidden = ['image', 'signature'].includes(object.type);
-    refs.whiteoutWarning.hidden = object.type !== 'whiteout';
-    refs.applyObjectProperties.disabled = false;
-    openPropertiesPanel();
+    if (refs.objectProperties) refs.objectProperties.hidden = false;
     if (renderer) renderer.setSelectedText(id);
     return;
   }
-  refs.objectProperties.hidden = true;
+  if (refs.objectProperties) refs.objectProperties.hidden = true;
   const pageState = editorState.pages[object.page - 1];
   const canvas = renderer && renderer.getPageCanvas(object.page);
   if (['text', 'ocr-text'].includes(object.type) && pageState && pageState.viewport && canvas && object.background === null) {
@@ -573,7 +571,7 @@ function beginInlineTextEdit(id, point = null) {
         refs.textValue.value = draft;
         refs.download.disabled = editorState.busy || (!editorState.dirty && draft === _object.text);
       },
-      onCommit: async ({ objectId, draft }) => {
+      onCommit: async ({ objectId, draft, measuredWidth }) => {
         const current = getTextObject(objectId);
         if (!current || editorState.busy) return;
         if (draft === current.text) { updateDirtyUi(); return; }
@@ -593,7 +591,7 @@ function beginInlineTextEdit(id, point = null) {
           return;
         }
         rememberObjectsForHistory([current]);
-        const values = { text: draft };
+        const values = { text: draft, measuredWidth };
         if (fontResult.descriptor) values.fontDescriptor = fontResult.descriptor;
         if (applyTextProperties(current, values)) {
           recordHistory();
@@ -1309,17 +1307,21 @@ function updatePageTextStatus(pageNumber, objects) {
     const page = editorState.pages[pageNumber - 1];
     if (page && page.isBlank) {
       refs.runOcr.hidden = true;
+      refs.stageStatus.hidden = true;
       return;
     }
     const hasOcr = editorState.objects.some((object) => object.page === pageNumber && object.ocrAssisted);
-    refs.runOcr.hidden = objects.length > 3 || hasOcr || Boolean(page && page.ocrReady);
-    if (objects.length <= 3 && !hasOcr && !(page && page.ocrReady)) {
-      refs.stageStatus.textContent = 'This page has little selectable PDF text and may be scanned.';
+    refs.runOcr.hidden = objects.length > 0 || hasOcr || Boolean(page && page.ocrReady);
+    if (!objects.length && !hasOcr && !(page && page.ocrReady)) {
+      refs.stageStatus.textContent = 'No selectable text was detected on this page.';
+      refs.stageStatus.hidden = false;
     } else if (hasOcr) {
       refs.stageStatus.textContent = 'OCR-assisted editing is active on this page. Original fonts cannot be detected from a scan.';
-    } else if (!objects.length) refs.stageStatus.textContent = 'No selectable text was detected on this page.';
-    else refs.stageStatus.textContent = objects.length + ' text items detected · click text to edit';
-    refs.stageStatus.hidden = false;
+      refs.stageStatus.hidden = false;
+    } else {
+      refs.stageStatus.textContent = '';
+      refs.stageStatus.hidden = true;
+    }
   }
   const selected = getTextObject(editorState.selectedObjectId);
   if (selected && selected.page === pageNumber && selected.background === null) selectTextObject(selected.id);
@@ -1429,7 +1431,7 @@ async function clearCurrentDocument() {
   refs.pagesPanel.classList.remove('is-open');
   refs.selectionEmpty.hidden = false;
   refs.propertiesForm.hidden = true;
-  refs.objectProperties.hidden = true;
+  if (refs.objectProperties) refs.objectProperties.hidden = true;
   refs.pagesContainer.replaceChildren();
   refs.thumbnails.replaceChildren();
 }
@@ -1591,7 +1593,7 @@ function onKeyDown(event) {
     editorState.selectedObjectId = null;
     refs.selectionEmpty.hidden = false;
     refs.propertiesForm.hidden = true;
-    refs.objectProperties.hidden = true;
+    if (refs.objectProperties) refs.objectProperties.hidden = true;
     setMode('select');
     closePropertiesPanel();
     renderer && renderer.setSelectedText(null);
@@ -1673,12 +1675,12 @@ refs.currentPage.addEventListener('input', () => {
   pageJumpTimer = window.setTimeout(commitPageJump, 180);
 });
 refs.currentPage.addEventListener('change', commitPageJump);
-refs.rotatePage.addEventListener('click', () => runPageOperation((page) => rotatePdfPage(page, 90), 'Page rotated 90° clockwise.'));
-refs.movePageUp.addEventListener('click', () => runPageOperation((page) => reorderPdfPage(page, -1), 'Page moved earlier.'));
-refs.movePageDown.addEventListener('click', () => runPageOperation((page) => reorderPdfPage(page, 1), 'Page moved later.'));
-refs.duplicatePage.addEventListener('click', () => runPageOperation(duplicatePdfPage, 'Page duplicated.'));
-refs.insertBlankPage.addEventListener('click', () => runPageOperation(insertBlankPageAfter, 'A blank page was inserted.'));
-refs.deletePage.addEventListener('click', () => runPageOperation(removePdfPage, 'Page deleted.'));
+refs.rotatePage?.addEventListener('click', () => runPageOperation((page) => rotatePdfPage(page, 90), 'Page rotated 90° clockwise.'));
+refs.movePageUp?.addEventListener('click', () => runPageOperation((page) => reorderPdfPage(page, -1), 'Page moved earlier.'));
+refs.movePageDown?.addEventListener('click', () => runPageOperation((page) => reorderPdfPage(page, 1), 'Page moved later.'));
+refs.duplicatePage?.addEventListener('click', () => runPageOperation(duplicatePdfPage, 'Page duplicated.'));
+refs.insertBlankPage?.addEventListener('click', () => runPageOperation(insertBlankPageAfter, 'A blank page was inserted.'));
+refs.deletePage?.addEventListener('click', () => runPageOperation(removePdfPage, 'Page deleted.'));
 refs.undoButton.addEventListener('click', async () => {
   if (inlineTextEditor) await inlineTextEditor.commit('undo');
   if (undo()) {
@@ -1696,7 +1698,7 @@ refs.redoButton.addEventListener('click', async () => {
   }
 });
 refs.propertiesForm.addEventListener('submit', commitSelectedText);
-refs.objectProperties.addEventListener('submit', commitObjectProperties);
+if (refs.objectProperties) refs.objectProperties.addEventListener('submit', commitObjectProperties);
 refs.contextFontFamily.addEventListener('change', () => applyContextTextChange({ fontFamily: refs.contextFontFamily.value }));
 refs.contextFontSize.addEventListener('change', () => applyContextTextChange({ fontSize: Number(refs.contextFontSize.value) }));
 refs.contextBold.addEventListener('click', () => {
@@ -1722,85 +1724,12 @@ refs.contextRotation.addEventListener('change', () => applyContextTextChange({ r
 refs.contextLetterSpacing.addEventListener('change', () => applyContextTextChange({ letterSpacing: Number(refs.contextLetterSpacing.value) }));
 refs.contextOpacity.addEventListener('change', () => applyContextTextChange({ opacity: Number(refs.contextOpacity.value) }));
 refs.contextAlignment.addEventListener('change', () => applyContextTextChange({ alignment: refs.contextAlignment.value }));
-refs.deleteObject.addEventListener('click', deleteSelectedObject);
-refs.duplicateObject.addEventListener('click', duplicateSelectedObject);
+if (refs.deleteObject) refs.deleteObject.addEventListener('click', deleteSelectedObject);
+if (refs.duplicateObject) refs.duplicateObject.addEventListener('click', duplicateSelectedObject);
 refs.runOcr.addEventListener('click', runOcrOnCurrentPage);
 refs.textColor.addEventListener('input', () => { refs.textColorValue.textContent = refs.textColor.value.toUpperCase(); });
-byId('mode-select-button').addEventListener('click', () => setMode('select'));
-byId('mode-text-button').addEventListener('click', () => setMode('text'));
-byId('mode-draw-button').addEventListener('click', () => setMode('draw'));
-byId('mode-highlight-button').addEventListener('click', () => setMode('highlight'));
-byId('mode-shape-button').addEventListener('click', () => setMode('shape'));
-byId('mode-whiteout-button').addEventListener('click', () => {
-  setMode('whiteout');
-  refs.stageStatus.textContent = 'Whiteout visually covers content only; it is not secure redaction. Drag over an area to cover it.';
-  refs.stageStatus.hidden = false;
-});
-byId('mode-image-button').addEventListener('click', () => refs.imageInput.click());
-byId('mode-signature-button').addEventListener('click', openSignatureDialog);
-refs.imageInput.addEventListener('change', async (event) => {
-  const file = event.target.files && event.target.files[0];
-  refs.imageInput.value = '';
-  if (!file) return;
-  try {
-    pendingImage = await decodeLocalImage(file);
-    setMode('image');
-    refs.stageStatus.textContent = 'Click a page to place the image.';
-    refs.stageStatus.hidden = false;
-  } catch (error) {
-    refs.stageStatus.textContent = error.message || 'The image could not be opened.';
-    refs.stageStatus.hidden = false;
-  }
-});
-refs.signatureCanvas.addEventListener('pointerdown', (event) => {
-  const canvas = refs.signatureCanvas;
-  const context = canvas.getContext('2d');
-  const rect = canvas.getBoundingClientRect();
-  context.strokeStyle = '#172554';
-  context.lineWidth = 5;
-  context.lineCap = 'round';
-  context.lineJoin = 'round';
-  context.beginPath();
-  context.moveTo((event.clientX - rect.left) * canvas.width / rect.width, (event.clientY - rect.top) * canvas.height / rect.height);
-  signatureHasInk = true;
-  try { canvas.setPointerCapture(event.pointerId); } catch (error) {}
-  event.preventDefault();
-});
-refs.signatureCanvas.addEventListener('pointermove', (event) => {
-  if (!event.buttons && event.pointerType !== 'touch') return;
-  const canvas = refs.signatureCanvas;
-  const context = canvas.getContext('2d');
-  const rect = canvas.getBoundingClientRect();
-  context.lineTo((event.clientX - rect.left) * canvas.width / rect.width, (event.clientY - rect.top) * canvas.height / rect.height);
-  context.stroke();
-  event.preventDefault();
-});
-refs.signatureCanvas.addEventListener('pointerup', (event) => {
-  try { refs.signatureCanvas.releasePointerCapture(event.pointerId); } catch (error) {}
-});
-refs.signatureClear.addEventListener('click', () => {
-  const context = refs.signatureCanvas.getContext('2d');
-  if (context) context.clearRect(0, 0, refs.signatureCanvas.width, refs.signatureCanvas.height);
-  signatureHasInk = false;
-  pendingImage = null;
-});
-refs.signatureFile.addEventListener('change', async (event) => {
-  const file = event.target.files && event.target.files[0];
-  refs.signatureFile.value = '';
-  if (!file) return;
-  try {
-    pendingImage = await decodeLocalImage(file);
-    refs.stageStatus.textContent = 'Signature image ready. Select Use signature, then click the page to place it.';
-    refs.stageStatus.hidden = false;
-  } catch (error) {
-    refs.stageStatus.textContent = error.message || 'The signature image could not be opened.';
-    refs.stageStatus.hidden = false;
-  }
-});
-refs.signatureUse.addEventListener('click', useSignature);
-refs.signatureClose.addEventListener('click', () => {
-  if (refs.signatureDialog.open) refs.signatureDialog.close();
-});
+byId('mode-select-button')?.addEventListener('click', () => setMode('select'));
+byId('mode-text-button')?.addEventListener('click', () => setMode('text'));
 refs.findToggle.addEventListener('click', toggleFindPanel);
 refs.findText.addEventListener('input', scheduleFind);
 refs.findPrevious.addEventListener('click', () => showFindMatch(currentFindIndex - 1));
@@ -1811,7 +1740,7 @@ refs.pagesDrawer.addEventListener('click', () => {
   refs.pagesPanel.classList.toggle('is-open', open);
   refs.pagesDrawer.setAttribute('aria-expanded', String(open));
 });
-refs.propertiesDrawer.addEventListener('click', () => {
+refs.propertiesDrawer?.addEventListener('click', () => {
   const object = getTextObject(editorState.selectedObjectId);
   if (isTextObject(object)) {
     toggleContextAdvanced();

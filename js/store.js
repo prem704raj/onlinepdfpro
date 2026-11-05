@@ -2,21 +2,65 @@ const STORE_PRODUCTS = {
     "dbms-notes": {
         id: "dbms-notes",
         title: "DBMS Complete Notes",
-        price: 9,
+        price: 0,
+        priceLabel: "Free",
+        pdfUrl: "/assets/study-materials/dbms-chapter-01.pdf",
+        downloadName: "DBMS-Chapter-01-Fundamentals.pdf",
         image: "/assets/previews/dbms/page-01.webp",
         url: "/products/dbms-notes",
-        pageCount: 51,
+        pageCount: 30,
         format: "PDF",
-        description: "A focused guide to database fundamentals, relational models, ER diagrams, normalization, SQL, transactions, indexing, and exam revision.",
+        description: "Free chapter-wise DBMS study materials for college studies — starting with Chapter 1: Data, Databases, and DBMS Fundamentals (30-page textbook chapter with Python/Java code, GATE/Viva question bank, and complete worked solutions).",
         includes: [
-            "Database fundamentals and architecture",
-            "ER diagrams and relational models",
-            "Normalization and SQL essentials",
-            "Transactions, concurrency, and indexing",
-            "Compact explanations for revision"
+            "Data vs. Information vs. Knowledge vs. Metadata",
+            "File-Processing Systems vs. DBMS (7 Classic Problems & Storage Math)",
+            "DBMS vs. RDBMS & E.F. Codd's Relational Rules",
+            "PostgreSQL, MySQL InnoDB, Oracle, SQLite & Python/Java Connectivity",
+            "Complete GATE, Semester Exam & Viva Question Bank with Worked Solutions"
         ],
-        deliveryNote: "Instant PDF access after secure checkout. Find it again anytime in My Library.",
-        disclosure: "This is an AI-assisted study draft. Review and verify the material before relying on it for exams or professional decisions.",
+        chapters: [
+            {
+                number: 1,
+                id: "chapter-01",
+                badge: "CHAPTER 01",
+                part: "PART I · DATABASE FOUNDATIONS",
+                title: "Data, Databases, and DBMS Fundamentals",
+                shortTopic: "Data vs. Information · File Systems vs. DBMS · Codd's Rules · Python & Java JDBC",
+                summary: "Complete 30-page textbook chapter covering raw data vs. metadata, UniVerseDB schema, the 7 classic file-system pitfalls with storage math, DBMS subsystems, Codd's rules, Python/Java connectivity, and full solved question bank.",
+                pageCount: 30,
+                status: "available",
+                pdfUrl: "/assets/study-materials/dbms-chapter-01.pdf",
+                downloadName: "DBMS-Chapter-01-Fundamentals.pdf"
+            },
+            {
+                number: 2,
+                id: "chapter-02",
+                badge: "CHAPTER 02",
+                part: "PART I · DATABASE FOUNDATIONS",
+                title: "DBMS Architecture & Data Independence",
+                shortTopic: "Schema vs. Instance · ANSI/SPARC 3-Schema · Logical & Physical Independence",
+                summary: "Three-Schema Architecture (External, Conceptual, Internal levels), Logical vs. Physical Data Independence, Query Processor and Storage Manager internals, and 1/2/3-Tier client-server architectures.",
+                pageCount: null,
+                status: "upcoming",
+                pdfUrl: null,
+                downloadName: null
+            },
+            {
+                number: 3,
+                id: "chapter-03",
+                badge: "CHAPTER 03",
+                part: "PART I · CONCEPTUAL DESIGN",
+                title: "Entity-Relationship (ER) & Enhanced ER Modeling",
+                shortTopic: "Entities & Attributes · Cardinality & Participation · Weak Entities · 7 Mapping Rules",
+                summary: "Conceptual database modeling with strong/weak entities, composite and multivalued attributes, total vs. partial participation, EER specialization/generalization, and step-by-step ER-to-Relational table mapping.",
+                pageCount: null,
+                status: "upcoming",
+                pdfUrl: null,
+                downloadName: null
+            }
+        ],
+        deliveryNote: "100% Free chapter-wise PDFs for college studies — view online or download instantly. No sign-in required.",
+        disclosure: "Free chapter-wise study material for college studies, semester exams, GATE CS, and technical placement preparation.",
         previewPages: [
             "/assets/previews/dbms/page-01.webp",
             "/assets/previews/dbms/page-02.webp",
@@ -27,605 +71,25 @@ const STORE_PRODUCTS = {
     }
 };
 
-const STORE_CART_KEY = "onlinepdfpro_cart";
-const STORE_WORKER_BASE = "https://onlinepdfpro-proxy.prem736raj.workers.dev";
-
-function normalizeCart(cart) {
-    if (!Array.isArray(cart)) return [];
-
-    const seen = new Set();
-    return cart.reduce((items, item) => {
-        const productId = item && typeof item.id === "string" ? item.id : "";
-        const product = STORE_PRODUCTS[productId];
-        if (!product || seen.has(productId)) return items;
-        seen.add(productId);
-        items.push(product);
-        return items;
-    }, []);
-}
-
-function getCart() {
-    try {
-        return normalizeCart(JSON.parse(localStorage.getItem(STORE_CART_KEY)));
-    } catch {
-        return [];
-    }
-}
-
-function saveCart(cart) {
-    const normalizedCart = normalizeCart(cart);
-    localStorage.setItem(
-        STORE_CART_KEY,
-        JSON.stringify(normalizedCart)
-    );
-
-    updateCartCount();
-    renderCart();
-    return normalizedCart;
-}
-
-function addToCart(productId) {
+function viewStudyPdf(productId) {
     const product = STORE_PRODUCTS[productId];
-
-    if (!product) {
-        console.error("Unknown product:", productId);
-        return;
-    }
-
-    const cart = getCart();
-
-    if (cart.some(item => item.id !== productId)) {
-        showCheckoutMessage("Checkout currently supports one item at a time. Remove the other item before buying this one.");
-        openCart();
-        return false;
-    }
-
-    const alreadyExists = cart.some(
-        item => item.id === productId
-    );
-
-    if (!alreadyExists) {
-        cart.push(product);
-        saveCart(cart);
-    }
-
-    openCart();
+    if (!product) return false;
+    window.location.href = product.url || "/products/dbms-notes";
     return true;
 }
 
-function removeFromCart(productId) {
-    const cart = getCart().filter(
-        item => item.id !== productId
-    );
-
-    saveCart(cart);
-}
-
-function clearCart() {
-    saveCart([]);
-}
-
-function getCartTotal() {
-    return getCart().reduce(
-        (sum, item) => sum + Number(item.price || 0),
-        0
-    );
-}
-
-function updateCartCount() {
-    const count = getCart().length;
-
-    document.querySelectorAll(".cart-count").forEach(el => {
-        el.textContent = count;
-        el.hidden = count === 0;
-    });
-}
-
-let cartFocusContext = null;
-
-function openCart() {
-    const drawer = document.getElementById("cartDrawer");
-    const overlay = document.getElementById("cartOverlay");
-
-    if (!drawer || !overlay) return;
-
-    renderCart();
-
-    if (!cartFocusContext) {
-        cartFocusContext = { trigger: document.activeElement, overflow: document.body.style.overflow, siblings: [] };
-        for (const element of document.body.children) {
-            if (element === drawer || element === overlay || element.matches('script, style')) continue;
-            cartFocusContext.siblings.push([element, element.inert]);
-            element.inert = true;
-        }
-    }
-    drawer.inert = false;
-    drawer.setAttribute('role', 'dialog');
-    drawer.setAttribute('aria-modal', 'true');
-    drawer.removeAttribute('aria-hidden');
-
-    drawer.classList.add("open");
-    overlay.classList.add("open");
-
-    document.body.style.overflow = "hidden";
-    drawer.querySelector('.cart-close')?.focus();
-}
-
-function closeCart() {
-    const drawer = document.getElementById("cartDrawer");
-    const overlay = document.getElementById("cartOverlay");
-
-    if (!drawer || !overlay) return;
-
-    drawer.classList.remove("open");
-    overlay.classList.remove("open");
-    if (cartFocusContext) {
-        for (const [element, previous] of cartFocusContext.siblings) element.inert = previous;
-        document.body.style.overflow = cartFocusContext.overflow;
-        cartFocusContext.trigger?.focus();
-        cartFocusContext = null;
-    }
-    drawer.inert = true;
-    drawer.setAttribute('aria-hidden', 'true');
-    drawer.removeAttribute('aria-modal');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const drawer = document.getElementById('cartDrawer');
-    if (drawer && !drawer.classList.contains('open')) {
-        drawer.inert = true;
-        drawer.setAttribute('aria-hidden', 'true');
-    }
-});
-document.addEventListener('keydown', event => {
-    const drawer = document.getElementById('cartDrawer');
-    if (!drawer?.classList.contains('open')) return;
-    if (event.key === 'Escape') { event.preventDefault(); closeCart(); }
-    if (event.key !== 'Tab') return;
-    const controls = [...drawer.querySelectorAll('button, a[href], input, select, textarea, [tabindex="0"]')]
-        .filter(element => !element.disabled && element.getClientRects().length && !element.closest('[hidden]'));
-    const first = controls[0], last = controls.at(-1);
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-});
-
-function renderCart() {
-    const container =
-        document.getElementById("cartItems");
-
-    const totalElement =
-        document.getElementById("cartTotal");
-
-    if (!container || !totalElement) return;
-
-    const cart = getCart();
-
-    if (cart.length === 0) {
-        container.innerHTML = `
-            <div class="cart-empty">
-                <p>Your cart is empty.</p>
-                <button onclick="closeCart()" style="margin-top: 15px; padding: 10px 20px; background: var(--sm-accent); color: white; border: none; font-weight: bold; cursor: pointer;">
-                    Continue Shopping
-                </button>
-            </div>
-        `;
-
-        totalElement.textContent = "₹0";
-        return;
-    }
-
-    container.innerHTML = "";
-
-    cart.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "cart-item";
-
-        const info = document.createElement("div");
-        info.className = "cart-item-info";
-
-        const title = document.createElement("strong");
-        title.textContent = item.title;
-
-        const price = document.createElement("span");
-        price.textContent = `₹${item.price}`;
-
-        info.appendChild(title);
-        info.appendChild(price);
-
-        const remove = document.createElement("button");
-        remove.className = "cart-remove";
-        remove.textContent = "Remove";
-
-        remove.addEventListener("click", () => {
-            removeFromCart(item.id);
-        });
-
-        row.appendChild(info);
-        row.appendChild(remove);
-
-        container.appendChild(row);
-    });
-
-    totalElement.textContent =
-        `₹${getCartTotal()}`;
-}
-
-function showCheckoutMessage(message, showLibraryLink = false) {
-    const messageElement = document.getElementById("cartCheckoutMessage");
-    const textElement = document.getElementById("cartCheckoutMessageText");
-    const libraryLink = document.getElementById("cartCheckoutLibraryLink");
-
-    if (!messageElement || !textElement) {
-        alert(message);
-        return;
-    }
-
-    textElement.textContent = message;
-    if (libraryLink) {
-        libraryLink.hidden = !showLibraryLink;
-        libraryLink.href = "/library.html";
-    }
-    messageElement.hidden = false;
-}
-
-function clearCheckoutMessage() {
-    const messageElement = document.getElementById("cartCheckoutMessage");
-    const textElement = document.getElementById("cartCheckoutMessageText");
-    const libraryLink = document.getElementById("cartCheckoutLibraryLink");
-
-    if (messageElement) messageElement.hidden = true;
-    if (textElement) textElement.textContent = "";
-    if (libraryLink) libraryLink.hidden = true;
-}
-
-async function loadRazorpayScript() {
-    return new Promise((resolve) => {
-        if (window.Razorpay) {
-            resolve(true);
-            return;
-        }
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-    });
-}
-
-async function checkoutCart() {
-    const cart = getCart();
-
-    if (!cart.length) {
-        return;
-    }
-
-    if (cart.length > 1) {
-        showCheckoutMessage("Checkout currently supports one item at a time. Remove other items before checkout.");
-        openCart();
-        return;
-    }
-
-    const loggedIn = await requireLogin();
-    if (!loggedIn) {
-        return;
-    }
-
-    const client = getSupabaseClient();
-    if (!client) {
-        showCheckoutMessage('Authentication service is unavailable. Please try again.');
-        return;
-    }
-    const user = await getCurrentUser();
-    if (!user) return;
-
-    // We only support checkout of 1 item at a time for this MVP
-    const product = cart[0];
-
-    try {
-        clearCheckoutMessage();
-        // Show loading state (simplistic alert for now, could be a spinner)
-        const btn = document.querySelector('.cart-checkout-btn');
-        if (btn) btn.textContent = 'Processing...';
-
-        // 1. Get auth token
-        const { data: { session } } = await client.auth.getSession();
-        if (!session?.access_token) {
-            throw new Error('Your session has expired. Please sign in again.');
-        }
-        
-        // 2. Call backend to create order
-        const res = await fetch(`${STORE_WORKER_BASE}/store/create-order`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.access_token}`
-            },
-            body: JSON.stringify({
-                product_id: product.id
-            })
-        });
-
-        if (!res.ok) {
-            let errorMessage = 'Failed to create order';
-            const errorData = await res.json().catch(() => ({}));
-            errorMessage = errorData.error || errorData.message || errorMessage;
-            const error = new Error(errorMessage);
-            error.code = errorData.code || '';
-            throw error;
-        }
-
-        const orderData = await res.json();
-
-        // 3. Load Razorpay
-        const isLoaded = await loadRazorpayScript();
-        if (!isLoaded) {
-            throw new Error('Failed to load payment gateway');
-        }
-
-        // 4. Open Razorpay Checkout
-        const options = {
-            key: orderData.key,  // Razorpay key from backend — not hardcoded
-            amount: orderData.amount,
-            currency: orderData.currency,
-            name: "OnlinePDFPro",
-            description: product.title,
-            image: "/logo.png",
-            order_id: orderData.order_id,
-            handler: async function (response) {
-                try {
-                    const verifyRes = await fetch(`${STORE_WORKER_BASE}/store/verify-payment`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${session.access_token}`
-                        },
-                        body: JSON.stringify({
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature
-                        })
-                    });
-
-                    if (verifyRes.ok) {
-                        // Clear cart
-                        clearCart();
-                        closeCart();
-                        alert("Payment successful! Redirecting to your library.");
-                        window.location.href = "/library.html";
-                    } else {
-                        const errorData = await verifyRes.json().catch(() => ({}));
-                        if (errorData.code === "ALREADY_PURCHASED") {
-                            showCheckoutMessage("You already own this item. Open My Library.", true);
-                            openCart();
-                        } else {
-                            showCheckoutMessage(errorData.error || "Payment verification failed. Please contact support.");
-                        }
-                    }
-                } catch (err) {
-                    console.error("Verification error", err);
-                    alert("Error verifying payment.");
-                }
-            },
-            prefill: {
-                name: getUserDisplayName(user) || "",
-                email: user.email || ""
-            },
-            theme: {
-                color: "#7c3aed"
-            }
-        };
-
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (response){
-            console.error(response.error);
-            alert("Payment failed: " + response.error.description);
-        });
-        rzp.open();
-
-    } catch (err) {
-        console.error(err);
-        if (err.code === "ALREADY_PURCHASED") {
-            showCheckoutMessage("You already own this item. Open My Library.", true);
-            openCart();
-        } else {
-            alert(err.message || "An error occurred during checkout.");
-        }
-    } finally {
-        const btn = document.querySelector('.cart-checkout-btn');
-        if (btn) btn.textContent = 'Continue to Checkout';
-    }
-}
-
-async function buyProduct(productId) {
+function downloadStudyPdf(productId) {
     const product = STORE_PRODUCTS[productId];
-
-    if (!product) {
-        showCheckoutMessage("That product is not available.");
-        return false;
-    }
-
-    const cart = getCart();
-    if (cart.some(item => item.id !== productId)) {
-        showCheckoutMessage("Checkout currently supports one item at a time. Remove the other item before buying this one.");
-        openCart();
-        return false;
-    }
-
-    // Buy Now still records the one-item cart so success and failure follow
-    // the same safe clearing rules as the cart checkout button.
-    saveCart([product]);
-    return checkoutCart();
+    if (!product || !product.pdfUrl) return false;
+    const link = document.createElement("a");
+    link.href = product.pdfUrl;
+    link.download = product.downloadName || `${product.id}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    return true;
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-        updateCartCount();
-        renderCart();
-    }
-);
-
-// -------------------------------------
-// PROFILE JS
-// -------------------------------------
-
-async function initializeStoreProfile() {
-
-    const wrap =
-        document.getElementById("profileMenuWrap");
-
-    if (!wrap) return;
-
-    const user =
-        await getCurrentUser();
-
-    if (!user) {
-        wrap.hidden = true;
-        return;
-    }
-
-    wrap.hidden = false;
-
-    const name =
-        getUserDisplayName(user);
-
-    const avatar =
-        getUserAvatar(user);
-
-
-    const nameElement =
-        document.getElementById("profileName");
-
-    const emailElement =
-        document.getElementById("profileEmail");
-
-    const initialElement =
-        document.getElementById("profileInitial");
-
-    const avatarElement =
-        document.getElementById("profileAvatar");
-
-
-    nameElement.textContent =
-        name;
-
-    emailElement.textContent =
-        user.email || "";
-
-    initialElement.textContent =
-        name.charAt(0).toUpperCase();
-
-
-    if (avatar) {
-
-        avatarElement.src =
-            avatar;
-
-        avatarElement.hidden =
-            false;
-
-        initialElement.hidden =
-            true;
-
-    } else {
-
-        avatarElement.hidden =
-            true;
-
-        initialElement.hidden =
-            false;
-
-    }
-}
-
-
-function setupProfileMenu() {
-
-    const trigger =
-        document.getElementById("profileTrigger");
-
-    const dropdown =
-        document.getElementById("profileDropdown");
-
-
-    if (!trigger || !dropdown) {
-        return;
-    }
-
-
-    trigger.addEventListener(
-        "click",
-        function (event) {
-
-            event.stopPropagation();
-
-            const isOpen =
-                !dropdown.hidden;
-
-            dropdown.hidden =
-                isOpen;
-
-            trigger.setAttribute(
-                "aria-expanded",
-                String(!isOpen)
-            );
-
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        function () {
-
-            dropdown.hidden =
-                true;
-
-            trigger.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-    );
-
-
-    dropdown.addEventListener(
-        "click",
-        function (event) {
-
-            event.stopPropagation();
-
-        }
-    );
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async function () {
-
-        await initializeStoreProfile();
-
-        setupProfileMenu();
-
-    }
-);
-
-// Expose globally on window
 window.STORE_PRODUCTS = STORE_PRODUCTS;
-window.getCart = getCart;
-window.saveCart = saveCart;
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.clearCart = clearCart;
-window.getCartTotal = getCartTotal;
-window.openCart = openCart;
-window.closeCart = closeCart;
-window.renderCart = renderCart;
-window.checkoutCart = checkoutCart;
-window.buyProduct = buyProduct;
-window.updateCartCount = updateCartCount;
-window.loadRazorpayScript = loadRazorpayScript;
-window.showCheckoutMessage = showCheckoutMessage;
-window.clearCheckoutMessage = clearCheckoutMessage;
+window.viewStudyPdf = viewStudyPdf;
+window.downloadStudyPdf = downloadStudyPdf;

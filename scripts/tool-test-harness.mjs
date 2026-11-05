@@ -3,9 +3,20 @@ import fs from "node:fs";
 import path from "node:path";
 import http from "node:http";
 import { fileURLToPath } from "node:url";
-import puppeteer from "puppeteer";
+import { createRequire } from "node:module";
 import { PDFDocument, PDFName, degrees, rgb } from "pdf-lib";
 import { encryptPDF } from "@pdfsmaller/pdf-encrypt";
+
+const requireModule = createRequire(import.meta.url);
+let browserEngine;
+let isPlaywright = false;
+try {
+  browserEngine = (await import("puppeteer")).default;
+} catch {
+  const pw = requireModule("/usr/local/share/bun-global/node_modules/playwright");
+  browserEngine = pw.chromium;
+  isPlaywright = true;
+}
 
 export const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -134,7 +145,7 @@ const server = http.createServer((req, res) => {
 });
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 export const base = `http://127.0.0.1:${server.address().port}`;
-export const browser = await puppeteer.launch({
+export const browser = await browserEngine.launch({
   headless: true,
   args: ["--no-sandbox", "--disable-dev-shm-usage"],
 });
@@ -204,15 +215,41 @@ fixtures.docx = write("synthetic.docx", Buffer.from(wordFixture));
 await archivePage.close();
 
 export async function open(route, options = {}) {
-  const page = await browser.newPage();
-  page.setDefaultTimeout(30_000);
-  await page.setViewport(
+  const vp =
     options.viewport ||
-      (process.env.TOOL_MOBILE === "1"
-        ? { width: 390, height: 844, isMobile: true, hasTouch: true }
-        : { width: 1280, height: 900 }),
-  );
-  await page.setBypassServiceWorker(true);
+    (process.env.TOOL_MOBILE === "1"
+      ? { width: 390, height: 844, isMobile: true, hasTouch: true }
+      : { width: 1280, height: 900 });
+  let page;
+  let context = null;
+  if (isPlaywright) {
+    context = await browser.newContext({
+      viewport: { width: vp.width, height: vp.height },
+      isMobile: Boolean(vp.isMobile),
+      hasTouch: Boolean(vp.hasTouch),
+      serviceWorkers: "block",
+    });
+    page = await context.newPage();
+    page.setDefaultTimeout(30_000);
+    const origWaitForFunction = page.waitForFunction.bind(page);
+    page.waitForFunction = async (fn, optsOrArg, ...rest) => {
+      if (rest.length > 0) {
+        return origWaitForFunction(fn, rest[0], optsOrArg || {});
+      }
+      return origWaitForFunction(fn, undefined, optsOrArg || {});
+    };
+    page.select = async (selector, ...values) => {
+      return page.selectOption(selector, values);
+    };
+    page.waitForNavigation = async () => {
+      return page.waitForLoadState("load");
+    };
+  } else {
+    page = await browser.newPage();
+    page.setDefaultTimeout(30_000);
+    await page.setViewport(vp);
+    await page.setBypassServiceWorker(true);
+  }
   page.testErrors = [];
   page.testAlerts = [];
   page.outbound = [];
@@ -221,17 +258,47 @@ export async function open(route, options = {}) {
     page.testAlerts.push(d.message());
     await d.accept();
   });
-  await page.setRequestInterception(true);
-  page.on("request", (req) => {
-    if (req.url().startsWith(base) || /^(data|blob):/.test(req.url()))
-      req.continue();
-    else if (options.intercept) options.intercept(req, page);
-    else {
-      page.outbound.push(req.url());
-      req.abort();
-    }
-  });
-  await page.evaluateOnNewDocument(() => {
+  if (isPlaywright) {
+    await page.route("**/*", async (pwRoute) => {
+      const pwReq = pwRoute.request();
+      const url = pwReq.url();
+      if (url.startsWith(base) || /^(data|blob):/.test(url)) {
+        await pwRoute.continue();
+      } else if (options.intercept) {
+        const fakeReq = {
+          url: () => url,
+          method: () => pwReq.method(),
+          headers: () => pwReq.headers(),
+          postData: () => pwReq.postData() || "",
+          continue: () => pwRoute.continue(),
+          abort: () => pwRoute.abort(),
+          respond: (resp) =>
+            pwRoute.fulfill({
+              status: resp.status || 200,
+              headers: resp.headers || {},
+              contentType: resp.contentType,
+              body: resp.body,
+            }),
+        };
+        await options.intercept(fakeReq, page);
+      } else {
+        page.outbound.push(url);
+        await pwRoute.abort();
+      }
+    });
+  } else {
+    await page.setRequestInterception(true);
+    page.on("request", (req) => {
+      if (req.url().startsWith(base) || /^(data|blob):/.test(req.url()))
+        req.continue();
+      else if (options.intercept) options.intercept(req, page);
+      else {
+        page.outbound.push(req.url());
+        req.abort();
+      }
+    });
+  }
+  const initHook = () => {
     sessionStorage.setItem("pwa-dismissed", "true");
     window.__downloads = [];
     window.__blobUrls = new Map();
@@ -277,38 +344,54 @@ export async function open(route, options = {}) {
       }
       return nativeDispatch.call(this, event);
     };
-  });
-  if (options.init) await page.evaluateOnNewDocument(options.init);
+  };
+  if (isPlaywright) {
+    await page.addInitScript(initHook);
+    if (options.init) await page.addInitScript(options.init);
+  } else {
+    await page.evaluateOnNewDocument(initHook);
+    if (options.init) await page.evaluateOnNewDocument(options.init);
+  }
   const response = await page.goto(base + route, { waitUntil: "load" });
   assert.equal(response.status(), 200, `Test route must serve the intended page: ${route}`);
   await page.evaluate(() => {
     if (window.OnlinePDFPro?.Downloader)
       OnlinePDFPro.Downloader.saveBlob = window.__captureDownload;
   });
-  if (process.env.TOOL_MOBILE === "1") {
-    const close = page.close.bind(page);
-    page.close = async () => {
-      try {
+  const rawClose = context ? () => context.close() : page.close.bind(page);
+  page.close = async () => {
+    try {
+      if (process.env.TOOL_MOBILE === "1") {
         const dimensions = await page.evaluate(() => ({
           width: window.innerWidth,
           content: document.documentElement.scrollWidth,
         }));
-        assert.ok(dimensions.content <= dimensions.width + 1,
-          `${route}: loaded workflow overflows the mobile page (${dimensions.content}px > ${dimensions.width}px)`);
-      } finally {
-        await close();
+        assert.ok(
+          dimensions.content <= dimensions.width + 1,
+          `${route}: loaded workflow overflows the mobile page (${dimensions.content}px > ${dimensions.width}px)`,
+        );
       }
-    };
-  }
+    } finally {
+      await rawClose();
+    }
+  };
   return page;
 }
 export async function upload(page, selector, ...files) {
   const input = await page.$(selector);
   assert.ok(input, `File input missing: ${selector}`);
-  await input.uploadFile(...files);
+  if (isPlaywright) {
+    await page.setInputFiles(selector, files);
+  } else {
+    await input.uploadFile(...files);
+  }
 }
 export async function visible(page, selector) {
-  await page.waitForSelector(selector, { visible: true });
+  if (isPlaywright) {
+    await page.waitForSelector(selector, { state: "visible" });
+  } else {
+    await page.waitForSelector(selector, { visible: true });
+  }
 }
 export async function fill(page, selector, value) {
   await page.$eval(
@@ -330,9 +413,11 @@ export async function click(page, selector) {
   await page.$eval(selector, (e) =>
     e.scrollIntoView({ behavior: "instant", block: "center" }),
   );
-  // Use the browser driver's stability/viewport/enabled checks after scrolling.
-  // A fixed delay can click the old position during sticky-header reflow.
-  await page.locator(selector).click();
+  if (isPlaywright) {
+    await page.locator(selector).first().click();
+  } else {
+    await page.locator(selector).click();
+  }
 }
 export async function download(page, index = 0) {
   try {

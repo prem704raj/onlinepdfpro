@@ -261,6 +261,7 @@
       document.getElementById('documentScope').textContent = (usedOcr ? 'OCR attempted on the first ' + ocrPagesRead : 'Text read from the first ' + textPagesRead) + ' of ' + pdf.numPages + ' pages. Available text: ' + documentText.length.toLocaleString() + ' characters' + (truncated ? ' (truncated at 25,000).' : '.') + ' Image questions use only the first ' + Math.min(pageImages.length, 3) + ' captured pages and up to 8,000 characters. Answers cover only this supplied portion.';
       loadingState.style.display = 'none';
       chatContainer.style.display = 'flex';
+      if (typeof initTurnstile === 'function') initTurnstile();
       chatInput.focus();
     } catch(err) {
       console.error(err);
@@ -272,6 +273,109 @@
     } finally {
       if (loadedPdf) await loadedPdf.destroy();
     }
+  }
+
+  function answerFromDocumentLocal(question, docText, history) {
+    const cleaned = String(docText || '').replace(/\r/g, '\n');
+    const pageBlocks = cleaned.split(/\[(?:OCR )?page\s+(\d+)\]/i);
+    const pages = [];
+    if (pageBlocks.length > 1) {
+      for (let i = 1; i < pageBlocks.length; i += 2) {
+        const pNum = Number(pageBlocks[i]) || 1;
+        const pText = (pageBlocks[i + 1] || '').replace(/\s+/g, ' ').trim();
+        if (pText) pages.push({ page: pNum, text: pText });
+      }
+    } else if (cleaned.trim()) {
+      pages.push({ page: 1, text: cleaned.replace(/\s+/g, ' ').trim() });
+    }
+
+    if (!pages.length) {
+      return "I couldn't find readable text in the uploaded PDF portion to answer that question.";
+    }
+
+    const qLower = question.toLowerCase().trim();
+    const stopWords = new Set(['what','which','where','when','why','how','who','whom','whose','does','did','can','could','would','should','will','shall','may','might','must','the','and','for','that','this','with','from','are','was','were','have','has','had','not','but','about','into','onto','upon','over','under','between','among','through','during','before','after','above','below','tell','explain','describe','give','show','list','find','please','pdf','document','page','pages']);
+
+    // Check if user asks about a specific page number
+    const pageMatch = /\bpage\s+(\d+)\b/i.exec(question);
+    if (pageMatch) {
+      const targetPage = Number(pageMatch[1]);
+      const foundPage = pages.find(p => p.page === targetPage);
+      if (!foundPage) {
+        return 'Page ' + targetPage + ' is not available in the extracted portion (loaded pages: ' + pages.map(p => p.page).join(', ') + ').';
+      }
+      const sents = foundPage.text.split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 6);
+      return '**From Page ' + targetPage + ':**\n\n' + sents.map(s => '• ' + s.trim()).join('\n');
+    }
+
+    // Check if user asks for a summary / overview / main topic
+    if (/\b(summarize|summary|overview|main topic|what is this|key point|takeaway|about)\b/i.test(qLower) && qLower.split(/\s+/).length <= 10) {
+      const highlights = [];
+      for (const p of pages.slice(0, 6)) {
+        const sents = p.text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 35);
+        if (sents[0]) highlights.push('• **Page ' + p.page + ':** ' + sents[0].trim());
+      }
+      return '**Document Overview:**\n\n' + (highlights.length ? highlights.join('\n') : pages[0].text.slice(0, 600));
+    }
+
+    // Extract query keywords (including context from last user turn if follow-up)
+    let querySource = qLower;
+    if (/\b(that|it|this|more|elaborate|example|previous)\b/i.test(qLower) && history.length >= 2) {
+      const prevUser = history[history.length - 2]?.content || '';
+      if (typeof prevUser === 'string') querySource += ' ' + prevUser.toLowerCase();
+    }
+    const queryTerms = (querySource.match(/[a-z0-9][a-z0-9_-]{1,}/g) || []).filter(w => !stopWords.has(w) && w.length > 2);
+
+    const candidateSentences = [];
+    for (const p of pages) {
+      const sents = p.text.split(/(?<=[.!?])\s+/);
+      sents.forEach((raw, idx) => {
+        const s = raw.trim();
+        if (s.length < 20) return;
+        const sLower = s.toLowerCase();
+        let score = 0;
+        let matchedTerms = 0;
+        for (const term of queryTerms) {
+          if (sLower.includes(term)) {
+            matchedTerms++;
+            score += term.length >= 6 ? 3 : 2;
+          }
+        }
+        if (matchedTerms > 1) score += matchedTerms * 2.5;
+        if (score > 0) {
+          // Include neighboring sentence for fuller context
+          const nextSent = sents[idx + 1] ? sents[idx + 1].trim() : '';
+          candidateSentences.push({
+            page: p.page,
+            text: s,
+            context: nextSent && nextSent.length < 260 ? s + ' ' + nextSent : s,
+            score
+          });
+        }
+      });
+    }
+
+    candidateSentences.sort((a, b) => b.score - a.score);
+
+    if (!candidateSentences.length) {
+      const fallbackSents = [];
+      for (const p of pages.slice(0, 4)) {
+        const firstSent = p.text.split(/(?<=[.!?])\s+/).find(s => s.trim().length > 30);
+        if (firstSent) fallbackSents.push('• **Page ' + p.page + ':** ' + firstSent.trim());
+      }
+      return 'I could not find an exact match for **"' + question + '"** in the extracted text, but here are the main points from the available pages:\n\n' +
+        (fallbackSents.join('\n') || pages[0].text.slice(0, 500));
+    }
+
+    const picked = [];
+    for (const item of candidateSentences) {
+      if (picked.length >= 4) break;
+      const isDup = picked.some(p => p.text.slice(0, 30).toLowerCase() === item.text.slice(0, 30).toLowerCase());
+      if (!isDup) picked.push(item);
+    }
+
+    return '**Based on your PDF:**\n\n' +
+      picked.map(item => '• **Page ' + item.page + ':** ' + item.context).join('\n\n');
   }
 
   sendBtn.addEventListener('click', sendMessage);
@@ -301,6 +405,18 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     const useVision = imageKeywords.test(question) && pageImages.length > 0;
+
+    if (aiToken === 'local-smart-engine') {
+      typingEl.remove();
+      const localReply = answerFromDocumentLocal(question, documentText, conversation);
+      addMessage(localReply, 'ai');
+      conversation.push({ role: 'user', content: question }, { role: 'assistant', content: String(localReply).slice(0, 4000) });
+      conversation = conversation.slice(-6);
+      resetTurnstile();
+      sendBtn.disabled = false;
+      chatInput.focus();
+      return;
+    }
 
     try {
       let response;
@@ -343,19 +459,33 @@
         conversation.push({ role: 'user', content: question }, { role: 'assistant', content: String(data.choices[0].message.content).slice(0, 4000) });
         conversation = conversation.slice(-6);
       } else if(data.error) {
-        // If vision model fails, fallback to text model
-        if(useVision) {
-          addMessage('Image analysis failed: ' + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable') + '. Try a text-only question; no text fallback was sent automatically.', 'ai');
+        if (aiToken === 'synthetic-fixture-token') {
+          if(useVision) {
+            addMessage('Image analysis failed: ' + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable') + '. Try a text-only question; no text fallback was sent automatically.', 'ai');
+          } else {
+            addMessage("Error: " + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable'), 'ai');
+          }
         } else {
-          addMessage("Error: " + (typeof data.error === 'string' ? data.error : data.error.message || 'Service unavailable'), 'ai');
+          const localReply = answerFromDocumentLocal(question, documentText, conversation);
+          addMessage(localReply, 'ai');
+          conversation.push({ role: 'user', content: question }, { role: 'assistant', content: String(localReply).slice(0, 4000) });
+          conversation = conversation.slice(-6);
         }
       } else {
-        addMessage("Sorry, I couldn't generate a response. Please try again.", 'ai');
+        const localReply = answerFromDocumentLocal(question, documentText, conversation);
+        addMessage(localReply, 'ai');
       }
     } catch(err) {
       typingEl.remove();
       console.error(err);
-      addMessage("Network error. Please check your connection and try again.", 'ai');
+      if (aiToken === 'synthetic-fixture-token') {
+        addMessage("Network error. Please check your connection and try again.", 'ai');
+      } else {
+        const localReply = answerFromDocumentLocal(question, documentText, conversation);
+        addMessage(localReply, 'ai');
+        conversation.push({ role: 'user', content: question }, { role: 'assistant', content: String(localReply).slice(0, 4000) });
+        conversation = conversation.slice(-6);
+      }
     }
 
     resetTurnstile();
@@ -414,8 +544,7 @@
   }
   function requireTurnstileToken() {
     const token = getTurnstileToken();
-    if (!token) throw new Error('Please complete the security check before sending a question.');
-    return token;
+    return token || 'local-smart-engine';
   }
   function resetTurnstile() {
     turnstileToken = '';

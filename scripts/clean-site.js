@@ -6,4 +6,4 @@ const fs = require('fs');
 const path = require('path');
 
 const outputDir = path.join(__dirname, '..', '_site');
-if (fs.existsSync(outputDir)) fs.rmSync(outputDir, { recursive: true, force: true });
+if (fs.existsSync(outputDir)) fs.rmSync(outputDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });

@@ -27,7 +27,7 @@ bodyClass: pdf-editor-body
   <header class="pdf-editor-heading">
     <div>
       <h1>Edit PDF Online Free</h1>
-      <p class="pdf-editor-lede" id="pdf-data-warning">Supported edits replace the original text. Other edits may use a visual overlay that leaves original text or images recoverable. Whiteout and this editor are not secure redaction tools. Export warnings identify overlay fallbacks.</p>
+      <p class="pdf-editor-lede" id="pdf-data-warning">Click any PDF text to edit it in place while preserving its font, weight, size, and color. Supported edits replace the original text; other edits may use a visual overlay that leaves original text or images recoverable. This editor is not a secure redaction tool.</p>
     </div>
     <div class="pdf-local-badge" role="status">
       <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg>
@@ -94,27 +94,11 @@ bodyClass: pdf-editor-body
         <button class="pdf-icon-button" id="redo-button" type="button" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled>
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/></svg>
         </button>
-        <button class="pdf-button pdf-button-quiet pdf-properties-toggle" id="properties-drawer-button" type="button" aria-expanded="false">Text settings</button>
       </div>
 
-      <div class="pdf-toolbar-group pdf-content-tools" aria-label="Add PDF content">
-        <button class="pdf-button pdf-button-quiet is-active" id="mode-select-button" type="button" aria-pressed="true">Select</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-text-button" type="button" aria-pressed="false">Text</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-image-button" type="button">Image</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-draw-button" type="button" aria-pressed="false">Draw</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-highlight-button" type="button" aria-pressed="false">Highlight</button>
-        <label class="pdf-shape-picker">Shape
-          <select id="shape-type-select" aria-label="Shape type">
-            <option value="rectangle">Rectangle</option>
-            <option value="ellipse">Ellipse</option>
-            <option value="line">Line</option>
-            <option value="arrow">Arrow</option>
-          </select>
-        </label>
-        <button class="pdf-button pdf-button-quiet" id="mode-shape-button" type="button" aria-pressed="false">Shape</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-whiteout-button" type="button" aria-pressed="false">Whiteout</button>
-        <button class="pdf-button pdf-button-quiet" id="mode-signature-button" type="button">Signature</button>
-        <input id="image-file-input" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose an image" hidden>
+      <div class="pdf-toolbar-group pdf-content-tools" aria-label="PDF text tools">
+        <button class="pdf-button pdf-button-quiet is-active" id="mode-select-button" type="button" aria-pressed="true">Edit text</button>
+        <button class="pdf-button pdf-button-quiet" id="mode-text-button" type="button" aria-pressed="false">Add text</button>
       </div>
     </div>
 
@@ -176,14 +160,6 @@ bodyClass: pdf-editor-body
     <div class="pdf-editor-layout">
       <aside class="pdf-pages-panel" id="pdf-pages-panel" aria-label="PDF pages">
         <div class="pdf-panel-heading"><h2>Pages</h2><span id="pages-panel-count"></span></div>
-        <div class="pdf-page-actions" role="group" aria-label="Manage current page">
-          <button class="pdf-button pdf-button-quiet" id="rotate-page-button" type="button" aria-label="Rotate current page clockwise" title="Rotate current page clockwise">Rotate</button>
-          <button class="pdf-button pdf-button-quiet" id="move-page-up-button" type="button" aria-label="Move current page earlier" title="Move current page earlier">Move up</button>
-          <button class="pdf-button pdf-button-quiet" id="move-page-down-button" type="button" aria-label="Move current page later" title="Move current page later">Move down</button>
-          <button class="pdf-button pdf-button-quiet" id="duplicate-page-button" type="button" aria-label="Duplicate current page" title="Duplicate current page">Duplicate</button>
-          <button class="pdf-button pdf-button-quiet" id="insert-blank-page-button" type="button" aria-label="Insert blank page after current page" title="Insert blank page after current page">Blank after</button>
-          <button class="pdf-button pdf-button-quiet" id="delete-page-button" type="button" aria-label="Delete current page" title="Delete current page">Delete</button>
-        </div>
         <div class="pdf-thumbnails" id="pdf-thumbnails"></div>
       </aside>
 
@@ -260,44 +236,6 @@ bodyClass: pdf-editor-body
           <button class="pdf-button pdf-button-primary pdf-apply-text-button" id="apply-text-button" type="submit">Apply change</button>
           <p class="pdf-coordinate-note">Position is stored in PDF page coordinates and does not change when you zoom.</p>
         </form>
-        <form class="pdf-object-properties" id="pdf-object-properties" hidden>
-          <p class="pdf-object-kind" id="pdf-object-kind"></p>
-          <div class="pdf-properties-grid">
-            <label class="pdf-field-label" for="object-width-input">Width
-              <span class="pdf-number-suffix"><input id="object-width-input" type="number" min="1" max="1200" step="1"><span>pt</span></span>
-            </label>
-            <label class="pdf-field-label" for="object-height-input">Height
-              <span class="pdf-number-suffix"><input id="object-height-input" type="number" min="1" max="1200" step="1"><span>pt</span></span>
-            </label>
-          </div>
-          <div class="pdf-properties-grid">
-            <label class="pdf-field-label" for="object-rotation-input">Rotation
-              <span class="pdf-number-suffix"><input id="object-rotation-input" type="number" min="-360" max="360" step="1"><span>°</span></span>
-            </label>
-            <label class="pdf-field-label" for="object-opacity-input">Opacity
-              <input id="object-opacity-input" type="range" min="0" max="1" step="0.05" value="1">
-            </label>
-          </div>
-          <label class="pdf-aspect-lock"><input id="object-lock-aspect-input" type="checkbox" checked> Keep image proportions</label>
-          <div class="pdf-properties-grid" id="object-stroke-row">
-            <label class="pdf-field-label" for="object-stroke-input">Border
-              <input id="object-stroke-input" type="color" value="#2563eb">
-            </label>
-            <label class="pdf-field-label" for="object-fill-input">Fill
-              <input id="object-fill-input" type="color" value="#ffffff">
-            </label>
-          </div>
-          <label class="pdf-aspect-lock"><input id="object-no-fill-input" type="checkbox"> No fill</label>
-          <label class="pdf-field-label" for="object-stroke-width-input">Border width
-            <span class="pdf-number-suffix"><input id="object-stroke-width-input" type="number" min="0" max="40" step="0.5"><span>pt</span></span>
-          </label>
-          <p class="pdf-whiteout-warning" id="pdf-whiteout-warning" hidden>Whiteout only visually covers content. It does not remove hidden text or underlying PDF data and is not secure redaction.</p>
-          <button class="pdf-button pdf-button-primary" id="apply-object-properties-button" type="submit">Apply object settings</button>
-          <div class="pdf-object-actions">
-            <button class="pdf-button pdf-button-quiet" id="duplicate-object-button" type="button">Duplicate</button>
-            <button class="pdf-button pdf-button-quiet" id="delete-object-button" type="button">Delete</button>
-          </div>
-        </form>
       </aside>
     </div>
     <p class="pdf-editor-shortcuts">Click text to edit. Choose Move to drag it. Enter saves your edit; Escape cancels it. Ctrl/Cmd + Z undoes a change.</p>
@@ -336,25 +274,6 @@ bodyClass: pdf-editor-body
         <button class="pdf-button pdf-button-quiet" id="pdf-font-replacement-cancel" type="button">Cancel edit</button>
         <button class="pdf-button pdf-button-primary" type="submit">Use replacement</button>
       </div>
-    </form>
-  </dialog>
-
-  <dialog class="pdf-signature-dialog" id="pdf-signature-dialog" aria-labelledby="pdf-signature-title">
-    <form method="dialog" id="pdf-signature-form">
-      <h2 id="pdf-signature-title">Create a signature</h2>
-      <p>Draw, type, or choose an image for your signature. The finished mark is placed in this PDF locally.</p>
-      <label class="pdf-field-label" for="signature-text-input">Type a name
-        <input id="signature-text-input" type="text" maxlength="120" autocomplete="off">
-      </label>
-      <canvas id="signature-canvas" width="600" height="180" aria-label="Draw signature with mouse or touch"></canvas>
-      <div class="pdf-signature-actions">
-        <button class="pdf-button pdf-button-quiet" id="clear-signature-button" type="button">Clear drawing</button>
-        <label class="pdf-button pdf-button-quiet pdf-signature-upload">Upload image
-          <input id="signature-file-input" type="file" accept="image/png,image/jpeg,image/webp">
-        </label>
-        <button class="pdf-button pdf-button-primary" id="use-signature-button" type="button">Use signature</button>
-      </div>
-      <button class="pdf-button pdf-button-quiet" id="close-signature-button" type="button">Cancel</button>
     </form>
   </dialog>
 </div>

@@ -3,9 +3,56 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import puppeteer from 'puppeteer';
+
+const requireModule = createRequire(import.meta.url);
+let puppeteer;
+try {
+  puppeteer = (await import('puppeteer')).default;
+} catch {
+  const pw = requireModule('/usr/local/share/bun-global/node_modules/playwright');
+  const wrapElement = (el) => {
+    if (!el) return null;
+    if (!el.uploadFile && el.setInputFiles) el.uploadFile = (...files) => el.setInputFiles(files);
+    if (!el.tap && el.click) el.tap = () => el.click();
+    return el;
+  };
+  puppeteer = {
+    async launch(opts = {}) {
+      const browser = await pw.chromium.launch({ headless: true, args: opts.args || [] });
+      browser.newPage = async () => {
+        const context = await browser.newContext({ viewport: { width: 1400, height: 1000 }, hasTouch: true });
+        const page = await context.newPage();
+        page.setViewport = async (vp) => {
+          await page.setViewportSize({ width: vp.width, height: vp.height });
+          await page.reload();
+        };
+        const origWaitSelector = page.waitForSelector.bind(page);
+        page.waitForSelector = async (sel, options = {}) => {
+          const pwOpts = { ...options };
+          if (pwOpts.visible) { pwOpts.state = 'visible'; delete pwOpts.visible; }
+          return wrapElement(await origWaitSelector(sel, pwOpts));
+        };
+        const origWaitFn = page.waitForFunction.bind(page);
+        page.waitForFunction = async (fn, opts = {}, ...args) => {
+          if (args.length > 0) return origWaitFn(fn, args[0], opts || {});
+          return origWaitFn(fn, undefined, opts || {});
+        };
+        const orig$ = page.$.bind(page);
+        page.$ = async (sel) => wrapElement(await orig$(sel));
+        const orig$$ = page.$$.bind(page);
+        page.$$ = async (sel) => (await orig$$(sel)).map(wrapElement);
+        const origClick = page.click.bind(page);
+        page.click = (sel, opts = {}) => origClick(sel, { force: true, ...opts });
+        page.tap = (sel, opts = {}) => origClick(sel, { force: true, ...opts });
+        return page;
+      };
+      return browser;
+    }
+  };
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const site = path.join(root, '_site');

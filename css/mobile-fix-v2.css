@@ -473,13 +473,14 @@
 
 
     /* ══════════════════════════════════════════
-       TOOL CARDS — 2-COLUMN GRID 
-       This is the key UX improvement.
-       2 columns = less scrolling, more density.
+       TOOL CARDS — RESPONSIVE MOBILE LAYOUT
+       1-column horizontal rows for the 5 homepage
+       flagship cards so titles never wrap mid-word
+       on 390px screens.
        ══════════════════════════════════════════ */
     .hp-tools-grid {
         display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-columns: 1fr !important;
         gap: 10px !important;
         padding: 0 !important;
         width: 100% !important;
@@ -497,7 +498,7 @@
 
     .hp-tool-name,
     .hp-tool-desc {
-        overflow-wrap: anywhere !important;
+        overflow-wrap: break-word !important;
     }
 
     .hp-tool-card {

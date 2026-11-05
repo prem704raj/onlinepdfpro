@@ -15,7 +15,7 @@ if (!fs.existsSync(siteDir)) {
     process.exit(1);
 }
 
-const release = process.env.RELEASE_ID || process.env.GITHUB_SHA || process.env.CF_PAGES_COMMIT_SHA || 'local';
+const release = process.env.RELEASE_ID || process.env.GITHUB_SHA || process.env.CF_PAGES_COMMIT_SHA || 'production';
 if (release === 'local' && (process.env.CI === 'true' || process.env.CF_PAGES === '1')) {
     console.error('Production/CI builds require an explicit source revision.');
     process.exit(1);

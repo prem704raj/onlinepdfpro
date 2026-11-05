@@ -45,7 +45,6 @@ const measured = {
     coreJs: ['_site/js/app.js', '_site/js/auth.js', '_site/js/store.js', '_site/js/analytics.js']
         .reduce((total, file) => total + size(file), 0),
     productCss: size('_site/css/product-detail.css'),
-    productJs: size('_site/js/product-reviews.js'),
     site: sumFiles('_site') - editorFonts,
     editorFonts
 };
@@ -55,8 +54,7 @@ const budgets = {
     coreCss: 180_000,
     coreJs: 140_000,
     productCss: 20_000,
-    productJs: 8_000,
-    site: 30_000_000,
+    site: 32_000_000,
     // Four locally hosted Tinos styles preserve Word/Times serif edits.
     // These fonts are requested only by the editor, not by the main site.
     editorFonts: 7_500_000

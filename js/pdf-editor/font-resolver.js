@@ -1,4 +1,4 @@
-import { getEmbeddedFont } from './embedded-fonts.js';
+import { getEmbeddedFont, safeHasGlyph } from './embedded-fonts.js';
 
 const BUNDLED_FONTS = {
   Tinos: {
@@ -50,7 +50,7 @@ const BUNDLED_FONTS = {
 
 const ALIASES = [
   [/^arial(?:mt)?$/i, 'Arial'],
-  [/^helvetica$/i, 'Helvetica'],
+  [/^helvetica(?:neue)?$/i, 'Helvetica'],
   [/^calibri$/i, 'Calibri'],
   [/^cambria$/i, 'Cambria'],
   [/^times(?:newroman)?(?:psmt)?$/i, 'Times New Roman'],
@@ -61,12 +61,26 @@ const ALIASES = [
   [/^tinos$/i, 'Tinos'],
   [/^courier(?:new)?$/i, 'Courier New'],
   [/^roboto$/i, 'Roboto'],
+  [/^inter$/i, 'Inter'],
+  [/^poppins$/i, 'Poppins'],
+  [/^opensans$/i, 'Open Sans'],
+  [/^lato$/i, 'Lato'],
   [/^montserrat$/i, 'Montserrat'],
+  [/^playfair(?:display)?$/i, 'Playfair Display'],
+  [/^instrumentserif$/i, 'Instrument Serif'],
+  [/^georgia$/i, 'Georgia'],
+  [/^(?:eb)?garamond$/i, 'Garamond'],
+  [/^baskerville$/i, 'Baskerville'],
+  [/^merriweather$/i, 'Merriweather'],
+  [/^lora$/i, 'Lora'],
+  [/^palatino(?:linotype)?$/i, 'Palatino'],
   [/^arimo$/i, 'Arimo'],
   [/^carlito$/i, 'Carlito'],
   [/^caladea$/i, 'Caladea'],
   [/^notosansdevanagari$/i, 'Noto Sans Devanagari']
 ];
+
+const SERIF_PATTERN = /serif|times|tinos|georgia|garamond|baskerville|palatino|bookman|playfair|instrument|merriweather|lora|charter|cambria|caladea|century|minion|caslon|didot|bodoni|spectral|crimson|vollkorn|bitter|domine/i;
 
 const STANDARD_BASE_FAMILIES = new Map([
   ['helvetica', 'Helvetica'],
@@ -90,7 +104,7 @@ function stripSubsetPrefix(value) {
 function stripStyleSuffix(value) {
   return value
     .replace(/[-_, ]+(regular|normal|roman|book|medium|light|semibold|demibold|demi|bold|black|heavy|italic|oblique|slanted|bolditalic|boldoblique)$/i, '')
-    .replace(/(BoldItalic|BoldOblique|SemiBold|DemiBold|Bold|Italic|Oblique)$/i, '')
+    .replace(/(BoldItalic|BoldOblique|SemiBold|DemiBold|Medium|Bold|Italic|Oblique)$/i, '')
     .trim();
 }
 
@@ -100,9 +114,11 @@ function compactName(value) {
 
 function styleFromName(value, style = {}) {
   const raw = String(value || '');
-  const bold = Number(style.fontWeight || 0) >= 600 || /bold|black|heavy|demi|semibold/i.test(raw);
+  const numericWeight = Number(style.fontWeight || 0);
+  const bold = numericWeight >= 500 || /bold|black|heavy|demi|semibold|medium/i.test(raw);
   const italic = Boolean(style.italic) || /italic|oblique|slanted/i.test(raw);
-  return { bold, italic, weight: bold ? 700 : 400 };
+  const weight = bold ? Math.max(700, numericWeight || 700) : (numericWeight >= 300 ? numericWeight : 400);
+  return { bold, italic, weight };
 }
 
 function normalizedFamily(value) {
@@ -153,7 +169,7 @@ function standardPlan(family, rawName) {
   };
 }
 
-function resolvePlan(detectedFamily, rawName, bold, italic) {
+function resolvePlan(detectedFamily, rawName, bold, italic, style = {}) {
   const rawBase = stripSubsetPrefix(String(rawName || '')).toLowerCase();
   const standardFamily = STANDARD_BASE_FAMILIES.get(rawBase);
   if (standardFamily) return standardPlan(standardFamily, rawName);
@@ -170,8 +186,11 @@ function resolvePlan(detectedFamily, rawName, bold, italic) {
     return bundledPlan('Tinos', bold, italic, detectedFamily === 'Tinos' ? 'exact' : 'matched', detectedFamily === 'Tinos' ? null : 'Tinos is used as a Times New Roman-compatible substitute for preview and overlay export.', detectedFamily);
   }
   if (detectedFamily === 'Noto Sans Devanagari') return bundledPlan('Noto Sans Devanagari', false, false, 'exact', null, detectedFamily);
-  if (detectedFamily === 'Roboto' || detectedFamily === 'Montserrat') {
-    return bundledPlan('Arimo', bold, italic, 'fallback', 'The original family is not bundled as a static export font yet. Arimo is used consistently for preview and overlay export.', detectedFamily);
+  if (Boolean(style.isSerif) || SERIF_PATTERN.test(detectedFamily) || SERIF_PATTERN.test(rawBase)) {
+    return bundledPlan('Tinos', bold, italic, 'matched', 'Tinos is used as a metric-compatible serif substitute to preserve the original serif style.', detectedFamily);
+  }
+  if (detectedFamily === 'Roboto' || detectedFamily === 'Montserrat' || detectedFamily === 'Inter' || detectedFamily === 'Poppins' || detectedFamily === 'Open Sans' || detectedFamily === 'Lato') {
+    return bundledPlan('Arimo', bold, italic, 'matched', 'Arimo is used as a metric-compatible sans-serif substitute for preview and overlay export.', detectedFamily);
   }
   return bundledPlan('Arimo', bold, italic, 'fallback', 'The original font could not be reused safely. Arimo is used consistently for preview and overlay export.', detectedFamily);
 }
@@ -183,14 +202,16 @@ export function createFontDescriptor({ style = {}, pdfFontName = '', requestedFa
   const sourceStyle = styleFromName(rawPdfFontName + ' ' + sourceName, style);
   const resolvedBold = typeof bold === 'boolean' ? bold : sourceStyle.bold;
   const resolvedItalic = typeof italic === 'boolean' ? italic : sourceStyle.italic;
-  const plan = resolvePlan(detectedFamily, rawPdfFontName, resolvedBold, resolvedItalic);
+  const resolvedWeight = resolvedBold ? 700 : (sourceStyle.weight || 400);
+  const plan = resolvePlan(detectedFamily, rawPdfFontName, resolvedBold, resolvedItalic, style);
   return {
     rawPdfFontName,
     normalizedFamily: detectedFamily,
     detectedFamily,
-    weight: resolvedBold ? 700 : 400,
+    weight: resolvedWeight,
     bold: resolvedBold,
     italic: resolvedItalic,
+    isSerif: Boolean(style.isSerif) || SERIF_PATTERN.test(detectedFamily) || SERIF_PATTERN.test(rawPdfFontName),
     subset: /^[A-Z]{6}\+/.test(rawPdfFontName),
     embedded: typeof style.embedded === 'boolean' ? style.embedded : null,
     glyphCoverage: 'unchecked',
@@ -210,12 +231,22 @@ export function resolveFont(style = {}, pdfFontName = '') {
     quality: descriptor.matchQuality,
     bold: descriptor.bold,
     italic: descriptor.italic,
+    weight: descriptor.weight,
     descriptor
   };
 }
 
-export function descriptorForFamily(family, { bold = false, italic = false } = {}) {
-  return createFontDescriptor({ requestedFamily: family, pdfFontName: family, bold, italic });
+export function descriptorForFamily(family, { bold = false, italic = false, weight, isSerif } = {}) {
+  const style = {};
+  if (weight) style.fontWeight = weight;
+  if (typeof isSerif === 'boolean') style.isSerif = isSerif;
+  return createFontDescriptor({
+    requestedFamily: family,
+    pdfFontName: family,
+    bold,
+    italic,
+    style
+  });
 }
 
 export function getBundledFontSource(descriptor, bold, italic) {
@@ -237,6 +268,23 @@ export function getPreviewFontFamily(object) {
     : object && object.fontFamily
       ? object.fontFamily
       : 'Arimo';
+}
+
+export function getPreviewFontStack(object, draftText = null) {
+  let primary = String(getPreviewFontFamily(object) || 'Arimo').replace(/["\\]/g, '');
+  const source = getEmbeddedFont(object);
+  if (source && draftText !== null && source.parsed) {
+    const missing = [...String(draftText)].some(ch => !safeHasGlyph(source.parsed, ch.codePointAt(0)));
+    if (missing) {
+      primary = '';
+    }
+  }
+  const detected = String((object && object.detectedFontFamily) || (object && object.fontFamily) || '');
+  const isSerif = Boolean(object && object.fontDescriptor && object.fontDescriptor.isSerif) || SERIF_PATTERN.test(detected) || primary === 'Tinos' || primary === 'Caladea';
+  const fallbackBundled = isSerif ? 'Tinos' : (detected.toLowerCase().includes('calibri') ? 'Carlito' : 'Arimo');
+  const generic = isSerif ? 'serif' : (primary.toLowerCase().includes('courier') ? 'monospace' : 'sans-serif');
+  if (!primary || primary === fallbackBundled) return `"${fallbackBundled}", ${generic}`;
+  return `"${primary}", "${fallbackBundled}", ${generic}`;
 }
 
 export function resolveStandardFont(PDFLib, object) {

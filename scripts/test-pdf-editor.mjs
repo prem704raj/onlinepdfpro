@@ -5,9 +5,54 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { PDFArray, PDFDict, PDFDocument, PDFName, PDFRawStream, StandardFonts, decodePDFRawStream, degrees, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import puppeteer from 'puppeteer';
+
+const requireModule = createRequire(import.meta.url);
+let puppeteer;
+try {
+  puppeteer = (await import('puppeteer')).default;
+} catch {
+  const pw = requireModule('/usr/local/share/bun-global/node_modules/playwright');
+  const wrapElement = (el) => {
+    if (!el) return null;
+    if (!el.uploadFile && el.setInputFiles) el.uploadFile = (...files) => el.setInputFiles(files);
+    if (!el.tap && el.click) el.tap = () => el.click();
+    return el;
+  };
+  puppeteer = {
+    async launch(opts = {}) {
+      const browser = await pw.chromium.launch({ headless: true, args: opts.args || [] });
+      const origNewPage = browser.newPage.bind(browser);
+      browser.newPage = async () => {
+        const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, hasTouch: true });
+        const page = await context.newPage();
+        page.setViewport = async (vp) => page.setViewportSize({ width: vp.width, height: vp.height });
+        const origWaitSelector = page.waitForSelector.bind(page);
+        page.waitForSelector = async (sel, options = {}) => {
+          const pwOpts = { ...options };
+          if (pwOpts.visible) { pwOpts.state = 'visible'; delete pwOpts.visible; }
+          return wrapElement(await origWaitSelector(sel, pwOpts));
+        };
+        const origWaitFn = page.waitForFunction.bind(page);
+        page.waitForFunction = async (fn, opts = {}, ...args) => {
+          if (args.length > 0) return origWaitFn(fn, args[0], opts || {});
+          return origWaitFn(fn, undefined, opts || {});
+        };
+        const orig$ = page.$.bind(page);
+        page.$ = async (sel) => wrapElement(await orig$(sel));
+        const orig$$ = page.$$.bind(page);
+        page.$$ = async (sel) => (await orig$$(sel)).map(wrapElement);
+        const origClick = page.click.bind(page);
+        page.click = (sel, opts = {}) => origClick(sel, { force: true, ...opts });
+        if (!page.tap) page.tap = (sel) => page.click(sel);
+        return page;
+      };
+      return browser;
+    }
+  };
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.join(root, '_site');
@@ -47,6 +92,10 @@ async function createFixture() {
   page.drawText('PREM RAJ', { x: 72, y: 650, size: 18, font: helveticaBold, color: rgb(0.05, 0.05, 0.05) });
   page.drawText('subsetword', { x: 72, y: 600, size: 18, font: arimoSubset, color: rgb(0.1, 0.1, 0.1) });
 
+  const arimoBoldBytes = fs.readFileSync(path.join(root, 'src/fonts/pdf-editor/Arimo-Bold.ttf'));
+  const chromeBoldSubset = await pdf.embedFont(arimoBoldBytes, { subset: true });
+  page.drawText('ChatGPT gpt-6-thinking', { x: 72, y: 568, size: 16, font: chromeBoldSubset, color: rgb(0.08, 0.08, 0.08) });
+
   for (let index = 0; index < 12; index += 1) {
     page.drawRectangle({
       x: 64 + index * 20,
@@ -61,6 +110,15 @@ async function createFixture() {
 
   await pdf.flush();
   pdf.context.lookup(wordBold.ref, PDFDict).set(PDFName.of('BaseFont'), PDFName.of('ABCDEF+TimesNewRomanPS-BoldMT'));
+  const chromeFontDict = pdf.context.lookup(chromeBoldSubset.ref, PDFDict);
+  chromeFontDict.set(PDFName.of('BaseFont'), PDFName.of('BCDEFG+Roboto'));
+  const chromeDescendants = chromeFontDict.lookupMaybe(PDFName.of('DescendantFonts'), PDFArray);
+  if (chromeDescendants) {
+    const cidFont = chromeDescendants.lookup(0, PDFDict);
+    cidFont.set(PDFName.of('BaseFont'), PDFName.of('BCDEFG+Roboto'));
+    const cidDesc = cidFont.lookupMaybe(PDFName.of('FontDescriptor'), PDFDict);
+    if (cidDesc) cidDesc.set(PDFName.of('FontName'), PDFName.of('BCDEFG+Roboto'));
+  }
   fs.writeFileSync(fixturePath, await pdf.save({ useObjectStreams: false }));
 }
 
@@ -240,6 +298,11 @@ async function run() {
     await page.waitForSelector('#pdf-editor-workspace:not([hidden])', { timeout: 20000 });
     await page.waitForSelector('.pdf-text-hit', { visible: true, timeout: 20000 });
     check(await page.evaluate(() => window.__pdfEditorAnalytics.some((event) => event.name === 'editor_open_success')), 'Editor open success is tracked without document data');
+    const toolbarState = await page.evaluate(() => ({
+      contentButtons: Array.from(document.querySelectorAll('.pdf-content-tools button')).map((b) => b.textContent.trim()),
+      hasLegacyTools: Boolean(document.querySelector('#mode-image-button, #mode-draw-button, #mode-highlight-button, #shape-type-select, #mode-shape-button, #mode-whiteout-button, #mode-signature-button, #rotate-page-button, #move-page-up-button, #move-page-down-button, #duplicate-page-button, #insert-blank-page-button, #delete-page-button, #properties-drawer-button'))
+    }));
+    check(toolbarState.contentButtons.length === 2 && toolbarState.contentButtons[0] === 'Edit text' && toolbarState.contentButtons[1] === 'Add text' && !toolbarState.hasLegacyTools, 'PDF editor toolbar focuses cleanly on Edit text and Add text without non-text or page-mutation clutter');
     await installDownloadCapture(page);
     await captureScreenshot(page, '01-before-existing-text.png');
 
@@ -337,6 +400,15 @@ async function run() {
     check(Math.abs(Number(await page.$eval('#context-font-size-input', (node) => node.value)) - 18) < 0.2, 'Source font size is inherited automatically');
     await commitEdit(page, 'PREM', 'AMRIT RAJ', '03-bold-prem-to-amrit.png');
     check(await page.evaluate(() => Array.from(document.querySelectorAll('.pdf-text-preview-glyph')).some((node) => node.textContent === 'AMRIT RAJ' && getComputedStyle(node).fontWeight >= 700)), 'Bold styling remains on the replacement preview');
+
+    await beginEdit(page, 'ChatGPT gpt-6-thinking');
+    await setInlineText(page, 'ChatTEERA gpt-6-thinking');
+    check(await page.$eval('.pdf-inline-text-input', (node) => Number(getComputedStyle(node).fontWeight) >= 700), 'Subsetted bold font without Bold in BaseFont name retains bold 700 weight while typing missing Latin glyphs');
+    await setInlineText(page, 'ChatTerra gpt-6-thinking');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('.pdf-text-preview-glyph')).some((node) => node.textContent === 'ChatTerra gpt-6-thinking'), { timeout: 10000 });
+    check(!await page.$eval('#pdf-font-replacement-dialog', (node) => Boolean(node.open)), 'Latin character edits on subsetted fonts auto-resolve without opening the replacement font dialog');
+    check(await page.evaluate(() => Array.from(document.querySelectorAll('.pdf-text-preview-glyph')).some((node) => node.textContent === 'ChatTerra gpt-6-thinking' && Number(getComputedStyle(node).fontWeight) >= 700)), 'Committed subsetted bold font edit retains bold 700 weight on the page preview');
 
     await beginEdit(page, 'subsetword');
     await setInlineText(page, 'नमस्ते');

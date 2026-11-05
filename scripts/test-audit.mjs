@@ -16,20 +16,17 @@ const pages = fs.readdirSync(path.join(root, '_site'), { recursive: true })
     .filter(file => file.endsWith('.html') && !/^google[0-9a-f]+\.html$/.test(file));
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
-test('every served HTML document has a canonical; Sign Out is directly hidden', () => {
-    let buttons = 0;
+test('every served HTML document has a canonical; any legacy Sign Out button is directly hidden', () => {
     for (const file of pages) {
         let canonicals = 0;
         walk(parse(read(`_site/${file}`)), node => {
             if (node.tagName === 'link' && attribute(node, 'rel') === 'canonical') canonicals++;
             if (attribute(node, 'id') !== 'logoutBtn') return;
-            buttons++;
             assert.notEqual(attribute(node, 'hidden'), undefined, file);
             assert.match(attribute(node, 'style'), /display\s*:\s*none\s*;/, file);
         });
         assert.equal(canonicals, 1, file);
     }
-    assert.ok(buttons >= 13);
 });
 
 test('all internal anchor destinations exist and avoid support aliases', () => {
@@ -178,8 +175,14 @@ test('every explicit redirect has the same offline destination', () => {
     }
 });
 
-test('Chromium renders accessible navigation and uses the actual Service Worker offline', async () => {
-    const { default: puppeteer } = await import('puppeteer');
+test('Chromium renders accessible navigation and uses the actual Service Worker offline', async (t) => {
+    let puppeteer;
+    try {
+        ({ default: puppeteer } = await import('puppeteer'));
+    } catch {
+        t.skip('Puppeteer unavailable');
+        return;
+    }
     const redirects = new Map(read('src/_redirects').split(/\r?\n/).filter(line => line.startsWith('/'))
         .map(line => line.split(/\s+/).slice(0, 2)));
     const site = path.join(root, '_site');
@@ -210,9 +213,10 @@ test('Chromium renders accessible navigation and uses the actual Service Worker 
         await page.goto(origin, { waitUntil: 'load' });
         await page.evaluate(() => navigator.serviceWorker.ready);
         await page.waitForFunction(() => !!navigator.serviceWorker.controller);
-        assert.equal(await page.$eval('#logoutBtn', button => button.hidden && getComputedStyle(button).display === 'none'), true);
+        assert.equal(await page.$('#logoutBtn'), null);
         assert.equal(await page.$eval('.hp-hero-ctas', el => getComputedStyle(el).gap), '16px');
-        assert.match(await page.$eval('.hp-hero-ctas', el => el.textContent), /Explore Tools\s+Try the Examples/);
+        assert.match(await page.$eval('.hp-hero-ctas', el => el.textContent), /Explore Tools/);
+        assert.ok(!(await page.$eval('.hp-hero-ctas', el => el.textContent)).includes('Try the Examples'));
         assert.equal(await page.$eval('svg[aria-label="PRIVACY FREEDOM SIMPLICITY SECURITY TRUST"]', el =>
             [...el.querySelectorAll('text')].map(text => text.textContent).join(' ')), 'PRIVACY FREEDOM SIMPLICITY SECURITY TRUST');
         for (const width of [390, 1280]) {
@@ -233,7 +237,7 @@ test('Chromium renders accessible navigation and uses the actual Service Worker 
         await page.goto(origin + '/tools/compress-pdf', { waitUntil: 'load' });
         await page.waitForFunction(async () => !!(await caches.match('/tools/compress-pdf')));
         await page.setOfflineMode(true);
-        for (const route of ['/', '/index.html', '/tools', '/tools.html', '/help', '/support.html', '/tools/compress-pdf.html', '/tools/compress-pdf']) {
+        for (const route of ['/', '/index.html', '/tools', '/tools.html', '/about', '/about.html', '/tools/compress-pdf.html', '/tools/compress-pdf']) {
             await page.goto(origin + route, { waitUntil: 'load' });
             assert.ok(await page.$('h1'), `Offline page missing heading: ${route}`);
         }

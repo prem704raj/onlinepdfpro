@@ -80,7 +80,7 @@ check(/ALLOWED_CHAT_MODELS/.test(worker) && /ALLOWED_VISION_MODELS/.test(worker)
 check(/ALLOWED_VISION_MODELS\.has\(body\.model\)/.test(worker), 'Worker applies the vision model allowlist before forwarding requests');
 check(/release:\s*env\.RELEASE_ID\s*\|\|\s*'local'/.test(worker) && !/6e9ff18841b0e0d810df05860a12558f6fc4da25/.test(worker), 'Worker health endpoint exposes current release attribution without a stale fallback');
 check(/payment\.refunded/.test(worker) && /status:\s*'refunded'/.test(worker), 'Worker handles refund and dispute webhooks');
-check(/refunds, disputes, and access/i.test(read('src/refund.njk')) && /partial refund/i.test(read('src/refund.njk')), 'Refund policy documents entitlement suspension for refunds and disputes');
+check(!exists('src/refund.njk') && !exists('src/login.html') && !exists('src/library.html'), 'Obsolete paid refund, login, and library pages are removed');
 check(/isValidConversionDocument/.test(worker) && /isValidConversionOutput/.test(worker), 'Worker validates conversion input and output signatures');
 const syntax = spawnSync(process.execPath, ['--input-type=module', '--check'], {
     cwd: root,
@@ -160,13 +160,13 @@ const authSource = read('src/js/auth.js');
 check(/supabase|signIn|signUp/i.test(authSource) && /getSession|onAuthStateChange/.test(authSource), 'Authentication session flow is wired to Supabase');
 check(/Object\.defineProperty\(window,\s*["']supabaseClient/.test(authSource) && /get:\s*getSupabaseClient/.test(authSource), 'Authentication exposes a live Supabase client getter');
 const storeSource = read('src/js/store.js');
-check(/verify-payment|verifyPayment|entitlement|my-purchases/i.test(storeSource), 'Purchase and library entitlement flow is wired to protected APIs');
+check(/viewStudyPdf|downloadStudyPdf/i.test(storeSource) && /dbms-chapter-01\.pdf/.test(storeSource), 'Free study materials flow exposes View and Download PDF helpers');
 const studySource = read('src/study-materials.html');
 const studyDetailSource = read('src/_includes/study-detail.njk');
-check(/catalog-cover/.test(studySource) && /products\/dbms-notes/.test(studySource) && /catalog-actions/.test(studySource), 'Study materials listing stays focused on the cover and purchase actions');
-check(/previewGrid/.test(studyDetailSource) && /showModal\(\)/.test(studyDetailSource) && /slice\(0, 5\)/.test(studyDetailSource), 'Study material detail page provides a reusable five-page preview dialog');
+check(/catalog-cover/.test(studySource) && /products\/dbms-notes/.test(studySource) && /catalog-actions/.test(studySource) && /dbms-chapter-01\.pdf/.test(studySource), 'Study materials listing stays focused on the cover and free View/Download actions');
+check(/chapter-card/.test(studyDetailSource) && /chapter-btn-view/.test(studyDetailSource) && /target="_blank"/.test(studyDetailSource) && !/pdf-viewer-container/.test(studyDetailSource) && !/back-link/.test(studyDetailSource), 'Study material detail page renders 3 vertical chapter cards with new-tab PDF view and download without inline viewer or legacy store sidebar');
 check(/includes/.test(storeSource) && /previewPages/.test(storeSource) && /products\/dbms-notes/.test(storeSource), 'Study material product metadata supports reusable static detail pages');
-check(/disclosure\.replaceChildren\(\)/.test(studyDetailSource) && !/getElementById\('disclosure'\)\.innerHTML/.test(studyDetailSource), 'Study material disclosures use text nodes instead of interpolated markup');
+check(createRequire(import.meta.url)('../src/_data/dbmsPages.js').length === 30, 'DBMS Chapter 1 study guide dataset contains all 30 pages');
 const pageNumbers = read('src/tools/add-page-numbers-to-pdf.html');
 check(/textContent\s*=\s*`\s*\$\{file\.name\}/.test(pageNumbers) && !/textContent\s*=\s*`[^`]*escapeHTML\(file\.name\)/.test(pageNumbers), 'File names assigned through textContent are not double-escaped');
 const previewAssetPaths = Array.from({ length: 5 }, (_, index) => `src/assets/previews/dbms/page-0${index + 1}.webp`);
@@ -226,11 +226,8 @@ if (exists('_site/release.json')) {
 check(/\.wrangler\//.test(read('.gitignore')), 'Wrangler runtime files are ignored');
 check(exists('src/_redirects') && /about-us/.test(read('src/_redirects')), 'Legacy About URLs have redirects');
 check(/tools\/qr-generator\.html\s+\/tools\/qr-code-generator\s+301/.test(read('src/_redirects')) && /text-to-audio\.html\s+\/text-to-speech\s+301/.test(read('src/_redirects')), 'Legacy tool aliases redirect to final clean URLs');
-for (const page of ['src/404.html', 'src/dmca.html', 'src/library.html', 'src/login.html', 'src/study-materials.html', 'src/_includes/study-detail.njk']) {
-    const source = read(page);
-    check(/@supabase\/supabase-js@2\.49\.1/.test(source) && /<script defer[^>]+supabase-js/.test(source), `${page} pins and defers Supabase JS`);
-}
-check(/@2\.49\.1/.test(read('src/_includes/base.njk')) && /<script defer[^>]+supabase-js/.test(read('src/_includes/base.njk')), 'Shared base layout pins and defers Supabase JS');
+check(!/@supabase\/supabase-js/.test(read('src/study-materials.html')) && !/@supabase\/supabase-js/.test(read('src/_includes/study-detail.njk')), 'Study materials pages do not load sign-in scripts');
+check(!/@supabase\/supabase-js/.test(read('src/_includes/base.njk')), 'Shared base layout does not load sign-in scripts');
 check(/note-item\.active \.note-title/.test(read('src/pdf-scratchpad.html')), 'Scratchpad updates the active note title selector');
 const sharedApp = read('src/js/app.js');
 check(/AccessibilityEnhancements/.test(sharedApp) && /aria-label/.test(sharedApp) && /role', 'button'/.test(sharedApp), 'Shared UI adds accessible file-input labels and keyboard upload targets');
@@ -371,11 +368,11 @@ async function browserSmoke() {
         await page.waitForSelector('.catalog-cover', { timeout: 5000 });
         const catalogState = await page.evaluate(() => ({
             imageLoaded: Boolean(document.querySelector('.catalog-cover')?.complete && document.querySelector('.catalog-cover')?.naturalWidth > 0),
-            actions: document.querySelectorAll('.catalog-actions button').length,
+            actions: document.querySelectorAll('.catalog-actions a').length,
             detailHref: document.querySelector('.catalog-cover-link')?.getAttribute('href'),
             hasLargePreview: Boolean(document.querySelector('.preview-grid, .preview-stage, .product-showcase'))
         }));
-        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.endsWith('/products/dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two purchase actions');
+        check(catalogState.imageLoaded && catalogState.actions === 2 && catalogState.detailHref?.endsWith('/products/dbms-notes') && !catalogState.hasLargePreview, 'Study materials listing shows only the DBMS cover and two free PDF actions');
 
         await page.goto(`${base}/products/dbms-notes.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#previewGrid .preview-thumb', { timeout: 5000 });

@@ -15,10 +15,10 @@ const redirectLines = fs.readFileSync(path.join(root, 'src/_redirects'), 'utf8')
     .map(line => line.trim()).filter(line => line && !line.startsWith('#'));
 const redirects = new Map(redirectLines.map(line => line.split(/\s+/).slice(0, 2)));
 
-test('the homepage focuses on five local PDF workflows while the directory preserves every tool', () => {
+test('the homepage focuses on six local PDF workflows while the directory preserves every tool', () => {
     const registry = createRequire(import.meta.url)('../src/_data/tools.js').tools;
     assert.equal(registry.length, 46);
-    assert.deepEqual(registry.filter(tool => tool.featured).map(tool => tool.name).sort(), ['Compress PDF', 'JPG to PDF', 'Merge PDF', 'PDF Editor', 'Split PDF']);
+    assert.deepEqual(registry.filter(tool => tool.featured).map(tool => tool.name).sort(), ['Compress PDF', 'JPG to PDF', 'Merge PDF', 'PDF Editor', 'Sign PDF', 'Split PDF']);
 });
 
 test('Cloudflare redirects use supported syntax and have no cycles or intermediate .html targets', () => {
@@ -116,23 +116,26 @@ test('the clean sitemap contains real canonical pages, all 19 preserved blog pos
     }
 });
 
-test('product facts and disclosure are present without JavaScript and legacy access remains available', () => {
+test('DBMS notes detail page renders 7 vertical chapter cards with new-tab View PDF and Download PDF without inline viewer', () => {
     const html = fs.readFileSync(path.join(site, 'products/dbms-notes.html'), 'utf8');
     assert.match(html, /DBMS Complete Notes/);
-    assert.match(html, /AI-assisted study draft/);
-    assert.match(html, /id="pageCount">51/);
-    assert.match(html, /id="productPrice">₹9/);
+    assert.match(html, /Free Study Materials for College Studies/i);
+    assert.match(html, /CHAPTER 01 • 30 PAGES • FREE PDF/);
+    assert.match(html, /CHAPTER 07 • 28 PAGES • FREE PDF/);
+    assert.match(html, /class="chapter-btn-view"[^>]*href="\/assets\/study-materials\/dbms-chapter-01\.pdf"[^>]*target="_blank"/);
+    assert.match(html, /download="DBMS-Chapter-01-Fundamentals\.pdf"/);
+    assert.ok(!html.includes('back-link'), 'No back-link should appear on the study material detail page');
+    assert.ok(!html.includes('pdf-viewer-container'), 'No inline PDF viewer should appear on the study material detail page');
     const schemas = [];
-    let previews = 0;
+    let renderedChapters = 0;
     walk(parse(html), node => {
         if (node.tagName === 'script' && attribute(node, 'type') === 'application/ld+json') schemas.push(JSON.parse(node.childNodes[0].value));
-        if (node.tagName === 'img' && attribute(node, 'src')?.startsWith('/assets/previews/dbms/')) previews++;
+        if (node.tagName === 'article' && (attribute(node, 'class') || '').includes('chapter-card')) renderedChapters++;
     });
-    const product = schemas.find(schema => schema['@type'] === 'Product');
-    assert.equal(product.offers.price, 9);
-    assert.equal(product.offers.priceCurrency, 'INR');
-    assert.equal(product.url, 'https://onlinepdfpro.com/products/dbms-notes');
-    assert.equal(previews, 5);
+    const work = schemas.find(schema => schema['@type'] === 'CreativeWork');
+    assert.equal(work.isAccessibleForFree, true);
+    assert.equal(work.url, 'https://onlinepdfpro.com/products/dbms-notes');
+    assert.equal(renderedChapters, 7);
     assert.match(fs.readFileSync(path.join(site, 'viewstudymaterials.html'), 'utf8'), /noindex, follow/);
 });
 

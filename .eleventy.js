@@ -25,6 +25,7 @@ module.exports = async function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/**/*.jpg');
   eleventyConfig.addPassthroughCopy('src/**/*.jpeg');
   eleventyConfig.addPassthroughCopy('src/**/*.svg');
+  eleventyConfig.addPassthroughCopy('src/**/*.pdf');
   eleventyConfig.addPassthroughCopy('src/**/*.ico');
   eleventyConfig.addPassthroughCopy('src/**/*.xml');
   eleventyConfig.addPassthroughCopy('src/**/*.txt');

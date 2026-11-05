@@ -116,16 +116,17 @@ async function renderBackgroundSamples(pdfPage, objects) {
 
 function getOriginalCoverBox(object) {
   const size = Math.max(1, object.originalFontSize || object.fontSize);
-  const pad = Math.max(0.8, size * 0.055);
+  const padX = Math.max(1.5, size * 0.08);
+  const padY = Math.max(0.9, size * 0.06);
   const originalWidth = Math.max(object.originalWidth || object.width, size * 0.35);
   const originalHeight = Math.max(object.originalHeight || object.height, size * (object.ascent - object.descent), size);
   return {
-    x: object.originalX - pad,
-    y: object.originalY - size * Math.max(0.2, Math.abs(object.descent)) - pad,
-    width: originalWidth + pad * 2,
-    height: originalHeight + pad * 2,
+    x: object.originalX - padX,
+    y: object.originalY - size * Math.max(0.2, Math.abs(object.descent)) - padY,
+    width: originalWidth + padX * 2,
+    height: originalHeight + padY * 2,
     rotation: object.originalRotation,
-    pad
+    pad: padY
   };
 }
 
