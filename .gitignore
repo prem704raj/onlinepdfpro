@@ -63,3 +63,7 @@ dist/
 
 .implementation-review/
 
+# AI Studio artifacts
+.aistudio/
+public/assets/aistudio/
+
