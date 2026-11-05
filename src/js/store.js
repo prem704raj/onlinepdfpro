@@ -6,7 +6,7 @@ const STORE_PRODUCTS = {
         priceLabel: "Free",
         pdfUrl: "/assets/study-materials/dbms-chapter-01.pdf",
         downloadName: "DBMS-Chapter-01-Fundamentals.pdf",
-        image: "/assets/previews/dbms/page-01.webp",
+        image: "/og-image.jpg",
         url: "/products/dbms-notes",
         pageCount: 199,
         format: "PDF",
@@ -114,11 +114,7 @@ const STORE_PRODUCTS = {
         deliveryNote: "100% Free chapter-wise PDFs for college studies — view online or download instantly. No sign-in required.",
         disclosure: "Free chapter-wise study material for college studies, semester exams, GATE CS, and technical placement preparation.",
         previewPages: [
-            "/assets/previews/dbms/page-01.webp",
-            "/assets/previews/dbms/page-02.webp",
-            "/assets/previews/dbms/page-03.webp",
-            "/assets/previews/dbms/page-04.webp",
-            "/assets/previews/dbms/page-05.webp"
+            "/og-image.jpg"
         ]
     }
 };

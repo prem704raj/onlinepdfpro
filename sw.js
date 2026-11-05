@@ -1,10 +1,10 @@
-// OnlinePDFPro Service Worker (e646480fdcff313f)
-// The build step replaces e646480fdcff313f with a content hash of the generated
+// OnlinePDFPro Service Worker (120e2b5522ec7765)
+// The build step replaces 120e2b5522ec7765 with a content hash of the generated
 // site. This invalidates the entire cache whenever a static asset changes.
 // Network-first for HTML/JS/CSS, and
 // cache-first for images/fonts with offline fallback.
 
-const CACHE_NAME = 'onlinepdfpro-cache-e646480fdcff313f';
+const CACHE_NAME = 'onlinepdfpro-cache-120e2b5522ec7765';
 
 const STATIC_ASSETS = [
     // Core pages

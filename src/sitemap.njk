@@ -6,10 +6,12 @@ permalink: /sitemap.xml
 {%- set staticPages = [
   { url: '/', priority: '1.0', changefreq: 'weekly' },
   { url: '/about', priority: '0.6', changefreq: 'yearly' },
+  { url: '/contact', priority: '0.6', changefreq: 'yearly' },
   { url: '/tools', priority: '0.9', changefreq: 'weekly' },
   { url: '/dmca', priority: '0.5', changefreq: 'yearly' },
   { url: '/privacy', priority: '0.5', changefreq: 'yearly' },
   { url: '/terms', priority: '0.5', changefreq: 'yearly' },
+  { url: '/disclaimer', priority: '0.5', changefreq: 'yearly' },
   { url: '/study-materials', priority: '0.9', changefreq: 'weekly' }
 ] -%}
 {%- for page in staticPages %}

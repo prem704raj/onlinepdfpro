@@ -161,11 +161,23 @@
                     {% endfor %}
                 </div>
             </section>
+            <section class="syllabus-overview" aria-label="Complete DBMS Syllabus &amp; Chapter Breakdown" style="margin-top:40px; padding:28px; border:1px solid var(--sm-border); border-radius:12px; background:var(--sm-surface);">
+                <h2 style="margin:0 0 12px; font-family:var(--sm-serif); font-size:1.5rem; color:var(--sm-text);">What You Will Learn in This 199-Page DBMS Series</h2>
+                <p style="margin:0 0 20px; color:var(--sm-muted); line-height:1.7;">Designed for B.Tech/B.E. Computer Science, BCA, MCA, GATE CS, and technical interview preparation, each chapter combines rigorous theoretical proofs with production PostgreSQL/MySQL SQL code, worked numerical formulas, and solved semester and viva questions:</p>
+                <div style="display:grid; gap:14px;">
+                    {% for ch in pageProduct.chapters %}
+                    <div style="padding:14px 16px; border:1px solid var(--sm-border); border-radius:8px; background:var(--sm-bg);">
+                        <strong style="display:block; color:var(--sm-text); margin-bottom:4px;">{{ ch.badge }}: {{ ch.title }} ({{ ch.pageCount }} Pages)</strong>
+                        <p style="margin:0; font-size:0.92rem; color:var(--sm-muted); line-height:1.6;">{{ ch.summary }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
         </div>
         <div id="detailError" class="detail-error" hidden><h1>Study material not found</h1><p>That PDF is not available right now.</p><a href="/study-materials">Browse free study materials</a></div>
     </main>
 
-    <footer class="hp-footer"><div class="hp-footer-grid"><div class="hp-footer-brand"><p class="hp-footer-brand-title">OnlinePDFPro</p><p class="hp-footer-brand-sub">Free PDF Tools &amp; Study Materials</p></div><div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf">Merge PDF</a></li><li><a href="/tools/compress-pdf">Compress PDF</a></li><li><a href="/tools/split-pdf">Split PDF</a></li><li><a href="/tools">All Tools</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about">About</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/dmca">Copyright &amp; DMCA</a></li></ul></div></div><div class="hp-footer-bottom"><p class="hp-footer-copy">© 2026 OnlinePDFPro. All rights reserved.</p></div></footer>
+    <footer class="hp-footer"><div class="hp-footer-grid"><div class="hp-footer-brand"><p class="hp-footer-brand-title">OnlinePDFPro</p><p class="hp-footer-brand-sub">Free PDF Tools &amp; Study Materials</p></div><div class="hp-footer-col"><p class="hp-footer-column-title">PDF Tools</p><ul><li><a href="/tools/merge-pdf">Merge PDF</a></li><li><a href="/tools/compress-pdf">Compress PDF</a></li><li><a href="/tools/split-pdf">Split PDF</a></li><li><a href="/tools">All Tools</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Support</p><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li></ul></div><div class="hp-footer-col"><p class="hp-footer-column-title">Legal</p><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/disclaimer">Disclaimer</a></li><li><a href="/dmca">Copyright &amp; DMCA</a></li></ul></div></div><div class="hp-footer-bottom"><p class="hp-footer-copy">© 2026 OnlinePDFPro. All rights reserved.</p></div></footer>
 
     <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
     <script defer src="/js/app.js?v=96"></script>

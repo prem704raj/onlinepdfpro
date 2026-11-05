@@ -11,6 +11,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://onlinepdfpro.com/contact</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://onlinepdfpro.com/tools</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -27,6 +32,11 @@
   </url>
   <url>
     <loc>https://onlinepdfpro.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://onlinepdfpro.com/disclaimer</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
