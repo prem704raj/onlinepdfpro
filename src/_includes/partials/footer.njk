@@ -35,6 +35,7 @@
 <li><a href="{{ '/privacy' | url }}">Privacy</a></li>
 <li><a href="{{ '/disclaimer' | url }}">Disclaimer</a></li>
 <li><a href="{{ '/dmca' | url }}">Copyright & DMCA</a></li>
+<li><button type="button" class="footer-cookie-btn" id="footerCookiePreferences">Cookie Preferences</button></li>
 </ul>
 </div>
 </div>
@@ -52,4 +53,15 @@
 </a>
 </div>
 </div>
+<aside id="cookieConsentBanner" class="cookie-consent-banner" role="region" aria-label="Cookie Consent &amp; Privacy Choices" style="display:none;">
+  <div class="cookie-consent-container">
+    <div class="cookie-consent-text">
+      <p><strong>Cookie &amp; Privacy Notice:</strong> OnlinePDFPro uses cookies to analyze site traffic, personalize content, and serve relevant advertisements via Google AdSense. Your document files are always processed 100% locally in your browser and are never uploaded or stored. Learn more in our <a href="{{ '/privacy' | url }}">Privacy &amp; Cookie Policy</a>.</p>
+    </div>
+    <div class="cookie-consent-actions">
+      <button type="button" id="cookieConsentAccept" class="cookie-btn cookie-btn-accept">Accept All Cookies</button>
+      <button type="button" id="cookieConsentDecline" class="cookie-btn cookie-btn-decline">Essential Only</button>
+    </div>
+  </div>
+</aside>
 </footer>

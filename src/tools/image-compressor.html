@@ -323,7 +323,7 @@
  fileList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" data-index="${index}">
  <div class="batch-file-header">
- <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" alt="">
+ <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" alt="Thumbnail preview">
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -365,7 +365,7 @@
  processingList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" id="process-${index}">
  <div class="batch-file-header">
- <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" alt="">
+ <img loading="lazy" src="${thumbnails[file.name]}" class="batch-file-thumb" alt="Thumbnail preview">
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)}</div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>

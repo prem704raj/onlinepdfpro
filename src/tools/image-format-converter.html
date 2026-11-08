@@ -540,7 +540,7 @@
  fileList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" data-index="${index}">
  <div class="batch-file-header">
- <img loading="lazy" src="${thumbnails[fileKey(file)]}" class="batch-file-thumb" alt="">
+ <img loading="lazy" src="${thumbnails[fileKey(file)]}" class="batch-file-thumb" alt="Thumbnail preview">
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600; margin-left:4px;">${escapeHTML(getFileFormatBadge(file))}</span></div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>
@@ -582,7 +582,7 @@
  processingList.innerHTML = files.map((file, index) => `
  <div class="batch-file-item" id="process-${index}">
  <div class="batch-file-header">
- <img loading="lazy" src="${thumbnails[fileKey(file)]}" class="batch-file-thumb" alt="">
+ <img loading="lazy" src="${thumbnails[fileKey(file)]}" class="batch-file-thumb" alt="Thumbnail preview">
  <div class="batch-file-info">
  <div class="batch-file-name">${escapeHTML(file.name)} <span style="display:inline-block; background:rgba(37,99,235,0.15); color:var(--aurora-azure,#2563eb); font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${escapeHTML(getFileFormatBadge(file))}</span> → <span style="display:inline-block; background:rgba(16,185,129,0.15); color:#10b981; font-size:10px; padding:2px 6px; border-radius:6px; font-weight:600;">${FORMAT_INFO[outputFormat].label}</span></div>
  <div class="batch-file-size">${OnlinePDFPro.Utils.formatFileSize(file.size)}</div>

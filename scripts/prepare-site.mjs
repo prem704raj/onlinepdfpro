@@ -45,9 +45,26 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
     let hasCanonical = false;
     let hasPublisher = false;
     let hasAdSenseScript = false;
+    let hasCookieBanner = false;
     let head;
+    let body;
     walk(document, node => {
         if (node.tagName === 'head') head = node;
+        if (node.tagName === 'body') body = node;
+        if (attribute(node, 'id') === 'cookieConsentBanner') hasCookieBanner = true;
+        if (node.tagName === 'img') {
+            const alt = attribute(node, 'alt');
+            if (alt === undefined || alt === null || alt.trim() === '') {
+                const src = attribute(node, 'src') || '';
+                const desc = src.includes('logo') ? 'OnlinePDFPro logo' : 'OnlinePDFPro Document Tool';
+                if (node.sourceCodeLocation?.attrs?.alt) {
+                    change(node, 'alt', desc);
+                } else if (node.sourceCodeLocation?.startTag) {
+                    const at = node.sourceCodeLocation.startTag.endOffset - 1;
+                    edits.push({ start: at, end: at, text: ` alt="${desc}"` });
+                }
+            }
+        }
         if (node.tagName === 'div' && (attribute(node, 'class') || '').split(/\s+/).includes('banner-ad-spacer')
             && (node.childNodes || []).every(child => child.nodeName === '#comment' || (child.nodeName === '#text' && !child.value.trim()))) {
             const location = node.sourceCodeLocation;
@@ -147,6 +164,11 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
         const existing = edits.find(edit => edit.start === at && edit.end === at);
         if (existing) existing.text += markup;
         else edits.push({ start: at, end: at, text: markup });
+    }
+    if (!hasCookieBanner && body?.sourceCodeLocation?.endTag) {
+        const at = body.sourceCodeLocation.endTag.startOffset;
+        const bannerHtml = '<aside id="cookieConsentBanner" class="cookie-consent-banner" role="region" aria-label="Cookie Consent &amp; Privacy Choices" style="display:none;"><div class="cookie-consent-container"><div class="cookie-consent-text"><p><strong>Cookie &amp; Privacy Notice:</strong> OnlinePDFPro uses cookies to analyze site traffic, personalize content, and serve relevant advertisements via Google AdSense. Your document files are always processed 100% locally in your browser and are never uploaded or stored. Learn more in our <a href="/privacy">Privacy &amp; Cookie Policy</a>.</p></div><div class="cookie-consent-actions"><button type="button" id="cookieConsentAccept" class="cookie-btn cookie-btn-accept">Accept All Cookies</button><button type="button" id="cookieConsentDecline" class="cookie-btn cookie-btn-decline">Essential Only</button></div></div></aside>';
+        edits.push({ start: at, end: at, text: bannerHtml });
     }
     // One attribute may be touched first as a URL and then as its canonical.
     const unique = new Map();

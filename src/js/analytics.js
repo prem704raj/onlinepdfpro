@@ -1,13 +1,14 @@
-/* Shared, opt-in GA4 measurement. Never include uploaded content, file names,
- * email addresses, auth callbacks, or URL query/fragment values in our events. */
+/* Shared, opt-in GA4 measurement and Cookie Consent management.
+ * Never include uploaded content, file names, email addresses, or query parameters. */
 (function () {
     'use strict';
     const measurementId = 'G-RPDGMCZ97D';
     const storageKey = 'onlinepdfpro-analytics-consent-v1';
+    const cookieConsentKey = 'onlinepdfpro-cookie-consent-v1';
     const production = ['onlinepdfpro.com', 'www.onlinepdfpro.com'].includes(location.hostname);
-    if (!production || window.OnlinePDFProAnalytics) return;
+    if (window.OnlinePDFProAnalytics) return;
     let choice = null;
-    try { choice = localStorage.getItem(storageKey); } catch {}
+    try { choice = localStorage.getItem(cookieConsentKey) || localStorage.getItem(storageKey); } catch {}
     let enabled = false;
     let loaded = false;
     const safeUrl = value => {
@@ -25,7 +26,7 @@
     const actions = new Set(['convert', 'download_all', 'download', 'upload', 'process', 'merge',
         'compress', 'split', 'start', 'complete', 'open', 'click']);
     function track(event, parameters = {}) {
-        if (!enabled || privatePage || !permittedEvents.has(event)) return;
+        if (!enabled || !production || privatePage || !permittedEvents.has(event)) return;
         const safe = { tool_id: toolId };
         if (actions.has(parameters.action)) safe.action = parameters.action;
         if (['pdf', 'document', 'image', 'other'].includes(parameters.file_type)) safe.file_type = parameters.file_type;
@@ -42,12 +43,21 @@
         enabled = true;
         window[`ga-disable-${measurementId}`] = false;
         if (loaded) {
-            raw('consent', 'update', { analytics_storage: 'granted' });
+            raw('consent', 'update', {
+                analytics_storage: 'granted',
+                ad_storage: 'granted',
+                ad_user_data: 'granted',
+                ad_personalization: 'granted'
+            });
             return;
         }
         loaded = true;
-        raw('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied',
-            ad_user_data: 'denied', ad_personalization: 'denied' });
+        raw('consent', 'default', {
+            analytics_storage: 'granted',
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted'
+        });
         raw('js', new Date());
         raw('config', measurementId, {
             send_page_view: false, allow_google_signals: false, allow_ad_personalization_signals: false,
@@ -56,19 +66,31 @@
         });
         raw('event', 'page_view', { page_location: safeUrl(location.href),
             page_referrer: safeUrl(document.referrer), page_title: document.title });
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-        document.head.appendChild(script);
+        if (production) {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+            document.head.appendChild(script);
+        }
     }
     function choose(value) {
         choice = value;
-        try { localStorage.setItem(storageKey, value); } catch {}
+        try {
+            localStorage.setItem(cookieConsentKey, value);
+            localStorage.setItem(storageKey, value);
+        } catch {}
         if (value === 'granted') enable();
         else {
             enabled = false;
             window[`ga-disable-${measurementId}`] = true;
-            if (loaded) raw('consent', 'update', { analytics_storage: 'denied' });
+            if (loaded) {
+                raw('consent', 'update', {
+                    analytics_storage: 'denied',
+                    ad_storage: 'denied',
+                    ad_user_data: 'denied',
+                    ad_personalization: 'denied'
+                });
+            }
             // Remove GA's first-party cookies when consent is withdrawn.
             document.cookie.split(';').forEach(cookie => {
                 const name = cookie.split('=')[0].trim();
@@ -78,42 +100,66 @@
                 }
             });
         }
-        document.getElementById('analyticsConsent')?.remove();
+        hideBanner();
     }
-    function showPreferences() {
-        if (document.getElementById('analyticsConsent')) return;
-        const panel = document.createElement('section');
-        panel.id = 'analyticsConsent';
-        panel.className = 'analytics-consent';
-        panel.setAttribute('aria-label', 'Analytics privacy choices');
-        const text = document.createElement('p');
-        text.textContent = 'Allow optional Google Analytics to help us improve these tools? Your files stay out of our analytics. You can change this choice anytime.';
-        const controls = document.createElement('div');
-        controls.className = 'analytics-consent-actions';
-        for (const [label, value] of [['Essential only', 'denied'], ['Allow analytics', 'granted']]) {
-            const button = document.createElement('button');
-            button.type = 'button'; button.textContent = label;
-            button.addEventListener('click', () => {
-                choose(value);
-                document.getElementById('analyticsPreferences')?.focus({ preventScroll: true });
-            });
-            controls.appendChild(button);
+    function hideBanner() {
+        const banner = document.getElementById('cookieConsentBanner') || document.getElementById('analyticsConsent');
+        if (banner) banner.style.display = 'none';
+    }
+    function showBanner() {
+        let banner = document.getElementById('cookieConsentBanner');
+        if (!banner) {
+            banner = document.createElement('aside');
+            banner.id = 'cookieConsentBanner';
+            banner.className = 'cookie-consent-banner';
+            banner.setAttribute('role', 'region');
+            banner.setAttribute('aria-label', 'Cookie Consent & Privacy Choices');
+            banner.innerHTML = `
+                <div class="cookie-consent-container">
+                    <div class="cookie-consent-text">
+                        <p><strong>Cookie &amp; Privacy Notice:</strong> OnlinePDFPro uses cookies to analyze site traffic, personalize content, and serve relevant advertisements via Google AdSense. Your document files are always processed 100% locally in your browser and are never uploaded or stored. Learn more in our <a href="/privacy">Privacy &amp; Cookie Policy</a>.</p>
+                    </div>
+                    <div class="cookie-consent-actions">
+                        <button type="button" id="cookieConsentAccept" class="cookie-btn cookie-btn-accept">Accept All Cookies</button>
+                        <button type="button" id="cookieConsentDecline" class="cookie-btn cookie-btn-decline">Essential Only</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(banner);
         }
-        const privacy = document.createElement('a');
-        privacy.href = '/privacy'; privacy.textContent = 'Privacy policy';
-        controls.appendChild(privacy);
-        panel.append(text, controls);
-        document.body.appendChild(panel);
+        banner.style.display = 'block';
+        bindBannerEvents(banner);
     }
-    window.OnlinePDFProAnalytics = { track, showPreferences };
+    function bindBannerEvents(banner) {
+        const acceptBtn = banner.querySelector('#cookieConsentAccept');
+        const declineBtn = banner.querySelector('#cookieConsentDecline');
+        if (acceptBtn && !acceptBtn._bound) {
+            acceptBtn._bound = true;
+            acceptBtn.addEventListener('click', () => choose('granted'));
+        }
+        if (declineBtn && !declineBtn._bound) {
+            declineBtn._bound = true;
+            declineBtn.addEventListener('click', () => choose('denied'));
+        }
+    }
+    window.OnlinePDFProAnalytics = { track, showPreferences: showBanner };
     function init() {
-        const preferences = document.createElement('button');
-        preferences.id = 'analyticsPreferences'; preferences.type = 'button';
-        preferences.className = 'analytics-preferences'; preferences.textContent = 'Privacy choices';
-        preferences.addEventListener('click', showPreferences);
-        (document.querySelector('footer') || document.querySelector('.blog-footer') || document.body).appendChild(preferences);
-        if (choice === 'granted') enable();
-        else if (choice !== 'denied') showPreferences();
+        const existingBanner = document.getElementById('cookieConsentBanner');
+        if (existingBanner) bindBannerEvents(existingBanner);
+
+        // Bind any footer cookie preference triggers
+        document.querySelectorAll('#footerCookiePreferences, .footer-cookie-btn').forEach(btn => {
+            btn.addEventListener('click', showBanner);
+        });
+
+        if (choice === 'granted') {
+            enable();
+            hideBanner();
+        } else if (choice === 'denied') {
+            hideBanner();
+        } else {
+            showBanner();
+        }
+
         document.addEventListener('change', event => {
             const input = event.target;
             if (!(input instanceof HTMLInputElement) || input.type !== 'file' || !input.files?.length) return;
