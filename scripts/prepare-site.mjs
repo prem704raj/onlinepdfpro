@@ -44,6 +44,7 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
     let hasAnalytics = false;
     let hasCanonical = false;
     let hasPublisher = false;
+    let hasAdSenseScript = false;
     let head;
     walk(document, node => {
         if (node.tagName === 'head') head = node;
@@ -53,6 +54,7 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
             if (location) edits.push({ start: location.startOffset, end: location.endOffset, text: '' });
         }
         if (node.tagName === 'script' && attribute(node, 'src')?.startsWith('/js/analytics.js')) hasAnalytics = true;
+        if (node.tagName === 'script' && (attribute(node, 'src') || '').includes('pagead2.googlesyndication.com')) hasAdSenseScript = true;
         if (node.tagName === 'script') {
             const source = attribute(node, 'src') || '';
             const isSupabase = /^https:\/\/cdn\.jsdelivr\.net\/npm\/@supabase\/supabase-js@2(?:\.|$)/.test(source);
@@ -127,6 +129,13 @@ export function prepareHtml(html, { canonicalPath, routes, aliases = new Map(), 
         const at = head.sourceCodeLocation.endTag.startOffset;
         // Ownership metadata makes no advertising or tracking request.
         edits.push({ start: at, end: at, text: '<meta name="google-adsense-account" content="ca-pub-3541372477756449">' });
+    }
+    if (!hasAdSenseScript && head?.sourceCodeLocation?.endTag) {
+        const at = head.sourceCodeLocation.endTag.startOffset;
+        const existing = edits.find(edit => edit.start === at && edit.end === at);
+        const tag = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3541372477756449" crossorigin="anonymous"></script>';
+        if (existing) existing.text += tag;
+        else edits.push({ start: at, end: at, text: tag });
     }
     if (!hasCsp && csp && head?.sourceCodeLocation?.endTag) {
         const at = head.sourceCodeLocation.endTag.startOffset;
